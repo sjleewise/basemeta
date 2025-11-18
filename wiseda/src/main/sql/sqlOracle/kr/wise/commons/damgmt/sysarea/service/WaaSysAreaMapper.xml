@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.commons.damgmt.sysarea.service.WaaSysAreaMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.commons.damgmt.sysarea.service.WaaSysArea"  extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+    <id column="SYS_AREA_ID" property="sysAreaId" jdbcType="VARCHAR" />
+    <result column="SYS_AREA_LNM" property="sysAreaLnm" jdbcType="VARCHAR" />
+    <result column="SYS_AREA_PNM" property="sysAreaPnm" jdbcType="VARCHAR" />
+    <result column="SYS_AREA_ABR_NM" property="sysAreaAbrNm" jdbcType="VARCHAR" />
+    <result column="STD_APL_YN" property="stdAplYn" jdbcType="VARCHAR" />
+    <result column="LECY_DCD" property="lecyDcd" jdbcType="VARCHAR" />
+    <result column="CRG_USER_ID" property="crgUserId" jdbcType="VARCHAR" />
+    <result column="CRG_USER_NM" property="crgUserNm" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    SYS_AREA_ID, EXP_DTM, STR_DTM, SYS_AREA_LNM, SYS_AREA_PNM, SYS_AREA_ABR_NM, STD_APL_YN, 
+    LECY_DCD, CRG_USER_ID, OBJ_DESCN, OBJ_VERS, REG_TYP_CD, WRIT_DTM, WRIT_USER_ID
+  </sql>
+  
+  <select id="selectList" parameterType="kr.wise.commons.damgmt.sysarea.service.WaaSysArea" resultMap="BaseResultMap">
+  	SELECT A.* 
+		  ,GET_USER_NM(A.CRG_USER_ID) AS CRG_USER_NM
+		  ,GET_USER_NM(A.WRIT_USER_ID) AS WRIT_USER_NM  	
+  	FROM WAA_SYS_AREA A
+  	<where>
+  		AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+  		AND REG_TYP_CD IN ('C', 'U')
+      <if test="sysAreaLnm != null"  >
+        AND (SYS_AREA_LNM LIKE '%' || #{sysAreaLnm,jdbcType=VARCHAR} || '%'
+        	OR SYS_AREA_PNM LIKE '%' || #{sysAreaLnm,jdbcType=VARCHAR} || '%'
+        	OR SYS_AREA_LNM LIKE '%' || UPPER(#{sysAreaLnm,jdbcType=VARCHAR}) || '%'
+        	OR SYS_AREA_PNM LIKE '%' || UPPER(#{sysAreaLnm,jdbcType=VARCHAR}) || '%')
+      </if>
+      <if test="sysAreaPnm != null" >
+        AND SYS_AREA_PNM = #{sysAreaPnm,jdbcType=VARCHAR}
+      </if>
+      <if test="stdAplYn != null" >
+        AND STD_APL_YN = #{stdAplYn,jdbcType=VARCHAR}
+      </if>
+      <if test="lecyDcd != null" >
+        AND LECY_DCD = #{lecyDcd,jdbcType=VARCHAR}
+      </if>
+      <if test="crgUserId != null" >
+        AND CRG_USER_ID = #{crgUserId,jdbcType=VARCHAR}
+      </if>
+  	</where>
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from WAA_SYS_AREA
+    where SYS_AREA_ID = #{sysAreaId,jdbcType=VARCHAR}
+    AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+  </select>
+  
+  <delete id="deleteall">
+    delete from WAA_SYS_AREA
+  </delete>
+
+
+  <delete id="delsysarealist" parameterType="java.util.Arrays">
+		<![CDATA[
+				DELETE FROM WAA_SYS_AREA 
+				WHERE SYS_AREA_ID IN 
+		 ]]>
+				<foreach collection="array" item="item" index="index" open="(" separator="," close=")">
+					#{item}
+				</foreach>
+ </delete>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from WAA_SYS_AREA
+    where SYS_AREA_ID = #{sysAreaId,jdbcType=VARCHAR}
+  </delete>
+  
+  <update id="deleteRegTyp" parameterType="kr.wise.commons.damgmt.sysarea.service.WaaSysArea" >
+    UPDATE WAA_SYS_AREA
+    SET REG_TYP_CD = #{regTypCd},
+    	OBJ_VERS = OBJ_VERS+1 ,
+    where SYS_AREA_ID = #{sysAreaId,jdbcType=VARCHAR}
+  </update>
+  <insert id="insert" parameterType="kr.wise.commons.damgmt.sysarea.service.WaaSysArea" >
+    insert into WAA_SYS_AREA (SYS_AREA_ID,  
+      SYS_AREA_LNM, SYS_AREA_PNM, SYS_AREA_ABR_NM, 
+      STD_APL_YN, LECY_DCD, CRG_USER_ID, 
+      OBJ_DESCN, OBJ_VERS, REG_TYP_CD, 
+      WRIT_USER_ID)
+    values (#{sysAreaId,jdbcType=VARCHAR},  
+      #{sysAreaLnm,jdbcType=VARCHAR}, #{sysAreaPnm,jdbcType=VARCHAR}, #{sysAreaAbrNm,jdbcType=VARCHAR}, 
+      #{stdAplYn,jdbcType=VARCHAR}, #{lecyDcd,jdbcType=VARCHAR}, #{crgUserId,jdbcType=VARCHAR}, 
+      #{objDescn,jdbcType=VARCHAR}, #{objVers,jdbcType=DECIMAL}, #{regTypCd,jdbcType=VARCHAR}, 
+      #{writUserId,jdbcType=VARCHAR})
+  </insert>
+
+  <insert id="insertSelective" parameterType="kr.wise.commons.damgmt.sysarea.service.WaaSysArea" >
+  	<selectKey keyProperty="sysAreaId" resultType="string" order="BEFORE" statementType="STATEMENT">
+  		<include refid="kr.wise.commons.cmm.service.CommonMapper.getObjId"/>
+<!--   		SELECT OBJ_ID.NEXTVAL FROM DUAL -->
+  	</selectKey>
+    insert into WAA_SYS_AREA
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="sysAreaId != null" >
+        SYS_AREA_ID,
+      </if>
+      <if test="expDtm != null" >
+        EXP_DTM,
+      </if>
+      <if test="strDtm != null" >
+        STR_DTM,
+      </if>
+      <if test="sysAreaLnm != null" >
+        SYS_AREA_LNM,
+      </if>
+      <if test="sysAreaPnm != null" >
+        SYS_AREA_PNM,
+      </if>
+      <if test="sysAreaAbrNm != null" >
+        SYS_AREA_ABR_NM,
+      </if>
+      <if test="stdAplYn != null" >
+        STD_APL_YN,
+      </if>
+      <if test="lecyDcd != null" >
+        LECY_DCD,
+      </if>
+      <if test="crgUserId != null" >
+        CRG_USER_ID,
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN,
+      </if>
+<!--       <if test="objVers != null" >
+        OBJ_VERS,
+      </if> -->
+      <if test="regTypCd != null" >
+        REG_TYP_CD,
+      </if>
+      <if test="writDtm != null" >
+        WRIT_DTM,
+      </if>
+      <if test="writUserId != null" >
+        WRIT_USER_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="sysAreaId != null" >
+        #{sysAreaId,jdbcType=VARCHAR},
+      </if>
+      <if test="expDtm != null" >
+        #{expDtm,jdbcType=DATE},
+      </if>
+      <if test="strDtm != null" >
+        #{strDtm,jdbcType=DATE},
+      </if>
+      <if test="sysAreaLnm != null" >
+        #{sysAreaLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="sysAreaPnm != null" >
+        #{sysAreaPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="sysAreaAbrNm != null" >
+        #{sysAreaAbrNm,jdbcType=VARCHAR},
+      </if>
+      <if test="stdAplYn != null" >
+        #{stdAplYn,jdbcType=VARCHAR},
+      </if>
+      <if test="lecyDcd != null" >
+        #{lecyDcd,jdbcType=VARCHAR},
+      </if>
+      <if test="crgUserId != null" >
+        #{crgUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="objDescn != null" >
+        #{objDescn,jdbcType=VARCHAR},
+      </if>
+<!--       <if test="objVers != null" >
+        #{objVers,jdbcType=DECIMAL},
+      </if> -->
+      <if test="regTypCd != null" >
+        #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="writDtm != null" >
+        #{writDtm,jdbcType=DATE},
+      </if>
+      <if test="writUserId != null" >
+        #{writUserId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.commons.damgmt.sysarea.service.WaaSysArea" >
+    update WAA_SYS_AREA
+    <set >
+        OBJ_VERS = OBJ_VERS+1 ,
+      <if test="expDtm != null" >
+        EXP_DTM = #{expDtm,jdbcType=DATE},
+      </if>
+      <if test="strDtm != null" >
+        STR_DTM = #{strDtm,jdbcType=DATE},
+      </if>
+      <if test="sysAreaLnm != null" >
+        SYS_AREA_LNM = #{sysAreaLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="sysAreaPnm != null" >
+        SYS_AREA_PNM = #{sysAreaPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="sysAreaAbrNm != null" >
+        SYS_AREA_ABR_NM = #{sysAreaAbrNm,jdbcType=VARCHAR},
+      </if>
+      <if test="stdAplYn != null" >
+        STD_APL_YN = #{stdAplYn,jdbcType=VARCHAR},
+      </if>
+      <if test="lecyDcd != null" >
+        LECY_DCD = #{lecyDcd,jdbcType=VARCHAR},
+      </if>
+      <if test="crgUserId != null" >
+        CRG_USER_ID = #{crgUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="writDtm != null" >
+        WRIT_DTM = #{writDtm,jdbcType=DATE},
+      </if>
+      <if test="writUserId != null" >
+        WRIT_USER_ID = #{writUserId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where SYS_AREA_ID = #{sysAreaId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="kr.wise.commons.damgmt.sysarea.service.WaaSysArea" >
+    update WAA_SYS_AREA
+    set EXP_DTM = #{expDtm,jdbcType=DATE},
+      STR_DTM = #{strDtm,jdbcType=DATE},
+      SYS_AREA_LNM = #{sysAreaLnm,jdbcType=VARCHAR},
+      SYS_AREA_PNM = #{sysAreaPnm,jdbcType=VARCHAR},
+      SYS_AREA_ABR_NM = #{sysAreaAbrNm,jdbcType=VARCHAR},
+      STD_APL_YN = #{stdAplYn,jdbcType=VARCHAR},
+      LECY_DCD = #{lecyDcd,jdbcType=VARCHAR},
+      CRG_USER_ID = #{crgUserId,jdbcType=VARCHAR},
+      OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      WRIT_DTM = #{writDtm,jdbcType=DATE},
+      WRIT_USER_ID = #{writUserId,jdbcType=VARCHAR}
+    where SYS_AREA_ID = #{sysAreaId,jdbcType=VARCHAR}
+  </update>
+  
+  <update id="updateExpDtm" parameterType="kr.wise.commons.damgmt.sysarea.service.WaaSysArea">
+  	UPDATE WAA_SYS_AREA SET
+  		EXP_DTM = SYSDATE
+  	WHERE SYS_AREA_ID = #{sysAreaId}
+  	  AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+  </update>
+  
+</mapper>

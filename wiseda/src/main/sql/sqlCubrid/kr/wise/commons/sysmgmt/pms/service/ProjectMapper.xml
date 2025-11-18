@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.commons.sysmgmt.pms.service.ProjectMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.commons.sysmgmt.pms.service.ProjectVO" >
+    <result column="PRJ_ID" property="prjId" jdbcType="VARCHAR" />
+    <result column="PRJ_NM" property="prjNm" jdbcType="VARCHAR" />
+    <result column="PM_NM" property="pmNm" jdbcType="VARCHAR" />
+    <result column="PM_TEL" property="pmTel" jdbcType="VARCHAR" />
+    <result column="DESCRIPTION" property="description" jdbcType="VARCHAR" />
+    <result column="STA_DTTM" property="staDttm"  />
+    <result column="END_DTTM" property="endDttm"  />
+    <result column="ORGL_USER" property="orglUser" jdbcType="VARCHAR" />
+    <result column="ORGL_DTTM" property="orglDttm" jdbcType="TIMESTAMP" />
+    <result column="UPDT_USER" property="updtUser" jdbcType="VARCHAR" />
+    <result column="UPDT_USER_NM" property="updtUserNm" jdbcType="VARCHAR" />
+    <result column="APRV_DTTM" property="aprvDttm" jdbcType="TIMESTAMP" />
+    <result column="USE_YN" property="useYn" jdbcType="CHAR" />
+    <result column="ORGL_TYPE" property="orglType" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <select id="selectProjectList" parameterType="kr.wise.commons.sysmgmt.pms.service.ProjectVO" resultMap="BaseResultMap">
+  SELECT PRJ_ID, PRJ_NM, PM_NM, 
+      PM_TEL, DESCRIPTION, 
+      TO_CHAR(STA_DTTM, 'YYYY-MM-DD') AS STA_DTTM , 
+      TO_CHAR(END_DTTM, 'YYYY-MM-DD') AS END_DTTM ,
+      ORGL_USER, ORGL_DTTM, 
+      UPDT_USER, APRV_DTTM, USE_YN, 
+      ORGL_TYPE,
+      GET_USER_NM(UPDT_USER) AS UPDT_USER_NM
+	FROM PMSPORJECT
+	WHERE 1=1
+	AND ORGL_TYPE IN ('C', 'U')
+	<if test="prjNm != null and prjNm != ''">
+	AND PRJ_NM LIKE '%' || #{prjNm} || '%'
+	</if>
+	<if test="pmNm != null and pmNm != ''">
+	AND PM_NM LIKE '%' || #{pmNm} || '%'
+	</if>
+  
+  </select>
+  
+  <select id="selectProjectDetail" parameterType="java.lang.String" resultMap="BaseResultMap">
+  SELECT PRJ_ID, PRJ_NM, PM_NM, 
+      PM_TEL, DESCRIPTION, 
+      TO_CHAR(STA_DTTM, 'YYYY-MM-DD') AS STA_DTTM , 
+      TO_CHAR(END_DTTM, 'YYYY-MM-DD') AS END_DTTM ,
+      ORGL_USER, ORGL_DTTM, 
+      UPDT_USER, APRV_DTTM, USE_YN, 
+      ORGL_TYPE
+	FROM PMSPORJECT
+	<where>
+		AND PRJ_ID = #{prjId}
+	</where>
+  </select>
+  
+  
+  
+  <update id="updateProject" parameterType="kr.wise.commons.sysmgmt.pms.service.ProjectVO" >
+    UPDATE PMSPORJECT
+    <set >
+      <if test="prjNm != null" >
+        PRJ_NM = #{prjNm,jdbcType=VARCHAR},
+      </if>
+      <if test="pmNm != null" >
+        PM_NM = #{pmNm,jdbcType=VARCHAR},
+      </if>
+      <if test="pmTel != null" >
+        PM_TEL = #{pmTel,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        DESCRIPTION = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="staDttm != null" >
+        STA_DTTM = TO_DATE(#{staDttm}, 'YYYY-MM-DD'),
+      </if>
+      <if test="endDttm != null" >
+        END_DTTM = TO_DATE(#{endDttm}, 'YYYY-MM-DD'),
+      </if>
+      <if test="updtUser != null" >
+        UPDT_USER = #{updtUser,jdbcType=VARCHAR},
+      </if>
+      <if test="useYn != null" >
+        USE_YN = #{useYn,jdbcType=CHAR},
+      </if>
+        APRV_DTTM = SYSDATETIME ,
+        ORGL_TYPE = 'U' ,
+    </set>
+    where PRJ_ID = #{prjId,jdbcType=VARCHAR}
+  </update>
+  
+  <update id="deleteProject" parameterType="kr.wise.commons.sysmgmt.pms.service.ProjectVO">
+  	DELETE FROM PMSPORJECT
+	WHERE PRJ_ID = #{prjId,jdbcType=VARCHAR}
+  </update>
+  
+
+  <insert id="insert" parameterType="kr.wise.commons.sysmgmt.pms.service.ProjectVO" >
+    insert into PMSPORJECT (PRJ_ID, PRJ_NM, PM_NM, 
+      PM_TEL, DESCRIPTION, STA_DTTM, 
+      END_DTTM, ORGL_USER, ORGL_DTTM, 
+      UPDT_USER, APRV_DTTM, USE_YN, 
+      ORGL_TYPE)
+    values (#{prjId,jdbcType=VARCHAR}, #{prjNm,jdbcType=VARCHAR}, #{pmNm,jdbcType=VARCHAR}, 
+      #{pmTel,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{staDttm,jdbcType=TIMESTAMP}, 
+      #{endDttm,jdbcType=TIMESTAMP}, #{orglUser,jdbcType=VARCHAR}, #{orglDttm,jdbcType=TIMESTAMP}, 
+      #{updtUser,jdbcType=VARCHAR}, #{aprvDttm,jdbcType=TIMESTAMP}, #{useYn,jdbcType=CHAR}, 
+      #{orglType,jdbcType=VARCHAR})
+  </insert>
+  
+  <insert id="insertProject" parameterType="kr.wise.commons.sysmgmt.pms.service.ProjectVO" >
+    insert into PMSPORJECT
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="prjId != null" >
+        PRJ_ID,
+      </if>
+      <if test="prjNm != null" >
+        PRJ_NM,
+      </if>
+      <if test="pmNm != null" >
+        PM_NM,
+      </if>
+      <if test="pmTel != null" >
+        PM_TEL,
+      </if>
+      <if test="description != null" >
+        DESCRIPTION,
+      </if>
+      <if test="staDttm != null" >
+        STA_DTTM,
+      </if>
+      <if test="endDttm != null" >
+        END_DTTM,
+      </if>
+      <if test="orglUser != null" >
+        ORGL_USER,
+      </if>
+      <if test="useYn != null" >
+        USE_YN,
+      </if>
+        ORGL_DTTM,
+        ORGL_TYPE,
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="prjId != null" >
+        #{prjId,jdbcType=VARCHAR},
+      </if>
+      <if test="prjNm != null" >
+        #{prjNm,jdbcType=VARCHAR},
+      </if>
+      <if test="pmNm != null" >
+        #{pmNm,jdbcType=VARCHAR},
+      </if>
+      <if test="pmTel != null" >
+        #{pmTel,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="staDttm != null" >
+      	TO_DATE(#{staDttm}, 'YYYY-MM-DD'),
+      </if>
+      <if test="endDttm != null" >
+      	TO_DATE(#{endDttm}, 'YYYY-MM-DD'),
+      </if>
+      <if test="orglUser != null" >
+        #{orglUser,jdbcType=VARCHAR},
+      </if>
+      <if test="useYn != null" >
+        #{useYn,jdbcType=CHAR},
+      </if>
+        SYSDATETIME ,
+        'C',
+    </trim>
+  </insert>
+  <insert id="insertSelective" parameterType="kr.wise.commons.sysmgmt.pms.service.ProjectVO" >
+    insert into PMSPORJECT
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="prjId != null" >
+        PRJ_ID,
+      </if>
+      <if test="prjNm != null" >
+        PRJ_NM,
+      </if>
+      <if test="pmNm != null" >
+        PM_NM,
+      </if>
+      <if test="pmTel != null" >
+        PM_TEL,
+      </if>
+      <if test="description != null" >
+        DESCRIPTION,
+      </if>
+      <if test="staDttm != null" >
+        STA_DTTM,
+      </if>
+      <if test="endDttm != null" >
+        END_DTTM,
+      </if>
+      <if test="orglUser != null" >
+        ORGL_USER,
+      </if>
+        ORGL_DTTM,
+      <if test="updtUser != null" >
+        UPDT_USER,
+      </if>
+        APRV_DTTM,
+      <if test="useYn != null" >
+        USE_YN,
+      </if>
+      <if test="orglType != null" >
+        ORGL_TYPE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="prjId != null" >
+        #{prjId,jdbcType=VARCHAR},
+      </if>
+      <if test="prjNm != null" >
+        #{prjNm,jdbcType=VARCHAR},
+      </if>
+      <if test="pmNm != null" >
+        #{pmNm,jdbcType=VARCHAR},
+      </if>
+      <if test="pmTel != null" >
+        #{pmTel,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="staDttm != null" >
+        #{staDttm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endDttm != null" >
+        #{endDttm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orglUser != null" >
+        #{orglUser,jdbcType=VARCHAR},
+      </if>
+     	SYSDATETIME,
+      <if test="updtUser != null" >
+        #{updtUser,jdbcType=VARCHAR},
+      </if>
+      	SYSDATETIME,
+      <if test="useYn != null" >
+        #{useYn,jdbcType=CHAR},
+      </if>
+      <if test="orglType != null" >
+        #{orglType,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+</mapper>

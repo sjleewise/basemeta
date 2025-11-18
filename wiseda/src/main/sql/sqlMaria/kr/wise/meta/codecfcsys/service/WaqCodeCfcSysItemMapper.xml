@@ -1,0 +1,673 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.meta.codecfcsys.service.WaqCodeCfcSysItemMapper" >
+  
+  <resultMap id="BaseResultMap" type="kr.wise.meta.codecfcsys.service.WaqCodeCfcSysItem" extends="kr.wise.meta.codecfcsys.service.WaqCodeCfcSysMapper.BaseResultMap">
+<!--     <id column="RQST_NO" property="rqstNo" jdbcType="VARCHAR" /> -->
+<!--     <id column="RQST_SNO" property="rqstSno" jdbcType="DECIMAL" /> -->
+<!--     <id column="RQST_DTL_SNO" property="rqstDtlSno" jdbcType="DECIMAL" /> -->
+<!--     <result column="CODE_CFC_SYS_ID" property="codeCfcSysId" jdbcType="VARCHAR" /> -->
+<!--     <result column="CODE_CFC_SYS_LNM" property="codeCfcSysLnm" jdbcType="VARCHAR" /> -->
+<!--     <result column="CODE_CFC_SYS_PNM" property="codeCfcSysPnm" jdbcType="VARCHAR" /> -->
+<!--     <result column="CODE_CFC_SYS_CD" property="codeCfcSysCd" jdbcType="VARCHAR" /> -->
+    <result column="CODE_CFC_SYS_ITEM_SEQ" property="codeCfcSysItemSeq" jdbcType="DECIMAL" />
+    <result column="CODE_CFC_SYS_ITEM_CD" property="codeCfcSysItemCd" jdbcType="VARCHAR" />
+<!--     <result column="RQST_DCD" property="rqstDcd" jdbcType="VARCHAR" /> -->
+<!--     <result column="VRF_CD" property="vrfCd" jdbcType="VARCHAR" /> -->
+<!--     <result column="VRF_RMK" property="vrfRmk" jdbcType="VARCHAR" /> -->
+    <result column="CODE_CFC_SYS_ITEM_FRM" property="codeCfcSysItemFrm" jdbcType="VARCHAR" />
+    <result column="CODE_CFC_SYS_ITEM_LEN" property="codeCfcSysItemLen" jdbcType="DECIMAL" />
+    <result column="CODE_CFC_SYS_ITEM_SPT" property="codeCfcSysItemSpt" jdbcType="VARCHAR" />
+    <result column="CODE_CFC_SYS_ITEM_REF_TBL" property="codeCfcSysItemRefTbl" jdbcType="VARCHAR" />
+    <result column="CODE_CFC_SYS_ITEM_REF_COL" property="codeCfcSysItemRefCol" jdbcType="VARCHAR" />
+    <result column="CODE_CFC_SYS_ITEM_REF_ID" property="codeCfcSysItemRefId" jdbcType="VARCHAR" />
+<!--     <result column="OBJ_DESCN" property="objDescn" jdbcType="VARCHAR" /> -->
+<!--     <result column="OBJ_VERS" property="objVers" jdbcType="DECIMAL" /> -->
+<!--     <result column="REG_TYP_CD" property="regTypCd" jdbcType="VARCHAR" /> -->
+<!--     <result column="FRS_RQST_DTM" property="frsRqstDtm" jdbcType="TIMESTAMP" /> -->
+<!--     <result column="FRS_RQST_USER_ID" property="frsRqstUserId" jdbcType="VARCHAR" /> -->
+<!--     <result column="RQST_DTM" property="rqstDtm" jdbcType="TIMESTAMP" /> -->
+<!--     <result column="RQST_USER_ID" property="rqstUserId" jdbcType="VARCHAR" /> -->
+<!--     <result column="APRV_DTM" property="aprvDtm" jdbcType="TIMESTAMP" /> -->
+<!--     <result column="APRV_USER_ID" property="aprvUserId" jdbcType="VARCHAR" /> -->
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    RQST_NO, RQST_SNO, RQST_DTL_SNO, CODE_CFC_SYS_ID, CODE_CFC_SYS_LNM, CODE_CFC_SYS_PNM, 
+    CODE_CFC_SYS_CD, CODE_CFC_SYS_ITEM_SEQ, CODE_CFC_SYS_ITEM_CD, RQST_DCD, VRF_CD, VRF_RMK, 
+    CODE_CFC_SYS_ITEM_FRM, CODE_CFC_SYS_ITEM_LEN, CODE_CFC_SYS_ITEM_SPT, CODE_CFC_SYS_ITEM_REF_TBL, 
+    CODE_CFC_SYS_ITEM_REF_COL, CODE_CFC_SYS_ITEM_REF_ID, OBJ_DESCN, OBJ_VERS, REG_TYP_CD, FRS_RQST_DTM, FRS_RQST_USER_ID, 
+    RQST_DTM, RQST_USER_ID, APRV_DTM, APRV_USER_ID
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="map" >
+    select /* WaqCodeCfcSysItemMapper.selectByPrimaryKey */
+    <include refid="Base_Column_List" />
+    from WAQ_CODE_CFC_SYS_ITEM
+    where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      and RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+      and RQST_DTL_SNO = #{rqstDtlSno,jdbcType=DECIMAL}
+  </select>
+ 
+  <delete id="deleteByPrimaryKey" parameterType="map" >
+    delete /* WaqCodeCfcSysItemMapper.deleteByPrimaryKey */
+    from WAQ_CODE_CFC_SYS_ITEM
+    where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      and RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+      and RQST_DTL_SNO = #{rqstDtlSno,jdbcType=DECIMAL}
+  </delete>
+  
+  <delete id="deleteWaq" parameterType="map" >
+    delete /* WaqCodeCfcSysItemMapper.deleteWaq */
+    from WAQ_CODE_CFC_SYS_ITEM
+    where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      and RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+     
+  </delete>
+  
+  <insert id="insertSelective" parameterType="kr.wise.meta.codecfcsys.service.WaqCodeCfcSysItem" >
+  	<selectKey keyProperty="rqstSno" resultType="int" order="BEFORE" statementType="PREPARED">
+   SELECT CASE WHEN IFNULL(A.RQST_SNO, 0) = IFNULL(B.RQST_SNO, 0) THEN B.RQST_SNO
+          ELSE IFNULL(MAX_RQST_SNO, 0) + 1
+          END AS RQST_SNO
+       FROM (SELECT #{rqstNo,jdbcType=VARCHAR} AS RQST_NO
+                 ,#{codeCfcSysLnm,jdbcType=VARCHAR} AS CODE_CFC_SYS_LNM
+                 ,#{codeCfcSysCd,jdbcType=VARCHAR} AS CODE_CFC_SYS_CD 
+                 , (SELECT MAX(RQST_SNO) AS RQST_SNO 
+                      FROM WAQ_CODE_CFC_SYS_ITEM 
+                     WHERE RQST_NO = #{rqstNo,jdbcType=VARCHAR}) AS MAX_RQST_SNO    
+                 , (SELECT IFNULL(MAX(RQST_SNO), 1) AS RQST_SNO 
+                      FROM WAQ_CODE_CFC_SYS_ITEM 
+                     WHERE RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+                       AND CODE_CFC_SYS_CD = #{codeCfcSysCd,jdbcType=VARCHAR}
+                       AND CODE_CFC_SYS_LNM = #{codeCfcSysLnm,jdbcType=VARCHAR}) AS RQST_SNO  
+<!--             DBMS 종류별  DUMMY  테이블 다름 -->
+            FROM DUAL
+          ) A
+         LEFT OUTER JOIN (SELECT RQST_NO
+                                 , CODE_CFC_SYS_LNM
+                                 , CODE_CFC_SYS_CD
+                                 , MAX(RQST_SNO) AS RQST_SNO
+                            FROM WAQ_CODE_CFC_SYS_ITEM
+                           WHERE RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+                             AND CODE_CFC_SYS_LNM = #{codeCfcSysLnm,jdbcType=VARCHAR}
+                             AND CODE_CFC_SYS_CD = #{codeCfcSysCd,jdbcType=VARCHAR}
+                           GROUP BY RQST_NO, CODE_CFC_SYS_LNM, CODE_CFC_SYS_CD) B
+           ON A.RQST_NO = B.RQST_NO
+          AND A.CODE_CFC_SYS_LNM = B.CODE_CFC_SYS_LNM        
+          AND A.CODE_CFC_SYS_CD = B.CODE_CFC_SYS_CD
+   WHERE A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+<!--   		SELECT IFNULL(MAX(RQST_SNO), 0) + 1       		 -->
+<!--   	 	  FROM WAQ_CODE_CFC_SYS_ITEM -->
+<!--   	     WHERE RQST_NO = #{rqstNo,jdbcType=VARCHAR}  -->
+<!--   	       AND CODE_CFC_SYS_LNM =  #{codeCfcSysLnm,jdbcType=VARCHAR}   	        -->
+  	</selectKey>
+  	
+    insert 	/* WaqCodeCfcSysItemMapper.insertSelective */
+    		into WAQ_CODE_CFC_SYS_ITEM
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+        RQST_NO,
+        RQST_SNO,
+        RQST_DTL_SNO,
+      <if test="codeCfcSysId != null" >
+        CODE_CFC_SYS_ID,
+      </if>
+      <if test="codeCfcSysLnm != null" >
+        CODE_CFC_SYS_LNM,
+      </if>
+      <if test="codeCfcSysPnm != null" >
+        CODE_CFC_SYS_PNM,
+      </if>
+      <if test="codeCfcSysCd != null" >
+        CODE_CFC_SYS_CD,
+      </if>
+      <if test="codeCfcSysItemSeq != null" >
+        CODE_CFC_SYS_ITEM_SEQ,
+      </if>
+      <if test="codeCfcSysItemCd != null" >
+        CODE_CFC_SYS_ITEM_CD,
+      </if>
+      <if test="rqstDcd != null" >
+        RQST_DCD,
+      </if>
+      <if test="vrfCd != null" >
+        VRF_CD,
+      </if>
+      <if test="vrfRmk != null" >
+        VRF_RMK,
+      </if>
+      <if test="codeCfcSysItemFrm != null" >
+        CODE_CFC_SYS_ITEM_FRM,
+      </if>
+      <if test="codeCfcSysItemLen != null" >
+        CODE_CFC_SYS_ITEM_LEN,
+      </if>
+      <if test="codeCfcSysItemSpt != null" >
+        CODE_CFC_SYS_ITEM_SPT,
+      </if>
+      <if test="codeCfcSysItemRefTbl != null" >
+        CODE_CFC_SYS_ITEM_REF_TBL,
+      </if>
+      <if test="codeCfcSysItemRefCol != null" >
+        CODE_CFC_SYS_ITEM_REF_COL,
+      </if>
+      <if test="codeCfcSysItemRefId != null" >
+        CODE_CFC_SYS_ITEM_REF_ID,
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN,
+      </if>
+        OBJ_VERS,
+      <if test="regTypCd != null" >
+        REG_TYP_CD,
+      </if>
+      <if test="frsRqstDtm != null" >
+        FRS_RQST_DTM,
+      </if>
+      <if test="frsRqstUserId != null" >
+        FRS_RQST_USER_ID,
+      </if>
+      <if test="rqstDtm != null" >
+        RQST_DTM,
+      </if>
+      <if test="rqstUserId != null" >
+        RQST_USER_ID,
+      </if>
+      <if test="aprvDtm != null" >
+        APRV_DTM,
+      </if>
+      <if test="aprvUserId != null" >
+        APRV_USER_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+        #{rqstNo},
+        #{rqstSno},
+<!--         #{rqstDtlSno,jdbcType=DECIMAL}, -->
+  		(SELECT IFNULL(MAX(RQST_DTL_SNO), 0) + 1 FROM WAQ_CODE_CFC_SYS_ITEM WHERE RQST_NO = #{rqstNo} AND RQST_SNO = #{rqstSno}),
+      <if test="codeCfcSysId != null" >
+        #{codeCfcSysId,jdbcType=VARCHAR},
+      </if>
+      <if test="codeCfcSysLnm != null" >
+        #{codeCfcSysLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="codeCfcSysPnm != null" >
+        #{codeCfcSysPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="codeCfcSysCd != null" >
+        #{codeCfcSysCd,jdbcType=VARCHAR},
+      </if>
+      <if test="codeCfcSysItemSeq != null" >
+        #{codeCfcSysItemSeq,jdbcType=DECIMAL},
+      </if>
+      <if test="codeCfcSysItemCd != null" >
+        #{codeCfcSysItemCd,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDcd != null" >
+        #{rqstDcd,jdbcType=VARCHAR},
+      </if>
+      <if test="vrfCd != null" >
+        #{vrfCd,jdbcType=VARCHAR},
+      </if>
+      <if test="vrfRmk != null" >
+        #{vrfRmk,jdbcType=VARCHAR},
+      </if>
+      <if test="codeCfcSysItemFrm != null" >
+        #{codeCfcSysItemFrm,jdbcType=VARCHAR},
+      </if>
+      <if test="codeCfcSysItemLen != null" >
+        #{codeCfcSysItemLen,jdbcType=DECIMAL},
+      </if>
+      <if test="codeCfcSysItemSpt != null" >
+        #{codeCfcSysItemSpt,jdbcType=VARCHAR},
+      </if>
+      <if test="codeCfcSysItemRefTbl != null" >
+        #{codeCfcSysItemRefTbl,jdbcType=VARCHAR},
+      </if>
+      <if test="codeCfcSysItemRefCol != null" >
+        #{codeCfcSysItemRefCol,jdbcType=VARCHAR},
+      </if>
+      <if test="codeCfcSysItemRefId != null" >
+        #{codeCfcSysItemRefId,jdbcType=VARCHAR},
+      </if>
+      <if test="objDescn != null" >
+        #{objDescn,jdbcType=VARCHAR},
+      </if>
+		1,
+      <if test="regTypCd != null" >
+        #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="frsRqstDtm != null" >
+        #{frsRqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="frsRqstUserId != null" >
+        #{frsRqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDtm != null" >
+        #{rqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rqstUserId != null" >
+        #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDtm != null" >
+        #{aprvDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aprvUserId != null" >
+        #{aprvUserId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.meta.codecfcsys.service.WaqCodeCfcSysItem" >
+    update 	/* WaqCodeCfcSysItemMapper.updateByPrimaryKeySelective */
+    		WAQ_CODE_CFC_SYS_ITEM
+    <set >
+      <if test="codeCfcSysId != null" >
+        CODE_CFC_SYS_ID = #{codeCfcSysId,jdbcType=VARCHAR},
+      </if>
+      <if test="codeCfcSysLnm != null" >
+        CODE_CFC_SYS_LNM = #{codeCfcSysLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="codeCfcSysPnm != null" >
+        CODE_CFC_SYS_PNM = #{codeCfcSysPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="codeCfcSysCd != null" >
+        CODE_CFC_SYS_CD = #{codeCfcSysCd,jdbcType=VARCHAR},
+      </if>
+      <if test="codeCfcSysItemSeq != null" >
+        CODE_CFC_SYS_ITEM_SEQ = #{codeCfcSysItemSeq,jdbcType=DECIMAL},
+      </if>
+      <if test="codeCfcSysItemCd != null" >
+        CODE_CFC_SYS_ITEM_CD = #{codeCfcSysItemCd,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDcd != null" >
+        RQST_DCD = #{rqstDcd,jdbcType=VARCHAR},
+      </if>
+      <if test="vrfCd != null" >
+        VRF_CD = #{vrfCd,jdbcType=VARCHAR},
+      </if>
+      <if test="vrfRmk != null" >
+        VRF_RMK = #{vrfRmk,jdbcType=VARCHAR},
+      </if>
+      <if test="codeCfcSysItemFrm != null" >
+        CODE_CFC_SYS_ITEM_FRM = #{codeCfcSysItemFrm,jdbcType=VARCHAR},
+      </if>
+      <if test="codeCfcSysItemLen != null" >
+        CODE_CFC_SYS_ITEM_LEN = #{codeCfcSysItemLen,jdbcType=DECIMAL},
+      </if>
+      <if test="codeCfcSysItemSpt != null" >
+        CODE_CFC_SYS_ITEM_SPT = #{codeCfcSysItemSpt,jdbcType=VARCHAR},
+      </if>
+      <if test="codeCfcSysItemRefTbl != null" >
+        CODE_CFC_SYS_ITEM_REF_TBL = #{codeCfcSysItemRefTbl,jdbcType=VARCHAR},
+      </if>
+      <if test="codeCfcSysItemRefCol != null" >
+        CODE_CFC_SYS_ITEM_REF_COL = #{codeCfcSysItemRefCol,jdbcType=VARCHAR},
+      </if>
+      <if test="codeCfcSysItemRefId != null" >
+        CODE_CFC_SYS_ITEM_REF_ID = #{codeCfcSysItemRefId,jdbcType=VARCHAR},
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="frsRqstDtm != null" >
+        FRS_RQST_DTM = #{frsRqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="frsRqstUserId != null" >
+        FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDtm != null" >
+        RQST_DTM = #{rqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rqstUserId != null" >
+        RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDtm != null" >
+        APRV_DTM = #{aprvDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aprvUserId != null" >
+        APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      and RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+      and RQST_DTL_SNO = #{rqstDtlSno,jdbcType=DECIMAL}
+  </update>
+  
+  <update id="updateRqstDcd" parameterType="java.lang.String" >
+    --항목 요청구분 Update... (기준은 WAQ_CODE_CFC_SYS RQST_DCD로 함.)
+    UPDATE 	/* WaqCodeCfcSysItemMapper.updateRqstDcd */
+    		WAQ_CODE_CFC_SYS_ITEM A
+    	SET A.RQST_DCD = (SELECT D.RQST_DCD
+                        FROM WAQ_CODE_CFC_SYS D
+                       WHERE D.RQST_NO = A.RQST_NO
+                         AND D.RQST_SNO = A.RQST_SNO
+                          )
+       ,A.VRF_CD = '4'
+       
+    WHERE A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+  </update>
+  
+  
+  <update id="updateCheckInit" parameterType="java.lang.String" >
+    UPDATE 	/* WaqCodeCfcSysItemMapper.updateCheckInit */
+    		WAQ_CODE_CFC_SYS_ITEM A
+    	SET (A.REG_TYP_CD, A.OBJ_VERS) = (SELECT CASE WHEN A.RQST_DCD = 'DD' then 'D' else case when MAX(B.CODE_CFC_SYS_ID) IS NULL THEN 'C' ELSE 'U' END END
+				                           , IFNULL(MAX(B.OBJ_VERS), 1)
+				                        FROM WAM_CODE_CFC_SYS_ITEM B
+				                           INNER JOIN WAM_CODE_CFC_SYS C
+				                              ON C.CODE_CFC_SYS_ID = B.CODE_CFC_SYS_ID
+				                             AND C.REG_TYP_CD IN ('C','U')
+				                           INNER JOIN WAQ_CODE_CFC_SYS D
+				                              ON C.CODE_CFC_SYS_CD = D.CODE_CFC_SYS_CD
+				                             AND C.CODE_CFC_SYS_LNM = D.CODE_CFC_SYS_LNM
+				                        WHERE B.REG_TYP_CD IN ('C','U')
+				                          AND B.CODE_CFC_SYS_CD = A.CODE_CFC_SYS_CD
+				                          AND B.CODE_CFC_SYS_LNM = A.CODE_CFC_SYS_LNM 
+				                          AND B.CODE_CFC_SYS_ITEM_SEQ = A.CODE_CFC_SYS_ITEM_SEQ
+				                          AND D.RQST_NO = A.RQST_NO
+				                          AND D.RQST_SNO = A.RQST_SNO
+				                          )
+       ,A.VRF_CD = '4'
+       
+    WHERE A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+  </update>
+  
+   <select id="selectCodeCfcSysRqstItemList" resultMap="BaseResultMap" parameterType="map" >
+    --코드분류체계 항목 요청서 리스트 조회
+  	SELECT /* WaqCodeCfcSysItemMapper.selectCodeCfcSysRqstItemList */
+    A.RQST_NO, A.RQST_SNO, A.RQST_DTL_SNO, A.CODE_CFC_SYS_ID, A.CODE_CFC_SYS_PNM, A.CODE_CFC_SYS_LNM, A.CODE_CFC_SYS_CD, A.CODE_CFC_SYS_ITEM_SEQ,
+    A.CODE_CFC_SYS_ITEM_CD, A.RQST_DCD, A.VRF_CD, A.VRF_RMK, A.RVW_CONTS,
+    A.CODE_CFC_SYS_ITEM_FRM, A.CODE_CFC_SYS_ITEM_LEN, A.CODE_CFC_SYS_ITEM_SPT, A.CODE_CFC_SYS_ITEM_REF_TBL, A.CODE_CFC_SYS_ITEM_REF_COL, A.CODE_CFC_SYS_ITEM_REF_ID,
+    A.OBJ_DESCN, A.OBJ_VERS, 
+    A.REG_TYP_CD, A.FRS_RQST_DTM, A.FRS_RQST_USER_ID, A.RQST_DTM, A.RQST_USER_ID, A.APRV_DTM, A.APRV_USER_ID
+    
+    <if test='rqstStepCd == "Q" '>
+     , CASE WHEN A.RVW_STS_CD = '2' THEN '2' ELSE '0' END AS RVW_STS_CD
+     </if>
+     <if test='rqstStepCd != "Q" '>
+     , A.RVW_STS_CD
+     </if>
+     , CASE WHEN A.VRF_CD = '2' THEN '#FF0000' END AS FontColor
+     , U.USER_NM AS RQST_USER_NM
+    FROM WAQ_CODE_CFC_SYS_ITEM A
+    LEFT OUTER JOIN WAA_USER U
+      ON A.RQST_USER_ID = U.USER_ID
+     AND U.REG_TYP_CD IN ('C', 'U')
+     AND U.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+    WHERE A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+    <if test='rqstStepCd == "Q" or rqstStepCd == "A" '>
+    	AND A.VRF_CD = '1'
+    </if>
+    <if test="rqstSno != null ">
+    	AND A.RQST_SNO = #{rqstSno}
+    </if>
+    ORDER BY A.RQST_SNO, A.CODE_CFC_SYS_ITEM_SEQ, A.RQST_DTL_SNO  
+  </select>
+  
+  
+  
+  <update id="updateWaqCUD" parameterType="map">
+   	--WAQ ID, VERS 등을 업데이트...
+   	UPDATE 	/* WaqCodeCfcSysItemMapper.updateWaqCUD */
+   			WAQ_CODE_CFC_SYS_ITEM A
+   	   SET (OBJ_VERS, FRS_RQST_DTM, FRS_RQST_USER_ID) = (
+   	   		SELECT
+   	   			  IFNULL(D.OBJ_VERS, 0) + 1 AS OBJ_VERS
+				, D.FRS_RQST_DTM
+				, D.FRS_RQST_USER_ID
+			  FROM WAQ_CODE_CFC_SYS B
+			  JOIN WAM_CODE_CFC_SYS C
+			    ON B.CODE_CFC_SYS_LNM = C.CODE_CFC_SYS_LNM
+	      	   AND B.CODE_CFC_SYS_CD = C.CODE_CFC_SYS_CD
+	      	  JOIN WAM_CODE_CFC_SYS_ITEM D
+	      	    ON C.CODE_CFC_SYS_ID = D.CODE_CFC_SYS_ID
+	      	 WHERE B.RQST_NO = A.RQST_NO
+			   AND B.RQST_SNO = A.RQST_SNO
+			   AND D.CODE_CFC_SYS_CD = A.CODE_CFC_SYS_CD
+			   AND D.CODE_CFC_SYS_LNM = A.CODE_CFC_SYS_LNM
+			   AND D.CODE_CFC_SYS_ITEM_SEQ = A.CODE_CFC_SYS_ITEM_SEQ
+			   AND B.RVW_STS_CD = '1' --승인대상만...
+   	   	   )
+	WHERE A.RQST_NO = #{rqstNo}
+	  AND A.VRF_CD = '1' --등록가능
+	  AND EXISTS (
+	  	  SELECT 1
+	  		FROM WAQ_CODE_CFC_SYS B
+			  JOIN WAM_CODE_CFC_SYS C
+			    ON B.CODE_CFC_SYS_LNM = C.CODE_CFC_SYS_LNM
+			   AND B.CODE_CFC_SYS_CD = C.CODE_CFC_SYS_CD
+<!-- 	      	   AND B.PDM_TBL_LNM = C.PDM_TBL_LNM -->
+	      	  JOIN WAM_CODE_CFC_SYS_ITEM D
+	      	    ON C.CODE_CFC_SYS_ID = D.CODE_CFC_SYS_ID
+	      	 WHERE B.RQST_NO = A.RQST_NO
+			   AND B.RQST_SNO = A.RQST_SNO
+			   AND D.CODE_CFC_SYS_CD = A.CODE_CFC_SYS_CD
+			   AND D.CODE_CFC_SYS_LNM = A.CODE_CFC_SYS_LNM
+			   AND D.CODE_CFC_SYS_ITEM_SEQ = A.CODE_CFC_SYS_ITEM_SEQ
+			   AND B.RVW_STS_CD = '1' --승인대상만...
+	  )   	   
+   	</update>
+   	
+   	<sql id="wam_col_list">
+		  A.CODE_CFC_SYS_LNM, A.CODE_CFC_SYS_PNM, A.CODE_CFC_SYS_CD, A.CODE_CFC_SYS_ITEM_SEQ, A.CODE_CFC_SYS_ITEM_CD, A.CODE_CFC_SYS_ITEM_FRM, 
+    	  A.CODE_CFC_SYS_ITEM_LEN, A.CODE_CFC_SYS_ITEM_SPT, A.CODE_CFC_SYS_ITEM_REF_TBL, A.CODE_CFC_SYS_ITEM_REF_COL, A.CODE_CFC_SYS_ITEM_REF_ID, 
+   		  A.RQST_NO, A.RQST_SNO, A.RQST_DTL_SNO, A.OBJ_DESCN, A.OBJ_VERS, A.REG_TYP_CD, A.FRS_RQST_DTM, A.FRS_RQST_USER_ID, 
+   		  A.RQST_DTM, A.RQST_USER_ID, A.APRV_DTM, A.APRV_USER_ID
+	</sql>
+   	
+   <update id="updateWaqId" parameterType="map">
+   --주제영역 ID, 테이블 ID 업데이트...
+   	UPDATE 	/* WaqCodeCfcSysItemMapper.updateWaqId */
+   			WAQ_CODE_CFC_SYS_ITEM X SET (CODE_CFC_SYS_ID, APRV_DTM, APRV_USER_ID) = (
+		SELECT A.CODE_CFC_SYS_ID, NOW(), A.APRV_USER_ID
+		  FROM	WAQ_CODE_CFC_SYS A 
+	     WHERE A.RQST_NO = X.RQST_NO
+	       AND A.RQST_SNO = X.RQST_SNO
+	       AND A.RVW_STS_CD = '1' --승인대상만...	
+	) 
+	WHERE X.RQST_NO = #{rqstNo}
+	  AND X.VRF_CD = '1' --등록가능
+   </update>   	
+   <update id="updateidByKey" parameterType="kr.wise.meta.codecfcsys.service.WaqCodeCfcSys">
+     --신규 적재 대상 ID 업데이트
+     UPDATE /* WaqCodeCfcSysItemMapper.updateidByKey */
+     		WAQ_CODE_CFC_SYS_ITEM SET CODE_CFC_SYS_ID = #{codeCfcSysId,jdbcType=VARCHAR}
+  	 WHERE RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+       AND RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+   </update>
+   
+   <delete id="deleteWAM" parameterType="map">
+    --WAM 삭제 (등록유형코드가REG_TYP_CD 변경, 삭제일 경우)
+	DELETE /* WaqCodeCfcSysItemMapper.deleteWAM */
+	FROM WAM_CODE_CFC_SYS_ITEM A
+	 WHERE EXISTS (
+		SELECT 1 FROM WAQ_CODE_CFC_SYS_ITEM C
+		 WHERE C.RQST_NO = #{rqstNo}
+	       AND C.CODE_CFC_SYS_LNM = A.CODE_CFC_SYS_LNM
+	       AND C.CODE_CFC_SYS_CD = A.CODE_CFC_SYS_CD
+<!-- 	       AND B.RVW_STS_CD = '1' -->
+<!-- 	       AND C.VRF_CD = '1' -->
+	)
+   </delete>
+   
+   <insert id="insertWAM" parameterType="map">
+   	--WAM 추가 (WAQ 내용을 추가, REG_TYP_CD 가 신규,변경일 경우)
+	INSERT 	/* WaqCodeCfcSysItemMapper.insertWAM */
+			INTO WAM_CODE_CFC_SYS_ITEM
+	SELECT 
+	    A.CODE_CFC_SYS_ID
+	  , <include refid="wam_col_list"/>
+	  FROM WAQ_CODE_CFC_SYS_ITEM A
+	  JOIN WAQ_CODE_CFC_SYS B 
+	    ON A.RQST_NO = B.RQST_NO
+	   AND A.RQST_SNO = B.RQST_SNO
+	 WHERE A.RQST_NO = #{rqstNo}
+	   AND A.VRF_CD = '1'
+	   AND A.REG_TYP_CD IN ('C', 'U')
+	   AND B.RVW_STS_CD = '1'
+   </insert>
+   
+   <update id="updateWAH"  parameterType="map">
+   	--WAH 이력 만료...
+	UPDATE 	/* WaqCodeCfcSysItemMapper.updateWAH */
+			WAH_CODE_CFC_SYS_ITEM A SET EXP_DTM = NOW()
+	WHERE EXISTS (
+		SELECT 1 FROM WAQ_CODE_CFC_SYS B 
+	      JOIN WAQ_CODE_CFC_SYS_ITEM C
+	        ON B.RQST_NO = C.RQST_NO
+	       AND B.RQST_SNO = C.RQST_SNO
+	     WHERE C.RQST_NO = #{rqstNo}
+	       AND C.CODE_CFC_SYS_ID = A.CODE_CFC_SYS_ID
+	       AND C.CODE_CFC_SYS_CD = A.CODE_CFC_SYS_CD
+	       AND C.CODE_CFC_SYS_LNM = A.CODE_CFC_SYS_LNM
+	       AND C.VRF_CD = '1'
+	       AND B.RVW_STS_CD = '1'
+	)
+	  AND EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+   </update>
+   
+   <insert id="insertWAH"  parameterType="map">
+   	--WAH이력 적재...
+	INSERT 	/* WaqCodeCfcSysItemMapper.insertWAH */
+			INTO WAH_CODE_CFC_SYS_ITEM
+	SELECT 
+			A.CODE_CFC_SYS_ID
+		  , STR_TO_DATE('9999-12-31', '%Y-%m-%d') AS EXP_DTM
+		  , NOW() AS STR_DTM 
+		  , <include refid="wam_col_list"/>
+	  FROM WAQ_CODE_CFC_SYS_ITEM A
+	  JOIN WAQ_CODE_CFC_SYS B
+	    ON B.RQST_NO = A.RQST_NO
+	   AND B.RQST_SNO = A.RQST_SNO
+	 WHERE A.RQST_NO = #{rqstNo}
+	   AND A.VRF_CD = '1'
+	   AND B.RVW_STS_CD = '1'
+   </insert>   
+  
+  <insert id="insertByRqstSno" parameterType="kr.wise.meta.codecfcsys.service.WaqCodeCfcSys">
+    --테이블 추가시 WAM에 존재하는 항목 추가한다.
+  	INSERT 	/* WaqCodeCfcSysItemMapper.insertByRqstSno */
+  			INTO WAQ_CODE_CFC_SYS_ITEM(
+	      RQST_NO, RQST_SNO, RQST_DTL_SNO, CODE_CFC_SYS_ID, CODE_CFC_SYS_LNM, CODE_CFC_SYS_PNM, CODE_CFC_SYS_CD, RQST_DCD
+	    , CODE_CFC_SYS_ITEM_SEQ, CODE_CFC_SYS_ITEM_CD, CODE_CFC_SYS_ITEM_FRM, CODE_CFC_SYS_ITEM_LEN, CODE_CFC_SYS_ITEM_SPT
+	    , CODE_CFC_SYS_ITEM_REF_TBL, CODE_CFC_SYS_ITEM_REF_COL, CODE_CFC_SYS_ITEM_REF_ID
+	    , OBJ_DESCN, OBJ_VERS, FRS_RQST_DTM, FRS_RQST_USER_ID, RQST_DTM, RQST_USER_ID
+	)
+	SELECT 
+	  B.RQST_NO, B.RQST_SNO
+	  , (SELECT IFNULL(MAX(RQST_DTL_SNO), 0) FROM WAQ_CODE_CFC_SYS_ITEM WHERE RQST_NO = #{rqstNo} AND RQST_SNO = #{rqstSno} ) + ROWNUM AS RQST_DTL_SNO
+	  , C.CODE_CFC_SYS_ID, C.CODE_CFC_SYS_LNM, C.CODE_CFC_SYS_PNM, C.CODE_CFC_SYS_CD, 'CU' AS RQST_DCD
+	  , C.CODE_CFC_SYS_ITEM_SEQ, C.CODE_CFC_SYS_ITEM_CD, C.CODE_CFC_SYS_ITEM_FRM, C.CODE_CFC_SYS_ITEM_LEN, C.CODE_CFC_SYS_ITEM_SPT
+	  , C.CODE_CFC_SYS_ITEM_REF_TBL, C.CODE_CFC_SYS_ITEM_REF_COL, C.CODE_CFC_SYS_ITEM_REF_ID
+	  , C.OBJ_DESCN, C.OBJ_VERS,  B.FRS_RQST_DTM, B.FRS_RQST_USER_ID, NOW(), B.RQST_USER_ID
+	  FROM WAM_CODE_CFC_SYS A 
+	  JOIN WAQ_CODE_CFC_SYS B
+	    ON A.CODE_CFC_SYS_ID = B.CODE_CFC_SYS_ID
+	INNER JOIN WAM_CODE_CFC_SYS_ITEM C
+	   ON A.CODE_CFC_SYS_ID = C.CODE_CFC_SYS_ID
+	WHERE B.RQST_NO = #{rqstNo}
+	  AND B.RQST_SNO = #{rqstSno}
+  </insert>
+  
+ <delete id="deleteByrqstSno" parameterType="kr.wise.meta.codecfcsys.service.WaqCodeCfcSysItem">
+ 	DELETE /* WaqCodeCfcSysItemMapper.deleteByrqstSno */
+ 	FROM WAQ_CODE_CFC_SYS_ITEM
+ 	 WHERE RQST_NO = #{rqstNo}
+ 	   AND RQST_SNO = #{rqstSno}
+ 	   AND RQST_DTL_SNO = #{rqstDtlSno}
+ </delete>
+  
+  <insert id="checkDupItmSeq" parameterType="map">
+  
+  /* WaqCodeCfcSysItemMapper.checkDupItmSeq */
+  
+  	 <include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSnoSql"/>
+  	 --검증쿼리 : 항목 순서 중복 체크 (CCS05)
+  	AND A.RQST_DCD = 'CU'
+    AND EXISTS (SELECT 1
+                FROM WAQ_CODE_CFC_SYS_ITEM D
+                WHERE A.RQST_NO = D.RQST_NO
+                  AND A.RQST_SNO = D.RQST_SNO
+                  AND A.CODE_CFC_SYS_CD = D.CODE_CFC_SYS_CD
+                  AND A.CODE_CFC_SYS_LNM = D.CODE_CFC_SYS_LNM
+                  AND A.CODE_CFC_SYS_ITEM_SEQ = D.CODE_CFC_SYS_ITEM_SEQ
+                  AND A.RQST_DTL_SNO != D.RQST_DTL_SNO)
+  	
+  </insert>
+  
+  <insert id="checkDupItmNm" parameterType="map">
+  
+  /* WaqCodeCfcSysItemMapper.checkDupItmNm */
+  
+  	 <include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSnoSql"/>
+  	 --검증쿼리 : 항목명 중복 체크 (CCS06)
+  	AND A.RQST_DCD = 'CU'
+    AND EXISTS (SELECT 1
+                FROM WAQ_CODE_CFC_SYS_ITEM D
+                WHERE A.RQST_NO = D.RQST_NO
+                  AND A.RQST_SNO = D.RQST_SNO
+                  AND A.CODE_CFC_SYS_CD = D.CODE_CFC_SYS_CD
+                  AND A.CODE_CFC_SYS_LNM = D.CODE_CFC_SYS_LNM
+                  AND A.CODE_CFC_SYS_ITEM_CD = D.CODE_CFC_SYS_ITEM_CD
+                  AND A.RQST_DTL_SNO != D.RQST_DTL_SNO)
+  	
+  </insert>
+  <insert id="checkNotEqualFrmLen" parameterType="map">
+  
+  /* WaqCodeCfcSysItemMapper.checkNotEqualFrmLen */
+  
+  	 <include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSnoSql"/>
+  	 --검증쿼리 : 항목 형식 길이 불일치 (CCS07)
+  	AND A.RQST_DCD = 'CU'
+  	AND A.CODE_CFC_SYS_ITEM_LEN != LENGTH(A.CODE_CFC_SYS_ITEM_FRM)
+	  	
+  </insert>
+  
+    <insert id="checkLastSpt" parameterType="map">
+    
+    /* WaqCodeCfcSysItemMapper.checkLastSpt */
+    
+	  <include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSnoSql"/>
+	  --검증쿼리 : 마지막 순번의 항목에 구분자가 있을 경우 체크 (CCS02) (미완성)
+	  AND A.RQST_DCD = 'CU'
+	  AND EXISTS (
+	  			SELECT 1 FROM WAQ_CODE_CFC_SYS_ITEM D
+	  			 WHERE A.RQST_NO = D.RQST_NO
+	  			   AND A.RQST_SNO = D.RQST_SNO
+	  			   AND A.CODE_CFC_SYS_ITEM_SPT IS NOT NULL
+	  			   AND A.CODE_CFC_SYS_ITEM_SEQ = (  SELECT MAX(CODE_CFC_SYS_ITEM_SEQ) 
+						  			   				  FROM WAQ_CODE_CFC_SYS_ITEM E
+						  			   			     WHERE D.RQST_NO 	  = E.RQST_NO
+						  			   			       AND D.RQST_SNO 	  = E.RQST_SNO
+	  			  								 ) 
+	  	)
+  </insert>
+  
+  <update id="updateSeqOrd" parameterType="map">
+  --항목 컬럼순서 Update...  (ROW_NUMBER() 함수 이용...(오라클전용))
+   	UPDATE 	/* WaqCodeCfcSysItemMapper.updateSeqOrd */
+   			WAQ_CODE_CFC_SYS_ITEM X 
+   	   SET X.CODE_CFC_SYS_ITEM_SEQ = ( SELECT COL_ORD
+   	   							   FROM (
+											SELECT A.*
+												 , ROW_NUMBER() OVER(PARTITION BY A.RQST_SNO ORDER BY A.CODE_CFC_SYS_ITEM_SEQ) AS COL_ORD
+				                              FROM WAQ_CODE_CFC_SYS_ITEM A
+				                             WHERE A.RQST_NO = #{rqstNo}
+										     ORDER BY A.CODE_CFC_SYS_ITEM_SEQ ) B
+								  WHERE 1=1 
+								    AND B.CODE_CFC_SYS_LNM = X.CODE_CFC_SYS_LNM
+                                    AND B.CODE_CFC_SYS_CD = X.CODE_CFC_SYS_CD
+                                    AND B.CODE_CFC_SYS_ITEM_FRM = X.CODE_CFC_SYS_ITEM_FRM
+								    AND B.RQST_NO = X.RQST_NO
+								    AND B.RQST_SNO = X.RQST_SNO
+								    AND B.RQST_DTL_SNO = X.RQST_DTL_SNO
+			               ) 
+	WHERE X.RQST_NO = #{rqstNo}
+  </update>
+  
+</mapper>

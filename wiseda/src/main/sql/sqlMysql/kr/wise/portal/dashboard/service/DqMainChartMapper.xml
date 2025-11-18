@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.portal.dashboard.service.DqMainChartMapper" >
+<resultMap id="BaseResultMap" type="kr.wise.portal.dashboard.service.DqMainChartVO" >
+	<id column="BR_ANA_DGR"      property="brAnaDgr"  jdbcType="VARCHAR" />
+    <result column="BR_CNT"      property="brCnt"     jdbcType="VARCHAR" />
+    <result column="BR_ANA_CNT"  property="brAnaCnt"  jdbcType="VARCHAR" />
+    <result column="BR_ERR_CNT"  property="brErrCnt"  jdbcType="VARCHAR" />
+    <result column="CS_CNT"      property="csCnt"     jdbcType="VARCHAR" />
+    <result column="IM_CNT"      property="imCnt"     jdbcType="VARCHAR" />
+    <result column="BR_QS"       property="brQs"      jdbcType="VARCHAR" />
+    <result column="PRF_ANA_DGR" property="prfAnaDgr" jdbcType="VARCHAR" />
+    <result column="PRF_CNT"     property="prfCnt"    jdbcType="VARCHAR" />
+    <result column="PRF_ANA_CNT" property="prfAnaCnt" jdbcType="VARCHAR" />
+    <result column="PRF_ERR_CNT" property="prfErrCnt" jdbcType="VARCHAR" />
+    <result column="PRF_QS"      property="prfQs"     jdbcType="VARCHAR" />
+</resultMap>
+<select id ="getApproveChartList" resultMap="BaseResultMap">
+	<![CDATA[
+	-- DQ Main 개선현황 차트 SQL
+	SELECT  /* DqMainChartMapper.getApproveChartList */
+			COUNT(M.BR_ID) AS BR_CNT 
+	       , SUM( CASE WHEN R.BR_ID IS NOT NULL THEN 1 ELSE 0 END ) AS BR_ANA_CNT
+	       , SUM( CASE WHEN R.ER_CNT > 0 THEN 1 ELSE 0 END ) AS BR_ERR_CNT
+	       , SUM( CASE WHEN C.ANA_JOB_ID IS NOT NULL THEN 1 ELSE 0 END ) AS CS_CNT
+	       , SUM( CASE WHEN I.ANA_JOB_ID IS NOT NULL THEN 1 ELSE 0 END ) AS IM_CNT
+	       , MAX(R.ANA_DGR) AS BR_ANA_DGR
+	  FROM WAM_BR_MSTR M 
+	       INNER JOIN WAM_BIZ_AREA B
+	          ON M.BIZ_AREA_ID = B.BIZ_AREA_ID
+	         AND B.REG_TYP_CD IN ('C','U')
+	        LEFT OUTER JOIN (SELECT R.*
+	                           FROM WAM_BR_RESULT R
+	                          WHERE ANA_DGR = (SELECT MAX(ANA_DGR) FROM WAM_BR_RESULT)) R
+	                  ON M.BR_ID = R.BR_ID
+	        -- 개선계획
+	        LEFT OUTER JOIN WAM_CS_ANA_MSTR C                    
+	          ON R.BR_ID = C.ANA_JOB_ID      
+	         AND R.ANA_STR_DTM = C.ANA_STR_DTM 
+	        -- 개선활동
+	        LEFT OUTER JOIN WAM_IM_ACT_MSTR I                    
+	          ON C.ANA_JOB_ID = I.ANA_JOB_ID      
+	         AND C.ANA_STR_DTM = I.ANA_STR_DTM 
+	WHERE M.REG_TYP_CD IN ('C','U')
+	]]>
+</select>
+
+<select id ="getAnalyzeChartList" resultMap="BaseResultMap">
+	<![CDATA[
+	-- DQ Main 진단현황 차트 SQL
+	SELECT 	/* DqMainChartMapper.getAnalyzeChartList */
+			MAX(BR_ANA_DGR)         AS BR_ANA_DGR
+	     , MAX(BR_CNT)             AS BR_CNT
+	     , MAX(BR_ANA_CNT)         AS BR_ANA_CNT
+	     , MAX(BR_ERR_CNT)         AS BR_ERR_CNT
+	     , IFNULL(MAX(PRF_ANA_DGR),0) AS PRF_ANA_DGR
+	     , MAX(PRF_CNT)            AS PRF_CNT
+	     , MAX(PRF_ANA_CNT)        AS PRF_ANA_CNT
+	     , MAX(PRF_ERR_CNT)        AS PRF_ERR_CNT
+	  FROM (SELECT COUNT(M.BR_ID) AS BR_CNT
+	             , SUM(CASE WHEN R.BR_ID IS NOT NULL THEN 1 ELSE 0 END) AS BR_ANA_CNT
+	             , SUM(CASE WHEN R.ER_CNT > 0 THEN 1 ELSE 0 END) AS BR_ERR_CNT
+	             , MAX(R.ANA_DGR) AS BR_ANA_DGR
+	             , NULL AS PRF_CNT
+	             , NULL AS PRF_ANA_CNT
+	             , NULL AS PRF_ERR_CNT
+	             , NULL AS PRF_ANA_DGR
+	          FROM WAM_BR_MSTR M
+	               LEFT OUTER JOIN (SELECT R.*
+	                                 FROM WAM_BR_RESULT R
+	                                WHERE ANA_DGR = (SELECT MAX(ANA_DGR) FROM WAM_BR_RESULT)) R
+	                 ON M.BR_ID = R.BR_ID
+	               AND R.ANA_DGR IS NOT NULL 
+	         WHERE M.REG_TYP_CD IN ('C','U')
+	          
+	         UNION ALL
+	         SELECT NULL AS BR_CNT
+	              , NULL AS BR_ANA_CNT
+	              , NULL AS BR_ERR_CNT
+	              , NULL AS BR_ANA_DGR
+	              , COUNT(M.PRF_ID) AS PRF_CNT
+	              , SUM(CASE WHEN R.PRF_ID IS NOT NULL THEN 1 ELSE 0 END) AS PRF_ANA_CNT
+	              , SUM(CASE WHEN R.ESN_ER_CNT > 0 THEN 1 ELSE 0 END) AS PRF_ERR_CNT
+	              , MAX(R.ANA_DGR) AS PRF_ANA_DGR
+	          FROM WAM_PRF_MSTR M
+	               LEFT OUTER JOIN (SELECT R.*
+	                                 FROM WAM_PRF_RESULT R
+	                                WHERE ANA_DGR = (SELECT MAX(ANA_DGR) FROM WAM_PRF_RESULT) ) R
+	                 ON M.PRF_ID = R.PRF_ID
+	                AND R.ANA_DGR IS NOT NULL    
+	         WHERE M.REG_TYP_CD IN ('C','U')
+	               
+	     ) A
+	     ]]>
+</select>
+
+<select id ="getQualityChartList" resultMap="BaseResultMap">
+	<![CDATA[
+	-- DQ Main 품질현황 차트 SQL
+ SELECT  /* DqMainChartMapper.getQualityChartList */
+ 		MAX(BR_ANA_DGR)         AS BR_ANA_DGR
+       , IFNULL(MAX(PRF_ANA_DGR),0) AS PRF_ANA_DGR
+       , MAX(BR_ANA_CNT)   as         BR_ANA_CNT
+       , MAX(BR_ER_CNT) as BR_ER_CNT
+       , CASE WHEN MAX(BR_ANA_CNT) = 0 THEN 0 ELSE (CASE WHEN MAX(BR_ER_CNT) = 0 THEN 100 ELSE ROUND(((MAX(BR_ANA_CNT)-MAX(BR_ER_CNT))/MAX(BR_ANA_CNT)*100),2) END ) END AS BR_QS
+       , MAX(PRF_ANA_CNT) AS PRF_ANA_CNT
+       , MAX(PRF_ER_CNT)  AS PRF_ER_CNT
+       , CASE WHEN MAX(PRF_ANA_CNT) = 0 THEN 0 ELSE (CASE WHEN MAX(PRF_ER_CNT) = 0 THEN 100 ELSE ROUND(((MAX(PRF_ANA_CNT)-MAX(PRF_ER_CNT))/MAX(PRF_ANA_CNT)*100),2) END ) END AS PRF_QS
+  FROM (SELECT MAX(R.ANA_DGR) AS BR_ANA_DGR
+               ,SUM(IFNULL(R.ANA_CNT,0)) AS BR_ANA_CNT
+               ,SUM(IFNULL(R.ER_CNT,0)) AS BR_ER_CNT
+               ,NULL AS PRF_ANA_DGR
+               ,NULL AS PRF_ANA_CNT
+               ,NULL AS PRF_ER_CNT
+          FROM WAM_BR_MSTR M
+               INNER JOIN (SELECT R.*
+                             FROM WAM_BR_RESULT R
+                            WHERE ANA_DGR = (SELECT MAX(ANA_DGR) FROM WAM_BR_RESULT)) R
+                 ON M.BR_ID = R.BR_ID
+          WHERE M.REG_TYP_CD IN ('C','U')
+            AND R.ANA_DGR IS NOT NULL 
+         UNION ALL
+         SELECT NULL AS BR_ANA_DGR
+               ,NULL AS BR_ANA_CNT
+               ,NULL AS BR_ER_CNT
+               ,MAX(R.ANA_DGR) AS PRF_ANA_DGR
+               ,SUM(IFNULL(R.ANA_CNT,0)) AS PRF_ANA_CNT
+               ,SUM(IFNULL(R.ESN_ER_CNT,0)) AS PRF_ER_CNT
+          FROM WAM_PRF_MSTR M
+               INNER JOIN (SELECT R.*
+                             FROM WAM_PRF_RESULT R
+                            WHERE ANA_DGR = (SELECT MAX(ANA_DGR) FROM WAM_PRF_RESULT)) R
+                 ON M.PRF_ID = R.PRF_ID
+          WHERE M.REG_TYP_CD IN ('C','U')
+            AND R.ANA_DGR IS NOT NULL ) Z
+            ]]>
+</select>
+
+</mapper>

@@ -1,0 +1,362 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.commons.damgmt.dmnginfo.service.WaaDmngMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.commons.damgmt.dmnginfo.service.WaaDmng" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+    <id column="DMNG_ID" property="dmngId" jdbcType="VARCHAR" />
+<!--     <result column="EXP_DTM" property="expDtm" jdbcType="DATE" /> -->
+<!--     <result column="STR_DTM" property="strDtm" jdbcType="DATE" /> -->
+    <result column="DMNG_LNM" property="dmngLnm" jdbcType="VARCHAR" />
+    <result column="DMNG_PNM" property="dmngPnm" jdbcType="VARCHAR" />
+    <result column="UPP_DMNG_ID" property="uppDmngId" jdbcType="VARCHAR" />
+    <result column="DMNG_LVL" property="dmngLvl" jdbcType="DECIMAL" />
+    <result column="DMNG_LVL" property="Level" jdbcType="DECIMAL" />
+    <result column="CD_DMN_YN" property="cdDmnYn" jdbcType="VARCHAR" />
+    <result column="INFOTP_CHG_CAN_YN" property="infotpChgCanYn" jdbcType="VARCHAR" />
+<!--     <result column="OBJ_DESCN" property="objDescn" jdbcType="VARCHAR" /> -->
+<!--     <result column="OBJ_VERS" property="objVers" jdbcType="DECIMAL" /> -->
+<!--     <result column="WRIT_DTM" property="writDtm" jdbcType="DATE" /> -->
+<!--     <result column="WRIT_USER_ID" property="writUserId" jdbcType="VARCHAR" /> -->
+    
+    <result column="UPP_DMNG_LNM" property="uppDmngLnm" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    DMNG_ID, EXP_DTM, STR_DTM, DMNG_LNM, DMNG_PNM, UPP_DMNG_ID, DMNG_LVL, CD_DMN_YN, 
+    INFOTP_CHG_CAN_YN, OBJ_DESCN, OBJ_VERS, WRIT_DTM, WRIT_USER_ID
+  </sql>
+  
+  <!-- for 문 사용 SQL -->
+  <sql id="SelectSql" >
+    SELECT DMNG_ID 
+              ,EXP_DTM 
+              ,STR_DTM
+              ,DMNG_LNM 
+              ,DMNG_PNM 
+              ,UPP_DMNG_ID 
+              ,DMNG_LVL
+              ,CD_DMN_YN
+              ,INFOTP_CHG_CAN_YN 
+              ,OBJ_DESCN 
+              ,OBJ_VERS 
+              ,WRIT_DTM 
+              ,WRIT_USER_ID
+              ,FULL_PATH
+              ,UPP_DMNG_ID||DMNG_ID AS ORDER_COLUMN
+              ,STND_ASRT
+   FROM WAA_DMNG A
+  WHERE DMNG_LVL = #{item}
+    AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from WAA_DMNG
+    where DMNG_ID = #{dmngId,jdbcType=VARCHAR}
+    AND EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from WAA_DMNG
+    where DMNG_ID = #{dmngId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="kr.wise.commons.damgmt.dmnginfo.service.WaaDmng" >
+  <selectKey keyProperty="dmngId"  resultType="string" order="BEFORE" statementType="STATEMENT">
+   <!-- SELECT OBJ_ID.NEXTVAL FROM DUAL -->
+   select OBJ_ID.next_value from db_root   
+  	</selectKey>
+    insert into WAA_DMNG (DMNG_ID, EXP_DTM, STR_DTM, 
+      DMNG_LNM, DMNG_PNM, UPP_DMNG_ID, 
+      DMNG_LVL, CD_DMN_YN, INFOTP_CHG_CAN_YN, 
+      OBJ_DESCN, OBJ_VERS, WRIT_DTM, 
+      WRIT_USER_ID)
+    values (#{dmngId,jdbcType=VARCHAR}, #{expDtm,jdbcType=DATE}, #{strDtm,jdbcType=DATE}, 
+      #{dmngLnm,jdbcType=VARCHAR}, #{dmngPnm,jdbcType=VARCHAR}, #{uppDmngId,jdbcType=VARCHAR}, 
+      #{dmngLvl,jdbcType=DECIMAL}, #{cdDmnYn,jdbcType=VARCHAR}, #{infotpChgCanYn,jdbcType=VARCHAR}, 
+      #{objDescn,jdbcType=VARCHAR}, #{objVers,jdbcType=DECIMAL}, #{writDtm,jdbcType=DATE}, 
+      #{writUserId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="kr.wise.commons.damgmt.dmnginfo.service.WaaDmng" >
+    
+    INSERT INTO WAA_DMNG
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="dmngId != null" >
+        DMNG_ID,
+      </if>
+        EXP_DTM,
+        STR_DTM,
+      <if test="dmngLnm != null" >
+        DMNG_LNM,
+      </if>
+      <if test="dmngPnm != null" >
+        DMNG_PNM,
+      </if>
+      <if test="uppDmngId != null" >
+        UPP_DMNG_ID,
+      </if>
+      <if test="uppDmngLnm != null" >
+        UPP_DMNG_LNM,
+      </if>
+      <if test="dmngLvl != null" >
+        DMNG_LVL,
+      </if>
+      <if test="cdDmnYn != null" >
+        CD_DMN_YN,
+      </if>
+      <if test="infotpChgCanYn != null" >
+        INFOTP_CHG_CAN_YN,
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN,
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS,
+      </if>
+        WRIT_DTM,
+      <if test="writUserId != null" >
+        WRIT_USER_ID,
+      </if>
+      <if test="rqstNo != null" >
+        RQST_NO,
+      </if>
+      <if test="stndAsrt != null" >
+        STND_ASRT,
+      </if>
+      
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="dmngId != null" >
+        #{dmngId,jdbcType=VARCHAR},
+      </if>
+        TO_DATE( '9999-12-31', 'YYYY-MM-DD'),
+        SYSDATETIME,
+      <if test="dmngLnm != null" >
+        #{dmngLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="dmngPnm != null" >
+        #{dmngPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="uppDmngId != null" >
+        #{uppDmngId,jdbcType=VARCHAR},
+      </if>
+      <if test="uppDmngLnm != null" >
+        #{uppDmngLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="dmngLvl != null" >
+        #{dmngLvl,jdbcType=DECIMAL},
+      </if>
+      <if test="cdDmnYn != null" >
+        #{cdDmnYn,jdbcType=VARCHAR},
+      </if>
+      <if test="infotpChgCanYn != null" >
+        #{infotpChgCanYn,jdbcType=VARCHAR},
+      </if>
+      <if test="objDescn != null" >
+        #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        #{objVers,jdbcType=DECIMAL},
+      </if>
+      SYSDATETIME,
+      <if test="writUserId != null" >
+        #{writUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstNo != null" >
+        #{rqstNo,jdbcType=VARCHAR},
+      </if>
+       <if test="stndAsrt != null" >
+         #{stndAsrt,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.commons.damgmt.dmnginfo.service.WaaDmng" >
+    update WAA_DMNG
+    <set >
+      <if test="expDtm != null" >
+        EXP_DTM = #{expDtm,jdbcType=DATE},
+      </if>
+      <if test="strDtm != null" >
+        STR_DTM = #{strDtm,jdbcType=DATE},
+      </if>
+      <if test="dmngLnm != null" >
+        DMNG_LNM = #{dmngLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="dmngPnm != null" >
+        DMNG_PNM = #{dmngPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="uppDmngId != null" >
+        UPP_DMNG_ID = #{uppDmngId,jdbcType=VARCHAR},
+      </if>
+      <if test="uppDmngLnm != null" >
+        UPP_DMNG_LNM = #{uppDmngLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="dmngLvl != null" >
+        DMNG_LVL = #{dmngLvl,jdbcType=DECIMAL},
+      </if>
+      <if test="cdDmnYn != null" >
+        CD_DMN_YN = #{cdDmnYn,jdbcType=VARCHAR},
+      </if>
+      <if test="infotpChgCanYn != null" >
+        INFOTP_CHG_CAN_YN = #{infotpChgCanYn,jdbcType=VARCHAR},
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="writDtm != null" >
+        WRIT_DTM = #{writDtm,jdbcType=DATE},
+      </if>
+      <if test="writUserId != null" >
+        WRIT_USER_ID = #{writUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstNo != null" >
+        RQST_NO = #{rqstNo,jdbcType=VARCHAR},
+      </if>
+      <if test="stndAsrt != null" >
+         STND_ASRT = #{stndAsrt,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where DMNG_ID = #{dmngId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="kr.wise.commons.damgmt.dmnginfo.service.WaaDmng" >
+    update WAA_DMNG
+    set EXP_DTM = #{expDtm,jdbcType=DATE},
+      STR_DTM = #{strDtm,jdbcType=DATE},
+      DMNG_LNM = #{dmngLnm,jdbcType=VARCHAR},
+      DMNG_PNM = #{dmngPnm,jdbcType=VARCHAR},
+      UPP_DMNG_ID = #{uppDmngId,jdbcType=VARCHAR},
+      DMNG_LVL = #{dmngLvl,jdbcType=DECIMAL},
+      CD_DMN_YN = #{cdDmnYn,jdbcType=VARCHAR},
+      INFOTP_CHG_CAN_YN = #{infotpChgCanYn,jdbcType=VARCHAR},
+      OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      WRIT_DTM = #{writDtm,jdbcType=DATE},
+      WRIT_USER_ID = #{writUserId,jdbcType=VARCHAR},
+      STND_ASRT = #{stndAsrt,jdbcType=VARCHAR}
+    where DMNG_ID = #{dmngId,jdbcType=VARCHAR}
+  </update>
+  
+  <select id="selectList" parameterType="kr.wise.commons.damgmt.dmnginfo.service.WaaDmng" resultMap="BaseResultMap">
+	  	SELECT  A.DMNG_ID 
+		       ,A.EXP_DTM 
+		       ,A.STR_DTM
+		       ,A.DMNG_LNM 
+		       ,A.DMNG_PNM 
+		       ,A.UPP_DMNG_ID
+		       ,B.DMNG_LNM AS UPP_DMNG_LNM
+		       ,A.DMNG_LVL
+		       ,A.CD_DMN_YN
+		       ,A.INFOTP_CHG_CAN_YN 
+		       ,A.OBJ_DESCN 
+		       ,A.OBJ_VERS 
+		       ,A.WRIT_DTM 
+		       ,A.WRIT_USER_ID
+		       ,A.FULL_PATH
+		       ,(SELECT USER_NM FROM WAA_USER WHERE USER_ID = A.WRIT_USER_ID AND EXP_DTM  =  TO_DATE('9999-12-31', 'YYYY-MM-DD') AND REG_TYP_CD IN ('C','U')) AS WRIT_USER_NM
+		       <!-- ,GET_USER_NM(A.WRIT_USER_ID) AS WRIT_USER_NM -->
+		       ,A.STND_ASRT
+		  FROM (
+	<!-- 	  		collection = 전달받은 인자값 -->
+	<!-- 	  		item   = 전달받은 인자값을 다른이름으로 대체  -->
+	<!-- 	  		open 해당 구문이 시작할떄  -->
+	<!-- 	  		lose 해당구문이 끝날떄 -->
+	<!-- 			separator  한번 이상 반복할때 반복되는 사이에  해당 문을 넣어줌 -->
+		  		<foreach collection="lvlList" item="item" index="index" open="" separator="UNION ALL" close="">
+					<include refid="SelectSql" />	      
+				</foreach>
+		       ) A
+		       LEFT OUTER JOIN WAA_DMNG B
+		         ON A.UPP_DMNG_ID = B.DMNG_ID
+		        AND B.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+		 <where>       
+		 <if test="dmngLnm != null" >
+	    		AND (A.DMNG_LNM LIKE '%' || #{dmngLnm,jdbcType=VARCHAR} || '%' OR A.DMNG_PNM LIKE '%' || #{dmngLnm,jdbcType=VARCHAR} || '%')
+		 </if>
+		 <if test="dmngId != null" >
+		      	AND A.DMNG_ID = #{dmngId,jdbcType=VARCHAR}
+		 </if>
+		 <if test="stndAsrt != null" >
+		        AND A.STND_ASRT = #{stndAsrt,jdbcType=VARCHAR}
+		 </if>
+		
+		 </where>
+<!-- 		 ORDER BY A.FULL_PATH, A.DMNG_LVL -->
+           ORDER BY A.STND_ASRT,A.ORDER_COLUMN,A.DMNG_LVL
+    </select>
+    
+     <update id="updateExpDtm" parameterType="kr.wise.commons.damgmt.dmnginfo.service.WaaDmng">
+  	UPDATE WAA_DMNG SET
+  		EXP_DTM = SYSDATETIME
+  	WHERE DMNG_ID = #{dmngId}
+  	  AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+  </update>
+    
+  <update id="updateFullPath" parameterType="kr.wise.commons.damgmt.dmnginfo.service.WaaDmng" >
+    UPDATE WAA_DMNG A
+	SET FULL_PATH = (SELECT FULL_PATH 
+                       FROM V_WAA_DMNG B
+                      WHERE A.DMNG_ID = B.DMNG_ID
+                        AND A.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD') )
+     WHERE A.RQST_NO =  #{rqstNo,jdbcType=VARCHAR}                        
+  </update>
+  
+  <update id="updtDmngLvl" parameterType="java.lang.String" >
+	UPDATE WAA_DMNG
+	  SET DMNG_LVL = NULL
+	 WHERE RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+	   <!-- AND UPP_DMNG_LNM IS NOT NULL -->
+	   AND UPP_DMNG_LNM != ''
+  </update>
+  <update id="updtUppDmngInfo" parameterType="java.lang.String" >
+    UPDATE WAA_DMNG A
+   	   SET (A.UPP_DMNG_ID, A.DMNG_LVL)  = (SELECT B.DMNG_ID, NVL(B.DMNG_LVL, 0) + 1
+   	   			                             FROM WAA_DMNG B
+   	   			                            WHERE B.DMNG_LNM = A.UPP_DMNG_LNM 
+                                              <![CDATA[ AND NVL(A.DMNG_LVL, -1) <> B.DMNG_LVL  ]]> 
+   	   			                              AND B.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD') 
+   	   			                              AND B.STND_ASRT = A.STND_ASRT  
+   	   			                           )
+       WHERE A.RQST_NO =  #{rqstNo,jdbcType=VARCHAR}
+         AND A.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+         AND A.UPP_DMNG_LNM IS NOT NULL
+         AND EXISTS (SELECT  1
+   	   	               FROM WAA_DMNG B
+   	   	              WHERE B.DMNG_LNM = A.UPP_DMNG_LNM 
+                        <![CDATA[ AND NVL(A.DMNG_LVL, -1) <> B.DMNG_LVL  ]]> 
+   	   	                AND B.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD') 
+   	   	                AND B.STND_ASRT = A.STND_ASRT  
+                    )
+  </update>
+    
+  <select id="getDmngId" parameterType="kr.wise.commons.damgmt.dmnginfo.service.WaaDmng" resultMap="BaseResultMap">
+  SELECT *
+    FROM WAA_DMNG
+   WHERE EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+     AND DMNG_LNM = #{dmngLnm,jdbcType=VARCHAR}
+     AND DMNG_LVL = 0
+     AND STND_ASRT = #{stndAsrt,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="selectDetail" parameterType="kr.wise.commons.damgmt.dmnginfo.service.WaaDmng" resultMap="BaseResultMap">
+  SELECT *
+    FROM WAA_DMNG
+   WHERE EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+     AND STND_ASRT = #{stndAsrt,jdbcType=VARCHAR}
+     AND DMNG_LNM  = #{dmngLnm,jdbcType=VARCHAR}
+     AND DMNG_LVL  = #{dmngLvl}
+     <if test="uppDmngLnm != null" >
+     AND NVL(UPP_DMNG_LNM,'_') = NVL(#{uppDmngLnm},'_')
+     </if>
+     
+  </select>
+
+  <select id="selectChkChdDmngList" parameterType="kr.wise.commons.damgmt.dmnginfo.service.WaaDmng" resultMap="BaseResultMap">
+  SELECT *
+    FROM WAA_DMNG
+   WHERE EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')   
+     AND UPP_DMNG_ID = #{uppDmngId,jdbcType=VARCHAR}
+  
+  </select>
+
+
+</mapper>

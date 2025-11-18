@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.commons.damgmt.dmnginfo.service.WaaInfoTypeMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.commons.damgmt.dmnginfo.service.WaaInfoType" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+    <id column="INFOTP_ID" property="infotpId" jdbcType="VARCHAR" />
+<!--     <result column="EXP_DTM" property="expDtm" jdbcType="DATE" /> -->
+<!--     <result column="STR_DTM" property="strDtm" jdbcType="DATE" /> -->
+    <result column="INFOTP_LNM" property="infotpLnm" jdbcType="VARCHAR" />
+    <result column="DATA_TYPE" property="dataType" jdbcType="VARCHAR" />
+    <result column="DATA_LEN" property="dataLen" jdbcType="DECIMAL" />
+    <result column="DATA_SCAL" property="dataScal" jdbcType="DECIMAL" />
+<!--     <result column="OBJ_DESCN" property="objDescn" jdbcType="VARCHAR" /> -->
+<!--     <result column="OBJ_VERS" property="objVers" jdbcType="DECIMAL" /> -->
+<!--     <result column="WRIT_DTM" property="writDtm" jdbcType="DATE" /> -->
+<!--     <result column="WRIT_USER_ID" property="writUserId" jdbcType="VARCHAR" /> -->
+  </resultMap>
+  <sql id="Base_Column_List" >
+    INFOTP_ID, EXP_DTM, STR_DTM, INFOTP_LNM, DATA_TYPE, DATA_LEN, DATA_SCAL, OBJ_DESCN, 
+    OBJ_VERS, WRIT_DTM, WRIT_USER_ID, STND_ASRT
+  </sql>
+  
+    <select id="selectInfotpList" resultMap="BaseResultMap">
+    SELECT 
+	    INFOTP_ID
+	    ,DATA_TYPE
+	    ,DATA_LEN
+	    ,DATA_SCAL
+	    , NVL( (
+	               SELECT B.DATA_TYPE_NM FROM WAA_DATA_TYPE_MAPRU A
+	                  INNER JOIN WAA_DBMS_DATA_TYPE B
+	                  ON A.DBMS_DATA_TYPE_ID = B.DBMS_DATA_TYPE_ID
+	                      AND A.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	                      AND A.REG_TYP_CD IN ('C', 'U')
+	                      AND B.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	                      AND B.REG_TYP_CD IN ('C', 'U')
+	                      AND B.DBMS_TYP_CD='ORA' 
+	                  WHERE A.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	                    AND A.LGC_DATA_TYPE=D.DATA_TYPE
+	                    AND A.REG_TYP_CD IN ('C', 'U')
+	                    AND ROWNUM = 1  
+	               ),D.DATA_TYPE
+	           ) AS oraDataType
+	           , NVL( (
+	               SELECT B.DATA_TYPE_NM FROM WAA_DATA_TYPE_MAPRU A
+	                  INNER JOIN WAA_DBMS_DATA_TYPE B
+	                  ON A.DBMS_DATA_TYPE_ID = B.DBMS_DATA_TYPE_ID
+	                      AND A.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	                      AND A.REG_TYP_CD IN ('C', 'U')
+	                      AND B.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	                      AND B.REG_TYP_CD IN ('C', 'U')
+	                      AND B.DBMS_TYP_CD='MSQ' 
+	                  WHERE A.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	                    AND A.LGC_DATA_TYPE=D.DATA_TYPE
+	                    AND A.REG_TYP_CD IN ('C', 'U')
+	                    AND ROWNUM = 1                            
+	               ),D.DATA_TYPE
+	           ) AS msDataType
+	  , NVL( (
+	               SELECT B.DATA_TYPE_NM FROM WAA_DATA_TYPE_MAPRU A
+	                  INNER JOIN WAA_DBMS_DATA_TYPE B
+	                  ON A.DBMS_DATA_TYPE_ID = B.DBMS_DATA_TYPE_ID
+	                      AND A.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	                      AND A.REG_TYP_CD IN ('C', 'U')
+	                      AND B.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	                      AND B.REG_TYP_CD IN ('C', 'U')
+	                      AND B.DBMS_TYP_CD='MYS' 
+	                  WHERE A.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	                    AND A.LGC_DATA_TYPE=D.DATA_TYPE
+	                    AND A.REG_TYP_CD IN ('C', 'U')
+	                    AND ROWNUM = 1                            
+	               ),D.DATA_TYPE
+	           ) AS myDataType
+    FROM WAA_INFO_TYPE D
+    WHERE EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+  </select>
+  
+  <select id="selectByName" resultMap="BaseResultMap" parameterType="kr.wise.commons.damgmt.dmnginfo.service.WaaInfoType">
+  --기존 인포타입이 있는지 확인한다.
+    SELECT 
+	    INFOTP_ID
+	    ,DATA_TYPE
+	    ,DATA_LEN
+	    ,DATA_SCAL
+    FROM WAA_INFO_TYPE
+    WHERE EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+      AND  INFOTP_LNM = #{infotpLnm}
+      AND STND_ASRT = #{stndAsrt}
+  
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from WAA_INFO_TYPE
+    where INFOTP_ID = #{infotpId,jdbcType=VARCHAR}
+    AND EXP_DTM = TO_DATE ('9999-12-31', 'YYYY-MM-DD')
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from WAA_INFO_TYPE
+    where INFOTP_ID = #{infotpId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="kr.wise.commons.damgmt.dmnginfo.service.WaaInfoType" >
+    <selectKey keyProperty="infotpId"  resultType="string" order="BEFORE" statementType="STATEMENT">
+   <!-- SELECT OBJ_ID.NEXTVAL FROM DUAL -->
+   select OBJ_ID.next_value from db_root   
+  	</selectKey> 
+  	 insert into WAA_INFO_TYPE (INFOTP_ID, EXP_DTM, STR_DTM, 
+      INFOTP_LNM, DATA_TYPE, DATA_LEN, 
+      DATA_SCAL, OBJ_DESCN, OBJ_VERS, 
+      WRIT_DTM, WRIT_USER_ID)
+    values (#{infotpId,jdbcType=VARCHAR}, #{expDtm,jdbcType=DATE}, #{strDtm,jdbcType=DATE}, 
+      #{infotpLnm,jdbcType=VARCHAR}, #{dataType,jdbcType=VARCHAR}, #{dataLen,jdbcType=DECIMAL}, 
+      #{dataScal,jdbcType=DECIMAL}, #{objDescn,jdbcType=VARCHAR}, #{objVers,jdbcType=DECIMAL}, 
+      #{writDtm,jdbcType=DATE}, #{writUserId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="kr.wise.commons.damgmt.dmnginfo.service.WaaInfoType" >
+    INSERT INTO WAA_INFO_TYPE
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+        INFOTP_ID,
+        EXP_DTM,
+        STR_DTM,
+        INFOTP_LNM,
+        DATA_TYPE,
+      <if test="dataLen != null" >
+        DATA_LEN,
+      </if>
+      <if test="dataScal != null" >
+        DATA_SCAL,
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN,
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS,
+      </if>
+        WRIT_DTM,
+      <if test="writUserId != null" >
+        WRIT_USER_ID,
+      </if>
+      <if test="stndAsrt != null" >
+       STND_ASRT,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+        #{infotpId,jdbcType=VARCHAR},
+        TO_DATE ('9999-12-31', 'YYYY-MM-DD'),
+        SYSDATETIME,
+        #{infotpLnm,jdbcType=VARCHAR},
+        #{dataType,jdbcType=VARCHAR},
+      <if test="dataLen != null" >
+        #{dataLen,jdbcType=DECIMAL},
+      </if>
+      <if test="dataScal != null" >
+        #{dataScal,jdbcType=DECIMAL},
+      </if>
+      <if test="objDescn != null" >
+        #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        #{objVers,jdbcType=DECIMAL},
+      </if>
+        SYSDATETIME,
+      <if test="writUserId != null" >
+        #{writUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="stndAsrt != null" >
+       #{stndAsrt,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.commons.damgmt.dmnginfo.service.WaaInfoType" >
+    update WAA_INFO_TYPE
+    <set >
+      <if test="expDtm != null" >
+        EXP_DTM = #{expDtm,jdbcType=DATE},
+      </if>
+      <if test="strDtm != null" >
+        STR_DTM = #{strDtm,jdbcType=DATE},
+      </if>
+      <if test="infotpLnm != null" >
+        INFOTP_LNM = #{infotpLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="dataType != null" >
+        DATA_TYPE = #{dataType,jdbcType=VARCHAR},
+      </if>
+      <if test="dataLen != null" >
+        DATA_LEN = #{dataLen,jdbcType=DECIMAL},
+      </if>
+      <if test="dataScal != null" >
+        DATA_SCAL = #{dataScal,jdbcType=DECIMAL},
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="writDtm != null" >
+        WRIT_DTM = #{writDtm,jdbcType=DATE},
+      </if>
+       <if test="stndAsrt != null" >
+       STND_ASRT = #{stndAsrt,jdbcType=VARCHAR},
+      </if>
+      <if test="writUserId != null" >
+        WRIT_USER_ID = #{writUserId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where INFOTP_ID = #{infotpId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="kr.wise.commons.damgmt.dmnginfo.service.WaaInfoType" >
+    update WAA_INFO_TYPE
+    set EXP_DTM = #{expDtm,jdbcType=DATE},
+      STR_DTM = #{strDtm,jdbcType=DATE},
+      INFOTP_LNM = #{infotpLnm,jdbcType=VARCHAR},
+      DATA_TYPE = #{dataType,jdbcType=VARCHAR},
+      DATA_LEN = #{dataLen,jdbcType=DECIMAL},
+      DATA_SCAL = #{dataScal,jdbcType=DECIMAL},
+      OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      WRIT_DTM = #{writDtm,jdbcType=DATE},
+      WRIT_USER_ID = #{writUserId,jdbcType=VARCHAR},
+      STND_ASRT = #{stndAsrt,jdbcType=VARCHAR}
+    where INFOTP_ID = #{infotpId,jdbcType=VARCHAR}
+  </update>
+
+    <select id="selectList" parameterType="kr.wise.commons.damgmt.dmnginfo.service.WaaInfoType" resultMap="BaseResultMap">
+  	select 
+    	 <include refid="Base_Column_List" /> 
+    from WAA_INFO_TYPE  	
+    where
+       	EXP_DTM = TO_DATE ('9999-12-31', 'YYYY-MM-DD')
+    
+      <if test="infotpLnm != null" >
+       AND UPPER(INFOTP_LNM) LIKE '%' ||  UPPER(#{infotpLnm,jdbcType=VARCHAR}) || '%'
+      </if>     
+       <if test="infotpId != null" >
+       AND INFOTP_ID = #{infotpId,jdbcType=VARCHAR}
+      </if>
+      <if test="expDtm != null" >
+       AND EXP_DTM = #{expDtm,jdbcType=DATE}
+      </if>
+      <if test="strDtm != null" >
+       AND STR_DTM = #{strDtm,jdbcType=DATE}
+      </if>
+      <if test="dataType != null" >
+       AND DATA_TYPE = #{dataType,jdbcType=VARCHAR}
+      </if>
+      <if test="dataLen != null" >
+       AND DATA_LEN = #{dataLen,jdbcType=DECIMAL}
+      </if>
+      <if test="dataScal != null" >
+       AND DATA_SCAL = #{dataScal,jdbcType=DECIMAL}
+      </if>
+      <if test="objDescn != null" >
+       AND OBJ_DESCN = #{objDescn,jdbcType=VARCHAR}
+      </if>
+      <if test="objVers != null" >
+       AND OBJ_VERS = #{objVers,jdbcType=DECIMAL}
+      </if>
+      <if test="writDtm != null" >
+       AND WRIT_DTM = #{writDtm,jdbcType=DATE}
+      </if>
+      <if test="writUserId != null" >
+       AND WRIT_USER_ID = #{writUserId,jdbcType=VARCHAR}
+      </if>
+      <if test="stndAsrt != null" >
+       AND STND_ASRT = #{stndAsrt,jdbcType=VARCHAR}
+      </if>
+      ORDER BY STND_ASRT,INFOTP_LNM
+      </select>
+      <update id="updateExpDtm" parameterType="kr.wise.commons.damgmt.dmnginfo.service.WaaInfoType">
+  	UPDATE WAA_INFO_TYPE SET
+  		EXP_DTM = SYSDATETIME
+  	WHERE INFOTP_ID = #{infotpId}
+  	  AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+  </update>
+      
+</mapper>

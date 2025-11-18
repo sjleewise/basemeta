@@ -1,0 +1,1264 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.wise.advisor.prepare.dqiquality.service.DqiQltyMapper">
+	<resultMap id="BaseResultMap" type="kr.wise.advisor.prepare.dqiquality.service.DqiQltyVo" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+	    <result column="DB_CONN_TRG_ID"  jdbcType="VARCHAR" property="dbConnTrgId"  />
+		<result column="DB_CONN_TRG_LNM" jdbcType="VARCHAR" property="dbConnTgrLnm" />
+		<result column="DB_SCH_ID"       jdbcType="VARCHAR" property="dbSchId"      />
+		<result column="DB_SCH_PNM"      jdbcType="VARCHAR" property="dbSchPnm"     />
+		
+		<result column="DQI_ID"          jdbcType="VARCHAR" property="dqiId"        />
+		<result column="DQI_LNM"         jdbcType="VARCHAR" property="dqiLnm"       />
+		<result column="UPP_DQI_LNM"     jdbcType="VARCHAR" property="uppDqiLnm"       />
+		
+		<result column="BIZ_DCD"    jdbcType="VARCHAR" property="bizDcd" />
+		<result column="FULL_PATH"    jdbcType="VARCHAR" property="fullPath" />
+		
+		<result column="BR_ANA_DGR"   jdbcType="VARCHAR" property="brAnaDgr" />
+		<result column="BR_CNT"       jdbcType="VARCHAR" property="brCnt" />
+		<result column="SIGMA"        jdbcType="VARCHAR" property="sigma" />
+		<result column="BR_ANA_CNT"   jdbcType="VARCHAR" property="brAnaCnt" />
+		<result column="BR_ER_CNT"    jdbcType="VARCHAR" property="brErCnt" />
+		<result column="BR_NON_RATE"  jdbcType="VARCHAR" property="brNonRate" />
+		<result column="BR_ERR_RATE"  jdbcType="VARCHAR" property="brErrRate" />
+		
+		<result column="PRF_ANA_DGR"  jdbcType="VARCHAR" property="prfAnaDgr" />
+		<result column="PRF_CNT"      jdbcType="VARCHAR" property="prfCnt" />
+		<result column="PRF_ANA_CNT"  jdbcType="VARCHAR" property="prfAnaCnt" />
+		<result column="PRF_ER_CNT"   jdbcType="VARCHAR" property="prfErCnt" />
+		<result column="PRF_NON_RATE" jdbcType="VARCHAR" property="prfNonRate" />
+		<result column="PRF_ERR_RATE" jdbcType="VARCHAR" property="prfErrRate" />
+		
+		<result column="MD_ANA_DGR"   jdbcType="VARCHAR" property="mdAnaDgr" />
+		<result column="MD_CNT"       jdbcType="VARCHAR" property="mdCnt" />
+		<result column="MD_ANA_CNT"   jdbcType="VARCHAR" property="mdAnaCnt" />
+		<result column="MD_ER_CNT"    jdbcType="VARCHAR" property="mdErCnt" />
+		<result column="MD_NON_RATE"  jdbcType="VARCHAR" property="mdNonRate" />
+		<result column="MD_ERR_RATE"  jdbcType="VARCHAR" property="mdErrRate" />
+		
+		<result column="ANA_DGR"   jdbcType="VARCHAR" property="anaDgr" />
+		
+		<result column="TOT_ANA_CNT"   jdbcType="VARCHAR" property="totAnaCnt" />
+		<result column="TOT_NON_RATE"   jdbcType="VARCHAR" property="totNonRate" />
+		<result column="TOT_ERR_RATE"   jdbcType="VARCHAR" property="totErrRate" />
+ 	</resultMap>
+ 	
+ 	<select id="selectDqiQltyList" parameterType="map" resultMap="BaseResultMap">
+ 		-- DQI별 최근차수 품질현황
+		SELECT A.DB_CONN_TRG_ID
+		       , A.DB_CONN_TRG_LNM
+		       , A.DB_SCH_ID
+		       , A.DB_SCH_PNM
+		       , A.DQI_ID
+		       , A.DQI_LNM
+		       , A.FULL_PATH
+		       , A.UPP_DQI_LNM
+		       , (NVL(MAX (A.BR_ANA_CNT),0) + NVL(MAX (A.PRF_ANA_CNT),0) + NVL(MAX (A.MD_ANA_CNT),0)) AS TOT_ANA_CNT
+		       , ROUND((((NVL(MAX (A.BR_ANA_CNT),0) + NVL(MAX (A.PRF_ANA_CNT),0) + NVL(MAX (A.MD_ANA_CNT),0)) - 
+		                    (NVL(MAX (A.BR_ER_CNT),0) + NVL(MAX (A.PRF_ER_CNT),0) + NVL(MAX (A.MD_ER_CNT),0)))/
+		                        DECODE((NVL(MAX (A.BR_ANA_CNT),0) + NVL(MAX (A.PRF_ANA_CNT),0) + NVL(MAX (A.MD_ANA_CNT),0)),0,1,
+		                                (NVL(MAX (A.BR_ANA_CNT),0) + NVL(MAX (A.PRF_ANA_CNT),0) + NVL(MAX (A.MD_ANA_CNT),0))))*100 ,2)
+		         AS TOT_NON_RATE
+		       , ROUND(((NVL(MAX (A.BR_ER_CNT),0) + NVL(MAX (A.PRF_ER_CNT),0) + NVL(MAX (A.MD_ER_CNT),0))*100/
+		                DECODE((NVL(MAX (A.BR_ANA_CNT),0) + NVL(MAX (A.PRF_ANA_CNT),0) + NVL(MAX(A.MD_ANA_CNT),0)),0,1,
+		                        (NVL(MAX (A.BR_ANA_CNT),0) + NVL(MAX (A.PRF_ANA_CNT),0) + NVL(MAX(A.MD_ANA_CNT),0)))), 2)
+		         AS TOT_ERR_RATE
+		       , MAX(A.BR_ANA_DGR) AS BR_ANA_DGR
+		       , MAX(A.BR_CNT) AS BR_CNT
+		       , MAX(A.SIGMA) AS SIGMA
+		       , MAX(A.BR_ANA_CNT) AS BR_ANA_CNT
+		       , MAX(A.BR_ER_CNT) AS BR_ER_CNT
+		       , MAX(A.BR_NON_RATE) AS BR_NON_RATE
+		       , MAX(A.BR_ERR_RATE) AS BR_ERR_RATE
+		
+		       , MAX(A.PRF_ANA_DGR) AS PRF_ANA_DGR
+		       , MAX(A.PRF_CNT) AS PRF_CNT
+		       , MAX(A.PRF_ANA_CNT) AS PRF_ANA_CNT
+		       , MAX(A.PRF_ER_CNT) AS PRF_ER_CNT
+		       , MAX(A.PRF_NON_RATE) AS PRF_NON_RATE
+		       , MAX(A.PRF_ERR_RATE) AS PRF_ERR_RATE
+		       
+		       , MAX(A.MD_ANA_DGR) AS MD_ANA_DGR
+		       , MAX(A.MD_CNT) AS MD_CNT
+		       , MAX(A.MD_ANA_CNT) AS MD_ANA_CNT
+		       , MAX(A.MD_ER_CNT) AS MD_ER_CNT
+		       , MAX(A.MD_NON_RATE) AS MD_NON_RATE
+		       , MAX(A.MD_ERR_RATE) AS MD_ERR_RATE  
+		  FROM (       
+				SELECT A.DB_CONN_TRG_ID
+				       , A.DB_CONN_TRG_LNM
+				       , A.DB_SCH_ID
+				       , A.DB_SCH_PNM
+				       , A.DQI_ID
+				       , A.DQI_LNM
+				       , A.FULL_PATH
+				       , A.UPP_DQI_LNM
+				       --업무규칙
+				       , DECODE(A.BIZ_DCD, 'BR', MAX(BR_ANA_DGR), NULL) AS BR_ANA_DGR
+				       , DECODE(A.BIZ_DCD, 'BR', MAX(BR_CNT), NULL) AS BR_CNT
+				       , DECODE(A.BIZ_DCD, 'BR', MAX(SIGMA), NULL) AS SIGMA
+				       , DECODE(A.BIZ_DCD, 'BR', MAX(BR_ANA_CNT), NULL) AS BR_ANA_CNT 
+				       , DECODE(A.BIZ_DCD, 'BR', MAX(BR_ER_CNT), NULL) AS BR_ER_CNT        
+				       , DECODE(A.BIZ_DCD, 'BR', MAX(BR_NON_RATE), NULL) AS BR_NON_RATE 
+				       , DECODE(A.BIZ_DCD, 'BR', MAX(BR_ERR_RATE), NULL) AS BR_ERR_RATE 
+				       --프로파일
+				       , DECODE(A.BIZ_DCD, 'PRF', MAX(PRF_ANA_DGR), NULL) AS PRF_ANA_DGR
+				       , DECODE(A.BIZ_DCD, 'PRF', MAX(PRF_CNT), NULL) AS PRF_CNT
+				       , DECODE(A.BIZ_DCD, 'PRF', MAX(PRF_ANA_CNT), NULL) AS PRF_ANA_CNT 
+				       , DECODE(A.BIZ_DCD, 'PRF', MAX(PRF_ER_CNT), NULL) AS PRF_ER_CNT        
+				       , DECODE(A.BIZ_DCD, 'PRF', MAX(PRF_NON_RATE), NULL) AS PRF_NON_RATE 
+				       , DECODE(A.BIZ_DCD, 'PRF', MAX(PRF_ERR_RATE), NULL) AS PRF_ERR_RATE  
+				       -- 이상값
+				       , DECODE(A.BIZ_DCD, 'MD', MAX(MD_ANA_DGR), NULL) AS MD_ANA_DGR
+				       , DECODE(A.BIZ_DCD, 'MD', MAX(MD_CNT), NULL) AS MD_CNT
+				       , DECODE(A.BIZ_DCD, 'MD', MAX(MD_ANA_CNT), NULL) AS MD_ANA_CNT 
+				       , DECODE(A.BIZ_DCD, 'MD', MAX(MD_ER_CNT), NULL) AS MD_ER_CNT        
+				       , DECODE(A.BIZ_DCD, 'MD', MAX(MD_NON_RATE), NULL) AS MD_NON_RATE 
+				       , DECODE(A.BIZ_DCD, 'MD', MAX(MD_ERR_RATE), NULL) AS MD_ERR_RATE    
+				  FROM (
+				SELECT 'BR' AS BIZ_DCD
+				      ,A.*
+				      -- 업무규칙
+				      ,A.ANA_DGR AS BR_ANA_DGR
+				      ,TO_CHAR(ROUND(WDQ_FC_SIGMA(WDQ_FC_DPMO(A.BR_ER_CNT, A.BR_ANA_CNT )),2)) AS SIGMA  
+				      ,DECODE(A.BR_ANA_CNT,0,0,DECODE(A.BR_ER_CNT,0,100,ROUND(((A.BR_ANA_CNT-A.BR_ER_CNT)/A.BR_ANA_CNT*100),2))) BR_NON_RATE
+				      ,DECODE(A.BR_ANA_CNT,0,0, ROUND(NVL(A.BR_ER_CNT,0)*100/ A.BR_ANA_CNT ,2) ) AS BR_ERR_RATE
+				      --프로파일
+				      ,NULL AS PRF_ANA_DGR
+				      ,NULL AS PRF_NON_RATE
+				      ,NULL AS PRF_ERR_RATE
+				      --이상값
+				      ,NULL AS MD_ANA_DGR
+				      ,NULL AS MD_NON_RATE
+				      ,NULL AS MD_ERR_RATE      
+					FROM (SELECT DBC.DB_CONN_TRG_ID
+					          ,DBC.DB_CONN_TRG_LNM
+				              ,DBC.DB_SCH_ID
+				              ,DBC.DB_SCH_PNM
+				              ,BR.ANA_DGR 
+					          ,DQI.DQI_ID
+					          ,DQI.DQI_LNM
+					          ,DQI.FULL_PATH
+				              --업무규칙
+				              ,(SELECT DQI_LNM FROM WAM_DQI A WHERE A.DQI_ID = DQI.UPP_DQI_ID) AS UPP_DQI_LNM
+					          ,NVL(SUM(BR.ANA_CNT),0) AS BR_ANA_CNT
+					          ,NVL(SUM(BR.ER_CNT), 0) AS BR_ER_CNT
+					          ,NVL(COUNT(BR.BR_ID),0) AS BR_CNT
+				              --프로파일
+				              ,NULL AS PRF_ANA_CNT
+				              ,NULL AS PRF_ER_CNT
+				              ,NULL AS PRF_CNT
+				              --이상값
+				              ,NULL AS MD_ANA_CNT
+				              ,NULL AS MD_ER_CNT
+				              ,NULL AS MD_CNT
+					      FROM WAM_BR_MSTR BM
+				               INNER JOIN (SELECT R.*
+				                            FROM WAM_BR_RESULT R
+				                                INNER JOIN (SELECT BR_ID, MAX(ANA_DGR) AS ANA_DGR, MAX(ANA_STR_DTM) AS ANA_STR_DTM
+				                                              FROM WAM_BR_RESULT
+				                                             GROUP BY BR_ID ) R2
+				                                   ON R.BR_ID = R2.BR_ID
+				                                  AND R.ANA_DGR = R2.ANA_DGR
+				                                  AND R.ANA_STR_DTM = R2.ANA_STR_DTM ) BR
+				                   ON BM.BR_ID = BR.BR_ID 
+				                  AND BR.ANA_CNT IS NOT NULL
+				                  AND BR.ANA_DGR IS NOT NULL
+				                 INNER JOIN (SELECT DB.DB_CONN_TRG_PNM
+				                                       ,DB.DB_CONN_TRG_LNM
+				                                       ,DB.DB_CONN_TRG_ID
+				                                       ,S.DB_SCH_PNM
+				                                       ,S.DB_SCH_LNM
+				                                       ,S.DB_SCH_ID                                       
+				                                  FROM WAA_DB_CONN_TRG DB
+				                                       INNER JOIN WAA_DB_SCH S
+				                                          ON DB.DB_CONN_TRG_ID = S.DB_CONN_TRG_ID
+				                                         AND S.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+				                                         AND S.REG_TYP_CD IN ('C','U')
+				                                 WHERE DB.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+				                                   AND DB.REG_TYP_CD IN ('C','U') 
+				                                ) DBC              
+				                  ON BM.DB_CONN_TRG_ID = DBC.DB_CONN_TRG_ID
+				                 AND BM.DB_SCH_ID = DBC.DB_SCH_ID  
+				                INNER JOIN WAM_BIZ_AREA BIZ
+				                   ON BM.BIZ_AREA_ID = BIZ.BIZ_AREA_ID
+				                  AND BIZ.REG_TYP_CD IN ('C', 'U')
+				                INNER JOIN WAM_BR_DQI_MAP DQIMAP
+				                   ON BM.BR_ID = DQIMAP.BR_ID
+				                  AND DQIMAP.REG_TYP_CD IN ('C', 'U')
+				                INNER JOIN WAM_DQI DQI
+				                   ON DQI.DQI_ID = DQIMAP.DQI_ID
+				                  AND DQI.REG_TYP_CD IN ('C', 'U')
+				                LEFT OUTER JOIN WAM_BR_CTQ_MAP CTQMAP
+				                   ON BM.BR_ID = CTQMAP.BR_ID
+				                  AND CTQMAP.REG_TYP_CD IN ('C', 'U')
+				                LEFT OUTER JOIN WAM_CTQ CTQ
+				                   ON CTQ.CTQ_ID = CTQMAP.CTQ_ID
+				                  AND CTQ.REG_TYP_CD IN ('C', 'U')
+				              WHERE BM.REG_TYP_CD IN ('C', 'U')                
+				              GROUP BY DBC.DB_CONN_TRG_ID, DBC.DB_CONN_TRG_LNM
+				                       ,DBC.DB_SCH_ID, DBC.DB_SCH_PNM
+				                      , DQI.DQI_ID, DQI.DQI_LNM, DQI.FULL_PATH
+				                      , BR.ANA_DGR, DQI.UPP_DQI_ID
+				             ) A
+				             GROUP BY A.DB_CONN_TRG_ID	
+									 ,A.DB_CONN_TRG_LNM	
+									 ,A.DB_SCH_ID
+									 ,A.DB_SCH_PNM		
+									 ,A.ANA_DGR			
+									 ,A.DQI_ID			
+									 ,A.DQI_LNM			
+									 ,A.FULL_PATH         
+									 ,A.UPP_DQI_LNM		
+									 ,A.BR_ANA_CNT		
+									 ,A.BR_ER_CNT			
+									 ,A.BR_CNT            
+									 ,A.PRF_ANA_CNT		
+									 ,A.PRF_ER_CNT		
+									 ,A.PRF_CNT           
+									 ,A.MD_ANA_CNT		
+									 ,A.MD_ER_CNT			
+									 ,A.MD_CNT
+				UNION ALL
+				SELECT 'PRF' AS BIZ_DCD
+				      ,A.*
+				      --업무규칙
+				      ,NULL AS BR_ANA_DGR
+				      ,NULL AS SIGMA  
+				      ,NULL AS BR_NON_RATE
+				      ,NULL AS BR_ERR_RATE
+				      --프로파일
+				      ,A.ANA_DGR AS PRF_ANA_DGR
+				      ,DECODE(A.PRF_ANA_CNT,0,0,DECODE(A.PRF_ER_CNT,0,100,ROUND(((A.PRF_ANA_CNT-A.PRF_ER_CNT)/A.PRF_ANA_CNT*100),2))) PRF_NON_RATE
+				      ,DECODE(A.PRF_ANA_CNT,0,0, ROUND(NVL(A.PRF_ER_CNT,0)*100/ A.PRF_ANA_CNT ,2) ) AS PRF_ERR_RATE
+				      --이상값
+				      ,NULL AS MD_ANA_DGR
+				      ,NULL AS MD_NON_RATE
+				      ,NULL AS MD_ERR_RATE        
+					FROM (SELECT DBC.DB_CONN_TRG_ID
+					          ,DBC.DB_CONN_TRG_LNM
+				              ,DBC.DB_SCH_ID
+				              ,DBC.DB_SCH_PNM
+				              ,PR.ANA_DGR
+					          ,DQI.DQI_ID
+					          ,DQI.DQI_LNM
+					          ,DQI.FULL_PATH
+				              --업무규칙
+				              ,(SELECT DQI_LNM FROM WAM_DQI A WHERE A.DQI_ID = DQI.UPP_DQI_ID) AS UPP_DQI_LNM
+					          ,NULL AS BR_ANA_CNT
+					          ,NULL AS BR_ER_CNT
+					          ,NULL AS BR_CNT
+				              --프로파일
+					          ,NVL(SUM(PR.ANA_CNT),0) AS PRF_ANA_CNT
+					          ,NVL(SUM(PR.ESN_ER_CNT), 0) AS PRF_ER_CNT
+					          ,NVL(COUNT(PR.PRF_ID),0) AS PRF_CNT
+				              --이상값
+				              ,NULL AS MD_ANA_CNT
+				              ,NULL AS MD_ER_CNT
+				              ,NULL AS MD_CNT              
+					      FROM WAM_PRF_MSTR PM
+				               INNER JOIN (SELECT R.*
+				                            FROM WAM_PRF_RESULT R
+				                                INNER JOIN (SELECT PRF_ID, MAX(ANA_DGR) AS ANA_DGR, MAX(ANA_STR_DTM) AS ANA_STR_DTM
+				                                              FROM WAM_PRF_RESULT
+				                                             GROUP BY ANA_DGR, PRF_ID ) R2
+				                                   ON R.PRF_ID = R2.PRF_ID
+				                                  AND R.ANA_DGR = R2.ANA_DGR
+				                                  AND R.ANA_STR_DTM = R2.ANA_STR_DTM ) PR
+				                   ON PM.PRF_ID = PR.PRF_ID 
+				                  AND PR.ANA_CNT IS NOT NULL
+				                  AND PR.ANA_DGR IS NOT NULL
+				                 INNER JOIN (SELECT DB.DB_CONN_TRG_PNM
+				                                       ,DB.DB_CONN_TRG_LNM
+				                                       ,DB.DB_CONN_TRG_ID
+				                                       ,S.DB_SCH_PNM
+				                                       ,S.DB_SCH_LNM
+				                                       ,S.DB_SCH_ID
+				                                  FROM WAA_DB_CONN_TRG DB
+				                                       INNER JOIN WAA_DB_SCH S
+				                                          ON DB.DB_CONN_TRG_ID = S.DB_CONN_TRG_ID
+				                                         AND S.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+				                                         AND S.REG_TYP_CD IN ('C','U')
+				                                 WHERE DB.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+				                                   AND DB.REG_TYP_CD IN ('C','U') 
+				                                ) DBC              
+				                  ON PM.DB_CONN_TRG_ID = DBC.DB_CONN_TRG_ID
+				                 AND PM.DB_SCH_ID = DBC.DB_SCH_ID
+				                
+				
+				                INNER JOIN WAM_PRF_DQI_MAP DQIMAP
+				                   ON PM.PRF_ID = DQIMAP.PRF_ID
+				                  AND DQIMAP.REG_TYP_CD IN ('C', 'U')
+				                INNER JOIN WAM_DQI DQI
+				                   ON DQI.DQI_ID = DQIMAP.DQI_ID
+				                  AND DQI.REG_TYP_CD IN ('C', 'U')
+				
+				              WHERE PM.REG_TYP_CD IN ('C', 'U')                
+				              GROUP BY DBC.DB_CONN_TRG_ID, DBC.DB_CONN_TRG_LNM
+				                       ,DBC.DB_SCH_ID, DBC.DB_SCH_PNM
+				                      , DQI.DQI_ID, DQI.DQI_LNM, DQI.FULL_PATH
+				                      , PR.ANA_DGR, DQI.UPP_DQI_ID
+				             ) A
+				             GROUP BY A.DB_CONN_TRG_ID	
+									 ,A.DB_CONN_TRG_LNM	
+									 ,A.DB_SCH_ID
+									 ,A.DB_SCH_PNM		
+									 ,A.ANA_DGR			
+									 ,A.DQI_ID			
+									 ,A.DQI_LNM			
+									 ,A.FULL_PATH         
+									 ,A.UPP_DQI_LNM		
+									 ,A.BR_ANA_CNT		
+									 ,A.BR_ER_CNT			
+									 ,A.BR_CNT            
+									 ,A.PRF_ANA_CNT		
+									 ,A.PRF_ER_CNT		
+									 ,A.PRF_CNT           
+									 ,A.MD_ANA_CNT		
+									 ,A.MD_ER_CNT			
+									 ,A.MD_CNT
+				UNION ALL
+				SELECT 'MD' AS BIZ_DCD
+				      ,A.*
+				      --업무규칙
+				      ,NULL AS BR_ANA_DGR
+				      ,NULL AS SIGMA  
+				      ,NULL AS BR_NON_RATE
+				      ,NULL AS BR_ERR_RATE
+				      --프로파일
+				      ,NULL AS PRF_ANA_DGR
+				      ,NULL AS PRF_NON_RATE
+				      ,NULL AS PRF_ERR_RATE 
+				      --이상값 
+				      ,A.ANA_DGR AS MD_ANA_DGR
+				      ,DECODE(A.MD_ANA_CNT,0,0,DECODE(A.MD_ER_CNT,0,100,ROUND(((A.MD_ANA_CNT-A.MD_ER_CNT)/A.MD_ANA_CNT*100),2))) MD_NON_RATE
+				      ,DECODE(A.MD_ANA_CNT,0,0, ROUND(NVL(A.MD_ER_CNT,0)*100/ A.MD_ANA_CNT ,2) ) AS MD_ERR_RATE       
+					FROM (
+				          SELECT DBC.DB_CONN_TRG_ID
+					          ,DBC.DB_CONN_TRG_LNM
+				              ,DBC.DB_SCH_ID
+				              ,DBC.DB_SCH_PNM
+				              ,MR.ANA_DGR
+					          ,DQI.DQI_ID
+					          ,DQI.DQI_LNM
+					          ,DQI.FULL_PATH
+				              --업무규칙
+				              ,(SELECT DQI_LNM FROM WAM_DQI A WHERE A.DQI_ID = DQI.UPP_DQI_ID) AS UPP_DQI_LNM
+					          ,NULL AS BR_ANA_CNT
+					          ,NULL AS BR_ER_CNT
+					          ,NULL AS BR_CNT
+				              --프로파일
+					          ,NULL AS PRF_ANA_CNT
+					          ,NULL AS PRF_ER_CNT
+					          ,NULL AS PRF_CNT
+				              --이상값
+					          ,NVL(SUM(MR.ANA_CNT),0) AS MD_ANA_CNT
+					          ,NVL(SUM(MR.ESN_ER_CNT), 0) AS MD_ER_CNT
+					          ,NVL(COUNT(MR.OTL_DTC_ID),0) AS MD_CNT 
+					      FROM WAD_DATA_SET MD
+				               INNER JOIN WAD_OTL_DTC A
+				                  ON MD.DASE_ID = A.DASE_ID          
+				               INNER JOIN (SELECT R.*
+				                            FROM WAD_OTL_RESULT R
+				                                INNER JOIN (SELECT OTL_DTC_ID, MAX(ANA_DGR) AS ANA_DGR, MAX(ANA_STR_DTM) AS ANA_STR_DTM
+				                                              FROM WAD_OTL_RESULT
+				                                             GROUP BY OTL_DTC_ID ) R2
+				                                   ON R.OTL_DTC_ID = R2.OTL_DTC_ID
+				                                  AND R.ANA_DGR = R2.ANA_DGR
+				                                  AND R.ANA_STR_DTM = R2.ANA_STR_DTM ) MR
+				                   ON A.OTL_DTC_ID = MR.OTL_DTC_ID 
+				                  AND MR.ANA_CNT IS NOT NULL
+				                  AND MR.ANA_DGR IS NOT NULL
+				                 INNER JOIN (SELECT DB.DB_CONN_TRG_PNM
+				                                       ,DB.DB_CONN_TRG_LNM
+				                                       ,DB.DB_CONN_TRG_ID
+				                                       ,S.DB_SCH_PNM
+				                                       ,S.DB_SCH_LNM
+				                                       ,S.DB_SCH_ID
+				                                  FROM WAA_DB_CONN_TRG DB
+				                                       INNER JOIN WAA_DB_SCH S
+				                                          ON DB.DB_CONN_TRG_ID = S.DB_CONN_TRG_ID
+				                                         AND S.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+				                                         AND S.REG_TYP_CD IN ('C','U')
+				                                 WHERE DB.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+				                                   AND DB.REG_TYP_CD IN ('C','U') 
+				                                ) DBC              
+				                  ON MD.DB_SCH_ID = DBC.DB_SCH_ID
+				                INNER JOIN WAM_OTL_DQI_MAP DQIMAP
+				                   ON A.OTL_DTC_ID = DQIMAP.OTL_DTC_ID
+				                INNER JOIN WAM_DQI DQI
+				                   ON DQI.DQI_ID = DQIMAP.DQI_ID
+				              WHERE 1 = 1
+				              GROUP BY DBC.DB_CONN_TRG_ID, DBC.DB_CONN_TRG_LNM
+				                       ,DBC.DB_SCH_ID, DBC.DB_SCH_PNM
+				                      , DQI.DQI_ID, DQI.DQI_LNM, DQI.FULL_PATH
+				                      , MR.ANA_DGR, DQI.UPP_DQI_ID
+				             ) A
+				             GROUP BY A.DB_CONN_TRG_ID	
+									 ,A.DB_CONN_TRG_LNM	
+									 ,A.DB_SCH_ID
+									 ,A.DB_SCH_PNM		
+									 ,A.ANA_DGR			
+									 ,A.DQI_ID			
+									 ,A.DQI_LNM			
+									 ,A.FULL_PATH         
+									 ,A.UPP_DQI_LNM		
+									 ,A.BR_ANA_CNT		
+									 ,A.BR_ER_CNT			
+									 ,A.BR_CNT            
+									 ,A.PRF_ANA_CNT		
+									 ,A.PRF_ER_CNT		
+									 ,A.PRF_CNT           
+									 ,A.MD_ANA_CNT		
+									 ,A.MD_ER_CNT			
+									 ,A.MD_CNT
+				) A
+				WHERE 1 = 1
+				<if test="dbConnTrgId != null and dbConnTrgId != ''">
+			    AND A.DB_CONN_TRG_ID = #{dbConnTrgId, jdbcType=VARCHAR}
+			    </if>
+			    <if test="dbSchId != null and dbSchId != '' ">
+			    AND A.DB_SCH_ID = #{dbSchId, jdbcType=VARCHAR}
+			    </if>
+			    <if test="dqiId != null and dqiId != '' ">
+			    AND A.DQI_ID = #{dqiId, jdbcType=VARCHAR}
+			    </if>
+				GROUP BY A.DB_CONN_TRG_ID, A.DB_CONN_TRG_LNM
+				        , A.DB_SCH_ID, A.DB_SCH_PNM
+				        , A.DQI_ID, A.DQI_LNM, A.FULL_PATH, A.UPP_DQI_LNM, A.BIZ_DCD
+		      ) A
+		GROUP BY A.DB_CONN_TRG_ID, A.DB_CONN_TRG_LNM
+		        , A.DB_SCH_ID, A.DB_SCH_PNM
+		        , A.DQI_ID, A.DQI_LNM, A.FULL_PATH, A.UPP_DQI_LNM 
+		ORDER BY DB_CONN_TRG_LNM, DB_SCH_PNM, FULL_PATH   
+ 	</select>
+ 	
+ 	<select id="selectDqiQltyBar" parameterType="map" resultMap="BaseResultMap">
+ 		-- DQI별 품질추이
+		SELECT A.DB_CONN_TRG_ID,
+		         A.DB_CONN_TRG_LNM,
+		         A.DB_SCH_ID,
+		         A.DB_SCH_PNM,
+		         A.DQI_ID,
+		         A.DQI_LNM,
+		         A.FULL_PATH,
+		         A.UPP_DQI_LNM,
+		         A.BR_ANA_DGR AS BR_ANA_DGR,
+		         MAX (A.BR_CNT) AS BR_CNT,
+		         MAX (A.SIGMA) AS SIGMA,
+		         MAX (A.BR_ANA_CNT) AS BR_ANA_CNT,
+		         MAX (A.BR_ER_CNT) AS BR_ER_CNT,
+		         MAX (A.BR_NON_RATE) AS BR_NON_RATE,
+		         MAX (A.BR_ERR_RATE) AS BR_ERR_RATE,
+		         A.PRF_ANA_DGR AS PRF_ANA_DGR,
+		         MAX (A.PRF_CNT) AS PRF_CNT,
+		         MAX (A.PRF_ANA_CNT) AS PRF_ANA_CNT,
+		         MAX (A.PRF_ER_CNT) AS PRF_ER_CNT,
+		         MAX (A.PRF_NON_RATE) AS PRF_NON_RATE,
+		         MAX (A.PRF_ERR_RATE) AS PRF_ERR_RATE,
+		         A.MD_ANA_DGR AS MD_ANA_DGR,
+		         MAX (A.MD_CNT) AS MD_CNT,
+		         MAX (A.MD_ANA_CNT) AS MD_ANA_CNT,
+		         MAX (A.MD_ER_CNT) AS MD_ER_CNT,
+		         MAX (A.MD_NON_RATE) AS MD_NON_RATE,
+		         MAX (A.MD_ERR_RATE) AS MD_ERR_RATE
+		    FROM (  SELECT A.DB_CONN_TRG_ID,
+		                   A.DB_CONN_TRG_LNM,
+		                   A.DB_SCH_ID,
+		                   A.DB_SCH_PNM,
+		                   A.DQI_ID,
+		                   A.DQI_LNM,
+		                   A.FULL_PATH,
+		                   A.UPP_DQI_LNM--업무규칙
+		                   ,
+		                   DECODE (A.BIZ_DCD, 'BR', BR_ANA_DGR, NULL) AS BR_ANA_DGR,
+		                   DECODE (A.BIZ_DCD, 'BR', MAX (BR_CNT), NULL) AS BR_CNT,
+		                   DECODE (A.BIZ_DCD, 'BR', MAX (SIGMA), NULL) AS SIGMA,
+		                   DECODE (A.BIZ_DCD, 'BR', MAX (BR_ANA_CNT), NULL) AS BR_ANA_CNT,
+		                   DECODE (A.BIZ_DCD, 'BR', MAX (BR_ER_CNT), NULL) AS BR_ER_CNT,
+		                   DECODE (A.BIZ_DCD, 'BR', MAX (BR_NON_RATE), NULL)
+		                      AS BR_NON_RATE,
+		                   DECODE (A.BIZ_DCD, 'BR', MAX (BR_ERR_RATE), NULL)
+		                      AS BR_ERR_RATE--프로파일
+		                   ,
+		                   DECODE (A.BIZ_DCD, 'PRF', PRF_ANA_DGR, NULL)
+		                      AS PRF_ANA_DGR,
+		                   DECODE (A.BIZ_DCD, 'PRF', MAX (PRF_CNT), NULL) AS PRF_CNT,
+		                   DECODE (A.BIZ_DCD, 'PRF', MAX (PRF_ANA_CNT), NULL)
+		                      AS PRF_ANA_CNT,
+		                   DECODE (A.BIZ_DCD, 'PRF', MAX (PRF_ER_CNT), NULL)
+		                      AS PRF_ER_CNT,
+		                   DECODE (A.BIZ_DCD, 'PRF', MAX (PRF_NON_RATE), NULL)
+		                      AS PRF_NON_RATE,
+		                   DECODE (A.BIZ_DCD, 'PRF', MAX (PRF_ERR_RATE), NULL)
+		                      AS PRF_ERR_RATE-- 이상값
+		                   ,
+		                   DECODE (A.BIZ_DCD, 'MD', MD_ANA_DGR, NULL) AS MD_ANA_DGR,
+		                   DECODE (A.BIZ_DCD, 'MD', MAX (MD_CNT), NULL) AS MD_CNT,
+		                   DECODE (A.BIZ_DCD, 'MD', MAX (MD_ANA_CNT), NULL) AS MD_ANA_CNT,
+		                   DECODE (A.BIZ_DCD, 'MD', MAX (MD_ER_CNT), NULL) AS MD_ER_CNT,
+		                   DECODE (A.BIZ_DCD, 'MD', MAX (MD_NON_RATE), NULL)
+		                      AS MD_NON_RATE,
+		                   DECODE (A.BIZ_DCD, 'MD', MAX (MD_ERR_RATE), NULL)
+		                      AS MD_ERR_RATE
+		              FROM (SELECT 'BR' AS BIZ_DCD,
+		                           A.*-- 업무규칙
+		                           ,
+		                           A.ANA_DGR AS BR_ANA_DGR,
+		                           TO_CHAR (
+		                              ROUND (
+		                                 WDQ_FC_SIGMA (
+		                                    WDQ_FC_DPMO (A.BR_ER_CNT, A.BR_ANA_CNT)),
+		                                 2))
+		                              AS SIGMA,
+		                           DECODE (
+		                              A.BR_ANA_CNT,
+		                              0, 0,
+		                              DECODE (
+		                                 A.BR_ER_CNT,
+		                                 0, 100,
+		                                 ROUND (
+		                                    (  (A.BR_ANA_CNT - A.BR_ER_CNT)
+		                                     / A.BR_ANA_CNT
+		                                     * 100),
+		                                    2)))
+		                              BR_NON_RATE,
+		                           DECODE (
+		                              A.BR_ANA_CNT,
+		                              0, 0,
+		                              ROUND (NVL (A.BR_ER_CNT, 0) * 100 / A.BR_ANA_CNT,
+		                                     2))
+		                              AS BR_ERR_RATE--프로파일
+		                           ,
+		                           NULL AS PRF_ANA_DGR,
+		                           NULL AS PRF_NON_RATE,
+		                           NULL AS PRF_ERR_RATE--이상값
+		                           ,
+		                           NULL AS MD_ANA_DGR,
+		                           NULL AS MD_NON_RATE,
+		                           NULL AS MD_ERR_RATE
+		                      FROM (  SELECT DBC.DB_CONN_TRG_ID,
+		                                     DBC.DB_CONN_TRG_LNM,
+		                                     DBC.DB_SCH_ID,
+		                                     DBC.DB_SCH_PNM,
+		                                     BR.ANA_DGR,
+		                                     DQI.DQI_ID,
+		                                     DQI.DQI_LNM,
+		                                     DQI.FULL_PATH--업무규칙
+		                                     ,
+		                                     (SELECT DQI_LNM
+		                                        FROM WAM_DQI A
+		                                       WHERE A.DQI_ID = DQI.UPP_DQI_ID)
+		                                        UPP_DQI_LNM,
+		                                     NVL (SUM (BR.ANA_CNT), 0) AS BR_ANA_CNT,
+		                                     NVL (SUM (BR.ER_CNT), 0) AS BR_ER_CNT,
+		                                     NVL (COUNT (BR.BR_ID), 0) AS BR_CNT--프로파일
+		                                     ,
+		                                     NULL AS PRF_ANA_CNT,
+		                                     NULL AS PRF_ER_CNT,
+		                                     NULL AS PRF_CNT--이상값
+		                                     ,
+		                                     NULL AS MD_ANA_CNT,
+		                                     NULL AS MD_ER_CNT,
+		                                     NULL AS MD_CNT
+		                                FROM WAM_BR_MSTR BM
+		                                     INNER JOIN
+		                                     (SELECT R.*
+		                                        FROM WAM_BR_RESULT R) BR
+		                                        ON     BM.BR_ID = BR.BR_ID
+		                                           AND BR.ANA_CNT IS NOT NULL
+		                                           AND BR.ANA_DGR IS NOT NULL
+		                                     INNER JOIN
+		                                     (SELECT DB.DB_CONN_TRG_PNM,
+		                                             DB.DB_CONN_TRG_LNM,
+		                                             DB.DB_CONN_TRG_ID,
+		                                             S.DB_SCH_PNM,
+		                                             S.DB_SCH_LNM,
+		                                             S.DB_SCH_ID
+		                                        FROM WAA_DB_CONN_TRG DB
+		                                             INNER JOIN WAA_DB_SCH S
+		                                                ON     DB.DB_CONN_TRG_ID =
+		                                                          S.DB_CONN_TRG_ID
+		                                                   AND S.EXP_DTM =
+		                                                          TO_DATE ('99991231',
+		                                                                   'YYYYMMDD')
+		                                                   AND S.REG_TYP_CD IN ('C', 'U')
+		                                       WHERE     DB.EXP_DTM =
+		                                                    TO_DATE ('99991231',
+		                                                             'YYYYMMDD')
+		                                             AND DB.REG_TYP_CD IN ('C', 'U')) DBC
+		                                        ON     BM.DB_CONN_TRG_ID =
+		                                                  DBC.DB_CONN_TRG_ID
+		                                           AND BM.DB_SCH_ID = DBC.DB_SCH_ID
+		                                     INNER JOIN WAM_BIZ_AREA BIZ
+		                                        ON     BM.BIZ_AREA_ID = BIZ.BIZ_AREA_ID
+		                                           AND BIZ.REG_TYP_CD IN ('C', 'U')
+		                                     INNER JOIN WAM_BR_DQI_MAP DQIMAP
+		                                        ON     BM.BR_ID = DQIMAP.BR_ID
+		                                           AND DQIMAP.REG_TYP_CD IN ('C', 'U')
+		                                     INNER JOIN WAM_DQI DQI
+		                                        ON     DQI.DQI_ID = DQIMAP.DQI_ID
+		                                           AND DQI.REG_TYP_CD IN ('C', 'U')
+		                                     LEFT OUTER JOIN WAM_BR_CTQ_MAP CTQMAP
+		                                        ON     BM.BR_ID = CTQMAP.BR_ID
+		                                           AND CTQMAP.REG_TYP_CD IN ('C', 'U')
+		                                     LEFT OUTER JOIN WAM_CTQ CTQ
+		                                        ON     CTQ.CTQ_ID = CTQMAP.CTQ_ID
+		                                           AND CTQ.REG_TYP_CD IN ('C', 'U')
+		                               WHERE BM.REG_TYP_CD IN ('C', 'U')
+		                            GROUP BY DBC.DB_CONN_TRG_ID,
+		                                     DBC.DB_CONN_TRG_LNM,
+		                                     DBC.DB_SCH_ID,
+		                                     DBC.DB_SCH_PNM,
+		                                     DQI.DQI_ID,
+		                                     DQI.DQI_LNM,
+		                                     DQI.FULL_PATH,
+		                                     BR.ANA_DGR,
+		                                     DQI.UPP_DQI_ID) A
+		                    UNION ALL
+		                    SELECT 'PRF' AS BIZ_DCD,
+		                           A.*--업무규칙
+		                           ,
+		                           NULL AS BR_ANA_DGR,
+		                           NULL AS SIGMA,
+		                           NULL AS BR_NON_RATE,
+		                           NULL AS BR_ERR_RATE--프로파일
+		                           ,
+		                           A.ANA_DGR AS PRF_ANA_DGR,
+		                           DECODE (
+		                              A.PRF_ANA_CNT,
+		                              0, 0,
+		                              DECODE (
+		                                 A.PRF_ER_CNT,
+		                                 0, 100,
+		                                 ROUND (
+		                                    (  (A.PRF_ANA_CNT - A.PRF_ER_CNT)
+		                                     / A.PRF_ANA_CNT
+		                                     * 100),
+		                                    2)))
+		                              PRF_NON_RATE,
+		                           DECODE (
+		                              A.PRF_ANA_CNT,
+		                              0, 0,
+		                              ROUND (NVL (A.PRF_ER_CNT, 0) * 100 / A.PRF_ANA_CNT,
+		                                     2))
+		                              AS PRF_ERR_RATE--이상값
+		                           ,
+		                           NULL AS MD_ANA_DGR,
+		                           NULL AS MD_NON_RATE,
+		                           NULL AS MD_ERR_RATE
+		                      FROM (  SELECT DBC.DB_CONN_TRG_ID,
+		                                     DBC.DB_CONN_TRG_LNM,
+		                                     DBC.DB_SCH_ID,
+		                                     DBC.DB_SCH_PNM,
+		                                     PR.ANA_DGR,
+		                                     DQI.DQI_ID,
+		                                     DQI.DQI_LNM,
+		                                     DQI.FULL_PATH--업무규칙
+		                                     ,
+		                                     (SELECT DQI_LNM
+		                                        FROM WAM_DQI A
+		                                       WHERE A.DQI_ID = DQI.UPP_DQI_ID)
+		                                        UPP_DQI_LNM,
+		                                     NULL AS BR_ANA_CNT,
+		                                     NULL AS BR_ER_CNT,
+		                                     NULL AS BR_CNT--프로파일
+		                                     ,
+		                                     NVL (SUM (PR.ANA_CNT), 0) AS PRF_ANA_CNT,
+		                                     NVL (SUM (PR.ESN_ER_CNT), 0) AS PRF_ER_CNT,
+		                                     NVL (COUNT (PR.PRF_ID), 0) AS PRF_CNT--이상값
+		                                     ,
+		                                     NULL AS MD_ANA_CNT,
+		                                     NULL AS MD_ER_CNT,
+		                                     NULL AS MD_CNT
+		                                FROM WAM_PRF_MSTR PM
+		                                     INNER JOIN
+		                                     (SELECT R.*
+		                                        FROM WAM_PRF_RESULT R) PR
+		                                        ON     PM.PRF_ID = PR.PRF_ID
+		                                           AND PR.ANA_CNT IS NOT NULL
+		                                           AND PR.ANA_DGR IS NOT NULL
+		                                     INNER JOIN
+		                                     (SELECT DB.DB_CONN_TRG_PNM,
+		                                             DB.DB_CONN_TRG_LNM,
+		                                             DB.DB_CONN_TRG_ID,
+		                                             S.DB_SCH_PNM,
+		                                             S.DB_SCH_LNM,
+		                                             S.DB_SCH_ID
+		                                        FROM WAA_DB_CONN_TRG DB
+		                                             INNER JOIN WAA_DB_SCH S
+		                                                ON     DB.DB_CONN_TRG_ID =
+		                                                          S.DB_CONN_TRG_ID
+		                                                   AND S.EXP_DTM =
+		                                                          TO_DATE ('99991231',
+		                                                                   'YYYYMMDD')
+		                                                   AND S.REG_TYP_CD IN ('C', 'U')
+		                                       WHERE     DB.EXP_DTM =
+		                                                    TO_DATE ('99991231',
+		                                                             'YYYYMMDD')
+		                                             AND DB.REG_TYP_CD IN ('C', 'U')) DBC
+		                                        ON     PM.DB_CONN_TRG_ID =
+		                                                  DBC.DB_CONN_TRG_ID
+		                                           AND PM.DB_SCH_ID = DBC.DB_SCH_ID
+		                                     INNER JOIN WAM_PRF_DQI_MAP DQIMAP
+		                                        ON     PM.PRF_ID = DQIMAP.PRF_ID
+		                                           AND DQIMAP.REG_TYP_CD IN ('C', 'U')
+		                                     INNER JOIN WAM_DQI DQI
+		                                        ON     DQI.DQI_ID = DQIMAP.DQI_ID
+		                                           AND DQI.REG_TYP_CD IN ('C', 'U')
+		                               WHERE PM.REG_TYP_CD IN ('C', 'U')
+		                            GROUP BY DBC.DB_CONN_TRG_ID,
+		                                     DBC.DB_CONN_TRG_LNM,
+		                                     DBC.DB_SCH_ID,
+		                                     DBC.DB_SCH_PNM,
+		                                     DQI.DQI_ID,
+		                                     DQI.DQI_LNM,
+		                                     DQI.FULL_PATH,
+		                                     PR.ANA_DGR,
+		                                     DQI.UPP_DQI_ID) A
+		                    UNION ALL
+		                    SELECT 'MD' AS BIZ_DCD,
+		                           A.*--업무규칙
+		                           ,
+		                           NULL AS BR_ANA_DGR,
+		                           NULL AS SIGMA,
+		                           NULL AS BR_NON_RATE,
+		                           NULL AS BR_ERR_RATE--프로파일
+		                           ,
+		                           NULL AS PRF_ANA_DGR,
+		                           NULL AS PRF_NON_RATE,
+		                           NULL AS PRF_ERR_RATE--이상값
+		                           ,
+		                           A.ANA_DGR AS MD_ANA_DGR,
+		                           DECODE (
+		                              A.MD_ANA_CNT,
+		                              0, 0,
+		                              DECODE (
+		                                 A.MD_ER_CNT,
+		                                 0, 100,
+		                                 ROUND (
+		                                    (  (A.MD_ANA_CNT - A.MD_ER_CNT)
+		                                     / A.MD_ANA_CNT
+		                                     * 100),
+		                                    2)))
+		                              MD_NON_RATE,
+		                           DECODE (
+		                              A.MD_ANA_CNT,
+		                              0, 0,
+		                              ROUND (NVL (A.MD_ER_CNT, 0) * 100 / A.MD_ANA_CNT,
+		                                     2))
+		                              AS MD_ERR_RATE
+		                      FROM (  SELECT DBC.DB_CONN_TRG_ID,
+		                                     DBC.DB_CONN_TRG_LNM,
+		                                     DBC.DB_SCH_ID,
+		                                     DBC.DB_SCH_PNM,
+		                                     MR.ANA_DGR,
+		                                     DQI.DQI_ID,
+		                                     DQI.DQI_LNM,
+		                                     DQI.FULL_PATH--업무규칙
+		                                     ,
+		                                     (SELECT DQI_LNM
+		                                        FROM WAM_DQI A
+		                                       WHERE A.DQI_ID = DQI.UPP_DQI_ID)
+		                                        UPP_DQI_LNM,
+		                                     NULL AS BR_ANA_CNT,
+		                                     NULL AS BR_ER_CNT,
+		                                     NULL AS BR_CNT--프로파일
+		                                     ,
+		                                     NULL AS PRF_ANA_CNT,
+		                                     NULL AS PRF_ER_CNT,
+		                                     NULL AS PRF_CNT--이상값
+		                                     ,
+		                                     NVL (SUM (MR.ANA_CNT), 0) AS MD_ANA_CNT,
+		                                     NVL (SUM (MR.ESN_ER_CNT), 0) AS MD_ER_CNT,
+		                                     NVL (COUNT (MR.OTL_DTC_ID), 0) AS MD_CNT
+		                                FROM WAD_DATA_SET MD
+		                                     INNER JOIN WAD_OTL_DTC A
+		                                        ON MD.DASE_ID = A.DASE_ID
+		                                     INNER JOIN
+		                                     (SELECT R.*
+		                                        FROM WAD_OTL_RESULT R) MR
+		                                        ON     A.OTL_DTC_ID = MR.OTL_DTC_ID
+		                                           AND MR.ANA_CNT IS NOT NULL
+		                                           AND MR.ANA_DGR IS NOT NULL
+		                                     INNER JOIN
+		                                     (SELECT DB.DB_CONN_TRG_PNM,
+		                                             DB.DB_CONN_TRG_LNM,
+		                                             DB.DB_CONN_TRG_ID,
+		                                             S.DB_SCH_PNM,
+		                                             S.DB_SCH_LNM,
+		                                             S.DB_SCH_ID
+		                                        FROM WAA_DB_CONN_TRG DB
+		                                             INNER JOIN WAA_DB_SCH S
+		                                                ON     DB.DB_CONN_TRG_ID =
+		                                                          S.DB_CONN_TRG_ID
+		                                                   AND S.EXP_DTM =
+		                                                          TO_DATE ('99991231',
+		                                                                   'YYYYMMDD')
+		                                                   AND S.REG_TYP_CD IN ('C', 'U')
+		                                       WHERE     DB.EXP_DTM =
+		                                                    TO_DATE ('99991231',
+		                                                             'YYYYMMDD')
+		                                             AND DB.REG_TYP_CD IN ('C', 'U')) DBC
+		                                        ON MD.DB_SCH_ID = DBC.DB_SCH_ID
+		                                     INNER JOIN WAM_OTL_DQI_MAP DQIMAP
+		                                        ON A.OTL_DTC_ID = DQIMAP.OTL_DTC_ID
+		                                     INNER JOIN WAM_DQI DQI
+		                                        ON DQI.DQI_ID = DQIMAP.DQI_ID
+		                               WHERE 1 = 1
+		                            GROUP BY DBC.DB_CONN_TRG_ID,
+		                                     DBC.DB_CONN_TRG_LNM,
+		                                     DBC.DB_SCH_ID,
+		                                     DBC.DB_SCH_PNM,
+		                                     DQI.DQI_ID,
+		                                     DQI.DQI_LNM,
+		                                     DQI.FULL_PATH,
+		                                     MR.ANA_DGR,
+		                                     DQI.UPP_DQI_ID) A) A
+		             WHERE     1 = 1
+		                   AND A.DB_CONN_TRG_ID = #{dbConnTrgId, jdbcType=VARCHAR} -- 클릭이벤트 시 PARAM
+		                   AND A.DB_SCH_ID = #{dbSchId, jdbcType=VARCHAR} -- 클릭이벤트 시 PARAM
+		  				   AND A.DQI_ID = #{dqiId, jdbcType=VARCHAR} -- 클릭이벤트 시 PARAM
+		          GROUP BY A.DB_CONN_TRG_ID,
+		                   A.DB_CONN_TRG_LNM,
+		                   A.DB_SCH_ID,
+		                   A.DB_SCH_PNM,
+		                   A.DQI_ID,
+		                   A.DQI_LNM,
+		                   A.FULL_PATH,
+		                   A.UPP_DQI_LNM,
+		                   A.BIZ_DCD,
+		                   A.BR_ANA_DGR,
+		                   A.PRF_ANA_DGR,
+		                   A.MD_ANA_DGR) A
+		GROUP BY A.DB_CONN_TRG_ID,
+		         A.DB_CONN_TRG_LNM,
+		         A.DB_SCH_ID,
+		         A.DB_SCH_PNM,
+		         A.DQI_ID,
+		         A.DQI_LNM,
+		         A.FULL_PATH,
+		         A.UPP_DQI_LNM,
+		         A.BR_ANA_DGR,
+		         A.PRF_ANA_DGR,
+		         A.MD_ANA_DGR
+		ORDER BY DB_CONN_TRG_LNM, DB_SCH_PNM, FULL_PATH
+ 	</select>
+ 	
+ 	<select id="selectDqiQltyPie" parameterType="map" resultMap="BaseResultMap">
+ 		--DQI별 품질 파이 챠트 필수 param : 진단차수, 스키마id, dqiId
+		SELECT A.DB_CONN_TRG_ID,
+		         A.DB_CONN_TRG_LNM,
+		         A.DB_SCH_ID,
+		         A.DB_SCH_PNM,
+		         A.DQI_ID,
+		         A.DQI_LNM,
+		         A.FULL_PATH,
+		         A.UPP_DQI_LNM,
+		         A.BIZ_DCD,
+		         A.BR_ANA_DGR AS BR_ANA_DGR,
+		         MAX (A.BR_CNT) AS BR_CNT,
+		         MAX (A.SIGMA) AS SIGMA,
+		         MAX (A.BR_ANA_CNT) AS BR_ANA_CNT,
+		         MAX (A.BR_ER_CNT) AS BR_ER_CNT,
+		         MAX (A.BR_NON_RATE) AS BR_NON_RATE,
+		         MAX (A.BR_ERR_RATE) AS BR_ERR_RATE,
+		         A.PRF_ANA_DGR AS PRF_ANA_DGR,
+		         MAX (A.PRF_CNT) AS PRF_CNT,
+		         MAX (A.PRF_ANA_CNT) AS PRF_ANA_CNT,
+		         MAX (A.PRF_ER_CNT) AS PRF_ER_CNT,
+		         MAX (A.PRF_NON_RATE) AS PRF_NON_RATE,
+		         MAX (A.PRF_ERR_RATE) AS PRF_ERR_RATE,
+		         A.MD_ANA_DGR AS MD_ANA_DGR,
+		         MAX (A.MD_CNT) AS MD_CNT,
+		         MAX (A.MD_ANA_CNT) AS MD_ANA_CNT,
+		         MAX (A.MD_ER_CNT) AS MD_ER_CNT,
+		         MAX (A.MD_NON_RATE) AS MD_NON_RATE,
+		         MAX (A.MD_ERR_RATE) AS MD_ERR_RATE
+		    FROM (  SELECT A.DB_CONN_TRG_ID,
+		                   A.DB_CONN_TRG_LNM,
+		                   A.DB_SCH_ID,
+		                   A.DB_SCH_PNM,
+		                   A.DQI_ID,
+		                   A.DQI_LNM,
+		                   A.FULL_PATH,
+		                   A.UPP_DQI_LNM,--업무규칙
+		                   A.BIZ_DCD,
+		                   DECODE (A.BIZ_DCD, 'BR', BR_ANA_DGR, NULL) AS BR_ANA_DGR,
+		                   DECODE (A.BIZ_DCD, 'BR', MAX (BR_CNT), NULL) AS BR_CNT,
+		                   DECODE (A.BIZ_DCD, 'BR', MAX (SIGMA), NULL) AS SIGMA,
+		                   DECODE (A.BIZ_DCD, 'BR', MAX (BR_ANA_CNT), NULL) AS BR_ANA_CNT,
+		                   DECODE (A.BIZ_DCD, 'BR', MAX (BR_ER_CNT), NULL) AS BR_ER_CNT,
+		                   DECODE (A.BIZ_DCD, 'BR', MAX (BR_NON_RATE), NULL)
+		                      AS BR_NON_RATE,
+		                   DECODE (A.BIZ_DCD, 'BR', MAX (BR_ERR_RATE), NULL)
+		                      AS BR_ERR_RATE--프로파일
+		                   ,
+		                   DECODE (A.BIZ_DCD, 'PRF', PRF_ANA_DGR, NULL)
+		                      AS PRF_ANA_DGR,
+		                   DECODE (A.BIZ_DCD, 'PRF', MAX (PRF_CNT), NULL) AS PRF_CNT,
+		                   DECODE (A.BIZ_DCD, 'PRF', MAX (PRF_ANA_CNT), NULL)
+		                      AS PRF_ANA_CNT,
+		                   DECODE (A.BIZ_DCD, 'PRF', MAX (PRF_ER_CNT), NULL)
+		                      AS PRF_ER_CNT,
+		                   DECODE (A.BIZ_DCD, 'PRF', MAX (PRF_NON_RATE), NULL)
+		                      AS PRF_NON_RATE,
+		                   DECODE (A.BIZ_DCD, 'PRF', MAX (PRF_ERR_RATE), NULL)
+		                      AS PRF_ERR_RATE-- 이상값
+		                   ,
+		                   DECODE (A.BIZ_DCD, 'MD', MD_ANA_DGR, NULL) AS MD_ANA_DGR,
+		                   DECODE (A.BIZ_DCD, 'MD', MAX (MD_CNT), NULL) AS MD_CNT,
+		                   DECODE (A.BIZ_DCD, 'MD', MAX (MD_ANA_CNT), NULL) AS MD_ANA_CNT,
+		                   DECODE (A.BIZ_DCD, 'MD', MAX (MD_ER_CNT), NULL) AS MD_ER_CNT,
+		                   DECODE (A.BIZ_DCD, 'MD', MAX (MD_NON_RATE), NULL)
+		                      AS MD_NON_RATE,
+		                   DECODE (A.BIZ_DCD, 'MD', MAX (MD_ERR_RATE), NULL)
+		                      AS MD_ERR_RATE
+		              FROM (SELECT 'BR' AS BIZ_DCD,
+		                           A.*-- 업무규칙
+		                           ,
+		                           A.ANA_DGR AS BR_ANA_DGR,
+		                           TO_CHAR (
+		                              ROUND (
+		                                 WDQ_FC_SIGMA (
+		                                    WDQ_FC_DPMO (A.BR_ER_CNT, A.BR_ANA_CNT)),
+		                                 2))
+		                              AS SIGMA,
+		                           DECODE (
+		                              A.BR_ANA_CNT,
+		                              0, 0,
+		                              DECODE (
+		                                 A.BR_ER_CNT,
+		                                 0, 100,
+		                                 ROUND (
+		                                    (  (A.BR_ANA_CNT - A.BR_ER_CNT)
+		                                     / A.BR_ANA_CNT
+		                                     * 100),
+		                                    2)))
+		                              BR_NON_RATE,
+		                           DECODE (
+		                              A.BR_ANA_CNT,
+		                              0, 0,
+		                              ROUND (NVL (A.BR_ER_CNT, 0) * 100 / A.BR_ANA_CNT,
+		                                     2))
+		                              AS BR_ERR_RATE--프로파일
+		                           ,
+		                           NULL AS PRF_ANA_DGR,
+		                           NULL AS PRF_NON_RATE,
+		                           NULL AS PRF_ERR_RATE--이상값
+		                           ,
+		                           NULL AS MD_ANA_DGR,
+		                           NULL AS MD_NON_RATE,
+		                           NULL AS MD_ERR_RATE
+		                      FROM (  SELECT DBC.DB_CONN_TRG_ID,
+		                                     DBC.DB_CONN_TRG_LNM,
+		                                     DBC.DB_SCH_ID,
+		                                     DBC.DB_SCH_PNM,
+		                                     BR.ANA_DGR,
+		                                     DQI.DQI_ID,
+		                                     DQI.DQI_LNM,
+		                                     DQI.FULL_PATH--업무규칙
+		                                     ,
+		                                     (SELECT DQI_LNM
+		                                        FROM WAM_DQI A
+		                                       WHERE A.DQI_ID = DQI.UPP_DQI_ID)
+		                                        UPP_DQI_LNM,
+		                                     NVL (SUM (BR.ANA_CNT), 0) AS BR_ANA_CNT,
+		                                     NVL (SUM (BR.ER_CNT), 0) AS BR_ER_CNT,
+		                                     NVL (COUNT (BR.BR_ID), 0) AS BR_CNT--프로파일
+		                                     ,
+		                                     NULL AS PRF_ANA_CNT,
+		                                     NULL AS PRF_ER_CNT,
+		                                     NULL AS PRF_CNT--이상값
+		                                     ,
+		                                     NULL AS MD_ANA_CNT,
+		                                     NULL AS MD_ER_CNT,
+		                                     NULL AS MD_CNT
+		                                FROM WAM_BR_MSTR BM
+		                                     INNER JOIN
+		                                     (SELECT R.*
+		                                        FROM WAM_BR_RESULT R) BR
+		                                        ON     BM.BR_ID = BR.BR_ID
+		                                           AND BR.ANA_CNT IS NOT NULL
+		                                           AND BR.ANA_DGR IS NOT NULL
+		                                     INNER JOIN
+		                                     (SELECT DB.DB_CONN_TRG_PNM,
+		                                             DB.DB_CONN_TRG_LNM,
+		                                             DB.DB_CONN_TRG_ID,
+		                                             S.DB_SCH_PNM,
+		                                             S.DB_SCH_LNM,
+		                                             S.DB_SCH_ID
+		                                        FROM WAA_DB_CONN_TRG DB
+		                                             INNER JOIN WAA_DB_SCH S
+		                                                ON     DB.DB_CONN_TRG_ID =
+		                                                          S.DB_CONN_TRG_ID
+		                                                   AND S.EXP_DTM =
+		                                                          TO_DATE ('99991231',
+		                                                                   'YYYYMMDD')
+		                                                   AND S.REG_TYP_CD IN ('C', 'U')
+		                                       WHERE     DB.EXP_DTM =
+		                                                    TO_DATE ('99991231',
+		                                                             'YYYYMMDD')
+		                                             AND DB.REG_TYP_CD IN ('C', 'U')) DBC
+		                                        ON     BM.DB_CONN_TRG_ID =
+		                                                  DBC.DB_CONN_TRG_ID
+		                                           AND BM.DB_SCH_ID = DBC.DB_SCH_ID
+		                                     INNER JOIN WAM_BIZ_AREA BIZ
+		                                        ON     BM.BIZ_AREA_ID = BIZ.BIZ_AREA_ID
+		                                           AND BIZ.REG_TYP_CD IN ('C', 'U')
+		                                     INNER JOIN WAM_BR_DQI_MAP DQIMAP
+		                                        ON     BM.BR_ID = DQIMAP.BR_ID
+		                                           AND DQIMAP.REG_TYP_CD IN ('C', 'U')
+		                                     INNER JOIN WAM_DQI DQI
+		                                        ON     DQI.DQI_ID = DQIMAP.DQI_ID
+		                                           AND DQI.REG_TYP_CD IN ('C', 'U')
+		                                     LEFT OUTER JOIN WAM_BR_CTQ_MAP CTQMAP
+		                                        ON     BM.BR_ID = CTQMAP.BR_ID
+		                                           AND CTQMAP.REG_TYP_CD IN ('C', 'U')
+		                                     LEFT OUTER JOIN WAM_CTQ CTQ
+		                                        ON     CTQ.CTQ_ID = CTQMAP.CTQ_ID
+		                                           AND CTQ.REG_TYP_CD IN ('C', 'U')
+		                               WHERE BM.REG_TYP_CD IN ('C', 'U')
+		                            GROUP BY DBC.DB_CONN_TRG_ID,
+		                                     DBC.DB_CONN_TRG_LNM,
+		                                     DBC.DB_SCH_ID,
+		                                     DBC.DB_SCH_PNM,
+		                                     DQI.DQI_ID,
+		                                     DQI.DQI_LNM,
+		                                     DQI.FULL_PATH,
+		                                     BR.ANA_DGR,
+		                                     DQI.UPP_DQI_ID) A
+		                    UNION ALL
+		                    SELECT 'PRF' AS BIZ_DCD,
+		                           A.*--업무규칙
+		                           ,
+		                           NULL AS BR_ANA_DGR,
+		                           NULL AS SIGMA,
+		                           NULL AS BR_NON_RATE,
+		                           NULL AS BR_ERR_RATE--프로파일
+		                           ,
+		                           A.ANA_DGR AS PRF_ANA_DGR,
+		                           DECODE (
+		                              A.PRF_ANA_CNT,
+		                              0, 0,
+		                              DECODE (
+		                                 A.PRF_ER_CNT,
+		                                 0, 100,
+		                                 ROUND (
+		                                    (  (A.PRF_ANA_CNT - A.PRF_ER_CNT)
+		                                     / A.PRF_ANA_CNT
+		                                     * 100),
+		                                    2)))
+		                              PRF_NON_RATE,
+		                           DECODE (
+		                              A.PRF_ANA_CNT,
+		                              0, 0,
+		                              ROUND (NVL (A.PRF_ER_CNT, 0) * 100 / A.PRF_ANA_CNT,
+		                                     2))
+		                              AS PRF_ERR_RATE--이상값
+		                           ,
+		                           NULL AS MD_ANA_DGR,
+		                           NULL AS MD_NON_RATE,
+		                           NULL AS MD_ERR_RATE
+		                      FROM (  SELECT DBC.DB_CONN_TRG_ID,
+		                                     DBC.DB_CONN_TRG_LNM,
+		                                     DBC.DB_SCH_ID,
+		                                     DBC.DB_SCH_PNM,
+		                                     PR.ANA_DGR,
+		                                     DQI.DQI_ID,
+		                                     DQI.DQI_LNM,
+		                                     DQI.FULL_PATH--업무규칙
+		                                     ,
+		                                     (SELECT DQI_LNM
+		                                        FROM WAM_DQI A
+		                                       WHERE A.DQI_ID = DQI.UPP_DQI_ID)
+		                                        UPP_DQI_LNM,
+		                                     NULL AS BR_ANA_CNT,
+		                                     NULL AS BR_ER_CNT,
+		                                     NULL AS BR_CNT--프로파일
+		                                     ,
+		                                     NVL (SUM (PR.ANA_CNT), 0) AS PRF_ANA_CNT,
+		                                     NVL (SUM (PR.ESN_ER_CNT), 0) AS PRF_ER_CNT,
+		                                     NVL (COUNT (PR.PRF_ID), 0) AS PRF_CNT--이상값
+		                                     ,
+		                                     NULL AS MD_ANA_CNT,
+		                                     NULL AS MD_ER_CNT,
+		                                     NULL AS MD_CNT
+		                                FROM WAM_PRF_MSTR PM
+		                                     INNER JOIN
+		                                     (SELECT R.*
+		                                        FROM WAM_PRF_RESULT R) PR
+		                                        ON     PM.PRF_ID = PR.PRF_ID
+		                                           AND PR.ANA_CNT IS NOT NULL
+		                                           AND PR.ANA_DGR IS NOT NULL
+		                                     INNER JOIN
+		                                     (SELECT DB.DB_CONN_TRG_PNM,
+		                                             DB.DB_CONN_TRG_LNM,
+		                                             DB.DB_CONN_TRG_ID,
+		                                             S.DB_SCH_PNM,
+		                                             S.DB_SCH_LNM,
+		                                             S.DB_SCH_ID
+		                                        FROM WAA_DB_CONN_TRG DB
+		                                             INNER JOIN WAA_DB_SCH S
+		                                                ON     DB.DB_CONN_TRG_ID =
+		                                                          S.DB_CONN_TRG_ID
+		                                                   AND S.EXP_DTM =
+		                                                          TO_DATE ('99991231',
+		                                                                   'YYYYMMDD')
+		                                                   AND S.REG_TYP_CD IN ('C', 'U')
+		                                       WHERE     DB.EXP_DTM =
+		                                                    TO_DATE ('99991231',
+		                                                             'YYYYMMDD')
+		                                             AND DB.REG_TYP_CD IN ('C', 'U')) DBC
+		                                        ON     PM.DB_CONN_TRG_ID =
+		                                                  DBC.DB_CONN_TRG_ID
+		                                           AND PM.DB_SCH_ID = DBC.DB_SCH_ID
+		                                     INNER JOIN WAM_PRF_DQI_MAP DQIMAP
+		                                        ON     PM.PRF_ID = DQIMAP.PRF_ID
+		                                           AND DQIMAP.REG_TYP_CD IN ('C', 'U')
+		                                     INNER JOIN WAM_DQI DQI
+		                                        ON     DQI.DQI_ID = DQIMAP.DQI_ID
+		                                           AND DQI.REG_TYP_CD IN ('C', 'U')
+		                               WHERE PM.REG_TYP_CD IN ('C', 'U')
+		                            GROUP BY DBC.DB_CONN_TRG_ID,
+		                                     DBC.DB_CONN_TRG_LNM,
+		                                     DBC.DB_SCH_ID,
+		                                     DBC.DB_SCH_PNM,
+		                                     DQI.DQI_ID,
+		                                     DQI.DQI_LNM,
+		                                     DQI.FULL_PATH,
+		                                     PR.ANA_DGR,
+		                                     DQI.UPP_DQI_ID) A
+		                    UNION ALL
+		                    SELECT 'MD' AS BIZ_DCD,
+		                           A.*--업무규칙
+		                           ,
+		                           NULL AS BR_ANA_DGR,
+		                           NULL AS SIGMA,
+		                           NULL AS BR_NON_RATE,
+		                           NULL AS BR_ERR_RATE--프로파일
+		                           ,
+		                           NULL AS PRF_ANA_DGR,
+		                           NULL AS PRF_NON_RATE,
+		                           NULL AS PRF_ERR_RATE--이상값
+		                           ,
+		                           A.ANA_DGR AS MD_ANA_DGR,
+		                           DECODE (
+		                              A.MD_ANA_CNT,
+		                              0, 0,
+		                              DECODE (
+		                                 A.MD_ER_CNT,
+		                                 0, 100,
+		                                 ROUND (
+		                                    (  (A.MD_ANA_CNT - A.MD_ER_CNT)
+		                                     / A.MD_ANA_CNT
+		                                     * 100),
+		                                    2)))
+		                              MD_NON_RATE,
+		                           DECODE (
+		                              A.MD_ANA_CNT,
+		                              0, 0,
+		                              ROUND (NVL (A.MD_ER_CNT, 0) * 100 / A.MD_ANA_CNT,
+		                                     2))
+		                              AS MD_ERR_RATE
+		                      FROM (  SELECT DBC.DB_CONN_TRG_ID,
+		                                     DBC.DB_CONN_TRG_LNM,
+		                                     DBC.DB_SCH_ID,
+		                                     DBC.DB_SCH_PNM,
+		                                     MR.ANA_DGR,
+		                                     DQI.DQI_ID,
+		                                     DQI.DQI_LNM,
+		                                     DQI.FULL_PATH--업무규칙
+		                                     ,
+		                                     (SELECT DQI_LNM
+		                                        FROM WAM_DQI A
+		                                       WHERE A.DQI_ID = DQI.UPP_DQI_ID)
+		                                        UPP_DQI_LNM,
+		                                     NULL AS BR_ANA_CNT,
+		                                     NULL AS BR_ER_CNT,
+		                                     NULL AS BR_CNT--프로파일
+		                                     ,
+		                                     NULL AS PRF_ANA_CNT,
+		                                     NULL AS PRF_ER_CNT,
+		                                     NULL AS PRF_CNT--이상값
+		                                     ,
+		                                     NVL (SUM (MR.ANA_CNT), 0) AS MD_ANA_CNT,
+		                                     NVL (SUM (MR.ESN_ER_CNT), 0) AS MD_ER_CNT,
+		                                     NVL (COUNT (MR.OTL_DTC_ID), 0) AS MD_CNT
+		                                FROM WAD_DATA_SET MD
+		                                     INNER JOIN WAD_OTL_DTC A
+		                                        ON MD.DASE_ID = A.DASE_ID
+		                                     INNER JOIN
+		                                     (SELECT R.*
+		                                        FROM WAD_OTL_RESULT R) MR
+		                                        ON     A.OTL_DTC_ID = MR.OTL_DTC_ID
+		                                           AND MR.ANA_CNT IS NOT NULL
+		                                           AND MR.ANA_DGR IS NOT NULL
+		                                     INNER JOIN
+		                                     (SELECT DB.DB_CONN_TRG_PNM,
+		                                             DB.DB_CONN_TRG_LNM,
+		                                             DB.DB_CONN_TRG_ID,
+		                                             S.DB_SCH_PNM,
+		                                             S.DB_SCH_LNM,
+		                                             S.DB_SCH_ID
+		                                        FROM WAA_DB_CONN_TRG DB
+		                                             INNER JOIN WAA_DB_SCH S
+		                                                ON     DB.DB_CONN_TRG_ID =
+		                                                          S.DB_CONN_TRG_ID
+		                                                   AND S.EXP_DTM =
+		                                                          TO_DATE ('99991231',
+		                                                                   'YYYYMMDD')
+		                                                   AND S.REG_TYP_CD IN ('C', 'U')
+		                                       WHERE     DB.EXP_DTM =
+		                                                    TO_DATE ('99991231',
+		                                                             'YYYYMMDD')
+		                                             AND DB.REG_TYP_CD IN ('C', 'U')) DBC
+		                                        ON MD.DB_SCH_ID = DBC.DB_SCH_ID
+		                                     INNER JOIN WAM_OTL_DQI_MAP DQIMAP
+		                                        ON A.OTL_DTC_ID = DQIMAP.OTL_DTC_ID
+		                                     INNER JOIN WAM_DQI DQI
+		                                        ON DQI.DQI_ID = DQIMAP.DQI_ID
+		                               WHERE 1 = 1
+		                            GROUP BY DBC.DB_CONN_TRG_ID,
+		                                     DBC.DB_CONN_TRG_LNM,
+		                                     DBC.DB_SCH_ID,
+		                                     DBC.DB_SCH_PNM,
+		                                     DQI.DQI_ID,
+		                                     DQI.DQI_LNM,
+		                                     DQI.FULL_PATH,
+		                                     MR.ANA_DGR,
+		                                     DQI.UPP_DQI_ID) A) A
+		             WHERE     1 = 1
+		                   AND A.DB_CONN_TRG_ID = #{dbConnTrgId, jdbcType=VARCHAR} -- 클릭이벤트 시 PARAM
+		                   AND A.DB_SCH_ID = #{dbSchId, jdbcType=VARCHAR} -- 클릭이벤트 시 PARAM
+		  				   AND A.DQI_ID = #{dqiId, jdbcType=VARCHAR} -- 클릭이벤트 시 PARAM
+		  				   AND (A.BR_ANA_DGR = #{anaDgr, jdbcType=VARCHAR}
+		  				     OR A.PRF_ANA_DGR = #{anaDgr, jdbcType=VARCHAR}
+		  				     OR A.MD_ANA_DGR = #{anaDgr, jdbcType=VARCHAR})
+		          GROUP BY A.DB_CONN_TRG_ID,
+		                   A.DB_CONN_TRG_LNM,
+		                   A.DB_SCH_ID,
+		                   A.DB_SCH_PNM,
+		                   A.DQI_ID,
+		                   A.DQI_LNM,
+		                   A.FULL_PATH,
+		                   A.UPP_DQI_LNM,
+		                   A.BIZ_DCD,
+		                   A.BR_ANA_DGR,
+		                   A.PRF_ANA_DGR,
+		                   A.MD_ANA_DGR) A
+		GROUP BY A.DB_CONN_TRG_ID,
+		         A.DB_CONN_TRG_LNM,
+		         A.DB_SCH_ID,
+		         A.DB_SCH_PNM,
+		         A.DQI_ID,
+		         A.DQI_LNM,
+		         A.FULL_PATH,
+		         A.UPP_DQI_LNM,
+		         A.BR_ANA_DGR,
+		         A.PRF_ANA_DGR,
+		         A.MD_ANA_DGR,
+		         A.BIZ_DCD
+		ORDER BY DB_CONN_TRG_LNM, DB_SCH_PNM, FULL_PATH
+ 	</select>
+</mapper>

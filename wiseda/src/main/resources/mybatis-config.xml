@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+	<!--
+		SqlMapConfig01.xml : MyBatis Framework 의 핵심 환경설정화일 (MetaData) 
+		: 설정파일 이름은 다른 이름을 갖을 수 있으나, 일반적으로 상요하는 이름을 사용
+	-->
+<configuration>
+	<!--
+		1. properties 파일 관리 - 애플리케이션 배포시 공통부분, 
+		    각 환경별 다른 값들은 properties 파일에 독립적으로 관리할 수 있다. 
+		    - DBMS 접속정보를 갖는 properties 파일 참조 
+		    - properties 파일에 저장된	key=value는 ${key} 표현으로 접근 가능
+	-->
+<!-- 	<properties resource="/properties/database.properties" /> -->
+	
+<!-- 
+	- cacheEnabled : 설정에서 각 mapper 에 설정된 캐시를 전역적으로 사용할지 말지에 대한 여부
+	    : true | false
+	    : default : true 
+	- lazyLoadingEnabled : 늦은 로딩을 사용할지에 대한 여부. 
+	    사용하지 않는다면 모두 즉시 로딩할 것이다. 
+	    : true | false
+	    : default : true 
+	- aggressiveLazyLoading : 활성화 상태로 두게 되면 늦은(lazy) 로딩 프로퍼티를 가진 객체는 
+	    호출에 따라 로드될 것이다. 반면에 개별 프로퍼티는 요청할때 로드된다. 
+	    : true | false 
+	    : default : true 
+	- multipleResultSetsEnabled : 한개의 구문에서 여러개의 ResultSet 을 허용할지의 여부
+	    (드라이버가 해당 기능을 지원해야 함) 
+	    : true | false 
+	    : default : true 
+	- useColumnLabel  칼럼명 대신에 칼럼라벨을 사용. 드라이버마다 조금 
+	    다르게 작동한다. 문서와 간단한 테스트를 통해 실제 
+	    기대하는 것처럼 작동하는지 확인해야 한다.  
+	    : true | false 
+	    : default : true 
+	- useGeneratedKeys : 생성키에 대한 JDBC 지원을 허용. 지원하는 
+	    드라이버가 필요하다. true 로 설정하면 생성키를 
+	    강제로 생성한다. 일부 드라이버(예를들면, Derby)에서는 이 설정을 무시한다.  
+	    : true | false 
+	    : default => false 
+	- autoMappingBehavior : MyBatis 가 칼럼을 필드/프로퍼티에 자동으로 
+	    매핑할지와 방법에 대해 명시. PARTIAL은 간단한 
+	    자동매핑만 할뿐, 내포된 결과에 대해서는 처리하지 
+	    않는다. FULL 은 처리가능한 모든 자동매핑을 처리한다. 
+	    : NONE, PARTIAL, FULL 
+	    : default : PARTIAL 
+	- defaultExecutorType : 디폴트 실행자(executor) 설정. SIMPLE 실행자는 
+	    특별히 하는 것이 없다. REUSE 실행자는 
+	    PreparedStatement 를 재사용한다. BATCH 실행자는 
+	    구문을 재사용하고 수정을 배치처리한다.  
+	    : SIMPLE, REUSE, BATCH
+	    : default : SIMPLE 
+	- defaultStatementTimeout : 데이터베이스로의 응답을 얼마나 오래 기다릴지를 
+	    판단하는 타임아웃을 셋팅 
+	    : 양수 
+	    : default : 셋팅되지않음(null) 
+-->
+	<settings>
+		<setting name="cacheEnabled" value="true" />
+		<setting name="lazyLoadingEnabled" value="false" />
+		<setting name="multipleResultSetsEnabled" value="true" />
+		<setting name="useColumnLabel" value="true" />
+		<setting name="useGeneratedKeys" value="false" />
+		<setting name="autoMappingBehavior" value="PARTIAL" />
+		<setting name="defaultExecutorType" value="SIMPLE" />
+		<setting name="defaultStatementTimeout" value="25000" />
+		<setting name="safeRowBoundsEnabled" value="false" />
+		<setting name="mapUnderscoreToCamelCase" value="false" />
+		<setting name="localCacheScope" value="SESSION" />
+		<setting name="jdbcTypeForNull" value="OTHER" />
+<!-- 		<setting name="logImpl" 		value="LOG4J"/> -->
+		<setting name="lazyLoadTriggerMethods" value="equals,clone,hashCode,toString" />
+	</settings>
+
+	<!--
+		typeAlias : Full Class Name을 alias로 정의 
+		:: Class Name 관리 : Full Class Name을 별칭(Alias) 관리
+	-->
+<!-- 	<typeAliases> -->
+<!-- 		<typeAlias alias="user" type="mybatis.services.domain.User" /> -->
+<!-- 	</typeAliases> -->
+
+
+<!-- 	<environments default="development"> -->
+<!-- 		<environment id="development"> -->
+			<!-- 
+				- JDBC : 간단한 JDBC 트랜잭션 관리 방식
+				- MANAGED : commit, rollback등 아무것도 하지 않는다. 컨테이너에게 맡긴다.
+			-->
+<!-- 			<transactionManager type="JDBC" /> -->
+
+			<!--
+				- UNPOOLED : 매번 요청에 대해 커넥션을 열고 닫는다.
+				- POOLED : DataSource 에 풀링이 적용된 JDBC 커넥션을 위한 구현체이다.
+				- JNDI : 이 DataSource 구현체는 컨테이너에 따라 설정이 변경되며
+				         , JNDI 컨텍스트를 참조한다.  
+				         : initial_context, data_source
+			-->
+<!-- 			<dataSource type="POOLED"> -->
+<!-- 				<property name="driver" value="${jdbc.driverClass}" /> -->
+<!-- 				<property name="url" value="${jdbc.url}" /> -->
+<!-- 				<property name="username" value="${jdbc.username}" /> -->
+<!-- 				<property name="password" value="${jdbc.password}" /> -->
+<!-- 			</dataSource> -->
+
+<!-- 		</environment> -->
+<!-- 	</environments> -->
+
+	<mappers>
+		<!-- SQL Definition :: file include -->
+<!-- 		<mapper resource="/kr/wise/commons/test/Service/TestMapper.xml" /> -->
+<!-- 		<mapper resource="sql/mybatis-userservice-mapper02.xml" /> -->
+<!-- 		<mapper resource="sql/mybatis-userservice-mapper03.xml" /> -->
+<!-- 		<mapper resource="sql/mybatis-userservice-mapper04.xml" /> -->
+<!-- 		<mapper resource="sql/mybatis-userservice-mapper05.xml" /> -->
+<!-- 		<mapper resource="sql/mybatis-userservice-mapper06.xml" /> -->
+<!-- 		<mapper resource="sql/mybatis-userservice-mapper09.xml" /> -->
+<!-- 		<mapper resource="sql/mybatis-userservice-mapper10.xml" /> -->
+<!-- 		<mapper resource="sql/mybatis-userservice-mapper11.xml" /> -->
+<!-- 		<mapper resource="sql/mybatis-userservice-mapper12.xml" /> -->
+<!-- 		<mapper resource="sql/UsersMapper.xml" /> -->
+	</mappers>
+
+</configuration> 
+	

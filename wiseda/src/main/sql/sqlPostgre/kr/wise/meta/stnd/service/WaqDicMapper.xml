@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.meta.stnd.service.WaqDicMapper" >
+<resultMap id="BaseResultMap" type="kr.wise.meta.stnd.service.WaqDic" 
+extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap" >
+	<id column="DIC_RQST_NO" property="dicRqstNo" jdbcType="VARCHAR" />
+	<id column="DIC_RQST_SNO" property="dicRqstSno" jdbcType="DECIMAL" />
+    <result column="WD_NAME" property="wdName" jdbcType="VARCHAR" />
+    <result column="DIC_ORGN" property="dicOrgn" jdbcType="VARCHAR" />
+    <result column="ENNM" property="ennm" jdbcType="VARCHAR" />
+    <result column="DIC_DESC" property="dicDesc" jdbcType="VARCHAR" />
+  </resultMap>
+  
+ <sql id="Base_Column_List">
+ 	WD_NAME,DIC_ORGN,ENNM,DIC_DESC
+ </sql>
+ <select id="selectDicList" resultMap="BaseResultMap" parameterType="kr.wise.meta.stnd.service.WaqDic">
+ 	SELECT 
+ 	DIC_RQST_NO,
+ 	WD_NAME,
+ 	DIC_ORGN,
+ 	ENNM,
+ 	DIC_DESC
+ 	FROM WAQ_DIC
+ 	WHERE DIC_RQST_NO = #{dicRqstNo,jdbcType=VARCHAR}
+ 	
+ </select>
+  <delete id="delDicList" parameterType="kr.wise.meta.stnd.service.WaqDic" >
+	DELETE FROM WAQ_DIC
+	 WHERE DIC_RQST_NO = #{dicRqstNo,jdbcType=VARCHAR} 
+		 <!-- AND DIC_RQST_SNO = #{dicRqstSno,jdbcType=DECIMAL} -->
+	     AND WD_NAME = #{wdName,jdbcType=VARCHAR}
+	     AND DIC_ORGN = #{dicOrgn,jdbcType=VARCHAR}
+	     AND DIC_DESC = #{dicDesc,jdbcType=VARCHAR}
+  </delete>
+ 
+ 
+ 
+<insert id="insertDic" parameterType="kr.wise.meta.stnd.service.WaqDic" >
+<!-- 	<selectKey keyProperty="dicRqstNo" resultType="int" statementType="PREPARED" order="BEFORE">
+	  		<include refid="kr.wise.commons.cmm.service.CommonMapper.getNextrqstSno"/>
+		SELECT COALESCE(MAX(DIC_RQST_SNO), 0) + 1 FROM WAQ_DIC WHERE DIC_RQST_NO = 
+		#{dicRqstNo}
+  	</selectKey> -->
+  
+    insert into WAQ_DIC
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      
+      <if test="dicRqstNo != null" >
+        DIC_RQST_NO,
+      </if>
+      <if test="wdName != null" >
+        WD_NAME,
+      </if>
+      <if test="dicOrgn != null" >	
+        DIC_ORGN,
+      </if>
+      <if test="ennm != null" >
+       	ENNM,
+      </if>
+      <if test="dicDesc != null" >
+       	DIC_DESC,
+      </if>
+       	DIC_RQST_DTM,
+      <if test="dicRqstUserId != null" >
+       	DIC_RQST_USER_ID,
+      </if>
+        
+    </trim>
+   
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="dicRqstNo != null" >
+        #{dicRqstNo,jdbcType=VARCHAR},
+      </if>
+      <if test="wdName != null" >
+        #{wdName,jdbcType=VARCHAR},
+      </if>
+      <if test="dicOrgn != null" >
+        #{dicOrgn,jdbcType=VARCHAR},
+      </if>
+      <if test="ennm != null" >
+      	#{ennm,jdbcType=VARCHAR},
+      </if>
+	  <if test="dicDesc != null" >
+      	#{dicDesc,jdbcType=VARCHAR},
+      </if>
+        NOW(),
+      <if test="dicRqstUserId != null" >
+      	#{dicRqstUserId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+<!--   <delete id="deleteByPrimaryKey" parameterType="kr.wise.meta.stnd.service.WaqDic">
+  	DELETE FROM WAQ_DIC
+  	 WHERE DIC_RQST_NO  = #{dicRqstNo}
+  	   AND DIC_RQST_SNO = #{dicRqstSno}
+  </delete> -->
+  
+</mapper>

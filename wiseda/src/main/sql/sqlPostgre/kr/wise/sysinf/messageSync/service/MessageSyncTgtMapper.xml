@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.wise.sysinf.messageSync.service.MessageSyncTgtMapper">
+  <resultMap id="MessageCdBaseResultMap" type="kr.wise.sysinf.messageSync.service.MessageCodeVo">
+    <result column="MSG_CD" 	jdbcType="VARCHAR" property="msgCd" />
+    <result column="SYS_DVCD" 	jdbcType="VARCHAR" property="sysDvcd" />
+    <result column="MSG_PTRN_DVCD" 	jdbcType="VARCHAR" property="msgPtrnDvcd" />
+    <result column="MSG_BZWR_DVCD" 	jdbcType="VARCHAR" property="msgBzwrDvcd" />
+    <result column="MSG_CNTN" 	jdbcType="VARCHAR" property="msgCntn" />
+    <result column="USE_YN" 	jdbcType="VARCHAR" property="useYn" />
+  </resultMap>
+  
+  
+  <select id="getTgtMessageCodeList" resultMap="MessageCdBaseResultMap">
+  	SELECT * FROM TBCERRORMSGC
+  </select>
+  
+  <insert id="insertMessageCode" parameterType = "kr.wise.sysinf.messageSync.service.MessageCodeVo">
+  	  INSERT INTO TBCERRORMSGC(MSG_CD                          
+                          ,SYS_DVCD     
+                          ,MSG_PTRN_DVCD
+                          ,MSG_BZWR_DVCD
+                          ,MSG_CNTN      
+                          ,USE_YN 
+                          ,SYS_REG_DTTM,SYS_RGSR_EMNO,SYS_REG_BRCD,SYS_CHG_DTTM,SYS_EDIR_EMNO,SYS_CHG_BRCD
+                          )
+  	    VALUES( 
+  	     #{msgCd   ,jdbcType = VARCHAR}
+        ,#{sysDvcd ,jdbcType = VARCHAR}  
+        ,#{msgPtrnDvcd ,jdbcType = VARCHAR}  
+        ,#{msgBzwrDvcd ,jdbcType = VARCHAR}  
+        ,#{msgCntn ,jdbcType = VARCHAR}  
+        ,#{useYn  ,jdbcType = VARCHAR}  
+        ,NOW()
+        ,'2dev15'
+        ,'000'
+        ,NOW()
+        ,'2dev15'
+        ,'000'       
+  	  )
+  	  </insert>
+  	  <update id ="updateMessageCode" parameterType = "kr.wise.sysinf.messageSync.service.MessageCodeVo">
+         UPDATE TBCERRORMSGC                                                            
+         SET MSG_CNTN  = #{msgCntn ,jdbcType = VARCHAR}                               
+            ,USE_YN = #{useYn  ,jdbcType = VARCHAR}                                    
+         WHERE COALESCE(MSG_CD,'-') = COALESCE(#{msgCd   ,jdbcType = VARCHAR},'-')              
+         AND   COALESCE(SYS_DVCD,'-') = COALESCE(#{sysDvcd   ,jdbcType = VARCHAR},'-')          
+         AND   COALESCE(MSG_PTRN_DVCD,'-') = COALESCE(#{msgPtrnDvcd   ,jdbcType = VARCHAR},'-') 
+         AND   COALESCE(MSG_BZWR_DVCD,'-') = COALESCE(#{msgBzwrDvcd   ,jdbcType = VARCHAR},'-') 
+
+      </update>
+      
+        <delete id ="deleteMessageCode" parameterType = "kr.wise.sysinf.messageSync.service.MessageCodeVo">
+         DELETE FROM TBCERRORMSGC
+         WHERE COALESCE(MSG_CD,'-') = COALESCE(#{msgCd   ,jdbcType = VARCHAR},'-')              
+         AND   COALESCE(SYS_DVCD,'-') = COALESCE(#{sysDvcd   ,jdbcType = VARCHAR},'-')          
+         AND   COALESCE(MSG_PTRN_DVCD,'-') = COALESCE(#{msgPtrnDvcd   ,jdbcType = VARCHAR},'-') 
+         AND   COALESCE(MSG_BZWR_DVCD,'-') = COALESCE(#{msgBzwrDvcd   ,jdbcType = VARCHAR},'-') 
+      </delete>
+
+</mapper>
+
+
+
+

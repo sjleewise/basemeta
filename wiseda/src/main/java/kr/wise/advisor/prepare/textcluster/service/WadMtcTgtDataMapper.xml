@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.wise.advisor.prepare.textcluster.service.WadMtcTgtDataMapper">
+  <resultMap id="BaseResultMap" type="kr.wise.advisor.prepare.textcluster.service.WadMtcTgtData">
+    <id column="MTC_ID" jdbcType="VARCHAR" property="mtcId" />
+    <id column="MTC_SNO" jdbcType="DECIMAL" property="mtcSno" />
+    <id column="TGT_DTL_SNO" jdbcType="DECIMAL" property="tgtDtlSno" />
+    <result column="MTC_PRB" jdbcType="DECIMAL" property="mtcPrb" />
+    <result column="COL_CNT" jdbcType="DECIMAL" property="colCnt" />
+    <result column="TGT_COL_NM1" jdbcType="VARCHAR" property="tgtColNm1" />
+    <result column="TGT_COL_NM2" jdbcType="VARCHAR" property="tgtColNm2" />
+    <result column="TGT_COL_NM3" jdbcType="VARCHAR" property="tgtColNm3" />
+    <result column="TGT_COL_NM4" jdbcType="VARCHAR" property="tgtColNm4" />
+    <result column="TGT_COL_NM5" jdbcType="VARCHAR" property="tgtColNm5" />
+    <result column="TGT_COL_NM6" jdbcType="VARCHAR" property="tgtColNm6" />
+    <result column="TGT_COL_NM7" jdbcType="VARCHAR" property="tgtColNm7" />
+    <result column="TGT_COL_NM8" jdbcType="VARCHAR" property="tgtColNm8" />
+    <result column="TGT_COL_NM9" jdbcType="VARCHAR" property="tgtColNm9" />
+    <result column="TGT_COL_NM10" jdbcType="VARCHAR" property="tgtColNm10" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    MTC_ID, MTC_SNO, TGT_DTL_SNO, MTC_PRB, COL_CNT, TGT_COL_NM1, TGT_COL_NM2, TGT_COL_NM3, 
+    TGT_COL_NM4, TGT_COL_NM5, TGT_COL_NM6, TGT_COL_NM7, TGT_COL_NM8, TGT_COL_NM9, TGT_COL_NM10
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="map" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from WAD_MTC_TGT_DATA
+    where MTC_ID = #{mtcId,jdbcType=VARCHAR}
+      and MTC_SNO = #{mtcSno,jdbcType=DECIMAL}
+      and TGT_DTL_SNO = #{tgtDtlSno,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="map">
+    delete from WAD_MTC_TGT_DATA
+    where MTC_ID = #{mtcId,jdbcType=VARCHAR}
+      and MTC_SNO = #{mtcSno,jdbcType=DECIMAL}
+      and TGT_DTL_SNO = #{tgtDtlSno,jdbcType=DECIMAL}
+  </delete>
+  <delete id="deleteByiD" parameterType="string">
+    DELETE FROM WAD_MTC_TGT_DATA
+    WHERE MTC_ID = #{mtcId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="kr.wise.advisor.prepare.textcluster.service.WadMtcTgtData">
+    insert into WAD_MTC_TGT_DATA (MTC_ID, MTC_SNO, TGT_DTL_SNO, 
+      MTC_PRB, COL_CNT, TGT_COL_NM1, 
+      TGT_COL_NM2, TGT_COL_NM3, TGT_COL_NM4, 
+      TGT_COL_NM5, TGT_COL_NM6, TGT_COL_NM7, 
+      TGT_COL_NM8, TGT_COL_NM9, TGT_COL_NM10
+      )
+    values (#{mtcId,jdbcType=VARCHAR}, #{mtcSno,jdbcType=DECIMAL}, #{tgtDtlSno,jdbcType=DECIMAL}, 
+      #{mtcPrb,jdbcType=DECIMAL}, #{colCnt,jdbcType=DECIMAL}, #{tgtColNm1,jdbcType=VARCHAR}, 
+      #{tgtColNm2,jdbcType=VARCHAR}, #{tgtColNm3,jdbcType=VARCHAR}, #{tgtColNm4,jdbcType=VARCHAR}, 
+      #{tgtColNm5,jdbcType=VARCHAR}, #{tgtColNm6,jdbcType=VARCHAR}, #{tgtColNm7,jdbcType=VARCHAR}, 
+      #{tgtColNm8,jdbcType=VARCHAR}, #{tgtColNm9,jdbcType=VARCHAR}, #{tgtColNm10,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertClustData" parameterType="kr.wise.advisor.prepare.textcluster.service.WadMtcTgtData">
+  --텍스트 클러스터 원본 결과 저장... 
+    insert into WAD_MTC_TGT_DATA (MTC_ID, MTC_SNO, TGT_DTL_SNO, 
+      MTC_PRB, COL_CNT, TGT_COL_NM1 
+      )
+    values (#{mtcId,jdbcType=VARCHAR}, #{mtcSno,jdbcType=DECIMAL}, #{tgtDtlSno,jdbcType=DECIMAL}, 
+      #{mtcPrb,jdbcType=DECIMAL}, #{colCnt,jdbcType=DECIMAL}, #{tgtColNm1,jdbcType=VARCHAR} 
+      )
+  </insert>
+  
+  <insert id="insertList" parameterType="map">
+  --타겟 컬럼 데이터 매칭 결과 저장....
+  INSERT INTO WAD_MTC_TGT_DATA (MTC_ID, MTC_SNO, TGT_DTL_SNO, MTC_PRB, COL_CNT
+  <foreach collection="colnms" open="," separator="," item="colnm">${colnm}</foreach>
+  ) VALUES (#{savevo.mtcId,jdbcType=VARCHAR}, #{savevo.mtcSno,jdbcType=DECIMAL}, #{savevo.tgtDtlSno,jdbcType=DECIMAL}, #{savevo.mtcPrb,jdbcType=DECIMAL}, #{savevo.colCnt,jdbcType=DECIMAL}
+  <foreach collection="colvals" open="," separator="," item="colval">#{colval,jdbcType=VARCHAR}</foreach>
+  )
+  </insert>
+  
+  <insert id="insertSelective" parameterType="kr.wise.advisor.prepare.textcluster.service.WadMtcTgtData">
+    insert into WAD_MTC_TGT_DATA
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="mtcId != null">
+        MTC_ID,
+      </if>
+      <if test="mtcSno != null">
+        MTC_SNO,
+      </if>
+      <if test="tgtDtlSno != null">
+        TGT_DTL_SNO,
+      </if>
+      <if test="mtcPrb != null">
+        MTC_PRB,
+      </if>
+      <if test="colCnt != null">
+        COL_CNT,
+      </if>
+      <if test="tgtColNm1 != null">
+        TGT_COL_NM1,
+      </if>
+      <if test="tgtColNm2 != null">
+        TGT_COL_NM2,
+      </if>
+      <if test="tgtColNm3 != null">
+        TGT_COL_NM3,
+      </if>
+      <if test="tgtColNm4 != null">
+        TGT_COL_NM4,
+      </if>
+      <if test="tgtColNm5 != null">
+        TGT_COL_NM5,
+      </if>
+      <if test="tgtColNm6 != null">
+        TGT_COL_NM6,
+      </if>
+      <if test="tgtColNm7 != null">
+        TGT_COL_NM7,
+      </if>
+      <if test="tgtColNm8 != null">
+        TGT_COL_NM8,
+      </if>
+      <if test="tgtColNm9 != null">
+        TGT_COL_NM9,
+      </if>
+      <if test="tgtColNm10 != null">
+        TGT_COL_NM10,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="mtcId != null">
+        #{mtcId,jdbcType=VARCHAR},
+      </if>
+      <if test="mtcSno != null">
+        #{mtcSno,jdbcType=DECIMAL},
+      </if>
+      <if test="tgtDtlSno != null">
+        #{tgtDtlSno,jdbcType=DECIMAL},
+      </if>
+      <if test="mtcPrb != null">
+        #{mtcPrb,jdbcType=DECIMAL},
+      </if>
+      <if test="colCnt != null">
+        #{colCnt,jdbcType=DECIMAL},
+      </if>
+      <if test="tgtColNm1 != null">
+        #{tgtColNm1,jdbcType=VARCHAR},
+      </if>
+      <if test="tgtColNm2 != null">
+        #{tgtColNm2,jdbcType=VARCHAR},
+      </if>
+      <if test="tgtColNm3 != null">
+        #{tgtColNm3,jdbcType=VARCHAR},
+      </if>
+      <if test="tgtColNm4 != null">
+        #{tgtColNm4,jdbcType=VARCHAR},
+      </if>
+      <if test="tgtColNm5 != null">
+        #{tgtColNm5,jdbcType=VARCHAR},
+      </if>
+      <if test="tgtColNm6 != null">
+        #{tgtColNm6,jdbcType=VARCHAR},
+      </if>
+      <if test="tgtColNm7 != null">
+        #{tgtColNm7,jdbcType=VARCHAR},
+      </if>
+      <if test="tgtColNm8 != null">
+        #{tgtColNm8,jdbcType=VARCHAR},
+      </if>
+      <if test="tgtColNm9 != null">
+        #{tgtColNm9,jdbcType=VARCHAR},
+      </if>
+      <if test="tgtColNm10 != null">
+        #{tgtColNm10,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.advisor.prepare.textcluster.service.WadMtcTgtData">
+    update WAD_MTC_TGT_DATA
+    <set>
+      <if test="mtcPrb != null">
+        MTC_PRB = #{mtcPrb,jdbcType=DECIMAL},
+      </if>
+      <if test="colCnt != null">
+        COL_CNT = #{colCnt,jdbcType=DECIMAL},
+      </if>
+      <if test="tgtColNm1 != null">
+        TGT_COL_NM1 = #{tgtColNm1,jdbcType=VARCHAR},
+      </if>
+      <if test="tgtColNm2 != null">
+        TGT_COL_NM2 = #{tgtColNm2,jdbcType=VARCHAR},
+      </if>
+      <if test="tgtColNm3 != null">
+        TGT_COL_NM3 = #{tgtColNm3,jdbcType=VARCHAR},
+      </if>
+      <if test="tgtColNm4 != null">
+        TGT_COL_NM4 = #{tgtColNm4,jdbcType=VARCHAR},
+      </if>
+      <if test="tgtColNm5 != null">
+        TGT_COL_NM5 = #{tgtColNm5,jdbcType=VARCHAR},
+      </if>
+      <if test="tgtColNm6 != null">
+        TGT_COL_NM6 = #{tgtColNm6,jdbcType=VARCHAR},
+      </if>
+      <if test="tgtColNm7 != null">
+        TGT_COL_NM7 = #{tgtColNm7,jdbcType=VARCHAR},
+      </if>
+      <if test="tgtColNm8 != null">
+        TGT_COL_NM8 = #{tgtColNm8,jdbcType=VARCHAR},
+      </if>
+      <if test="tgtColNm9 != null">
+        TGT_COL_NM9 = #{tgtColNm9,jdbcType=VARCHAR},
+      </if>
+      <if test="tgtColNm10 != null">
+        TGT_COL_NM10 = #{tgtColNm10,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where MTC_ID = #{mtcId,jdbcType=VARCHAR}
+      and MTC_SNO = #{mtcSno,jdbcType=DECIMAL}
+      and TGT_DTL_SNO = #{tgtDtlSno,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="kr.wise.advisor.prepare.textcluster.service.WadMtcTgtData">
+    update WAD_MTC_TGT_DATA
+    set MTC_PRB = #{mtcPrb,jdbcType=DECIMAL},
+      COL_CNT = #{colCnt,jdbcType=DECIMAL},
+      TGT_COL_NM1 = #{tgtColNm1,jdbcType=VARCHAR},
+      TGT_COL_NM2 = #{tgtColNm2,jdbcType=VARCHAR},
+      TGT_COL_NM3 = #{tgtColNm3,jdbcType=VARCHAR},
+      TGT_COL_NM4 = #{tgtColNm4,jdbcType=VARCHAR},
+      TGT_COL_NM5 = #{tgtColNm5,jdbcType=VARCHAR},
+      TGT_COL_NM6 = #{tgtColNm6,jdbcType=VARCHAR},
+      TGT_COL_NM7 = #{tgtColNm7,jdbcType=VARCHAR},
+      TGT_COL_NM8 = #{tgtColNm8,jdbcType=VARCHAR},
+      TGT_COL_NM9 = #{tgtColNm9,jdbcType=VARCHAR},
+      TGT_COL_NM10 = #{tgtColNm10,jdbcType=VARCHAR}
+    where MTC_ID = #{mtcId,jdbcType=VARCHAR}
+      and MTC_SNO = #{mtcSno,jdbcType=DECIMAL}
+      and TGT_DTL_SNO = #{tgtDtlSno,jdbcType=DECIMAL}
+  </update>
+  
+  <insert id="insertClstData" parameterType="kr.wise.advisor.prepare.textcluster.service.WadClstData">
+  --텍스트 클러스터 결과 저장... 
+    INSERT INTO WAD_CLST_DATA (CLST_ID, CLST_SNO, COL_CNT
+                             , SRC_NM, CLST_NM 
+      )
+    VALUES (#{clstId,jdbcType=VARCHAR}, #{clstSno,jdbcType=DECIMAL}, #{colCnt,jdbcType=DECIMAL}
+          , #{srcNm,jdbcType=VARCHAR}, #{clstNm,jdbcType=VARCHAR} 
+      )
+  </insert>
+  
+  <update id="updateClstYn" parameterType="kr.wise.advisor.prepare.textcluster.service.WadClstData">
+  --텍스트 클러스터링 추천용어 저장... 
+    UPDATE WAD_CLST_DATA 
+       SET CLST_YN = #{clstYn, jdbcType=VARCHAR}
+     WHERE CLST_ID = #{clstId, jdbcType=VARCHAR} 
+       AND CLST_SNO= #{clstSno,jdbcType=DECIMAL}
+  </update>
+</mapper>

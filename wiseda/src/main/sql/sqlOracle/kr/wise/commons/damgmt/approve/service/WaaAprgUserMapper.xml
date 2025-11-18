@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.commons.damgmt.approve.service.WaaAprgUserMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.commons.damgmt.approve.service.WaaAprgUser" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+    <id column="APRG_ID" property="aprgId" jdbcType="VARCHAR" />
+    <id column="USER_ID" property="userId" jdbcType="VARCHAR" />
+    <id column="USER_NM" property="userNm" jdbcType="VARCHAR" />
+<!--     <result column="EXP_DTM" property="expDtm" jdbcType="TIMESTAMP" /> -->
+<!--     <result column="STR_DTM" property="strDtm" jdbcType="TIMESTAMP" /> -->
+<!--     <result column="OBJ_DESCN" property="objDescn" jdbcType="VARCHAR" /> -->
+<!--     <result column="OBJ_VERS" property="objVers" jdbcType="DECIMAL" /> -->
+<!--     <result column="REG_TYP_CD" property="regTypCd" jdbcType="VARCHAR" /> -->
+<!--     <result column="WRIT_DTM" property="writDtm" jdbcType="TIMESTAMP" /> -->
+<!--     <result column="WRIT_USER_ID" property="writUserId" jdbcType="VARCHAR" /> -->
+  </resultMap>
+  <sql id="Base_Column_List" >
+    APRG_ID, USER_ID, EXP_DTM, STR_DTM, OBJ_DESCN, OBJ_VERS, REG_TYP_CD, WRIT_DTM, WRIT_USER_ID
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from WAA_APRG_USER
+    where APRG_ID = #{aprgId,jdbcType=VARCHAR}
+      and USER_ID = #{userId,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectListById" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+     A.*, B.USER_NM,
+     GET_USER_NM(A.WRIT_USER_ID) AS WRIT_USER_NM
+    from WAA_APRG_USER A, WAA_USER B, WAA_APRG C
+    <where> 
+    A.USER_ID = B.USER_ID
+    AND A.EXP_DTM = B.EXP_DTM
+    AND A.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+    AND A.REG_TYP_CD IN ('C', 'U')
+    AND A.APRG_ID = C.APRG_ID
+    AND C.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+    AND C.REG_TYP_CD IN ('C', 'U')
+    <if test="aprgId != null" >
+        AND A.APRG_ID = #{aprgId,jdbcType=VARCHAR}
+      </if>
+      <if test="userNm != null" >
+        AND B.USER_NM LIKE '%' || #{userNm,jdbcType=VARCHAR} || '%'
+      </if>
+      </where>
+
+  </select>
+  
+  <update id="updateExpDtm" parameterType="kr.wise.commons.damgmt.approve.service.WaaAprgUser">
+  	UPDATE WAA_APRG_USER SET
+  		EXP_DTM = SYSDATE
+  	WHERE APRG_ID = #{aprgId}
+  	  AND USER_ID = #{userId}
+  	  AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+  </update>
+  
+  <delete id="deleteByPrimaryKey" parameterType="map" >
+    delete from WAA_APRG_USER
+    where APRG_ID = #{aprgId,jdbcType=VARCHAR}
+      and USER_ID = #{userId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="kr.wise.commons.damgmt.approve.service.WaaAprgUser" >
+    insert into WAA_APRG_USER (APRG_ID, USER_ID, EXP_DTM, 
+      STR_DTM, OBJ_DESCN, OBJ_VERS, 
+      REG_TYP_CD, WRIT_DTM, WRIT_USER_ID
+      )
+    values (#{aprgId,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{expDtm,jdbcType=TIMESTAMP}, 
+      #{strDtm,jdbcType=TIMESTAMP}, #{objDescn,jdbcType=VARCHAR}, #{objVers,jdbcType=DECIMAL}, 
+      #{regTypCd,jdbcType=VARCHAR}, #{writDtm,jdbcType=TIMESTAMP}, #{writUserId,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="kr.wise.commons.damgmt.approve.service.WaaAprgUser" >
+    insert into WAA_APRG_USER
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+
+        APRG_ID,
+        USER_ID,
+        EXP_DTM,
+        STR_DTM,
+      <if test="objDescn != null" >
+        OBJ_DESCN,
+      </if>
+        OBJ_VERS,
+        REG_TYP_CD,
+        WRIT_DTM,
+      <if test="writUserId != null" >
+        WRIT_USER_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+        #{aprgId,jdbcType=VARCHAR},
+        #{userId,jdbcType=VARCHAR},
+        TO_DATE('9999-12-31', 'YYYY-MM-DD'),
+        SYSDATE,
+      <if test="objDescn != null" >
+        #{objDescn,jdbcType=VARCHAR},
+      </if>
+        #{objVers,jdbcType=DECIMAL},
+        #{regTypCd,jdbcType=VARCHAR},
+        SYSDATE,
+      <if test="writUserId != null" >
+        #{writUserId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.commons.damgmt.approve.service.WaaAprgUser" >
+    update WAA_APRG_USER
+    <set >
+      <if test="expDtm != null" >
+        EXP_DTM = #{expDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="strDtm != null" >
+        STR_DTM = #{strDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="writDtm != null" >
+        WRIT_DTM = #{writDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="writUserId != null" >
+        WRIT_USER_ID = #{writUserId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where APRG_ID = #{aprgId,jdbcType=VARCHAR}
+      and USER_ID = #{userId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="kr.wise.commons.damgmt.approve.service.WaaAprgUser" >
+    update WAA_APRG_USER
+    set EXP_DTM = #{expDtm,jdbcType=TIMESTAMP},
+      STR_DTM = #{strDtm,jdbcType=TIMESTAMP},
+      OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      WRIT_DTM = #{writDtm,jdbcType=TIMESTAMP},
+      WRIT_USER_ID = #{writUserId,jdbcType=VARCHAR}
+    where APRG_ID = #{aprgId,jdbcType=VARCHAR}
+      and USER_ID = #{userId,jdbcType=VARCHAR}
+  </update>
+</mapper>

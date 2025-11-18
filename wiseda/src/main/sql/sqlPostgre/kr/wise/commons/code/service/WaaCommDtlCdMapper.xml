@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.egmd.cmcd.mapper.WaaCommDtlCdMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.commons.code.service.WaaCommDtlCd" >
+    <id column="COMM_DTL_CD_ID" property="commDtlCdId" jdbcType="VARCHAR" />
+    <id column="EXP_DTM" property="expDtm" jdbcType="DATE" />
+    <result column="STR_DTM" property="strDtm" jdbcType="DATE" />
+    <result column="COMM_DTL_CD" property="commDtlCd" jdbcType="VARCHAR" />
+    <result column="COMM_DTL_CD_NM" property="commDtlCdNm" jdbcType="VARCHAR" />
+    <result column="COMM_DCD_ID" property="commDcdId" jdbcType="VARCHAR" />
+    <result column="UPP_COMM_DTL_CD_ID" property="uppCommDtlCdId" jdbcType="VARCHAR" />
+    <result column="DISP_ORD" property="dispOrd" jdbcType="DECIMAL" />
+    <result column="OBJ_DESCN" property="objDescn" jdbcType="VARCHAR" />
+    <result column="OBJ_VERS" property="objVers" jdbcType="DECIMAL" />
+    <result column="REG_TYP_CD" property="regTypCd" jdbcType="VARCHAR" />
+    <result column="WRIT_DTM" property="writDtm" jdbcType="DATE" />
+    <result column="WRIT_USER_ID" property="writUserId" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    COMM_DTL_CD_ID, EXP_DTM, STR_DTM, COMM_DTL_CD, COMM_DTL_CD_NM, COMM_DCD_ID, UPP_COMM_DTL_CD_ID, 
+    DISP_ORD, OBJ_DESCN, OBJ_VERS, REG_TYP_CD, WRIT_DTM, WRIT_USER_ID
+  </sql>
+  <sql id="Orderby_Condition">
+  	ORDER BY COMM_DCD_ID, DISP_ORD
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="map" >
+    select 
+    <include refid="Base_Column_List" />
+    from WAA_COMM_DTL_CD
+    where COMM_DTL_CD_ID = #{commDtlCdId,jdbcType=VARCHAR}
+      and EXP_DTM = TO_DATE ('9999-12-31', 'YYYY-MM-DD')
+  </select>
+  <select id="selectList" resultMap="BaseResultMap" parameterType="kr.wise.commons.code.service.WaaCommDtlCd" >
+    select 
+    <include refid="Base_Column_List" />
+    from WAA_COMM_DTL_CD
+    <where>
+        AND EXP_DTM = TO_DATE ('9999-12-31', 'YYYY-MM-DD')
+        AND REG_TYP_CD IN ('C', 'U')
+    <if test="sltDcdId != null">
+    	AND COMM_DCD_ID = #{sltDcdId,jdbcType=VARCHAR}
+    </if>
+    <if test="commDtlCdNm != null" >
+        AND COMM_DTL_CD_NM = #{commDtlCdNm,jdbcType=VARCHAR},
+    </if>
+    </where>
+    <include refid="Orderby_Condition"/>
+  </select>
+  <delete id="deleteAll">
+  	delete from WAA_COMM_DTL_CD
+  </delete>
+  <delete id="deleteByPrimaryKey" parameterType="map" >
+    delete from WAA_COMM_DTL_CD
+    where COMM_DTL_CD_ID = #{commDtlCdId,jdbcType=VARCHAR}
+      and EXP_DTM = TO_DATE ('9999-12-31', 'YYYY-MM-DD')
+  </delete>
+  <insert id="insert" parameterType="kr.wise.commons.code.service.WaaCommDtlCd" >
+  	<selectKey keyProperty="commDtlCdId" resultType="string"  order="BEFORE">
+  		select OBJ_ID.nextval from dual
+  	</selectKey>
+    insert into WAA_COMM_DTL_CD (COMM_DTL_CD_ID, EXP_DTM, STR_DTM, 
+      COMM_DTL_CD, COMM_DTL_CD_NM, COMM_DCD_ID, 
+      UPP_COMM_DTL_CD_ID, DISP_ORD, OBJ_DESCN, 
+      OBJ_VERS, REG_TYP_CD, WRIT_DTM, 
+      WRIT_USER_ID)
+    values (#{commDtlCdId}, TO_DATE ('9999-12-31', 'YYYY-MM-DD'), NOW(), 
+      #{commDtlCd,jdbcType=VARCHAR}, #{commDtlCdNm,jdbcType=VARCHAR}, #{commDcdId,jdbcType=VARCHAR}, 
+      #{uppCommDtlCdId,jdbcType=VARCHAR}, #{dispOrd,jdbcType=DECIMAL}, #{objDescn,jdbcType=VARCHAR}, 
+      #{objVers,jdbcType=DECIMAL}, #{regTypCd,jdbcType=VARCHAR}, NOW(), 
+      #{writUserId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="kr.wise.commons.code.service.WaaCommDtlCd" >
+    <selectKey keyProperty="commDtlCdId" resultType="string" order="BEFORE">
+  		select OBJ_ID.NEXTVAL from dual
+  	</selectKey>
+    insert into WAA_COMM_DTL_CD
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="commDtlCdId != null" >
+        COMM_DTL_CD_ID,
+      </if>
+      <if test="commDtlCd != null" >
+        COMM_DTL_CD,
+      </if>
+      <if test="commDtlCdNm != null" >
+        COMM_DTL_CD_NM,
+      </if>
+      <if test="commDcdId != null" >
+        COMM_DCD_ID,
+      </if>
+      <if test="uppCommDtlCdId != null" >
+        UPP_COMM_DTL_CD_ID,
+      </if>
+      <if test="dispOrd != null" >
+        DISP_ORD,
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN,
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS,
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD,
+      </if>
+      <if test="writUserId != null" >
+        WRIT_USER_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="commDtlCdId != null" >
+        #{commDtlCdId,jdbcType=VARCHAR},
+      </if>
+      <if test="commDtlCd != null" >
+        #{commDtlCd,jdbcType=VARCHAR},
+      </if>
+      <if test="commDtlCdNm != null" >
+        #{commDtlCdNm,jdbcType=VARCHAR},
+      </if>
+      <if test="commDcdId != null" >
+        #{commDcdId,jdbcType=VARCHAR},
+      </if>
+      <if test="uppCommDtlCdId != null" >
+        #{uppCommDtlCdId,jdbcType=VARCHAR},
+      </if>
+      <if test="dispOrd != null" >
+        #{dispOrd,jdbcType=DECIMAL},
+      </if>
+      <if test="objDescn != null" >
+        #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null" >
+        #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="writUserId != null" >
+        #{writUserId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.commons.code.service.WaaCommDtlCd" >
+    update WAA_COMM_DTL_CD
+    <set >
+      <if test="strDtm != null" >
+        STR_DTM = #{strDtm,jdbcType=DATE},
+      </if>
+      <if test="commDtlCd != null" >
+        COMM_DTL_CD = #{commDtlCd,jdbcType=VARCHAR},
+      </if>
+      <if test="commDtlCdNm != null" >
+        COMM_DTL_CD_NM = #{commDtlCdNm,jdbcType=VARCHAR},
+      </if>
+      <if test="commDcdId != null" >
+        COMM_DCD_ID = #{commDcdId,jdbcType=VARCHAR},
+      </if>
+      <if test="uppCommDtlCdId != null" >
+        UPP_COMM_DTL_CD_ID = #{uppCommDtlCdId,jdbcType=VARCHAR},
+      </if>
+      <if test="dispOrd != null" >
+        DISP_ORD = #{dispOrd,jdbcType=DECIMAL},
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="writDtm != null" >
+        WRIT_DTM = #{writDtm,jdbcType=DATE},
+      </if>
+      <if test="writUserId != null" >
+        WRIT_USER_ID = #{writUserId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where COMM_DTL_CD_ID = #{commDtlCdId,jdbcType=VARCHAR}
+      and EXP_DTM = TO_DATE ('9999-12-31', 'YYYY-MM-DD')
+  </update>
+  <update id="updateByPrimaryKey" parameterType="kr.wise.commons.code.service.WaaCommDtlCd" >
+    update WAA_COMM_DTL_CD
+    set STR_DTM = NOW(),
+      COMM_DTL_CD = #{commDtlCd,jdbcType=VARCHAR},
+      COMM_DTL_CD_NM = #{commDtlCdNm,jdbcType=VARCHAR},
+      COMM_DCD_ID = #{commDcdId,jdbcType=VARCHAR},
+      UPP_COMM_DTL_CD_ID = #{uppCommDtlCdId,jdbcType=VARCHAR},
+      DISP_ORD = #{dispOrd,jdbcType=DECIMAL},
+      OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      WRIT_DTM = #{writDtm,jdbcType=DATE},
+      WRIT_USER_ID = #{writUserId,jdbcType=VARCHAR}
+    where COMM_DTL_CD_ID = #{commDtlCdId,jdbcType=VARCHAR}
+      and EXP_DTM = TO_DATE ('9999-12-31', 'YYYY-MM-DD')
+  </update>
+</mapper>

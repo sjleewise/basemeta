@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.portal.myjob.service.VWaaAprvPrcsMapper" >
+  
+  <resultMap id="BaseResultMap" type="kr.wise.portal.myjob.service.VWaaAprvPrcs" >
+    <result column="REQUEST_ID" property="requestId" jdbcType="VARCHAR" />
+    <result column="REQUEST_TYPE" property="requestType" jdbcType="VARCHAR" />
+    <result column="REQUEST_TYPE_NM" property="requestTypeNm" jdbcType="VARCHAR" />
+    <result column="BIZ_NM" property="bizNm" jdbcType="VARCHAR" />
+    <result column="RQST_USER" property="rqstUser" jdbcType="VARCHAR" />
+    <result column="REQUEST_STATUS" property="requestStatus" jdbcType="VARCHAR" />
+    <result column="REQUEST_STATUS_NM" property="requestStatusNm" jdbcType="VARCHAR" />    
+    <result column="ORGL_DTTM" property="orglDttm" jdbcType="VARCHAR" />
+    <result column="REQ_XPN_DDL_DATE" property="reqXpnDdlDate" jdbcType="VARCHAR" />
+    <result column="REQ_BGN_DE" property="reqBgnde" jdbcType="VARCHAR"/>
+    <result column="REQ_END_DE" property="reqEndde" jdbcType="VARCHAR"/>
+    <result column="TOT_CNT" property="totCnt" />
+    <result column="RN" property="rn"  />
+    <result column="USER_ID" property="userid"  />
+    
+    
+
+  </resultMap>
+
+<select id="apprReqList" parameterType="java.util.Map" resultMap="BaseResultMap" >
+<if test="recordCountPerPage != null" >
+SELECT * FROM ( SELECT rownum rn, TB.* FROM (
+</if>
+SELECT B.REQUEST_ID
+	      ,B.REQUEST_TYPE
+          ,X.VALUE_KNM AS REQUEST_TYPE_NM
+	      ,B.BIZ_NM
+	      ,GET_USER_KNM(B.RQST_USER)	AS RQST_USER
+	      ,B.REQUEST_STATUS
+          ,Y.VALUE_KNM AS REQUEST_STATUS_NM 
+	      ,TO_CHAR(B.ORGL_DTTM, 'YYYY-MM-DD HH24:MI:SS') AS ORGL_DTTM          
+          , B.REQ_XPN_DDL_DATE
+
+	  	  FROM V_WAA_APRV_PRCS B
+           LEFT OUTER JOIN WAA_COMMON_CODE X
+            ON  B.REQUEST_TYPE = X.VALUE
+            AND X.CODE_NAME = 'RQST_BIZ_TYPE'
+            
+           LEFT OUTER JOIN WAA_COMMON_CODE Y
+            ON  B.REQUEST_STATUS = Y.VALUE
+            AND Y.CODE_NAME = 'STATUS_CODE'
+            
+            ,WAA_USERS C, WAA_DEPT D , WAA_APRV_PRCS E
+        
+     WHERE B.RQST_USER = C.USER_ID
+       AND C.DEPT_CD = D.OBJ_ID
+       AND E.REQUEST_ID = B.REQUEST_ID
+	   AND E.APRV_STEP = B.APRV_STEP 
+       AND C.XPR_DTTM = TO_DATE('9999-12-31','YYYY-MM-DD')
+       AND C.IS_DELETED = 'N'
+       AND D.XPR_DTTM = TO_DATE('9999-12-31','YYYY-MM-DD')
+       AND D.IS_DELETED = 'N'
+	   AND B.APRV_USER = #{userId}
+		<if test="ofBizType != null and ofBizType != '' ">
+		<![CDATA[ AND	B.REQUEST_TYPE =#{ofBizType}  		]]>
+		</if>
+<!-- 		<if test="orglDttm != null and orglDttm != ''" >
+		<![CDATA[ AND	B.ORGL_DTTM =#{orglDttm}  		]]>
+		</if> -->
+		<if test="ntceBgnde != null and ntceBgnde != '' and ntceEndde != null and ntceEndde != '' ">
+		<![CDATA[  AND TO_CHAR(B.ORGL_DTTM,'YYYY-MM-DD')  BETWEEN #{ntceBgnde} AND #{ntceEndde} ]]>       
+		</if>
+		ORDER BY ORGL_DTTM DESC, TO_NUMBER(B.REQUEST_ID) DESC
+		<if test="recordCountPerPage != null" >
+		 <![CDATA[ ) TB ) WHERE ROWNUM <= #{recordCountPerPage} ]]>
+		 </if>
+<!-- 		) TB ) WHERE rn BETWEEN #{firstIndex} + 1 AND #{firstIndex} + #{recordCountPerPage} -->
+</select>
+<select id="selectRqstList" parameterType="java.lang.String" resultMap="BaseResultMap" >
+ SELECT COUNT(*) AS TOT_CNT
+  FROM WAQ_REQ_MST                                                                                      
+ WHERE ORGL_USER = #{userId}
+   AND REQUEST_STATUS IN ('2','3')
+ UNION ALL
+ SELECT  COUNT(*) TOT_CNT                                          										 
+ 	  FROM V_WAA_APRV_PRCS B                                      										 
+ 	 WHERE APRV_USER = #{userId}
+</select>
+
+<select id="searchApprCount" parameterType="java.util.Map" resultMap="BaseResultMap" >
+		SELECT COUNT(*) TOT_CNT
+		      FROM (SELECT B.REQUEST_ID
+	      ,B.REQUEST_TYPE
+          ,X.VALUE_KNM AS REQUEST_TYPE_NM
+	      ,B.BIZ_NM
+	      ,GET_USER_KNM(B.RQST_USER)	AS RQST_USER
+	      ,B.REQUEST_STATUS
+          ,Y.VALUE_KNM AS REQUEST_STATUS_NM 
+	      ,TO_CHAR(B.ORGL_DTTM, 'YYYY-MM-DD HH24:MI:SS') AS ORGL_DTTM          
+          , B.REQ_XPN_DDL_DATE
+
+	  	  FROM V_WAA_APRV_PRCS B
+           LEFT OUTER JOIN WAA_COMMON_CODE X
+            ON  B.REQUEST_TYPE = X.VALUE
+            AND X.CODE_NAME = 'RQST_BIZ_TYPE'
+            
+           LEFT OUTER JOIN WAA_COMMON_CODE Y
+            ON  B.REQUEST_STATUS = Y.VALUE
+            AND Y.CODE_NAME = 'STATUS_CODE'
+            
+            ,WAA_USERS C, WAA_DEPT D , WAA_APRV_PRCS E
+        
+     WHERE B.RQST_USER = C.USER_ID
+       AND C.DEPT_CD = D.OBJ_ID
+       AND E.REQUEST_ID = B.REQUEST_ID
+	   AND E.APRV_STEP = B.APRV_STEP 
+       AND C.XPR_DTTM = TO_DATE('9999-12-31','YYYY-MM-DD')
+       AND C.IS_DELETED = 'N'
+       AND D.XPR_DTTM = TO_DATE('9999-12-31','YYYY-MM-DD')
+       AND D.IS_DELETED = 'N'
+	   AND B.APRV_USER = #{userid}
+	   
+	   
+		<if test="requestType != null and requestType != ''" >
+		<![CDATA[ AND	B.REQUEST_TYPE =#{requestType}  		]]>
+		</if>
+		
+		<if test="orglDttm != null and orglDttm != ''" >
+		<![CDATA[ AND	B.ORGL_DTTM =#{orglDttm}  		]]>
+		</if>
+		
+		<if test="reqBgnde != null and reqBgnde != '' and reqEndde != null and reqEndde != '' ">
+		<![CDATA[  AND TO_CHAR(B.ORGL_DTTM,'YYYY-MM-DD')  BETWEEN #{reqBgnde} AND #{reqEndde}  ]]>        
+		</if>
+		) TB
+</select>
+  
+</mapper>

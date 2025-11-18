@@ -1,0 +1,428 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.meta.gap.service.StndGapMapper" >
+<resultMap id="BaseResultMap" type="kr.wise.meta.gap.service.StndGapVO" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+	 <result column="COL_ID"        property="colId"     jdbcType="VARCHAR" />
+    <result column="ORG_NM"        property="orgNm"     jdbcType="VARCHAR" />
+    <result column="DB_NM"         property="dbNm"      jdbcType="VARCHAR" />
+    <result column="TBL_PNM"       property="tblPnm"    jdbcType="VARCHAR" />
+    <result column="TBL_LNM"       property="tblLnm"    jdbcType="VARCHAR" />
+    <result column="COL_PNM"       property="colPnm"    jdbcType="VARCHAR" />
+    <result column="COL_LNM"       property="colLnm"    jdbcType="DECIMAL" />
+    <result column="STND_CD_YN"    property="stndCdYn"  jdbcType="DECIMAL" />
+    <result column="STND_CD_NM"    property="stndCdNm"  jdbcType="VARCHAR" />
+    <result column="COL_DESCN"     property="colDescn"  jdbcType="VARCHAR" />
+    <result column="DATA_TYPE"     property="dataType"  jdbcType="VARCHAR" />
+    <result column="DATA_LEN"      property="dataLen"   jdbcType="VARCHAR" />
+    <result column="DATA_SCAL"     property="dataScal"  jdbcType="VARCHAR" /> 
+    <result column="DATA_FRM"      property="dataFrm"   jdbcType="DECIMAL" />
+    <result column="NOT_NULL_YN"   property="notNullYn" jdbcType="DECIMAL" />
+    <result column="PK_YN"         property="pkYn"      jdbcType="VARCHAR" />
+    <result column="FK_YN"         property="fkYn"      jdbcType="VARCHAR" />
+    <result column="CONSTRNT"      property="constrnt"  jdbcType="VARCHAR" />
+    <result column="PRSN_YN"       property="prsnYn"    jdbcType="VARCHAR" />
+    <result column="ENC_YN"        property="encYn"     jdbcType="VARCHAR" /> 
+    <result column="OPEN_YN"       property="openYn"    jdbcType="VARCHAR" />
+    <result column="SDITM_ID" property="sditmId" jdbcType="VARCHAR" />
+    <result column="SDITM_LNM" property="sditmLnm" jdbcType="VARCHAR" />
+    <result column="SDITM_PNM" property="sditmPnm" jdbcType="VARCHAR" />
+    <result column="LNM_CRI_DS" property="lnmCriDs" jdbcType="VARCHAR" />
+    <result column="DMN_ID" property="dmnId" jdbcType="VARCHAR" />
+    <result column="DMNG_ID" property="dmngId" jdbcType="VARCHAR" />
+    <result column="DMNG_LNM" property="dmngLnm" jdbcType="VARCHAR" />
+    <result column="INFOTP_ID" property="infotpId" jdbcType="VARCHAR" />
+    <result column="INFOTP_LNM" property="infotpLnm" jdbcType="VARCHAR" />
+    <result column="INFOTP_CHG_YN" property="infotpChgYn" jdbcType="VARCHAR" />
+    <result column="ENC_YN" property="encYn" jdbcType="VARCHAR" /> 
+
+    <result column="DMN_PNM" property="dmnPnm" jdbcType="VARCHAR" />
+    <result column="DMN_LNM" property="dmnLnm" jdbcType="VARCHAR" />
+    <result column="DATA_TYPE" property="dataType" jdbcType="VARCHAR" />
+    <result column="DATA_LEN" property="dataLen" jdbcType="VARCHAR" />
+    <result column="DATA_SCAL" property="dataScal" jdbcType="VARCHAR" />
+
+	<result column="UPP_DMNG_ID" property="uppDmngId" jdbcType="VARCHAR" />
+	<result column="UPP_DMNG_LNM" property="uppDmngLnm" jdbcType="VARCHAR" />
+	<result column="FULL_ENG_MEAN" property="fullEngMean" jdbcType="VARCHAR" />
+	<result column="PNM_CRI_DS" property="pnmCriDs" jdbcType="VARCHAR" />
+	<result column="TRANS_YN" property="transYn" jdbcType="VARCHAR" />
+	<result column="PERS_INFO_YN" property="persInfoYn" jdbcType="VARCHAR"/>
+
+	<result column="OWNR_ORG" property="ownrOrg" jdbcType="VARCHAR"/>
+	<result column="ADMN_STND_CD" property="admnStndCd" jdbcType="VARCHAR"/>
+	<result column="SAVE_FRM"      property="saveFrm"     jdbcType="VARCHAR" />
+    <result column="EXPRSN_FRM"    property="exprsnFrm"   jdbcType="VARCHAR" />
+    <result column="UNIT"          property="unit"        jdbcType="VARCHAR" />
+    <result column="ORG_NM"          property="orgNm"        jdbcType="VARCHAR" />
+    <result column="ALW_VAL"          property="alwVal"        jdbcType="VARCHAR" />
+    <result column="DB_NM"          property="dbNm"        jdbcType="VARCHAR" />
+    <result column="GAP_STATUS"          property="gapStatus"        jdbcType="VARCHAR" />
+    <result column="DMN_DATA_TYPE"  property="dmnDataType"        jdbcType="VARCHAR" />
+    <result column="DMN_DATA_LEN"   property="dmnDataLen"        jdbcType="VARCHAR" />
+    <result column="DMN_DATA_SCAL"  property="dmnDataScal"        jdbcType="VARCHAR" />
+    
+    <result column="ANA_CD"       property="anaCd"        jdbcType="VARCHAR" />
+    <result column="ANA_DTM"      property="anaDtm"        jdbcType="VARCHAR" />
+    <result column="TOT_COL_CNT"  property="totColCnt"        jdbcType="VARCHAR" />
+    <result column="COL_APLY_CNT" property="colAplyCnt"        jdbcType="VARCHAR" />
+    <result column="COL_APLY_RT"  property="colAplyRt"        jdbcType="VARCHAR" />
+    <result column="COL_ERR_CNT"  property="colErrCnt"        jdbcType="VARCHAR" />
+    <result column="COL_ERR_RT"   property="colErrRt"        jdbcType="VARCHAR" />          
+  
+</resultMap>
+
+<sql id="DBStndItemGapList">
+               SELECT A.ORG_NM	
+                     ,A.DB_NM	
+                     ,A.TBL_PNM	
+                     ,A.TBL_LNM	
+                     ,A.COL_PNM	
+                     ,A.COL_LNM
+                     ,B.SDITM_PNM 
+                     ,B.SDITM_LNM
+                     ,CASE WHEN B.SDITM_PNM IS NOT NULL THEN 1 ELSE 0 END GAP_STATUS
+               FROM WAM_PDM_COL A
+               LEFT OUTER JOIN WAM_DB_SDITM B
+               ON A.DB_NM = B.DB_NM 
+               AND A.COL_PNM = B.SDITM_PNM
+               AND A.COL_LNM = B.SDITM_LNM
+</sql>
+
+<sql id="DBDmnGapList">
+              SELECT A.ORG_NM	
+                    ,A.DB_NM	
+                    ,A.TBL_PNM	
+                    ,A.TBL_LNM	
+                    ,A.COL_PNM	
+                    ,A.COL_LNM
+                    ,B.SDITM_PNM 
+                    ,B.SDITM_LNM
+                    ,C.INFOTP_LNM
+                    ,A.DATA_TYPE
+                    ,A.DATA_LEN
+                    ,A.DATA_SCAL
+                    ,C.DATA_TYPE AS DMN_DATA_TYPE
+                    ,C.DATA_LEN  AS DMN_DATA_LEN 
+                    ,C.DATA_SCAL AS DMN_DATA_SCAL
+                    ,CASE WHEN B.SDITM_PNM IS NOT NULL 
+                           AND C.DATA_TYPE = A.DATA_TYPE
+                           AND C.DATA_LEN  = A.DATA_LEN
+                           AND C.DATA_SCAL = A.DATA_SCAL
+                           THEN 1 ELSE 0 END GAP_STATUS
+                    FROM WAM_PDM_COL A
+                    LEFT OUTER JOIN WAM_DB_SDITM B
+                    ON A.DB_NM = B.DB_NM 
+                    AND A.COL_PNM = B.SDITM_PNM
+                    AND A.COL_LNM = B.SDITM_LNM
+                    LEFT OUTER JOIN WAM_DB_DMN C
+                    ON B.DB_NM = C.DB_NM
+                    AND B.INFOTP_LNM = C.INFOTP_LNM
+</sql>     
+
+<sql id="StndItemGapList">
+               SELECT A.ORG_NM	
+                     ,A.DB_NM	
+                     ,A.TBL_PNM	
+                     ,A.TBL_LNM	
+                     ,A.COL_PNM	
+                     ,A.COL_LNM
+                     ,B.SDITM_PNM 
+                     ,B.SDITM_LNM
+                     ,CASE WHEN B.SDITM_PNM IS NOT NULL THEN 1 ELSE 0 END GAP_STATUS
+               FROM WAM_PDM_COL A
+               LEFT OUTER JOIN WAM_SDITM B
+               ON A.COL_PNM = B.SDITM_PNM
+               AND A.COL_LNM = B.SDITM_LNM
+</sql>
+<sql id="DmnGapList">
+                SELECT A.ORG_NM	
+                      ,A.DB_NM	
+                      ,A.TBL_PNM	
+                      ,A.TBL_LNM	
+                      ,A.COL_PNM	
+                      ,A.COL_LNM
+                      ,B.SDITM_PNM 
+                      ,B.SDITM_LNM
+                      ,C.INFOTP_LNM
+                      ,A.DATA_TYPE
+                      ,A.DATA_LEN
+                      ,A.DATA_SCAL
+                      ,C.DATA_TYPE AS DMN_DATA_TYPE
+                      ,C.DATA_LEN  AS DMN_DATA_LEN 
+                      ,C.DATA_SCAL AS DMN_DATA_SCAL
+                      ,CASE WHEN B.SDITM_PNM IS NOT NULL 
+                             AND C.DATA_TYPE = A.DATA_TYPE
+                             AND C.DATA_LEN  = A.DATA_LEN
+                             AND C.DATA_SCAL = A.DATA_SCAL
+                             THEN 1 ELSE 0 END GAP_STATUS
+                FROM WAM_PDM_COL A
+                LEFT OUTER JOIN WAM_SDITM B
+                ON A.COL_PNM = B.SDITM_PNM
+                AND A.COL_LNM = B.SDITM_LNM
+                LEFT OUTER JOIN WAM_DMN C
+                ON B.INFOTP_LNM = C.INFOTP_LNM
+</sql>
+
+<select id="getDBStndItemGapList" resultMap="BaseResultMap" parameterType="kr.wise.meta.gap.service.StndGapVO">
+  <include refid="DBStndItemGapList"/>
+</select>
+
+<select id="getDBDmnGapList" resultMap="BaseResultMap" parameterType="kr.wise.meta.gap.service.StndGapVO">
+   <include refid="DBDmnGapList"/>
+</select>
+
+<select id="getStndItemGapList" resultMap="BaseResultMap" parameterType="kr.wise.meta.gap.service.StndGapVO">
+   <include refid="StndItemGapList"/>
+</select>
+
+<select id="getDmnGapList" resultMap="BaseResultMap" parameterType="kr.wise.meta.gap.service.StndGapVO">
+   <include refid="DmnGapList"/>
+</select>
+
+
+<select id="selectDBStndItemGapResult" resultType="java.util.HashMap"  parameterType="map">
+       SELECT ANA_CD                                    AS anaCd 
+           , CONCAT(TOT_COL_CNT)                        AS totColCnt  
+           , CONCAT(ANA_DTM)                            AS anaDtm     
+           , CONCAT(COL_APLY_CNT)                       AS colAplyCnt
+           , CONCAT(ROUND(((COL_APLY_CNT/TOT_COL_CNT) * 100),2)) AS colAplyRt
+     FROM (
+            SELECT 
+                   '01' AS ANA_CD -- 표준용어진단(DB표준용어 비교)
+                  ,COUNT(*) AS TOT_COL_CNT
+                  ,NOW() AS ANA_DTM
+                  ,SUM(GAP_STATUS) AS COL_APLY_CNT
+            FROM (
+                   <include refid="DBStndItemGapList"/>
+                 ) Z
+          )  X
+</select>
+
+<select id="selectDBStndItemGapUneqResult" resultType="java.util.HashMap"  parameterType="map">
+       SELECT ANA_CD                                    AS anaCd 
+           , CONCAT(TOT_COL_CNT)                        AS totColCnt  
+           , CONCAT(ANA_DTM)                            AS anaDtm     
+           , CONCAT(TOT_COL_CNT-COL_APLY_CNT)                       AS colErrCnt
+                 , CONCAT(ROUND(((1-(COL_APLY_CNT/TOT_COL_CNT)) * 100),2)) AS colErrRt
+     FROM (
+            SELECT 
+                   '05' AS ANA_CD -- 표준용어진단(DB표준용어 비교)
+                  ,COUNT(*) AS TOT_COL_CNT
+                  ,NOW() AS ANA_DTM
+                  ,SUM(GAP_STATUS) AS COL_APLY_CNT
+            FROM (
+                   <include refid="DBStndItemGapList"/>
+                 ) Z
+          )  X
+</select>
+
+
+<select id="selectDBDmnGapResult" resultType="java.util.HashMap"  parameterType="map">
+       SELECT ANA_CD                                    AS anaCd 
+           , CONCAT(TOT_COL_CNT)                        AS totColCnt  
+           , CONCAT(ANA_DTM)                            AS anaDtm     
+           , CONCAT(COL_APLY_CNT)                       AS colAplyCnt
+           , CONCAT(ROUND(((COL_APLY_CNT/TOT_COL_CNT) * 100),2)) AS colAplyRt
+     FROM (
+            SELECT 
+                   '02' AS ANA_CD -- 표준용어진단(DB도메인 비교)
+                  ,COUNT(*) AS TOT_COL_CNT
+                  ,NOW() AS ANA_DTM
+                  ,SUM(GAP_STATUS) AS COL_APLY_CNT
+            FROM (
+                   <include refid="DBDmnGapList"/>
+                 ) Z
+          )  X
+</select>
+
+<select id="selectDBDmnGapUneqResult" resultType="java.util.HashMap"  parameterType="map">
+       SELECT ANA_CD                                    AS anaCd 
+           , CONCAT(TOT_COL_CNT)                        AS totColCnt  
+           , CONCAT(ANA_DTM)                            AS anaDtm     
+           , CONCAT(TOT_COL_CNT-COL_APLY_CNT)                       AS colErrCnt
+               , CONCAT(ROUND(((1-(COL_APLY_CNT/TOT_COL_CNT)) * 100),2)) AS colErrRt
+     FROM (
+            SELECT 
+                   '06' AS ANA_CD -- 표준용어진단(DB도메인 비교 불일치)
+                  ,COUNT(*) AS TOT_COL_CNT
+                  ,NOW() AS ANA_DTM
+                  ,SUM(GAP_STATUS) AS COL_APLY_CNT
+            FROM (
+                   <include refid="DBDmnGapList"/>
+                 ) Z
+          )  X
+</select>
+
+<select id="selectStndItemGapResult" resultType="java.util.HashMap"  parameterType="map">
+      SELECT ANA_CD                                    AS anaCd 
+           , CONCAT(TOT_COL_CNT)                        AS totColCnt  
+           , CONCAT(ANA_DTM)                            AS anaDtm     
+           , CONCAT(COL_APLY_CNT)                       AS colAplyCnt
+           , CONCAT(ROUND(((COL_APLY_CNT/TOT_COL_CNT) * 100),2)) AS colAplyRt
+     FROM (
+            SELECT 
+                   '03' AS ANA_CD -- 표준용어진단(기관표준용어 비교)
+                  ,COUNT(*) AS TOT_COL_CNT
+                  ,NOW() AS ANA_DTM
+                  ,SUM(GAP_STATUS) AS COL_APLY_CNT
+            FROM (
+                   <include refid="DBStndItemGapList"/>
+                 ) Z
+          )  X
+</select>
+
+<select id="selectStndItemGapUneqResult" resultType="java.util.HashMap"  parameterType="map">
+      SELECT ANA_CD                                    AS anaCd 
+           , CONCAT(TOT_COL_CNT)                        AS totColCnt  
+           , CONCAT(ANA_DTM)                            AS anaDtm     
+           , CONCAT(TOT_COL_CNT-COL_APLY_CNT)                       AS colErrCnt
+                 , CONCAT(ROUND(((1-(COL_APLY_CNT/TOT_COL_CNT)) * 100),2)) AS colErrRt
+     FROM (
+            SELECT 
+                   '07' AS ANA_CD -- 표준용어진단(기관표준용어 비교)
+                  ,COUNT(*) AS TOT_COL_CNT
+                  ,NOW() AS ANA_DTM
+                  ,SUM(GAP_STATUS) AS COL_APLY_CNT
+            FROM (
+                   <include refid="DBStndItemGapList"/>
+                 ) Z
+          )  X
+</select>
+
+<select id="selectDmnGapResult" resultType="java.util.HashMap" parameterType="map">
+         SELECT ANA_CD                                    AS anaCd 
+           , CONCAT(TOT_COL_CNT)                        AS totColCnt 
+           , CONCAT(ANA_DTM)                            AS anaDtm
+           , CONCAT(COL_APLY_CNT)                       AS colAplyCnt
+           , CONCAT(ROUND(((COL_APLY_CNT/TOT_COL_CNT) * 100),2)) AS colAplyRt
+     FROM (
+            SELECT 
+                   '04' AS ANA_CD -- 표준용어진단(기관도메인 비교)
+                  ,COUNT(*) AS TOT_COL_CNT
+                  ,NOW() AS ANA_DTM
+                  ,SUM(GAP_STATUS) AS COL_APLY_CNT
+            FROM (
+                   <include refid="DmnGapList"/>
+                 ) Z
+          )  X
+</select>
+
+<select id="selectDmnGapUneqResult" resultType="java.util.HashMap" parameterType="map">
+         SELECT ANA_CD                                    AS anaCd 
+           , CONCAT(TOT_COL_CNT)                        AS totColCnt 
+           , CONCAT(ANA_DTM)                            AS anaDtm
+           , CONCAT(TOT_COL_CNT-COL_APLY_CNT)                       AS colErrCnt
+                 , CONCAT(ROUND(((1-(COL_APLY_CNT/TOT_COL_CNT)) * 100),2)) AS colErrRt
+     FROM (
+            SELECT 
+                   '08' AS ANA_CD -- 표준도메인(기관도메인 비교)
+                  ,COUNT(*) AS TOT_COL_CNT
+                  ,NOW() AS ANA_DTM
+                  ,SUM(GAP_STATUS) AS COL_APLY_CNT
+            FROM (
+                   <include refid="DmnGapList"/>
+                 ) Z
+          )  X
+</select>
+ <select id="getColDefGapList" resultMap="BaseResultMap" parameterType="kr.wise.meta.gap.service.StndGapVO">
+	<![CDATA[
+	SELECT A.COL_ID, A.ORG_NM, A.DB_NM, A.TBL_PNM, A.TBL_LNM, A.COL_PNM, A.COL_LNM, A.STND_CD_YN, A.STND_CD_NM, A.COL_DESCN
+	, A.DATA_TYPE, A.DATA_LEN, A.DATA_SCAL, A.DATA_FRM, A.NOT_NULL_YN, A.PK_YN, A.FK_YN, A.CONSTRNT, A.PRSN_YN, A.ENC_YN, A.OPEN_YN
+	, B.COL_ID, B.ORG_NM, B.DB_NM, B.TBL_PNM, B.TBL_LNM, B.COL_PNM, B.COL_LNM, B.STND_CD_YN, B.STND_CD_NM, B.COL_DESCN
+	, B.DATA_TYPE, B.DATA_LEN, B.DATA_SCAL, B.DATA_FRM, B.NOT_NULL_YN, B.PK_YN, B.FK_YN, B.CONSTRNT, B.PRSN_YN, B.ENC_YN, B.OPEN_YN
+	, '컬럼정의 불일치' AS GAP_STATUS
+	FROM WAM_PDM_COL A
+	LEFT JOIN WAM_PDM_COL B
+	  ON A.COL_PNM = B.COL_PNM 
+	 AND A.COL_ID <> B.COL_ID 
+	WHERE A.DATA_TYPE <> B.DATA_TYPE 
+	   OR A.DATA_LEN  <> B.DATA_LEN 
+	   OR A.DATA_SCAL <> B.DATA_SCAL 
+	ORDER BY A.COL_PNM 
+	]]>
+</select>
+  <insert id="regColDefGapList" parameterType="kr.wise.meta.gap.service.StndGapVO" >
+  	INSERT INTO WAM_STND_ANA
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+        ANA_CD,
+        ANA_DTM,
+      <if test="totColCnt != null" >
+        TOT_COL_CNT,
+      </if>
+      <if test="colErrCnt != null" >
+        COL_ERR_CNT,
+      </if>
+      <if test="colErrRt != null" >
+        COL_ERR_RT,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+    	'10', NOW(),
+      <if test="totColCnt != null" >
+        #{totColCnt,jdbcType=VARCHAR},
+      </if>
+      <if test="colErrCnt != null" >
+        #{colErrCnt,jdbcType=DECIMAL},
+      </if>
+      <if test="colErrRt != null" >
+        #{colErrRt,jdbcType=DECIMAL},
+      </if>
+    </trim>  
+  </insert>
+
+ 
+<insert id="insertGapResult" parameterType="kr.wise.meta.gap.service.StndGapVO">
+INSERT INTO WAM_STND_ANA
+(ANA_CD, ANA_DTM, TOT_COL_CNT, COL_APLY_CNT, COL_APLY_RT, COL_ERR_CNT, COL_ERR_RT)
+VALUES(#{anaCd,jdbcType=VARCHAR}
+      ,  current_timestamp()
+<!--       , #{anaDtm,jdbcType=VARCHAR} -->
+      , #{totColCnt,jdbcType=VARCHAR}
+      , #{colAplyCnt,jdbcType=VARCHAR}
+      , #{colAplyRt,jdbcType=VARCHAR}
+      , #{colErrCnt,jdbcType=VARCHAR}, #{colErrRt,jdbcType=VARCHAR});
+</insert>
+       <select id="getMtaColGapList" resultMap="BaseResultMap" parameterType="kr.wise.meta.gap.service.StndGapVO">
+	SELECT A.COL_ID, A.ORG_NM, A.DB_NM, A.TBL_PNM, A.TBL_LNM, A.COL_PNM, A.COL_LNM, A.STND_CD_YN, A.STND_CD_NM, A.COL_DESCN
+	, A.DATA_TYPE, A.DATA_LEN, A.DATA_SCAL, A.DATA_FRM, A.NOT_NULL_YN, A.PK_YN, A.FK_YN, A.CONSTRNT, A.PRSN_YN, A.ENC_YN, A.OPEN_YN
+	, CASE WHEN B.SDITM_ID IS NULL THEN 'GAP' ELSE 'APLY' END AS GAP_STATUS
+	, CASE WHEN B.SDITM_ID IS NULL THEN '#FF0000' END AS FontColor
+	FROM WAM_PDM_COL A
+	LEFT JOIN COMM_SDITM B
+	  ON A.COL_LNM = B.SDITM_LNM 
+</select>
+  <insert id="regMtaColGapList" parameterType="kr.wise.meta.gap.service.StndGapVO" >
+  	INSERT INTO WAM_STND_ANA
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+        ANA_CD,
+        ANA_DTM,
+      <if test="totColCnt != null" >
+        TOT_COL_CNT,
+      </if>
+      <if test="colAplyCnt != null" >
+        COL_APLY_CNT,
+      </if>
+      <if test="colAplyRt != null" >
+        COL_APLY_RT,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+    	'11', NOW(),
+      <if test="totColCnt != null" >
+        #{totColCnt,jdbcType=VARCHAR},
+      </if>
+      <if test="colAplyCnt != null" >
+        #{colAplyCnt,jdbcType=DECIMAL},
+      </if>
+      <if test="colAplyRt != null" >
+        #{colAplyRt,jdbcType=DECIMAL},
+      </if>
+    </trim>  
+  </insert>
+<select id="selectGapResultList"  resultMap="BaseResultMap"    parameterType="kr.wise.meta.gap.service.StndGapVO">
+SELECT *
+FROM WAM_STND_ANA
+WHERE ANA_CD = #{anaCd, jdbcType=VARCHAR}
+ORDER BY ANA_DTM DESC
+</select>  
+</mapper>

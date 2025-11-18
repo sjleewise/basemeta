@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.meta.stnd.service.SlcGlossaryMMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.meta.stnd.service.SlcGlossaryM"  extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+    <id column="SLC_GLOSSARY_NM" property="slcGlossaryNm" jdbcType="VARCHAR" />
+    <result column="GLOSSARY_SEQ" property="glossarySeq" jdbcType="DECIMAL" />
+    <result column="GLOSSARY_CLAS_NM" property="glossaryClasNm" jdbcType="VARCHAR" />
+    <result column="SLC_GLOSSARY_ENG_NM" property="slcGlossaryEngNm" jdbcType="VARCHAR" />
+    <result column="GLOSSARY_EXPL" property="glossaryExpl" jdbcType="VARCHAR" />
+    <result column="GLOSSARY_SRC_EXPL" property="glossarySrcExpl" jdbcType="VARCHAR" />
+    <result column="REGST_DT" property="regstDt" jdbcType="TIMESTAMP" />
+    <result column="REGSTPSN_ID" property="regstpsnId" jdbcType="VARCHAR" />
+    <result column="UPD_DT" property="updDt" jdbcType="TIMESTAMP" />
+    <result column="UPDER_ID" property="upderId" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <resultMap id="BaseResultMap2" type="java.util.HashMap" >
+    <id column="SLC_GLOSSARY_NM" property="slcGlossaryNm" jdbcType="VARCHAR" />
+    <result column="GLOSSARY_SEQ" property="glossarySeq" jdbcType="DECIMAL" />
+    <result column="GLOSSARY_CLAS_NM" property="glossaryClasNm" jdbcType="VARCHAR" />
+    <result column="SLC_GLOSSARY_ENG_NM" property="slcGlossaryEngNm" jdbcType="VARCHAR" />
+    <result column="GLOSSARY_EXPL" property="glossaryExpl" jdbcType="VARCHAR" />
+    <result column="GLOSSARY_SRC_EXPL" property="glossarySrcExpl" jdbcType="VARCHAR" />
+    <result column="REGST_DT" property="regstDt" jdbcType="TIMESTAMP" />
+    <result column="REGSTPSN_ID" property="regstpsnId" jdbcType="VARCHAR" />
+    <result column="UPD_DT" property="updDt" jdbcType="TIMESTAMP" />
+    <result column="UPDER_ID" property="upderId" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    GLOSSARY_CLAS_NM, GLOSSARY_SEQ, SLC_GLOSSARY_NM, SLC_GLOSSARY_ENG_NM, GLOSSARY_EXPL, 
+    GLOSSARY_SRC_EXPL, REGST_DT, REGSTPSN_ID, UPD_DT, UPDER_ID
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from SLC_GLOSSARY_M
+    where SLC_GLOSSARY_NM = #{slcGlossaryNm,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="selectSlcGlossaryList" resultMap="BaseResultMap" parameterType="kr.wise.meta.stnd.service.SlcGlossaryM">
+  	--매립지 기술용어 리스트 조회
+  	SELECT 
+  	<include refid="Base_Column_List" />
+  	  FROM SLC_GLOSSARY_M
+  	<where>
+  	  <if test="glossaryClasNm != null" >
+        AND GLOSSARY_CLAS_NM LIKE '%'||#{glossaryClasNm}||'%'
+      </if>
+      <if test="slcGlossaryNm != null" >
+        AND ( SLC_GLOSSARY_NM LIKE '%'||#{slcGlossaryNm}||'%' 
+            OR  SLC_GLOSSARY_ENG_NM LIKE '%'||#{slcGlossaryNm}||'%' )
+      </if>
+      <if test="glossaryExpl != null" >
+        AND GLOSSARY_EXPL LIKE '%'||#{glossaryExpl}||'%'
+      </if>
+      <if test="glossarySrcExpl != null" >
+        AND GLOSSARY_SRC_EXPL LIKE '%'||#{glossarySrcExpl}||'%'
+      </if>
+  	</where>
+  </select>
+  
+  <select id="selectSlcGlossaryListXls" resultMap="BaseResultMap2" parameterType="kr.wise.meta.stnd.service.SlcGlossaryM">
+  	--매립지 기술용어 리스트 조회(map)
+  	SELECT 
+  	<include refid="Base_Column_List" />
+  	  FROM SLC_GLOSSARY_M
+  	<where>
+  	  <if test="glossaryClasNm != null" >
+        AND GLOSSARY_CLAS_NM LIKE '%'||#{glossaryClasNm}||'%'
+      </if>
+      <if test="slcGlossaryNm != null" >
+        AND ( SLC_GLOSSARY_NM LIKE '%'||#{slcGlossaryNm}||'%' 
+            OR  SLC_GLOSSARY_ENG_NM LIKE '%'||#{slcGlossaryNm}||'%' )
+      </if>
+      <if test="glossaryExpl != null" >
+        AND GLOSSARY_EXPL LIKE '%'||#{glossaryExpl}||'%'
+      </if>
+      <if test="glossarySrcExpl != null" >
+        AND GLOSSARY_SRC_EXPL LIKE '%'||#{glossarySrcExpl}||'%'
+      </if>
+  	</where>  	
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from SLC_GLOSSARY_M
+    where SLC_GLOSSARY_NM = #{slcGlossaryNm,jdbcType=VARCHAR}
+  </delete>
+  
+  <delete id="deleteList" parameterType="java.util.ArrayList" >
+  	DELETE FROM SLC_GLOSSARY_M
+  	WHERE SLC_GLOSSARY_NM IN 
+  	<foreach collection="list" item="item" open="(" separator="," close=")">
+  		#{item.slcGlossaryNm}
+	</foreach>
+  </delete>
+  
+  <insert id="insert" parameterType="kr.wise.meta.stnd.service.SlcGlossaryM" >
+    insert into SLC_GLOSSARY_M (GLOSSARY_CLAS_NM, GLOSSARY_SEQ, SLC_GLOSSARY_NM, 
+      SLC_GLOSSARY_ENG_NM, GLOSSARY_EXPL, GLOSSARY_SRC_EXPL, 
+      REGST_DT, REGSTPSN_ID, UPD_DT, 
+      UPDER_ID)
+    values (#{glossaryClasNm,jdbcType=VARCHAR}, #{glossarySeq,jdbcType=DECIMAL}, #{slcGlossaryNm,jdbcType=VARCHAR}, 
+      #{slcGlossaryEngNm,jdbcType=VARCHAR}, #{glossaryExpl,jdbcType=VARCHAR}, #{glossarySrcExpl,jdbcType=VARCHAR}, 
+      #{regstDt,jdbcType=TIMESTAMP}, #{regstpsnId,jdbcType=VARCHAR}, #{updDt,jdbcType=TIMESTAMP}, 
+      #{upderId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="kr.wise.meta.stnd.service.SlcGlossaryM" >
+    insert into SLC_GLOSSARY_M
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="glossaryClasNm != null" >
+        GLOSSARY_CLAS_NM,
+      </if>
+      <if test="glossarySeq != null" >
+        GLOSSARY_SEQ,
+      </if>
+      <if test="slcGlossaryNm != null" >
+        SLC_GLOSSARY_NM,
+      </if>
+      <if test="slcGlossaryEngNm != null" >
+        SLC_GLOSSARY_ENG_NM,
+      </if>
+      <if test="glossaryExpl != null" >
+        GLOSSARY_EXPL,
+      </if>
+      <if test="glossarySrcExpl != null" >
+        GLOSSARY_SRC_EXPL,
+      </if>
+        REGST_DT,
+      <if test="regstpsnId != null" >
+        REGSTPSN_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="glossaryClasNm != null" >
+        #{glossaryClasNm,jdbcType=VARCHAR},
+      </if>
+      <if test="glossarySeq != null" >
+        #{glossarySeq,jdbcType=DECIMAL},
+      </if>
+      <if test="slcGlossaryNm != null" >
+        #{slcGlossaryNm,jdbcType=VARCHAR},
+      </if>
+      <if test="slcGlossaryEngNm != null" >
+        #{slcGlossaryEngNm,jdbcType=VARCHAR},
+      </if>
+      <if test="glossaryExpl != null" >
+        #{glossaryExpl,jdbcType=VARCHAR},
+      </if>
+      <if test="glossarySrcExpl != null" >
+        #{glossarySrcExpl,jdbcType=VARCHAR},
+      </if>
+        SYSDATETIME ,
+      <if test="regstpsnId != null" >
+        #{regstpsnId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.meta.stnd.service.SlcGlossaryM" >
+    update SLC_GLOSSARY_M
+    <set >
+      <if test="glossarySeq != null" >
+        GLOSSARY_SEQ = #{glossarySeq,jdbcType=DECIMAL},
+      </if>
+      <if test="glossaryClasNm != null" >
+        GLOSSARY_CLAS_NM = #{glossaryClasNm,jdbcType=VARCHAR},
+      </if>
+      <if test="slcGlossaryEngNm != null" >
+        SLC_GLOSSARY_ENG_NM = #{slcGlossaryEngNm,jdbcType=VARCHAR},
+      </if>
+      <if test="glossaryExpl != null" >
+        GLOSSARY_EXPL = #{glossaryExpl,jdbcType=VARCHAR},
+      </if>
+      <if test="glossarySrcExpl != null" >
+        GLOSSARY_SRC_EXPL = #{glossarySrcExpl,jdbcType=VARCHAR},
+      </if>
+        UPD_DT = SYSDATETIME ,
+      <if test="upderId != null" >
+        UPDER_ID = #{upderId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where SLC_GLOSSARY_NM = #{slcGlossaryNm,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="kr.wise.meta.stnd.service.SlcGlossaryM" >
+    update SLC_GLOSSARY_M
+    set GLOSSARY_SEQ = #{glossarySeq,jdbcType=DECIMAL},
+      SLC_GLOSSARY_NM = #{slcGlossaryNm,jdbcType=VARCHAR},
+      SLC_GLOSSARY_ENG_NM = #{slcGlossaryEngNm,jdbcType=VARCHAR},
+      GLOSSARY_EXPL = #{glossaryExpl,jdbcType=VARCHAR},
+      GLOSSARY_SRC_EXPL = #{glossarySrcExpl,jdbcType=VARCHAR},
+      REGST_DT = #{regstDt,jdbcType=TIMESTAMP},
+      REGSTPSN_ID = #{regstpsnId,jdbcType=VARCHAR},
+      UPD_DT = #{updDt,jdbcType=TIMESTAMP},
+      UPDER_ID = #{upderId,jdbcType=VARCHAR}
+    where SLC_GLOSSARY_NM = #{slcGlossaryNm,jdbcType=VARCHAR}
+  </update>
+</mapper>

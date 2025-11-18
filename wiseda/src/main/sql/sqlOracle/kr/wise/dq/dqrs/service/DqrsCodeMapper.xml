@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.wise.dq.dqrs.service.DqrsCodeMapper">
+  <resultMap id="CodeResultMap" type="kr.wise.commons.code.service.CodeListVo">
+    <result column="CODE_CD"    jdbcType="VARCHAR" property="codeCd" />
+    <result column="CODE_LNM"    jdbcType="VARCHAR" property="codeLnm" />
+    <result column="CODE_PNM"    jdbcType="VARCHAR" property="codePnm" />
+    <result column="UPCODE_CD"    jdbcType="VARCHAR" property="upcodeCd" />
+  </resultMap>
+  
+
+  
+  <!-- 코드 리스트  -->
+  <select id="selectPubSditmConnTrgId" resultMap="CodeResultMap">
+  	SELECT DISTINCT DB_CONN_TRG_ID AS CODE_CD
+  		, DB_CONN_TRG_ID AS CODE_LNM
+  		, DB_CONN_TRG_ID AS CODE_PNM
+  		FROM  WAA_DQRS_SDITM
+		WHERE EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+		AND GOV_YN = 'Y'
+  </select>
+  <select id="selectPubDmnConnTrgId" resultMap="CodeResultMap">
+  	SELECT DISTINCT DB_CONN_TRG_ID AS CODE_CD
+  		, DB_CONN_TRG_ID  AS CODE_LNM
+  		, DB_CONN_TRG_ID AS CODE_PNM
+  		FROM  WAA_DQRS_DMN
+		WHERE EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+		AND GOV_YN = 'Y'
+  </select>
+  <select id="selectAllDbms" resultMap="CodeResultMap">
+  	SELECT * FROM
+		(SELECT 
+      		DB_CONN_TRG_ID   AS CODE_CD
+       	  , DB_CONN_TRG_LNM  AS CODE_LNM
+      	 FROM WAA_DB_CONN_TRG
+     	 WHERE EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+      	 AND REG_TYP_CD IN ('C', 'U')
+
+		UNION ALL 	
+
+	 	SELECT * FROM(
+			SELECT	*  FROM  
+	  		(
+	  			SELECT 
+          			DB_CONN_TRG_ID    AS CODE_CD
+          		   ,CONCAT(DB_CONN_TRG_LNM,'(삭제된 DBMS)')   AS CODE_LNM
+      			FROM WAA_DB_CONN_TRG
+      			WHERE REG_TYP_CD IN ('C', 'U')
+	  		 ) A
+	  	 GROUP BY A.CODE_CD, A.CODE_LNM
+		 ) D
+	WHERE NOT EXISTS (
+		SELECT 
+			B.DB_CONN_TRG_ID 
+		FROM WAA_DB_CONN_TRG B 
+		WHERE B.REG_TYP_CD IN ('C', 'U') 
+		AND B.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+		AND B.DB_CONN_TRG_ID = D.CODE_CD)
+	) T 
+	WHERE 1=1
+	AND EXISTS (
+		SELECT 
+			DISTINCT A.DB_CONN_TRG_ID 
+		FROM WAA_DQRS_DMN A 
+		WHERE A.DB_CONN_TRG_ID = T.CODE_CD
+	)
+	OR EXISTS (
+		SELECT 
+			DISTINCT A.DB_CONN_TRG_ID 
+		FROM WAA_DQRS_SDITM A 
+		WHERE A.DB_CONN_TRG_ID = T.CODE_CD
+	)
+  </select>
+  <select id="selectAllDbmsSchId" resultMap="CodeResultMap">
+  SELECT * FROM
+	( 	 
+  	 SELECT 	A.DB_SCH_ID  AS CODE_CD
+          , A.DB_SCH_LNM AS CODE_LNM
+          , A.DB_CONN_TRG_ID as UPCODE_CD
+       FROM WAA_DB_SCH A 
+      WHERE A.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+        AND A.REG_TYP_CD IN ('C', 'U')
+        AND NVL(A.CLT_XCL_YN,'N') = 'N'
+       
+      UNION all
+      
+ 	SELECT * FROM(
+		SELECT	*  FROM  
+	  	(
+	  		SELECT 
+            	A.DB_SCH_ID  AS CODE_CD
+          	  , A.DB_SCH_LNM AS CODE_LNM
+          	  , A.DB_CONN_TRG_ID as UPCODE_CD
+     		FROM WAA_DB_SCH A 
+        	WHERE A.REG_TYP_CD IN ('C', 'U')
+        	AND NVL(A.CLT_XCL_YN,'N') = 'N'
+	  	) A
+	  	GROUP BY A.CODE_CD, A.CODE_LNM, A.UPCODE_CD
+	) D
+	WHERE NOT EXISTS (
+	SELECT B.DB_CONN_TRG_ID 
+	FROM WAA_DB_SCH B 
+	WHERE B.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+    AND B.REG_TYP_CD IN ('C', 'U')
+    AND NVL(B.CLT_XCL_YN,'N') = 'N' 
+	AND B.DB_CONN_TRG_ID = D.UPCODE_CD
+	AND B.DB_SCH_ID=D.CODE_CD)
+   ) T where 1=1
+	AND EXISTS (
+		SELECT 
+			DISTINCT A.DB_CONN_TRG_ID 
+		FROM WAA_DQRS_DMN A 
+		WHERE A.DB_CONN_TRG_ID = T.UPCODE_CD
+		AND   A.DB_SCH_ID      = T.CODE_CD
+	)
+	OR EXISTS (
+		SELECT 
+			DISTINCT A.DB_CONN_TRG_ID 
+		FROM WAA_DQRS_SDITM A 
+		WHERE A.DB_CONN_TRG_ID = T.UPCODE_CD
+		AND   A.DB_SCH_ID      = T.CODE_CD
+	)
+  </select>
+  
+  <select id="selectGovTblDbms" resultMap="CodeResultMap">
+  	SELECT * FROM
+		(SELECT 
+      		DB_CONN_TRG_ID   AS CODE_CD
+       	  , DB_CONN_TRG_LNM  AS CODE_LNM
+      	 FROM WAA_DB_CONN_TRG
+     	 WHERE EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+      	 AND REG_TYP_CD IN ('C', 'U')
+
+		UNION ALL 	
+
+	 	SELECT * FROM(
+			SELECT	*  FROM  
+	  		(
+	  			SELECT 
+          			DB_CONN_TRG_ID    AS CODE_CD
+          		   ,CONCAT(DB_CONN_TRG_LNM,'(삭제된 DBMS)')   AS CODE_LNM
+      			FROM WAA_DB_CONN_TRG
+      			WHERE REG_TYP_CD IN ('C', 'U')
+	  		 ) A
+	  	 GROUP BY A.CODE_CD, A.CODE_LNM
+		 ) D
+	WHERE NOT EXISTS (
+		SELECT 
+			B.DB_CONN_TRG_ID 
+		FROM WAA_DB_CONN_TRG B 
+		WHERE B.REG_TYP_CD IN ('C', 'U') 
+		AND B.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+		AND B.DB_CONN_TRG_ID = D.CODE_CD)
+	) T 
+	WHERE 1=1
+	AND EXISTS (
+		SELECT 
+			DISTINCT A.DB_CONN_TRG_ID 
+		FROM WAA_DQRS_TBL A 
+		WHERE A.DB_CONN_TRG_ID = T.CODE_CD
+	)
+  </select>
+  
+  <select id="selectGovTblSchId" resultMap="CodeResultMap">
+  SELECT * FROM
+	( 	 
+  	 SELECT 	A.DB_SCH_ID  AS CODE_CD
+          , A.DB_SCH_LNM AS CODE_LNM
+          , A.DB_CONN_TRG_ID as UPCODE_CD
+       FROM WAA_DB_SCH A 
+      WHERE A.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+        AND A.REG_TYP_CD IN ('C', 'U')
+        AND NVL(A.CLT_XCL_YN,'N') = 'N'
+       
+      UNION all
+      
+ 	SELECT * FROM(
+		SELECT	*  FROM  
+	  	(
+	  		SELECT 
+            	A.DB_SCH_ID  AS CODE_CD
+          	  , A.DB_SCH_LNM AS CODE_LNM
+          	  , A.DB_CONN_TRG_ID as UPCODE_CD
+     		FROM WAA_DB_SCH A 
+        	WHERE A.REG_TYP_CD IN ('C', 'U')
+        	AND NVL(A.CLT_XCL_YN,'N') = 'N'
+	  	) A
+	  	GROUP BY A.CODE_CD, A.CODE_LNM, A.UPCODE_CD
+	) D
+	WHERE NOT EXISTS (
+	SELECT B.DB_CONN_TRG_ID 
+	FROM WAA_DB_SCH B 
+	WHERE B.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+    AND B.REG_TYP_CD IN ('C', 'U')
+    AND NVL(B.CLT_XCL_YN,'N') = 'N' 
+	AND B.DB_CONN_TRG_ID = D.UPCODE_CD
+	AND B.DB_SCH_ID=D.CODE_CD)
+   ) T where 1=1
+	AND EXISTS (
+		SELECT 
+			DISTINCT A.DB_CONN_TRG_ID 
+		FROM WAA_DQRS_TBL A 
+		WHERE A.DB_CONN_TRG_ID = T.UPCODE_CD
+		AND   A.DB_SCH_ID      = T.CODE_CD
+	)   
+  </select>
+</mapper>

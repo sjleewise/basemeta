@@ -1,0 +1,344 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.dq.criinfo.ctq.service.WahCtqMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.dq.criinfo.ctq.service.WahCtqVO"  >
+    <id column="CTQ_ID" property="ctqId" jdbcType="VARCHAR" />
+    <id column="EXP_DTM" property="expDtm" jdbcType="DATE" />
+    <result column="STR_DTM" property="strDtm" jdbcType="DATE" /> 
+    <result column="CTQ_LNM" property="ctqLnm" jdbcType="VARCHAR" />
+    <result column="CTQ_PNM" property="ctqPnm" jdbcType="VARCHAR" />
+    <result column="CTQ_LVL" property="ctqLvl" jdbcType="DECIMAL" />
+    <result column="UPP_CTQ_ID" property="uppCtqId" jdbcType="VARCHAR" />
+    <result column="UPP_CTQ_LNM" property="uppCtqLnm" jdbcType="VARCHAR" />
+    <result column="OBJ_DESCN" property="objDescn" jdbcType="VARCHAR" />
+    <result column="OBJ_VERS" property="objVers" jdbcType="DECIMAL" />
+    <result column="REG_TYP_CD" property="regTypCd" jdbcType="VARCHAR" />
+    <result column="FRS_RQST_DTM" property="frsRqstDtm" jdbcType="DATE" />
+    <result column="FRS_RQST_USER_ID" property="frsRqstUserId" jdbcType="VARCHAR" />
+    <result column="FRS_RQST_USER_NM" property="frsRqstUserNm" jdbcType="VARCHAR" />
+    <result column="RQST_DTM" property="rqstDtm" jdbcType="DATE" />
+    <result column="RQST_USER_ID" property="rqstUserId" jdbcType="VARCHAR" />
+    <result column="RQST_USER_NM" property="rqstUserNm" jdbcType="VARCHAR" />
+    <result column="APRV_DTM" property="aprvDtm" jdbcType="DATE" />
+    <result column="APRV_USER_ID" property="aprvUserId" jdbcType="VARCHAR" />
+    <result column="APRV_USER_NM" property="aprvUserNm" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="WhereUsedResultMap" type="kr.wise.dq.criinfo.ctq.service.WamCtqWhereUsed"  >
+    <id column="BR_ID" property="brId" jdbcType="VARCHAR" /> 
+    <result column="BR_NM" property="brNm" jdbcType="VARCHAR" />
+    <result column="DB_NM" property="dbNm" jdbcType="VARCHAR" />
+    <result column="SCH_NM" property="schNm" jdbcType="VARCHAR" />
+    <result column="TBL_PNM" property="tblPnm" jdbcType="VARCHAR" />
+    <result column="COL_PNM" property="colPnm" jdbcType="VARCHAR" />
+    <result column="BIZ_AREA_NM" property="bizAreaNm" jdbcType="VARCHAR" />
+    <result column="OBJ_DESCN" property="objDescn" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    CTQ_ID, EXP_DTM, STR_DTM, CTQ_LNM, CTQ_PNM, CTQ_LVL, UPP_CTQ_ID, 
+    OBJ_DESCN, OBJ_VERS, REG_TYP_CD, FRS_RQST_DTM, FRS_RQST_USER_ID, RQST_DTM, RQST_USER_ID, 
+    APRV_DTM, APRV_USER_ID
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="map" >
+    select 
+    <include refid="Base_Column_List" />
+    from WAH_CTQ
+    where CTQ_ID = #{ctqId,jdbcType=VARCHAR}
+      and EXP_DTM = #{expDtm,jdbcType=DATE}
+  </select>
+  <select id="selectHstByCtqId" resultMap="BaseResultMap" parameterType="String" >
+	SELECT  A.CTQ_ID
+	        ,A.EXP_DTM
+	        ,A.STR_DTM
+	        ,A.CTQ_LNM
+	        ,A.CTQ_PNM
+	        ,A.CTQ_LVL
+	        ,A.UPP_CTQ_ID
+	        ,M.CTQ_LNM AS UPP_CTQ_LNM
+	        ,A.OBJ_DESCN
+	        ,A.OBJ_VERS
+	        ,A.REG_TYP_CD
+	        ,A.FRS_RQST_DTM
+	        ,A.FRS_RQST_USER_ID
+	        ,A.RQST_DTM
+	        ,A.RQST_USER_ID
+	        ,A.APRV_DTM
+	        ,A.APRV_USER_ID        
+	        ,B.USER_NM AS RQST_USER_NM
+	        ,C.USER_NM AS FRS_RQST_USER_NM
+	        ,D.USER_NM AS APRV_USER_NM
+	 FROM WAH_CTQ A
+	      LEFT OUTER JOIN WAM_CTQ M
+	       ON A.UPP_CTQ_ID = M.CTQ_ID
+	      AND A.REG_TYP_CD IN ('C','U')
+	      LEFT OUTER JOIN WAA_USER  B
+	        ON A.RQST_USER_ID = B.USER_ID
+	       AND B.EXP_DTM = '99991231'
+	       AND B.REG_TYP_CD IN ('C','U')
+	      LEFT OUTER JOIN WAA_USER  C
+	        ON A.FRS_RQST_USER_ID = C.USER_ID
+	       AND C.EXP_DTM = '99991231'
+	       AND C.REG_TYP_CD IN ('C','U')   
+	      LEFT OUTER JOIN WAA_USER  D
+	        ON A.APRV_USER_ID = D.USER_ID
+	       AND D.EXP_DTM = '99991231'
+	       AND D.REG_TYP_CD IN ('C','U')  
+	 WHERE  A.CTQ_ID = #{ctqId,jdbcType=VARCHAR}
+  </select>
+  <select id="selectWhereusedByCtqId" resultMap="WhereUsedResultMap" parameterType="String" >
+	SELECT A.BR_ID
+	      ,A.BR_NM
+	      ,DB.DB_CONN_TRG_PNM AS DB_NM
+	      ,SCH.DB_SCH_PNM AS SCH_NM
+	      ,A.DBC_TBL_NM AS TBL_PNM
+	      ,A.DBC_COL_NM AS COL_PNM
+	      ,C.BIZ_AREA_LNM AS BIZ_AREA_NM
+	      ,A.OBJ_DESCN
+	  FROM WAA_DB_CONN_TRG DB
+	 INNER JOIN WAA_DB_SCH SCH
+	    ON SCH.DB_CONN_TRG_ID = DB.DB_CONN_TRG_ID
+	   AND SCH.REG_TYP_CD IN ('C', 'U')
+	   AND SCH.EXP_DTM = STR_TO_DATE('99991231', '%Y%m%d %H:%i:%S')
+	 INNER JOIN WAM_BR_MSTR A
+	    ON A.DB_CONN_TRG_ID = SCH.DB_CONN_TRG_ID
+	   AND A.DB_SCH_ID = SCH.DB_SCH_ID
+	 INNER JOIN WAM_BR_CTQ_MAP B
+	    ON B.BR_ID = A.BR_ID
+	 INNER JOIN WAM_BIZ_AREA C
+	    ON C.BIZ_AREA_ID = A.BIZ_AREA_ID 
+	 WHERE DB.REG_TYP_CD IN ('C', 'U')
+	   AND DB.EXP_DTM = STR_TO_DATE('99991231', '%Y%m%d %H:%i:%S')
+	   AND B.CTQ_ID = #{ctqId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="map" >
+    delete from WAH_CTQ
+    where CTQ_ID = #{ctqId,jdbcType=VARCHAR}
+      and EXP_DTM = #{expDtm,jdbcType=DATE}
+  </delete>
+  <insert id="insert" parameterType="kr.wise.dq.criinfo.ctq.service.WahCtqVO" >
+    insert into WAH_CTQ (CTQ_ID, EXP_DTM, STR_DTM, 
+      CTQ_LNM, CTQ_PNM, CTQ_LVL, 
+      UPP_CTQ_ID, OBJ_DESCN, OBJ_VERS, 
+      REG_TYP_CD, FRS_RQST_DTM, FRS_RQST_USER_ID, 
+      RQST_DTM, RQST_USER_ID, APRV_DTM, 
+      APRV_USER_ID)
+    values (#{ctqId,jdbcType=VARCHAR}, #{expDtm,jdbcType=DATE}, #{strDtm,jdbcType=DATE}, 
+      #{ctqLnm,jdbcType=VARCHAR}, #{ctqPnm,jdbcType=VARCHAR}, #{ctqLvl,jdbcType=DECIMAL}, 
+      #{uppCtqId,jdbcType=VARCHAR}, #{objDescn,jdbcType=VARCHAR}, #{objVers,jdbcType=DECIMAL}, 
+      #{regTypCd,jdbcType=VARCHAR}, #{frsRqstDtm,jdbcType=DATE}, #{frsRqstUserId,jdbcType=VARCHAR}, 
+      #{rqstDtm,jdbcType=DATE}, #{rqstUserId,jdbcType=VARCHAR}, #{aprvDtm,jdbcType=DATE}, 
+      #{aprvUserId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="kr.wise.dq.criinfo.ctq.service.WahCtqVO" >
+    insert into WAH_CTQ
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="ctqId != null" >
+        CTQ_ID,
+      </if>
+      <if test="expDtm != null" >
+        EXP_DTM,
+      </if>
+      <if test="strDtm != null" >
+        STR_DTM,
+      </if>
+      <if test="ctqLnm != null" >
+        CTQ_LNM,
+      </if>
+      <if test="ctqPnm != null" >
+        CTQ_PNM,
+      </if>
+      <if test="ctqLvl != null" >
+        CTQ_LVL,
+      </if>
+      <if test="uppCtqId != null" >
+        UPP_CTQ_ID,
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN,
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS,
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD,
+      </if>
+      <if test="frsRqstDtm != null" >
+        FRS_RQST_DTM,
+      </if>
+      <if test="frsRqstUserId != null" >
+        FRS_RQST_USER_ID,
+      </if>
+      <if test="rqstDtm != null" >
+        RQST_DTM,
+      </if>
+      <if test="rqstUserId != null" >
+        RQST_USER_ID,
+      </if>
+      <if test="aprvDtm != null" >
+        APRV_DTM,
+      </if>
+      <if test="aprvUserId != null" >
+        APRV_USER_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="ctqId != null" >
+        #{ctqId,jdbcType=VARCHAR},
+      </if>
+      <if test="expDtm != null" >
+        #{expDtm,jdbcType=DATE},
+      </if>
+      <if test="strDtm != null" >
+        #{strDtm,jdbcType=DATE},
+      </if>
+      <if test="ctqLnm != null" >
+        #{ctqLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="ctqPnm != null" >
+        #{ctqPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="ctqLvl != null" >
+        #{ctqLvl,jdbcType=DECIMAL},
+      </if>
+      <if test="uppCtqId != null" >
+        #{uppCtqId,jdbcType=VARCHAR},
+      </if>
+      <if test="objDescn != null" >
+        #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null" >
+        #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="frsRqstDtm != null" >
+        #{frsRqstDtm,jdbcType=DATE},
+      </if>
+      <if test="frsRqstUserId != null" >
+        #{frsRqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDtm != null" >
+        #{rqstDtm,jdbcType=DATE},
+      </if>
+      <if test="rqstUserId != null" >
+        #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDtm != null" >
+        #{aprvDtm,jdbcType=DATE},
+      </if>
+      <if test="aprvUserId != null" >
+        #{aprvUserId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.dq.criinfo.ctq.service.WahCtqVO" >
+    update WAH_CTQ
+    <set >
+      <if test="strDtm != null" >
+        STR_DTM = #{strDtm,jdbcType=DATE},
+      </if>
+      <if test="ctqLnm != null" >
+        CTQ_LNM = #{ctqLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="ctqPnm != null" >
+        CTQ_PNM = #{ctqPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="ctqLvl != null" >
+        CTQ_LVL = #{ctqLvl,jdbcType=DECIMAL},
+      </if>
+      <if test="uppCtqId != null" >
+        UPP_CTQ_ID = #{uppCtqId,jdbcType=VARCHAR},
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="frsRqstDtm != null" >
+        FRS_RQST_DTM = #{frsRqstDtm,jdbcType=DATE},
+      </if>
+      <if test="frsRqstUserId != null" >
+        FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDtm != null" >
+        RQST_DTM = #{rqstDtm,jdbcType=DATE},
+      </if>
+      <if test="rqstUserId != null" >
+        RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDtm != null" >
+        APRV_DTM = #{aprvDtm,jdbcType=DATE},
+      </if>
+      <if test="aprvUserId != null" >
+        APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where CTQ_ID = #{ctqId,jdbcType=VARCHAR}
+      and EXP_DTM = #{expDtm,jdbcType=DATE}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="kr.wise.dq.criinfo.ctq.service.WahCtqVO" >
+    update WAH_CTQ
+    set STR_DTM = #{strDtm,jdbcType=DATE},
+      CTQ_LNM = #{ctqLnm,jdbcType=VARCHAR},
+      CTQ_PNM = #{ctqPnm,jdbcType=VARCHAR},
+      CTQ_LVL = #{ctqLvl,jdbcType=DECIMAL},
+      UPP_CTQ_ID = #{uppCtqId,jdbcType=VARCHAR},
+      OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      FRS_RQST_DTM = #{frsRqstDtm,jdbcType=DATE},
+      FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR},
+      RQST_DTM = #{rqstDtm,jdbcType=DATE},
+      RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      APRV_DTM = #{aprvDtm,jdbcType=DATE},
+      APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR}
+    where CTQ_ID = #{ctqId,jdbcType=VARCHAR}
+      and EXP_DTM = #{expDtm,jdbcType=DATE}
+  </update>
+  
+  <update id="updateWahCtq" parameterType="kr.wise.commons.rqstmst.service.WaqMstr" >
+	update WAH_CTQ A
+	set A.EXP_DTM = (select STR_DTM from WAM_CTQ B
+			                  where A.CTQ_ID = B.CTQ_ID
+			                     and A.OBJ_VERS = B.OBJ_VERS )
+    where A.EXP_DTM = '99991231'
+      and exists (select 1 from WAQ_CTQ B
+	                  where A.CTQ_ID = B.CTQ_ID
+	                     and B.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+	                     and A.OBJ_VERS = B.OBJ_VERS)
+  </update>
+  
+  <insert id="insertWahCtq" parameterType="kr.wise.commons.rqstmst.service.WaqMstr" >
+	insert into WAH_CTQ
+	select
+	         IFNULL(B.CTQ_ID, OBJ_ID.NEXTVAL) as CTQ_ID
+	       , '99991231' as EXP_DTM 
+           , NOW() as STR_DTM
+           , A.CTQ_LNM
+           , A.CTQ_PNM 
+           , A.CTQ_LVL
+           , A.UPP_CTQ_ID
+           , A.RQST_NO
+           , A.RQST_SNO
+           , A.OBJ_DESCN
+           , IFNULL(B.OBJ_VERS, 0) + 1 as OBJ_VERS
+          -- , A.OBJ_VERS
+           , A.REG_TYP_CD
+           , IFNULL(B.FRS_RQST_DTM, A.RQST_DTM) as FRS_RQST_DTM
+           , IFNULL(B.FRS_RQST_USER_ID, A.RQST_USER_ID) as FRS_RQST_USER_ID
+           , A.RQST_DTM
+           , A.RQST_USER_ID
+           , NOW() AS APRV_DTM   --A.APRV_DTM
+           , #{aprvUserId,jdbcType=VARCHAR}  AS APRV_USER_ID    --A.APRV_USER_ID
+	from WAQ_CTQ A
+	     left outer join WAM_CTQ B
+	       on A.CTQ_ID = B.CTQ_ID
+	      and B.REG_TYP_CD in ('C','U')
+	where A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+	  and A.VRF_CD = '1' -- 등록가능
+  </insert>
+</mapper>

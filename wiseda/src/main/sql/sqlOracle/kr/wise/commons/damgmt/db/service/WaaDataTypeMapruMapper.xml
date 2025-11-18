@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.commons.damgmt.db.service.WaaDataTypeMapruMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.commons.damgmt.db.service.WaaDataTypeMapru" extends="kr.wise.commons.damgmt.db.service.WaaDbmsDataTypeMapper.BaseResultMap" >
+    <id column="DATA_TYPE_MAPRU_ID" property="dataTypeMapruId" jdbcType="VARCHAR" />
+    <result column="MAPRU_NM"      property="mapruNm"     jdbcType="VARCHAR" />
+    <result column="LGC_DATA_TYPE" property="lgcDataType" jdbcType="VARCHAR" />
+    <result column="MIN_VAL"       property="minVal"      jdbcType="VARCHAR" />
+    <result column="CND_CD"        property="cndCd"       jdbcType="VARCHAR" />
+    <result column="MAX_VAL"       property="maxVal"      jdbcType="VARCHAR" />
+    <result column="LEN_USE_YN"    property="lenUseYn"    jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    DATA_TYPE_MAPRU_ID, EXP_DTM, STR_DTM, MAPRU_NM, DBMS_DATA_TYPE_ID, LGC_DATA_TYPE, 
+    MIN_VAL, CND_CD, MAX_VAL, OBJ_DESCN, OBJ_VERS, REG_TYP_CD, WRIT_DTM, WRIT_USER_ID,
+    LEN_USE_YN
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from WAA_DATA_TYPE_MAPRU
+    where DATA_TYPE_MAPRU_ID = #{dataTypeMapruId,jdbcType=VARCHAR}
+    AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+    AND REG_TYP_CD IN ('C', 'U')
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from WAA_DATA_TYPE_MAPRU
+    where DATA_TYPE_MAPRU_ID = #{dataTypeMapruId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="kr.wise.commons.damgmt.db.service.WaaDataTypeMapru" >
+    insert into WAA_DATA_TYPE_MAPRU (DATA_TYPE_MAPRU_ID, EXP_DTM, STR_DTM, 
+      MAPRU_NM, DBMS_DATA_TYPE_ID, LGC_DATA_TYPE, 
+      MIN_VAL, CND_CD, MAX_VAL, 
+      OBJ_DESCN, OBJ_VERS, REG_TYP_CD, 
+      WRIT_DTM, WRIT_USER_ID)
+    values (#{dataTypeMapruId,jdbcType=VARCHAR}, #{expDtm,jdbcType=TIMESTAMP}, #{strDtm,jdbcType=TIMESTAMP}, 
+      #{mapruNm,jdbcType=VARCHAR}, #{dbmsDataTypeId,jdbcType=VARCHAR}, #{lgcDataType,jdbcType=VARCHAR}, 
+      #{minVal,jdbcType=VARCHAR}, #{cndCd,jdbcType=VARCHAR}, #{maxVal,jdbcType=VARCHAR}, 
+      #{objDescn,jdbcType=VARCHAR}, #{objVers,jdbcType=DECIMAL}, #{regTypCd,jdbcType=VARCHAR}, 
+      #{writDtm,jdbcType=TIMESTAMP}, #{writUserId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="kr.wise.commons.damgmt.db.service.WaaDataTypeMapru" >
+    insert into WAA_DATA_TYPE_MAPRU
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="dataTypeMapruId != null" >
+        DATA_TYPE_MAPRU_ID,
+      </if>
+      <if test="expDtm != null" >
+        EXP_DTM,
+      </if>
+      <if test="strDtm != null" >
+        STR_DTM,
+      </if>
+      <if test="mapruNm != null" >
+        MAPRU_NM,
+      </if>
+      <if test="dbmsDataTypeId != null" >
+        DBMS_DATA_TYPE_ID,
+      </if>
+      <if test="lgcDataType != null" >
+        LGC_DATA_TYPE,
+      </if>
+      <if test="minVal != null" >
+        MIN_VAL,
+      </if>
+      <if test="cndCd != null" >
+        CND_CD,
+      </if>
+      <if test="maxVal != null" >
+        MAX_VAL,
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN,
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS,
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD,
+      </if>
+      <if test="writDtm != null" >
+        WRIT_DTM,
+      </if>
+      <if test="writUserId != null" >
+        WRIT_USER_ID,
+      </if>
+      <if test="lenUseYn != null" >
+        LEN_USE_YN,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="dataTypeMapruId != null" >
+        #{dataTypeMapruId,jdbcType=VARCHAR},
+      </if>
+      <if test="expDtm != null" >
+        #{expDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="strDtm != null" >
+        #{strDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mapruNm != null" >
+        #{mapruNm,jdbcType=VARCHAR},
+      </if>
+      <if test="dbmsDataTypeId != null" >
+        #{dbmsDataTypeId,jdbcType=VARCHAR},
+      </if>
+      <if test="lgcDataType != null" >
+        #{lgcDataType,jdbcType=VARCHAR},
+      </if>
+      <if test="minVal != null" >
+        #{minVal,jdbcType=VARCHAR},
+      </if>
+      <if test="cndCd != null" >
+        #{cndCd,jdbcType=VARCHAR},
+      </if>
+      <if test="maxVal != null" >
+        #{maxVal,jdbcType=VARCHAR},
+      </if>
+      <if test="objDescn != null" >
+        #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null" >
+        #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="writDtm != null" >
+        #{writDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="writUserId != null" >
+        #{writUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="lenUseYn != null" >
+         #{lenUseYn,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.commons.damgmt.db.service.WaaDataTypeMapru" >
+    update WAA_DATA_TYPE_MAPRU
+    <set >
+      <if test="expDtm != null" >
+        EXP_DTM = #{expDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="strDtm != null" >
+        STR_DTM = #{strDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mapruNm != null" >
+        MAPRU_NM = #{mapruNm,jdbcType=VARCHAR},
+      </if>
+      <if test="dbmsDataTypeId != null" >
+        DBMS_DATA_TYPE_ID = #{dbmsDataTypeId,jdbcType=VARCHAR},
+      </if>
+      <if test="lgcDataType != null" >
+        LGC_DATA_TYPE = #{lgcDataType,jdbcType=VARCHAR},
+      </if>
+      <if test="minVal != null" >
+        MIN_VAL = #{minVal,jdbcType=VARCHAR},
+      </if>
+      <if test="cndCd != null" >
+        CND_CD = #{cndCd,jdbcType=VARCHAR},
+      </if>
+      <if test="maxVal != null" >
+        MAX_VAL = #{maxVal,jdbcType=VARCHAR},
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="writDtm != null" >
+        WRIT_DTM = #{writDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="writUserId != null" >
+        WRIT_USER_ID = #{writUserId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where DATA_TYPE_MAPRU_ID = #{dataTypeMapruId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="kr.wise.commons.damgmt.db.service.WaaDataTypeMapru" >
+    update WAA_DATA_TYPE_MAPRU
+    set EXP_DTM = #{expDtm,jdbcType=TIMESTAMP},
+      STR_DTM = #{strDtm,jdbcType=TIMESTAMP},
+      MAPRU_NM = #{mapruNm,jdbcType=VARCHAR},
+      DBMS_DATA_TYPE_ID = #{dbmsDataTypeId,jdbcType=VARCHAR},
+      LGC_DATA_TYPE = #{lgcDataType,jdbcType=VARCHAR},
+      MIN_VAL = #{minVal,jdbcType=VARCHAR},
+      CND_CD = #{cndCd,jdbcType=VARCHAR},
+      MAX_VAL = #{maxVal,jdbcType=VARCHAR},
+      OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      WRIT_DTM = #{writDtm,jdbcType=TIMESTAMP},
+      WRIT_USER_ID = #{writUserId,jdbcType=VARCHAR}
+    where DATA_TYPE_MAPRU_ID = #{dataTypeMapruId,jdbcType=VARCHAR}
+  </update>
+  
+  <select id="selectList" resultMap="BaseResultMap" parameterType="kr.wise.commons.damgmt.db.service.WaaDataTypeMapru" >
+    SELECT A.*, B.DBMS_TYP_CD
+    	  ,GET_USER_NM(A.WRIT_USER_ID) AS WRIT_USER_NM
+    FROM WAA_DATA_TYPE_MAPRU A
+    INNER JOIN WAA_DBMS_DATA_TYPE B
+    	ON A.DBMS_DATA_TYPE_ID = B.DBMS_DATA_TYPE_ID
+    	AND A.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+    	AND A.REG_TYP_CD IN ('C', 'U')
+    	AND B.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+    	AND B.REG_TYP_CD IN ('C', 'U')
+    <where>
+       A.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+       AND A.REG_TYP_CD IN ('C', 'U')
+    <if test="lgcDataType != null" >
+       AND A.LGC_DATA_TYPE = #{lgcDataType,jdbcType=VARCHAR}
+    </if>
+    <if test="dbmsTypCd != null" >
+       AND B.DBMS_TYP_CD = #{dbmsTypCd,jdbcType=VARCHAR}
+    </if>
+    <if test="dbmsDataTypeId != null" >
+       AND A.DBMS_DATA_TYPE_ID = #{dbmsDataTypeId,jdbcType=VARCHAR}
+    </if>
+    <if test="mapruNm != null" >
+       AND UPPER(A.MAPRU_NM) LIKE '%' || UPPER(#{mapruNm,jdbcType=VARCHAR}) || '%'
+    </if>
+      
+    </where>
+    ORDER BY B.DBMS_TYP_CD, A.MAPRU_NM
+  </select>
+  
+  <update id="updateExpDtm" parameterType="kr.wise.commons.damgmt.db.service.WaaDataTypeMapru">
+  	UPDATE WAA_DATA_TYPE_MAPRU SET
+  		EXP_DTM = SYSDATE
+  	WHERE DATA_TYPE_MAPRU_ID = #{dataTypeMapruId}
+  	  AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+  </update>
+  
+</mapper>

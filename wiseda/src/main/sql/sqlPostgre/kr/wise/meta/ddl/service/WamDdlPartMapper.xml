@@ -1,0 +1,441 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.meta.ddl.service.WamDdlPartMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.meta.ddl.service.WaqDdlPart" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+    <result column="DDL_PART_ID" property="ddlPartId" jdbcType="VARCHAR" />
+    <result column="DB_CONN_TRG_ID" property="dbConnTrgId" jdbcType="VARCHAR" />
+    <result column="DB_CONN_TRG_PNM" property="dbConnTrgPnm" jdbcType="VARCHAR" />
+    <result column="DB_SCH_ID" property="dbSchId" jdbcType="VARCHAR" />
+    <result column="DB_SCH_PNM" property="dbSchPnm" jdbcType="VARCHAR" />
+    <result column="DDL_TBL_ID" property="ddlTblId" jdbcType="VARCHAR" />
+    <result column="DDL_TBL_PNM" property="ddlTblPnm" jdbcType="VARCHAR" />
+    <result column="DDL_TBL_LNM" property="ddlTblLnm" jdbcType="VARCHAR" />
+    <result column="TBL_SPAC_ID" property="tblSpacId" jdbcType="VARCHAR" />
+    <result column="TBL_SPAC_PNM" property="tblSpacPnm" jdbcType="VARCHAR" />
+    <result column="PART_TYP_CD" property="partTypCd" jdbcType="VARCHAR" />
+    <result column="PART_KEY" property="partKey" jdbcType="VARCHAR" />
+    <result column="SUB_PART_TYP_CD" property="subPartTypCd" jdbcType="VARCHAR" />
+    <result column="SUB_PART_KEY" property="subPartKey" jdbcType="VARCHAR" />
+    <result column="DDL_TRG_DCD" property="ddlTrgDcd" jdbcType="VARCHAR" />
+    <result column="SRC_DB_SCH_ID" property="srcDbSchId" jdbcType="VARCHAR" />
+    <result column="SRC_DDL_PART_ID" property="srcDdlPartId" jdbcType="VARCHAR" />
+    <result column="FULL_PATH" property="fullPath" jdbcType="VARCHAR" />
+    <result column="SYS_AREA_ID" property="sysAreaId" jdbcType="VARCHAR" />
+    <result column="SYS_AREA_LNM" property="sysAreaLnm" jdbcType="VARCHAR" />
+    <result column="RQST_RESN" property="rqstResn" jdbcType="VARCHAR" />
+	<result column="PRJ_MNG_NO"     property="prjMngNo"    jdbcType="VARCHAR" />
+	<result column="SR_MNG_NO"      property="srMngNo"     jdbcType="VARCHAR" />    
+	<result column="CUD_YN"      property="cudYn"     jdbcType="VARCHAR" />    
+	<result column="OBJ_DCD"      property="objDcd"     jdbcType="VARCHAR" />
+	<result column="OBJ_ID"      property="objId"     jdbcType="VARCHAR" />
+	<result column="APL_REQ_TYP_CD" property="aplReqTypCd" jdbcType="VARCHAR" />
+	<result column="APL_REQ_DT" property="aplReqdt" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <resultMap id="WaqDdlPartMainResultMap" type="kr.wise.meta.ddl.service.WaqDdlPartMain" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+    <result column="DDL_MAIN_PART_ID" property="ddlMainPartId" jdbcType="VARCHAR" />
+    <result column="DDL_PART_PNM" property="ddlPartPnm" jdbcType="VARCHAR" />
+    <result column="DDL_PART_ID" property="ddlPartId" jdbcType="VARCHAR" />
+    <result column="DDL_TBL_ID" property="ddlTblId" jdbcType="VARCHAR" />
+    <result column="DDL_TBL_PNM" property="ddlTblPnm" jdbcType="VARCHAR" />
+    <result column="DDL_PART_VAL" property="ddlPartVal" jdbcType="VARCHAR" />
+    <result column="TBL_SPAC_ID" property="tblSpacId" jdbcType="VARCHAR" />
+    <result column="TBL_SPAC_PNM" property="tblSpacPnm" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="WaqDdlPartSubtMap" type="kr.wise.meta.ddl.service.WaqDdlPartSub" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+    <result column="DDL_SUB_PART_ID" property="ddlSubPartId" jdbcType="VARCHAR" />
+    <result column="DDL_PART_SUB_PNM" property="ddlPartSubPnm" jdbcType="VARCHAR" />
+    <result column="DDL_MAIN_PART_ID" property="ddlMainPartId" jdbcType="VARCHAR" />
+    <result column="DDL_PART_PNM" property="ddlPartPnm" jdbcType="VARCHAR" />
+    <result column="DDL_PART_ID" property="ddlPartId" jdbcType="VARCHAR" />
+    <result column="DDL_TBL_ID" property="ddlTblId" jdbcType="VARCHAR" />
+    <result column="DDL_TBL_PNM" property="ddlTblPnm" jdbcType="VARCHAR" />
+    <result column="DDL_PART_SUB_VAL" property="ddlPartSubVal" jdbcType="VARCHAR" />
+    <result column="TBL_SPAC_ID" property="tblSpacId" jdbcType="VARCHAR" />
+    <result column="TBL_SPAC_PNM" property="tblSpacPnm" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  
+  
+  <sql id="Base_Column_List" >
+	,DDL_PART_ID     
+	,DDL_TBL_ID      
+	,DDL_TBL_PNM     
+	,DB_CONN_TRG_ID  
+	,DB_SCH_ID       
+	,TBL_SPAC_ID     
+	,PART_TYP_CD     
+	,PART_KEY        
+	,SUB_PART_TYP_CD 
+	,SUB_PART_KEY    
+	,RQST_NO         
+	,RQST_SNO        
+	,OBJ_DESCN       
+	,OBJ_VERS        
+	,REG_TYP_CD      
+	,FRS_RQST_DTM    
+	,FRS_RQST_USER_ID
+	,RQST_DTM        
+	,RQST_USER_ID    
+	,APRV_DTM        
+	,APRV_USER_ID    
+	,PRC_TYP_CD      
+	,PRC_DT          
+	,PRC_DBA_ID      
+	,DDL_TRG_DCD     
+	,SRC_DB_SCH_ID   
+	,SRC_DDL_PART_ID 
+  </sql>
+  
+  
+<select id="selectDdlPartLst" resultMap="BaseResultMap" parameterType="kr.wise.meta.ddl.service.WaqDdlPart" >
+   SELECT A.DDL_PART_ID     
+	    , A.DDL_TBL_ID      
+	    , A.DDL_TBL_PNM    
+	    , T.DDL_TBL_LNM 
+	    , A.DB_CONN_TRG_ID
+	    , DB.DB_CONN_TRG_PNM
+	    , A.DB_SCH_ID      
+	    , S.DB_SCH_PNM 
+	    , PT.FULL_PATH
+	    , A.TBL_SPAC_ID     
+	    , A.PART_TYP_CD     
+	    , A.PART_KEY        
+	    , A.SUB_PART_TYP_CD 
+	    , A.SUB_PART_KEY    
+	    , A.RQST_NO         
+	    , A.RQST_SNO        
+	    , A.OBJ_DESCN       
+	    , A.OBJ_VERS        
+	    , A.REG_TYP_CD      
+	    , A.FRS_RQST_DTM    
+	    , A.FRS_RQST_USER_ID
+	    , A.RQST_DTM        
+	    , A.RQST_USER_ID    
+	    , A.APRV_DTM        
+	    , A.APRV_USER_ID    			
+	    , A.DDL_TRG_DCD     
+	    , A.SRC_DB_SCH_ID   
+	    , A.SRC_DDL_PART_ID   	   
+	    , A.PRJ_MNG_NO
+	    , A.SR_MNG_NO
+	    , COALESCE(A.CUD_YN,'N') AS CUD_YN
+	    , 'DDP' AS OBJ_DCD 
+	    , A.DDL_PART_ID AS OBJ_ID
+	    , A.RQST_RESN	        
+	    , U.USER_NM  AS FRS_RQST_USER_NM
+		, U1.USER_NM AS RQST_USER_NM
+		, D.DEPT_NM  AS RQST_USER_DEPT
+		, U2.USER_NM AS APRV_USER_NM		     
+		, A.APL_REQ_DT	        
+	  FROM WAM_DDL_PART A
+	       INNER JOIN WAM_DDL_TBL T
+	          ON A.DDL_TBL_ID = T.DDL_TBL_ID
+	       INNER JOIN WAA_DB_CONN_TRG DB
+	          ON A.DB_CONN_TRG_ID = DB.DB_CONN_TRG_ID 
+	         AND DB.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+	         AND DB.REG_TYP_CD IN ('C','U')
+	       INNER JOIN WAA_DB_SCH S
+	          ON A.DB_SCH_ID = S.DB_SCH_ID 
+	         AND S.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+	         AND S.REG_TYP_CD IN ('C','U')
+	       LEFT JOIN WAM_PDM_TBL PT
+	         ON T.PDM_TBL_ID = PT.PDM_TBL_ID	      
+		   LEFT JOIN WAA_USER U
+		     ON A.FRS_RQST_USER_ID = U.USER_ID
+		    AND U.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+		    AND U.REG_TYP_CD IN ('C', 'U')
+		   LEFT JOIN WAA_USER U1
+		     ON A.RQST_USER_ID = U1.USER_ID
+		    AND U1.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+		    AND U1.REG_TYP_CD IN ('C', 'U')
+	 	   LEFT JOIN WAA_DEPT D
+	         ON U1.DEPT_ID = D.DEPT_ID
+	        AND D.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+	        AND D.REG_TYP_CD IN ('C','U')
+		   LEFT JOIN WAA_USER U2
+		     ON A.APRV_USER_ID = U2.USER_ID
+		    AND U2.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+		    AND U2.REG_TYP_CD IN ('C', 'U')
+	 WHERE 1 = 1
+	<if test="dbConnTrgId != null" >
+	   AND A.DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR}
+	</if>	 
+	<if test="dbSchId != null" >
+	   AND A.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+	</if>	 
+	<if test="ddlTblPnm != null" >
+	   AND ( UPPER(T.DDL_TBL_LNM) LIKE '%' || UPPER(#{ddlTblPnm,jdbcType=VARCHAR}) || '%' 
+        	OR UPPER(T.DDL_TBL_PNM) LIKE '%' || UPPER(#{ddlTblPnm,jdbcType=VARCHAR}) || '%'  ) 
+	</if>	
+	<if test="partTypCd != null" >
+	   AND A.PART_TYP_CD = #{partTypCd,jdbcType=VARCHAR}
+	</if>	 
+	<if test="partKey != null" >
+	   AND UPPER(A.PART_KEY) LIKE '%' || UPPER(#{partKey,jdbcType=VARCHAR}) || '%' 
+	</if>	 
+	<if test="subPartTypCd != null" >
+	   AND A.SUB_PART_TYP_CD = #{subPartTypCd,jdbcType=VARCHAR}
+	</if>	 
+	<if test="subPartKey != null" >
+	   AND UPPER(A.SUB_PART_KEY) LIKE '%' || UPPER(#{subPartKey,jdbcType=VARCHAR}) || '%'
+	</if>	 
+	<if test='ddlTrgDcd = "D" ' >
+	   AND A.SRC_DB_SCH_ID IS NULL
+	</if>
+	<if test="fullPath != null">
+	AND UPPER(SB.FULL_PATH) LIKE '%' || UPPER(#{fullPath,jdbcType=VARCHAR}) || '%'
+	</if> 
+	<if test="sysAreaId != null" >
+	AND SB.SYS_AREA_ID = #{sysAreaId,jdbcType=VARCHAR}
+	</if>
+	<if test="srMngNo != null">
+	AND A.SR_MNG_NO LIKE '%'||#{srMngNo,jdbcType=VARCHAR}||'%'
+	</if>    
+	<if test="prjMngNo != null">
+	AND A.PRJ_MNG_NO LIKE '%'||#{prjMngNo,jdbcType=VARCHAR}||'%'
+	</if>  
+	<if test="cudYn != null">
+	AND COALESCE(A.CUD_YN,'N') = #{cudYn,jdbcType=VARCHAR}
+	</if>  	 	
+</select>
+
+<select id="selectDdlPartHistLst" resultMap="BaseResultMap" parameterType="kr.wise.meta.ddl.service.WaqDdlPart" >
+	SELECT A.DDL_PART_ID     
+	     , A.DDL_TBL_ID      
+	     , A.DDL_TBL_PNM    
+	     , T.DDL_TBL_LNM 
+	     , A.DB_CONN_TRG_ID
+	     , DB.DB_CONN_TRG_PNM
+	     , A.DB_SCH_ID      
+	     , S.DB_SCH_PNM 
+	     , A.TBL_SPAC_ID     
+	     , A.PART_TYP_CD     
+	     , A.PART_KEY        
+	     , A.SUB_PART_TYP_CD 
+	     , A.SUB_PART_KEY    
+	     , A.RQST_NO         
+	     , A.RQST_SNO        
+	     , A.OBJ_DESCN       
+	     , A.OBJ_VERS        
+	     , A.REG_TYP_CD      
+	     , A.FRS_RQST_DTM    
+	     , A.FRS_RQST_USER_ID
+	     , A.RQST_DTM        
+	     , A.RQST_USER_ID    
+	     , A.APRV_DTM        
+	     , A.APRV_USER_ID    
+	     , A.EXP_DTM 
+	     , A.STR_DTM 	     
+	     , U.USER_NM AS FRS_RQST_USER_NM
+         , U2.USER_NM AS RQST_USER_NM
+         , D.DEPT_NM AS RQST_USER_DEPT
+         , U3.USER_NM AS APRV_USER_NM
+	     , CASE WHEN A.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD') AND A.REG_TYP_CD IN ('C', 'U') THEN '#0000FF'
+            ELSE NULL 
+            END AS FontColor
+         , A.SR_MNG_NO
+	     , A.PRJ_MNG_NO
+         , A.APL_REQ_TYP_CD
+	     , A.APL_REQ_DT
+	     , A.RQST_RESN			
+	     , PT.FULL_PATH 			
+	  FROM WAH_DDL_PART A
+	       INNER JOIN WAM_DDL_TBL T
+	          ON A.DDL_TBL_ID = T.DDL_TBL_ID
+	       INNER JOIN WAA_DB_CONN_TRG DB
+	          ON A.DB_CONN_TRG_ID = DB.DB_CONN_TRG_ID 
+	         AND DB.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+	         AND DB.REG_TYP_CD IN ('C','U')
+	       INNER JOIN WAA_DB_SCH S
+	          ON A.DB_SCH_ID = S.DB_SCH_ID 
+	         AND S.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+	         AND S.REG_TYP_CD IN ('C','U')
+	        LEFT OUTER JOIN WAA_USER U
+              ON A.FRS_RQST_USER_ID = U.USER_ID
+             AND U.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	         AND U.REG_TYP_CD IN ('C', 'U')
+	        LEFT OUTER JOIN WAA_USER U2
+              ON A.RQST_USER_ID = U2.USER_ID
+             AND U2.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	         AND U2.REG_TYP_CD IN ('C', 'U')
+      	   LEFT JOIN WAA_DEPT D
+	         ON U2.DEPT_ID = D.DEPT_ID
+	        AND D.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+	        AND D.REG_TYP_CD IN ('C','U')
+	       LEFT JOIN WAA_USER U3
+              ON A.APRV_USER_ID = U3.USER_ID
+             AND U3.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	         AND U3.REG_TYP_CD IN ('C', 'U')	         	         
+           LEFT JOIN WAM_PDM_TBL PT
+	          ON T.PDM_TBL_ID = PT.PDM_TBL_ID 	         
+	 WHERE 1 = 1
+	  AND A.DDL_PART_ID = #{ddlPartId,jdbcType=VARCHAR}
+	ORDER BY A.STR_DTM DESC
+</select>
+
+<select id="selectDdlPartDtlInfo" resultMap="BaseResultMap" parameterType="kr.wise.meta.ddl.service.WaqDdlPart" >
+	SELECT A.DDL_PART_ID     
+	     , A.DDL_TBL_ID      
+	     , A.DDL_TBL_PNM    
+	     , T.DDL_TBL_LNM 
+	     , A.DB_CONN_TRG_ID
+	     , DB.DB_CONN_TRG_PNM
+	     , A.DB_SCH_ID      
+	     , S.DB_SCH_PNM 
+	     , A.TBL_SPAC_ID     
+	     , A.PART_TYP_CD     
+	     , A.PART_KEY        
+	     , A.SUB_PART_TYP_CD 
+	     , A.SUB_PART_KEY    
+	     , A.RQST_NO         
+	     , A.RQST_SNO        
+	     , A.OBJ_DESCN       
+	     , A.OBJ_VERS        
+	     , A.REG_TYP_CD      
+	     , A.FRS_RQST_DTM    
+	     , A.FRS_RQST_USER_ID
+	     , U.USER_NM AS FRS_RQST_USER_NM
+	     , A.RQST_DTM        
+	     , A.RQST_USER_ID  
+	     , U2.USER_NM AS RQST_USER_NM 
+	     , A.APRV_DTM        
+	     , A.APRV_USER_ID
+	     , U3.USER_NM AS APRV_USER_NM    			
+	     , A.DDL_TRG_DCD     
+	     , A.SRC_DB_SCH_ID   
+	     , A.SRC_DDL_PART_ID  			
+	     , A.RQST_RESN
+		 , A.PRJ_MNG_NO
+	     , A.SR_MNG_NO	
+	     , COALESCE(A.CUD_YN,'N') AS CUD_YN	
+	     , A.APL_REQ_TYP_CD
+	     , A.APL_REQ_DT	
+	     , A.RQST_RESN
+	  FROM WAH_DDL_PART A
+	       INNER JOIN WAM_DDL_TBL T
+	          ON A.DDL_TBL_ID = T.DDL_TBL_ID
+	       INNER JOIN WAA_DB_CONN_TRG DB
+	          ON A.DB_CONN_TRG_ID = DB.DB_CONN_TRG_ID 
+	         AND DB.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+	         AND DB.REG_TYP_CD IN ('C','U')
+	       INNER JOIN WAA_DB_SCH S
+	          ON A.DB_SCH_ID = S.DB_SCH_ID 
+	         AND S.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+	         AND S.REG_TYP_CD IN ('C','U')
+	        LEFT OUTER JOIN WAA_USER U
+	          ON A.FRS_RQST_USER_ID = U.USER_ID
+	         AND U.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+	         AND U.REG_TYP_CD IN ('C','U')
+	        LEFT OUTER JOIN WAA_USER U2
+	          ON A.RQST_USER_ID = U2.USER_ID
+	         AND U2.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+	         AND U2.REG_TYP_CD IN ('C','U')
+	        LEFT OUTER JOIN WAA_USER U3
+	          ON A.APRV_USER_ID = U3.USER_ID
+	         AND U3.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+	         AND U3.REG_TYP_CD IN ('C','U')
+	        LEFT OUTER JOIN WAM_PDM_TBL PT
+	          ON T.PDM_TBL_ID = PT.PDM_TBL_ID		   			
+	 WHERE 1 = 1
+	   AND A.DDL_PART_ID = #{ddlPartId,jdbcType=VARCHAR}
+	   AND A.RQST_NO = #{rqstNo, jdbcType=VARCHAR}
+</select>
+
+
+	
+<select id="selectDdlPartMainList" resultMap="WaqDdlPartMainResultMap" parameterType="kr.wise.meta.ddl.service.WaqDdlPart" >
+SELECT 
+      M.DDL_MAIN_PART_ID
+    , M.DDL_PART_PNM
+    , M.DDL_PART_ID
+    , M.DDL_TBL_ID
+    , M.DDL_PART_VAL
+    , M.TBL_SPAC_ID
+    , M.TBL_SPAC_PNM
+    , M.OBJ_DESCN
+    , M.OBJ_VERS
+    , M.REG_TYP_CD
+    , B.DDL_TBL_PNM
+    , U.USER_NM  AS RQST_USER_NM
+    , A.RQST_DTM 
+ FROM WAQ_DDL_PART_MAIN M
+      LEFT JOIN WAH_DDL_PART A
+         ON M.DDL_PART_ID = A.DDL_PART_ID
+        AND M.RQST_NO = A.RQST_NO
+        AND M.RQST_SNO = A.RQST_SNO
+      INNER JOIN WAM_DDL_TBL B
+         ON A.DDL_TBL_ID = B.DDL_TBL_ID
+       LEFT OUTER JOIN WAA_USER U
+         ON A.RQST_USER_ID = U.USER_ID
+        AND U.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	    AND U.REG_TYP_CD IN ('C', 'U')         
+WHERE 1 = 1
+  AND M.DDL_PART_ID = #{ddlPartId,jdbcType=VARCHAR} 
+  AND M.RQST_NO = #{rqstNo, jdbcType=VARCHAR}   
+</select>
+<select id="selecDdlPartSubList" resultMap="WaqDdlPartSubtMap" parameterType="kr.wise.meta.ddl.service.WaqDdlPart" >
+SELECT 
+  	  M.DDL_SUB_PART_ID
+  	, M.DDL_PART_SUB_PNM
+    , M.DDL_MAIN_PART_ID
+    , M.DDL_PART_ID
+    , B.DDL_PART_PNM
+    , M.DDL_TBL_ID
+    , C.DDL_TBL_PNM
+    , M.DDL_PART_SUB_VAL
+    , M.TBL_SPAC_ID
+    , M.TBL_SPAC_PNM
+    , M.OBJ_DESCN
+    , M.OBJ_VERS
+    , M.REG_TYP_CD
+    , U.USER_NM  AS RQST_USER_NM
+    , A.RQST_DTM
+ FROM WAQ_DDL_PART_SUB M
+      LEFT JOIN WAH_DDL_PART A
+         ON M.DDL_PART_ID = A.DDL_PART_ID
+        AND M.RQST_NO = A.RQST_NO
+        AND M.RQST_SNO = A.RQST_SNO
+        AND M.RQST_DCD = 'CU'
+      INNER JOIN WAM_DDL_PART_MAIN B
+         ON M.DDL_MAIN_PART_ID = B.DDL_MAIN_PART_ID
+      INNER JOIN WAM_DDL_TBL C
+         ON A.DDL_TBL_ID = C.DDL_TBL_ID
+       LEFT OUTER JOIN WAA_USER U
+         ON A.RQST_USER_ID = U.USER_ID
+        AND U.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	    AND U.REG_TYP_CD IN ('C', 'U')                  
+WHERE 1 = 1
+  AND M.DDL_PART_ID = #{ddlPartId,jdbcType=VARCHAR} 
+  AND M.RQST_NO = #{rqstNo, jdbcType=VARCHAR}  
+</select>
+
+	
+	<update id="updateDdlPartRqstPrc" parameterType="kr.wise.meta.ddl.service.WamDdlTbl" >
+    UPDATE WAH_DDL_PART
+       SET 
+       	   <if test="prcTypCd != null">
+       	   PRC_TYP_CD = #{prcTypCd,jdbcType=VARCHAR},
+       	   </if>
+       	   <if test="prcDt != null">
+--           PRC_DT = TO_CHAR(NOW(), 'YYYYMMDD'),
+           PRC_DT = TO_CHAR(NOW(), 'YYYYMMDDHH24MISS'),
+           </if>
+           <if test="prcDt == null">
+           PRC_DT = NULL,
+           </if>
+       	   <if test="prcDbaId != null">
+       	   PRC_DBA_ID = #{prcDbaId,jdbcType=VARCHAR}
+           </if>
+           <if test="prcDbaId == null">
+       	   PRC_DBA_ID = NULL
+           </if>
+     WHERE DDL_PART_ID = #{objId,jdbcType=VARCHAR}
+      -- AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+     	 AND RQST_NO = #{rqstNo, jdbcType=VARCHAR}
+         AND NULLIF(PRC_DT, '') IS NULL  --처리완료왼 건은 해제못함 20171214
+  </update>
+  
+
+  
+</mapper>

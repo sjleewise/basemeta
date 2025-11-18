@@ -1,0 +1,1700 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.meta.mta.service.WaqMtaTblMapper">
+  <resultMap id="BaseResultMap" type="kr.wise.meta.mta.service.WaqMtaTbl" extends = "kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+  	<id column="RQST_NO"  property="rqstNo" jdbcType="VARCHAR" />
+    <id column="RQST_SNO" property="rqstSno" jdbcType="DECIMAL" />
+	<result column="MTA_TBL_ID"      property="mtaTblId" jdbcType="VARCHAR" />
+	<result column="MTA_TBL_PNM"     property="mtaTblPnm" jdbcType="VARCHAR" />
+	<result column="MTA_TBL_LNM"     property="mtaTblLnm" jdbcType="VARCHAR" />
+	<result column="ORG_CD"          property="orgCd" jdbcType="VARCHAR" />
+	<result column="ORG_NM"          property="orgNm" jdbcType="VARCHAR" />
+	<result column="INFO_SYS_CD"     property="infoSysCd" jdbcType="VARCHAR" />
+	<result column="INFO_SYS_NM"     property="infoSysNm" jdbcType="VARCHAR" />
+	<result column="DB_CONN_TRG_ID"  property="dbConnTrgId" jdbcType="VARCHAR" />
+	<result column="DB_CONN_TRG_PNM" property="dbConnTrgPnm" jdbcType="VARCHAR" />
+	<result column="TBL_TYP_NM"      property="tblTypNm" jdbcType="VARCHAR" />
+	<result column="REL_ENTY_NM"     property="relEntyNm" jdbcType="VARCHAR" />
+	<result column="PRSV_TERM"       property="prsvTerm" jdbcType="VARCHAR" />
+	<result column="OCCR_CYL"        property="occrCyl" jdbcType="VARCHAR" />
+	<result column="TBL_VOL"         property="tblVol" jdbcType="VARCHAR" />
+	<result column="EXPT_OCCR_CNT"   property="exptOccrCnt" jdbcType="VARCHAR" />
+	<result column="TAG_INF_NM"      property="tagInfNm" jdbcType="VARCHAR" />
+	<result column="SUBJ_NM"         property="subjNm" jdbcType="VARCHAR" />
+	<result column="SUBJ_ID"         property="subjId" jdbcType="VARCHAR" />
+	<result column="UPP_SUBJ_ID"     property="uppSubjId" jdbcType="VARCHAR" />
+	<result column="TBL_CRE_DT"      property="tblCreDt" jdbcType="VARCHAR" />
+	<result column="NOPEN_RSN"       property="nopenRsn" jdbcType="VARCHAR" />
+	<result column="OPEN_DATA_LST"   property="openDataLst" jdbcType="VARCHAR" />
+	<result column="DB_SCH_ID"       property="dbSchId" jdbcType="VARCHAR" />
+	<result column="DB_SCH_PNM"      property="dbSchPnm" jdbcType="VARCHAR" />
+		
+	<result column="DB_CONN_TRG_LNM" property="dbConnTrgLnm" jdbcType="VARCHAR" />
+	<result column="DB_SCH_LNM"      property="dbSchLnm"  jdbcType="VARCHAR" />
+	<result column="DBC_TBL_PNM"     property="dbcTblPnm" jdbcType="VARCHAR" />
+	<result column="DBC_TBL_LNM"     property="dbcTblLnm" jdbcType="VARCHAR" />	
+	
+	<result column="TBL_CLLT_DCD"       property="tblClltDcd"   jdbcType="VARCHAR" />
+	<result column="GAP_STATUS"         property="gapStatus"    jdbcType="VARCHAR" />
+	<result column="NOPEN_RSN_CD_NM"    property="nopenRsnCdNm" jdbcType="VARCHAR" />	
+	<result column="DQ_DGNS_YN"         property="dqDgnsYn"     jdbcType="VARCHAR" />
+	<result column="TBL_CLLT_DCD"       property="tblClltDcd"   jdbcType="VARCHAR" />
+	<result column="OPEN_RSN_CD"        property="openRsnCd"    jdbcType="VARCHAR" />
+	<result column="NOPEN_DTL_REL_BSS"  property="nopenDtlRelBss"    jdbcType="VARCHAR" />
+	
+	
+	<result column="REG_TBL_STATUS" property="regTblStatus" jdbcType="VARCHAR" />
+	<result column="REG_COL_STATUS" property="regColStatus" jdbcType="VARCHAR" />
+	
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+      RQST_NO, RQST_SNO, MTA_TBL_ID, MTA_TBL_PNM, MTA_TBL_LNM, RQST_DCD, RVW_STS_CD, RVW_CONTS
+    , VRF_CD
+    , VRF_RMK
+    , ORG_CD, ORG_NM, INFO_SYS_CD, INFO_SYS_NM, DB_CONN_TRG_ID, DB_CONN_TRG_PNM, TBL_TYP_NM, REL_ENTY_NM, PRSV_TERM, OCCR_CYL
+    , TBL_VOL, EXPT_OCCR_CNT, SUBJ_NM, TAG_INF_NM
+    , OBJ_DESCN, OBJ_VERS, REG_TYP_CD, FRS_RQST_USER_ID, FRS_RQST_DTM, RQST_USER_ID, RQST_DTM, APRV_USER_ID, APRV_DTM
+    , DB_SCH_ID, DB_SCH_PNM
+    , TBL_CRE_DT, NOPEN_RSN, OPEN_DATA_LST
+    , DQ_DGNS_YN
+    , TBL_CLLT_DCD 
+  </sql>
+  
+  <select id="selectMtaTblListbyMst" parameterType="kr.wise.commons.rqstmst.service.WaqMstr" resultMap="BaseResultMap">
+    <!-- 메타데이터 테이블 요청서 리스트 조회 -->
+	SELECT 	/* WaqMtaTblMapper.selectMtaTblListbyMst */
+			RQST_NO, RQST_SNO, MTA_TBL_ID, MTA_TBL_PNM, MTA_TBL_LNM, RQST_DCD
+	     , RVW_STS_CD, REG_TBL_STATUS, REG_COL_STATUS
+	     , RVW_CONTS, VRF_CD, VRF_RMK
+		 , ORG_CD, ORG_NM, INFO_SYS_CD, INFO_SYS_NM, DB_CONN_TRG_ID, DB_CONN_TRG_PNM, TBL_TYP_NM, REL_ENTY_NM, PRSV_TERM, OCCR_CYL
+		 , TBL_VOL, EXPT_OCCR_CNT, SUBJ_NM, TAG_INF_NM
+		 , OBJ_DESCN, OBJ_VERS, REG_TYP_CD, FRS_RQST_USER_ID, FRS_RQST_DTM, RQST_USER_ID, RQST_DTM, APRV_USER_ID, APRV_DTM
+		 , CASE WHEN A.VRF_CD = '2'                                   THEN '#FF0000'
+		        WHEN REG_TBL_STATUS = 'ERR' OR COL_GAP_STATUS = 'ERR' THEN '#FF0000' 
+		        ELSE CASE WHEN REG_TBL_STATUS = 'OK' AND COL_GAP_STATUS = 'OK' THEN '#0000FF'  END END AS FontColor
+		 , RQST_USER_NM
+		 , DB_SCH_ID
+		 , DB_SCH_PNM
+		 , TBL_CRE_DT
+		 , NOPEN_RSN
+		 , OPEN_DATA_LST
+		 , DQ_DGNS_YN 
+	  FROM
+		(
+		SELECT     
+			 A.RQST_NO, A.RQST_SNO, A.MTA_TBL_ID, A.MTA_TBL_PNM, A.MTA_TBL_LNM, A.RQST_DCD
+	    	 <if test='rqstStepCd == "Q" '>
+		     , CASE WHEN A.RVW_STS_CD = '2' THEN '2' ELSE '0' END AS RVW_STS_CD
+		     </if>
+		     <if test='rqstStepCd != "Q" '>
+		     , A.RVW_STS_CD
+		     </if>
+		    , (SELECT CASE WHEN MAX(DTLS.VRF_SNO) IS NULL THEN 'OK' ELSE 'ERR' END
+                 FROM WAQ_RQST_VRF_DTLS DTLS
+                WHERE DTLS.BIZ_DTL_CD = 'TBL'
+                  AND DTLS.RQST_NO    = A.RQST_NO
+                  AND DTLS.RQST_SNO   = A.RQST_SNO 
+                  AND DTLS.VRF_DTL_CD = 'MTA01'
+               ) AS REG_TBL_STATUS
+            , CONCAT((CASE WHEN COL.GAP_STATUS = 'OK' THEN '완료' ELSE '미완료' END), '(', COL.TOTAL_CNT, '/', COL.OK_CNT, ')') AS REG_COL_STATUS
+            , GAP_STATUS COL_GAP_STATUS
+		    , A.RVW_CONTS, A.VRF_CD, A.VRF_RMK
+		    , A.ORG_CD, A.ORG_NM, A.INFO_SYS_CD, A.INFO_SYS_NM, A.DB_CONN_TRG_ID, A.DB_CONN_TRG_PNM, A.TBL_TYP_NM, A.REL_ENTY_NM, A.PRSV_TERM, A.OCCR_CYL
+		    , A.TBL_VOL, A.EXPT_OCCR_CNT, A.SUBJ_NM, A.TAG_INF_NM
+		    , A.OBJ_DESCN, A.OBJ_VERS, A.REG_TYP_CD, A.FRS_RQST_USER_ID, A.FRS_RQST_DTM, A.RQST_USER_ID, A.RQST_DTM, A.APRV_USER_ID, A.APRV_DTM
+		    , CASE WHEN A.VRF_CD = '2' THEN '#FF0000' ELSE CASE WHEN A.VRF_CD = '5' THEN '#0000FF'  END END AS FontColor 
+		    , U.USER_NM AS RQST_USER_NM
+		    , A.DB_SCH_ID
+		    , A.DB_SCH_PNM
+		    , A.TBL_CRE_DT
+		    , A.NOPEN_RSN
+		    , A.OPEN_DATA_LST
+		    , A.DQ_DGNS_YN
+	    FROM WAQ_MTA_TBL A
+	    LEFT OUTER JOIN WAA_USER U
+	      ON A.RQST_USER_ID = U.USER_ID
+	     AND U.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	     AND U.REG_TYP_CD IN ('C', 'A', 'U')
+	     LEFT OUTER JOIN (
+	     						SELECT SUM(CASE WHEN GAP_STATUS = 'ERR' THEN CNT ELSE 0 END) ERR_CNT
+								, SUM(CASE WHEN GAP_STATUS = 'OK' THEN CNT ELSE 0 END) OK_CNT
+								, MAX(TOTAL_CNT) TOTAL_CNT, RQST_NO , RQST_SNO, MIN(GAP_STATUS) GAP_STATUS
+								FROM (
+										SELECT RQST_NO, RQST_SNO, GAP_STATUS, COUNT(*) CNT, TOTAL_CNT
+										FROM 
+												(	
+													SELECT COL.RQST_NO, COL.RQST_SNO, COL.RQST_DTL_SNO, CASE WHEN DTLS.VRF_SNO IS NULL THEN 'OK' ELSE 'ERR' END GAP_STATUS
+													, COUNT(*) OVER (PARTITION BY COL.RQST_NO, COL.RQST_SNO) TOTAL_CNT
+													FROM WAQ_MTA_COL COL 
+													LEFT OUTER JOIN WAQ_RQST_VRF_DTLS DTLS ON COL.RQST_NO = DTLS.RQST_NO 
+														AND COL.RQST_SNO = DTLS.RQST_SNO 
+														AND COL.RQST_DTL_SNO = DTLS.RQST_DTL_SNO
+														AND COL.REG_TYP_CD IN ('C', 'A', 'U')
+														AND DTLS.BIZ_DTL_CD = 'COL'
+														AND DTLS.VRF_DTL_CD = 'MTA01'
+													WHERE COL.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+												)
+										GROUP BY RQST_NO, RQST_SNO, GAP_STATUS
+										)
+									GROUP BY RQST_NO , RQST_SNO
+	     ) COL 
+	      ON COL.RQST_NO  = A.RQST_NO
+	     AND COL.RQST_SNO = A.RQST_SNO 
+	    WHERE A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+	    <if test='rqstStepCd == "Q" or rqstStepCd == "A" '>
+	    	AND A.VRF_CD = '1'
+	    </if>
+	    ) A
+    ORDER BY RQST_SNO
+  </select>
+
+  <select id="selectMtaTblDetail" resultMap="BaseResultMap" parameterType="kr.wise.meta.mta.service.WaqMtaTbl" >
+    <!-- 테이블 요청 상세정보 조회 -->
+    SELECT  /* WaqMtaTblMapper.selectMtaTblDetail */
+    		RQST_NO
+          , RQST_SNO
+          , MTA_TBL_ID
+          , MTA_TBL_PNM, MTA_TBL_LNM
+          , RQST_DCD, RVW_STS_CD, RVW_CONTS
+          , IFNULL(VRF_CD,'4') AS VRF_CD
+          , VRF_RMK
+          , ORG_CD, ORG_NM, INFO_SYS_CD, INFO_SYS_NM, DB_CONN_TRG_ID, DB_CONN_TRG_PNM, TBL_TYP_NM, REL_ENTY_NM, PRSV_TERM, OCCR_CYL
+          , TBL_VOL, EXPT_OCCR_CNT, SUBJ_NM, TAG_INF_NM
+          , OBJ_DESCN, OBJ_VERS, REG_TYP_CD, FRS_RQST_USER_ID, FRS_RQST_DTM, RQST_USER_ID, RQST_DTM, APRV_USER_ID, APRV_DTM
+          , DB_SCH_ID, DB_SCH_PNM
+          , TBL_CRE_DT, NOPEN_RSN, OPEN_DATA_LST
+          , DQ_DGNS_YN
+          , TBL_CLLT_DCD 
+          , OPEN_RSN_CD
+          , NOPEN_DTL_REL_BSS
+          , (SELECT CASE WHEN MAX(DTLS.VRF_SNO) IS NULL THEN 'OK' ELSE 'ERR' END
+               FROM WAQ_RQST_VRF_DTLS DTLS
+              WHERE DTLS.BIZ_DTL_CD = 'TBL'
+                AND DTLS.RQST_NO    = TBL.RQST_NO
+                AND DTLS.RQST_SNO   = TBL.RQST_SNO 
+                AND DTLS.VRF_DTL_CD = 'MTA01'
+             ) AS REG_TBL_STATUS
+          <!-- 비공개사유 코드명-->
+          , (	SELECT B.COMM_DTL_CD_NM
+                FROM WAA_COMM_DCD A
+                     INNER JOIN WAA_COMM_DTL_CD B
+                        ON A.COMM_DCD_ID = B.COMM_DCD_ID
+                       AND B.EXP_DTM  =  STR_TO_DATE('9999-12-31', '%Y-%m-%d')  
+                       AND B.REG_TYP_CD IN ('C','U')
+               WHERE A.COMM_DCD = 'NOPEN_RSN_CD'
+                 AND A.EXP_DTM  =  STR_TO_DATE('9999-12-31', '%Y-%m-%d')  
+                 AND A.REG_TYP_CD IN ('C','U') 
+                 AND B.COMM_DTL_CD = TBL.NOPEN_RSN) NOPEN_RSN_CD_NM
+     FROM WAQ_MTA_TBL TBL
+    WHERE RQST_NO  = #{rqstNo,jdbcType=VARCHAR}
+      AND RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+  </select>	
+
+  <insert id="insertSelective" parameterType="kr.wise.meta.mta.service.WaqMtaTbl" >
+	<selectKey keyProperty="rqstSno" resultType="int" statementType="PREPARED" order="BEFORE">
+		SELECT IFNULL(MAX(RQST_SNO), 0) + 1 FROM WAQ_MTA_TBL WHERE RQST_NO = #{rqstNo}
+  	</selectKey>
+  	insert 	/* WaqMtaTblMapper.insertSelective */
+  			into WAQ_MTA_TBL
+  	<trim prefix="(" suffix=")" suffixOverrides=",">
+		  RQST_NO,
+		  RQST_SNO,
+		<if test="mtaTblId != null">
+		  MTA_TBL_ID,
+		</if>
+		<if test="mtaTblPnm != null">
+		  MTA_TBL_PNM,
+		</if>
+		<if test="mtaTblLnm != null">
+		  MTA_TBL_LNM,
+		</if>
+		<if test="rqstDcd != null">
+		  RQST_DCD,
+		</if>
+		<if test="rvwStsCd != null">
+		  RVW_STS_CD,
+		</if>
+		<if test="rvwConts != null">
+		  RVW_CONTS,
+		</if>
+		<if test="vrfCd != null">
+		  VRF_CD,
+		</if>
+		<if test="vrfRmk != null">
+		  VRF_RMK,
+		</if>
+		<if test="orgCd != null">
+		  ORG_CD,
+		</if>
+		<if test="orgNm != null">
+		  ORG_NM,
+		</if>
+		<if test="infoSysCd != null">
+		  INFO_SYS_CD,
+		</if>
+		<if test="infoSysNm != null">
+		  INFO_SYS_NM,
+		</if>
+		<if test="dbConnTrgId != null">
+		  DB_CONN_TRG_ID,
+		</if>
+		<if test="dbConnTrgPnm != null">
+		  DB_CONN_TRG_PNM,
+		</if>
+		<if test="dbSchId != null">
+		  DB_SCH_ID,
+		</if>
+		<if test="dbSchPnm != null">
+		  DB_SCH_PNM,
+		</if>
+		<if test="tblTypNm != null">
+		  TBL_TYP_NM,
+		</if>
+		<if test="relEntyNm != null">
+		  REL_ENTY_NM,
+		</if>
+		<if test="prsvTerm != null">
+		  PRSV_TERM,
+		</if>
+		<if test="occrCyl != null">
+		  OCCR_CYL,
+		</if>
+		<if test="tblVol != null">
+		  TBL_VOL,
+		</if>
+		<if test="exptOccrCnt != null">
+		  EXPT_OCCR_CNT,
+		</if>
+		<if test="subjClDcd != null">
+		  SUBJ_CL_DCD,
+		</if>
+		<if test="subjNm != null">
+		  SUBJ_NM,
+		</if>
+		<if test="subjId != null">
+		  SUBJ_ID,
+		</if>
+		<if test="uppSubjId != null">
+		  UPP_SUBJ_ID,
+		</if>
+		<if test="tagInfNm != null">
+		  TAG_INF_NM,
+		</if>
+		<if test="objDescn != null">
+		  OBJ_DESCN,
+		</if>
+		  OBJ_VERS,
+		<if test="regTypCd != null">
+		  REG_TYP_CD,
+		</if>
+		<if test="gapStsCd != null">
+		  GAP_STS_CD,
+		</if>
+		<if test="frsRqstUserId != null">
+		  FRS_RQST_USER_ID,
+		</if>
+		  FRS_RQST_DTM,
+		<if test="rqstUserId != null">
+		  RQST_USER_ID,
+		</if>
+		  RQST_DTM,
+		<if test="tblCreDt != null">
+		  TBL_CRE_DT,
+		</if>
+		<if test="nopenRsn != null">
+		  NOPEN_RSN,
+		</if>
+		<if test="openDataLst != null">
+		  OPEN_DATA_LST,
+		</if>
+		<if test="dqDgnsYn != null">
+		  DQ_DGNS_YN,
+		</if>
+		<if test="tblClltDcd != null">
+		  TBL_CLLT_DCD,
+		</if>
+		<if test="openRsnCd != null">
+		  OPEN_RSN_CD,
+		</if>
+		<if test="nopenDtlRelBss != null">
+		  NOPEN_DTL_REL_BSS,
+		</if>
+  	</trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+        #{rqstNo,jdbcType=VARCHAR},
+        #{rqstSno,jdbcType=DECIMAL},
+		<if test="mtaTblId != null">
+		  #{mtaTblId,jdbcType=VARCHAR},
+		</if>
+		<if test="mtaTblPnm != null">
+		  #{mtaTblPnm,jdbcType=VARCHAR},
+		</if>
+		<if test="mtaTblLnm != null">
+		  REPLACE(REPLACE(#{mtaTblLnm,jdbcType=VARCHAR}, ' ', ''), '	',''),
+		</if>
+		<if test="rqstDcd != null">
+		  #{rqstDcd,jdbcType=VARCHAR},
+		</if>
+		<if test="rvwStsCd != null">
+		  #{rvwStsCd,jdbcType=VARCHAR},
+		</if>
+		<if test="rvwConts != null">
+		  #{rvwConts,jdbcType=VARCHAR},
+		</if>
+		<if test="vrfCd != null">
+		  #{vrfCd,jdbcType=VARCHAR},
+		</if>
+		<if test="vrfRmk != null">
+		  #{vrfRmk,jdbcType=VARCHAR},
+		</if>
+		<if test="orgCd != null">
+		  #{orgCd,jdbcType=VARCHAR},
+		</if>
+		<if test="orgNm != null">
+		  #{orgNm,jdbcType=VARCHAR},
+		</if>
+		<if test="infoSysCd != null">
+		  #{infoSysCd,jdbcType=VARCHAR},
+		</if>
+		<if test="infoSysNm != null">
+		  #{infoSysNm,jdbcType=VARCHAR},
+		</if>
+		<if test="dbConnTrgId != null">
+		  #{dbConnTrgId,jdbcType=VARCHAR},
+		</if>
+		<if test="dbConnTrgPnm != null">
+		  #{dbConnTrgPnm,jdbcType=VARCHAR},
+		</if>
+		<if test="dbSchId != null">
+		  #{dbSchId,jdbcType=VARCHAR},
+		</if>
+		<if test="dbSchPnm != null">
+		  #{dbSchPnm,jdbcType=VARCHAR},
+		</if>
+		<if test="tblTypNm != null">
+		  #{tblTypNm,jdbcType=VARCHAR},
+		</if>
+		<if test="relEntyNm != null">
+		  #{relEntyNm,jdbcType=VARCHAR},
+		</if>
+		<if test="prsvTerm != null">
+		  #{prsvTerm,jdbcType=VARCHAR},
+		</if>
+		<if test="occrCyl != null">
+		  #{occrCyl,jdbcType=VARCHAR},
+		</if>
+		<if test="tblVol != null">
+		  #{tblVol,jdbcType=VARCHAR},
+		</if>
+		<if test="exptOccrCnt != null">
+		  #{exptOccrCnt,jdbcType=VARCHAR},
+		</if>
+		<if test="subjClDcd != null">
+		  #{subjClDcd,jdbcType=VARCHAR},
+		</if>
+		<if test="subjNm != null">
+		  #{subjNm,jdbcType=VARCHAR},
+		</if>
+		<if test="subjId != null">
+		  #{subjId,jdbcType=VARCHAR},
+		</if>
+		<if test="uppSubjId != null">
+		  #{uppSubjId,jdbcType=VARCHAR},
+		</if>
+		<if test="tagInfNm != null">
+		  #{tagInfNm,jdbcType=VARCHAR},
+		</if>
+		<if test="objDescn != null">
+		  #{objDescn,jdbcType=VARCHAR},
+		</if>
+		  1,
+		<if test="regTypCd != null">
+		  #{regTypCd,jdbcType=VARCHAR},
+		</if>
+		<if test="gapStsCd != null">
+		  #{gapStsCd,jdbcType=VARCHAR},
+		</if>
+		<if test="frsRqstUserId != null">
+		  #{frsRqstUserId,jdbcType=VARCHAR},
+		</if>
+		  NOW(),
+		<if test="rqstUserId != null">
+		  #{rqstUserId,jdbcType=VARCHAR},
+		</if>
+		  NOW(),
+		<if test="tblCreDt != null">
+		  #{tblCreDt,jdbcType=VARCHAR},
+		</if>
+		<if test="nopenRsn != null">
+		  #{nopenRsn,jdbcType=VARCHAR},
+		</if>
+		<if test="openDataLst != null">
+		  #{openDataLst,jdbcType=VARCHAR},
+		</if>
+		<if test="dqDgnsYn != null">
+		   #{dqDgnsYn,jdbcType=VARCHAR},
+		</if>
+		<if test="tblClltDcd != null">
+		  #{tblClltDcd,jdbcType=VARCHAR},
+		</if>
+		<if test="openRsnCd != null">
+		   #{openRsnCd,jdbcType=VARCHAR},
+		</if>
+		<if test="nopenDtlRelBss != null">
+		  #{nopenDtlRelBss,jdbcType=VARCHAR},
+		</if>
+    </trim>
+  </insert>
+  <update id="updateidByKey" parameterType="kr.wise.meta.mta.service.WaqMtaTbl">
+     <!-- 신규 적재 대상 ID 업데이트 -->
+     UPDATE /* WaqMtaTblMapper.updateidByKey */
+     		WAQ_MTA_TBL 
+        SET MTA_TBL_ID = #{mtaTblId,jdbcType=VARCHAR}
+  	  WHERE RQST_NO    = #{rqstNo,jdbcType=VARCHAR}
+        AND RQST_SNO   = #{rqstSno,jdbcType=DECIMAL}
+  </update>
+  
+  <select id="selectWaqC" parameterType="map" resultMap="BaseResultMap">
+   	<!-- 신규 적재 대상 추출 -->
+   	SELECT /* WaqMtaTblMapper.selectWaqC */
+   		* FROM WAQ_MTA_TBL
+   	WHERE RQST_NO = #{rqstNo}
+   	  AND RVW_STS_CD = '1'  --승인
+   	  AND REG_TYP_CD = 'C'
+  </select>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.meta.mta.service.WaqMtaTbl" >
+  	update /* WaqMtaTblMapper.updateByPrimaryKeySelective */
+  		WAQ_MTA_TBL
+  	<set>
+  	<if test="mtaTblId != null">
+  		MTA_TBL_ID = #{mtaTblId,jdbcType=VARCHAR},
+  	</if>
+	<if test="mtaTblPnm != null">
+		MTA_TBL_PNM = #{mtaTblPnm,jdbcType=VARCHAR},
+	</if>
+	<if test="mtaTblLnm != null">
+		MTA_TBL_LNM = REPLACE(REPLACE(#{mtaTblLnm,jdbcType=VARCHAR}, ' ', ''), '	',''),
+	</if>
+	<if test="rqstDcd != null">
+		RQST_DCD = #{rqstDcd,jdbcType=VARCHAR},
+	</if>
+	<if test="rvwStsCd != null">
+		RVW_STS_CD = #{rvwStsCd,jdbcType=VARCHAR},
+	</if>
+	<if test="rvwConts != null">
+		RVW_CONTS = #{rvwConts,jdbcType=VARCHAR},
+	</if>
+	<if test="vrfCd != null">
+		VRF_CD = #{vrfCd,jdbcType=VARCHAR},
+	</if>
+	<if test="vrfRmk != null">
+		VRF_RMK = #{vrfRmk,jdbcType=VARCHAR},
+	</if>
+	<if test="orgCd != null">
+		ORG_CD = #{orgCd,jdbcType=VARCHAR},
+	</if>
+	<if test="orgNm != null">
+		ORG_NM = #{orgNm,jdbcType=VARCHAR},
+	</if>
+	<if test="infoSysCd != null">
+		INFO_SYS_CD = #{infoSysCd,jdbcType=VARCHAR},
+	</if>
+	<if test="infoSysNm != null">
+		INFO_SYS_NM = #{infoSysNm,jdbcType=VARCHAR},
+	</if>
+	<if test="dbConnTrgId != null">
+		DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR},
+	</if>
+	<if test="dbConnTrgPnm != null">
+		DB_CONN_TRG_PNM = #{dbConnTrgPnm,jdbcType=VARCHAR},
+	</if>			
+	<if test="regTypCd != null">
+		REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+	</if>
+	<if test="rqstUserId != null">
+		RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+	</if>			
+		RQST_DTM           = NOW(),
+		TBL_TYP_NM         = #{tblTypNm,jdbcType=VARCHAR},	
+		REL_ENTY_NM        = #{relEntyNm,jdbcType=VARCHAR},	
+		PRSV_TERM          = #{prsvTerm,jdbcType=VARCHAR},		
+		OCCR_CYL           = #{occrCyl,jdbcType=VARCHAR},	
+		TBL_VOL            = #{tblVol,jdbcType=VARCHAR},	
+		EXPT_OCCR_CNT      = #{exptOccrCnt,jdbcType=VARCHAR},
+		SUBJ_CL_DCD        = #{subjClDcd,jdbcType=VARCHAR},
+		SUBJ_ID            = #{subjId,jdbcType=VARCHAR},
+		UPP_SUBJ_ID        = #{uppSubjId,jdbcType=VARCHAR}, 		
+		SUBJ_NM            = #{subjNm,jdbcType=VARCHAR},	
+		TAG_INF_NM         = #{tagInfNm,jdbcType=VARCHAR},	 
+		OBJ_DESCN          = #{objDescn,jdbcType=VARCHAR},		
+		TBL_CRE_DT         = #{tblCreDt,jdbcType=VARCHAR},	
+	    NOPEN_RSN          = #{nopenRsn,jdbcType=VARCHAR},	
+	    OPEN_DATA_LST      = #{openDataLst,jdbcType=VARCHAR},	
+	    DQ_DGNS_YN         = IFNULL(#{ dqDgnsYn,jdbcType=VARCHAR},'N'),
+	    OPEN_RSN_CD        = #{openRsnCd,jdbcType=VARCHAR},
+	    NOPEN_DTL_REL_BSS  = #{nopenDtlRelBss,jdbcType=VARCHAR}  	 	     		   
+  	</set>
+    WHERE RQST_NO  = #{rqstNo,jdbcType=VARCHAR}
+   	  AND RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+  </update>
+  
+  <delete id="deleteByrqstSno" parameterType="kr.wise.meta.mta.service.WaqMtaTbl">
+  	DELETE /* WaqMtaTblMapper.deleteByrqstSno */
+  	FROM WAQ_MTA_TBL
+  	 WHERE RQST_NO  = #{rqstNo}
+  	   AND RQST_SNO = #{rqstSno}
+  </delete>
+  
+	<!-- 메타데이터 테이블 추가대상 조회 -->
+	<select id="selectwamlist" parameterType="map" resultMap="BaseResultMap" >
+     SELECT /* WaqMtaTblMapper.selectwamlist */
+			  IFNULL(SELECT IFNULL(MAX(RQST_SNO), 0) FROM WAQ_MTA_TBL WHERE RQST_NO = #{reqmst.rqstNo}),0)+ @rownum:=@rownum+1 AS RQST_SNO
+			, 'I' AS IBS_STATUS
+			, 'DD' AS RQST_DCD 
+			, A.MTA_TBL_ID
+		 	, A.MTA_TBL_PNM
+			, A.MTA_TBL_LNM 			
+			, A.ORG_CD
+			, C.ORG_NM
+			, A.INFO_SYS_CD
+			, B.INFO_SYS_NM
+			, A.DB_CONN_TRG_ID
+			, A.DB_CONN_TRG_PNM
+			, A.DB_SCH_ID
+			, A.DB_SCH_PNM
+			, A.OBJ_DESCN
+			, A.OBJ_VERS
+			, A.TBL_TYP_NM
+			, A.REL_ENTY_NM
+			, A.SUBJ_NM
+			, A.TAG_INF_NM
+			, A.PRSV_TERM
+			, A.TBL_VOL
+			, A.EXPT_OCCR_CNT
+			, A.TBL_CRE_DT
+			, A.NOPEN_RSN
+			, A.OPEN_DATA_LST
+			, A.OCCR_CYL
+			, A.TBL_CLLT_DCD 
+	   FROM WAM_MTA_TBL A
+	        INNER JOIN WAA_INFO_SYS B
+	           ON B.EXP_DTM = STR_TO_DATE('9999-12-31','%Y-%m-%d')  
+	          AND B.INFO_SYS_CD = A.INFO_SYS_CD   
+	        INNER JOIN WAA_ORG C
+	           ON C.EXP_DTM = STR_TO_DATE('9999-12-31','%Y-%m-%d')  
+	          AND C.ORG_CD = B.ORG_CD
+	  WHERE A.MTA_TBL_ID IN 
+	 <foreach collection="list" item="item" open="(" separator="," close=")">
+	  	#{item.mtaTblId}
+	 </foreach>
+	   <!-- AND A.REG_TYP_CD IN ('C', 'U') -->
+  </select>
+  
+  <!-- 검증) 메타데이터 테이블ID 생성 및 등록유형코드 생성 -->
+ <!--  <update id="updateCheckInit" parameterType="java.lang.String" >
+    UPDATE WAQ_MTA_TBL A
+       SET (A.REG_TYP_CD, A.MTA_TBL_ID) = 
+                          (SELECT CASE WHEN A.RQST_DCD = 'DD' THEN 'D' ELSE CASE WHEN MAX(B.MTA_TBL_ID ) IS NULL THEN 'C' ELSE 'U' END END
+                                , MAX(B.MTA_TBL_ID) 
+                             FROM WAM_MTA_TBL B
+                            WHERE B.REG_TYP_CD IN ('C','U')
+                     		  AND B.ORG_CD   = A.ORG_CD
+                               AND B.INFO_SYS_CD = A.INFO_SYS_CD
+                               AND B.DB_CONN_TRG_ID = A.DB_CONN_TRG_ID
+                              AND B.MTA_TBL_PNM = A.MTA_TBL_PNM                           
+                          )
+        , A.VRF_CD = '4'
+    WHERE A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+  </update> -->
+  
+  <!-- 검증) 메타데이터 록유형코드 생성 및 K -->
+  <update id="updateCheckInit" parameterType="java.lang.String" >
+    UPDATE /* WaqMtaTblMapper.updateCheckInit */
+    	WAQ_MTA_TBL A
+       SET (A.REG_TYP_CD, A.MTA_TBL_ID) = 
+                          (SELECT CASE WHEN A.RQST_DCD = 'DD' THEN 'D' ELSE CASE WHEN MAX(B.MTA_TBL_ID ) IS NULL THEN 'C' ELSE 'U' END END
+                                , MAX(B.MTA_TBL_ID) AS MTA_TBL_ID
+                             FROM WAM_MTA_TBL B
+                            WHERE B.DB_SCH_ID   = A.DB_SCH_ID
+                              AND B.MTA_TBL_PNM = A.MTA_TBL_PNM                                                   
+                          )
+        , A.VRF_CD = '4'
+    WHERE A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+  </update>
+  
+  <!-- 메타데이터 Q 테이블에 WAT 자동항목(테이블불륨) -->
+  <update id="updateTblAutoItem" parameterType="java.lang.String" >
+    UPDATE /* WaqMtaTblMapper.updateTblAutoItem */
+    	WAQ_MTA_TBL A
+       SET A.TBL_VOL = 
+                          (SELECT B.ROW_EACNT
+                             FROM WAT_DBC_TBL B
+                            WHERE B.DB_SCH_ID   = A.DB_SCH_ID
+                              AND B.DBC_TBL_NM = A.MTA_TBL_PNM                 
+                          )
+    WHERE A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+  </update>  
+  
+  <insert id="checkMtaTblItem" parameterType="map">
+  
+  	/* WaqMtaTblMapper.checkMtaTblItem */
+  	
+  	<include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSql"/>
+  	<!-- 검증쿼리 : 메타데이터 관리항목 중 필수 항목 미입력 체크 (MTA01) -->
+  	AND A.REG_TYP_CD IN ('C','U')
+   	AND (    IFNULL(A.MTA_TBL_LNM,'') = ''
+	      OR IFNULL(A.OBJ_DESCN,'')   = ''
+	      OR IFNULL(A.SUBJ_NM,'')     = '' 	      	      
+	      OR IFNULL(A.OPEN_RSN_CD,'') = ''
+	      OR IFNULL(A.DQ_DGNS_YN,'')  = ''
+	    )
+  </insert>
+
+  <insert id="checkDupTbl" parameterType="map">
+  
+  	/* WaqMtaTblMapper.checkDupTbl */
+  	
+  	<include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSql"/>
+  	<!-- 검증쿼리 : 요청서내 중복(PT001) -->
+    AND EXISTS (SELECT 1
+             FROM WAQ_MTA_TBL D
+             WHERE A.RQST_NO = D.RQST_NO
+               AND A.MTA_TBL_PNM = D.MTA_TBL_PNM
+               AND A.ORG_CD   = D.ORG_CD
+               AND A.INFO_SYS_CD = D.INFO_SYS_CD
+               AND A.DB_CONN_TRG_ID = D.DB_CONN_TRG_ID
+               AND A.RQST_SNO != D.RQST_SNO)
+  </insert>
+  
+  <insert id="checkNotExistTbl" parameterType="map">
+  
+  	/* WaqMtaTblMapper.checkNotExistTbl */
+  	
+  	<include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSql"/>
+      <!-- 검증쿼리 : 삭제대상 테이블 미존재(PT002) -->
+      AND A.RQST_DCD = 'DD'
+      AND NOT EXISTS (SELECT 1
+                  FROM WAM_MTA_TBL D
+                  WHERE A.MTA_TBL_ID = D.MTA_TBL_ID
+                    AND D.REG_TYP_CD IN ('C', 'U'))
+  </insert>
+  
+   <insert id="checkRequestTbl" parameterType="map">
+   
+   	/* WaqMtaTblMapper.checkRequestTbl */
+   	
+  	<include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSql"/>
+  	<!-- 검증쿼리 : 반려건이 아닌것 중에서 요청중인 테이블 (PT004) -->
+    AND EXISTS (
+    		SELECT 1 
+    		  FROM WAQ_MSTR E
+                   INNER JOIN WAQ_MTA_TBL D
+                      ON E.RQST_NO = D.RQST_NO
+             WHERE E.RQST_NO != #{rqstNo}
+               AND D.DB_SCH_ID   = A.DB_SCH_ID
+               AND D.MTA_TBL_PNM = A.MTA_TBL_PNM
+               AND E.RQST_STEP_CD = 'Q'       
+               AND D.VRF_CD = '1'         
+			   AND IFNULL(D.RVW_STS_CD, 0) != '2'
+               )
+  </insert>
+  
+  <insert id="checkColCnt" parameterType="map">
+  
+  	/* WaqMtaTblMapper.checkColCnt */
+  	
+	  <include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSql"/>
+	  <!-- 검증쿼리 : 컬럼 존재여부 체크(PT006) -->
+      <![CDATA[
+      AND A.RQST_DCD = 'CU'
+      AND NOT EXISTS ( SELECT 1
+						       FROM WAQ_MTA_COL X
+						      WHERE X.RQST_NO = A.RQST_NO 
+						         AND X.RQST_SNO = A.RQST_SNO )
+      ]]>
+  </insert>
+  
+  	<insert id="checkNotChgData" parameterType="map">
+  	
+  		/* WaqMtaTblMapper.checkNotChgData */
+  		
+	  <!-- <include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSql"/>  -->
+	  
+	  <include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.updateVrfNotChg"/>
+	  <!-- 검증쿼리 : 변경일 때 변경된 데이터가 없을 경우 (PT000) -->
+      AND A.REG_TYP_CD = 'U'
+      AND EXISTS (
+      		SELECT 1 
+      		  FROM WAM_MTA_TBL D
+      		 WHERE A.ORG_CD         = D.ORG_CD
+               AND A.INFO_SYS_CD    = D.INFO_SYS_CD
+               AND A.DB_CONN_TRG_ID = D.DB_CONN_TRG_ID
+      		   AND A.MTA_TBL_PNM    = D.MTA_TBL_PNM
+      		   AND IFNULL(A.MTA_TBL_LNM,'')       = IFNULL(D.MTA_TBL_LNM,'')
+      		   AND IFNULL(A.REL_ENTY_NM,'')       = IFNULL(D.REL_ENTY_NM,'')
+      		   AND IFNULL(A.PRSV_TERM,'')         = IFNULL(D.PRSV_TERM,'')
+      		   AND IFNULL(A.OCCR_CYL,'')          = IFNULL(D.OCCR_CYL,'')
+      		   AND IFNULL(A.EXPT_OCCR_CNT,'')     = IFNULL(D.EXPT_OCCR_CNT,'')
+      		   AND IFNULL(A.SUBJ_NM,'')           = IFNULL(D.SUBJ_NM,'')
+      		   AND IFNULL(A.TAG_INF_NM,'')        = IFNULL(D.TAG_INF_NM,'')
+      		   AND IFNULL(A.OBJ_DESCN,'')         = IFNULL(D.OBJ_DESCN,'')
+      		   AND IFNULL(A.EXPT_OCCR_CNT,'')     = IFNULL(D.EXPT_OCCR_CNT,'')
+      		   AND IFNULL(A.DQ_DGNS_YN,'')        = IFNULL(D.DQ_DGNS_YN,'')
+      		   AND IFNULL(A.OPEN_RSN_CD,'')       = IFNULL(D.OPEN_RSN_CD,'')
+      		   AND IFNULL(A.NOPEN_RSN,'')         = IFNULL(D.NOPEN_RSN,'')
+      		   AND IFNULL(A.NOPEN_DTL_REL_BSS,'') = IFNULL(D.NOPEN_DTL_REL_BSS,'')
+      		)
+      AND NOT EXISTS (
+      		SELECT 1 
+      		  FROM WAQ_MTA_COL D
+      		 WHERE D.RQST_NO  = A.RQST_NO
+               AND D.RQST_SNO = A.RQST_SNO
+               AND (D.VRF_CD = '1' OR D.REG_TYP_CD IN ('C','D'))
+      		)
+	</insert>
+  
+ 	<!-- #승인관련 -->
+	<!-- 승인/반려 업데이트 -->
+	<update id="updatervwStsCd" parameterType="kr.wise.meta.mta.service.WaqMtaTbl" >
+		UPDATE 	/* WaqMtaTblMapper.updatervwStsCd */
+				WAQ_MTA_TBL
+		<set>
+		    RVW_STS_CD 	= #{rvwStsCd} , 
+			RVW_CONTS 	= #{rvwConts} , 
+			APRV_DTM	= NOW() ,
+			APRV_USER_ID = #{aprvUserId}
+		</set>
+	  WHERE RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+	    AND RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+	    AND VRF_CD = '1'
+	    AND IFNULL(RVW_STS_CD, '_') != '2'
+	</update>
+
+   	<!-- WAQ ID, VERS 등을 업데이트... -->
+	<update id="updateWaqCUD" parameterType="map">
+	/*WAQ ID, VERS 등을 업데이트*/
+	UPDATE 	/* WaqMtaTblMapper.updateWaqCUD */
+			WAQ_MTA_TBL A
+	SET ( MTA_TBL_ID, OBJ_VERS, FRS_RQST_DTM, FRS_RQST_USER_ID) = (
+	          SELECT B.MTA_TBL_ID AS MTA_TBL_ID
+	               , IFNULL(B.OBJ_VERS, 0) + 1 AS OBJ_VERS
+	               , B.FRS_RQST_DTM
+	               , B.FRS_RQST_USER_ID
+	           FROM WAM_MTA_TBL B
+	          WHERE B.MTA_TBL_ID = A.MTA_TBL_ID
+	            AND B.REG_TYP_CD IN ('C', 'U')  
+	)
+	WHERE A.RQST_NO = #{rqstNo}
+	--AND A.VRF_CD = '1' 		--등록가능
+	AND A.RVW_STS_CD = '1'  --승인
+	AND EXISTS (
+		SELECT 1
+		  FROM WAM_MTA_TBL B
+	     WHERE B.MTA_TBL_ID = A.MTA_TBL_ID
+	       AND B.REG_TYP_CD IN ('C', 'U')
+	)
+   </update>
+
+   <delete id="deleteWAM" parameterType="map">
+    --WAM 삭제 (등록유형코드가REG_TYP_CD 변경, 삭제일 경우)
+	DELETE /* WaqMtaTblMapper.deleteWAM */
+	FROM WAM_MTA_TBL A
+	 WHERE EXISTS (
+	     SELECT 1 
+	       FROM WAQ_MTA_TBL B
+	      WHERE B.RQST_NO = #{rqstNo}
+	        AND B.RVW_STS_CD = '1'
+	        AND B.MTA_TBL_ID = A.MTA_TBL_ID 
+	 )
+    </delete>
+    
+    <sql id="wam_col">
+	, MTA_TBL_PNM, MTA_TBL_LNM, ORG_CD, INFO_SYS_CD, DB_CONN_TRG_ID, DB_CONN_TRG_PNM, DB_SCH_ID
+	, DB_SCH_PNM, OBJ_DESCN, OBJ_VERS, REG_TYP_CD, FRS_RQST_DTM, FRS_RQST_USER_ID, RQST_NO
+	, RQST_SNO, RQST_DTM, RQST_USER_ID, APRV_DTM, APRV_USER_ID, TBL_TYP_NM, REL_ENTY_NM
+	, SUBJ_CL_DCD, SUBJ_NM, SUBJ_ID, UPP_SUBJ_ID, TAG_INF_NM, PRSV_TERM, TBL_VOL, EXPT_OCCR_CNT
+	, TBL_CRE_DT, OPEN_DATA_LST, OCCR_CYL, FULL_PATH
+	, DQ_DGNS_YN
+	, TBL_CLLT_DCD
+	, OPEN_RSN_CD
+	, NOPEN_RSN 
+	, NOPEN_DTL_REL_BSS
+    </sql>
+    
+	<insert id="insertWAM" parameterType="map"> 
+   	--WAM 추가 (WAQ 내용을 추가, REG_TYP_CD 가 신규,변경일 경우)
+	INSERT 	/* WaqMtaTblMapper.insertWAM */
+			INTO WAM_MTA_TBL 
+	(
+	   MTA_TBL_ID 	
+	   <include refid="wam_col"/>
+	   , GAP_STS_CD
+	)
+	SELECT MTA_TBL_ID 	
+	       <include refid="wam_col"/>
+	    , 'S' <!-- 승인처리 -->
+	 FROM WAQ_MTA_TBL A
+	WHERE A.RQST_NO = #{rqstNo}
+	  AND A.RVW_STS_CD = '1'
+	  AND A.REG_TYP_CD IN ('C', 'U')
+   </insert>  
+   
+   <!-- 메타데이터 등록 > 추가_변경등록 collector 수집메타 정보 조회 (미사용예정) -->
+    <select id="selectDbcTblList" parameterType="kr.wise.meta.mta.service.WaqMtaTbl" resultMap="BaseResultMap">
+    SELECT	/* WaqMtaTblMapper.selectDbcTblList */
+    		A.DB_CONN_TRG_ID
+			, C.DB_CONN_TRG_PNM
+			, C.DB_CONN_TRG_LNM
+			, C.INFO_SYS_CD
+			, B.DB_SCH_ID
+			, B.DB_SCH_PNM
+			, B.DB_SCH_LNM
+			, D.ORG_CD
+			, E.ORG_NM
+			, A.DBC_TBL_NM AS DBC_TBL_PNM
+			, A.DBC_TBL_KOR_NM AS DBC_TBL_LNM
+			, A.DESCN AS OBJ_DESCN
+			, A.TBL_CLLT_DCD
+			, IFNULL(MCOL.GAP_STATUS, 'GAP') GAP_STATUS
+			,CASE WHEN IFNULL(MCOL.GAP_STATUS, 'GAP') = 'GAP' THEN '#FF0000' END AS FontColor
+			, MCOL.MTA_TBL_ID
+	   FROM WAT_DBC_TBL A 
+			INNER JOIN WAA_DB_SCH B ON A.DB_SCH_ID = B.DB_SCH_ID 
+				AND A.DB_CONN_TRG_ID = B.DB_CONN_TRG_ID
+				AND B.EXP_DTM = STR_TO_DATE('99991231','%Y%m%d')
+			INNER JOIN WAA_DB_CONN_TRG C ON C.DB_CONN_TRG_ID = B.DB_CONN_TRG_ID
+				AND C.EXP_DTM = STR_TO_DATE('99991231','%Y%m%d')
+				AND C.REG_TYP_CD IN ('C','U')
+			INNER JOIN WAA_INFO_SYS D ON D.INFO_SYS_CD = C.INFO_SYS_CD
+				AND D.EXP_DTM = STR_TO_DATE('99991231','%Y%m%d')
+			INNER JOIN WAA_ORG E ON E.ORG_CD = D.ORG_CD
+				AND E.EXP_DTM = STR_TO_DATE('99991231','%Y%m%d')
+				AND E.REG_TYP_CD IN ('C','U')
+			LEFT OUTER JOIN (SELECT MTA_TBL_ID
+												, MTA_TBL_PNM
+												, db_conn_trg_id
+												, MTA_DB_SCH_ID
+												, ORG_CD
+												, CASE WHEN TOTAL_CNT = CNT THEN 'NML' ELSE 'GAP' END GAP_STATUS
+										FROM
+												(SELECT 		
+														 	  A.MTA_TBL_ID
+															, A.MTA_TBL_PNM
+															, A.ORG_CD
+															, A.DB_SCH_ID MTA_DB_SCH_ID
+															, A.db_conn_trg_id
+															, B.MTA_COL_ID
+															, B.MTA_COL_PNM
+															, C.DB_SCH_ID
+															, C.DBC_TBL_NM
+															, C.DBC_COL_NM
+															, COUNT(*) OVER (PARTITION BY A.MTA_TBL_ID) TOTAL_CNT
+															, COUNT(*) OVER (PARTITION BY A.MTA_TBL_ID, C.DB_SCH_ID) CNT
+												FROM WAM_MTA_TBL A
+														INNER JOIN WAM_MTA_COL B ON A.MTA_TBL_ID = B.MTA_TBL_ID
+															AND IFNULL(A.REG_TYP_CD, '') IN ('C','U')
+															<if test="orgCd != null">
+															AND	A.ORG_CD = #{orgCd,jdbcType=VARCHAR}
+															</if>
+															<if test="infoSysCd != null">
+															AND	A.INFO_SYS_CD = #{infoSysCd,jdbcType=VARCHAR}
+															</if>
+															<if test="dbSchId != null">
+															AND A.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+															</if>
+															<if test="dbConnTrgId != null">
+															AND A.DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR}
+															</if>
+															AND IFNULL(B.REG_TYP_CD, 'C') IN ('C','U')	
+														LEFT OUTER JOIN WAT_DBC_COL C ON A.DB_SCH_ID = C.DB_SCH_ID
+															AND A.MTA_TBL_PNM = C.DBC_TBL_NM
+															AND B.MTA_COL_PNM = C.DBC_COL_NM
+															AND IFNULL(B.MTA_COL_LNM, '') = IFNULL(C.DBC_COL_KOR_NM, '')
+															AND IFNULL(B.DATA_TYPE, '') = IFNULL(C.DATA_TYPE, '')
+															AND IFNULL(B.DATA_LEN, '') = IFNULL(C.DATA_LEN, '')
+															AND IFNULL(B.DATA_SCAL, '') = IFNULL(C.DATA_PNT, '')
+															AND (CASE WHEN IFNULL(B.NONUL_YN, '') = 'Y' THEN 'Y' ELSE 'N' END) = (CASE WHEN  IFNULL(C.NULL_YN, '') = 'N' THEN 'Y' ELSE 'N' END)
+															AND IFNULL(B.DEFLT_VAL, '') = IFNULL(C.DEFLT_VAL, '')
+															AND IFNULL(B.PK_YN, '') = IFNULL(C.PK_YN, '')
+															AND IFNULL(B.FK_YN, '') = IFNULL(C.FK_YN, '')
+															AND IFNULL(B.COL_ORD, 0) = IFNULL(C.ORD, 0)
+															AND IFNULL(B.PK_ORD, 0) = IFNULL(C.PK_ORD, 0)
+															AND IFNULL(B.OBJ_DESCN, '') = IFNULL(C.COL_DESCN, '')
+															AND IFNULL(C.REG_TYP_CD, 'C') IN ('C','U')
+													)	
+										GROUP BY MTA_TBL_ID, MTA_TBL_PNM, db_conn_trg_id, MTA_DB_SCH_ID, ORG_CD ) MCOL ON A.DB_SCH_ID = MCOL.MTA_DB_SCH_ID
+							AND A.DBC_TBL_NM = MCOL.MTA_TBL_PNM
+							AND C.DB_CONN_TRG_ID = MCOL.DB_CONN_TRG_ID
+							AND E.ORG_CD = MCOL.ORG_CD
+		<where>
+		AND IFNULL(A.REG_TYP_CD, 'C') IN ('C','U')
+		<if test="dbSchId != null">
+		AND A.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+		</if>
+		<if test="dbConnTrgId != null">
+		AND A.DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR}
+		</if>
+		<if test="infoSysCd != null">
+		AND C.INFO_SYS_CD = #{infoSysCd,jdbcType=VARCHAR}
+		</if>
+		<if test="orgCd != null">
+		AND	E.ORG_CD = #{orgCd,jdbcType=VARCHAR}
+		</if>
+		<if test="tblNm != null">
+		AND (A.DBC_TBL_NM LIKE CONCAT('%', UPPER(#{tblNm,jdbcType=VARCHAR}), '%')
+				OR A.DBC_TBL_NM LIKE CONCAT('%', #{tblNm,jdbcType=VARCHAR}, '%')
+				OR A.DBC_TBL_KOR_NM LIKE CONCAT('%', #{tblNm,jdbcType=VARCHAR}, '%'))
+		</if>
+		<if test="gapStatus != null">
+		AND	IFNULL(MCOL.GAP_STATUS, 'GAP') = #{gapStatus,jdbcType=VARCHAR}
+		</if>
+		</where>
+	<!-- SELECT   A.DB_CONN_TRG_ID
+			, C.DB_CONN_TRG_PNM
+			, C.DB_CONN_TRG_LNM
+			, C.INFO_SYS_CD
+			, B.DB_SCH_ID
+			, B.DB_SCH_PNM
+			, B.DB_SCH_LNM
+			, D.ORG_CD
+			, A.DBC_TBL_NM AS DBC_TBL_PNM
+			, A.DBC_TBL_KOR_NM AS DBC_TBL_LNM
+			, A.DESCN AS OBJ_DESCN
+	FROM    WAT_DBC_TBL A 
+			INNER JOIN WAA_DB_SCH B
+			ON A.DB_SCH_ID = B.DB_SCH_ID 
+			AND A.DB_CONN_TRG_ID = B.DB_CONN_TRG_ID
+			AND B.EXP_DTM = STR_TO_DATE('99991231','%Y%m%d')
+			INNER JOIN WAA_DB_CONN_TRG C
+			ON C.DB_CONN_TRG_ID = B.DB_CONN_TRG_ID
+			AND C.EXP_DTM = STR_TO_DATE('99991231','%Y%m%d')
+			AND C.REG_TYP_CD IN ('C','U')
+			INNER JOIN WAA_INFO_SYS D
+			ON D.INFO_SYS_CD = C.INFO_SYS_CD
+			AND D.EXP_DTM = STR_TO_DATE('99991231','%Y%m%d')
+			<if test="dbConnTrgId != null">
+			AND A.DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR}
+			</if>
+			<if test="dbSchId != null">
+			AND A.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+			</if>
+			<if test="infoSysCd != null">
+			AND C.INFO_SYS_CD = #{infoSysCd,jdbcType=VARCHAR}
+			</if>
+			<if test="orgCd != null">
+			AND	D.ORG_CD = #{orgCd,jdbcType=VARCHAR}
+			</if>
+			<if test="tblNm != null">
+			AND (A.DBC_TBL_NM LIKE '%'||UPPER(#{tblNm,jdbcType=VARCHAR})||'%'
+					OR A.DBC_TBL_NM LIKE '%'||#{tblNm,jdbcType=VARCHAR}||'%'
+					OR A.DBC_TBL_KOR_NM LIKE '%'||#{tblNm,jdbcType=VARCHAR}||'%')
+			</if>      -->                                 
+	</select>
+	
+	<select id="selectdbclist" parameterType="map" resultMap="BaseResultMap" >
+  	<!-- 메타데이터 테이블 추가대상 조회 -->
+		SELECT /* WaqMtaTblMapper.selectdbclist */
+			  IFNULL((SELECT IFNULL(MAX(RQST_SNO), 0) FROM WAQ_MTA_TBL WHERE RQST_NO = #{reqmst.rqstNo}),0) + @rownum:=@rownum+1 AS RQST_SNO
+			, 'I' AS IBS_STATUS
+			, F.MTA_TBL_ID
+		 	, A.DBC_TBL_NM AS MTA_TBL_PNM
+			, A.DBC_TBL_KOR_NM AS MTA_TBL_LNM
+			, #{reqmst.rqstDcd} AS RQST_DCD
+			, E.ORG_CD
+			, E.ORG_NM
+			, C.INFO_SYS_CD
+			, D.INFO_SYS_NM			
+			, A.DB_CONN_TRG_ID
+ 			, C.DB_CONN_TRG_PNM
+ 			, B.DB_SCH_ID 
+			, B.DB_SCH_PNM
+			, F.TBL_TYP_NM
+			, F.REL_ENTY_NM
+			, F.PRSV_TERM
+			, F.OCCR_CYL
+			, F.TBL_VOL
+			, F.SUBJ_NM
+			, F.TAG_INF_NM
+			, IFNULL(STR_TO_DATE(A.TBL_CRT_DTM, '%Y-%m-%d') , F.TBL_CRE_DT)  <!-- , F.TBL_CRE_DT -->
+			, F.NOPEN_RSN
+			, F.OPEN_DATA_LST
+		FROM WAT_DBC_TBL A 
+			INNER JOIN WAA_DB_SCH B ON A.DB_SCH_ID = B.DB_SCH_ID 
+			AND A.DB_CONN_TRG_ID = B.DB_CONN_TRG_ID 
+			AND B.REG_TYP_CD IN ('C', 'U') 
+			AND B.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d') 
+			INNER JOIN WAA_DB_CONN_TRG C ON C.DB_CONN_TRG_ID = B.DB_CONN_TRG_ID 
+			AND C.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+			LEFT OUTER JOIN WAA_INFO_SYS D ON C.INFO_SYS_CD = D.INFO_SYS_CD AND D.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+			INNER JOIN WAA_ORG E ON E.ORG_CD = D.ORG_CD 
+			AND E.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d') 
+			AND E.REG_TYP_CD IN ('C', 'U') 
+			LEFT OUTER JOIN WAM_MTA_TBL F ON A.DB_SCH_ID = F.DB_SCH_ID AND A.DBC_TBL_NM = F.MTA_TBL_PNM AND IFNULL(F.REG_TYP_CD, 'C') IN ('C', 'U') 
+	<where>
+			<!--  A.REG_TYP IN ('C', 'U')
+	    AND --> 
+	 AND IFNULL(A.REG_TYP_CD, 'C') IN ('C', 'U')
+	 AND (A.DB_SCH_ID, A.DBC_TBL_NM) IN 
+	 <foreach collection="list" item="item" open="(" separator="," close=",('',''))">
+	  	(#{item.dbSchId,jdbcType=VARCHAR}, #{item.dbcTblPnm,jdbcType=VARCHAR})
+	 </foreach>
+	</where>
+
+  </select>
+  
+  <select id="selectwatlist" parameterType="map" resultMap="BaseResultMap" >
+  	<!-- 메타데이터 테이블 추가대상 조회 -->
+		SELECT 	/* WaqMtaTblMapper.selectwatlist */
+		      IFNULL((SELECT IFNULL(MAX(RQST_SNO), 0) 
+			           FROM WAQ_MTA_TBL 
+			          WHERE RQST_NO = #{reqmst.rqstNo}
+		        	),0) + @rownum:=@rownum+1 AS RQST_SNO
+			, 'I' AS IBS_STATUS
+			, 'CU' AS RQST_DCD 
+			, F.MTA_TBL_ID
+		 	, A.DBC_TBL_NM                          AS MTA_TBL_PNM
+			, IFNULL(F.MTA_TBL_LNM, A.DBC_TBL_KOR_NM)  AS MTA_TBL_LNM 
+			, E.ORG_CD
+			, E.ORG_NM
+			, C.INFO_SYS_CD
+			, D.INFO_SYS_NM			
+			, A.DB_CONN_TRG_ID
+ 			, C.DB_CONN_TRG_PNM
+ 			, B.DB_SCH_ID 
+			, B.DB_SCH_PNM
+			, F.OBJ_DESCN
+			, F.TBL_TYP_NM
+			, F.REL_ENTY_NM
+			, F.PRSV_TERM
+			, F.OCCR_CYL 
+			<!-- 임시저장시 수집테이블 참조 , F.TBL_VOL -->
+			, F.SUBJ_NM
+			, F.SUBJ_ID
+			, F.UPP_SUBJ_ID
+			, F.TAG_INF_NM
+			<!-- , IFNULL(TO_CHAR(A.TBL_CRT_DTM, 'yyyymmdd'), F.TBL_CRE_DT) AS TBL_CRE_DT -->
+			, IFNULL(STR_TO_DATE(A.REG_DTM, '%Y-%m-%d'), F.TBL_CRE_DT) AS TBL_CRE_DT
+			, F.OPEN_RSN_CD   
+			, F.NOPEN_RSN      
+			, F.OPEN_DATA_LST
+			, F.DQ_DGNS_YN    AS DQ_DGNS_YN
+			, F.NOPEN_DTL_REL_BSS  
+			, A.TBL_CLLT_DCD 		
+			, A.ROW_EACNT     AS TBL_VOL		
+		FROM WAT_DBC_TBL A 
+		     INNER JOIN WAA_DB_SCH B 
+		        ON B.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d') 
+		       AND B.REG_TYP_CD IN ('C', 'U') 			  
+		       AND B.DB_SCH_ID       = A.DB_SCH_ID   			    			   
+		     INNER JOIN WAA_DB_CONN_TRG C 
+		        ON C.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')  
+		       AND C.DB_CONN_TRG_ID = B.DB_CONN_TRG_ID
+		     LEFT JOIN WAA_INFO_SYS D 
+		        ON D.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')  
+		       AND D.INFO_SYS_CD = C.INFO_SYS_CD  
+		     INNER JOIN WAA_ORG E 
+		        ON E.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d') 
+		       AND E.REG_TYP_CD IN ('C', 'U') 
+		       AND E.ORG_CD = D.ORG_CD 
+		     LEFT JOIN WAM_MTA_TBL F 
+		       ON A.DB_SCH_ID  = F.DB_SCH_ID 
+		      AND A.DBC_TBL_NM = F.MTA_TBL_PNM 			 
+	WHERE 1 = 1 		 
+	  AND (A.DB_SCH_ID, A.DBC_TBL_NM) IN 
+	  <foreach collection="list" item="item" open="(" separator="UNION ALL" close=")">
+	   	<!--  SELECT { #{item.dbSchId,jdbcType=VARCHAR}, #{item.mtaTblPnm,jdbcType=VARCHAR} } 
+	   	   FROM DB_ROOT -->
+	   	SELECT #{item.dbSchId,jdbcType=VARCHAR}, #{item.mtaTblPnm,jdbcType=VARCHAR}
+	   	  FROM DUAL
+	  </foreach>
+	
+  </select>
+  
+  <update id="updateInitGapStsCd" parameterType="map" >
+   	 UPDATE /* WaqMtaTblMapper.updateInitGapStsCd */
+   	 		WAM_MTA_TBL T
+   	    SET T.GAP_STS_CD = 'S'
+   	  WHERE IFNULL(T.GAP_STS_CD,'') != 'S'
+   	    AND T.MTA_TBL_ID IN (SELECT A.MTA_TBL_ID
+		                       FROM WAM_MTA_TBL A
+		                            INNER JOIN WAA_DB_CONN_TRG B
+		                               ON B.EXP_DTM = STR_TO_DATE('9999-12-31','%Y-%m-%d')  
+							          AND B.DB_CONN_TRG_ID = A.DB_CONN_TRG_ID    							        
+							        INNER JOIN WAQ_MSTR D
+							           ON D.RQST_NO = A.RQST_NO        
+		                      WHERE D.RQST_STEP_CD = 'A'
+		                       <if test="orgCd != null">
+		                        AND (C.UPP_ORG_CD = #{orgCd,jdbcType=VARCHAR} OR C.ORG_CD = #{orgCd,jdbcType=VARCHAR})
+		                       </if>     			      
+		                     )   
+  </update>
+  
+  <update id="updateWamMtaGapStsCd" parameterType="map" >
+      UPDATE /* WaqMtaTblMapper.updateWamMtaGapStsCd */
+			 WAM_MTA_TBL T
+		 SET GAP_STS_CD =   
+					  (SELECT GAP_STS_CD
+					     FROM (
+							   SELECT 'U'            AS GAP_STS_CD
+							         , A.DB_SCH_ID
+							         , A.DBC_TBL_NM AS MTA_TBL_PNM 
+								  FROM WAT_DBC_TBL A     
+								        INNER JOIN WAT_DBC_COL B
+								           ON B.DB_SCH_ID  = A.DB_SCH_ID
+								          AND B.DBC_TBL_NM = A.DBC_TBL_NM 
+								        INNER JOIN WAA_DB_SCH C
+								            ON C.EXP_DTM = STR_TO_DATE('9999-12-31','%Y-%m-%d')  
+								           AND C.DB_SCH_ID = A.DB_SCH_ID 
+								        INNER JOIN WAA_DB_CONN_TRG D
+								            ON D.EXP_DTM = STR_TO_DATE('9999-12-31','%Y-%m-%d')  
+								           AND D.DB_CONN_TRG_ID = C.DB_CONN_TRG_ID   
+								         INNER JOIN WAA_INFO_SYS E
+								            ON E.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d') 
+								           AND E.INFO_SYS_CD = D.INFO_SYS_CD
+								         INNER JOIN WAA_ORG F
+								            ON F.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d') 
+								           AND F.ORG_CD = D.ORG_CD    
+								 WHERE 1 = 1        
+								   <if test="orgCd != null">
+								   AND (F.UPP_ORG_CD = #{orgCd,jdbcType=VARCHAR} OR F.ORG_CD = #{orgCd,jdbcType=VARCHAR} )
+								   </if>  								   
+								   AND EXISTS (SELECT 1
+								                 FROM WAM_MTA_TBL X     
+								                WHERE X.DB_SCH_ID   = A.DB_SCH_ID
+								                  AND X.MTA_TBL_PNM = A.DBC_TBL_NM
+								               )     
+								    AND NOT EXISTS (SELECT 1
+								                      FROM WAM_MTA_TBL X     
+												           INNER JOIN WAM_MTA_COL Y
+												              ON Y.MTA_TBL_ID = X.MTA_TBL_ID
+													  WHERE X.DB_SCH_ID   = A.DB_SCH_ID
+													    AND X.MTA_TBL_PNM = A.DBC_TBL_NM
+													    AND Y.MTA_COL_PNM = B.DBC_COL_NM
+													 )      
+							     GROUP BY A.DB_SCH_ID
+								         , A.DBC_TBL_NM  								  
+							     UNION ALL
+							   SELECT 'U'              AS GAP_STS_CD   
+							         , A.DB_SCH_ID
+							         , A.MTA_TBL_PNM       
+								  FROM WAM_MTA_TBL A     
+								        INNER JOIN WAM_MTA_COL B
+								           ON B.MTA_TBL_ID = A.MTA_TBL_ID 								            
+								        INNER JOIN WAA_DB_SCH C
+								            ON C.EXP_DTM = STR_TO_DATE('9999-12-31','%Y-%m-%d')  
+								           AND C.DB_SCH_ID = A.DB_SCH_ID 
+								        INNER JOIN WAA_DB_CONN_TRG D
+								            ON D.EXP_DTM = STR_TO_DATE('9999-12-31','%Y-%m-%d')  
+								           AND D.DB_CONN_TRG_ID = C.DB_CONN_TRG_ID    
+								         INNER JOIN WAA_INFO_SYS E
+								            ON E.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d') 
+								           AND E.INFO_SYS_CD = D.INFO_SYS_CD
+								         INNER JOIN WAA_ORG F
+								            ON F.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d') 
+								           AND F.ORG_CD = D.ORG_CD    
+								         INNER JOIN WAT_DBC_TBL G
+								            ON G.DB_SCH_ID  = A.DB_SCH_ID
+								           AND G.DBC_TBL_NM = A.MTA_TBL_PNM
+								         LEFT JOIN WAT_DBC_COL H
+								            ON H.DB_SCH_ID  = A.DB_SCH_ID
+								           AND H.DBC_TBL_NM = A.MTA_TBL_PNM     
+								           AND H.DBC_COL_NM = B.MTA_COL_PNM								           
+								  WHERE 1 = 1     
+								    <if test="orgCd != null">								    						       
+								    AND (F.UPP_ORG_CD = #{orgCd,jdbcType=VARCHAR} OR F.ORG_CD = #{orgCd,jdbcType=VARCHAR} )
+								    </if>								    	 				    								   
+								    AND NOT (     IFNULL(B.DATA_TYPE,'_') = IFNULL(H.DATA_TYPE,'_')								            
+								             ) 
+							     GROUP BY A.DB_SCH_ID
+								         , A.MTA_TBL_PNM  								    	        
+							     UNION ALL
+							   SELECT 'U'              AS GAP_STS_CD   
+							         , A.DB_SCH_ID
+							         , A.MTA_TBL_PNM       
+								  FROM WAM_MTA_TBL A     
+								        INNER JOIN WAM_MTA_COL B
+								           ON B.MTA_TBL_ID = A.MTA_TBL_ID 
+								        INNER JOIN WAA_DB_SCH C
+								            ON C.EXP_DTM = STR_TO_DATE('9999-12-31','%Y-%m-%d')  
+								           AND C.DB_SCH_ID = A.DB_SCH_ID 
+								        INNER JOIN WAA_DB_CONN_TRG D
+								            ON D.EXP_DTM = STR_TO_DATE('9999-12-31','%Y-%m-%d')  
+								           AND D.DB_CONN_TRG_ID = C.DB_CONN_TRG_ID    
+								         INNER JOIN WAA_INFO_SYS E
+								            ON E.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d') 
+								           AND E.INFO_SYS_CD = D.INFO_SYS_CD
+								         INNER JOIN WAA_ORG F
+								            ON F.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d') 
+								           AND F.ORG_CD = D.ORG_CD    
+								 WHERE 1 = 1        
+								    <if test="orgCd != null">
+								    AND (F.UPP_ORG_CD = #{orgCd,jdbcType=VARCHAR} OR F.ORG_CD = #{orgCd,jdbcType=VARCHAR} )
+								    </if>  				    
+								    AND EXISTS (SELECT 1
+								                    FROM WAT_DBC_TBL X     
+								                   WHERE X.DB_SCH_ID   = A.DB_SCH_ID
+								                     AND X.DBC_TBL_NM  = A.MTA_TBL_PNM 
+								                 )     
+								    AND NOT EXISTS (SELECT 1
+								                        FROM WAT_DBC_TBL X     
+													          INNER JOIN WAT_DBC_COL Y
+													             ON Y.DB_SCH_ID  = X.DB_SCH_ID
+													            AND Y.DBC_TBL_NM = X.DBC_TBL_NM 
+													  WHERE X.DB_SCH_ID  = A.DB_SCH_ID
+													    AND X.DBC_TBL_NM = A.MTA_TBL_PNM
+													    AND Y.DBC_COL_NM = B.MTA_COL_PNM
+													 )      
+							     GROUP BY A.DB_SCH_ID
+								         , A.MTA_TBL_PNM  
+							  ) X
+							  WHERE X.DB_SCH_ID   = T.DB_SCH_ID
+							    AND X.MTA_TBL_PNM = T.MTA_TBL_PNM
+							    <!-- LIMIT 1 -->
+							    LIMIT 1	         
+					)	   
+		 WHERE 1 = 1
+		   AND T.GAP_STS_CD = 'S'   
+		   AND T.MTA_TBL_ID IN (SELECT A.MTA_TBL_ID
+		                           FROM WAM_MTA_TBL A
+		                                 INNER JOIN WAA_DB_CONN_TRG B
+		                                    ON B.EXP_DTM = STR_TO_DATE('9999-12-31','%Y-%m-%d')  
+								           AND B.DB_CONN_TRG_ID = A.DB_CONN_TRG_ID    
+								          INNER JOIN WAA_ORG C
+								            ON C.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d') 
+								           AND C.ORG_CD = B.ORG_CD      
+		                          WHERE 1 = 1
+		                            <if test="orgCd != null">
+		                            AND (C.UPP_ORG_CD = #{orgCd,jdbcType=VARCHAR} OR C.ORG_CD = #{orgCd,jdbcType=VARCHAR})
+		                            </if>    			      
+		                         )
+		   AND EXISTS (SELECT GAP_STS_CD
+					     FROM (
+							   SELECT 'U'            AS GAP_STS_CD
+							         , A.DB_SCH_ID
+							         , A.DBC_TBL_NM AS MTA_TBL_PNM 
+								  FROM WAT_DBC_TBL A     
+								        INNER JOIN WAT_DBC_COL B
+								           ON B.DB_SCH_ID  = A.DB_SCH_ID
+								          AND B.DBC_TBL_NM = A.DBC_TBL_NM 
+								        INNER JOIN WAA_DB_SCH C
+								            ON C.EXP_DTM = STR_TO_DATE('9999-12-31','%Y-%m-%d')  
+								           AND C.DB_SCH_ID = A.DB_SCH_ID 
+								        INNER JOIN WAA_DB_CONN_TRG D
+								            ON D.EXP_DTM = STR_TO_DATE('9999-12-31','%Y-%m-%d')  
+								           AND D.DB_CONN_TRG_ID = C.DB_CONN_TRG_ID   
+								         INNER JOIN WAA_INFO_SYS E
+								            ON E.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d') 
+								           AND E.INFO_SYS_CD = D.INFO_SYS_CD
+								         INNER JOIN WAA_ORG F
+								            ON F.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d') 
+								           AND F.ORG_CD = D.ORG_CD    
+								 WHERE 1 = 1      
+								    <if test="orgCd != null">  
+								    AND (F.UPP_ORG_CD = #{orgCd,jdbcType=VARCHAR} OR F.ORG_CD = #{orgCd,jdbcType=VARCHAR} )
+								    </if>  								   
+								    AND EXISTS (SELECT 1
+								                  FROM WAM_MTA_TBL X     
+								                 WHERE X.DB_SCH_ID   = A.DB_SCH_ID
+								                   AND X.MTA_TBL_PNM = A.DBC_TBL_NM
+								               )     
+								    AND NOT EXISTS (SELECT 1
+								                      FROM WAM_MTA_TBL X     
+										    		       INNER JOIN WAM_MTA_COL Y
+										    		          ON Y.MTA_TBL_ID = X.MTA_TBL_ID
+										    		  WHERE X.DB_SCH_ID   = A.DB_SCH_ID
+										    		    AND X.MTA_TBL_PNM = A.DBC_TBL_NM
+										    		    AND Y.MTA_COL_PNM = B.DBC_COL_NM
+													 )      
+							     GROUP BY A.DB_SCH_ID 
+								         , A.DBC_TBL_NM  
+							     UNION ALL
+							   SELECT 'U'              AS GAP_STS_CD   
+							         , A.DB_SCH_ID
+							         , A.MTA_TBL_PNM       
+								  FROM WAM_MTA_TBL A     
+								        INNER JOIN WAM_MTA_COL B
+								           ON B.MTA_TBL_ID = A.MTA_TBL_ID 
+								        INNER JOIN WAA_DB_SCH C
+								            ON C.EXP_DTM = STR_TO_DATE('9999-12-31','%Y-%m-%d')  
+								           AND C.DB_SCH_ID = A.DB_SCH_ID 
+								        INNER JOIN WAA_DB_CONN_TRG D
+								            ON D.EXP_DTM = STR_TO_DATE('9999-12-31','%Y-%m-%d')  
+								           AND D.DB_CONN_TRG_ID = C.DB_CONN_TRG_ID    
+								         INNER JOIN WAA_INFO_SYS E
+								            ON E.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d') 
+								           AND E.INFO_SYS_CD = D.INFO_SYS_CD
+								         INNER JOIN WAA_ORG F
+								            ON F.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d') 
+								           AND F.ORG_CD = D.ORG_CD    
+								         INNER JOIN WAT_DBC_TBL G
+								            ON G.DB_SCH_ID  = A.DB_SCH_ID
+								           AND G.DBC_TBL_NM = A.MTA_TBL_PNM
+								         LEFT JOIN WAT_DBC_COL H
+								            ON H.DB_SCH_ID  = A.DB_SCH_ID
+								           AND H.DBC_TBL_NM = A.MTA_TBL_PNM     
+								           AND H.DBC_COL_NM = B.MTA_COL_PNM
+								 WHERE 1 = 1        
+								    <if test="orgCd != null">
+								    AND (F.UPP_ORG_CD = #{orgCd,jdbcType=VARCHAR} OR F.ORG_CD = #{orgCd,jdbcType=VARCHAR} )
+								    </if>  	 								   				    								    
+								    AND NOT (      IFNULL(B.DATA_TYPE,'_') = IFNULL(H.DATA_TYPE,'_') 								               
+								             ) 
+							     GROUP BY A.DB_SCH_ID
+								         , A.MTA_TBL_PNM            
+							     UNION ALL
+							   SELECT 'U'              AS GAP_STS_CD   
+							         , A.DB_SCH_ID
+							         , A.MTA_TBL_PNM       
+								  FROM WAM_MTA_TBL A     
+								        INNER JOIN WAM_MTA_COL B
+								           ON B.MTA_TBL_ID = A.MTA_TBL_ID 
+								        INNER JOIN WAA_DB_SCH C
+								            ON C.EXP_DTM = STR_TO_DATE('9999-12-31','%Y-%m-%d')  
+								           AND C.DB_SCH_ID = A.DB_SCH_ID 
+								        INNER JOIN WAA_DB_CONN_TRG D
+								            ON D.EXP_DTM = STR_TO_DATE('9999-12-31','%Y-%m-%d')  
+								           AND D.DB_CONN_TRG_ID = C.DB_CONN_TRG_ID    
+								         INNER JOIN WAA_INFO_SYS E
+								            ON E.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d') 
+								           AND E.INFO_SYS_CD = D.INFO_SYS_CD
+								         INNER JOIN WAA_ORG F
+								            ON F.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d') 
+								           AND F.ORG_CD = D.ORG_CD    
+								 WHERE 1 = 1   
+								    <if test="orgCd != null">     
+								    AND (F.UPP_ORG_CD = #{orgCd,jdbcType=VARCHAR} OR F.ORG_CD = #{orgCd,jdbcType=VARCHAR} )
+								    </if>  				    
+								    AND EXISTS (SELECT 1
+								                    FROM WAT_DBC_TBL X     
+								                   WHERE X.DB_SCH_ID   = A.DB_SCH_ID
+								                     AND X.DBC_TBL_NM  = A.MTA_TBL_PNM 
+								                 )     
+								    AND NOT EXISTS (SELECT 1
+								                        FROM WAT_DBC_TBL X     
+													          INNER JOIN WAT_DBC_COL Y
+													             ON Y.DB_SCH_ID  = X.DB_SCH_ID
+													            AND Y.DBC_TBL_NM = X.DBC_TBL_NM 
+													  WHERE X.DB_SCH_ID  = A.DB_SCH_ID
+													    AND X.DBC_TBL_NM = A.MTA_TBL_PNM
+													    AND Y.DBC_COL_NM = B.MTA_COL_PNM
+													 )      
+							     GROUP BY A.DB_SCH_ID
+								         , A.MTA_TBL_PNM  
+							  ) X
+							  WHERE X.DB_SCH_ID   = T.DB_SCH_ID
+							    AND X.MTA_TBL_PNM = T.MTA_TBL_PNM	         
+					)	                            	  
+  </update>
+  
+   <insert id="checkColErr" parameterType="map">
+   
+   	/* WaqMtaTblMapper.checkColErr */
+   	
+	  <include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSql"/>
+	  --검증쿼리 : 컬럼 오류가 있을 경우 체크 (PT999)
+	  AND EXISTS (
+	  			  SELECT 1 
+	  			    FROM WAQ_MTA_COL D
+	  			   WHERE A.RQST_NO  = D.RQST_NO
+	  			     AND A.RQST_SNO = D.RQST_SNO
+	  			     AND D.VRF_CD = '2'
+	  			     AND EXISTS ( SELECT 1 
+	  			                    FROM WAQ_RQST_VRF_DTLS E
+	  			     			   WHERE D.RQST_NO 	    = E.RQST_NO
+	  			     			     AND D.RQST_SNO 	= E.RQST_SNO
+	  			     			     AND D.RQST_DTL_SNO = E.RQST_DTL_SNO
+	  			     			     AND E.VRF_DTL_CD NOT IN ('PC000')
+	  			                ) 
+	             )
+  </insert>
+  
+  
+  <select id="selectOrgInfoSys" parameterType="map" resultType="java.util.HashMap">
+  
+  	   SELECT /* WaqMtaTblMapper.selectOrgInfoSys */
+  	   		A.INFO_SYS_CD  
+        	, A.INFO_SYS_NM 
+        	, B.ORG_CD       AS UPCODE_CD
+         FROM WAA_INFO_SYS A
+              INNER JOIN WAA_ORG B
+                 ON B.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+                AND B.ORG_CD = A.ORG_CD   
+        WHERE A.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	      AND A.ORG_CD = #{orgCd,jdbcType=VARCHAR}  	   
+	    ORDER BY A.INFO_SYS_NM      
+  </select>
+    
+  <select id="selectInfoSysDbConnTrg" parameterType="map" resultType="java.util.HashMap">
+  
+  	   SELECT /* WaqMtaTblMapper.selectInfoSysDbConnTrg */
+  	   		A.DB_CONN_TRG_ID  
+        	, A.DB_CONN_TRG_PNM 
+        	, A.DB_CONN_TRG_LNM
+         FROM WAA_DB_CONN_TRG A             
+        WHERE A.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d') <!-- AND A.ORG_CD      = #{orgCd} -->
+	      AND A.INFO_SYS_CD = #{infoSysCd, jdbcType=VARCHAR}
+	    ORDER BY A.DB_CONN_TRG_PNM      
+  </select>
+    
+  <select id="selectInfoSysDbSch" parameterType="map" resultType="java.util.HashMap">
+  
+  	   SELECT /* WaqMtaTblMapper.selectInfoSysDbSch */
+  	   		A.DB_SCH_ID  
+        	, A.DB_SCH_PNM 
+        	, A.DB_SCH_LNM
+        	, A.DB_CONN_TRG_ID
+         FROM WAA_DB_SCH A             
+        WHERE A.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	      AND A.DB_CONN_TRG_ID = #{dbConnTrgId} 
+	    ORDER BY A.DB_SCH_PNM      
+  </select>
+  
+  <select id="selectTempRqstCnt" parameterType="map" resultType="java.util.HashMap">
+  
+  	   SELECT /* WaqMtaTblMapper.selectTempRqstCnt */
+  	   		A.RQST_NO
+  	        , A.RQST_NM         	
+  	        , A.BIZ_DCD
+  	        , C.COMM_DTL_CD_NM AS BIZ_DCD_NM
+  	        , A.RQST_STEP_CD
+  	        , D.COMM_DTL_CD_NM AS RQST_STEP_CD_NM
+         FROM WAQ_MSTR A
+              INNER JOIN
+              (SELECT RQST_NO
+                 FROM WAQ_MTA_TBL
+                GROUP BY RQST_NO 
+               ) B                 
+               ON B.RQST_NO = A.RQST_NO      
+              LEFT JOIN 
+              (SELECT B.COMM_DTL_CD, B.COMM_DTL_CD_NM
+		         FROM WAA_COMM_DCD A
+		              INNER JOIN WAA_COMM_DTL_CD B
+		                 ON A.COMM_DCD_ID = B.COMM_DCD_ID
+		                AND A.COMM_DCD = 'BIZ_DCD'
+		                AND B.EXP_DTM = STR_TO_DATE('99991231','%Y%m%d')
+		                AND B.REG_TYP_CD IN ('C','U')
+		        WHERE A.EXP_DTM = STR_TO_DATE('99991231','%Y%m%d')
+		           AND A.REG_TYP_CD IN ('C','U') 
+		      ) C
+              ON C.COMM_DTL_CD = A.BIZ_DCD    
+             LEFT JOIN 
+             (SELECT B.COMM_DTL_CD, B.COMM_DTL_CD_NM
+		        FROM WAA_COMM_DCD A
+		             INNER JOIN WAA_COMM_DTL_CD B
+		                ON A.COMM_DCD_ID = B.COMM_DCD_ID
+		               AND A.COMM_DCD = 'RQST_STEP_CD'
+		               AND B.EXP_DTM = STR_TO_DATE('99991231','%Y%m%d')
+		               AND B.REG_TYP_CD IN ('C','U')
+		        WHERE A.EXP_DTM = STR_TO_DATE('99991231','%Y%m%d')
+		          AND A.REG_TYP_CD IN ('C','U') 
+		       ) D
+               ON D.COMM_DTL_CD = A.RQST_STEP_CD               
+        WHERE 1 = 1
+          AND A.RQST_STEP_CD = 'S'
+          AND A.WRIT_USER_ID = #{writUserId} 	      
+	      AND A.WRIT_DTM = (SELECT MAX(WRIT_DTM)
+	                         FROM WAQ_MSTR A
+					              INNER JOIN WAQ_MTA_TBL B
+					                 ON B.RQST_NO = A.RQST_NO  
+					        WHERE A.RQST_STEP_CD = 'S'
+					          AND A.WRIT_USER_ID = #{writUserId}       					                      
+	                       )
+  </select>
+  
+  <delete id="deleteNotExistsWaqMstr" parameterType="map"  >
+  
+  	 DELETE /* WaqMtaTblMapper.deleteNotExistsWaqMstr */
+  	 FROM WAQ_MSTR A
+  	  WHERE A.RQST_NO = #{rqstNo, jdbcType=VARCHAR}  
+  	    AND NOT EXISTS (SELECT 1
+  	                       FROM WAQ_MTA_TBL X 
+  	                      WHERE X.RQST_NO = A.RQST_NO 
+  	                    )  
+  </delete>
+  
+  <select id="selectMtaTblByDbSchId" resultMap="BaseResultMap" parameterType="kr.wise.meta.mta.service.WaqMtaTbl" >
+   
+   SELECT /* WaqMtaTblMapper.selectMtaTblByDbSchId */
+   		A.DB_SCH_ID
+        , A.MTA_TBL_PNM  
+        , A.RQST_NO
+        , A.RQST_SNO  
+        , B.WRIT_USER_ID
+     FROM WAQ_MTA_TBL A
+          INNER JOIN WAQ_MSTR B
+             ON B.RQST_NO = A.RQST_NO
+          LEFT JOIN WAM_MTA_TBL C
+            ON C.MTA_TBL_ID = A.MTA_TBL_ID          
+    WHERE B.RQST_STEP_CD = 'S'     
+      AND A.RQST_DCD = 'CU'
+      AND B.WRIT_DTM IN (SELECT MAX(WRIT_DTM)
+                           FROM WAQ_MTA_TBL X
+                                INNER JOIN WAQ_MSTR Y
+                                   ON Y.RQST_NO = X.RQST_NO              
+                          WHERE 1 = 1  
+                            AND Y.RQST_STEP_CD = 'S' 
+                            AND X.RQST_DCD = 'CU'
+                            AND X.DB_SCH_ID    = #{dbSchId, jdbcType=VARCHAR}
+                            AND X.MTA_TBL_PNM  = #{mtaTblPnm, jdbcType=VARCHAR} 
+                            AND Y.WRIT_USER_ID = #{writUserId, jdbcType=VARCHAR}  
+                         )
+      AND A.DB_SCH_ID    = #{dbSchId, jdbcType=VARCHAR}
+      AND A.MTA_TBL_PNM  = #{mtaTblPnm, jdbcType=VARCHAR} 
+      AND B.WRIT_USER_ID = #{writUserId, jdbcType=VARCHAR}       
+  </select>	
+  
+  <delete id="deleteNotMyTempSave" parameterType="map" >
+  
+  	DELETE /* WaqMtaTblMapper.deleteNotMyTempSave */
+  	FROM WAQ_MSTR
+  	 WHERE RQST_STEP_CD = 'S'
+  	   AND WRIT_USER_ID = #{writUserId, jdbcType=VARCHAR}
+  	   AND RQST_NO IN (SELECT RQST_NO 
+  	                     FROM WAQ_MTA_TBL
+  	                    WHERE RQST_NO != #{rqstNo, jdbcType=VARCHAR}
+  	                      AND DB_SCH_ID    = #{dbSchId, jdbcType=VARCHAR}
+                          AND MTA_TBL_PNM  = #{mtaTblPnm, jdbcType=VARCHAR}     
+  	                  )   	                    	 
+  </delete>
+  
+  <delete id="deleteErrWaqMstr" parameterType="map">
+  	DELETE /* WaqMtaTblMapper.deleteErrWaqMstr */
+  	FROM WAQ_MSTR
+  	 WHERE RQST_STEP_CD = 'S'
+  	   AND RQST_NM IS NULL
+  	   AND WRIT_USER_ID = #{writUserId, jdbcType=VARCHAR} 
+  	  
+  </delete> 
+  
+  <select id="selectUpdWatMtaCheck" parameterType="map" resultMap="BaseResultMap">
+  	SELECT /* WaqMtaTblMapper.selectUpdWatMtaCheck */
+  			A.DB_SCH_ID
+			, A.DBC_TBL_NM AS MTA_TBL_PNM 
+	  FROM WAT_DBC_TBL A     
+	       INNER JOIN WAT_DBC_COL B
+	          ON B.DB_SCH_ID  = A.DB_SCH_ID
+	         AND B.DBC_TBL_NM = A.DBC_TBL_NM 
+	       INNER JOIN WAA_DB_SCH C
+	          ON C.EXP_DTM = STR_TO_DATE('9999-12-31','%Y-%m-%d')  
+	         AND C.DB_SCH_ID = A.DB_SCH_ID 
+	       INNER JOIN WAA_DB_CONN_TRG D
+	          ON D.EXP_DTM = STR_TO_DATE('9999-12-31','%Y-%m-%d')  
+	         AND D.DB_CONN_TRG_ID = C.DB_CONN_TRG_ID   
+	       INNER JOIN WAA_INFO_SYS E
+	          ON E.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d') 
+	         AND E.INFO_SYS_CD = D.INFO_SYS_CD
+	       INNER JOIN WAA_ORG F
+	          ON F.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d') 
+		    <!-- AND F.ORG_CD = D.ORG_CD -->    
+	 WHERE 1 = 1       
+	  AND EXISTS (SELECT  1
+	                FROM WAQ_MTA_TBL X
+	               WHERE X.RQST_NO = #{rqstNo, jdbcType=VARCHAR}
+	                 AND X.DB_SCH_ID = A.DB_SCH_ID
+	                 AND X.MTA_TBL_PNM = A.DBC_TBL_NM
+	             )  
+	   AND EXISTS (SELECT 1
+	                 FROM WAM_MTA_TBL X     
+	                WHERE X.DB_SCH_ID   = A.DB_SCH_ID
+	                  AND X.MTA_TBL_PNM = A.DBC_TBL_NM
+	               )     
+	      AND NOT EXISTS (SELECT 1
+	                        FROM WAQ_MTA_TBL X     
+					             INNER JOIN WAQ_MTA_COL Y
+					                ON Y.RQST_NO  = X.RQST_NO
+					               AND Y.RQST_SNO = X.RQST_SNO 
+					             INNER JOIN WAQ_MSTR Z
+					                ON Z.RQST_NO = X.RQST_NO  
+						   WHERE X.RQST_NO = #{rqstNo, jdbcType=VARCHAR}
+						     AND X.DB_SCH_ID   = A.DB_SCH_ID
+						     AND X.MTA_TBL_PNM = A.DBC_TBL_NM
+						     AND Y.MTA_COL_PNM = B.DBC_COL_NM
+						 )      
+	 GROUP BY A.DB_SCH_ID
+	         , A.DBC_TBL_NM  								      						    	        
+	 UNION ALL
+	SELECT A.DB_SCH_ID
+	     , A.MTA_TBL_PNM       
+	  FROM WAQ_MTA_TBL A     
+	       INNER JOIN WAQ_MTA_COL B
+	          ON B.RQST_NO  = A.RQST_NO
+	         AND B.RQST_SNO = A.RQST_SNO 
+	       INNER JOIN WAA_DB_SCH C
+	          ON C.EXP_DTM = STR_TO_DATE('9999-12-31','%Y-%m-%d')  
+	         AND C.DB_SCH_ID = A.DB_SCH_ID 
+	       INNER JOIN WAA_DB_CONN_TRG D
+	          ON D.EXP_DTM = STR_TO_DATE('9999-12-31','%Y-%m-%d')  
+	         AND D.DB_CONN_TRG_ID = C.DB_CONN_TRG_ID    
+	       INNER JOIN WAA_INFO_SYS E
+	          ON E.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d') 
+	         AND E.INFO_SYS_CD = D.INFO_SYS_CD
+	       INNER JOIN WAA_ORG F
+	          ON F.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d') 
+	        <!-- AND F.ORG_CD = D.ORG_CD -->    
+	       INNER JOIN WAQ_MSTR G
+	          ON G.RQST_NO = A.RQST_NO
+	 WHERE 1 = 1     
+	    AND A.RQST_NO = #{rqstNo, jdbcType=VARCHAR}
+	    AND B.RQST_DCD = 'CU'
+	    AND EXISTS (SELECT 1
+	                  FROM WAT_DBC_TBL X     
+	                 WHERE X.DB_SCH_ID   = A.DB_SCH_ID
+	                   AND X.DBC_TBL_NM  = A.MTA_TBL_PNM 
+	                )     
+	    AND NOT EXISTS (SELECT 1
+	                        FROM WAT_DBC_TBL X     
+						         INNER JOIN WAT_DBC_COL Y
+						            ON Y.DB_SCH_ID  = X.DB_SCH_ID
+						           AND Y.DBC_TBL_NM = X.DBC_TBL_NM 
+						  WHERE X.DB_SCH_ID  = A.DB_SCH_ID
+						    AND X.DBC_TBL_NM = A.MTA_TBL_PNM
+						    AND Y.DBC_COL_NM = B.MTA_COL_PNM
+						 )      
+	 GROUP BY A.DB_SCH_ID
+	         , A.MTA_TBL_PNM  
+	         
+	         
+  </select>
+  
+  <update id="updateMtaGapStsCd" parameterType="map" >
+		  UPDATE WAM_MTA_TBL
+    		SET GAP_STS_CD = 'S'
+    			, SEND_STS_CD = #{sendStsCd,jdbcType=VARCHAR}
+    			, SEND_DTM = NOW()
+    		WHERE 1=1
+    	<if test="mtaTblId != null">
+    		AND MTA_TBL_ID = #{mtaTblId,jdbcType=VARCHAR}
+    	</if>
+    	<if test='mtaRqstNo != null and mtaRqstNo != ""'>
+    		AND RQST_NO = #{mtaRqstNo,jdbcType=VARCHAR}
+    	</if>
+    		
+  </update>
+  
+  <update id="updateMtaRegTypCd" parameterType="map" >
+		UPDATE WAM_MTA_TBL A
+		   SET A.REG_TYP_CD = 'U'
+		 WHERE 1=1
+    	<if test="mtaTblId != null">
+    		AND MTA_TBL_ID = #{mtaTblId,jdbcType=VARCHAR}
+    	</if>
+    	<if test="mtaRqstNo != null">
+    		AND RQST_NO = #{mtaRqstNo,jdbcType=VARCHAR}
+    	</if>
+  </update>
+  
+  <update id="updateMtaColRegTypCd" parameterType="map" >
+		UPDATE WAM_MTA_COL A
+		   SET REG_TYP_CD = 'U'
+		 WHERE 1=1
+    	<if test="mtaTblId != null">
+    		AND MTA_TBL_ID = #{mtaTblId,jdbcType=VARCHAR}
+    	</if>
+    	<if test="mtaRqstNo != null">
+    		AND RQST_NO = #{mtaRqstNo,jdbcType=VARCHAR}
+    	</if>
+  </update>
+   
+</mapper>

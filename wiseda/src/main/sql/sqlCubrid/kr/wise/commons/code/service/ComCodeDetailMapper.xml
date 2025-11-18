@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.commons.code.service.ComCodeDetailMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.commons.code.service.ComCodeDetailVO" >
+    <id column="CODE_ID" property="codeId" jdbcType="VARCHAR" />
+    <id column="CODE" property="code" jdbcType="VARCHAR" />
+    <result column="KEYID" property="keyId" />
+    <result column="CODE_ID_NM" property="codeIdNm" jdbcType="VARCHAR" />
+    <result column="CODE_NM" property="codeNm" jdbcType="VARCHAR" />
+    <result column="CODE_DC" property="codeDc" jdbcType="VARCHAR" />
+    <result column="USE_AT"  property="useAt" jdbcType="CHAR" />
+    <result column="FRST_REGIST_PNTTM" property="frstRegistPnttm" jdbcType="TIMESTAMP" />
+    <result column="FRST_REGISTER_ID" property="frstRegisterId" jdbcType="VARCHAR" />
+    <result column="LAST_UPDT_PNTTM" property="lastUpdtPnttm" jdbcType="TIMESTAMP" />
+    <result column="LAST_UPDUSR_ID" property="lastUpdusrId" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    CODE_ID, CODE, CODE_NM, CODE_DC, USE_AT, FRST_REGIST_PNTTM, FRST_REGISTER_ID, LAST_UPDT_PNTTM, 
+    LAST_UPDUSR_ID
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="map" >
+    SELECT A.*
+	    , B.CODE_ID_NM
+	    , ROWNUM AS KEYID
+	FROM COMTCCMMNDETAILCODE A
+	JOIN COMTCCMMNCODE B
+	ON A.CODE_ID = B.CODE_ID
+	AND B.USE_AT = 'Y'
+    where A.CODE_ID = #{codeId,jdbcType=VARCHAR}
+      and A.CODE = #{code,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="selectComDetailCodeList" parameterType="kr.wise.commons.code.service.ComCodeDetailVO" resultMap="BaseResultMap">
+  	SELECT A.*
+	    , B.CODE_ID_NM
+	    , ROWNUM AS KEYID
+	FROM COMTCCMMNDETAILCODE A
+	JOIN COMTCCMMNCODE B
+	ON A.CODE_ID = B.CODE_ID
+	AND B.USE_AT = 'Y'
+    WHERE 1=1
+    <if test="codeId != null and codeId != ''">
+    	AND A.CODE_ID = #{codeId}
+    </if>
+    <if test="codeNm != null and codeNm != ''">
+  		AND A.CODE_NM  LIKE '%'|| #{codeNm} || '%'
+  	</if>
+  	ORDER BY B.CODE_ID_NM , A.CODE_NM 
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="map" >
+    delete from COMTCCMMNDETAILCODE
+    where CODE_ID = #{codeId,jdbcType=VARCHAR}
+      and CODE = #{code,jdbcType=VARCHAR}
+  </delete>
+  
+  <delete id="deleteComDetailCOde" parameterType="map">
+  	delete from COMTCCMMNDETAILCODE
+    where CODE_ID IN 
+    <foreach collection="ids" item="item" index="index" open="(" separator="," close=")" >
+    	#{item}
+    </foreach>
+    AND CODE IN
+    <foreach collection="codes" item="item2" index="index2" open="(" separator="," close=")">
+    	#{item2}
+    </foreach>
+    
+  </delete>
+  
+  <insert id="insert" parameterType="kr.wise.commons.code.service.ComCodeDetailVO" >
+    insert into COMTCCMMNDETAILCODE (CODE_ID, CODE, CODE_NM, 
+      CODE_DC, USE_AT, FRST_REGIST_PNTTM, 
+      FRST_REGISTER_ID, LAST_UPDT_PNTTM, LAST_UPDUSR_ID
+      )
+    values (#{codeId,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, #{codeNm,jdbcType=VARCHAR}, 
+      #{codeDc,jdbcType=VARCHAR}, #{useAt,jdbcType=CHAR}, #{frstRegistPnttm,jdbcType=TIMESTAMP}, 
+      #{frstRegisterId,jdbcType=VARCHAR}, #{lastUpdtPnttm,jdbcType=TIMESTAMP}, #{lastUpdusrId,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="kr.wise.commons.code.service.ComCodeDetailVO" >
+    insert into COMTCCMMNDETAILCODE
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="codeId != null" >
+        CODE_ID,
+      </if>
+      <if test="code != null" >
+        CODE,
+      </if>
+      <if test="codeNm != null" >
+        CODE_NM,
+      </if>
+      <if test="codeDc != null" >
+        CODE_DC,
+      </if>
+      <if test="useAt != null" >
+        USE_AT,
+      </if>
+      <if test="frstRegisterId != null" >
+        FRST_REGISTER_ID,
+      </if>
+        FRST_REGIST_PNTTM,
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="codeId != null" >
+        #{codeId,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="codeNm != null" >
+        #{codeNm,jdbcType=VARCHAR},
+      </if>
+      <if test="codeDc != null" >
+        #{codeDc,jdbcType=VARCHAR},
+      </if>
+      <if test="useAt != null" >
+        #{useAt,jdbcType=CHAR},
+      </if>
+      <if test="frstRegisterId != null" >
+        #{frstRegisterId,jdbcType=VARCHAR},
+      </if>
+      SYSDATETIME ,
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.commons.code.service.ComCodeDetailVO" >
+    update COMTCCMMNDETAILCODE
+    <set >
+      <if test="codeNm != null" >
+        CODE_NM = #{codeNm,jdbcType=VARCHAR},
+      </if>
+      <if test="codeDc != null" >
+        CODE_DC = #{codeDc,jdbcType=VARCHAR},
+      </if>
+      <if test="useAt != null" >
+        USE_AT = #{useAt,jdbcType=CHAR},
+      </if>
+      <if test="lastUpdusrId != null" >
+        LAST_UPDUSR_ID = #{lastUpdusrId,jdbcType=VARCHAR},
+      </if>
+        LAST_UPDT_PNTTM = SYSDATETIME ,
+    </set>
+    where CODE_ID = #{codeId,jdbcType=VARCHAR}
+      and CODE = #{code,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="kr.wise.commons.code.service.ComCodeDetailVO" >
+    update COMTCCMMNDETAILCODE
+    set CODE_NM = #{codeNm,jdbcType=VARCHAR},
+      CODE_DC = #{codeDc,jdbcType=VARCHAR},
+      USE_AT = #{useAt,jdbcType=CHAR},
+      FRST_REGIST_PNTTM = #{frstRegistPnttm,jdbcType=TIMESTAMP},
+      FRST_REGISTER_ID = #{frstRegisterId,jdbcType=VARCHAR},
+      LAST_UPDT_PNTTM = #{lastUpdtPnttm,jdbcType=TIMESTAMP},
+      LAST_UPDUSR_ID = #{lastUpdusrId,jdbcType=VARCHAR}
+    where CODE_ID = #{codeId,jdbcType=VARCHAR}
+      and CODE = #{code,jdbcType=VARCHAR}
+  </update>
+</mapper>

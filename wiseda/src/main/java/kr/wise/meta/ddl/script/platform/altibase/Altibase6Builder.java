@@ -1,0 +1,375 @@
+package kr.wise.meta.ddl.script.platform.altibase;
+
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
+import java.io.IOException;
+import java.util.Map;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
+
+import org.apache.commons.lang.StringUtils;
+
+import kr.wise.commons.cmm.exception.WiseBizException;
+import kr.wise.meta.ddl.script.model.Column;
+import kr.wise.meta.ddl.script.model.Database;
+import kr.wise.meta.ddl.script.model.Index;
+import kr.wise.meta.ddl.script.model.Table;
+import kr.wise.meta.ddl.script.platform.SqlBuilder;
+
+
+/**
+ * The SQL Builder for Oracle.
+ *
+ * @version $Revision: 893917 $
+ */
+public class Altibase6Builder extends SqlBuilder
+{
+	/** The regular expression pattern for ISO dates, i.e. 'YYYY-MM-DD'. */
+	private Pattern _isoDatePattern;
+	/** The regular expression pattern for ISO times, i.e. 'HH:MI:SS'. */
+	private Pattern _isoTimePattern;
+	/** The regular expression pattern for ISO timestamps, i.e. 'YYYY-MM-DD HH:MI:SS.fffffffff'. */
+	private Pattern _isoTimestampPattern;
+
+	/**
+     * Creates a new builder instance.
+     *
+     * @param platform The plaftform this builder belongs to
+     */
+    public Altibase6Builder()
+    {
+        super();
+        addEscapedCharSequence("'", "''");
+
+    	try
+    	{
+            _isoDatePattern      = Pattern.compile("\\d{4}\\-\\d{2}\\-\\d{2}");
+            _isoTimePattern      = Pattern.compile("\\d{2}:\\d{2}:\\d{2}");
+            _isoTimestampPattern = Pattern.compile("\\d{4}\\-\\d{2}\\-\\d{2} \\d{2}:\\d{2}:\\d{2}[\\.\\d{1,8}]?");
+        }
+    	catch (PatternSyntaxException ex)
+        {
+        	throw new WiseBizException("Oracle8Builder Error");
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void createTable(Database database, Table table, Map parameters) throws IOException
+    {
+        // lets create any sequences
+//        Column[] columns = table.getAutoIncrementColumns();
+//
+//        for (int idx = 0; idx < columns.length; idx++)
+//        {
+//            createAutoIncrementSequence(table, columns[idx]);
+//        }
+
+        super.createTable(database, table, parameters);
+
+//        for (int idx = 0; idx < columns.length; idx++)
+//        {
+//            createAutoIncrementTrigger(table, columns[idx]);
+//        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void dropTable(Table table) throws IOException
+    {
+        Column[] columns = table.getAutoIncrementColumns();
+
+        for (int idx = 0; idx < columns.length; idx++)
+        {
+            dropAutoIncrementTrigger(table, columns[idx]);
+            dropAutoIncrementSequence(table, columns[idx]);
+        }
+
+        print("DROP TABLE ");
+        printIdentifier(getTableName(table));
+        print(" CASCADE CONSTRAINTS");
+        printEndOfStatement();
+    }
+    
+    
+    /**
+     * Writes the primary key constraints of the table as alter table statements.
+     *
+     * @param table             The table
+     * @param primaryKeyColumns The primary key columns
+     */
+    public void createPrimaryKey(Table table, Column[] primaryKeyColumns) throws IOException
+    {
+        if ((primaryKeyColumns.length > 0) && shouldGeneratePrimaryKeys(primaryKeyColumns))
+        {
+            print("ALTER TABLE ");
+            printlnIdentifier(getTableName(table));
+            printIndent();
+            print("ADD CONSTRAINT ");
+            printIdentifier(getConstraintName("PK", table, null, null));
+            print(" ");
+            writePrimaryKeyStmt(table, primaryKeyColumns);
+            //INDEX 테이블 스페이스
+        	if(!StringUtils.isBlank(table.getIdxSpacPnm())) {
+        		printIndent();
+        		print("USING INDEX ");
+        		printlnIdentifier(table.getIdxSpacPnm());
+    		}
+        	println(getPlatformInfo().getSqlCommandDelimiter());
+        }
+    }
+    
+
+    /**
+     * Creates the sequence necessary for the auto-increment of the given column.
+     *
+     * @param table  The table
+     * @param column The column
+     */
+    protected void createAutoIncrementSequence(Table  table, Column column) throws IOException
+    {
+        print("CREATE SEQUENCE ");
+        printIdentifier(getConstraintName("seq", table, column.getName(), null));
+        printEndOfStatement();
+    }
+
+
+
+    /**
+     * Drops the sequence used for the auto-increment of the given column.
+     *
+     * @param table  The table
+     * @param column The column
+     */
+    protected void dropAutoIncrementSequence(Table  table, Column column) throws IOException
+    {
+        print("DROP SEQUENCE ");
+        printIdentifier(getConstraintName("seq", table, column.getName(), null));
+        printEndOfStatement();
+    }
+
+    /**
+     * Drops the trigger used for the auto-increment of the given column.
+     *
+     * @param table  The table
+     * @param column The column
+     */
+    protected void dropAutoIncrementTrigger(Table  table,
+                                            Column column) throws IOException
+    {
+        print("DROP TRIGGER ");
+        printIdentifier(getConstraintName("trg", table, column.getName(), null));
+        printEndOfStatement();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected void createTemporaryTable(Database database, Table table, Map parameters) throws IOException
+    {
+        createTable(database, table, parameters);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected void dropTemporaryTable(Database database, Table table) throws IOException
+    {
+        dropTable(table);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void dropForeignKeys(Table table) throws IOException
+    {
+        // no need to as we drop the table with CASCASE CONSTRAINTS
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void dropIndex(Table table, Index index) throws IOException
+    {
+        // Index names in Oracle are unique to a schema and hence Oracle does not
+        // use the ON <tablename> clause
+        print("DROP INDEX ");
+        printIdentifier(getIndexName(index));
+        printEndOfStatement();
+    }
+
+
+
+    /**
+     * {@inheritDoc}
+     */
+    protected void writeColumnAutoIncrementStmt(Table table, Column column) throws IOException
+    {
+        // we're using sequences instead
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getSelectLastIdentityValues(Table table)
+    {
+        Column[] columns = table.getAutoIncrementColumns();
+
+        if (columns.length > 0)
+        {
+            StringBuffer result = new StringBuffer();
+
+            result.append("SELECT ");
+            for (int idx = 0; idx < columns.length; idx++)
+            {
+                if (idx > 0)
+                {
+                    result.append(",");
+                }
+                result.append(getDelimitedIdentifier(getConstraintName("seq", table, columns[idx].getName(), null)));
+                result.append(".currval");
+            }
+            result.append(" FROM dual");
+            return result.toString();
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void addColumn(Database model, Table table, Column newColumn) throws IOException
+    {
+        print("ALTER TABLE ");
+        printlnIdentifier(getTableName(table));
+        printIndent();
+        print(" ADD ");
+        writeColumn(table, newColumn);
+        printEndOfStatement();
+        if (newColumn.isAutoIncrement())
+        {
+            createAutoIncrementSequence(table, newColumn);
+//            createAutoIncrementTrigger(table, newColumn);
+        }
+    }
+
+    /**
+     * Writes the SQL to drop a column.
+     *
+     * @param table  The table
+     * @param column The column to drop
+     */
+    public void dropColumn(Table table, Column column) throws IOException
+    {
+        if (column.isAutoIncrement())
+        {
+//            dropAutoIncrementTrigger(table, column);
+            dropAutoIncrementSequence(table, column);
+        }
+        print("ALTER TABLE ");
+        printlnIdentifier(getTableName(table));
+        printIndent();
+        print("DROP COLUMN ");
+        printIdentifier(getColumnName(column));
+        printEndOfStatement();
+    }
+
+    
+    
+    /**
+     * Returns the constraint name. This method takes care of length limitations imposed by some databases.
+     *
+     * @param prefix     The constraint prefix, can be <code>null</code>
+     * @param table      The table that the constraint belongs to
+     * @param secondPart The second name part, e.g. the name of the constraint column
+     * @param suffix     The constraint suffix, e.g. a counter (can be <code>null</code>)
+     * @return The constraint name
+     */
+    public String getConstraintName(String prefix, Table table, String secondPart, String suffix)
+    {
+        StringBuffer result = new StringBuffer();
+
+        if (prefix != null)
+        {
+            result.append(prefix);
+            result.append("_");
+        }
+        //기표원 PK 명명규칙 앞 4자리 제거 뒤 2자리 제거
+        //테이블명 TCD_XXXX_XXXX_N -> PK_XXXX_XXXX
+        result.append(   table.getName().substring(4, (table.getName().length()-2) ) );
+//        result.append(table.getName());
+        
+        if(secondPart != null){
+        	result.append("_");
+        	result.append(secondPart);
+        }
+        
+        if (suffix != null)
+        {
+            result.append("_");
+            result.append(suffix);
+        }
+        return shortenName(result.toString(), getMaxConstraintNameLength());
+    }
+    
+    
+    /**
+     * Writes the SQL to drop the primary key of the given table.
+     *
+     * @param table The table
+     */
+    public void dropPrimaryKey(Table table) throws IOException
+    {
+        print("ALTER TABLE ");
+        printlnIdentifier(getTableName(table));
+        printIndent();
+        print("DROP PRIMARY KEY");
+        printEndOfStatement();
+    }
+
+    
+    public void createComment(Table table) throws IOException {
+    	writeTableCommentStmt(table);
+    	writeColCommentStmt(table);
+    	println();
+    }
+    
+    
+    /** @param table shshin
+     * @throws IOException */
+    public void writeTableCommentStmt(Table table) throws IOException {
+    	if(!StringUtils.isBlank(table.getDescription())) {
+
+    		print("COMMENT ON TABLE ");
+    		print(getTableName(table));
+    		print(" IS '");
+    		print(table.getDescription());
+    		print("'");
+    		println(getPlatformInfo().getSqlCommandDelimiter());
+
+    	}
+
+    }
+}

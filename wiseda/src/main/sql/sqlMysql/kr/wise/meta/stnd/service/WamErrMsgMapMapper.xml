@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.meta.stnd.service.WamErrMsgMapMapper" >
+
+	<resultMap id="BaseResultMap" type="kr.wise.meta.stnd.service.WamErrMsgMap" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+		<id column="MSG_MAP_ID" property="msgMapId" jdbcType="VARCHAR" />
+		<result column="MSG_MAP_LNM" property="msgMapLnm" jdbcType="VARCHAR" />
+		<result column="MSG_MAP_PNM" property="msgMapPnm" jdbcType="VARCHAR" />
+		<result column="STD_ERR_MSG_ID" property="stdErrMsgId" jdbcType="VARCHAR" />
+		<result column="ERR_CD" property="errCd" jdbcType="VARCHAR" />
+		<result column="ISD_ERR_CAS_CTS" property="isdErrCasCts" jdbcType="VARCHAR" />
+		<result column="OSD_ERR_CAS_CTS" property="osdErrCasCts" jdbcType="VARCHAR" />
+		<result column="DMN_ID" property="dmnId" jdbcType="VARCHAR" />
+		<result column="DMN_LNM" property="dmnLnm" jdbcType="VARCHAR" />
+		<result column="DMN_PNM" property="dmnPnm" jdbcType="VARCHAR" />
+		<result column="CD_VAL_ID" property="cdValId" jdbcType="VARCHAR" />
+		<result column="CD_VAL" property="cdVal" jdbcType="VARCHAR" />
+		<result column="CD_VAL_NM" property="cdValNm" jdbcType="VARCHAR" />
+		<result column="ISTT_US_IMPO_YN" property="isttUsImpoYn" jdbcType="VARCHAR" />
+		<result column="RPST_ERCD_YN" property="rpstErcdYn" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<sql id="Base_Column_List" >
+		MSG_MAP_ID, MSG_MAP_LNM, MSG_MAP_PNM, RQST_NO, RQST_SNO, OBJ_DESCN, OBJ_VERS, REG_TYP_CD, 
+		FRS_RQST_DTM, FRS_RQST_USER_ID, RQST_DTM, RQST_USER_ID, APRV_DTM, APRV_USER_ID, STD_ERR_MSG_ID, 
+		ERR_CD, ISD_ERR_CAS_CTS, OSD_ERR_CAS_CTS, DMN_ID, DMN_LNM, DMN_PNM, CD_VAL_ID, CD_VAL,
+	CD_VAL_NM, ISTT_US_IMPO_YN, RPST_ERCD_YN
+	</sql>
+
+	<select id="selectList" parameterType="kr.wise.meta.stnd.service.WamErrMsgMap" resultMap="BaseResultMap">
+	
+		SELECT	/* WamErrMsgMapMapper.selectList */
+			A.*
+		FROM
+			WAM_ERR_MSG_MAP A
+		<where>
+			<if test="msgMapId != null" >
+			AND MSG_MAP_ID LIKE '%'||#{msgMapId,jdbcType=VARCHAR}||'%'
+			</if>
+			<if test="stdErrMsgId != null" >
+			AND STD_ERR_MSG_ID LIKE '%'||#{stdErrMsgId,jdbcType=VARCHAR}||'%'
+			</if>
+			<if test="errCd != null" >
+			AND ERR_CD LIKE '%'||#{errCd,jdbcType=VARCHAR}||'%'
+			</if>
+			<if test="isdErrCasCts != null" >
+			AND ISD_ERR_CAS_CTS LIKE '%'||#{isdErrCasCts,jdbcType=VARCHAR}||'%'
+			</if>
+			<if test="osdErrCasCts != null" >
+			AND OSD_ERR_CAS_CTS LIKE '%'||#{osdErrCasCts,jdbcType=VARCHAR}||'%'
+			</if>
+			<if test="dmnId != null" >
+			AND DMN_ID LIKE '%'||#{dmnId,jdbcType=VARCHAR}||'%'
+			</if>
+			<if test="dmnLnm != null" >
+			AND DMN_LNM LIKE '%'||#{dmnLnm,jdbcType=VARCHAR}||'%'
+			</if>
+			<if test="dmnPnm != null" >
+			AND DMN_PNM LIKE '%'||#{dmnPnm,jdbcType=VARCHAR}||'%'
+			</if>
+			<if test="cdValId != null" >
+			AND CD_VAL_ID LIKE '%'||#{cdValId,jdbcType=VARCHAR}||'%'
+			</if>
+			 <if test="cdVal != null" >
+			AND CD_VAL LIKE '%'||#{cdVal,jdbcType=VARCHAR}||'%'
+			</if>
+			<if test="cdValNm != null" >
+			AND CD_VAL_NM LIKE '%'||#{cdValNm,jdbcType=VARCHAR}||'%'
+			</if>
+			<if test="isttUsImpoYn != null" >
+			AND ISTT_US_IMPO_YN LIKE '%'||#{isttUsImpoYn,jdbcType=VARCHAR}||'%'
+			</if>
+			<if test="rpstErcdYn != null" >
+			AND RPST_ERCD_YN LIKE '%'||#{rpstErcdYn,jdbcType=VARCHAR}||'%'
+			</if>
+	   </where>
+	</select>
+
+	<select id="selectMessageDtl" parameterType="java.lang.String" resultMap="BaseResultMap">
+	
+		SELECT	/* WamErrMsgMapMapper.selectMessageDtl */
+			A.*
+			GET_USER_NM(A.FRS_RQST_USER_ID) AS FRS_RQST_USER_NM,
+			GET_USER_NM(A.RQST_USER_ID) AS RQST_USER_NM,
+			GET_USER_NM(A.APRV_USER_ID) AS APRV_USER_NM
+		FROM
+			WAM_ERR_MSG_MAP A
+		<where>
+			MSG_MAP_ID = #{msgMapId,jdbcType=VARCHAR}  
+		</where>
+
+	</select>
+	
+	<select id="selectChangeList" parameterType="java.lang.String" resultMap="BaseResultMap">
+	
+		SELECT	/* WamErrMsgMapMapper.selectChangeList */
+			A.*
+		FROM
+			WAH_ERR_MSG_MAP A
+		<where>
+			MSG_MAP_ID = #{msgMapId,jdbcType=VARCHAR}  
+		</where> 
+		ORDER BY
+			OBJ_VERS DESC
+
+	</select>
+	
+</mapper>

@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.portal.myjob.service.OwnShipMapper" >
+
+    <resultMap id="tblChangeMap" type="kr.wise.portal.myjob.service.TblChangeVO" >
+        <result column="TOT_CNT" property="totCnt"  />
+        <result column="rn" property="rn"  />
+        <result column="DATAMODEL_NM" property="dataModelNm"  />
+    	<result column="PRIMARY_SUBJ_NM"  property="primarySubjNm"  />
+    	<result column="SUBJ_NM"  property="subjNm"  />	
+    	<result column="OBJ_ENM"  property="objEnm"  />
+    	<result column="OBJ_KNM"  property="objKnm"  />
+    	<result column="MNG_USER"  property="mngUser"  />
+    	<result column="MNG_USER_ID"  property="mngUserId"  />
+    	<result column="OBJ_ID"  property="objId"  />
+    </resultMap>
+
+    <select id="selectTblChangeSub" parameterType="java.util.Map" resultMap="tblChangeMap">
+		
+		SELECT /* OwnShipMapper.selectTblChangeSub */
+			COUNT(A.rn)AS TOT_CNT
+		FROM (SELECT rownum rn
+		            ,TB.* 
+		      FROM (SELECT DATAMODEL_NM                                       
+                          ,PRIMARY_SUBJ_NM                                    
+		                  ,SUBJ_NM                                            
+		                  ,OBJ_ENM                                            
+		                  ,MNG_USER                                           
+		                  ,MNG_USER_ID
+		                  ,OBJ_ID                                        
+		            FROM WAM_PDM_TBL                                         
+		            WHERE XPR_DTTM = STR_TO_DATE('99991231','%Y%m%d')           
+		            AND ORGL_TYPE IN ('C','U')
+		            AND MNG_USER_ID = #{userid}
+		           <!-- 
+		            <if test="mngUserIdAf != null and mngUserIdAf != ''" >
+	                   <![CDATA[ AND MNG_USER_ID = #{mngUserIdAf} ]]> 
+	                </if> 
+	                <if test="mngUserAf != null and mngUserAf != ''" >
+	                   <![CDATA[ AND MNG_USER = #{mngUserAf} ]]> 
+	                </if> 
+	                -->
+	               )TB 
+        	 )A
+		     
+    </select>
+
+	<select id="selectTblChangeParam" parameterType="java.util.Map" resultMap="tblChangeMap">
+        <if test="recordCountPerPage != null">
+		SELECT	/* OwnShipMapper.selectTblChangeParam */
+			* 
+		FROM (SELECT rownum rn  ,TB.* FROM (
+		</if> 
+		     		SELECT 	/* OwnShipMapper.selectTblChangeSub */
+		     				DATAMODEL_NM                                       
+                          ,PRIMARY_SUBJ_NM                                    
+			              ,SUBJ_NM                                            
+			              ,OBJ_ENM
+			              ,OBJ_KNM                                            
+			              ,MNG_USER                                           
+			              ,MNG_USER_ID
+			              ,OBJ_ID                                        
+			        FROM WAM_PDM_TBL                                         
+			        WHERE XPR_DTTM = STR_TO_DATE('99991231','%Y%m%d')           
+			        AND ORGL_TYPE IN ('C','U')
+			        AND MNG_USER_ID = #{userid}
+			       <!-- 
+			        <if test="mngUserIdAf != null and mngUserIdAf != ''" >
+                       <![CDATA[ AND MNG_USER_ID = #{mngUserIdAf} ]]> 
+                    </if> 
+                    <if test="mngUserAf != null and mngUserAf != ''" >
+                       <![CDATA[ AND MNG_USER = #{mngUserAf} ]]> 
+                    </if> 
+        	       -->
+        <if test="recordCountPerPage != null">
+          )TB ) WHERE rn BETWEEN #{firstIndex} + 1 AND #{firstIndex} + #{recordCountPerPage} 
+        </if>
+    </select>
+
+ 	 <update id="ownershipUpdate" parameterType="java.util.Map">
+ 		  UPDATE /* OwnShipMapper.ownershipUpdate */
+ 		  		WAM_PDM_TBL 
+		     SET
+		 	 <if test="mngUserIdAf != null and mngUserIdAf != ''" >
+        		<![CDATA[ MNG_USER_ID = #{mngUserIdAf}]]>
+       		 </if>
+       		 <if test="mngUserAf != null and mngUserAf != ''" >
+        		<![CDATA[,MNG_USER = #{mngUserAf}]]>
+       		 </if>
+		   WHERE OBJ_ID IN ( ${objId} )
+		   AND XPR_DTTM = STR_TO_DATE('99991231','%Y%m%d')           
+           AND ORGL_TYPE IN ('C','U')  
+ 	</update>
+ 	
+ 	<update id="updateOwnShip" parameterType="java.util.Map">
+ 		UPDATE /* OwnShipMapper.updateOwnShip */
+ 			WAM_PDM_TBL 
+		     SET
+		 	 <if test="mngUserIdAf != null and mngUserIdAf != ''" >
+        		<![CDATA[ MNG_USER_ID = #{mngUserIdAf}]]>
+       		 </if>
+       		 <if test="mngUserAf != null and mngUserAf != ''" >
+        		<![CDATA[,MNG_USER = #{mngUserAf}]]>
+       		 </if>
+       		 WHERE OBJ_ID IN 
+       		 <foreach collection="ids" item="item" index="index" open="(" separator="," close=")">
+				#{item}       		 
+       		 </foreach>
+		     AND XPR_DTTM = STR_TO_DATE('99991231','%Y%m%d')           
+             AND ORGL_TYPE IN ('C','U')  
+ 	
+ 	</update>
+
+<!--  	
+ 	 <update id="ownershipUpdate1" parameterType="java.util.ArrayList">
+ 		  UPDATE WAM_PDM_TBL 
+		     SET MNG_USER_ID = 'aaa', MNG_USER = 'aaa'
+		   WHERE OBJ_ID IN 
+		   <foreach item="item" index="index" collection="list"
+		      open="(" separator="," close=")">
+		        #{item}
+		  </foreach>
+		   AND XPR_DTTM = STR_TO_DATE('99991231','%Y%m%d')           
+           AND ORGL_TYPE IN ('C','U')  
+ 	</update>
+ -->
+ 
+ 
+     <select id="selectTblUpdateSub" parameterType="java.util.Map" resultMap="tblChangeMap">
+		
+		SELECT /* OwnShipMapper.selectTblUpdateSub */
+			COUNT(A.rn)AS TOT_CNT
+		FROM (SELECT rownum rn
+		            ,TB.* 
+		      FROM (SELECT DATAMODEL_NM                                       
+                          ,PRIMARY_SUBJ_NM                                    
+		                  ,SUBJ_NM                                            
+		                  ,OBJ_ENM                                            
+		                  ,MNG_USER                                           
+		                  ,MNG_USER_ID
+		                  ,OBJ_ID                                        
+		            FROM WAM_PDM_TBL                                         
+		            WHERE XPR_DTTM = STR_TO_DATE('99991231','%Y%m%d')           
+		            AND ORGL_TYPE IN ('C','U')
+		            AND OBJ_ID IN ( ${objId} )
+	               )TB 
+        	 )A
+		     
+    </select>
+
+	<select id="selectTblUpdateParam" parameterType="java.util.Map" resultMap="tblChangeMap">
+		SELECT /* OwnShipMapper.selectTblUpdateParam */
+			* 
+		FROM (SELECT rownum rn
+		            ,TB.* 
+		      FROM (SELECT DATAMODEL_NM                                       
+                          ,PRIMARY_SUBJ_NM                                    
+			              ,SUBJ_NM                                            
+			              ,OBJ_ENM                                            
+			              ,MNG_USER                                           
+			              ,MNG_USER_ID
+			              ,OBJ_ID                                        
+			        FROM WAM_PDM_TBL                                         
+			        WHERE XPR_DTTM = STR_TO_DATE('99991231','%Y%m%d')           
+			        AND ORGL_TYPE IN ('C','U')
+			        AND OBJ_ID IN ( ${objId} )
+        	       )TB 
+        	)
+         WHERE rn BETWEEN #{firstIndex} + 1 AND #{firstIndex} + #{recordCountPerPage} 
+    </select>
+ 
+ 
+ 
+
+</mapper>
+

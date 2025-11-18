@@ -1,0 +1,677 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.meta.mta.service.WamMtaTblMapper">
+	<resultMap id="BaseResultMap" type="kr.wise.meta.mta.service.WamMtaTbl" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+		<id column="MTA_TBL_ID" property="mtaTblId" jdbcType="VARCHAR" />
+
+		<result column="MTA_TBL_PNM" property="mtaTblPnm" jdbcType="VARCHAR" />
+		<result column="MTA_TBL_LNM" property="mtaTblLnm" jdbcType="VARCHAR" />
+		<result column="RQST_NO" property="rqstNo" jdbcType="VARCHAR" />
+		<result column="RQST_SNO" property="rqstSno" jdbcType="DECIMAL" />
+		<result column="ORG_CD" property="orgCd" jdbcType="VARCHAR" />
+		<result column="INFO_SYS_CD" property="infoSysCd" jdbcType="VARCHAR" />
+		<result column="DB_CONN_TRG_ID" property="dbConnTrgId" jdbcType="VARCHAR" />
+		<result column="DB_SCH_ID" property="dbSchId" jdbcType="VARCHAR" />
+		<result column="DB_SCH_PNM" property="dbSchPnm" jdbcType="VARCHAR" />
+		<result column="TBL_TYP_NM" property="tblTypNm" jdbcType="VARCHAR" />
+		<result column="REL_ENTY_NM" property="relEntyNm" jdbcType="VARCHAR" />
+		<result column="PRSV_TERM" property="prsvTerm" jdbcType="VARCHAR" />
+		<result column="OCCR_CYL" property="occrCyl" jdbcType="VARCHAR" />
+		<result column="TBL_VOL" property="tblVol" jdbcType="VARCHAR" />
+		<result column="EXPT_OCCR_CNT" property="exptOccrCnt" jdbcType="VARCHAR" />
+		<result column="SUBJ_NM" property="subjNm" jdbcType="VARCHAR" />
+		<result column="TAG_INF_NM" property="tagInfNm" jdbcType="VARCHAR" />
+		<result column="DQ_DGNS_YN" property="dqDgnsYn" jdbcType="VARCHAR" />
+		<result column="COL_CNT" property="colCnt" jdbcType="VARCHAR" />
+
+		<result column="TBL_CRE_DT" property="tblCreDt" jdbcType="VARCHAR" />
+		<result column="NOPEN_RSN" property="nopenRsn" jdbcType="VARCHAR" />
+		<result column="OPEN_DATA_LST" property="openDataLst" jdbcType="VARCHAR" />
+		<result column="DBMS_TYP_CD" property="dbmsTypCd" jdbcType="VARCHAR" />
+		<result column="GAP_STS_CD" property="gapStsCd" jdbcType="VARCHAR" />
+		<result column="OPEN_RSN_CD" property="openRsnCd" jdbcType="VARCHAR" />
+		<result column="DB_CONN_TRG_PNM" property="dbConnTrgPnm" jdbcType="VARCHAR" />
+		<result column="NOPEN_DTL_REL_BSS" property="nopenDtlRelBss" jdbcType="VARCHAR" />
+		<result column="BRM_ID" property="brmId" jdbcType="VARCHAR" />
+		<result column="BRM_NM" property="brmNm" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<!-- ESB용 파일 헤더 -->
+	<resultMap id="MtaTblMap" type="java.util.HashMap">
+		<result column="MTA_TBL_ID"        property="mta_tbl_id"       jdbcType="VARCHAR" />
+		<result column="MTA_TBL_PNM"       property="mta_tbl_pnm"      jdbcType="VARCHAR" />
+		<result column="MTA_TBL_LNM"       property="mta_tbl_lnm"      jdbcType="VARCHAR" />
+		<result column="ORG_CD"            property="org_cd"           jdbcType="VARCHAR" />
+		<result column="INFO_SYS_CD"       property="info_sys_cd"      jdbcType="VARCHAR" />
+		<result column="DB_CONN_TRG_ID"    property="db_conn_trg_id"   jdbcType="VARCHAR" />
+		<result column="DB_CONN_TRG_PNM"   property="db_conn_trg_pnm"  jdbcType="VARCHAR" />
+		<result column="DB_SCH_ID"         property="db_sch_id"        jdbcType="VARCHAR" />
+		<result column="DB_SCH_PNM"        property="db_sch_pnm"       jdbcType="VARCHAR" />
+		<result column="OBJ_DESCN"         property="obj_descn"        jdbcType="VARCHAR" />
+		<result column="OBJ_VERS"          property="obj_vers"         jdbcType="DECIMAL" />
+		<result column="REG_TYP_CD"        property="reg_typ_cd"       jdbcType="VARCHAR" />
+		<result column="FRS_RQST_DTM"      property="frs_rqst_dtm"     jdbcType="VARCHAR" />
+		<result column="FRS_RQST_USER_ID"  property="frs_rqst_user_id" jdbcType="VARCHAR" />
+		<result column="RQST_NO"           property="rqst_no"          jdbcType="VARCHAR" />
+		<result column="RQST_SNO"          property="rqst_sno"         jdbcType="DECIMAL" />
+		<result column="RQST_DTM"          property="rqst_dtm"         jdbcType="VARCHAR" />
+		<result column="RQST_USER_ID"      property="rqst_user_id"     jdbcType="VARCHAR" />
+		<result column="APRV_DTM"          property="aprv_dtm"         jdbcType="VARCHAR" />
+		<result column="APRV_USER_ID"      property="aprv_user_id"     jdbcType="VARCHAR" />
+		<result column="TBL_TYP_NM"        property="tbl_typ_nm"       jdbcType="VARCHAR" />
+		<result column="REL_ENTY_NM"       property="rel_enty_nm"      jdbcType="VARCHAR" />
+		<result column="SUBJ_NM"           property="subj_nm"          jdbcType="VARCHAR" />
+		<result column="TAG_INF_NM"        property="tag_inf_nm"       jdbcType="VARCHAR" />
+		<result column="PRSV_TERM"         property="prsv_term"        jdbcType="VARCHAR" />
+		<result column="TBL_VOL"           property="tbl_vol"          jdbcType="VARCHAR" />
+		<result column="EXPT_OCCR_CNT"     property="expt_occr_cnt"    jdbcType="VARCHAR" />
+		<result column="TBL_CRE_DT"        property="tbl_cre_dt"       jdbcType="VARCHAR" />
+		<result column="NOPEN_RSN"         property="nopen_rsn"        jdbcType="VARCHAR" />
+		<result column="OPEN_DATA_LST"     property="open_data_lst"    jdbcType="VARCHAR" />
+		<result column="OCCR_CYL"          property="occr_cyl"         jdbcType="VARCHAR" />
+		<result column="DQ_DGNS_YN"        property="dq_dgns_yn"       jdbcType="VARCHAR" />
+		<result column="TBL_CLLT_DCD"      property="tbl_cllt_dcd"     jdbcType="VARCHAR" />
+		<result column="OPEN_RSN_CD"       property="open_rsn_cd"      jdbcType="VARCHAR" />
+		<result column="NOPEN_DTL_REL_BSS" property="nopen_dtl_rel_bss"   jdbcType="VARCHAR" />
+	</resultMap>
+
+	<resultMap id="totcntmap" type="kr.wise.portal.dashboard.service.TotalCountVO">
+		<result column="CNT_NAME" property="cntName" />
+		<result column="TOT_CNT" property="totCnt" />
+		<result column="PAGE" property="page" />
+		<result column="AUTH" property="auth" />
+	</resultMap>
+
+	<resultMap id="udpcntmap" type="kr.wise.portal.dashboard.service.UpdateCntVO">
+		<result column="TERM_TYPE_NM" property="termTypeNm" />
+		<result column="CUR_CNT" property="curCnt" />
+		<result column="INS_CNT" property="insCnt" />
+		<result column="UPD_CNT" property="updCnt" />
+		<result column="DEL_CNT" property="delCnt" />
+		<result column="PAGE" property="page" />
+		<result column="AUTH" property="auth" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		MTA_TBL_ID, MTA_TBL_PNM, MTA_TBL_LNM,
+		RQST_NO, RQST_SNO, ORG_CD, INFO_SYS_CD, DB_CONN_TRG_ID, TBL_TYP_NM,
+		REL_ENTY_NM,
+		PRSV_TERM, OCCR_CYL, TBL_VOL, EXPT_OCCR_CNT, SUBJ_NM,
+		TAG_INF_NM, 
+		OBJ_DESCN, OBJ_VERS, REG_TYP_CD, FRS_RQST_DTM, FRS_RQST_USER_ID, RQST_DTM,
+		RQST_USER_ID,
+		APRV_DTM, APRV_USER_ID, TBL_CRE_DT, NOPEN_RSN, OPEN_DATA_LST
+	</sql>
+	<sql id="Base_Column_List2">
+		MTA_TBL_ID, MTA_TBL_PNM, MTA_TBL_LNM,
+		RQST_NO, RQST_SNO, ORG_CD, INFO_SYS_CD, DB_CONN_TRG_ID, TBL_TYP_NM,
+		REL_ENTY_NM,
+		PRSV_TERM, OCCR_CYL, TBL_VOL, EXPT_OCCR_CNT, SUBJ_NM,
+		TAG_INF_NM, 
+		OBJ_DESCN, OBJ_VERS, REG_TYP_CD, FRS_RQST_DTM, FRS_RQST_USER_ID, RQST_DTM,
+		RQST_USER_ID,
+		APRV_DTM, APRV_USER_ID, TBL_CRE_DT, NOPEN_RSN, OPEN_DATA_LST
+	</sql>
+	<sql id="Base_Column_List3">
+		A.MTA_TBL_ID, MTA_TBL_PNM, MTA_TBL_LNM,
+		RQST_NO, RQST_SNO, ORG_CD, INFO_SYS_CD, DB_CONN_TRG_ID, TBL_TYP_NM,
+		REL_ENTY_NM,
+		PRSV_TERM, OCCR_CYL, TBL_VOL, EXPT_OCCR_CNT, SUBJ_NM, TAG_INF_NM, 
+		A.OBJ_DESCN, A.OBJ_VERS, FRS_RQST_DTM, FRS_RQST_USER_ID, RQST_DTM, RQST_USER_ID,
+		APRV_DTM, APRV_USER_ID, TBL_CRE_DT, NOPEN_RSN, OPEN_DATA_LST
+	</sql>
+
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from WAM_MTA_TBL
+		where MTA_TBL_ID = #{mtaTblId,jdbcType=VARCHAR}
+	</select>
+
+	<select id="selectList" resultMap="BaseResultMap" parameterType="kr.wise.meta.mta.service.WamMtaTbl">
+		SELECT A.*
+			, (SELECT USER_NM FROM WAA_USER B1 
+				WHERE B1.USER_ID = A.FRS_RQST_USER_ID 
+				  AND B1.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')) AS FRS_RQST_USER_NM
+			, (SELECT USER_NM FROM WAA_USER B1 
+				WHERE B1.USER_ID = A.RQST_USER_ID
+				  AND B1.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')) AS RQST_USER_NM
+			, (SELECT USER_NM FROM WAA_USER B1 
+				WHERE B1.USER_ID = A.APRV_USER_ID
+				  AND B1.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')) AS APRV_USER_NM
+			, (SELECT DBMS_TYP_CD FROM WAA_DB_CONN_TRG
+				WHERE EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+				AND REG_TYP_CD IN ('C','U')
+				AND DB_CONN_TRG_ID = A.DB_CONN_TRG_ID ) AS DBMS_TYP_CD
+		FROM WAM_MTA_TBL A
+		WHERE 1 = 1
+		AND A.GAP_STS_CD = 'S'	<!-- 전송완료된 건 -->
+		AND A.REG_TYP_CD IN ('C', 'U')
+		<if test="mtaTblId != null">
+			AND A.MTA_TBL_ID = #{mtaTblId,jdbcType=VARCHAR}
+		</if>
+		<if test="mtaTblLnm != null">
+			AND (  UPPER(A.MTA_TBL_PNM) LIKE '%' || UPPER(#{mtaTblLnm,jdbcType=VARCHAR})||'%'
+				OR A.MTA_TBL_PNM LIKE '%' || #{mtaTblLnm,jdbcType=VARCHAR} || '%'
+				OR UPPER(A.MTA_TBL_LNM) LIKE '%' || UPPER(#{mtaTblLnm,jdbcType=VARCHAR})||'%'
+				OR A.MTA_TBL_LNM LIKE '%' || #{mtaTblLnm, jdbcType=VARCHAR} || '%')
+		</if>
+		<!-- 메타데이터 조회에 사용 -->
+		<if test="orgCd != null">
+			AND A.ORG_CD  in (   SELECT ORG_CD 
+  					  FROM WAA_ORG
+					  START WITH ORG_CD = #{orgCd,jdbcType=VARCHAR}
+					  CONNECT BY PRIOR ORG_CD = UPP_ORG_CD 
+					  AND REG_TYP_CD IN ('C','U') 
+					  AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD'))
+		</if>
+		<if test="orgNm != null">
+			AND A.ORG_CD IN ( SELECT ORG_CD FROM WAA_ORG 
+							   WHERE REG_TYP_CD IN ('C','U') AND EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+							     AND ORG_NM LIKE '%' || #{orgNm,jdbcType=VARCHAR} || '%' )
+		</if>
+		<if test="infoSysCd != null">
+			AND A.INFO_SYS_CD = #{infoSysCd,jdbcType=VARCHAR}
+		</if>
+		<if test="infoSysNm != null">
+			AND A.INFO_SYS_CD IN ( SELECT INFO_SYS_CD FROM WAA_INFO_SYS 
+									WHERE EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+									  AND UPPER(INFO_SYS_NM) LIKE '%' || UPPER(#{infoSysNm, jdbcType=VARCHAR}) || '%')
+		</if>
+		<if test="dbConnTrgId != null">
+			AND A.DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR}
+		</if>
+		<if test="dbConnTrgPnm != null">
+			AND A.DB_CONN_TRG_ID IN ( SELECT DB_CONN_TRG_ID FROM WAA_DB_CONN_TRG 
+									WHERE EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+									  AND REG_TYP_CD IN ('C','U')
+									  AND ( DB_CONN_TRG_PNM LIKE '%' || UPPER(#{dbConnTrgPnm,jdbcType=VARCHAR}) || '%'
+									  	 OR DB_CONN_TRG_PNM LIKE '%' || #{dbConnTrgPnm,jdbcType=VARCHAR} || '%'
+									  	 OR DB_CONN_TRG_LNM LIKE '%' || UPPER(#{dbConnTrgPnm,jdbcType=VARCHAR}) || '%' 
+									  	 OR DB_CONN_TRG_LNM LIKE '%' || #{dbConnTrgPnm,jdbcType=VARCHAR} || '%' ))
+		</if>
+		<if test="rqstNo != null">
+			AND A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+		</if>
+		ORDER BY A.MTA_TBL_PNM
+	</select>
+
+	<!-- 메타데이터 테이블 정보 상세 조회  -->	
+	<select id="selectMtaTblInfoDetail" resultMap="BaseResultMap" parameterType="java.lang.String">
+		SELECT   A.*
+				, (SELECT USER_NM FROM WAA_USER WHERE USER_ID = A.FRS_RQST_USER_ID AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD') AND REG_TYP_CD IN ('C','U')) AS FRS_RQST_USER_NM
+				, (SELECT USER_NM FROM WAA_USER WHERE USER_ID = A.RQST_USER_ID AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD') AND REG_TYP_CD IN ('C','U')) AS RQST_USER_NM
+				, (SELECT USER_NM FROM WAA_USER WHERE USER_ID = A.APRV_USER_ID AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD') AND REG_TYP_CD IN ('C','U')) AS APRV_USER_NM
+		  FROM 	WAM_MTA_TBL A
+		 WHERE 	A.MTA_TBL_ID = #{mtaTblId,jdbcType=VARCHAR}
+		   AND	A.REG_TYP_CD IN ('C', 'U')
+	</select>
+	
+	<!-- 등록화면에서 기 등록된 메타데이터 테이블 리스트 조회 -->
+	<resultMap id="BaseResultMap2" type="kr.wise.meta.mta.service.WaqMtaTbl" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+		<result column="ORG_CD" property="orgCd" jdbcType="VARCHAR" />
+		<result column="ORG_NM" property="orgNm" jdbcType="VARCHAR" />
+		<result column="INFO_SYS_CD" property="infoSysCd" jdbcType="VARCHAR" />
+		<result column="INFO_SYS_NM" property="infoSysNm" jdbcType="VARCHAR" />
+		<result column="DB_CONN_TRG_ID" property="dbConnTrgId" jdbcType="VARCHAR" />
+		<result column="DB_CONN_TRG_LNM" property="dbConnTrgLnm" jdbcType="VARCHAR" />
+		<result column="DB_CONN_TRG_PNM" property="dbConnTrgPnm" jdbcType="VARCHAR" />
+		<result column="DB_SCH_ID" property="dbSchId" jdbcType="VARCHAR" />
+		<result column="DB_SCH_PNM" property="dbSchPnm" jdbcType="VARCHAR" />
+		<result column="MTA_TBL_ID" property="mtaTblId" jdbcType="VARCHAR" />
+		<result column="MTA_TBL_PNM" property="mtaTblPnm" jdbcType="VARCHAR" />
+		<result column="MTA_TBL_LNM" property="mtaTblLnm" jdbcType="VARCHAR" />
+		<result column="OBJ_DESCN" property="objDescn" jdbcType="VARCHAR" />
+		<result column="GAP_STS_CD" property="gapStsCd" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<select id="selectMtaTblList" resultMap="BaseResultMap2" parameterType="kr.wise.meta.mta.service.WaqMtaTbl">
+		SELECT
+				  A.ORG_CD
+			    , D.ORG_NM
+				, A.INFO_SYS_CD
+				, C.INFO_SYS_NM
+				, A.DB_CONN_TRG_ID
+				, B.DB_CONN_TRG_LNM
+				, A.DB_CONN_TRG_PNM
+				, A.DB_SCH_ID
+				, A.DB_SCH_PNM
+				, A.MTA_TBL_ID
+				, A.MTA_TBL_PNM
+				, A.MTA_TBL_LNM
+				, A.REG_TYP_CD
+				, A.OBJ_DESCN
+				, NVL(A.GAP_STS_CD, 'C') GAP_STS_CD
+		FROM WAM_MTA_TBL A
+	        INNER JOIN WAA_DB_CONN_TRG B
+	           ON B.EXP_DTM = TO_DATE('9999-12-31','YYYY-MM-DD')  
+	          AND B.DB_CONN_TRG_ID = A.DB_CONN_TRG_ID
+	          AND B.INFO_SYS_CD = A.INFO_SYS_CD
+	        INNER JOIN WAA_INFO_SYS C
+	           ON C.EXP_DTM = TO_DATE('9999-12-31','YYYY-MM-DD')  
+	          AND C.INFO_SYS_CD = B.INFO_SYS_CD   
+	        INNER JOIN WAA_ORG D
+	           ON D.EXP_DTM = TO_DATE('9999-12-31','YYYY-MM-DD')  
+	          AND D.ORG_CD = C.ORG_CD
+		<where>
+		<if test="orgCd != null">
+			AND A.ORG_CD = #{orgCd,jdbcType=VARCHAR}
+		</if>
+		<if test="infoSysNm != null">
+			AND A.INFO_SYS_CD IN (SELECT INFO_SYS_CD FROM WAA_INFO_SYS
+        						   WHERE EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+        						     AND UPPER(INFO_SYS_NM) LIKE '%' || UPPER(#{infoSysNm, jdbcType=VARCHAR}) || '%' )
+		</if>
+		<if test="dbConnTrgLnm != null">
+			 AND (  B.DB_CONN_TRG_LNM LIKE '%' || #{dbConnTrgLnm,jdbcType=VARCHAR} || '%'
+	        	 OR B.DB_CONN_TRG_LNM LIKE '%' || UPPER(#{dbConnTrgLnm,jdbcType=VARCHAR}) || '%'
+	        	 OR A.DB_CONN_TRG_PNM LIKE '%' || #{dbConnTrgLnm,jdbcType=VARCHAR} || '%'
+	        	 OR A.DB_CONN_TRG_PNM LIKE '%' || UPPER(#{dbConnTrgLnm,jdbcType=VARCHAR}) || '%')
+		</if>
+		<if test="dbSchPnm != null">
+			AND (   A.DB_SCH_PNM LIKE '%' || #{dbSchPnm,jdbcType=VARCHAR} || '%'
+	        	 OR A.DB_SCH_PNM LIKE '%' || UPPER(#{dbSchPnm,jdbcType=VARCHAR}) || '%')
+		</if>
+		<if test="tblNm != null">
+			AND (UPPER(A.MTA_TBL_PNM) LIKE '%'||UPPER(#{tblNm,jdbcType=VARCHAR})||'%'
+				OR A.MTA_TBL_PNM LIKE '%'||#{tblNm,jdbcType=VARCHAR}||'%'
+				OR A.MTA_TBL_LNM LIKE '%'||#{tblNm,jdbcType=VARCHAR}||'%')
+		</if>
+		AND NOT EXISTS ( SELECT 1 FROM WAQ_MTA_TBL WHERE RQST_NO = #{rqstNo,jdbcType=VARCHAR} AND MTA_TBL_ID = A.MTA_TBL_ID)
+		<if test="gapStsCd != null">
+			AND NVL(A.GAP_STS_CD, 'C') = #{gapStsCd,jdbcType=VARCHAR}
+		</if>
+		</where>
+		<!-- ORDER BY A.MTA_TBL_PNM -->
+	</select>
+	
+	<select id="selectMtaTblListAuto" resultMap="BaseResultMap2" parameterType="kr.wise.meta.mta.service.WaqMtaTbl">
+		SELECT  A.DB_CONN_TRG_ID
+       ,B.DB_SCH_ID
+       ,C.DBC_TBL_NM
+       ,D.MTA_TBL_ID
+  FROM  WAA_DB_CONN_TRG A
+        INNER JOIN WAA_DB_SCH B
+           ON B.EXP_DTM = A.EXP_DTM
+          AND B.DB_CONN_TRG_ID = A.DB_CONN_TRG_ID
+        INNER JOIN WAT_DBC_TBL C
+           ON C.DB_SCH_ID  = B.DB_SCH_ID
+        INNER JOIN WAM_MTA_TBL D
+           ON (D.DB_SCH_ID = C.DB_SCH_ID OR D.DB_SCH_ID IS NULL)
+          AND D.MTA_TBL_PNM = C.DBC_TBL_NM
+        INNER JOIN WAA_INFO_SYS E
+          ON E.EXP_DTM = A.EXP_DTM
+         AND E.INFO_SYS_CD = A.INFO_SYS_CD
+ WHERE  A.EXP_DTM = TO_DATE('9999-12-31','YYYY-MM-DD')
+   AND  NOT EXISTS (SELECT  MTA_COL_PNM
+                      FROM  WAM_MTA_COL X
+					 WHERE  X.MTA_TBL_ID = D.MTA_TBL_ID
+					 DIFFERENCE
+					SELECT  DBC_COL_NM
+					  FROM  WAT_DBC_COL Y
+					 WHERE  Y.DB_SCH_ID  = C.DB_SCH_ID
+		               AND  Y.DBC_TBL_NM = C.DBC_TBL_NM
+				   )      
+   AND  NOT EXISTS (SELECT  DBC_COL_NM
+					  FROM  WAT_DBC_COL Y
+					 WHERE  Y.DB_SCH_ID  = C.DB_SCH_ID
+		               AND  Y.DBC_TBL_NM = C.DBC_TBL_NM
+		             DIFFERENCE
+		            SELECT  MTA_COL_PNM
+                      FROM  WAM_MTA_COL X
+					 WHERE  X.MTA_TBL_ID = D.MTA_TBL_ID
+				   )  
+	</select>
+	
+	<!-- ESB파일용 요청번호로 wam 목록 조회 -->
+	<select id="selectListByRqstNo" resultMap="MtaTblMap" parameterType="java.lang.String">
+		
+		SELECT A.MTA_TBL_ID
+			 , NVL(A.MTA_TBL_PNM     , '') MTA_TBL_PNM
+			 , NVL(A.MTA_TBL_LNM     , '') MTA_TBL_LNM
+			 , NVL(A.ORG_CD          , '') ORG_CD
+			 , NVL(A.INFO_SYS_CD     , '') INFO_SYS_CD
+			 , NVL(A.DB_CONN_TRG_ID  , '') DB_CONN_TRG_ID
+			 , NVL(A.DB_CONN_TRG_PNM , '') DB_CONN_TRG_PNM
+			 , NVL(A.DB_SCH_ID       , '') DB_SCH_ID
+			 , NVL(A.DB_SCH_PNM      , '') DB_SCH_PNM
+			 , NVL(A.OBJ_DESCN       , '') OBJ_DESCN
+			 , NVL(A.OBJ_VERS        , '') OBJ_VERS
+			 , NVL(A.REG_TYP_CD      , '') REG_TYP_CD
+			 , NVL(TO_CHAR(A.FRS_RQST_DTM,'YYYYMMDDHH24MISS'),'') FRS_RQST_DTM
+			 , NVL(A.FRS_RQST_USER_ID, '') FRS_RQST_USER_ID
+			 , NVL(A.RQST_NO         , '') RQST_NO
+			 , NVL(A.RQST_SNO        , '') RQST_SNO
+			 , NVL(TO_CHAR(A.RQST_DTM,'YYYYMMDDHH24MISS'),'') RQST_DTM
+			 , NVL(A.RQST_USER_ID    , '') RQST_USER_ID
+			 , NVL(TO_CHAR(A.APRV_DTM,'YYYYMMDDHH24MISS'),'') APRV_DTM
+			 , NVL(A.APRV_USER_ID    , '') APRV_USER_ID
+			 , NVL(A.TBL_TYP_NM      , '') TBL_TYP_NM
+			 , NVL(A.REL_ENTY_NM     , '') REL_ENTY_NM
+			 , NVL(A.SUBJ_NM         , '') SUBJ_NM
+			 , NVL(A.TAG_INF_NM      , '') TAG_INF_NM
+			 , NVL(A.PRSV_TERM       , '') PRSV_TERM
+			 , NVL(A.TBL_VOL         , '') TBL_VOL
+			 , NVL(A.EXPT_OCCR_CNT   , '') EXPT_OCCR_CNT
+			 , NVL(A.TBL_CRE_DT      , '') TBL_CRE_DT
+			 , NVL(A.NOPEN_RSN       , '') NOPEN_RSN
+			 , NVL(A.OPEN_DATA_LST   , '') OPEN_DATA_LST
+			 , NVL(A.OCCR_CYL        , '') OCCR_CYL  		
+             , NVL(A.DQ_DGNS_YN      , 'N') DQ_DGNS_YN
+             , NVL(A.TBL_CLLT_DCD    , 'A') TBL_CLLT_DCD
+             , NVL(A.OPEN_RSN_CD    , '') OPEN_RSN_CD
+             , NVL(A.NOPEN_DTL_REL_BSS, '') NOPEN_DTL_REL_BSS
+		  FROM WAQ_MTA_TBL A				       
+		 WHERE 1 = 1
+		   AND A.RVW_STS_CD = '1'
+		 <if test="rqstNo != null">
+		 	AND A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+		 </if>
+		 ORDER BY A.MTA_TBL_PNM
+	</select>
+	
+	<!-- ESB파일용 요청번호로 wam 목록 조회 -->
+	<select id="selectListByTblId" resultMap="MtaTblMap" parameterType="java.lang.String">
+		SELECT A.MTA_TBL_ID
+			 , NVL(A.MTA_TBL_PNM     , '') MTA_TBL_PNM
+			 , NVL(A.MTA_TBL_LNM     , '') MTA_TBL_LNM
+			 , NVL(A.ORG_CD          , '') ORG_CD
+			 , NVL(A.INFO_SYS_CD     , '') INFO_SYS_CD
+			 , NVL(A.DB_CONN_TRG_ID  , '') DB_CONN_TRG_ID
+			 , NVL(A.DB_CONN_TRG_PNM , '') DB_CONN_TRG_PNM
+			 , NVL(A.DB_SCH_ID       , '') DB_SCH_ID
+			 , NVL(A.DB_SCH_PNM      , '') DB_SCH_PNM
+			 , NVL(A.OBJ_DESCN       , '') OBJ_DESCN
+			 , NVL(A.OBJ_VERS        , '') OBJ_VERS
+			 , NVL(A.REG_TYP_CD      , '') REG_TYP_CD
+			 , NVL(TO_CHAR(A.FRS_RQST_DTM,'YYYYMMDDHH24MISS'),'') FRS_RQST_DTM
+			 , NVL(A.FRS_RQST_USER_ID, '') FRS_RQST_USER_ID
+			 , NVL(A.RQST_NO         , '') RQST_NO
+			 , NVL(A.RQST_SNO        , '') RQST_SNO
+			 , NVL(TO_CHAR(A.RQST_DTM,'YYYYMMDDHH24MISS'),'') RQST_DTM
+			 , NVL(A.RQST_USER_ID    , '') RQST_USER_ID
+			 , NVL(TO_CHAR(A.APRV_DTM,'YYYYMMDDHH24MISS'),'') APRV_DTM
+			 , NVL(A.APRV_USER_ID    , '') APRV_USER_ID
+			 , NVL(A.TBL_TYP_NM      , '') TBL_TYP_NM
+			 , NVL(A.REL_ENTY_NM     , '') REL_ENTY_NM
+			 , NVL(A.SUBJ_NM         , '') SUBJ_NM
+			 , NVL(A.TAG_INF_NM      , '') TAG_INF_NM
+			 , NVL(A.PRSV_TERM       , '') PRSV_TERM
+			 , NVL(A.TBL_VOL         , '') TBL_VOL
+			 , NVL(A.EXPT_OCCR_CNT   , '') EXPT_OCCR_CNT
+			 , NVL(A.TBL_CRE_DT      , '') TBL_CRE_DT
+			 , NVL(A.NOPEN_RSN       , '') NOPEN_RSN
+			 , NVL(A.OPEN_DATA_LST   , '') OPEN_DATA_LST
+			 , NVL(A.OCCR_CYL        , '') OCCR_CYL  		
+             , NVL(A.DQ_DGNS_YN      , 'N') DQ_DGNS_YN
+             , NVL(A.TBL_CLLT_DCD    , 'A') TBL_CLLT_DCD
+             , NVL(A.OPEN_RSN_CD    , '') OPEN_RSN_CD
+             , NVL(A.NOPEN_DTL_REL_BSS, '') NOPEN_DTL_REL_BSS
+		  FROM WAM_MTA_TBL A				       
+		 WHERE 1 = 1
+		 <if test="mtaTblId != null">
+		 	AND A.MTA_TBL_ID = #{mtaTblId,jdbcType=VARCHAR}
+		 </if>
+		 ORDER BY A.MTA_TBL_PNM
+	</select>
+	
+	<!-- ESB파일용 요청번호로 wam 목록 조회 -->
+	<select id="selectWamMtaTblByRqstNo" resultMap="MtaTblMap" parameterType="java.lang.String">
+		SELECT A.MTA_TBL_ID
+			 , NVL(A.MTA_TBL_PNM     , '') MTA_TBL_PNM
+			 , NVL(A.MTA_TBL_LNM     , '') MTA_TBL_LNM
+			 , NVL(A.ORG_CD          , '') ORG_CD
+			 , NVL(A.INFO_SYS_CD     , '') INFO_SYS_CD
+			 , NVL(A.DB_CONN_TRG_ID  , '') DB_CONN_TRG_ID
+			 , NVL(A.DB_CONN_TRG_PNM , '') DB_CONN_TRG_PNM
+			 , NVL(A.DB_SCH_ID       , '') DB_SCH_ID
+			 , NVL(A.DB_SCH_PNM      , '') DB_SCH_PNM
+			 , NVL(A.OBJ_DESCN       , '') OBJ_DESCN
+			 , NVL(A.OBJ_VERS        , '') OBJ_VERS
+			 , NVL(A.REG_TYP_CD      , '') REG_TYP_CD
+			 , NVL(TO_CHAR(A.FRS_RQST_DTM,'YYYYMMDDHH24MISS'),'') FRS_RQST_DTM
+			 , NVL(A.FRS_RQST_USER_ID, '') FRS_RQST_USER_ID
+			 , NVL(A.RQST_NO         , '') RQST_NO
+			 , NVL(A.RQST_SNO        , '') RQST_SNO
+			 , NVL(TO_CHAR(A.RQST_DTM,'YYYYMMDDHH24MISS'),'') RQST_DTM
+			 , NVL(A.RQST_USER_ID    , '') RQST_USER_ID
+			 , NVL(TO_CHAR(A.APRV_DTM,'YYYYMMDDHH24MISS'),'') APRV_DTM
+			 , NVL(A.APRV_USER_ID    , '') APRV_USER_ID
+			 , NVL(A.TBL_TYP_NM      , '') TBL_TYP_NM
+			 , NVL(A.REL_ENTY_NM     , '') REL_ENTY_NM
+			 , NVL(A.SUBJ_NM         , '') SUBJ_NM
+			 , NVL(A.TAG_INF_NM      , '') TAG_INF_NM
+			 , NVL(A.PRSV_TERM       , '') PRSV_TERM
+			 , NVL(A.TBL_VOL         , '') TBL_VOL
+			 , NVL(A.EXPT_OCCR_CNT   , '') EXPT_OCCR_CNT
+			 , NVL(A.TBL_CRE_DT      , '') TBL_CRE_DT
+			 , NVL(A.NOPEN_RSN       , '') NOPEN_RSN
+			 , NVL(A.OPEN_DATA_LST   , '') OPEN_DATA_LST
+			 , NVL(A.OCCR_CYL        , '') OCCR_CYL
+			 , NVL(A.OCCR_CYL        , '') OCCR_CYL			
+             , NVL(A.DQ_DGNS_YN      , 'N') DQ_DGNS_YN
+             , NVL(A.TBL_CLLT_DCD    , 'A') TBL_CLLT_DCD
+		  FROM WAM_MTA_TBL A				       
+		 WHERE 1 = 1
+		   AND EXISTS (SELECT 1
+		                 FROM WAQ_MTA_TBL X
+		                WHERE X.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+		                  AND X.DB_SCH_ID   = A.DB_SCH_ID
+		                  AND X.MTA_TBL_PNM = A.MTA_TBL_PNM   
+		                  AND X.RVW_STS_CD = '1' 
+		               ) 		 
+		 ORDER BY A.MTA_TBL_PNM
+	</select>
+	<select id="selectBrmList" resultMap="BaseResultMap">
+		SELECT BRM_ID,
+			   BRM_NM
+		FROM WAM_BRM_DETAIL
+	</select>
+	
+	
+	<resultMap id="MtaTotalMap" type="java.util.HashMap">
+		<result column="DB_CONN_TRG_ID"   property="db_conn_trg_id"    jdbcType="VARCHAR" />
+		<result column="DB_CONN_TRG_PNM"  property="db_conn_trg_pnm"   jdbcType="VARCHAR" />
+		<result column="DB_CONN_TRG_LNM"  property="db_conn_trg_lnm"   jdbcType="VARCHAR" />
+		<result column="ORG_CD"           property="org_cd"            jdbcType="VARCHAR" />
+		<result column="ORG_NM"           property="org_nm"            jdbcType="VARCHAR" />
+		<result column="INFO_SYS_CD"      property="info_sys_cd"       jdbcType="VARCHAR" />
+		<result column="INFO_SYS_NM"      property="info_sys_nm"       jdbcType="VARCHAR" />
+		<result column="DBMS_TYP_CD"      property="dbms_typ_cd"       jdbcType="VARCHAR" />
+		<result column="DBMS_TYP_NM"      property="dbms_typ_nm"       jdbcType="VARCHAR" />
+		<result column="DBMS_VERS_CD"     property="dbms_vers_cd"      jdbcType="VARCHAR" />
+		<result column="DBMS_VERS_NM"     property="dbms_vers_nm"      jdbcType="VARCHAR" />
+		<result column="CRGP_NM"          property="crgp_nm"           jdbcType="VARCHAR" />
+		<result column="CRGP_CNTEL"       property="crgp_cntel"        jdbcType="VARCHAR" />
+		<result column="MTA_TBL_ID"       property="mta_tbl_id"        jdbcType="VARCHAR" />
+		<result column="MTA_TBL_PNM"      property="mta_tbl_pnm"       jdbcType="VARCHAR" />
+		<result column="MTA_TBL_LNM"      property="mta_tbl_lnm"       jdbcType="VARCHAR" />
+		<result column="INFO_SYS_CD"      property="info_sys_cd"       jdbcType="VARCHAR" />
+		<result column="DB_CONN_TRG_ID"   property="db_conn_trg_id"    jdbcType="VARCHAR" />
+		<result column="DB_CONN_TRG_PNM"  property="db_conn_trg_pnm"   jdbcType="VARCHAR" />
+		<result column="DB_SCH_ID"        property="db_sch_id"         jdbcType="VARCHAR" />
+		<result column="DB_SCH_PNM"       property="db_sch_pnm"        jdbcType="VARCHAR" />
+		<result column="TBL_TYP_NM"       property="tbl_typ_nm"        jdbcType="VARCHAR" />
+		<result column="REL_ENTY_NM"      property="rel_enty_nm"       jdbcType="VARCHAR" />
+		<result column="SUBJ_NM"          property="subj_nm"           jdbcType="VARCHAR" />
+		<result column="TAG_INF_NM"       property="tag_inf_nm"        jdbcType="VARCHAR" />
+		<result column="PRSV_TERM"        property="prsv_term"         jdbcType="VARCHAR" />
+		<result column="TBL_VOL"          property="tbl_vol"           jdbcType="VARCHAR" />
+		<result column="EXPT_OCCR_CNT"    property="expt_occr_cnt"     jdbcType="VARCHAR" />
+		<result column="TBL_CRE_DT"       property="tbl_cre_dt"        jdbcType="VARCHAR" />
+		<result column="NOPEN_RSN"        property="nopen_rsn"         jdbcType="VARCHAR" />
+		<result column="OPEN_DATA_LST"    property="open_data_lst"     jdbcType="VARCHAR" />
+		<result column="OCCR_CYL"         property="occr_cyl"          jdbcType="VARCHAR" />
+		<result column="MTA_COL_ID"       property="mta_col_id"        jdbcType="VARCHAR" />
+		<result column="MTA_COL_PNM"      property="mta_col_pnm"       jdbcType="VARCHAR" />
+		<result column="MTA_COL_LNM"      property="mta_col_lnm"       jdbcType="VARCHAR" />
+		<result column="MTA_TBL_ID"       property="mta_tbl_id"        jdbcType="VARCHAR" />
+		<result column="COL_REL_ENTY_NM"  property="col_rel_enty_nm"   jdbcType="VARCHAR" />
+		<result column="COL_REL_ATTR_NM"  property="col_rel_attr_nm"   jdbcType="VARCHAR" />
+		<result column="COL_ORD"          property="col_ord"           jdbcType="VARCHAR" />
+		<result column="PK_YN"            property="pk_yn"             jdbcType="VARCHAR" />
+		<result column="PK_ORD"           property="pk_ord"            jdbcType="VARCHAR" />
+		<result column="FK_YN"            property="fk_yn"             jdbcType="VARCHAR" />
+		<result column="DATA_TYPE"        property="data_type"         jdbcType="VARCHAR" />
+		<result column="DATA_LEN"         property="data_len"          jdbcType="VARCHAR" />
+		<result column="DATA_SCAL"        property="data_scal"         jdbcType="VARCHAR" />
+		<result column="DATA_FMT"         property="data_fmt"          jdbcType="VARCHAR" />
+		<result column="NONUL_YN"         property="nonul_yn"          jdbcType="VARCHAR" />
+		<result column="DEFLT_VAL"        property="deflt_val"         jdbcType="VARCHAR" />
+		<result column="CONST_CND"        property="const_cnd"         jdbcType="VARCHAR" />
+		<result column="OPEN_YN"          property="open_yn"           jdbcType="VARCHAR" />
+		<result column="PRSN_INFO_YN"     property="prsn_info_yn"      jdbcType="VARCHAR" />
+		<result column="ENC_TRG_YN"       property="enc_trg_yn"        jdbcType="VARCHAR" />
+		<result column="PRI_RSN"          property="pri_rsn"           jdbcType="VARCHAR" />
+		<result column="RQST_NO"          property="rqst_no"           jdbcType="VARCHAR" />
+		<result column="RQST_SNO"         property="rqst_sno"          jdbcType="DECIMAL" />
+		<result column="RQST_DTL_SNO"     property="rqst_dtl_sno"      jdbcType="VARCHAR" />
+		<result column="OBJ_VERS"         property="obj_vers"          jdbcType="DECIMAL" />
+		<result column="REG_TYP_CD"       property="reg_typ_cd"        jdbcType="VARCHAR" />
+		<result column="FRS_RQST_DTM"     property="frs_rqst_dtm"      jdbcType="VARCHAR" />
+		<result column="FRS_RQST_USER_ID" property="frs_rqst_user_id"  jdbcType="VARCHAR" />
+		<result column="RQST_DTM"         property="rqst_dtm"          jdbcType="VARCHAR" />
+		<result column="RQST_USER_ID"     property="rqst_user_id"      jdbcType="VARCHAR" />
+		<result column="APRV_DTM"         property="aprv_dtm"          jdbcType="VARCHAR" />
+		<result column="APRV_USER_ID"     property="aprv_user_id"      jdbcType="VARCHAR" />
+		<result column="MTA_TBL_OBJ_DESCN"  property="mta_tbl_obj_descn"   jdbcType="VARCHAR" />
+		<result column="MTA_COL_OBJ_DESCN"  property="mta_col_obj_descn"   jdbcType="VARCHAR" />
+		<result column="DB_CONN_TRG_OBJ_DESCN"  property="db_conn_trg_obj_descn"   jdbcType="VARCHAR" />
+	</resultMap>
+	
+	
+	<select id="selectEsbTotal" resultMap="MtaTotalMap" parameterType="java.lang.String" >
+SELECT
+			   C.DB_CONN_TRG_ID
+			 , C.DB_CONN_TRG_PNM
+			 , C.DB_CONN_TRG_LNM
+			 , NVL(B.ORG_CD, '') ORG_CD
+			 , B.ORG_NM
+			 , B.INFO_SYS_CD
+			 , B.INFO_SYS_NM
+			 , C.DBMS_TYP_CD
+			 , (SELECT X.COMM_DTL_CD_NM FROM WAA_COMM_DTL_CD X
+	    		INNER JOIN WAA_COMM_DCD Y
+	    		   ON X.COMM_DCD_ID = Y.COMM_DCD_ID
+	    	      AND Y.REG_TYP_CD IN ('C','U')
+	    	      AND Y.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+	    	      AND Y.COMM_DCD = 'DBMS_TYP_CD'
+	    	    WHERE X.REG_TYP_CD IN ('C','U')
+	              AND X.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+	              AND X.COMM_DTL_CD = C.DBMS_TYP_CD) AS DBMS_TYP_NM
+	    	 , C.DBMS_VERS_CD
+	    	 , (SELECT X.COMM_DTL_CD_NM FROM WAA_COMM_DTL_CD X
+	    		INNER JOIN WAA_COMM_DCD Y
+	    		   ON X.COMM_DCD_ID = Y.COMM_DCD_ID
+	    	      AND Y.REG_TYP_CD IN ('C','U')
+	    	      AND Y.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+	    	      AND Y.COMM_DCD = 'DBMS_VERS_CD'
+	    	     WHERE X.REG_TYP_CD IN ('C','U')
+	              AND X.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+	    		  AND X.COMM_DTL_CD = C.DBMS_VERS_CD) AS DBMS_VERS_NM	
+	    	 , NVL(C.CRGP_NM,'')    AS CRGP_NM 	
+	    	 , NVL(C.CRGP_CNTEL,'') AS CRGP_CNTEL	
+	    	 , NVL(C.OBJ_DESCN,'')  AS DB_CONN_TRG_OBJ_DESCN
+			 , B.MTA_TBL_ID
+			 , NVL(B.MTA_TBL_PNM     , '') MTA_TBL_PNM
+			 , NVL(B.MTA_TBL_LNM     , '') MTA_TBL_LNM
+			 , NVL(B.INFO_SYS_CD     , '') INFO_SYS_CD
+			 , NVL(B.DB_CONN_TRG_ID  , '') DB_CONN_TRG_ID
+			 , NVL(B.DB_CONN_TRG_PNM , '') DB_CONN_TRG_PNM
+			 , NVL(B.DB_SCH_ID       , '') DB_SCH_ID
+			 , NVL(B.DB_SCH_PNM      , '') DB_SCH_PNM
+			 , NVL(B.TBL_TYP_NM      , '') TBL_TYP_NM
+			 , NVL(B.REL_ENTY_NM     , '') REL_ENTY_NM
+			 , NVL(B.SUBJ_NM         , '') SUBJ_NM
+			 , NVL(B.TAG_INF_NM      , '') TAG_INF_NM
+			 , NVL(B.PRSV_TERM       , '') PRSV_TERM
+			 , NVL(B.TBL_VOL         , '') TBL_VOL
+			 , NVL(B.EXPT_OCCR_CNT   , '') EXPT_OCCR_CNT
+			 , NVL(B.TBL_CRE_DT      , '') TBL_CRE_DT
+			 , NVL(B.NOPEN_RSN       , '') NOPEN_RSN
+			 , NVL(B.OPEN_DATA_LST   , '') OPEN_DATA_LST
+			 , NVL(B.OCCR_CYL        , '') OCCR_CYL  
+			 , NVL(B.OBJ_DESCN       , '') MTA_TBL_OBJ_DESCN
+			, A.MTA_COL_ID
+			, NVL(A.MTA_COL_PNM,'') MTA_COL_PNM
+			, NVL(A.MTA_COL_LNM,'') MTA_COL_LNM
+			, NVL(A.MTA_TBL_ID,'') MTA_TBL_ID
+			, NVL(A.COL_REL_ENTY_NM,'') COL_REL_ENTY_NM
+			, NVL(A.COL_REL_ATTR_NM,'') COL_REL_ATTR_NM
+			, NVL(A.COL_ORD,'') COL_ORD
+			, NVL(A.PK_YN,'') PK_YN
+			, NVL(A.PK_ORD,'') PK_ORD
+			, NVL(A.FK_YN,'') FK_YN
+			, NVL(A.DATA_TYPE,'') DATA_TYPE
+			, NVL(A.DATA_LEN,'') DATA_LEN
+			, NVL(A.DATA_SCAL,'') DATA_SCAL
+			, NVL(A.DATA_FMT,'') DATA_FMT
+			, NVL(A.NONUL_YN,'') NONUL_YN
+			, NVL(A.DEFLT_VAL,'') DEFLT_VAL
+			, NVL(A.CONST_CND,'') CONST_CND
+			, NVL(A.OPEN_YN,'') OPEN_YN
+			, NVL(A.PRSN_INFO_YN,'') PRSN_INFO_YN
+			, NVL(A.ENC_TRG_YN,'') ENC_TRG_YN
+			, NVL(A.PRI_RSN,'') PRI_RSN
+			, NVL(A.RQST_NO,'') RQST_NO
+			, NVL(A.RQST_SNO,'') RQST_SNO
+			, NVL(A.RQST_DTL_SNO,'') RQST_DTL_SNO
+			, NVL(A.OBJ_DESCN,'') MTA_COL_OBJ_DESCN
+			, NVL(A.OBJ_VERS,'') OBJ_VERS
+			, NVL(A.REG_TYP_CD,'U') REG_TYP_CD
+			, TO_CHAR(A.FRS_RQST_DTM,'YYYYMMDDHH24MISS') AS FRS_RQST_DTM
+			, NVL(A.FRS_RQST_USER_ID,'') FRS_RQST_USER_ID
+			, TO_CHAR(A.RQST_DTM,'YYYYMMDDHH24MISS') AS RQST_DTM
+			, NVL(A.RQST_USER_ID,'') RQST_USER_ID
+			, NVL(TO_CHAR(A.APRV_DTM,'YYYYMMDDHH24MISS'),'') AS APRV_DTM 
+			, NVL(A.APRV_USER_ID,'') APRV_USER_ID
+		 FROM WAQ_MTA_COL A 
+		      INNER JOIN WAQ_MTA_TBL B 
+		         ON B.RQST_NO  = A.RQST_NO
+		        AND B.RQST_SNO = A.RQST_SNO
+		      JOIN WAA_DB_CONN_TRG C
+		         ON B.DB_CONN_TRG_ID = C.DB_CONN_TRG_ID
+		        AND C.EXP_DTM = TO_DATE('9999-12-31','YYYY-MM-DD')
+		WHERE B.RVW_STS_CD = '1'
+		<if test="rqstNo != null">
+		 	AND A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+		</if>
+		 ORDER BY C.DB_CONN_TRG_PNM, B.MTA_TBL_LNM, A.MTA_COL_LNM
+	</select>
+	
+	<resultMap id="MtaInfoSysMap" type="java.util.HashMap">
+		<result column="ORG_CD"			property="orgCd"		jdbcType="VARCHAR" />
+		<result column="ORG_NM"			property="orgNm"		jdbcType="VARCHAR" />
+		<result column="INFO_SYS_CD"	property="infoSysCd"    jdbcType="VARCHAR" />
+		<result column="INFO_SYS_NM"	property="infoSysNm"    jdbcType="VARCHAR" />
+		<result column="REL_LAW"		property="relLaw"		jdbcType="VARCHAR" />
+		<result column="CONST_PURP"		property="constPurp"	jdbcType="VARCHAR" />
+		<result column="CONST_YY"		property="constYy"		jdbcType="VARCHAR" />
+		<result column="OPER_DEPT_NM"	property="operDeptNm"	jdbcType="VARCHAR" />
+		<result column="CRG_USER_NM"	property="crgUserNm"	jdbcType="VARCHAR" />
+		<result column="CRG_TEL_NO"		property="crgTelNo"		jdbcType="VARCHAR" />
+		<result column="CRG_EMAIL_ADDR" property="crgEmailAddr"	jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<select id="selectEsbInfoSys" resultMap="MtaInfoSysMap" parameterType="java.lang.String" >
+		SELECT ORG_CD
+			 , (SELECT ORG_NM FROM WAA_ORG WHERE ORG_CD = A.ORG_CD AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')) AS ORG_NM
+			 , INFO_SYS_CD
+			 , INFO_SYS_NM
+			 , REL_LAW
+			 , CONST_PURP
+			 , CONST_YY
+			 , OPER_DEPT_NM
+			 , CRG_USER_NM
+			 , CRG_TEL_NO
+			 , CRG_EMAIL_ADDR
+		FROM WAA_INFO_SYS A
+		WHERE 1=1
+		<if test="infoSysCd != null">
+			AND INFO_SYS_CD = #{infoSysCd,jdbcType=VARCHAR}
+		</if>
+		
+	</select>
+	
+</mapper>

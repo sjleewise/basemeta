@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.meta.effect.service.WatPgmAstaTblMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.meta.effect.service.WatPgmAstaTbl" >
+    <result column="REQUEST_ID"   property="requestId" 	jdbcType="VARCHAR" />
+    <result column="OBJ_NM"  	  property="objNm" 		jdbcType="VARCHAR" />
+    <result column="STA_DTTM" 	  property="staDttm" 	jdbcType="TIMESTAMP" />
+    <result column="SUBSYSTEM_ID" property="subsystemId" jdbcType="DECIMAL" />
+    <result column="PGM_ID" 	  property="pgmId" 		jdbcType="DECIMAL" />
+    <result column="TBL_ENM" 	  property="tblEnm" 	jdbcType="VARCHAR" />
+    <result column="CREATE_YN" 	  property="createYn" 	jdbcType="VARCHAR" />
+    <result column="READ_YN" 	  property="readYn" 	jdbcType="VARCHAR" />
+    <result column="UPDATE_YN" 	  property="updateYn" 	jdbcType="VARCHAR" />
+    <result column="DELETE_YN" 	  property="deleteYn" 	jdbcType="VARCHAR" />
+    <result column="FULL_PATH" 	  property="fullPath" 	jdbcType="VARCHAR" />
+    <result column="PDM_TBL_LNM"  property="pdmTblLnm" 	jdbcType="VARCHAR" />
+    <result column="PDM_TBL_ID"   property="pdmTblId" 	jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <select id="selectTblCRUD" parameterType="kr.wise.meta.effect.service.WatPgmAsta" resultMap="BaseResultMap">
+	SELECT /* WatPgmAstaTblMapper.selectTblCRUD */
+			A.TBL_ENM
+	      ,B.PDM_TBL_LNM
+	      ,B.FULL_PATH 
+	      ,A.CREATE_YN
+	      ,A.READ_YN
+	      ,A.UPDATE_YN
+	      ,A.DELETE_YN
+	      ,A.PGM_ID 
+	      ,B.PDM_TBL_ID
+	      ,B.FULL_PATH  
+	  FROM WAT_PGM_ASTA_TBL A
+	   LEFT OUTER JOIN  WAM_PDM_TBL B
+	    ON A.TBL_ENM = B.PDM_TBL_PNM
+	 WHERE A.SUBSYSTEM_ID = #{subsystemId}
+	   AND A.PGM_ID = #{pgmId}
+	 ORDER BY TBL_ENM  	
+  </select>
+  
+  
+  <insert id="insert" parameterType="kr.wise.meta.effect.service.WatPgmAstaTbl" >
+    insert /* WatPgmAstaTblMapper.insert */
+    into WAT_PGM_ASTA_TBL (REQUEST_ID, OBJ_NM, STA_DTTM, 
+      SUBSYSTEM_ID, PGM_ID, TBL_ENM, 
+      CREATE_YN, READ_YN, UPDATE_YN, 
+      DELETE_YN, OF_FUC_ID)
+    values (#{requestId,jdbcType=VARCHAR}, #{objNm,jdbcType=VARCHAR}, #{staDttm,jdbcType=TIMESTAMP}, 
+      #{subsystemId,jdbcType=DECIMAL}, #{pgmId,jdbcType=DECIMAL}, #{tblEnm,jdbcType=VARCHAR}, 
+      #{createYn,jdbcType=VARCHAR}, #{readYn,jdbcType=VARCHAR}, #{updateYn,jdbcType=VARCHAR}, 
+      #{deleteYn,jdbcType=VARCHAR}, #{ofFucId,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="kr.wise.meta.effect.service.WatPgmAstaTbl" >
+    insert /* WatPgmAstaTblMapper.insertSelective */
+    into WAT_PGM_ASTA_TBL
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="requestId != null" >
+        REQUEST_ID,
+      </if>
+      <if test="objNm != null" >
+        OBJ_NM,
+      </if>
+      <if test="staDttm != null" >
+        STA_DTTM,
+      </if>
+      <if test="subsystemId != null" >
+        SUBSYSTEM_ID,
+      </if>
+      <if test="pgmId != null" >
+        PGM_ID,
+      </if>
+      <if test="tblEnm != null" >
+        TBL_ENM,
+      </if>
+      <if test="createYn != null" >
+        CREATE_YN,
+      </if>
+      <if test="readYn != null" >
+        READ_YN,
+      </if>
+      <if test="updateYn != null" >
+        UPDATE_YN,
+      </if>
+      <if test="deleteYn != null" >
+        DELETE_YN,
+      </if>
+      <if test="ofFucId != null" >
+        OF_FUC_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="requestId != null" >
+        #{requestId,jdbcType=VARCHAR},
+      </if>
+      <if test="objNm != null" >
+        #{objNm,jdbcType=VARCHAR},
+      </if>
+      <if test="staDttm != null" >
+        #{staDttm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="subsystemId != null" >
+        #{subsystemId,jdbcType=DECIMAL},
+      </if>
+      <if test="pgmId != null" >
+        #{pgmId,jdbcType=DECIMAL},
+      </if>
+      <if test="tblEnm != null" >
+        #{tblEnm,jdbcType=VARCHAR},
+      </if>
+      <if test="createYn != null" >
+        #{createYn,jdbcType=VARCHAR},
+      </if>
+      <if test="readYn != null" >
+        #{readYn,jdbcType=VARCHAR},
+      </if>
+      <if test="updateYn != null" >
+        #{updateYn,jdbcType=VARCHAR},
+      </if>
+      <if test="deleteYn != null" >
+        #{deleteYn,jdbcType=VARCHAR},
+      </if>
+      <if test="ofFucId != null" >
+        #{ofFucId,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+</mapper>

@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.dq.criinfo.bizarea.service.WahBizAreaMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.dq.criinfo.bizarea.service.WahBizAreaVO"  >
+    <id column="BIZ_AREA_ID" property="bizAreaId" jdbcType="VARCHAR" />
+    <id column="EXP_DTM" property="expDtm" jdbcType="DATE" />
+    <result column="STR_DTM" property="strDtm" jdbcType="DATE" /> 
+    <result column="BIZ_AREA_LNM" property="bizAreaLnm" jdbcType="VARCHAR" />
+    <result column="BIZ_AREA_PNM" property="bizAreaPnm" jdbcType="VARCHAR" />
+    <result column="BIZ_AREA_LVL" property="bizAreaLvl" jdbcType="DECIMAL" />
+    <result column="UPP_BIZ_AREA_ID" property="uppBizAreaId" jdbcType="VARCHAR" />
+    <result column="UPP_BIZ_AREA_LNM" property="uppBizAreaLnm" jdbcType="VARCHAR" />
+    <result column="OBJ_DESCN" property="objDescn" jdbcType="VARCHAR" />
+    <result column="OBJ_VERS" property="objVers" jdbcType="DECIMAL" />
+    <result column="REG_TYP_CD" property="regTypCd" jdbcType="VARCHAR" />
+    <result column="FRS_RQST_DTM" property="frsRqstDtm" jdbcType="DATE" />
+    <result column="FRS_RQST_USER_ID" property="frsRqstUserId" jdbcType="VARCHAR" />
+    <result column="FRS_RQST_USER_NM" property="frsRqstUserNm" jdbcType="VARCHAR" />
+    <result column="RQST_DTM" property="rqstDtm" jdbcType="DATE" />
+    <result column="RQST_USER_ID" property="rqstUserId" jdbcType="VARCHAR" />
+    <result column="RQST_USER_NM" property="rqstUserNm" jdbcType="VARCHAR" />
+    <result column="APRV_DTM" property="aprvDtm" jdbcType="DATE" />
+    <result column="APRV_USER_ID" property="aprvUserId" jdbcType="VARCHAR" />
+    <result column="APRV_USER_NM" property="aprvUserNm" jdbcType="VARCHAR" />
+    <result column="DEPT_NM" property="deptNm" jdbcType="VARCHAR" />
+	<result column="DEPT_ID" property="deptId" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    BIZ_AREA_ID, EXP_DTM, STR_DTM, BIZ_AREA_LNM, BIZ_AREA_PNM, BIZ_AREA_LVL, UPP_BIZ_AREA_ID, 
+    OBJ_DESCN, OBJ_VERS, REG_TYP_CD, FRS_RQST_DTM, FRS_RQST_USER_ID, RQST_DTM, RQST_USER_ID, 
+    APRV_DTM, APRV_USER_ID, DEPT_NM, DEPT_ID
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="map" >
+    select 
+    <include refid="Base_Column_List" />
+    from WAH_BIZ_AREA
+    where BIZ_AREA_ID = #{bizAreaId,jdbcType=VARCHAR}
+      and EXP_DTM = #{expDtm,jdbcType=DATE}
+  </select>
+  <select id="selectHstByBizAreaId" resultMap="BaseResultMap" parameterType="String" >
+	SELECT  A.BIZ_AREA_ID
+	        ,A.EXP_DTM
+	        ,A.STR_DTM
+	        ,A.BIZ_AREA_LNM
+	        ,A.BIZ_AREA_PNM
+	        ,A.BIZ_AREA_LVL
+	        ,A.UPP_BIZ_AREA_ID
+	        ,M.BIZ_AREA_LNM AS UPP_BIZ_AREA_LNM
+	        ,A.OBJ_DESCN
+	        ,A.OBJ_VERS
+	        ,A.REG_TYP_CD
+	        ,A.FRS_RQST_DTM
+	        ,A.FRS_RQST_USER_ID
+	        ,A.RQST_DTM
+	        ,A.RQST_USER_ID
+	        ,A.APRV_DTM
+	        ,A.APRV_USER_ID        
+	        ,B.USER_NM AS RQST_USER_NM
+	        ,C.USER_NM AS FRS_RQST_USER_NM
+	        ,D.USER_NM AS APRV_USER_NM
+	        , A.DEPT_NM, A.DEPT_ID
+	 FROM WAH_BIZ_AREA A
+	      LEFT OUTER JOIN WAM_BIZ_AREA M
+	       ON A.UPP_BIZ_AREA_ID = M.BIZ_AREA_ID
+	      AND A.REG_TYP_CD IN ('C','U')
+	      LEFT OUTER JOIN WAA_USER  B
+	        ON A.RQST_USER_ID = B.USER_ID
+	       AND B.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+	       AND B.REG_TYP_CD IN ('C','U')
+	      LEFT OUTER JOIN WAA_USER  C
+	        ON A.FRS_RQST_USER_ID = C.USER_ID
+	       AND C.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+	       AND C.REG_TYP_CD IN ('C','U')   
+	      LEFT OUTER JOIN WAA_USER  D
+	        ON A.APRV_USER_ID = D.USER_ID
+	       AND D.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+	       AND D.REG_TYP_CD IN ('C','U')  
+	 WHERE  A.BIZ_AREA_ID = #{bizAreaId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="map" >
+    delete from WAH_BIZ_AREA
+    where BIZ_AREA_ID = #{bizAreaId,jdbcType=VARCHAR}
+      and EXP_DTM = #{expDtm,jdbcType=DATE}
+  </delete>
+  <insert id="insert" parameterType="kr.wise.dq.criinfo.bizarea.service.WahBizAreaVO" >
+    insert into WAH_BIZ_AREA (BIZ_AREA_ID, EXP_DTM, STR_DTM, 
+      BIZ_AREA_LNM, BIZ_AREA_PNM, BIZ_AREA_LVL, 
+      UPP_BIZ_AREA_ID, OBJ_DESCN, OBJ_VERS, 
+      REG_TYP_CD, FRS_RQST_DTM, FRS_RQST_USER_ID, 
+      RQST_DTM, RQST_USER_ID, APRV_DTM, 
+      APRV_USER_ID)
+    values (#{bizAreaId,jdbcType=VARCHAR}, #{expDtm,jdbcType=DATE}, #{strDtm,jdbcType=DATE}, 
+      #{bizAreaLnm,jdbcType=VARCHAR}, #{bizAreaPnm,jdbcType=VARCHAR}, #{bizAreaLvl,jdbcType=DECIMAL}, 
+      #{uppBizAreaId,jdbcType=VARCHAR}, #{objDescn,jdbcType=VARCHAR}, #{objVers,jdbcType=DECIMAL}, 
+      #{regTypCd,jdbcType=VARCHAR}, #{frsRqstDtm,jdbcType=DATE}, #{frsRqstUserId,jdbcType=VARCHAR}, 
+      #{rqstDtm,jdbcType=DATE}, #{rqstUserId,jdbcType=VARCHAR}, #{aprvDtm,jdbcType=DATE}, 
+      #{aprvUserId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="kr.wise.dq.criinfo.bizarea.service.WahBizAreaVO" >
+    insert into WAH_BIZ_AREA
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="bizAreaId != null" >
+        BIZ_AREA_ID,
+      </if>
+      <if test="expDtm != null" >
+        EXP_DTM,
+      </if>
+      <if test="strDtm != null" >
+        STR_DTM,
+      </if>
+      <if test="bizAreaLnm != null" >
+        BIZ_AREA_LNM,
+      </if>
+      <if test="bizAreaPnm != null" >
+        BIZ_AREA_PNM,
+      </if>
+      <if test="bizAreaLvl != null" >
+        BIZ_AREA_LVL,
+      </if>
+      <if test="uppBizAreaId != null" >
+        UPP_BIZ_AREA_ID,
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN,
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS,
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD,
+      </if>
+      <if test="frsRqstDtm != null" >
+        FRS_RQST_DTM,
+      </if>
+      <if test="frsRqstUserId != null" >
+        FRS_RQST_USER_ID,
+      </if>
+      <if test="rqstDtm != null" >
+        RQST_DTM,
+      </if>
+      <if test="rqstUserId != null" >
+        RQST_USER_ID,
+      </if>
+      <if test="aprvDtm != null" >
+        APRV_DTM,
+      </if>
+      <if test="aprvUserId != null" >
+        APRV_USER_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="bizAreaId != null" >
+        #{bizAreaId,jdbcType=VARCHAR},
+      </if>
+      <if test="expDtm != null" >
+        #{expDtm,jdbcType=DATE},
+      </if>
+      <if test="strDtm != null" >
+        #{strDtm,jdbcType=DATE},
+      </if>
+      <if test="bizAreaLnm != null" >
+        #{bizAreaLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="bizAreaPnm != null" >
+        #{bizAreaPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="bizAreaLvl != null" >
+        #{bizAreaLvl,jdbcType=DECIMAL},
+      </if>
+      <if test="uppBizAreaId != null" >
+        #{uppBizAreaId,jdbcType=VARCHAR},
+      </if>
+      <if test="objDescn != null" >
+        #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null" >
+        #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="frsRqstDtm != null" >
+        #{frsRqstDtm,jdbcType=DATE},
+      </if>
+      <if test="frsRqstUserId != null" >
+        #{frsRqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDtm != null" >
+        #{rqstDtm,jdbcType=DATE},
+      </if>
+      <if test="rqstUserId != null" >
+        #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDtm != null" >
+        #{aprvDtm,jdbcType=DATE},
+      </if>
+      <if test="aprvUserId != null" >
+        #{aprvUserId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.dq.criinfo.bizarea.service.WahBizAreaVO" >
+    update WAH_BIZ_AREA
+    <set >
+      <if test="strDtm != null" >
+        STR_DTM = #{strDtm,jdbcType=DATE},
+      </if>
+      <if test="bizAreaLnm != null" >
+        BIZ_AREA_LNM = #{bizAreaLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="bizAreaPnm != null" >
+        BIZ_AREA_PNM = #{bizAreaPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="bizAreaLvl != null" >
+        BIZ_AREA_LVL = #{bizAreaLvl,jdbcType=DECIMAL},
+      </if>
+      <if test="uppBizAreaId != null" >
+        UPP_BIZ_AREA_ID = #{uppBizAreaId,jdbcType=VARCHAR},
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="frsRqstDtm != null" >
+        FRS_RQST_DTM = #{frsRqstDtm,jdbcType=DATE},
+      </if>
+      <if test="frsRqstUserId != null" >
+        FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDtm != null" >
+        RQST_DTM = #{rqstDtm,jdbcType=DATE},
+      </if>
+      <if test="rqstUserId != null" >
+        RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDtm != null" >
+        APRV_DTM = #{aprvDtm,jdbcType=DATE},
+      </if>
+      <if test="aprvUserId != null" >
+        APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where BIZ_AREA_ID = #{bizAreaId,jdbcType=VARCHAR}
+      and EXP_DTM = #{expDtm,jdbcType=DATE}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="kr.wise.dq.criinfo.bizarea.service.WahBizAreaVO" >
+    update WAH_BIZ_AREA
+    set STR_DTM = #{strDtm,jdbcType=DATE},
+      BIZ_AREA_LNM = #{bizAreaLnm,jdbcType=VARCHAR},
+      BIZ_AREA_PNM = #{bizAreaPnm,jdbcType=VARCHAR},
+      BIZ_AREA_LVL = #{bizAreaLvl,jdbcType=DECIMAL},
+      UPP_BIZ_AREA_ID = #{uppBizAreaId,jdbcType=VARCHAR},
+      OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      FRS_RQST_DTM = #{frsRqstDtm,jdbcType=DATE},
+      FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR},
+      RQST_DTM = #{rqstDtm,jdbcType=DATE},
+      RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      APRV_DTM = #{aprvDtm,jdbcType=DATE},
+      APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR}
+    where BIZ_AREA_ID = #{bizAreaId,jdbcType=VARCHAR}
+      and EXP_DTM = #{expDtm,jdbcType=DATE}
+  </update>
+  
+  <update id="updateWahBizArea" parameterType="kr.wise.commons.rqstmst.service.WaqMstr" >
+	update WAH_BIZ_AREA A
+	set A.EXP_DTM = (select STR_DTM from WAM_BIZ_AREA B
+			                  where A.BIZ_AREA_ID = B.BIZ_AREA_ID
+			                     and A.OBJ_VERS = B.OBJ_VERS )
+    where A.EXP_DTM = to_date('99991231','YYYYMMDD')
+      and exists (select 1 from WAQ_BIZ_AREA B
+	                  where A.BIZ_AREA_ID = B.BIZ_AREA_ID
+	                     and B.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+	                     and A.OBJ_VERS = B.OBJ_VERS)
+  </update>
+  
+  <insert id="insertWahBizArea" parameterType="kr.wise.commons.rqstmst.service.WaqMstr" >
+	insert into WAH_BIZ_AREA
+	select
+	         NVL(B.BIZ_AREA_ID, OBJ_ID.NEXTVAL) as BIZ_AREA_ID
+	       , to_date('99991231','YYYYMMDD') as EXP_DTM 
+           , SYSDATE as STR_DTM
+           , A.BIZ_AREA_LNM
+           , A.BIZ_AREA_PNM 
+           , A.BIZ_AREA_LVL
+           , A.UPP_BIZ_AREA_ID
+           , A.RQST_NO
+           , A.RQST_SNO
+           , A.OBJ_DESCN
+           , NVL(B.OBJ_VERS, 0) + 1 as OBJ_VERS
+          -- , A.OBJ_VERS
+           , A.REG_TYP_CD
+           , NVL(B.FRS_RQST_DTM, A.RQST_DTM) as FRS_RQST_DTM
+           , NVL(B.FRS_RQST_USER_ID, A.RQST_USER_ID) as FRS_RQST_USER_ID
+           , A.RQST_DTM
+           , A.RQST_USER_ID
+           , SYSDATE AS APRV_DTM   --A.APRV_DTM
+           , #{aprvUserId,jdbcType=VARCHAR}  AS APRV_USER_ID    --A.APRV_USER_ID
+	from WAQ_BIZ_AREA A
+	     left outer join WAM_BIZ_AREA B
+	       on A.BIZ_AREA_ID = B.BIZ_AREA_ID
+	      and B.REG_TYP_CD in ('C','U')
+	where A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+	  and A.VRF_CD = '1' --등록가능
+  </insert>
+</mapper>

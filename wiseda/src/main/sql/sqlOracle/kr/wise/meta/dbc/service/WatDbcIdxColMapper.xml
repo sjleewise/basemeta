@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.meta.dbc.service.WatDbcIdxColMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.meta.dbc.service.WatDbcIdxCol" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap" >
+    <result column="DB_SCH_ID" property="dbSchId" jdbcType="VARCHAR" />
+    <result column="DBC_TBL_NM" property="dbcTblNm" jdbcType="VARCHAR" />
+    <result column="DBC_IDX_COL_NM" property="dbcIdxColNm" jdbcType="VARCHAR" />
+    <result column="DBC_IDX_NM" property="dbcIdxNm" jdbcType="VARCHAR" />
+    <result column="DBC_IDX_COL_KOR_NM" property="dbcIdxColKorNm" jdbcType="VARCHAR" />
+    <result column="VERS" property="vers" jdbcType="DECIMAL" />
+    <result column="REG_TYP" property="regTyp" jdbcType="VARCHAR" />
+    <result column="REG_DTM" property="regDtm" jdbcType="TIMESTAMP" />
+    <result column="REG_USER" property="regUser" jdbcType="VARCHAR" />
+    <result column="UPD_DTM" property="updDtm" jdbcType="TIMESTAMP" />
+    <result column="UPD_USER" property="updUser" jdbcType="VARCHAR" />
+    <result column="DESCN" property="descn" jdbcType="VARCHAR" />
+    <result column="DDL_IDX_COL_ID" property="ddlIdxColId" jdbcType="VARCHAR" />
+    <result column="PDM_IDX_COL_ID" property="pdmIdxColId" jdbcType="VARCHAR" />
+    <result column="ORD" property="ord" jdbcType="DECIMAL" />
+    <result column="SORT_TYPE" property="sortType" jdbcType="VARCHAR" />
+    <result column="DATA_TYPE" property="dataType" jdbcType="VARCHAR" />
+    <result column="DATA_PNUM" property="dataPnum" jdbcType="DECIMAL" />
+    <result column="DATA_LEN" property="dataLen" jdbcType="DECIMAL" />
+    <result column="DATA_PNT" property="dataPnt" jdbcType="DECIMAL" />
+    <result column="IDXCOL_DQ_EXP_YN" property="idxcolDqExpYn" jdbcType="VARCHAR" />
+    <result column="DDL_IDX_COL_EXTNC_EXS" property="ddlIdxColExtncExs" jdbcType="VARCHAR" />
+    <result column="DDL_ORD_ERR_EXS" property="ddlOrdErrExs" jdbcType="VARCHAR" />
+    <result column="PDM_IDX_COL_EXTNC_EXS" property="pdmIdxColExtncExs" jdbcType="VARCHAR" />
+    <result column="PDM_ORD_ERR_EXS" property="pdmOrdErrExs" jdbcType="VARCHAR" />
+    <result column="DDL_IDX_COL_ERR_EXS" property="ddlIdxColErrExs" jdbcType="VARCHAR" />
+    <result column="PDM_IDX_COL_ERR_EXS" property="pdmIdxColErrExs" jdbcType="VARCHAR" />
+    <result column="IDX_COL_ERR_CONTS" property="idxColErrConts" jdbcType="VARCHAR" />
+    
+    <result column="DB_SCH_LNM" property="dbSchLnm" jdbcType="VARCHAR" />
+  </resultMap>
+  <insert id="insert" parameterType="kr.wise.meta.dbc.service.WatDbcIdxCol" >
+    insert into WAT_DBC_IDX_COL (DB_SCH_ID, DBC_TBL_NM, DBC_IDX_COL_NM, 
+      DBC_IDX_NM, DBC_IDX_COL_KOR_NM, VERS, 
+      REG_TYP, REG_DTM, REG_USER, 
+      UPD_DTM, UPD_USER, DESCN, 
+      DDL_IDX_COL_ID, PDM_IDX_COL_ID, ORD, 
+      SORT_TYPE, DATA_TYPE, DATA_PNUM, 
+      DATA_LEN, DATA_PNT, IDXCOL_DQ_EXP_YN, 
+      DDL_IDX_COL_EXTNC_EXS, DDL_ORD_ERR_EXS, PDM_IDX_COL_EXTNC_EXS, 
+      PDM_ORD_ERR_EXS, DDL_IDX_COL_ERR_EXS, PDM_IDX_COL_ERR_EXS, 
+      IDX_COL_ERR_CONTS)
+    values (#{dbSchId,jdbcType=VARCHAR}, #{dbcTblNm,jdbcType=VARCHAR}, #{dbcIdxColNm,jdbcType=VARCHAR}, 
+      #{dbcIdxNm,jdbcType=VARCHAR}, #{dbcIdxColKorNm,jdbcType=VARCHAR}, #{vers,jdbcType=DECIMAL}, 
+      #{regTyp,jdbcType=VARCHAR}, #{regDtm,jdbcType=TIMESTAMP}, #{regUser,jdbcType=VARCHAR}, 
+      #{updDtm,jdbcType=TIMESTAMP}, #{updUser,jdbcType=VARCHAR}, #{descn,jdbcType=VARCHAR}, 
+      #{ddlIdxColId,jdbcType=VARCHAR}, #{pdmIdxColId,jdbcType=VARCHAR}, #{ord,jdbcType=DECIMAL}, 
+      #{sortType,jdbcType=VARCHAR}, #{dataType,jdbcType=VARCHAR}, #{dataPnum,jdbcType=DECIMAL}, 
+      #{dataLen,jdbcType=DECIMAL}, #{dataPnt,jdbcType=DECIMAL}, #{idxcolDqExpYn,jdbcType=VARCHAR}, 
+      #{ddlIdxColExtncExs,jdbcType=VARCHAR}, #{ddlOrdErrExs,jdbcType=VARCHAR}, #{pdmIdxColExtncExs,jdbcType=VARCHAR}, 
+      #{pdmOrdErrExs,jdbcType=VARCHAR}, #{ddlIdxColErrExs,jdbcType=VARCHAR}, #{pdmIdxColErrExs,jdbcType=VARCHAR}, 
+      #{idxColErrConts,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="kr.wise.meta.dbc.service.WatDbcIdxCol" >
+    insert into WAT_DBC_IDX_COL
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="dbSchId != null" >
+        DB_SCH_ID,
+      </if>
+      <if test="dbcTblNm != null" >
+        DBC_TBL_NM,
+      </if>
+      <if test="dbcIdxColNm != null" >
+        DBC_IDX_COL_NM,
+      </if>
+      <if test="dbcIdxNm != null" >
+        DBC_IDX_NM,
+      </if>
+      <if test="dbcIdxColKorNm != null" >
+        DBC_IDX_COL_KOR_NM,
+      </if>
+      <if test="vers != null" >
+        VERS,
+      </if>
+      <if test="regTyp != null" >
+        REG_TYP,
+      </if>
+      <if test="regDtm != null" >
+        REG_DTM,
+      </if>
+      <if test="regUser != null" >
+        REG_USER,
+      </if>
+      <if test="updDtm != null" >
+        UPD_DTM,
+      </if>
+      <if test="updUser != null" >
+        UPD_USER,
+      </if>
+      <if test="descn != null" >
+        DESCN,
+      </if>
+      <if test="ddlIdxColId != null" >
+        DDL_IDX_COL_ID,
+      </if>
+      <if test="pdmIdxColId != null" >
+        PDM_IDX_COL_ID,
+      </if>
+      <if test="ord != null" >
+        ORD,
+      </if>
+      <if test="sortType != null" >
+        SORT_TYPE,
+      </if>
+      <if test="dataType != null" >
+        DATA_TYPE,
+      </if>
+      <if test="dataPnum != null" >
+        DATA_PNUM,
+      </if>
+      <if test="dataLen != null" >
+        DATA_LEN,
+      </if>
+      <if test="dataPnt != null" >
+        DATA_PNT,
+      </if>
+      <if test="idxcolDqExpYn != null" >
+        IDXCOL_DQ_EXP_YN,
+      </if>
+      <if test="ddlIdxColExtncExs != null" >
+        DDL_IDX_COL_EXTNC_EXS,
+      </if>
+      <if test="ddlOrdErrExs != null" >
+        DDL_ORD_ERR_EXS,
+      </if>
+      <if test="pdmIdxColExtncExs != null" >
+        PDM_IDX_COL_EXTNC_EXS,
+      </if>
+      <if test="pdmOrdErrExs != null" >
+        PDM_ORD_ERR_EXS,
+      </if>
+      <if test="ddlIdxColErrExs != null" >
+        DDL_IDX_COL_ERR_EXS,
+      </if>
+      <if test="pdmIdxColErrExs != null" >
+        PDM_IDX_COL_ERR_EXS,
+      </if>
+      <if test="idxColErrConts != null" >
+        IDX_COL_ERR_CONTS,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="dbSchId != null" >
+        #{dbSchId,jdbcType=VARCHAR},
+      </if>
+      <if test="dbcTblNm != null" >
+        #{dbcTblNm,jdbcType=VARCHAR},
+      </if>
+      <if test="dbcIdxColNm != null" >
+        #{dbcIdxColNm,jdbcType=VARCHAR},
+      </if>
+      <if test="dbcIdxNm != null" >
+        #{dbcIdxNm,jdbcType=VARCHAR},
+      </if>
+      <if test="dbcIdxColKorNm != null" >
+        #{dbcIdxColKorNm,jdbcType=VARCHAR},
+      </if>
+      <if test="vers != null" >
+        #{vers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTyp != null" >
+        #{regTyp,jdbcType=VARCHAR},
+      </if>
+      <if test="regDtm != null" >
+        #{regDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="regUser != null" >
+        #{regUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updDtm != null" >
+        #{updDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updUser != null" >
+        #{updUser,jdbcType=VARCHAR},
+      </if>
+      <if test="descn != null" >
+        #{descn,jdbcType=VARCHAR},
+      </if>
+      <if test="ddlIdxColId != null" >
+        #{ddlIdxColId,jdbcType=VARCHAR},
+      </if>
+      <if test="pdmIdxColId != null" >
+        #{pdmIdxColId,jdbcType=VARCHAR},
+      </if>
+      <if test="ord != null" >
+        #{ord,jdbcType=DECIMAL},
+      </if>
+      <if test="sortType != null" >
+        #{sortType,jdbcType=VARCHAR},
+      </if>
+      <if test="dataType != null" >
+        #{dataType,jdbcType=VARCHAR},
+      </if>
+      <if test="dataPnum != null" >
+        #{dataPnum,jdbcType=DECIMAL},
+      </if>
+      <if test="dataLen != null" >
+        #{dataLen,jdbcType=DECIMAL},
+      </if>
+      <if test="dataPnt != null" >
+        #{dataPnt,jdbcType=DECIMAL},
+      </if>
+      <if test="idxcolDqExpYn != null" >
+        #{idxcolDqExpYn,jdbcType=VARCHAR},
+      </if>
+      <if test="ddlIdxColExtncExs != null" >
+        #{ddlIdxColExtncExs,jdbcType=VARCHAR},
+      </if>
+      <if test="ddlOrdErrExs != null" >
+        #{ddlOrdErrExs,jdbcType=VARCHAR},
+      </if>
+      <if test="pdmIdxColExtncExs != null" >
+        #{pdmIdxColExtncExs,jdbcType=VARCHAR},
+      </if>
+      <if test="pdmOrdErrExs != null" >
+        #{pdmOrdErrExs,jdbcType=VARCHAR},
+      </if>
+      <if test="ddlIdxColErrExs != null" >
+        #{ddlIdxColErrExs,jdbcType=VARCHAR},
+      </if>
+      <if test="pdmIdxColErrExs != null" >
+        #{pdmIdxColErrExs,jdbcType=VARCHAR},
+      </if>
+      <if test="idxColErrConts != null" >
+        #{idxColErrConts,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="selectList" parameterType="java.lang.String" resultMap="BaseResultMap">
+  SELECT A.DB_SCH_ID
+       , C.DB_SCH_LNM
+       , A.DBC_TBL_NM
+       , A.DBC_IDX_NM
+       , A.DBC_IDX_COL_NM
+       , A.DBC_IDX_COL_KOR_NM
+       , A.ORD
+       , A.SORT_TYPE
+       , A.DATA_TYPE
+       , A.DATA_PNUM
+       , A.DATA_LEN
+       , A.DATA_PNT
+       , A.DESCN
+     FROM WAT_DBC_IDX_COL A
+          INNER JOIN WAT_DBC_TBL B
+             ON A.DB_SCH_ID  = B.DB_SCH_ID
+            AND A.DBC_TBL_NM = B.DBC_TBL_NM
+          INNER JOIN WAA_DB_SCH C
+             ON C.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD') 
+            AND C.REG_TYP_CD IN ('C', 'U')
+            AND C.DB_SCH_ID = A.DB_SCH_ID                           
+  <where>
+     AND A.DB_SCH_ID  = #{dbSchId,jdbcType=VARCHAR}
+     AND A.DBC_TBL_NM = #{dbcTblNm,jdbcType=VARCHAR}
+  </where>
+  ORDER BY A.DBC_IDX_NM
+         , A.ORD
+  </select>
+  
+  <select id="selectDbcIdxColChangeList" parameterType="java.lang.String" resultMap="BaseResultMap">
+  SELECT A.DB_SCH_ID
+       , C.DB_SCH_LNM
+       , A.DBC_TBL_NM
+       , A.DBC_IDX_NM
+       , A.DBC_IDX_COL_NM
+       , A.DBC_IDX_COL_KOR_NM
+       , A.ORD
+       , A.SORT_TYPE
+       , A.DATA_TYPE
+       , A.DATA_PNUM
+       , A.DATA_LEN
+       , A.DATA_PNT
+       , A.DESCN
+       , A.VERS
+       , A.EXP_DTM
+       , A.STR_DTM
+       , CASE WHEN A.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD') AND A.REG_TYP IN ('C', 'U') THEN '#0000FF'
+	   	 ELSE NULL END AS FontColor
+     FROM WAH_DBC_IDX_COL A
+        INNER JOIN WAH_DBC_TBL B
+            ON A.DB_SCH_ID = B.DB_SCH_ID
+            AND A.DBC_TBL_NM = B.DBC_TBL_NM
+<!--             AND NVL(B.REG_TYP, 'C') IN ('C', 'U') -->
+        INNER JOIN WAA_DB_SCH C
+            ON A.DB_SCH_ID = C.DB_SCH_ID
+            AND C.REG_TYP_CD IN ('C', 'U')
+            AND C.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+            
+  <where>
+  AND A.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+  AND A.DBC_TBL_NM = #{dbcTblNm,jdbcType=VARCHAR}
+<!--   AND NVL(A.REG_TYP, 'C') IN ('C', 'U') -->
+  </where>
+  ORDER BY A.EXP_DTM DESC, A.STR_DTM DESC, A.ORD
+  </select>
+  
+</mapper>

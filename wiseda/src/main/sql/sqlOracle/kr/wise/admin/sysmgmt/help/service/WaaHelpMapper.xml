@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.admin.sysmgmt.help.service.WaaHelpMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.admin.sysmgmt.help.service.WaaHelp" >
+    <id column="HELP_ID" property="helpId" jdbcType="VARCHAR" />
+    <result column="SCR_NM" property="scrNm" jdbcType="VARCHAR" />
+    <result column="SCR_URL" property="scrUrl" jdbcType="VARCHAR" />
+    <result column="USE_YN" property="useYn" jdbcType="VARCHAR" />
+    <result column="MENU_ID" property="menuId" jdbcType="VARCHAR" />
+    <result column="REG_TYP_CD" property="regTypCd" jdbcType="VARCHAR" />
+    <result column="WRIT_DTM" property="writDtm" jdbcType="TIMESTAMP" />
+    <result column="WRIT_USER_ID" property="writUserId" jdbcType="VARCHAR" />
+    <result column="EXP_DTM" property="expDtm" jdbcType="TIMESTAMP" />
+    <result column="STR_DTM" property="strDtm" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="kr.wise.admin.sysmgmt.help.service.WaaHelp" extends="BaseResultMap" >
+    <result column="HELP_CTNT" property="helpCtnt" jdbcType="CLOB" />
+  </resultMap>
+  
+	<resultMap id="helpMasterDetail" type="kr.wise.admin.sysmgmt.help.service.WaaHelpVO">
+		<result property="helpId" 	column="HELP_ID" />
+		<result property="scrNm" 	column="SCR_NM" />      
+		<result property="fullPath" 	column="FULL_PATH" />            
+		<result property="scrUrl" 	column="SCR_URL" />                
+		<result property="useYn" 	column="USE_YN" />
+		<result property="helpCtnt" 	column="HELP_CTNT" />                
+		<result property="menuId" 	column="MENU_ID" />
+		<result property="menuNm" 	column="MENU_NM" />                
+		<result property="regTypCd" 	column="REG_TYP_CD" />            
+		<result property="writDtm" 	column="WRIT_DTM" />         
+		<result property="writUserId" 	column="WRIT_USER_ID" />             
+		<result property="expDtm" 	column="EXP_DTM" />        
+		<result property="strDtm" 	column="STR_DTM" />  
+	</resultMap>
+  
+  <!-- <sql id="Base_Column_List" >
+    HELP_ID, SCR_NM, SCR_URL, USE_YN, MENU_ID, REG_TYP_CD, WRIT_DTM, WRIT_USER_ID, EXP_DTM, 
+    STR_DTM
+  </sql>
+  <sql id="Blob_Column_List" >
+    HELP_CTNT 
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from WAA_HELP
+    where HELP_ID = #{helpId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from WAA_HELP
+    where HELP_ID = #{helpId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="kr.wise.admin.sysmgmt.help.service.WaaHelp" >
+    insert into WAA_HELP (HELP_ID, SCR_NM, SCR_URL, 
+      USE_YN, MENU_ID, REG_TYP_CD, 
+      WRIT_DTM, WRIT_USER_ID, EXP_DTM, 
+      STR_DTM, HELP_CTNT)
+    values (#{helpId,jdbcType=VARCHAR}, #{scrNm,jdbcType=VARCHAR}, #{scrUrl,jdbcType=VARCHAR}, 
+      #{useYn,jdbcType=VARCHAR}, #{menuId,jdbcType=VARCHAR}, #{regTypCd,jdbcType=VARCHAR}, 
+      #{writDtm,jdbcType=TIMESTAMP}, #{writUserId,jdbcType=VARCHAR}, #{expDtm,jdbcType=TIMESTAMP}, 
+      #{strDtm,jdbcType=TIMESTAMP}, #{helpCtnt,jdbcType=CLOB})
+  </insert>
+  <insert id="insertSelective" parameterType="kr.wise.admin.sysmgmt.help.service.WaaHelp" >
+    insert into WAA_HELP
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="helpId != null" >
+        HELP_ID,
+      </if>
+      <if test="scrNm != null" >
+        SCR_NM,
+      </if>
+      <if test="scrUrl != null" >
+        SCR_URL,
+      </if>
+      <if test="useYn != null" >
+        USE_YN,
+      </if>
+      <if test="menuId != null" >
+        MENU_ID,
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD,
+      </if>
+      <if test="writDtm != null" >
+        WRIT_DTM,
+      </if>
+      <if test="writUserId != null" >
+        WRIT_USER_ID,
+      </if>
+      <if test="expDtm != null" >
+        EXP_DTM,
+      </if>
+      <if test="strDtm != null" >
+        STR_DTM,
+      </if>
+      <if test="helpCtnt != null" >
+        HELP_CTNT,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="helpId != null" >
+        #{helpId,jdbcType=VARCHAR},
+      </if>
+      <if test="scrNm != null" >
+        #{scrNm,jdbcType=VARCHAR},
+      </if>
+      <if test="scrUrl != null" >
+        #{scrUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="useYn != null" >
+        #{useYn,jdbcType=VARCHAR},
+      </if>
+      <if test="menuId != null" >
+        #{menuId,jdbcType=VARCHAR},
+      </if>
+      <if test="regTypCd != null" >
+        #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="writDtm != null" >
+        #{writDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="writUserId != null" >
+        #{writUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="expDtm != null" >
+        #{expDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="strDtm != null" >
+        #{strDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="helpCtnt != null" >
+        #{helpCtnt,jdbcType=CLOB},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.admin.sysmgmt.help.service.WaaHelp" >
+    update WAA_HELP
+    <set >
+      <if test="scrNm != null" >
+        SCR_NM = #{scrNm,jdbcType=VARCHAR},
+      </if>
+      <if test="scrUrl != null" >
+        SCR_URL = #{scrUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="useYn != null" >
+        USE_YN = #{useYn,jdbcType=VARCHAR},
+      </if>
+      <if test="menuId != null" >
+        MENU_ID = #{menuId,jdbcType=VARCHAR},
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="writDtm != null" >
+        WRIT_DTM = #{writDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="writUserId != null" >
+        WRIT_USER_ID = #{writUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="expDtm != null" >
+        EXP_DTM = #{expDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="strDtm != null" >
+        STR_DTM = #{strDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="helpCtnt != null" >
+        HELP_CTNT = #{helpCtnt,jdbcType=CLOB},
+      </if>
+    </set>
+    where HELP_ID = #{helpId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="kr.wise.admin.sysmgmt.help.service.WaaHelp" >
+    update WAA_HELP
+    set SCR_NM = #{scrNm,jdbcType=VARCHAR},
+      SCR_URL = #{scrUrl,jdbcType=VARCHAR},
+      USE_YN = #{useYn,jdbcType=VARCHAR},
+      MENU_ID = #{menuId,jdbcType=VARCHAR},
+      REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      WRIT_DTM = #{writDtm,jdbcType=TIMESTAMP},
+      WRIT_USER_ID = #{writUserId,jdbcType=VARCHAR},
+      EXP_DTM = #{expDtm,jdbcType=TIMESTAMP},
+      STR_DTM = #{strDtm,jdbcType=TIMESTAMP},
+      HELP_CTNT = #{helpCtnt,jdbcType=CLOB}
+    where HELP_ID = #{helpId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="kr.wise.admin.sysmgmt.help.service.WaaHelp" >
+    update WAA_HELP
+    set SCR_NM = #{scrNm,jdbcType=VARCHAR},
+      SCR_URL = #{scrUrl,jdbcType=VARCHAR},
+      USE_YN = #{useYn,jdbcType=VARCHAR},
+      MENU_ID = #{menuId,jdbcType=VARCHAR},
+      REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      WRIT_DTM = #{writDtm,jdbcType=TIMESTAMP},
+      WRIT_USER_ID = #{writUserId,jdbcType=VARCHAR},
+      EXP_DTM = #{expDtm,jdbcType=TIMESTAMP},
+      STR_DTM = #{strDtm,jdbcType=TIMESTAMP}
+    where HELP_ID = #{helpId,jdbcType=VARCHAR}
+  </update> -->
+	<select id="selectAllHelpMstrList" resultMap="helpMasterDetail" parameterType="kr.wise.admin.sysmgmt.help.service.WaaHelpVO" >
+  		<![CDATA[	  			
+  			SELECT
+  				A.HELP_ID, A.SCR_NM, B.FULL_PATH, A.SCR_URL, A.MENU_ID, B.MENU_NM, A.USE_YN, A.REG_TYP_CD
+  			FROM WAA_HELP A, WAA_PRGM_MENU B
+  			WHERE 1=1
+  			AND A.MENU_ID = B.MENU_ID
+  			AND B.EXP_DTM = TO_DATE('99991231', 'YYYY-MM-DD HH24:MI:SS')
+  		]]>	
+  			<if test="searchWrd != null and searchWrd != ''">
+			       <![CDATA[   AND SCR_NM like  '%'|| #{searchWrd}||'%']]>
+			</if>
+  			<!-- <if test="searchTyp == 'scrUrl' and searchWrd != null and searchWrd != ''">
+			       <![CDATA[   AND SCR_Url like  '%'|| #{searchWrd}||'%']]>
+			</if> -->
+  			ORDER BY HELP_ID ASC
+	</select>
+	
+	<select id="selectHelpMasterInf" resultMap="helpMasterDetail" parameterType="kr.wise.admin.sysmgmt.help.service.WaaHelpVO" >
+		<![CDATA[  			
+  			SELECT
+  				A.HELP_ID, A.SCR_NM, A.SCR_URL, A.MENU_ID, B.MENU_NM, A.HELP_CTNT, A.USE_YN, A.REG_TYP_CD
+  			FROM WAA_HELP A, WAA_PRGM_MENU B
+  			WHERE 1=1
+  			AND A.MENU_ID = B.MENU_ID
+  			AND A.HELP_ID = #{helpId}
+  			AND B.EXP_DTM = TO_DATE('99991231', 'YYYY-MM-DD HH24:MI:SS')
+  		]]>
+  </select>
+  
+  <insert id="insertHelpMastetInf" parameterType="kr.wise.admin.sysmgmt.help.service.WaaHelpVO" >
+		<![CDATA[
+				INSERT INTO  WAA_HELP (
+					  HELP_ID, SCR_NM, SCR_URL, USE_YN, HELP_CTNT, MENU_ID, 
+					  REG_TYP_CD, WRIT_DTM, WRIT_USER_ID, EXP_DTM, STR_DTM
+					) VALUES (
+					#{helpId, jdbcType=CHAR},   	
+					#{scrNm, jdbcType=VARCHAR}, 	
+					#{scrUrl, jdbcType=VARCHAR}, 	
+					#{useYn, jdbcType=CHAR},      	
+					#{helpCtnt, jdbcType=VARCHAR},           	
+					#{menuId, jdbcType=VARCHAR},
+					'C',            	
+					TO_DATE(SYSDATE,  'YYYY-MM-DD HH24:MI:SS'),           	
+					#{writUserId, jdbcType=VARCHAR},         	
+					TO_DATE('99991231', 'YYYY-MM-DD HH24:MI:SS'),           	
+					TO_DATE(SYSDATE,  'YYYY-MM-DD HH24:MI:SS')         	
+					)
+		 ]]>
+	</insert>
+	
+	<update id="updateHelpMastetInf" parameterType="kr.wise.admin.sysmgmt.help.service.WaaHelpVO" >
+		<![CDATA[
+				UPDATE WAA_HELP 
+					SET
+					SCR_NM         = #{scrNm, jdbcType=VARCHAR}, 	                
+					SCR_URL        = #{scrUrl, jdbcType=VARCHAR}, 	                
+					USE_YN         = #{useYn, jdbcType=CHAR},      	                
+					HELP_CTNT      = #{helpCtnt, jdbcType=VARCHAR},           	
+					MENU_ID        = #{menuId, jdbcType=VARCHAR}, 
+					REG_TYP_CD     = 'U',            	        
+					WRIT_DTM       = TO_DATE(SYSDATE,  'YYYY-MM-DD HH24:MI:SS'),     
+					WRIT_USER_ID   = #{writUserId, jdbcType=VARCHAR},         	
+					EXP_DTM        = TO_DATE('99991231', 'YYYY-MM-DD HH24:MI:SS')
+				WHERE HELP_ID = #{helpId}
+		 ]]>
+	</update> 
+
+	<update id="updateHelpId" parameterType="kr.wise.admin.sysmgmt.help.service.WaaHelpVO" >
+		<![CDATA[
+				UPDATE WAA_PRGM_MENU 
+					SET
+					HELP_ID   	   = #{helpId, jdbcType=CHAR}
+				WHERE MENU_ID 	   = #{menuId, jdbcType=VARCHAR}
+				AND EXP_DTM = TO_DATE('99991231', 'YYYY-MM-DD HH24:MI:SS')
+		 ]]>
+	</update> 
+	
+	<update id="updateHelpIdNull" parameterType="kr.wise.admin.sysmgmt.help.service.WaaHelpVO" >
+		<![CDATA[
+				UPDATE WAA_PRGM_MENU 
+					SET
+					HELP_ID   	   = ''
+				WHERE MENU_ID 	   = #{menuId, jdbcType=VARCHAR}
+				AND EXP_DTM = TO_DATE('99991231', 'YYYY-MM-DD HH24:MI:SS')
+		 ]]>
+	</update>
+  
+	<delete id="deleteHelp" parameterType="java.util.Arrays">
+		<![CDATA[
+				DELETE FROM WAA_HELP 
+				WHERE HELP_ID IN 
+		 ]]>
+				<foreach collection="array" item="item" index="index" open="(" separator="," close=")">
+					#{item}
+				</foreach>
+	</delete>
+  
+ 	<update id="updateHelpIdReset" parameterType="kr.wise.admin.sysmgmt.help.service.WaaHelpVO" >
+		<![CDATA[
+				UPDATE WAA_PRGM_MENU
+					SET
+					HELP_ID = ''
+				WHERE HELP_ID IN
+		 ]]>
+		 	<foreach collection="array" item="item" index="index" open="(" separator="," close=")">
+					#{item}
+			</foreach>
+	</update>
+	
+	<select id="selectHelpCtnt" resultMap="helpMasterDetail" parameterType="kr.wise.admin.sysmgmt.help.service.WaaHelpVO">
+		--HELP_ID를 비교하여 도움말을 가져온다.
+		<![CDATA[  			
+  			SELECT
+  				HELP_ID, SCR_NM, SCR_URL, HELP_CTNT
+  			FROM WAA_HELP
+  			WHERE HELP_ID = #{helpId, javaType=String, jdbcType=VARCHAR}
+  		]]>
+	</select>
+  
+	
+</mapper>

@@ -1,0 +1,1355 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.commons.api.service.ApiMapper" >
+<resultMap id="TblBaseResultMap" type="kr.wise.commons.api.service.WamPdmTblApi" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+    <result column="PDM_TBL_PNM"   property="pdmTblPnm" jdbcType="VARCHAR" />
+    <result column="PDM_TBL_LNM"   property="pdmTblLnm" jdbcType="VARCHAR" />
+    <result column="SUBJ_LNM"      property="subjLnm" jdbcType="VARCHAR" />
+    <result column="PERS_INFO_CNV_YN"      property="persInfoCnvYn" jdbcType="VARCHAR" />
+    <result column="PERS_INFO_GRD"      property="persInfoGrd" jdbcType="VARCHAR" />
+  </resultMap>
+  
+<sql id="Base_Column_List3" >
+    PDM_TBL_PNM, PDM_TBL_LNM, B.SUBJ_LNM, A.STD_APL_YN, PART_TBL_YN, DW_TRG_TBL_YN, 
+    CRG_USER_ID, A.OBJ_DESCN, A.OBJ_VERS, FRS_RQST_DTM, FRS_RQST_USER_ID, 
+    RQST_DTM, RQST_USER_ID, APRV_DTM, APRV_USER_ID, CTD_FCY, DEL_CRI, DEL_MTD, BCK_FCY,PERS_INFO_CNV_YN,PERS_INFO_GRD 
+  </sql>
+  
+<select id="selectPdmTblList" resultMap="TblBaseResultMap" parameterType="map" >
+    SELECT * FROM (
+    	SELECT ROWNUM AS RNUM,DD.* 
+    	  FROM (
+		    SELECT 
+		          <include refid="Base_Column_List3" />
+		    	, B.SYS_AREA_ID
+		    	, B.FULL_PATH    	
+		    	, GET_USER_NM(A.CRG_USER_ID) AS CRG_USER_NM
+		    	, GET_USER_NM(A.FRS_RQST_USER_ID) AS FRS_RQST_USER_NM
+		    	, GET_USER_NM(A.RQST_USER_ID) AS RQST_USER_NM
+		    	, GET_USER_NM(A.APRV_USER_ID) AS APRV_USER_NM
+		    	, (SELECT MAX(Z.ENC_YN) 
+		    	   FROM WAM_PDM_COL Z
+		    	   WHERE A.PDM_TBL_ID = Z.PDM_TBL_ID
+		    	   ) ENC_YN
+		    	, #{rqstDcd,jdbcType=VARCHAR}   AS RQST_DCD
+		    	<choose>
+		    		<when test='rqstDcd == "DD" '>
+		    			, 'D'  AS REG_TYP_CD     
+		    		</when>    			
+		    		<otherwise>
+		    			, A.REG_TYP_CD
+		    		</otherwise>
+		    	</choose>    	    	
+		    FROM WAM_PDM_TBL A
+		         LEFT JOIN 
+		         (SELECT FULL_PATH
+				       , SUBJ_ID
+				       , SYS_AREA_ID
+				       , REG_TYP_CD
+				       , SUBJ_LNM
+				    FROM WAA_SUBJ
+				   WHERE REG_TYP_CD IN ('C', 'U')
+				     AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+		         ) B
+		         ON A.SUBJ_ID = B.SUBJ_ID
+		    WHERE 1 = 1	 	
+	          <if test="pdmTblLnm != null" >
+		        AND (A.PDM_TBL_LNM LIKE  '%'||#{pdmTblLnm,jdbcType=VARCHAR}||'%'
+		        OR A.PDM_TBL_LNM LIKE  '%'||UPPER(#{pdmTblLnm,jdbcType=VARCHAR})||'%')
+		      </if>
+	          <if test="pdmTblPnm != null" >
+		        AND (A.PDM_TBL_PNM LIKE  '%'||#{pdmTblPnm,jdbcType=VARCHAR}||'%'
+		        OR A.PDM_TBL_PNM LIKE  '%'||UPPER(#{pdmTblPnm,jdbcType=VARCHAR})||'%')
+		      </if>
+		      <if test="subjLnm != null" >
+		        AND (B.FULL_PATH LIKE '%'||#{subjLnm,jdbcType=VARCHAR}||'%')
+		      </if>
+		      <if test="persInfoCnvYn != null" >
+		        AND A.PERS_INFO_CNV_YN = #{persInfoCnvYn,jdbcType=VARCHAR}
+		      </if>
+		      <if test="persInfoGrd != null" >
+		        AND A.PERS_INFO_GRD = #{persInfoGrd,jdbcType=VARCHAR}
+		      </if>
+		    ORDER BY A.FULL_PATH
+		           , A.PDM_TBL_PNM 
+		           ) DD
+		     )
+	     WHERE 1=1
+	     <if test="pageIndex != null and sizeIndex != null">
+	     	AND RNUM BETWEEN (#{pageIndex}-1)*#{sizeIndex}+1 AND  #{pageIndex}*#{sizeIndex}
+	     </if>
+  </select>
+  <select id="selectPdmTblCnt" resultType="int" parameterType="map" >
+    SELECT 
+    	COUNT(1)
+    FROM WAM_PDM_TBL A
+         LEFT JOIN 
+         (SELECT FULL_PATH
+		       , SUBJ_ID
+		       , SYS_AREA_ID
+		       , REG_TYP_CD
+		       , SUBJ_LNM
+		    FROM WAA_SUBJ
+		   WHERE REG_TYP_CD IN ('C', 'U')
+		     AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+         ) B
+         ON A.SUBJ_ID = B.SUBJ_ID
+    WHERE 1 = 1	 	
+	  <if test="pdmTblLnm != null" >
+        AND (A.PDM_TBL_LNM LIKE  '%'||#{pdmTblLnm,jdbcType=VARCHAR}||'%'
+        OR A.PDM_TBL_LNM LIKE  '%'||UPPER(#{pdmTblLnm,jdbcType=VARCHAR})||'%')
+      </if>
+         <if test="pdmTblPnm != null" >
+        AND (A.PDM_TBL_PNM LIKE  '%'||#{pdmTblPnm,jdbcType=VARCHAR}||'%'
+        OR A.PDM_TBL_PNM LIKE  '%'||UPPER(#{pdmTblPnm,jdbcType=VARCHAR})||'%')
+      </if>
+      <if test="subjLnm != null" >
+        AND (B.FULL_PATH LIKE '%'||#{subjLnm,jdbcType=VARCHAR}||'%')
+      </if>
+      <if test="persInfoCnvYn != null" >
+        AND A.PERS_INFO_CNV_YN = #{persInfoCnvYn,jdbcType=VARCHAR}
+      </if>
+      <if test="persInfoGrd != null" >
+        AND A.PERS_INFO_GRD = #{persInfoGrd,jdbcType=VARCHAR}
+      </if>
+  </select>
+  
+  
+   <resultMap id="ColBaseResultMap" type="kr.wise.commons.api.service.WamPdmColApi" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap" >
+    <result column="PDM_TBL_PNM" property="pdmTblPnm" jdbcType="VARCHAR" />
+    <result column="SUBJ_LNM" property="subjLnm" jdbcType="VARCHAR" />
+    <result column="PERS_INFO_CNV_YN"      property="persInfoCnvYn" jdbcType="VARCHAR" />
+    <result column="PERS_INFO_GRD"      property="persInfoGrd" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <select id="selectPdmColList" resultMap="ColBaseResultMap" parameterType="map" >
+		 SELECT * FROM (
+   			SELECT ROWNUM AS RNUM, DD.*
+   			 FROM (	    
+			    SELECT
+			  			  A.PDM_COL_PNM
+						, A.PDM_COL_LNM
+						, C.SDITM_LNM
+						, C.SDITM_PNM
+						, D.DMN_LNM
+						, D.DMN_PNM
+						, A.COL_ORD
+						, CASE WHEN A.DATA_LEN IS NULL 
+			                     THEN A.DATA_TYPE
+			                     ELSE (CASE WHEN A.DATA_SCAL IS NOT NULL
+			                                THEN A.DATA_TYPE || '(' || A.DATA_LEN ||','|| A.DATA_SCAL ||')' 
+			                                ELSE A.DATA_TYPE || '(' || A.DATA_LEN ||')'
+			                                 END )
+			                     END AS DATA_TYPE
+						, NVL(A.PK_YN, 'N') AS PK_YN
+						, A.PK_ORD
+						, NVL(A.NONUL_YN, 'N') AS NONUL_YN
+						, A.ENC_YN
+						, A.OBJ_DESCN
+						, A.OBJ_VERS
+						, A.REG_TYP_CD
+						, A.FRS_RQST_DTM
+						, A.FRS_RQST_USER_ID
+						, A.RQST_DTM
+						, A.RQST_USER_ID
+						, A.APRV_DTM
+						, A.APRV_USER_ID
+						, A.PERS_INFO_CNV_YN
+						, A.PERS_INFO_GRD
+						, B.PDM_TBL_LNM
+						, B.PDM_TBL_PNM
+			            , SUBJ.SUBJ_LNM
+			            , SUBJ.FULL_PATH
+			            , B.STD_APL_YN
+				    	, GET_USER_NM(A.FRS_RQST_USER_ID) AS FRS_RQST_USER_NM
+			    		, GET_USER_NM(A.RQST_USER_ID) AS RQST_USER_NM
+			    		, GET_USER_NM(A.APRV_USER_ID) AS APRV_USER_NM
+			     FROM WAM_PDM_TBL B
+			    	    INNER JOIN WAM_PDM_COL A
+			               ON B.PDM_TBL_ID = A.PDM_TBL_ID
+						 AND A.REG_TYP_CD IN ('C', 'U')
+						  LEFT OUTER JOIN WAM_SDITM C
+							ON A.SDITM_ID = C.SDITM_ID
+						   AND C.REG_TYP_CD IN ('C', 'U')
+						  LEFT OUTER JOIN WAM_DMN D
+						    ON C.DMN_ID = D.DMN_ID
+						   AND D.REG_TYP_CD IN ('C', 'U')
+						  LEFT OUTER JOIN WAA_INFO_TYPE E
+						    ON D.INFOTP_ID = E.INFOTP_ID
+						   AND E.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+						   LEFT OUTER JOIN WAA_SUBJ SUBJ
+			               ON B.SUBJ_ID = SUBJ.SUBJ_ID
+			               AND SUBJ.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+			               AND SUBJ.REG_TYP_CD IN ('C', 'U') 
+			    <where>
+			    	AND B.REG_TYP_CD IN ('C', 'U')
+					<!--     	gap 분석 물리테이블ID 는 필수 입력항목 입니다. -->
+			    	<if test="pdmTblPnm != null and pdmTblPnm != '' "> 
+			    	AND (B.PDM_TBL_PNM LIKE '%'||#{pdmTblPnm,jdbcType=VARCHAR}||'%' OR B.PDM_TBL_PNM LIKE '%'||UPPER(#{pdmTblPnm,jdbcType=VARCHAR})||'%')
+			    	</if>
+			    	<if test="subjLnm != null and subjLnm != '' "> 
+			    	AND SUBJ.FULL_PATH LIKE '%'||#{subjLnm,jdbcType=VARCHAR} ||'%'
+			    	</if>
+			    	<if test="persInfoCnvYn != null" >
+				       AND A.PERS_INFO_CNV_YN = #{persInfoCnvYn,jdbcType=VARCHAR}
+				    </if>
+				    <if test="persInfoGrd != null" >
+				       AND A.PERS_INFO_GRD = #{persInfoGrd,jdbcType=VARCHAR}
+				    </if>
+			    </where>
+			    ORDER BY B.PDM_TBL_LNM, A.COL_ORD
+			    ) DD
+		     )
+	     WHERE 1=1
+	     <if test="pageIndex != null and sizeIndex != null">
+	     	AND RNUM BETWEEN (#{pageIndex}-1)*#{sizeIndex}+1 AND  #{pageIndex}*#{sizeIndex}
+	     </if>
+  </select>
+  
+  <select id="selectPdmColCnt" resultType="int" parameterType="map" >
+    SELECT
+  			 COUNT(1)
+     FROM WAM_PDM_TBL B
+    	    INNER JOIN WAM_PDM_COL A
+               ON B.PDM_TBL_ID = A.PDM_TBL_ID
+			 AND A.REG_TYP_CD IN ('C', 'U')
+			  LEFT OUTER JOIN WAM_SDITM C
+				ON A.SDITM_ID = C.SDITM_ID
+			   AND C.REG_TYP_CD IN ('C', 'U')
+			  LEFT OUTER JOIN WAM_DMN D
+			    ON C.DMN_ID = D.DMN_ID
+			   AND D.REG_TYP_CD IN ('C', 'U')
+			  LEFT OUTER JOIN WAA_INFO_TYPE E
+			    ON D.INFOTP_ID = E.INFOTP_ID
+			   AND E.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+			   LEFT OUTER JOIN WAA_SUBJ SUBJ
+               ON B.SUBJ_ID = SUBJ.SUBJ_ID
+               AND SUBJ.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+               AND SUBJ.REG_TYP_CD IN ('C', 'U') 
+    <where>
+    	AND B.REG_TYP_CD IN ('C', 'U')
+		<!--     	gap 분석 물리테이블ID 는 필수 입력항목 입니다. -->
+      	<if test="pdmTblPnm != null and pdmTblPnm != '' "> 
+    	AND (B.PDM_TBL_PNM LIKE '%'||#{pdmTblPnm,jdbcType=VARCHAR}||'%' OR B.PDM_TBL_PNM LIKE '%'||UPPER(#{pdmTblPnm,jdbcType=VARCHAR})||'%')
+    	</if>
+    	<if test="subjLnm != null and subjLnm != '' "> 
+    	AND SUBJ.FULL_PATH LIKE '%'||#{subjLnm,jdbcType=VARCHAR} ||'%'
+    	</if>
+    	<if test="persInfoCnvYn != null" >
+	       AND A.PERS_INFO_CNV_YN = #{persInfoCnvYn,jdbcType=VARCHAR}
+	    </if>
+	    <if test="persInfoGrd != null" >
+	       AND A.PERS_INFO_GRD = #{persInfoGrd,jdbcType=VARCHAR}
+	    </if>
+    </where>
+  </select>
+  
+  <resultMap id="WdBaseResultMap" type="kr.wise.commons.api.service.WamStwdApi" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+    <result column="STWD_LNM" property="stwdLnm" jdbcType="VARCHAR" />
+    <result column="STWD_PNM" property="stwdPnm" jdbcType="VARCHAR" />
+    <result column="STND_ASRT" property="stndAsrt" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <select id="selectStndWordList" resultMap="WdBaseResultMap" parameterType="map" >
+  	SELECT * FROM (
+   			SELECT ROWNUM AS RNUM, DD.* 
+   				FROM (
+				  	SELECT A.STWD_LNM
+						,A.STWD_PNM
+						,A.ENG_MEAN
+						,A.WD_DCD
+						,A.OBJ_DESCN
+						,A.OBJ_VERS
+						,A.REG_TYP_CD
+						,A.FRS_RQST_DTM
+						,A.FRS_RQST_USER_ID
+						,A.RQST_DTM
+						,A.RQST_USER_ID
+						,A.APRV_DTM
+						,A.APRV_USER_ID
+						,A.STND_ASRT
+				  		,GET_USER_NM(A.FRS_RQST_USER_ID) AS FRS_RQST_USER_NM
+				    	,GET_USER_NM(A.RQST_USER_ID) AS RQST_USER_NM
+				    	,GET_USER_NM(A.APRV_USER_ID) AS APRV_USER_NM 
+				   	FROM WAM_STWD A
+				  	<where>
+						AND REG_TYP_CD IN ('C', 'U')
+				      <if test="stwdLnm != null" >
+				        AND (STWD_LNM LIKE '%' || #{stwdLnm,jdbcType=VARCHAR} || '%'
+				        	 OR STWD_LNM LIKE '%' || UPPER(#{stwdLnm,jdbcType=VARCHAR}) || '%')
+				      </if>
+				      <if test="stwdPnm != null" >
+				        AND (STWD_PNM LIKE '%' || #{stwdPnm,jdbcType=VARCHAR} || '%'
+				        	 OR STWD_PNM LIKE '%' || UPPER(#{stwdPnm,jdbcType=VARCHAR}) || '%')
+				      </if>
+				  	</where>
+				  	ORDER BY STWD_LNM
+			  	) DD
+		     )
+	     WHERE 1=1
+	     <if test="pageIndex != null and sizeIndex != null">
+	     	AND RNUM BETWEEN (#{pageIndex}-1)*#{sizeIndex}+1 AND  #{pageIndex}*#{sizeIndex}
+	     </if>
+  </select>
+  
+  <select id="selectStndWordCnt" resultType="int" parameterType="map" >
+  	SELECT COUNT(1) FROM WAM_STWD
+  	<where>
+		AND REG_TYP_CD IN ('C', 'U')
+      <if test="stwdLnm != null" >
+        AND (STWD_LNM LIKE '%' || #{stwdLnm,jdbcType=VARCHAR} || '%'
+        	 OR STWD_LNM LIKE '%' || UPPER(#{stwdLnm,jdbcType=VARCHAR}) || '%')
+      </if>
+      <if test="stwdPnm != null" >
+        AND (STWD_PNM LIKE '%' || #{stwdPnm,jdbcType=VARCHAR} || '%'
+        	 OR STWD_PNM LIKE '%' || UPPER(#{stwdPnm,jdbcType=VARCHAR}) || '%')
+      </if>
+  	</where>
+  </select>
+  
+  <resultMap id="DomainBaseResultMap" type="kr.wise.commons.api.service.WamDmnApi" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+    <result column="DMN_LNM" 		   property="dmnLnm" jdbcType="VARCHAR" />
+    <result column="SUBJ_ID" 	   	   property="subjId" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  
+  <select id="selectDomainList" resultMap="DomainBaseResultMap" parameterType="map" >
+	SELECT * FROM (
+    	SELECT ROWNUM AS RNUM,DD.* 
+    	  FROM (	  	
+			  	SELECT  A.DMN_LNM
+						, A.DMN_PNM
+						, A.LNM_CRI_DS
+						, A.UPP_DMN_ID
+						, A.SUBJ_ID
+						, A.LST_ENTY_ID
+						, A.LST_ENTY_PNM
+						, A.LST_ENTY_LNM
+						, A.LST_ATTR_ID
+						, A.LST_ATTR_PNM
+						, A.LST_ATTR_LNM
+						, A.CD_VAL_TYP_CD
+						, A.CD_VAL_IVW_CD
+						, A.SDITM_AUTO_CRT_YN
+						, A.DATA_FRM
+						, A.CRG_USER_ID
+						, A.DMN_ORG_DS
+						, A.OBJ_DESCN
+						, A.OBJ_VERS
+						, A.REG_TYP_CD
+						, A.FRS_RQST_DTM
+						, A.FRS_RQST_USER_ID
+						, A.RQST_DTM
+						, A.RQST_USER_ID
+						, A.APRV_DTM
+						, A.APRV_USER_ID
+						, A.FULL_PATH
+						, A.PNM_CRI_DS
+						, A.ENC_YN
+						, A.DMN_DSCD
+						, A.TRANS_YN
+						, A.DMN_ORG_TXT
+						, A.SUB_CD_YN
+						, A.DMN_MAX_VAL
+						, A.DMN_MIN_VAL
+						, A.STND_ASRT
+			  	        , B.DATA_TYPE
+			  	        , B.DATA_LEN
+			  	        , B.DATA_SCAL 
+			  	  FROM WAM_DMN A 
+			     INNER JOIN V_WAA_DMNG G
+			        ON A.DMNG_ID = G.DMNG_ID
+			  	 INNER JOIN WAA_INFO_TYPE B
+			  	    ON A.INFOTP_ID = B.INFOTP_ID
+			  	   AND B.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+			  	<where>
+			       AND A.REG_TYP_CD IN ('C', 'U')
+			      <if test="dmnLnm != null" >
+			       AND (DMN_LNM LIKE '%' || #{dmnLnm,jdbcType=VARCHAR} || '%'
+			   	    OR DMN_LNM LIKE '%' || UPPER(#{dmnLnm,jdbcType=VARCHAR}) || '%')
+			      </if>
+			      <if test="subjId != null" >
+			        AND A.SUBJ_ID = #{subjId,jdbcType=VARCHAR}
+			      </if>
+			  	</where>
+			  	ORDER BY DMN_LNM
+  				) DD
+		     )
+	     WHERE 1=1
+	     <if test="pageIndex != null and sizeIndex != null">
+	     	AND RNUM BETWEEN (#{pageIndex}-1)*#{sizeIndex}+1 AND  #{pageIndex}*#{sizeIndex}
+	     </if>
+  </select>
+  
+  
+  <select id="selectDomainCnt" resultType="int" parameterType="map" >
+  	SELECT COUNT(1) 
+  	  FROM WAM_DMN A 
+     INNER JOIN V_WAA_DMNG G
+        ON A.DMNG_ID = G.DMNG_ID
+  	 INNER JOIN WAA_INFO_TYPE B
+  	    ON A.INFOTP_ID = B.INFOTP_ID
+  	   AND B.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+  	<where>
+       AND A.REG_TYP_CD IN ('C', 'U')
+      <if test="dmnLnm != null" >
+       AND (DMN_LNM LIKE '%' || #{dmnLnm,jdbcType=VARCHAR} || '%'
+   	    OR DMN_LNM LIKE '%' || UPPER(#{dmnLnm,jdbcType=VARCHAR}) || '%')
+      </if>
+      <if test="subjId != null" >
+        AND A.SUBJ_ID = #{subjId,jdbcType=VARCHAR}
+      </if>
+  	</where>
+  </select>
+  
+  <resultMap id="SditmBaseResultMap" type="kr.wise.commons.api.service.WamSditmApi" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+    <result column="SDITM_LNM" property="sditmLnm" jdbcType="VARCHAR" />
+    <result column="SDITM_PNM" property="sditmPnm" jdbcType="VARCHAR" />
+    <result column="PERS_INFO_CNV_YN"      property="persInfoCnvYn" jdbcType="VARCHAR" />
+    <result column="PERS_INFO_GRD"      property="persInfoGrd" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <select id="selectSditmList" resultMap="SditmBaseResultMap" parameterType="map">
+		SELECT * FROM (
+    		SELECT ROWNUM AS RNUM,DD.* 
+    	  		FROM (
+    	  			SELECT A.SDITM_LNM
+			             ,A.SDITM_PNM
+			             ,A.LNM_CRI_DS
+			             ,A.INFOTP_CHG_YN
+			             ,A.OBJ_DESCN
+			             ,A.OBJ_VERS
+			             ,A.REG_TYP_CD
+			             ,A.FRS_RQST_DTM
+			             ,A.FRS_RQST_USER_ID
+			             ,A.RQST_DTM
+			             ,A.RQST_USER_ID
+			             ,A.APRV_DTM
+			             ,A.APRV_USER_ID
+			             ,A.PNM_CRI_DS
+			             ,A.TEST_DATA_CNV_YN
+			             ,A.PERS_INFO_CNV_YN
+			             ,A.PERS_INFO_GRD
+					     ,B.DMN_LNM
+					     ,B.DMN_PNM
+					     ,D.DATA_TYPE
+					     ,D.DATA_LEN
+					     ,D.DATA_SCAL
+					     ,GET_USER_NM(A.FRS_RQST_USER_ID) AS FRS_RQST_USER_NM
+				    	 ,GET_USER_NM(A.RQST_USER_ID) AS RQST_USER_NM
+				    	 ,GET_USER_NM(A.APRV_USER_ID) AS APRV_USER_NM
+				    	 ,G.DMNG_LNM
+				    	 ,G.DMNG_PNM
+				    	 ,G.UPP_DMNG_ID
+				    	 ,G.UPP_DMNG_LNM
+				    	 ,NVL(B.ENC_YN,'N') ENC_YN	 
+				     FROM WAM_SDITM A 
+				    INNER JOIN WAM_DMN B
+				       ON A.DMN_ID = B.DMN_ID
+			          AND A.REG_TYP_CD IN ('C', 'U')
+			          AND B.REG_TYP_CD IN ('C', 'U')
+				     LEFT OUTER JOIN WAA_INFO_TYPE D
+				       ON A.INFOTP_ID = D.INFOTP_ID 
+			          AND D.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+			         LEFT OUTER JOIN V_WAA_DMNG G
+			           ON A.DMNG_ID = G.DMNG_ID
+			  <where>
+			  <trim prefix="" suffix="" suffixOverrides="," >
+			    <if test="sditmLnm != null" >
+			      AND (SDITM_LNM LIKE '%' || #{sditmLnm,jdbcType=VARCHAR} || '%' 
+			           OR SDITM_LNM LIKE '%' || UPPER(#{sditmLnm,jdbcType=VARCHAR}) || '%')
+			    </if>
+			    <if test="sditmPnm != null" >
+			      AND (SDITM_PNM LIKE '%' || #{sditmPnm,jdbcType=VARCHAR} || '%'
+			           OR SDITM_PNM LIKE '%' || UPPER(#{sditmPnm,jdbcType=VARCHAR}) || '%')
+			    </if>
+			    </trim>
+			    <if test="persInfoCnvYn != null" >
+			       AND A.PERS_INFO_CNV_YN = #{persInfoCnvYn,jdbcType=VARCHAR}
+			    </if>
+			    <if test="persInfoGrd != null" >
+			       AND A.PERS_INFO_GRD = #{persInfoGrd,jdbcType=VARCHAR}
+			    </if>
+			  </where>
+			  ORDER BY SDITM_LNM
+			  ) DD
+		     )
+	     WHERE 1=1
+	     <if test="pageIndex != null and sizeIndex != null">
+	     	AND RNUM BETWEEN (#{pageIndex}-1)*#{sizeIndex}+1 AND  #{pageIndex}*#{sizeIndex}
+	     </if>
+  </select>
+  
+  <select id="selectSditmCnt" resultType="int" parameterType="map">
+	  	SELECT COUNT(1)
+		     FROM WAM_SDITM A 
+		    INNER JOIN WAM_DMN B
+		       ON A.DMN_ID = B.DMN_ID
+	          AND A.REG_TYP_CD IN ('C', 'U')
+	          AND B.REG_TYP_CD IN ('C', 'U')
+		     LEFT OUTER JOIN WAA_INFO_TYPE D
+		       ON A.INFOTP_ID = D.INFOTP_ID 
+	          AND D.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	         LEFT OUTER JOIN V_WAA_DMNG G
+	           ON A.DMNG_ID = G.DMNG_ID
+	  <where>
+	  <trim prefix="" suffix="" suffixOverrides="," >
+	    <if test="sditmLnm != null" >
+	      AND (SDITM_LNM LIKE '%' || #{sditmLnm,jdbcType=VARCHAR} || '%' 
+	           OR SDITM_LNM LIKE '%' || UPPER(#{sditmLnm,jdbcType=VARCHAR}) || '%')
+	    </if>
+	    <if test="sditmPnm != null" >
+	      AND (SDITM_PNM LIKE '%' || #{sditmPnm,jdbcType=VARCHAR} || '%'
+	           OR SDITM_PNM LIKE '%' || UPPER(#{sditmPnm,jdbcType=VARCHAR}) || '%')
+	    </if>
+	    </trim>
+	    <if test="persInfoCnvYn != null" >
+	       AND A.PERS_INFO_CNV_YN = #{persInfoCnvYn,jdbcType=VARCHAR}
+	    </if>
+	    <if test="persInfoGrd != null" >
+	       AND A.PERS_INFO_GRD = #{persInfoGrd,jdbcType=VARCHAR}
+	    </if>
+	  </where>
+  </select>
+  
+  <resultMap id="DdlTblBaseResultMap" type="kr.wise.commons.api.service.WamDdlTblApi" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+    <result column="DDL_TBL_PNM" property="ddlTblPnm" jdbcType="VARCHAR" />
+    <result column="DDL_TBL_LNM" property="ddlTblLnm" jdbcType="VARCHAR" />
+    <result column="PERS_INFO_CNV_YN"      property="persInfoCnvYn" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <select id="selectDdlTblList" resultMap="DdlTblBaseResultMap" parameterType="map" >
+  SELECT * FROM (
+    		SELECT ROWNUM AS RNUM,DD.* 
+    	  		FROM (
+  	                  SELECT A.PDM_RQST_NO                                                                             
+  		              		 , A.TBL_CMMT_UPD_YN                                                                     
+  		              		 , A.DDL_TBL_PNM                                                                         
+  		              		 , A.DDL_TBL_LNM                                                                         
+  		              		 , A.PRC_TYP_CD                                                                          
+  		              		 , A.PRC_DT                                                                              
+  		              		 , A.PRC_DBA_ID                                                                          
+  		              		 , A.OBJ_DESCN                                                                           
+  		              		 , A.OBJ_VERS                                                                            
+  		              		 , A.REG_TYP_CD                                                                          
+  		              		 , A.FRS_RQST_DTM                                                                        
+  		              		 , A.FRS_RQST_USER_ID                                                                    
+  		              		 , A.RQST_DTM                                                                            
+  		              		 , A.RQST_USER_ID                                                                        
+  		              		 , A.APRV_DTM                                                                            
+  		              		 , A.APRV_USER_ID                                                                        
+  		              		 , A.ENC_YN                                                                              
+  		              		 , A.USER_RQST_CNTN                                                                      
+  		              		 , A.PART_TBL_YN                                                                         
+  		              		 , A.PCI_YN                                                                              
+  		              		 , A.DDL_TRG_DCD                                                                         
+  				             , A.SRC_DDL_TRG_DCD                                                                     
+  				             , A.SRC_DB_SCH_ID                                                                       
+  				             , A.SRC_DB_SCH_PNM                                                                      
+  				             , A.SRC_DB_CONN_TRG_PNM                                                                 
+  				             , A.TGT_DDL_TRG_DCD                                                                     
+  				             , A.TGT_DB_SCH_ID                                                                       
+  				             , A.TGT_DB_SCH_PNM                                                                      
+  				             , A.TGT_DB_CONN_TRG_PNM                                                                 
+  			                 , B.PDM_TBL_LNM                                                                         
+  			                 , B.PDM_TBL_PNM                                                                         
+  			                 , SCH.DB_SCH_LNM                                                                        
+  			                 , SCH.DB_SCH_PNM                                                                        
+  			                 , DB.DB_CONN_TRG_LNM                                                                    
+  		                     , DB.DB_CONN_TRG_PNM                                                                    
+ 			                 , S.SUBJ_LNM                                                                            
+ 			                 , S.SUBJ_PNM                                                                            
+ 			                 , S.FULL_PATH                                                                           
+ 			                 , U1.USER_NM AS FRS_RQST_USER_NM                                                        
+ 			                 , U2.USER_NM AS RQST_USER_NM                                                            
+ 			                 , U3.USER_NM AS APRV_USER_NM                                                            
+ 			                 , A.PERS_INFO_CNV_YN                                                                    
+ 		                 FROM WAM_DDL_TBL A                                                                      
+ 		                 LEFT OUTER JOIN WAM_PDM_TBL B                                                           
+ 		                   ON A.PDM_TBL_ID = B.PDM_TBL_ID                                                               
+ 		                  AND B.REG_TYP_CD IN ('C', 'U')                                                                
+ 		                 INNER JOIN WAA_DB_SCH SCH                                                                
+ 		                    ON A.DB_SCH_ID = SCH.DB_SCH_ID                                                               
+ 		                   AND SCH.REG_TYP_CD IN ('C', 'U')                                                              
+ 		                   AND SCH.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')                                         
+ 		                 INNER JOIN WAA_DB_CONN_TRG DB                                                            
+ 		                    ON SCH.DB_CONN_TRG_ID = DB.DB_CONN_TRG_ID                                                    
+ 		                   AND DB.REG_TYP_CD IN ('C', 'U')                                                               
+ 		                   AND DB.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')                                          
+ 		                 LEFT OUTER JOIN WAA_SUBJ S                                                               
+ 		                    ON B.SUBJ_ID = S.SUBJ_ID                                                                     
+ 		                   AND S.REG_TYP_CD IN ('C', 'U')                                                                
+ 		                   AND S.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')                                           
+ 		                 LEFT OUTER JOIN WAA_USER U1                                                             
+ 		                   ON A.FRS_RQST_USER_ID = U1.USER_ID                                                           
+ 		                  AND U1.REG_TYP_CD IN ('C', 'U')                                                               
+ 		                  AND U1.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')                                          
+ 		                 LEFT OUTER JOIN WAA_USER U2                                                             
+ 		                   ON A.RQST_USER_ID = U2.USER_ID                                                               
+ 		                  AND U2.REG_TYP_CD IN ('C', 'U')                                                               
+ 		                  AND U2.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')                                          
+ 		                 LEFT OUTER JOIN WAA_USER U3                                                             
+ 		                   ON A.APRV_USER_ID = U3.USER_ID                                                               
+ 		                  AND U3.REG_TYP_CD IN ('C', 'U')                                                               
+ 		                  AND U3.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')                                          
+ 	                    <where>                                                                                            
+ 	                    	A.REG_TYP_CD IN ('C', 'U')                                                                       
+ 	                        <if test="ddlTblLnm != null" >                                                                 
+ 	                          AND (A.DDL_TBL_LNM LIKE '%' || #{ddlTblLnm,jdbcType=VARCHAR} || '%'                          
+ 	                          	OR A.DDL_TBL_LNM LIKE '%' || UPPER(#{ddlTblLnm,jdbcType=VARCHAR}) || '%')                
+ 	                        </if>                                                                                          
+ 	                        <if test="ddlTblPnm != null" >                                                                 
+ 	                          AND (A.DDL_TBL_PNM LIKE '%' || #{ddlTblPnm,jdbcType=VARCHAR} || '%'                          
+ 	                          	OR A.DDL_TBL_PNM LIKE '%' || UPPER(#{ddlTblPnm,jdbcType=VARCHAR}) || '%')                
+ 	                        </if>                                                                                          
+<!--  	                        <if test="pageIndex != null and sizeIndex != null">                                             -->
+<!--  	                       	AND ROWNUM BETWEEN (#{pageIndex}-1)*#{sizeIndex}+1 AND  #{pageIndex}*#{sizeIndex}             -->
+<!--  	                       </if>                                                                                            -->
+ 	                       <if test="persInfoCnvYn != null" >                                                              
+ 	                         AND A.PERS_INFO_CNV_YN = #{persInfoCnvYn,jdbcType=VARCHAR}                                    
+ 	                       </if>                                                                                           
+ 	                       <if test="subjLnm != null" >                                                                    
+ 	                        AND B.FULL_PATH LIKE '%'||REPLACE(#{subjLnm,jdbcType=VARCHAR},'_','@_')||'%' ESCAPE '@'        
+ 	                        </if>                                                                                          
+ 	                    </where>                                                                                           
+	                      ORDER BY DB.DB_CONN_TRG_PNM, SCH.DB_SCH_PNM, A.DDL_TBL_PNM
+			  ) DD
+		     )
+	     WHERE 1=1
+	     <if test="pageIndex != null and sizeIndex != null">
+	     	AND RNUM BETWEEN (#{pageIndex}-1)*#{sizeIndex}+1 AND  #{pageIndex}*#{sizeIndex}
+	     </if>
+  </select>
+  
+  <select id="selectDdlTblCnt" resultType="int" parameterType="map" >
+	    SELECT COUNT(1)
+		  FROM WAM_DDL_TBL A
+		  LEFT OUTER JOIN WAM_PDM_TBL B
+		    ON A.PDM_TBL_ID = B.PDM_TBL_ID
+		   AND B.REG_TYP_CD IN ('C', 'U')
+		 INNER JOIN WAA_DB_SCH SCH
+		    ON A.DB_SCH_ID = SCH.DB_SCH_ID
+		   AND SCH.REG_TYP_CD IN ('C', 'U')
+		   AND SCH.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+		 INNER JOIN WAA_DB_CONN_TRG DB
+		    ON SCH.DB_CONN_TRG_ID = DB.DB_CONN_TRG_ID
+		   AND DB.REG_TYP_CD IN ('C', 'U')
+		   AND DB.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+		 LEFT OUTER JOIN WAA_SUBJ S
+		    ON B.SUBJ_ID = S.SUBJ_ID
+		   AND S.REG_TYP_CD IN ('C', 'U')
+		   AND S.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+		  LEFT OUTER JOIN WAA_USER U1
+		    ON A.FRS_RQST_USER_ID = U1.USER_ID
+		   AND U1.REG_TYP_CD IN ('C', 'U')
+		   AND U1.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+		  LEFT OUTER JOIN WAA_USER U2
+		    ON A.RQST_USER_ID = U2.USER_ID
+		   AND U2.REG_TYP_CD IN ('C', 'U')
+		   AND U2.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+		  LEFT OUTER JOIN WAA_USER U3
+		    ON A.APRV_USER_ID = U3.USER_ID
+		   AND U3.REG_TYP_CD IN ('C', 'U')
+		   AND U3.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	  <where>
+	  	A.REG_TYP_CD IN ('C', 'U')
+	  	  
+	      <if test="ddlTblLnm != null" >
+	        AND (A.DDL_TBL_LNM LIKE '%' || #{ddlTblLnm,jdbcType=VARCHAR} || '%'
+	        	OR A.DDL_TBL_LNM LIKE '%' || UPPER(#{ddlTblLnm,jdbcType=VARCHAR}) || '%')
+	      </if>
+	      <if test="ddlTblPnm != null" >
+	        AND (A.DDL_TBL_PNM LIKE '%' || #{ddlTblPnm,jdbcType=VARCHAR} || '%'
+	        	OR A.DDL_TBL_PNM LIKE '%' || UPPER(#{ddlTblPnm,jdbcType=VARCHAR}) || '%')
+	      </if>
+	      <if test="persInfoCnvYn != null" >
+	       AND A.PERS_INFO_CNV_YN = #{persInfoCnvYn,jdbcType=VARCHAR}
+	      </if>
+	      <if test="subjLnm != null" >
+	      AND B.FULL_PATH LIKE '%'||REPLACE(#{subjLnm,jdbcType=VARCHAR},'_','@_')||'%' ESCAPE '@'
+	      </if>
+	  </where>
+  </select>
+  
+  
+  <resultMap id="DdlColBaseResultMap" type="kr.wise.commons.api.service.WamDdlColApi" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+    <result column="DDL_COL_PNM"  property="ddlColPnm" jdbcType="VARCHAR" />
+    <result column="PERS_INFO_CNV_YN"      property="persInfoCnvYn" jdbcType="VARCHAR" />
+    <result column="PERS_INFO_GRD"      property="persInfoGrd" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <select id="selectDdlColList" resultMap="DdlColBaseResultMap" parameterType="map" >
+	 SELECT * FROM (
+    	SELECT ROWNUM AS RNUM,DD.* 
+    	  FROM (
+    	   SELECT  A.DDL_COL_PNM       
+						,A.DDL_COL_LNM       
+						,A.COL_ORD           
+						, CASE WHEN A.DATA_LEN IS NULL 
+				         THEN A.DATA_TYPE
+				         ELSE (CASE WHEN A.DATA_SCAL IS NOT NULL
+				                    THEN A.DATA_TYPE || '(' || A.DATA_LEN ||', '|| A.DATA_SCAL ||')' 
+				                    ELSE A.DATA_TYPE || '(' || A.DATA_LEN ||')'
+				                     END )
+				         END AS DATA_TYPE         
+						,A.DATA_LEN          
+						,A.DATA_SCAL         
+						,NVL(A.PK_YN, 'N') AS   PK_YN           
+						,A.PK_ORD  
+						,NVL(A.NONUL_YN, 'N') AS   NONUL_YN          
+						,A.DEFLT_VAL         
+						,A.OBJ_DESCN         
+						,A.OBJ_VERS          
+						,A.REG_TYP_CD        
+						,A.FRS_RQST_DTM        
+						,A.FRS_RQST_USER_ID    
+						,A.RQST_DTM            
+						,A.RQST_USER_ID        
+						,A.APRV_DTM            
+						,A.APRV_USER_ID  
+				  		,GET_USER_NM(A.FRS_RQST_USER_ID) AS FRS_RQST_USER_NM
+				  		,GET_USER_NM(A.RQST_USER_ID) AS RQST_USER_NM
+				  		,GET_USER_NM(A.APRV_USER_ID) AS APRV_USER_NM
+				  		,B.DDL_TBL_PNM
+				  		,B.DDL_TBL_LNM
+				  		,B.SCRT_INFO
+				  		,A.PERS_INFO_CNV_YN
+				  		,A.PERS_INFO_GRD
+				  FROM WAM_DDL_COL A 
+				  INNER JOIN WAM_DDL_TBL B
+				  	ON A.DDL_TBL_ID = B.DDL_TBL_ID
+				   AND B.REG_TYP_CD IN ('C', 'U')
+				  LEFT OUTER JOIN WAM_PDM_TBL C
+				    ON B.PDM_TBL_ID = C.PDM_TBL_ID
+				  <where>
+				  	A.REG_TYP_CD IN ('C', 'U')
+				  	<if test="ddlTblPnm != null">
+				  	AND (B.DDL_TBL_PNM LIKE '%' || #{ddlTblPnm,jdbcType=VARCHAR} || '%'
+				  		OR B.DDL_TBL_PNM LIKE '%' || UPPER(#{ddlTblPnm,jdbcType=VARCHAR}) || '%')
+				  	
+				  	</if>
+				  	<if test="persInfoCnvYn != null" >
+				        AND A.PERS_INFO_CNV_YN = #{persInfoCnvYn,jdbcType=VARCHAR}
+				    </if>
+				    <if test="persInfoGrd != null" >
+				        AND A.PERS_INFO_GRD = #{persInfoGrd,jdbcType=VARCHAR}
+				     </if>
+				     <if test="subjLnm != null" >
+	                    AND C.FULL_PATH LIKE '%'||REPLACE(#{subjLnm,jdbcType=VARCHAR},'_','@_')||'%' ESCAPE '@'
+	                 </if>
+				  </where>
+				  ORDER BY A.DDL_TBL_ID, COL_ORD
+			  ) DD
+		     )
+	     WHERE 1=1
+	     <if test="pageIndex != null and sizeIndex != null">
+	     	AND RNUM BETWEEN (#{pageIndex}-1)*#{sizeIndex}+1 AND  #{pageIndex}*#{sizeIndex}
+	     </if>
+  </select>
+  
+  <select id="selectDdlColCnt" resultType="int" parameterType="map" >
+	  SELECT  COUNT(1)
+	  FROM WAM_DDL_COL A 
+	  INNER JOIN WAM_DDL_TBL B
+	  	ON A.DDL_TBL_ID = B.DDL_TBL_ID
+	   AND B.REG_TYP_CD IN ('C', 'U')
+	   	LEFT OUTER JOIN WAM_PDM_TBL C
+		ON B.PDM_TBL_ID = C.PDM_TBL_ID
+	  <where>
+	  	A.REG_TYP_CD IN ('C', 'U')
+	  	<if test="ddlTblPnm != null">
+	  	AND (B.DDL_TBL_PNM LIKE '%' || #{ddlTblPnm,jdbcType=VARCHAR} || '%'
+	  		OR B.DDL_TBL_PNM LIKE '%' || UPPER(#{ddlTblPnm,jdbcType=VARCHAR}) || '%')
+	  	</if>
+	  	<if test="persInfoCnvYn != null" >
+	        AND A.PERS_INFO_CNV_YN = #{persInfoCnvYn,jdbcType=VARCHAR}
+	    </if>
+	    <if test="persInfoGrd != null" >
+	        AND A.PERS_INFO_GRD = #{persInfoGrd,jdbcType=VARCHAR}
+	     </if>
+	     <if test="subjLnm != null" >
+	        AND C.FULL_PATH LIKE '%'||REPLACE(#{subjLnm,jdbcType=VARCHAR},'_','@_')||'%' ESCAPE '@'
+	     </if>
+	  </where>
+  </select>
+  
+  <select id="selectVStdTermList" resultType="kr.wise.commons.api.service.vStdTermApi" parameterType="map">
+		    SELECT termname, 
+ 			   termengname, 
+ 		       domainname,
+ 			   comments,
+		       sysname,
+		       pers_info_cnv_yn,
+		       pers_info_grd
+		, CASE WHEN ldatatype IS NULL 
+				         THEN ldatatype
+				         ELSE (CASE WHEN data_scal IS NOT NULL
+				                    THEN ldatatype || '(' || data_len ||', '|| data_scal ||')' 
+				                    ELSE ldatatype || '(' || data_len ||')'
+				                     END )
+				         END AS ldatatype       
+		, CASE WHEN pdatatype IS NULL 
+				         THEN pdatatype
+				         ELSE (CASE WHEN data_scal IS NOT NULL
+				                    THEN pdatatype || '(' || data_len ||', '|| data_scal ||')' 
+				                    ELSE pdatatype || '(' || data_len ||')'
+				                     END )
+				         END AS pdatatype
+				         
+        , CASE WHEN oraDataType IS NULL 
+				         THEN ORADATATYPE
+				         ELSE (CASE WHEN data_scal IS NOT NULL
+				                    THEN oraDataType || '(' || data_len ||', '|| data_scal ||')' 
+				                    ELSE oraDataType || '(' || data_len ||')'
+				                     END )
+				         END AS oraDataType
+         , CASE WHEN msDataType IS NULL 
+				         THEN msDataType
+				         ELSE (CASE WHEN data_scal IS NOT NULL
+				                    THEN msDataType || '(' || data_len ||', '|| data_scal ||')' 
+				                    ELSE msDataType || '(' || data_len ||')'
+				                     END )
+				         END AS msDataType                
+          , CASE WHEN myDataType IS NULL 
+				         THEN myDataType
+				         ELSE (CASE WHEN data_scal IS NOT NULL
+				                    THEN myDataType || '(' || data_len ||', '|| data_scal ||')' 
+				                    ELSE myDataType || '(' || data_len ||')'
+				                     END )
+				         END AS myDataType
+
+		FROM (
+		    
+			    SELECT A.SDITM_LNM AS TERMNAME
+				             ,A.SDITM_PNM AS TERMENGNAME
+				             ,B.DMN_LNM AS DOMAINNAME
+				             ,D.DATA_TYPE AS ldatatype
+				     		 ,D.DATA_TYPE AS pdatatype
+			                 , NVL( (
+			                     SELECT B.DATA_TYPE_NM FROM WAA_DATA_TYPE_MAPRU A
+			                        INNER JOIN WAA_DBMS_DATA_TYPE B
+			                        ON A.DBMS_DATA_TYPE_ID = B.DBMS_DATA_TYPE_ID
+			                            AND A.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+			                            AND A.REG_TYP_CD IN ('C', 'U')
+			                            AND B.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+			                            AND B.REG_TYP_CD IN ('C', 'U')
+			                            AND B.DBMS_TYP_CD='ORA' 
+			                        WHERE A.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+			                           AND A.REG_TYP_CD IN ('C', 'U')  
+			                           AND A.LGC_DATA_TYPE=D.DATA_TYPE
+			                     ),D.DATA_TYPE
+			                 ) AS ORADATATYPE
+			                 , NVL( (
+			                     SELECT B.DATA_TYPE_NM FROM WAA_DATA_TYPE_MAPRU A
+			                        INNER JOIN WAA_DBMS_DATA_TYPE B
+			                        ON A.DBMS_DATA_TYPE_ID = B.DBMS_DATA_TYPE_ID
+			                            AND A.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+			                            AND A.REG_TYP_CD IN ('C', 'U')
+			                            AND B.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+			                            AND B.REG_TYP_CD IN ('C', 'U')
+			                            AND B.DBMS_TYP_CD='MSQ' 
+			                        WHERE A.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+			                            AND A.REG_TYP_CD IN ('C', 'U')                            
+			                            AND A.LGC_DATA_TYPE=D.DATA_TYPE
+			                     ),D.DATA_TYPE
+			                 ) AS msDataType
+						     , NVL( (
+			                     SELECT B.DATA_TYPE_NM FROM WAA_DATA_TYPE_MAPRU A
+			                        INNER JOIN WAA_DBMS_DATA_TYPE B
+			                        ON A.DBMS_DATA_TYPE_ID = B.DBMS_DATA_TYPE_ID
+			                            AND A.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+			                            AND A.REG_TYP_CD IN ('C', 'U')
+			                            AND B.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+			                            AND B.REG_TYP_CD IN ('C', 'U')
+			                            AND B.DBMS_TYP_CD='MYS' 
+			                        WHERE A.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+ 			                            AND A.REG_TYP_CD IN ('C', 'U')                            
+			                            AND A.LGC_DATA_TYPE=D.DATA_TYPE
+			                     ),D.DATA_TYPE
+			                 ) AS myDataType  
+			                 ,D.DATA_SCAL
+			                 ,D.DATA_LEN
+				             ,A.OBJ_DESCN AS COMMENTS
+						     ,A.STND_ASRT AS SYSNAME
+						     ,A.PERS_INFO_CNV_YN AS PERS_INFO_CNV_YN
+						     ,A.PERS_INFO_GRD AS PERS_INFO_GRD
+					     FROM WAM_SDITM A 
+					    INNER JOIN WAM_DMN B
+					       ON A.DMN_ID = B.DMN_ID
+				          AND A.REG_TYP_CD IN ('C', 'U')
+				          AND B.REG_TYP_CD IN ('C', 'U')
+					     LEFT OUTER JOIN WAA_INFO_TYPE D
+					       ON A.INFOTP_ID = D.INFOTP_ID 
+				          AND D.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+		  <where>
+		    <if test="termname != null" >
+		      AND (A.SDITM_LNM LIKE '%' || #{termname,jdbcType=VARCHAR} || '%'
+		           OR A.SDITM_LNM LIKE '%' || UPPER(#{termname,jdbcType=VARCHAR}) || '%')
+		    </if>
+		    <if test="termengname != null" >
+		      AND (A.SDITM_PNM LIKE '%' || #{termengname,jdbcType=VARCHAR} || '%'
+		           OR A.SDITM_PNM LIKE '%' || UPPER(#{termengname,jdbcType=VARCHAR}) || '%')
+		    </if>
+		    <if test="domainname != null" >
+		      AND (B.DMN_LNM LIKE '%' || #{domainname,jdbcType=VARCHAR} || '%'
+		           OR B.DMN_LNM LIKE '%' || UPPER(#{domainname,jdbcType=VARCHAR}) || '%')
+		    </if>
+		    <if test="ldatatype != null" >
+		      AND (D.DATA_TYPE LIKE '%' || #{ldatatype,jdbcType=VARCHAR} || '%'
+		           OR D.DATA_TYPE LIKE '%' || UPPER(#{ldatatype,jdbcType=VARCHAR}) || '%')
+		    </if>
+		    <if test="pdatatype != null" >
+		      AND (D.DATA_TYPE LIKE '%' || #{pdatatype,jdbcType=VARCHAR} || '%'
+		           OR D.DATA_TYPE LIKE '%' || UPPER(#{pdatatype,jdbcType=VARCHAR}) || '%')
+		    </if>
+		    <if test="comments != null" >
+		      AND (A.OBJ_DESCN LIKE '%' || #{comments,jdbcType=VARCHAR} || '%'
+		           OR A.OBJ_DESCN LIKE '%' || UPPER(#{comments,jdbcType=VARCHAR}) || '%')
+		    </if>
+		    <if test="sysname != null" >
+		      AND (A.STND_ASRT LIKE '%' || #{sysname,jdbcType=VARCHAR} || '%'
+		           OR A.STND_ASRT LIKE '%' || UPPER(#{sysname,jdbcType=VARCHAR}) || '%')
+		    </if>
+		    <if test="pers_info_cnv_yn != null" >
+		      AND (A.PERS_INFO_CNV_YN = #{pers_info_cnv_yn,jdbcType=VARCHAR}
+		      	   OR A.PERS_INFO_CNV_YN = UPPER(#{pers_info_cnv_yn,jdbcType=VARCHAR}))
+		    </if>
+		    <if test="pers_info_grd != null" >
+		      AND A.PERS_INFO_GRD = #{pers_info_grd,jdbcType=VARCHAR}
+		    </if>
+		  </where>
+		  )
+	 ORDER BY 1
+  </select>
+  
+  <resultMap id="DbcTblBaseResultMap" type="kr.wise.commons.api.service.WatDbcTblApi" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+    <id column="DB_SCH_ID" property="dbSchId" jdbcType="VARCHAR" />
+    <id column="DBC_TBL_NM" property="dbcTblNm" jdbcType="VARCHAR" />
+    <result column="DBC_TBL_KOR_NM" property="dbcTblKorNm" jdbcType="VARCHAR" />
+    <result column="VERS" property="vers" jdbcType="DECIMAL" />
+    <result column="REG_TYP" property="regTyp" jdbcType="VARCHAR" />
+    <result column="REG_DTM" property="regDtm" jdbcType="TIMESTAMP" />
+    <result column="UPD_DTM" property="updDtm" jdbcType="TIMESTAMP" />
+    <result column="DESCN" property="descn" jdbcType="VARCHAR" />
+    <result column="DB_CONN_TRG_ID" property="dbConnTrgId" jdbcType="VARCHAR" />
+    <result column="DBC_TBL_SPAC_NM" property="dbcTblSpacNm" jdbcType="VARCHAR" />
+    <result column="DDL_TBL_ID" property="ddlTblId" jdbcType="VARCHAR" />
+    <result column="PDM_TBL_ID" property="pdmTblId" jdbcType="VARCHAR" />
+    <result column="DBMS_TYPE" property="dbmsType" jdbcType="VARCHAR" />
+    <result column="SUBJ_ID" property="subjId" jdbcType="VARCHAR" />
+    <result column="COL_EACNT" property="colEacnt" jdbcType="DECIMAL" />
+    <result column="ROW_EACNT" property="rowEacnt" jdbcType="DECIMAL" />
+    <result column="TBL_SIZE" property="tblSize" jdbcType="DECIMAL" />
+    <result column="DATA_SIZE" property="dataSize" jdbcType="DECIMAL" />
+    <result column="IDX_SIZE" property="idxSize" jdbcType="DECIMAL" />
+    <result column="NUSE_SIZE" property="nuseSize" jdbcType="DECIMAL" />
+    <result column="BF_COL_EACNT" property="bfColEacnt" jdbcType="DECIMAL" />
+    <result column="BF_ROW_EACNT" property="bfRowEacnt" jdbcType="DECIMAL" />
+    <result column="BF_TBL_SIZE" property="bfTblSize" jdbcType="DECIMAL" />
+    <result column="BF_DATA_SIZE" property="bfDataSize" jdbcType="DECIMAL" />
+    <result column="BF_IDX_SIZE" property="bfIdxSize" jdbcType="DECIMAL" />
+    <result column="BF_NUSE_SIZE" property="bfNuseSize" jdbcType="DECIMAL" />
+    <result column="ANA_DTM" property="anaDtm" jdbcType="TIMESTAMP" />
+    <result column="CRT_DTM" property="crtDtm" jdbcType="TIMESTAMP" />
+    <result column="CHG_DTM" property="chgDtm" jdbcType="TIMESTAMP" />
+    <result column="PDM_DESCN" property="pdmDescn" jdbcType="VARCHAR" />
+    <result column="TBL_DQ_EXP_YN" property="tblDqExpYn" jdbcType="VARCHAR" />
+    <result column="DDL_TBL_ERR_EXS" property="ddlTblErrExs" jdbcType="VARCHAR" />
+    <result column="DDL_TBL_ERR_CD" property="ddlTblErrCd" jdbcType="VARCHAR" />
+    <result column="DDL_TBL_ERR_DESCN" property="ddlTblErrDescn" jdbcType="VARCHAR" />
+    <result column="DDL_COL_ERR_EXS" property="ddlColErrExs" jdbcType="VARCHAR" />
+    <result column="DDL_COL_ERR_CD" property="ddlColErrCd" jdbcType="VARCHAR" />
+    <result column="DDL_COL_ERR_DESCN" property="ddlColErrDescn" jdbcType="VARCHAR" />
+    <result column="PDM_TBL_ERR_EXS" property="pdmTblErrExs" jdbcType="VARCHAR" />
+    <result column="PDM_TBL_ERR_CD" property="pdmTblErrCd" jdbcType="VARCHAR" />
+    <result column="PDM_TBL_ERR_DESCN" property="pdmTblErrDescn" jdbcType="VARCHAR" />
+    <result column="PDM_COL_ERR_EXS" property="pdmColErrExs" jdbcType="VARCHAR" />
+    <result column="PDM_COL_ERR_CD" property="pdmColErrCd" jdbcType="VARCHAR" />
+    <result column="PDM_COL_ERR_DESCN" property="pdmColErrDescn" jdbcType="VARCHAR" />
+    <result column="DDL_TBL_EXTNC_EXS" property="ddlTblExtncExs" jdbcType="VARCHAR" />
+    <result column="PDM_TBL_EXTNC_EXS" property="pdmTblExtncExs" jdbcType="VARCHAR" />
+    
+    <result column="DB_CONN_TRG_LNM" property="dbConnTrgLnm" jdbcType="VARCHAR" />
+    <result column="DB_SCH_LNM" property="dbSchLnm" jdbcType="VARCHAR" />
+    <result column="SUBJ_LNM" property="subjLnm" jdbcType="VARCHAR" />
+    <result column="DDL_TBL_LNM" property="ddlTblLnm" jdbcType="VARCHAR" />
+    <result column="PDM_TBL_LNM" property="pdmTblLnm" jdbcType="VARCHAR" />
+    <result column="DBC_COL_NM" property="dbcColNm" jdbcType="VARCHAR" />
+    <result column="DB_CONN_TRG_PNM" property="dbConnTrgPnm" jdbcType="VARCHAR" />
+    <result column="DB_SCH_PNM" property="dbSchPnm" jdbcType="VARCHAR" />
+    <result column="FULL_PATH" property="fullPath" jdbcType="VARCHAR" />
+    <result column="DDL_TBL_PNM" property="ddlTblPnm" jdbcType="VARCHAR" />
+    <result column="PDM_TBL_PNM" property="pdmTblPnm" jdbcType="VARCHAR" />
+    
+     <result column="NAME" property="dpndNm" jdbcType="VARCHAR" />
+    <result column="TYPE" property="dpndObjTyp" jdbcType="VARCHAR" />
+    <result column="REFERENCED_OWNER" property="repObjDbSchPnm" jdbcType="VARCHAR" />
+    <result column="REFERENCED_NAME" property="repObjNm" jdbcType="VARCHAR" />
+    <result column="REFERENCED_TYPE" property="repObjTyp" jdbcType="VARCHAR" />
+    <result column="REFERENCED_LINK_NAME" property="repObjLinkNm" jdbcType="VARCHAR" />
+    <result column="DEPENDENCY_TYPE" property="dpndTyp" jdbcType="VARCHAR" />
+    <result column="OBJECT_TYPE" property="objectType" jdbcType="VARCHAR" />
+    <result column="OBJECT_NAME" property="objectName" jdbcType="VARCHAR" />
+    <result column="DDL_TEXT" property="ddlText" jdbcType="VARCHAR" />
+    <result column="DEPENDENCIES_CNT" property="depcCnt" jdbcType="VARCHAR" />
+    
+    <result column="DBC_OBJ_NM" property="dbcObjNm" jdbcType="VARCHAR" />
+    <result column="STATUS" property="status" jdbcType="VARCHAR" />
+    <result column="DDL_ETC_ID" property="ddlEtcId" jdbcType="VARCHAR" />
+    <result column="TBL_SPAC_TYPE" property="tblSpacType" jdbcType="VARCHAR"/>
+    <result column="DEFLT_YN" property="defltYn" jdbcType="VARCHAR"/>
+    <result column="TBL_SPAC_SIZE" property="tblSpacSize" jdbcType="VARCHAR"/>
+    <result column="TBL_SPAC_RMS_USE_QNT" property="tblSpacRmsUseQnt" jdbcType="VARCHAR"/>
+    <result column="TBL_SPAC_USE_QNT" property="tblSpacUseQnt" jdbcType="VARCHAR"/>
+    <result column="TBL_SPAC_BGNN_SIZE" property="tblSpacBgnnSize" jdbcType="VARCHAR"/>
+    <result column="TBL_SPAC_MAX_SIZE" property="tblSpacMaxSize" jdbcType="VARCHAR"/>
+    <result column="TBL_SPAC_INC_SIZE" property="tblSpacIncSize" jdbcType="VARCHAR"/>
+    <result column="TBL_SPAC_USE_RT" property="tblSpacUseRt" jdbcType="VARCHAR"/>     
+    <result column="DBC_OBJ_CNT" property="dbcObjCnt" jdbcType="DECIMAL"/>
+    <result column="DBC_TBL_CNT" property="dbcTblCnt" jdbcType="DECIMAL"/>
+    <result column="DBC_IDX_CNT" property="dbcIdxCnt" jdbcType="DECIMAL"/>
+    <result column="BF_IDX_EACNT" property="bfIdxEacnt" jdbcType="DECIMAL"/>
+    <result column="DBC_IDX_NM" property="dbcIdxNm" jdbcType="VARCHAR"/>
+    <result column="PK_YN" property="pkYn" jdbcType="VARCHAR"/>
+    <result column="UQ_YN" property="uqYn" jdbcType="VARCHAR"/>
+  </resultMap>
+  
+  <select id="selectDbcTblList" resultMap="DbcTblBaseResultMap" parameterType="map" >
+	 SELECT * FROM (
+    	SELECT ROWNUM AS RNUM,DD.* 
+    	  FROM (
+    	   SELECT B.DB_SCH_LNM
+			      ,C.DB_CONN_TRG_LNM
+			      ,D.FULL_PATH AS SUBJ_LNM
+			      ,A.DBC_TBL_NM
+			      ,A.DBC_TBL_KOR_NM
+			      ,DDL_TBL_LNM
+			      ,PDM_TBL_LNM
+			      ,A.CRT_DTM
+			      ,A.REG_TYP
+			      ,A.DBMS_TYPE
+			      ,A.DBC_TBL_SPAC_NM
+			      ,A.TBL_SIZE
+			      ,A.ROW_EACNT
+			   FROM WAT_DBC_TBL A
+			    LEFT OUTER JOIN WAA_DB_SCH B
+			        ON A.DB_SCH_ID = B.DB_SCH_ID
+			        AND B.REG_TYP_CD IN ('C', 'U')
+			        AND B.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+			    LEFT OUTER JOIN WAA_DB_CONN_TRG C
+			        ON A.DB_CONN_TRG_ID = C.DB_CONN_TRG_ID
+			        AND C.REG_TYP_CD IN ('C', 'U')
+			        AND C.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+			    LEFT OUTER JOIN WAM_DDL_TBL E
+			         ON A.DB_SCH_ID = E.DB_SCH_ID
+			        AND A.DBC_TBL_NM = E.DDL_TBL_PNM
+			        AND E.REG_TYP_CD IN ('C', 'U')
+			    LEFT OUTER JOIN WAM_PDM_TBL F
+			        ON E.PDM_TBL_ID = F.PDM_TBL_ID
+			        AND F.REG_TYP_CD IN ('C', 'U')
+			    LEFT OUTER JOIN WAA_SUBJ D
+			        ON F.SUBJ_ID = D.SUBJ_ID
+			        AND D.REG_TYP_CD IN ('C', 'U')
+			        AND D.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')    
+			  <where>
+			  <if test="dbConnTrgPnm != null" >
+		        AND (C.DB_CONN_TRG_PNM LIKE '%' || #{dbConnTrgPnm,jdbcType=VARCHAR} || '%'
+		        OR C.DB_CONN_TRG_PNM LIKE '%' || UPPER(#{dbConnTrgPnm,jdbcType=VARCHAR}) || '%')
+		      </if>
+			  <if test="dbSchPnm != null" >
+		        AND (B.DB_SCH_PNM LIKE '%' || #{dbSchPnm,jdbcType=VARCHAR} || '%'
+		        OR B.DB_SCH_PNM LIKE '%' || UPPER(#{dbSchPnm,jdbcType=VARCHAR}) || '%')
+		      </if>
+			  <if test="subjLnm != null" >
+		        AND (D.FULL_PATH LIKE '%' || #{subjLnm,jdbcType=VARCHAR} || '%'
+		        OR D.FULL_PATH LIKE '%' || UPPER(#{subjLnm,jdbcType=VARCHAR}) || '%')
+		      </if>
+			  <if test="dbcTblNm != null" >
+		        AND (DBC_TBL_NM LIKE '%' || #{dbcTblNm,jdbcType=VARCHAR} || '%'
+		        	OR DBC_TBL_NM LIKE '%' || UPPER(#{dbcTblNm,jdbcType=VARCHAR}) || '%'
+		        	OR DBC_TBL_KOR_NM LIKE '%' || #{dbcTblNm,jdbcType=VARCHAR} || '%'
+		        	OR DBC_TBL_KOR_NM LIKE '%' || UPPER(#{dbcTblNm,jdbcType=VARCHAR}) || '%')
+		      </if>
+			  <if test="dbcColNm != null">
+			  		AND EXISTS ( SELECT 1
+			                     FROM WAT_DBC_COL B
+			                    WHERE B.DB_SCH_ID = A.DB_SCH_ID
+			                      AND B.DBC_TBL_NM = A.DBC_TBL_NM
+			                      AND (B.DBC_COL_NM LIKE '%' || #{dbcColNm,jdbcType=VARCHAR} || '%'
+			                      		OR B.DBC_COL_NM LIKE '%' || UPPER(#{dbcColNm,jdbcType=VARCHAR}) || '%' )
+			                   )
+			  </if>
+			  </where>
+			  ORDER BY DB_SCH_LNM, DBC_TBL_NM
+			  ) DD
+		     )
+	     WHERE 1=1
+	     <if test="pageIndex != null and sizeIndex != null">
+	     	AND RNUM BETWEEN (#{pageIndex}-1)*#{sizeIndex}+1 AND  #{pageIndex}*#{sizeIndex}
+	     </if>
+  </select>
+  
+  <select id="selectDbcTblCnt" resultType="int" parameterType="map" >
+	  SELECT COUNT(1)
+			   FROM WAT_DBC_TBL A
+			    LEFT OUTER JOIN WAA_DB_SCH B
+			        ON A.DB_SCH_ID = B.DB_SCH_ID
+			        AND B.REG_TYP_CD IN ('C', 'U')
+			        AND B.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+			    LEFT OUTER JOIN WAA_DB_CONN_TRG C
+			        ON A.DB_CONN_TRG_ID = C.DB_CONN_TRG_ID
+			        AND C.REG_TYP_CD IN ('C', 'U')
+			        AND C.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+			    LEFT OUTER JOIN WAM_DDL_TBL E
+			         ON A.DB_SCH_ID = E.DB_SCH_ID
+			        AND A.DBC_TBL_NM = E.DDL_TBL_PNM
+			        AND E.REG_TYP_CD IN ('C', 'U')
+			    LEFT OUTER JOIN WAM_PDM_TBL F
+			        ON E.PDM_TBL_ID = F.PDM_TBL_ID
+			        AND F.REG_TYP_CD IN ('C', 'U')
+			    LEFT OUTER JOIN WAA_SUBJ D
+			        ON F.SUBJ_ID = D.SUBJ_ID
+			        AND D.REG_TYP_CD IN ('C', 'U')
+			        AND D.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')    
+			  <where>
+			  <if test="dbConnTrgPnm != null" >
+		        AND (C.DB_CONN_TRG_PNM LIKE '%' || #{dbConnTrgPnm,jdbcType=VARCHAR} || '%'
+		        OR C.DB_CONN_TRG_PNM LIKE '%' || UPPER(#{dbConnTrgPnm,jdbcType=VARCHAR}) || '%')
+		      </if>
+			  <if test="dbSchPnm != null" >
+			        AND (B.DB_SCH_PNM LIKE '%' || #{dbSchPnm,jdbcType=VARCHAR} || '%'
+			        OR B.DB_SCH_PNM LIKE '%' || UPPER(#{dbSchPnm,jdbcType=VARCHAR}) || '%')
+			      </if>
+			  <if test="subjLnm != null" >
+		        AND (D.FULL_PATH LIKE '%' || #{subjLnm,jdbcType=VARCHAR} || '%'
+		        OR D.FULL_PATH LIKE '%' || UPPER(#{subjLnm,jdbcType=VARCHAR}) || '%')
+		      </if>
+			  <if test="dbcTblNm != null" >
+		        AND (DBC_TBL_NM LIKE '%' || #{dbcTblNm,jdbcType=VARCHAR} || '%'
+		        	OR DBC_TBL_NM LIKE '%' || UPPER(#{dbcTblNm,jdbcType=VARCHAR}) || '%'
+		        	OR DBC_TBL_KOR_NM LIKE '%' || #{dbcTblNm,jdbcType=VARCHAR} || '%'
+		        	OR DBC_TBL_KOR_NM LIKE '%' || UPPER(#{dbcTblNm,jdbcType=VARCHAR}) || '%')
+		      </if>
+			  <if test="dbcColNm != null">
+			  		AND EXISTS ( SELECT 1
+			                     FROM WAT_DBC_COL B
+			                    WHERE B.DB_SCH_ID = A.DB_SCH_ID
+			                      AND B.DBC_TBL_NM = A.DBC_TBL_NM
+			                      AND (B.DBC_COL_NM LIKE '%' || #{dbcColNm,jdbcType=VARCHAR} || '%'
+			                      		OR B.DBC_COL_NM LIKE '%' || UPPER(#{dbcColNm,jdbcType=VARCHAR}) || '%' )
+			                   )
+			  </if>
+			  </where>
+  </select>
+  
+  <resultMap id="DbcColBaseResultMap" type="kr.wise.commons.api.service.WatDbcColApi" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+    <id column="DB_SCH_ID" property="dbSchId" jdbcType="VARCHAR" />
+    <id column="DBC_TBL_NM" property="dbcTblNm" jdbcType="VARCHAR" />
+    <id column="DBC_COL_NM" property="dbcColNm" jdbcType="VARCHAR" />
+    <result column="DBC_COL_KOR_NM" property="dbcColKorNm" jdbcType="VARCHAR" />
+    <result column="VERS" property="vers" jdbcType="DECIMAL" />
+    <result column="REG_TYP" property="regTyp" jdbcType="VARCHAR" />
+    <result column="REG_DTM" property="regDtm" jdbcType="TIMESTAMP" />
+    <result column="UPD_DTM" property="updDtm" jdbcType="TIMESTAMP" />
+    <result column="DESCN" property="descn" jdbcType="VARCHAR" />
+    <result column="DDL_COL_ID" property="ddlColId" jdbcType="VARCHAR" />
+    <result column="PDM_COL_ID" property="pdmColId" jdbcType="VARCHAR" />
+    <result column="ITM_ID" property="itmId" jdbcType="VARCHAR" />
+    <result column="ITM_PNM" property="itmPnm" jdbcType="VARCHAR" />
+    <result column="ITM_LNM" property="itmLnm" jdbcType="VARCHAR" />
+    <result column="DATA_TYPE" property="dataType" jdbcType="VARCHAR" />
+    <result column="DATA_LEN" property="dataLen" jdbcType="DECIMAL" />
+    <result column="DATA_PNUM" property="dataPnum" jdbcType="DECIMAL" />
+    <result column="DATA_PNT" property="dataPnt" jdbcType="DECIMAL" />
+    <result column="NULL_YN" property="nullYn" jdbcType="VARCHAR" />
+    <result column="DEFLT_LEN" property="defltLen" jdbcType="DECIMAL" />
+    <result column="DEFLT_VAL" property="defltVal" jdbcType="VARCHAR" />
+    <result column="PK_YN" property="pkYn" jdbcType="VARCHAR" />
+    <result column="ORD" property="ord" jdbcType="DECIMAL" />
+    <result column="PK_ORD" property="pkOrd" jdbcType="DECIMAL" />
+    <result column="COL_DESCN" property="colDescn" jdbcType="VARCHAR" />
+    <result column="COL_DQ_EXP_YN" property="colDqExpYn" jdbcType="VARCHAR" />
+    <result column="DDL_COL_EXTNC_YN" property="ddlColExtncYn" jdbcType="VARCHAR" />
+    <result column="DDL_ORD_ERR_EXS" property="ddlOrdErrExs" jdbcType="VARCHAR" />
+    <result column="DDL_PK_YN_ERR_EXS" property="ddlPkYnErrExs" jdbcType="VARCHAR" />
+    <result column="DDL_PK_ORD_ERR_EXS" property="ddlPkOrdErrExs" jdbcType="VARCHAR" />
+    <result column="DDL_NULL_YN_ERR_EXS" property="ddlNullYnErrExs" jdbcType="VARCHAR" />
+    <result column="DDL_DEFLT_ERR_EXS" property="ddlDefltErrExs" jdbcType="VARCHAR" />
+    <result column="DDL_CMMT_ERR_EXS" property="ddlCmmtErrExs" jdbcType="VARCHAR" />
+    <result column="DDL_DATA_TYPE_ERR_EXS" property="ddlDataTypeErrExs" jdbcType="VARCHAR" />
+    <result column="DDL_DATA_LEN_ERR_EXS" property="ddlDataLenErrExs" jdbcType="VARCHAR" />
+    <result column="DDL_DATA_PNT_ERR_EXS" property="ddlDataPntErrExs" jdbcType="VARCHAR" />
+    <result column="DDL_COL_ERR_EXS" property="ddlColErrExs" jdbcType="VARCHAR" />
+    <result column="PDM_COL_EXTNC_EXS" property="pdmColExtncExs" jdbcType="VARCHAR" />
+    <result column="PDM_ORD_ERR_EXS" property="pdmOrdErrExs" jdbcType="VARCHAR" />
+    <result column="PDM_PK_YN_ERR_EXS" property="pdmPkYnErrExs" jdbcType="VARCHAR" />
+    <result column="PDM_PK_ORD_ERR_EXS" property="pdmPkOrdErrExs" jdbcType="VARCHAR" />
+    <result column="PDM_NULL_YN_ERR_EXS" property="pdmNullYnErrExs" jdbcType="VARCHAR" />
+    <result column="PDM_DEFLT_ERR_EXS" property="pdmDefltErrExs" jdbcType="VARCHAR" />
+    <result column="PDM_CMMT_ERR_EXS" property="pdmCmmtErrExs" jdbcType="VARCHAR" />
+    <result column="PDM_DATA_TYPE_ERR_EXS" property="pdmDataTypeErrExs" jdbcType="VARCHAR" />
+    <result column="PDM_DATA_LEN_ERR_EXS" property="pdmDataLenErrExs" jdbcType="VARCHAR" />
+    <result column="PDM_DATA_PNT_ERR_EXS" property="pdmDataPntErrExs" jdbcType="VARCHAR" />
+    <result column="PDM_COL_ERR_EXS" property="pdmColErrExs" jdbcType="VARCHAR" />
+    <result column="COL_ERR_CONTS" property="colErrConts" jdbcType="VARCHAR" />
+    
+    <result column="DB_CONN_TRG_LNM" property="dbConnTrgLnm" jdbcType="VARCHAR" />
+    <result column="DB_SCH_LNM" property="dbSchLnm" jdbcType="VARCHAR" />
+    <result column="DB_CONN_TRG_PNM" property="dbConnTrgPnm" jdbcType="VARCHAR" />
+    <result column="DB_SCH_PNM" property="dbSchPnm" jdbcType="VARCHAR" />
+    <result column="SUBJ_LNM" property="subjLnm" jdbcType="VARCHAR" />
+    <result column="DDL_TBL_LNM" property="ddlTblLnm" jdbcType="VARCHAR" />
+    <result column="PDM_TBL_LNM" property="pdmTblLnm" jdbcType="VARCHAR" />
+    <result column="DDL_COL_LNM" property="ddlColLnm" jdbcType="VARCHAR" />
+    <result column="PDM_COL_LNM" property="pdmColLnm" jdbcType="VARCHAR" />
+    <result column="FULL_PATH" property="fullPath" jdbcType="VARCHAR" />
+    <result column="DDL_TBL_PNM" property="ddlTblPnm" jdbcType="VARCHAR" />
+    <result column="PDM_TBL_PNM" property="pdmTblPnm" jdbcType="VARCHAR" />
+    <result column="DDL_COL_PNM" property="ddlColPnm" jdbcType="VARCHAR" />
+    <result column="PDM_COL_PNM" property="pdmColPnm" jdbcType="VARCHAR" />
+    <result column="DB_CONN_TRG_ID" property="dbConnTrgId" jdbcType="VARCHAR" />
+    <result column="PRF_KND_CD" property="prfKndCd" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <select id="selectDbcColList" resultMap="DbcColBaseResultMap" parameterType="map" >
+	 SELECT * FROM (
+    	SELECT ROWNUM AS RNUM,DD.* 
+    	  FROM (
+    	   SELECT A.DBC_TBL_NM
+				  ,A.DBC_COL_NM
+				  ,A.DBC_COL_KOR_NM
+				  ,A.DATA_TYPE
+				  ,A.DATA_LEN
+				  ,A.DATA_PNUM
+				  ,A.DATA_PNT
+				  ,A.NULL_YN
+				  ,A.DEFLT_LEN
+				  ,A.DEFLT_VAL
+				  ,A.PK_YN
+				  ,A.ORD
+				  ,A.PK_ORD
+				  ,C.DB_SCH_LNM
+				  ,D.DB_CONN_TRG_LNM
+				  ,E.SUBJ_LNM
+				  ,F.DDL_TBL_LNM
+				  ,G.PDM_TBL_LNM
+			      ,H.PDM_COL_LNM
+			      ,I.DDL_COL_LNM
+			    FROM WAT_DBC_COL A
+			        INNER JOIN WAT_DBC_TBL B
+			            ON A.DB_SCH_ID = B.DB_SCH_ID
+			            AND A.DBC_TBL_NM = B.DBC_TBL_NM
+				    LEFT OUTER JOIN WAA_DB_SCH C
+				        ON B.DB_SCH_ID = C.DB_SCH_ID
+				        AND C.REG_TYP_CD IN ('C', 'U')
+				        AND C.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+				    LEFT OUTER JOIN WAA_DB_CONN_TRG D
+				        ON B.DB_CONN_TRG_ID = D.DB_CONN_TRG_ID
+				        AND D.REG_TYP_CD IN ('C', 'U')
+				        AND D.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+				    LEFT OUTER JOIN WAA_SUBJ E
+				        ON B.SUBJ_ID = E.SUBJ_ID
+				        AND E.REG_TYP_CD IN ('C', 'U')
+				        AND E.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+				    LEFT OUTER JOIN WAM_DDL_TBL F
+				        ON B.DDL_TBL_ID = F.DDL_TBL_ID
+				        AND F.REG_TYP_CD IN ('C', 'U')
+				    LEFT OUTER JOIN WAM_PDM_TBL G
+				        ON B.PDM_TBL_ID = G.PDM_TBL_ID
+				        AND G.REG_TYP_CD IN ('C', 'U')
+			        LEFT OUTER JOIN WAM_PDM_COL H
+			            ON G.PDM_TBL_ID = H.PDM_TBL_ID
+			            AND A.PDM_COL_ID = H.PDM_COL_ID
+			            AND H.REG_TYP_CD IN ('C', 'U')
+			        LEFT OUTER JOIN WAM_DDL_COL I
+			            ON F.DDL_TBL_ID = I.DDL_TBL_ID
+			            AND A.DDL_COL_ID = I.DDL_COL_ID
+			            AND I.REG_TYP_CD IN ('C', 'U')
+			   <where>
+				  <if test="dbcTblNm != null" >
+			        AND (A.DBC_TBL_NM LIKE '%' || #{dbcTblNm,jdbcType=VARCHAR} || '%'
+			        	OR A.DBC_TBL_NM LIKE '%' || UPPER(#{dbcTblNm,jdbcType=VARCHAR}) || '%')
+			      </if>
+			      <if test="dbcColNm != null" >
+			        AND (A.DBC_COL_NM LIKE '%' || #{dbcColNm,jdbcType=VARCHAR} || '%'
+			        	OR A.DBC_COL_NM LIKE '%' || UPPER(#{dbcColNm,jdbcType=VARCHAR}) || '%')
+			      </if>
+			      <if test="dbConnTrgPnm != null" >
+			        AND (D.DB_CONN_TRG_PNM LIKE '%' || #{dbConnTrgPnm,jdbcType=VARCHAR} || '%'
+			        OR D.DB_CONN_TRG_PNM LIKE '%' || UPPER(#{dbConnTrgPnm,jdbcType=VARCHAR}) || '%')
+			      </if>
+				  <if test="dbSchPnm != null" >
+			        AND (C.DB_SCH_PNM LIKE '%' || #{dbSchPnm,jdbcType=VARCHAR} || '%'
+			        OR C.DB_SCH_PNM LIKE '%' || UPPER(#{dbSchPnm,jdbcType=VARCHAR}) || '%')
+			      </if>
+				  <if test="subjLnm != null" >
+			        AND (E.FULL_PATH LIKE '%' || #{subjLnm,jdbcType=VARCHAR} || '%'
+			        OR E.FULL_PATH LIKE '%' || UPPER(#{subjLnm,jdbcType=VARCHAR}) || '%')
+			      </if>
+			   </where>
+			   ORDER BY A.DBC_TBL_NM,A.DBC_COL_NM,A.DB_SCH_ID
+			  ) DD
+		     )
+	     WHERE 1=1
+	     <if test="pageIndex != null and sizeIndex != null">
+	     	AND RNUM BETWEEN (#{pageIndex}-1)*#{sizeIndex}+1 AND  #{pageIndex}*#{sizeIndex}
+	     </if>
+  </select>
+  
+  <select id="selectDbcColCnt" resultType="int" parameterType="map" >
+	  SELECT COUNT(1)
+			    FROM WAT_DBC_COL A
+			        INNER JOIN WAT_DBC_TBL B
+			            ON A.DB_SCH_ID = B.DB_SCH_ID
+			            AND A.DBC_TBL_NM = B.DBC_TBL_NM
+				    LEFT OUTER JOIN WAA_DB_SCH C
+				        ON B.DB_SCH_ID = C.DB_SCH_ID
+				        AND C.REG_TYP_CD IN ('C', 'U')
+				        AND C.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+				    LEFT OUTER JOIN WAA_DB_CONN_TRG D
+				        ON B.DB_CONN_TRG_ID = D.DB_CONN_TRG_ID
+				        AND D.REG_TYP_CD IN ('C', 'U')
+				        AND D.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+				    LEFT OUTER JOIN WAA_SUBJ E
+				        ON B.SUBJ_ID = E.SUBJ_ID
+				        AND E.REG_TYP_CD IN ('C', 'U')
+				        AND E.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+				    LEFT OUTER JOIN WAM_DDL_TBL F
+				        ON B.DDL_TBL_ID = F.DDL_TBL_ID
+				        AND F.REG_TYP_CD IN ('C', 'U')
+				    LEFT OUTER JOIN WAM_PDM_TBL G
+				        ON B.PDM_TBL_ID = G.PDM_TBL_ID
+				        AND G.REG_TYP_CD IN ('C', 'U')
+			        LEFT OUTER JOIN WAM_PDM_COL H
+			            ON G.PDM_TBL_ID = H.PDM_TBL_ID
+			            AND A.PDM_COL_ID = H.PDM_COL_ID
+			            AND H.REG_TYP_CD IN ('C', 'U')
+			        LEFT OUTER JOIN WAM_DDL_COL I
+			            ON F.DDL_TBL_ID = I.DDL_TBL_ID
+			            AND A.DDL_COL_ID = I.DDL_COL_ID
+			            AND I.REG_TYP_CD IN ('C', 'U')
+			    <where>
+				  <if test="dbcTblNm != null" >
+			        AND (A.DBC_TBL_NM LIKE '%' || #{dbcTblNm,jdbcType=VARCHAR} || '%'
+			        	OR A.DBC_TBL_NM LIKE '%' || UPPER(#{dbcTblNm,jdbcType=VARCHAR}) || '%')
+			      </if>
+			      <if test="dbcColNm != null" >
+			        AND (A.DBC_COL_NM LIKE '%' || #{dbcColNm,jdbcType=VARCHAR} || '%'
+			        	OR A.DBC_COL_NM LIKE '%' || UPPER(#{dbcColNm,jdbcType=VARCHAR}) || '%')
+			      </if>
+			      <if test="dbConnTrgPnm != null" >
+			        AND (D.DB_CONN_TRG_PNM LIKE '%' || #{dbConnTrgPnm,jdbcType=VARCHAR} || '%'
+			        OR D.DB_CONN_TRG_PNM LIKE '%' || UPPER(#{dbConnTrgPnm,jdbcType=VARCHAR}) || '%')
+			      </if>
+				  <if test="dbSchPnm != null" >
+			        AND (C.DB_SCH_PNM LIKE '%' || #{dbSchPnm,jdbcType=VARCHAR} || '%'
+			        OR C.DB_SCH_PNM LIKE '%' || UPPER(#{dbSchPnm,jdbcType=VARCHAR}) || '%')
+			      </if>
+				  <if test="subjLnm != null" >
+			        AND (E.FULL_PATH LIKE '%' || #{subjLnm,jdbcType=VARCHAR} || '%'
+			        OR E.FULL_PATH LIKE '%' || UPPER(#{subjLnm,jdbcType=VARCHAR}) || '%')
+			      </if>
+			   </where>
+  </select>
+  
+ </mapper>

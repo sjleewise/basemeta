@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.meta.model.service.WamAsisDmnCdValMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.meta.model.service.WamAsisDmnCdVal" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+    <id column="DMN_ID" property="dmnId" jdbcType="VARCHAR" />
+    <result column="DMN_LNM" property="dmnLnm" jdbcType="VARCHAR" />
+    <result column="DMN_PNM" property="dmnPnm" jdbcType="VARCHAR" />
+    <result column="ASIS_DIT" property="asisDit" jdbcType="VARCHAR" />
+    <result column="ASIS_SYSTEM_NM" property="asisSystemNm" jdbcType="VARCHAR" />
+    <result column="ASIS_GROUP_NM" property="asisGroupNm" jdbcType="VARCHAR" />
+    <result column="ASIS_PART_NM" property="asisPartNm" jdbcType="VARCHAR" />
+    <result column="ASIS_BIZ_NM" property="asisBizNm" jdbcType="VARCHAR" />
+    <result column="ASIS_BIZ_CD" property="asisBizCd" jdbcType="VARCHAR" />
+    <result column="ASIS_DB_NM" property="asisDbNm" jdbcType="VARCHAR" />
+    <result column="ASIS_TBL_NM" property="asisTblNm" jdbcType="VARCHAR" />
+    <result column="ASIS_COL_ID" property="asisColId" jdbcType="VARCHAR" />
+    <result column="ASIS_COL_NM" property="asisColNm" jdbcType="VARCHAR" />
+    <result column="CODE_NM" property="codeNm" jdbcType="VARCHAR" />
+    <result column="DFD_COL_NM" property="dfdColNm" jdbcType="VARCHAR" />
+    <result column="DFD_COL_VALUE" property="dfdColValue" jdbcType="VARCHAR" />
+    <result column="CODE_VALUE" property="codeValue" jdbcType="VARCHAR" />
+    <result column="CODE_DISP_NUM" property="codeDispNum" jdbcType="VARCHAR" />
+    <result column="APP_TEAM_NM" property="appTeamNm" jdbcType="VARCHAR" />
+    <result column="APP_CHRG_NM" property="appChrgNm" jdbcType="VARCHAR" />
+    <result column="TSF_TEAM_NM" property="tsfTeamNm" jdbcType="VARCHAR" />
+    <result column="TSF_CHRG_NM" property="tsfChrgNm" jdbcType="VARCHAR" />
+    <result column="LAST_CHG_DT" property="lastChgDt" jdbcType="VARCHAR" />
+    <result column="ADD_NOTE1" property="addNote1" jdbcType="VARCHAR" />
+    <result column="ADD_NOTE2" property="addNote2" jdbcType="VARCHAR" />
+    <result column="ADD_NOTE3" property="addNote3" jdbcType="VARCHAR" />
+    <result column="ADD_NOTE4" property="addNote4" jdbcType="VARCHAR" />
+    <result column="APP_SI_NM" property="appSiNm" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    DMN_ID, DMN_LNM, DMN_PNM, RQST_NO, RQST_SNO, OBJ_DESCN, OBJ_VERS, REG_TYP_CD, FRS_RQST_DTM, 
+    FRS_RQST_USER_ID, RQST_DTM, RQST_USER_ID, APRV_DTM, APRV_USER_ID, ASIS_DIT, ASIS_SYSTEM_NM, 
+    ASIS_GROUP_NM, ASIS_PART_NM, ASIS_BIZ_NM, ASIS_BIZ_CD, ASIS_DB_NM, ASIS_TBL_NM, ASIS_COL_ID, 
+    ASIS_COL_NM, CODE_NM, DFD_COL_NM, DFD_COL_VALUE, CODE_VALUE, CODE_DISP_NUM, APP_TEAM_NM, 
+    APP_CHRG_NM, TSF_TEAM_NM, TSF_CHRG_NM, LAST_CHG_DT, ADD_NOTE1, ADD_NOTE2, ADD_NOTE3, 
+    ADD_NOTE4, APP_SI_NM
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from WAM_ASIS_DMN_CD_VAL
+    where DMN_ID = #{dmnId,jdbcType=VARCHAR}
+  </select>
+  <select id="selectList" parameterType="kr.wise.meta.model.service.WamAsisDmnCdVal" resultMap="BaseResultMap">
+    SELECT A.*
+	  FROM WAM_ASIS_DMN_CD_VAL A
+	  <where>
+		  <if test="dmnId != null" >
+	        AND DMN_ID LIKE '%'||#{dmnId,jdbcType=VARCHAR}||'%'
+	      </if>
+	      <if test="dmnLnm != null" >
+	        AND DMN_LNM LIKE '%'||#{dmnLnm,jdbcType=VARCHAR}||'%'
+	      </if>
+	      <if test="dmnPnm != null" >
+	        AND DMN_PNM LIKE '%'||#{dmnPnm,jdbcType=VARCHAR}||'%'
+	      </if>
+	      <if test="asisDit != null" >
+	        AND ASIS_DIT LIKE '%'||#{asisDit,jdbcType=VARCHAR}||'%'
+	      </if>
+	      <if test="asisSystemNm != null" >
+	        AND ASIS_SYSTEM_NM LIKE '%'||#{asisSystemNm,jdbcType=VARCHAR}||'%'
+	      </if>
+	      <if test="asisGroupNm != null" >
+	        AND ASIS_GROUP_NM LIKE '%'||#{asisGroupNm,jdbcType=VARCHAR}||'%'
+	      </if>
+	      <if test="asisDbNm != null" >
+	        AND ASIS_DB_NM LIKE '%'||#{asisDbNm,jdbcType=VARCHAR}||'%'
+	      </if>
+	      <if test="asisTblNm != null" >
+	        AND ASIS_TBL_NM LIKE '%'||#{asisTblNm,jdbcType=VARCHAR}||'%'
+	      </if>
+	      <if test="asisColNm != null" >
+	        AND ASIS_COL_NM LIKE '%'||#{asisColNm,jdbcType=VARCHAR}||'%'
+	      </if>
+	      <if test="codeNm != null" >
+	        AND CODE_NM LIKE '%'||#{codeNm,jdbcType=VARCHAR}||'%'
+	      </if>
+	      <if test="dfdColNm != null" >
+	        AND DFD_COL_NM LIKE '%'||#{dfdColNm,jdbcType=VARCHAR}||'%'
+	      </if>
+	      <if test="dfdColValue != null" >
+	        AND DFD_COL_VALUE LIKE '%'||#{dfdColValue,jdbcType=VARCHAR}||'%'
+	      </if>
+	      <if test="codeValue != null" >
+	        AND CODE_VALUE LIKE '%'||#{codeValue,jdbcType=VARCHAR}||'%'
+	      </if>
+	      <if test="codeDispNum != null" >
+	        AND CODE_DISP_NUM LIKE '%'||#{codeDispNum,jdbcType=VARCHAR}||'%'
+	      </if>
+	      <if test="appTeamNm != null" >
+	        AND APP_TEAM_NM LIKE '%'||#{appTeamNm,jdbcType=VARCHAR}||'%'
+	      </if>
+	      <if test="appChrgNm != null" >
+	        AND APP_CHRG_NM LIKE '%'||#{appChrgNm,jdbcType=VARCHAR}||'%'
+	      </if>
+	      <if test="tsfTeamNm != null" >
+	        AND TSF_TEAM_NM LIKE '%'||#{tsfTeamNm,jdbcType=VARCHAR}||'%'
+	      </if>
+	      <if test="tsfChrgNm != null" >
+	        AND TSF_CHRG_NM LIKE '%'||#{tsfChrgNm,jdbcType=VARCHAR}||'%'
+	      </if>
+	      <if test="appSiNm != null" >
+	        AND APP_SI_NM LIKE '%'||#{appSiNm,jdbcType=VARCHAR}||'%'
+	      </if>
+	   </where> 
+  </select>
+  
+   <select id="selectDtl" parameterType="java.lang.String" resultMap="BaseResultMap">
+    SELECT A.*
+    	   ,(SELECT USER_NM FROM WAA_USER WHERE USER_ID = A.FRS_RQST_USER_ID AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD') AND REG_TYP_CD IN ('C','U')) AS FRS_RQST_USER_NM
+    	   ,(SELECT USER_NM FROM WAA_USER WHERE USER_ID = A.RQST_USER_ID AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD') AND REG_TYP_CD IN ('C','U')) AS RQST_USER_NM
+    	   ,(SELECT USER_NM FROM WAA_USER WHERE USER_ID = A.APRV_USER_ID AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD') AND REG_TYP_CD IN ('C','U')) AS APRV_USER_NM
+	  FROM WAM_ASIS_DMN_CD_VAL A
+	  <where>
+	   DMN_ID = #{dmnId,jdbcType=VARCHAR}  
+	   </where> 
+  </select>
+   <select id="selectChangeList" parameterType="java.lang.String" resultMap="BaseResultMap">
+    SELECT A.*
+	  FROM WAM_ASIS_DMN_CD_VAL A
+	  <where>
+	   DMN_ID = #{dmnId,jdbcType=VARCHAR}
+	   </where> 
+	ORDER BY OBJ_VERS DESC
+  </select>
+</mapper>

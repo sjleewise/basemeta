@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.commons.damgmt.db.service.WaaDbPrivilegeMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.commons.damgmt.db.service.WaaDbPrivilege" extends="kr.wise.commons.damgmt.db.service.WaaDbRoleMapper.BaseResultMap">
+    <id column="PRIVILEGE_ID" property="privilegeId" jdbcType="VARCHAR" />
+<!--     <id column="EXP_DTM" property="expDtm" jdbcType="TIMESTAMP" /> -->
+<!--     <result column="STR_DTM" property="strDtm" jdbcType="TIMESTAMP" /> -->
+<!--     <result column="ROLE_ID" property="roleId" jdbcType="VARCHAR" /> -->
+    <result column="GRANTED_DB_CONN_TRG_ID" property="grantedDbConnTrgId" jdbcType="VARCHAR" />
+<!--     <result column="DB_CONN_TRG_ID" property="dbConnTrgId" jdbcType="VARCHAR" /> -->
+    <result column="DB_SCH_ID" property="dbSchId" jdbcType="VARCHAR" />
+    <result column="SELECT_YN" property="selectYn" jdbcType="VARCHAR" />
+    <result column="INSERT_YN" property="insertYn" jdbcType="VARCHAR" />
+    <result column="UPDATE_YN" property="updateYn" jdbcType="VARCHAR" />
+    <result column="DELETE_YN" property="deleteYn" jdbcType="VARCHAR" />
+    <result column="APPLY_RULE_TGT" property="applyRuleTgt" jdbcType="VARCHAR" />
+    <result column="APPLY_RULE_MTHD" property="applyRuleMthd" jdbcType="VARCHAR" />
+    <result column="APPLY_RULE_CONT" property="applyRuleCont" jdbcType="VARCHAR" />
+<!--     <result column="OBJ_DESCN" property="objDescn" jdbcType="VARCHAR" /> -->
+<!--     <result column="OBJ_VERS" property="objVers" jdbcType="DECIMAL" /> -->
+<!--     <result column="REG_TYP_CD" property="regTypCd" jdbcType="VARCHAR" /> -->
+<!--     <result column="WRIT_DTM" property="writDtm" jdbcType="TIMESTAMP" /> -->
+<!--     <result column="WRIT_USER_ID" property="writUserId" jdbcType="VARCHAR" /> -->
+  </resultMap>
+  <sql id="Base_Column_List" >
+    PRIVILEGE_ID, EXP_DTM, STR_DTM, ROLE_ID, DB_CONN_TRG_ID, DB_SCH_ID, SELECT_YN, INSERT_YN, 
+    UPDATE_YN, DELETE_YN, APPLY_RULE_TGT, APPLY_RULE_MTHD, APPLY_RULE_CONT, OBJ_DESCN, 
+    OBJ_VERS, REG_TYP_CD, WRIT_DTM, WRIT_USER_ID
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+      FROM WAA_DB_PRIVILEGE
+     WHERE PRIVILEGE_ID = #{privilegeId,jdbcType=VARCHAR}
+       AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+       AND REG_TYP_CD IN ('C', 'U')
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="map" >
+    delete from WAA_DB_PRIVILEGE
+    where PRIVILEGE_ID = #{privilegeId,jdbcType=VARCHAR}
+      and EXP_DTM = #{expDtm,jdbcType=TIMESTAMP}
+  </delete>
+  <insert id="insert" parameterType="kr.wise.commons.damgmt.db.service.WaaDbPrivilege" >
+    insert into WAA_DB_PRIVILEGE (PRIVILEGE_ID, EXP_DTM, STR_DTM, 
+      ROLE_ID, DB_CONN_TRG_ID, DB_SCH_ID, 
+      SELECT_YN, INSERT_YN, UPDATE_YN, 
+      DELETE_YN, APPLY_RULE_TGT, APPLY_RULE_MTHD, 
+      APPLY_RULE_CONT, OBJ_DESCN, OBJ_VERS, 
+      REG_TYP_CD, WRIT_DTM, WRIT_USER_ID
+      )
+    values (#{privilegeId,jdbcType=VARCHAR}, #{expDtm,jdbcType=TIMESTAMP}, #{strDtm,jdbcType=TIMESTAMP}, 
+      #{roleId,jdbcType=VARCHAR}, #{dbConnTrgId,jdbcType=VARCHAR}, #{dbSchId,jdbcType=VARCHAR}, 
+      #{selectYn,jdbcType=VARCHAR}, #{insertYn,jdbcType=VARCHAR}, #{updateYn,jdbcType=VARCHAR}, 
+      #{deleteYn,jdbcType=VARCHAR}, #{applyRuleTgt,jdbcType=VARCHAR}, #{applyRuleMthd,jdbcType=VARCHAR}, 
+      #{applyRuleCont,jdbcType=VARCHAR}, #{objDescn,jdbcType=VARCHAR}, #{objVers,jdbcType=DECIMAL}, 
+      #{regTypCd,jdbcType=VARCHAR}, #{writDtm,jdbcType=TIMESTAMP}, #{writUserId,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="kr.wise.commons.damgmt.db.service.WaaDbPrivilege" >
+    insert into WAA_DB_PRIVILEGE
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="privilegeId != null" >
+        PRIVILEGE_ID,
+      </if>
+        EXP_DTM,
+        STR_DTM,
+      <if test="roleId != null" >
+        ROLE_ID,
+      </if>
+      <if test="dbConnTrgId != null" >
+        DB_CONN_TRG_ID,
+      </if>
+      <if test="dbSchId != null" >
+        DB_SCH_ID,
+      </if>
+      <if test="selectYn != null" >
+        SELECT_YN,
+      </if>
+      <if test="insertYn != null" >
+        INSERT_YN,
+      </if>
+      <if test="updateYn != null" >
+        UPDATE_YN,
+      </if>
+      <if test="deleteYn != null" >
+        DELETE_YN,
+      </if>
+      <if test="applyRuleTgt != null" >
+        APPLY_RULE_TGT,
+      </if>
+      <if test="applyRuleMthd != null" >
+        APPLY_RULE_MTHD,
+      </if>
+      <if test="applyRuleCont != null" >
+        APPLY_RULE_CONT,
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN,
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS,
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD,
+      </if>
+        WRIT_DTM,
+      <if test="writUserId != null" >
+        WRIT_USER_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="privilegeId != null" >
+        #{privilegeId,jdbcType=VARCHAR},
+      </if>
+      	TO_DATE('9999-12-31', 'YYYY-MM-DD'),
+      	SYSDATE,
+      <if test="roleId != null" >
+        #{roleId,jdbcType=VARCHAR},
+      </if>
+      <if test="dbConnTrgId != null" >
+        #{dbConnTrgId,jdbcType=VARCHAR},
+      </if>
+      <if test="dbSchId != null" >
+        #{dbSchId,jdbcType=VARCHAR},
+      </if>
+      <if test="selectYn != null" >
+        #{selectYn,jdbcType=VARCHAR},
+      </if>
+      <if test="insertYn != null" >
+        #{insertYn,jdbcType=VARCHAR},
+      </if>
+      <if test="updateYn != null" >
+        #{updateYn,jdbcType=VARCHAR},
+      </if>
+      <if test="deleteYn != null" >
+        #{deleteYn,jdbcType=VARCHAR},
+      </if>
+      <if test="applyRuleTgt != null" >
+        #{applyRuleTgt,jdbcType=VARCHAR},
+      </if>
+      <if test="applyRuleMthd != null" >
+        #{applyRuleMthd,jdbcType=VARCHAR},
+      </if>
+      <if test="applyRuleCont != null" >
+        #{applyRuleCont,jdbcType=VARCHAR},
+      </if>
+      <if test="objDescn != null" >
+        #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null" >
+        #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      	SYSDATE,
+      <if test="writUserId != null" >
+        #{writUserId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.commons.damgmt.db.service.WaaDbPrivilege" >
+    update WAA_DB_PRIVILEGE
+    <set >
+      <if test="strDtm != null" >
+        STR_DTM = #{strDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="roleId != null" >
+        ROLE_ID = #{roleId,jdbcType=VARCHAR},
+      </if>
+      <if test="dbConnTrgId != null" >
+        DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR},
+      </if>
+      <if test="dbSchId != null" >
+        DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR},
+      </if>
+      <if test="selectYn != null" >
+        SELECT_YN = #{selectYn,jdbcType=VARCHAR},
+      </if>
+      <if test="insertYn != null" >
+        INSERT_YN = #{insertYn,jdbcType=VARCHAR},
+      </if>
+      <if test="updateYn != null" >
+        UPDATE_YN = #{updateYn,jdbcType=VARCHAR},
+      </if>
+      <if test="deleteYn != null" >
+        DELETE_YN = #{deleteYn,jdbcType=VARCHAR},
+      </if>
+      <if test="applyRuleTgt != null" >
+        APPLY_RULE_TGT = #{applyRuleTgt,jdbcType=VARCHAR},
+      </if>
+      <if test="applyRuleMthd != null" >
+        APPLY_RULE_MTHD = #{applyRuleMthd,jdbcType=VARCHAR},
+      </if>
+      <if test="applyRuleCont != null" >
+        APPLY_RULE_CONT = #{applyRuleCont,jdbcType=VARCHAR},
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="writDtm != null" >
+        WRIT_DTM = #{writDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="writUserId != null" >
+        WRIT_USER_ID = #{writUserId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where PRIVILEGE_ID = #{privilegeId,jdbcType=VARCHAR}
+      and EXP_DTM = #{expDtm,jdbcType=TIMESTAMP}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="kr.wise.commons.damgmt.db.service.WaaDbPrivilege" >
+    update WAA_DB_PRIVILEGE
+    set STR_DTM = #{strDtm,jdbcType=TIMESTAMP},
+      ROLE_ID = #{roleId,jdbcType=VARCHAR},
+      DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR},
+      DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR},
+      SELECT_YN = #{selectYn,jdbcType=VARCHAR},
+      INSERT_YN = #{insertYn,jdbcType=VARCHAR},
+      UPDATE_YN = #{updateYn,jdbcType=VARCHAR},
+      DELETE_YN = #{deleteYn,jdbcType=VARCHAR},
+      APPLY_RULE_TGT = #{applyRuleTgt,jdbcType=VARCHAR},
+      APPLY_RULE_MTHD = #{applyRuleMthd,jdbcType=VARCHAR},
+      APPLY_RULE_CONT = #{applyRuleCont,jdbcType=VARCHAR},
+      OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      WRIT_DTM = #{writDtm,jdbcType=TIMESTAMP},
+      WRIT_USER_ID = #{writUserId,jdbcType=VARCHAR}
+    where PRIVILEGE_ID = #{privilegeId,jdbcType=VARCHAR}
+      and EXP_DTM = #{expDtm,jdbcType=TIMESTAMP}
+  </update>
+  
+  <select id="getDbRoleList" parameterType="kr.wise.commons.damgmt.db.service.WaaDbPrivilege" resultMap="BaseResultMap">
+	SELECT A.*
+	     , R.DB_CONN_TRG_ID AS GRANTED_DB_CONN_TRG_ID
+	     , U.USER_NM AS WRIT_USER_NM
+	  FROM WAA_DB_PRIVILEGE A
+	 INNER JOIN WAA_DB_CONN_TRG DB
+	    ON A.DB_CONN_TRG_ID = DB.DB_CONN_TRG_ID
+	   AND DB.REG_TYP_CD IN ('C', 'U')
+	   AND DB.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	 INNER JOIN WAA_DB_ROLE R
+	    ON A.ROLE_ID = R.ROLE_ID
+	   AND R.REG_TYP_CD IN ('C', 'U')
+	   AND R.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	  LEFT OUTER JOIN WAA_USER U
+	    ON A.WRIT_USER_ID = U.USER_ID
+	   AND U.REG_TYP_CD IN ('C', 'U')
+	   AND U.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	 WHERE A.REG_TYP_CD IN ('C', 'U')
+	   AND A.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+
+ 	<if test='selectYn == "Y"'>
+ 	   AND A.SELECT_YN = 'Y'
+ 	</if>
+ 	<if test='insertYn == "Y"'>
+ 	   AND A.INSERT_YN = 'Y'
+ 	</if>
+ 	<if test='updateYn == "Y"'>
+ 	   AND A.UPDATE_YN = 'Y'
+ 	</if>
+ 	<if test='deleteYn == "Y"'>
+ 	   AND A.DELETE_YN = 'Y'
+ 	</if> 	
+  </select>
+  
+  <update id="updateExpDtm" parameterType="kr.wise.commons.damgmt.db.service.WaaDbPrivilege">
+  UPDATE WAA_DB_PRIVILEGE
+     SET EXP_DTM = SYSDATE
+   WHERE PRIVILEGE_ID = #{privilegeId,jdbcType=VARCHAR}
+     AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+     AND REG_TYP_CD IN ('C', 'U')
+  
+  </update>
+  <update id="deleteDbRoleAuth" parameterType="kr.wise.commons.damgmt.db.service.WaaDbPrivilege">
+  UPDATE WAA_DB_PRIVILEGE
+     SET REG_TYP_CD = 'D'
+   WHERE PRIVILEGE_ID = #{privilegeId}
+     AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+     AND REG_TYP_CD IN ('C', 'U')
+  
+  </update>
+  
+</mapper>

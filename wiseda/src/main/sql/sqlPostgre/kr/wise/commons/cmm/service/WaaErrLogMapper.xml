@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.wise.commons.cmm.service.WaaErrLogMapper">
+  <resultMap id="BaseResultMap" type="kr.wise.commons.cmm.service.WaaErrLog">
+        <result column="SEQ"     property="seq"    jdbcType="DECIMAL" />
+        <result column="PGM_NM"  property="pgmNm"  jdbcType="VARCHAR" />
+        <result column="ERR_LOG" property="errLog" jdbcType="VARCHAR" />
+        <result column="ERR_DTM" property="errDtm" jdbcType="TIMESTAMP" />
+        <result column="USER_ID" property="userId" jdbcType="VARCHAR" />        
+        <result column="USER_NM" property="userNm" jdbcType="VARCHAR" />        
+  </resultMap>
+  
+  
+  <insert id="insertErrLog" parameterType="kr.wise.commons.cmm.service.WaaErrLog">
+    <selectKey keyProperty="seq" resultType="int" order="BEFORE" statementType="PREPARED">
+  		SELECT COALESCE(MAX(SEQ),0)+1 FROM WAA_ERR_LOG
+  	</selectKey>
+  	INSERT INTO WAA_ERR_LOG
+  	(
+  	     SEQ
+        ,PGM_NM
+        ,ERR_LOG
+        ,ERR_DTM
+        ,USER_ID
+  	)
+	VALUES(
+            #{seq    ,jdbcType=DECIMAL}
+           ,#{pgmNm  ,jdbcType=VARCHAR}
+           ,#{errLog ,jdbcType=VARCHAR}
+           ,NOW()
+           ,#{userId ,jdbcType=VARCHAR}
+	)
+  </insert>
+  
+  <select id="selectErrLog" parameterType="kr.wise.commons.cmm.service.WaaErrLog" resultMap ="BaseResultMap">
+  SELECT A.*
+       , U.USER_NM
+  FROM WAA_ERR_LOG A
+  LEFT OUTER JOIN WAA_USER U
+  ON A.USER_ID = U.USER_ID
+  AND U.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+  AND U.REG_TYP_CD IN ('C', 'U')
+  <where>
+  <if test="userId != null and userId !=''">
+  AND A.USER_ID = #{userId ,jdbcType=VARCHAR}
+  </if>
+  <if test="userNm != null  and userNm !='' ">
+  AND U.USER_NM = #{userNm ,jdbcType=VARCHAR}
+  </if>
+   <if test="pgmNm != null and pgmNm != '' ">
+  AND A.PGM_NM LIKE '%'||#{pgmNm ,jdbcType=VARCHAR}||'%'  
+  </if>
+    <if test="errLog != null and errLog != '' ">
+  AND A.ERR_LOG LIKE '%'||#{errLog ,jdbcType=VARCHAR}||'%'  
+  </if>
+  
+  <if test="searchBgnDe != null">
+  AND A.ERR_DTM  >  TO_DATE(#{searchBgnDe ,jdbcType=TIMESTAMP},'YYYY-MM-DD')    
+  </if>
+  <if test="searchEndDe != null">
+  <![CDATA[
+  AND A.ERR_DTM <=  TO_DATE(#{searchEndDe ,jdbcType=TIMESTAMP},'YYYY-MM-DD') + 1
+  ]]>      
+  </if>  
+  </where>
+  ORDER BY SEQ DESC
+  </select>
+  
+  
+</mapper>

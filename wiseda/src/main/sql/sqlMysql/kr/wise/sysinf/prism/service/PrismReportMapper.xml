@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.sysinf.prism.service.PrismReportMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.sysinf.prism.service.PrismReportVo" >
+	 <id 	 column="RESEARCH_ID"           property="researchID"          jdbcType="VARCHAR" />
+	 <id 	 column="SEQ_NO"                property="seqNo"               jdbcType="VARCHAR" />
+	 <result column="REPORT_TITLE"          property="reportTitle"         jdbcType="VARCHAR" />
+	 <result column="ALTERNATIVE"           property="alternative"         jdbcType="VARCHAR" />
+	 <result column="SUB_TITLE"             property="subTitle"            jdbcType="VARCHAR" />
+	 <result column="URL"                   property="URL"                 jdbcType="VARCHAR" />
+	 <result column="REPORT_OPEN_YN"        property="reportOpenYn"        jdbcType="VARCHAR" />
+	 <result column="REPORT_OPEN_LAW"       property="reportOpenLaw"       jdbcType="VARCHAR" />
+	 <result column="REPORT_OPEN_SCOPE_YN"  property="reportOpenScopeYn"   jdbcType="VARCHAR" />
+	 <result column="REPORT_OPEN_SCOPE"     property="reportOpenScope"     jdbcType="VARCHAR" />
+	 <result column="TABLE_CONTENTS"        property="tableContents"       jdbcType="VARCHAR" />
+	 <result column="SUMMARY"               property="summary"             jdbcType="VARCHAR" />
+	 <result column="KEYWORD"               property="keyword"             jdbcType="VARCHAR" />
+	 <result column="CONTRIBUTOR"           property="contributor"         jdbcType="VARCHAR" />
+	 <result column="CREATED_DATE"          property="createdDate"         jdbcType="VARCHAR" />
+	 <result column="ISSUED_YEAR"           property="issuedYear"          jdbcType="VARCHAR" />
+	 <result column="SUBMITTED_DATE"        property="submittedDate"       jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+     RESEARCH_ID ,SEQ_NO ,REPORT_TITLE ,ALTERNATIVE ,SUB_TITLE ,URL ,REPORT_OPEN_YN ,REPORT_OPEN_LAW 
+    ,REPORT_OPEN_SCOPE_YN ,REPORT_OPEN_SCOPE ,TABLE_CONTENTS ,SUMMARY ,KEYWORD ,CONTRIBUTOR ,CREATED_DATE 
+    ,ISSUED_YEAR ,SUBMITTED_DATE 
+  </sql>
+
+  <select id="selectReportbyOrgan" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    --기관별 등록된 연구보고서 목록 조회...
+    SELECT /* PrismReportMapper.selectReportbyOrgan */
+           A.RESEARCH_ID
+         , B.SEQ_NO
+         , B.REPORT_TITLE
+    FROM PRISM_RESEARCH_MST A
+    JOIN PRISM_REPORT_MST B
+      ON A.RESEARCH_ID = B.RESEARCH_ID
+    WHERE A.ORGAN_NAME = #{organName,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectNewReportbyOrgan" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    --기관별 연구보고서 목록 조회 (보고서목록에는 있지만 상세는 없는 리스트 조회)...
+    --연구보고서 상제정보를 과제 ID로만 조회하므로 그룹별로 확인...
+ 	SELECT /* PrismReportMapper.selectNewReportbyOrgan */
+ 	       DISTINCT A.RESEARCH_ID
+         --, A.SEQ_NO
+--         , A.REPORT_TITLE
+--         , A.ISSUED_YEAR
+--         , A.SUBMITTED_DATE
+         , C.ORGAN_NAME
+    FROM (SELECT RESEARCH_ID FROM PRISM_REPORT_MST GROUP BY RESEARCH_ID) A
+    LEFT OUTER JOIN (SELECT RESEARCH_ID FROM PRISM_REPORT_DTL GROUP BY RESEARCH_ID)  B
+      ON A.RESEARCH_ID = B.RESEARCH_ID
+     --AND A.SEQ_NO = B.SEQ_NO
+    LEFT OUTER JOIN PRISM_RESEARCH_MST C
+      ON A.RESEARCH_ID = C.RESEARCH_ID
+    WHERE B.RESEARCH_ID IS NULL
+      AND C.ORGAN_NAME = #{organName,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectReport" resultMap="BaseResultMap"  >
+    --연구보고서 목록 조회...
+    SELECT /* PrismReportMapper.selectReport */
+           B.RESEARCH_ID
+         , B.SEQ_NO
+         , B.REPORT_TITLE
+    FROM PRISM_REPORT_MST B
+  </select>
+
+
+  <insert id="insertReportbyOrgan" parameterType="kr.wise.sysinf.prism.service.PrismReportVo" >
+    --prism 연구보고서 목록 입력
+    insert /* PrismReportMapper.insertReportbyOrgan */
+    	into PRISM_REPORT_MST (RESEARCH_ID ,SEQ_NO ,REPORT_TITLE ,ALTERNATIVE ,SUB_TITLE 
+    	,URL ,REPORT_OPEN_YN ,REPORT_OPEN_LAW ,REPORT_OPEN_SCOPE_YN ,REPORT_OPEN_SCOPE 
+    	,TABLE_CONTENTS ,SUMMARY ,KEYWORD ,CONTRIBUTOR ,CREATED_DATE ,ISSUED_YEAR ,SUBMITTED_DATE 
+      )
+    values (#{researchID,jdbcType=VARCHAR}, #{seqNo,jdbcType=VARCHAR}, #{reportTitle,jdbcType=VARCHAR}, 
+      #{alternative,jdbcType=VARCHAR}, #{subTitle,jdbcType=VARCHAR}, #{URL,jdbcType=VARCHAR}, 
+      #{reportOpenYn,jdbcType=VARCHAR}, #{reportOpenLaw,jdbcType=VARCHAR}, #{reportOpenScopeYn,jdbcType=VARCHAR}, 
+      #{reportOpenScope,jdbcType=VARCHAR}, #{tableContents,jdbcType=VARCHAR}, #{summary,jdbcType=VARCHAR}, 
+      #{keyword,jdbcType=VARCHAR}, #{contributor,jdbcType=VARCHAR}, #{createdDate,jdbcType=VARCHAR}, 
+      #{issuedYear,jdbcType=VARCHAR}, #{submittedDate,jdbcType=VARCHAR}
+      )
+  </insert>
+  
+  
+  <insert id="insertReportDetail" parameterType="kr.wise.sysinf.prism.service.PrismReportVo">
+  --prism 연구보고서 상세 입력 (filename, filesize 제외)
+  insert /* PrismReportMapper.insertReportDetail */
+  	into PRISM_REPORT_DTL ( RESEARCH_ID, SEQ_NO, REPORT_TITLE, ALTERNATIVE, SUB_TITLE
+		, REPORT_OPEN_YN, REPORT_OPEN_LAW, REPORT_OPEN_SCOPE_YN
+		, REPORT_OPEN_SCOPE, TABLE_CONTENTS, TABLE_CONTENTS_MORE, SUMMARY, SUMMARY_MORE
+		, KEYWORD, CONTRIBUTOR, CREATED_DATE, ISSUED_YEAR, SUBMITTED_DATE
+  )
+  VALUES (#{researchID ,jdbcType=VARCHAR}, #{seqNo,jdbcType=VARCHAR},#{reportTitle,jdbcType=VARCHAR}
+		,#{alternative,jdbcType=VARCHAR},#{subTitle,jdbcType=VARCHAR},#{reportOpenYn,jdbcType=VARCHAR}
+		,#{reportOpenLaw,jdbcType=VARCHAR},#{reportOpenScopeYn,jdbcType=VARCHAR}
+		,#{reportOpenScope,jdbcType=VARCHAR},#{tableContents,jdbcType=VARCHAR},#{tableContentsMore,jdbcType=VARCHAR}
+		,#{summary,jdbcType=VARCHAR},#{summaryMore,jdbcType=VARCHAR}
+		,#{keyword,jdbcType=VARCHAR},#{contributor ,jdbcType=VARCHAR},#{createdDate,jdbcType=VARCHAR}
+		,#{issuedYear,jdbcType=VARCHAR},#{submittedDate,jdbcType=VARCHAR} 
+  )
+  </insert>
+  
+  <insert id="insertSelective" parameterType="kr.wise.sysinf.prism.service.PrismResearchMst" >
+    insert /* PrismReportMapper.insertSelective */
+    	into PRISM_RESEARCH_MST
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="researchId != null" >
+        RESEARCH_ID,
+      </if>
+      <if test="researchName != null" >
+        RESEARCH_NAME,
+      </if>
+      <if test="researchOutline != null" >
+        RESEARCH_OUTLINE,
+      </if>
+      <if test="organName != null" >
+        ORGAN_NAME,
+      </if>
+      <if test="url != null" >
+        URL,
+      </if>
+      <if test="bizName1 != null" >
+        BIZ_NAME1,
+      </if>
+      <if test="brmBizid != null" >
+        BRM_BIZID,
+      </if>
+      <if test="bizName2 != null" >
+        BIZ_NAME2,
+      </if>
+      <if test="parentId != null" >
+        PARENT_ID,
+      </if>
+      <if test="bizName3 != null" >
+        BIZ_NAME3,
+      </if>
+      <if test="superId != null" >
+        SUPER_ID,
+      </if>
+      <if test="issuedYear != null" >
+        ISSUED_YEAR,
+      </if>
+      <if test="researchStartDate != null" >
+        RESEARCH_START_DATE,
+      </if>
+      <if test="researchEndDate != null" >
+        RESEARCH_END_DATE,
+      </if>
+      <if test="supplyOrg != null" >
+        SUPPLY_ORG,
+      </if>
+      <if test="researchOrganName != null" >
+        RESEARCH_ORGAN_NAME,
+      </if>
+      <if test="submittedDate != null" >
+        SUBMITTED_DATE,
+      </if>
+      <if test="updateOption != null" >
+        UPDATE_OPTION,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="researchId != null" >
+        #{researchId,jdbcType=VARCHAR},
+      </if>
+      <if test="researchName != null" >
+        #{researchName,jdbcType=VARCHAR},
+      </if>
+      <if test="researchOutline != null" >
+        #{researchOutline,jdbcType=VARCHAR},
+      </if>
+      <if test="organName != null" >
+        #{organName,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null" >
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="bizName1 != null" >
+        #{bizName1,jdbcType=VARCHAR},
+      </if>
+      <if test="brmBizid != null" >
+        #{brmBizid,jdbcType=VARCHAR},
+      </if>
+      <if test="bizName2 != null" >
+        #{bizName2,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null" >
+        #{parentId,jdbcType=VARCHAR},
+      </if>
+      <if test="bizName3 != null" >
+        #{bizName3,jdbcType=VARCHAR},
+      </if>
+      <if test="superId != null" >
+        #{superId,jdbcType=VARCHAR},
+      </if>
+      <if test="issuedYear != null" >
+        #{issuedYear,jdbcType=VARCHAR},
+      </if>
+      <if test="researchStartDate != null" >
+        #{researchStartDate,jdbcType=VARCHAR},
+      </if>
+      <if test="researchEndDate != null" >
+        #{researchEndDate,jdbcType=VARCHAR},
+      </if>
+      <if test="supplyOrg != null" >
+        #{supplyOrg,jdbcType=VARCHAR},
+      </if>
+      <if test="researchOrganName != null" >
+        #{researchOrganName,jdbcType=VARCHAR},
+      </if>
+      <if test="submittedDate != null" >
+        #{submittedDate,jdbcType=VARCHAR},
+      </if>
+      <if test="updateOption != null" >
+        #{updateOption,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.sysinf.prism.service.PrismResearchMst" >
+    update /* PrismReportMapper.updateByPrimaryKeySelective */
+    	PRISM_RESEARCH_MST
+    <set >
+      <if test="researchName != null" >
+        RESEARCH_NAME = #{researchName,jdbcType=VARCHAR},
+      </if>
+      <if test="researchOutline != null" >
+        RESEARCH_OUTLINE = #{researchOutline,jdbcType=VARCHAR},
+      </if>
+      <if test="organName != null" >
+        ORGAN_NAME = #{organName,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null" >
+        URL = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="bizName1 != null" >
+        BIZ_NAME1 = #{bizName1,jdbcType=VARCHAR},
+      </if>
+      <if test="brmBizid != null" >
+        BRM_BIZID = #{brmBizid,jdbcType=VARCHAR},
+      </if>
+      <if test="bizName2 != null" >
+        BIZ_NAME2 = #{bizName2,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null" >
+        PARENT_ID = #{parentId,jdbcType=VARCHAR},
+      </if>
+      <if test="bizName3 != null" >
+        BIZ_NAME3 = #{bizName3,jdbcType=VARCHAR},
+      </if>
+      <if test="superId != null" >
+        SUPER_ID = #{superId,jdbcType=VARCHAR},
+      </if>
+      <if test="issuedYear != null" >
+        ISSUED_YEAR = #{issuedYear,jdbcType=VARCHAR},
+      </if>
+      <if test="researchStartDate != null" >
+        RESEARCH_START_DATE = #{researchStartDate,jdbcType=VARCHAR},
+      </if>
+      <if test="researchEndDate != null" >
+        RESEARCH_END_DATE = #{researchEndDate,jdbcType=VARCHAR},
+      </if>
+      <if test="supplyOrg != null" >
+        SUPPLY_ORG = #{supplyOrg,jdbcType=VARCHAR},
+      </if>
+      <if test="researchOrganName != null" >
+        RESEARCH_ORGAN_NAME = #{researchOrganName,jdbcType=VARCHAR},
+      </if>
+      <if test="submittedDate != null" >
+        SUBMITTED_DATE = #{submittedDate,jdbcType=VARCHAR},
+      </if>
+      <if test="updateOption != null" >
+        UPDATE_OPTION = #{updateOption,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where RESEARCH_ID = #{researchId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="kr.wise.sysinf.prism.service.PrismResearchMst" >
+    update /* PrismReportMapper.updateByPrimaryKey */
+    	PRISM_RESEARCH_MST
+    set RESEARCH_NAME = #{researchName,jdbcType=VARCHAR},
+      RESEARCH_OUTLINE = #{researchOutline,jdbcType=VARCHAR},
+      ORGAN_NAME = #{organName,jdbcType=VARCHAR},
+      URL = #{url,jdbcType=VARCHAR},
+      BIZ_NAME1 = #{bizName1,jdbcType=VARCHAR},
+      BRM_BIZID = #{brmBizid,jdbcType=VARCHAR},
+      BIZ_NAME2 = #{bizName2,jdbcType=VARCHAR},
+      PARENT_ID = #{parentId,jdbcType=VARCHAR},
+      BIZ_NAME3 = #{bizName3,jdbcType=VARCHAR},
+      SUPER_ID = #{superId,jdbcType=VARCHAR},
+      ISSUED_YEAR = #{issuedYear,jdbcType=VARCHAR},
+      RESEARCH_START_DATE = #{researchStartDate,jdbcType=VARCHAR},
+      RESEARCH_END_DATE = #{researchEndDate,jdbcType=VARCHAR},
+      SUPPLY_ORG = #{supplyOrg,jdbcType=VARCHAR},
+      RESEARCH_ORGAN_NAME = #{researchOrganName,jdbcType=VARCHAR},
+      SUBMITTED_DATE = #{submittedDate,jdbcType=VARCHAR},
+      UPDATE_OPTION = #{updateOption,jdbcType=VARCHAR}
+    where RESEARCH_ID = #{researchId,jdbcType=VARCHAR}
+  </update>
+</mapper>

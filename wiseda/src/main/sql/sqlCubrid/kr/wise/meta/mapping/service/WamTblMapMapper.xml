@@ -1,0 +1,583 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.meta.mapping.service.WamTblMapMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.meta.mapping.service.WamTblMap" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap" >
+    <id column="TBL_MAP_ID" property="tblMapId" jdbcType="VARCHAR" />
+    <result column="MAP_DF_ID" property="mapDfId" jdbcType="VARCHAR" />
+    <result column="RQST_NO" property="rqstNo" jdbcType="VARCHAR" />
+    <result column="RQST_SNO" property="rqstSno" jdbcType="DECIMAL" />
+    <result column="OBJ_VERS" property="objVers" jdbcType="DECIMAL" />
+    <result column="OBJ_DESCN" property="objDescn" jdbcType="VARCHAR" />
+    <result column="REG_TYP_CD" property="regTypCd" jdbcType="VARCHAR" />
+    <result column="FRS_RQST_DTM" property="frsRqstDtm" jdbcType="TIMESTAMP" />
+    <result column="FRS_RQST_USER_ID" property="frsRqstUserId" jdbcType="VARCHAR" />
+    <result column="RQST_DTM" property="rqstDtm" jdbcType="TIMESTAMP" />
+    <result column="RQST_USER_ID" property="rqstUserId" jdbcType="VARCHAR" />
+    <result column="APRV_DTM" property="aprvDtm" jdbcType="TIMESTAMP" />
+    <result column="APRV_USER_ID" property="aprvUserId" jdbcType="VARCHAR" />
+    <result column="MAP_DF_TYPE" property="mapDfType" jdbcType="VARCHAR" />
+    <result column="MAP_SNO" property="mapSno" jdbcType="VARCHAR" />
+    <result column="TBL_MAP_TYPE" property="tblMapType" jdbcType="VARCHAR" />
+    <result column="TGT_SUBJ_ID" property="tgtSubjId" jdbcType="VARCHAR" />
+    <result column="TGT_SUBJ_ALL_PATH" property="tgtSubjAllPath" jdbcType="VARCHAR" />
+    <result column="TGT_DB_ID" property="tgtDbId" jdbcType="VARCHAR" />
+    <result column="TGT_DB_PNM" property="tgtDbPnm" jdbcType="VARCHAR" />
+    <result column="TGT_TBL_ID" property="tgtTblId" jdbcType="VARCHAR" />
+    <result column="TGT_TBL_LNM" property="tgtTblLnm" jdbcType="VARCHAR" />
+    <result column="TGT_TBL_PNM" property="tgtTblPnm" jdbcType="VARCHAR" />
+    <result column="TGT_FLF_TYPE" property="tgtFlfType" jdbcType="VARCHAR" />
+    <result column="SRC_BIZ_ID" property="srcBizId" jdbcType="VARCHAR" />
+    <result column="SRC_BIZ_NM" property="srcBizNm" jdbcType="VARCHAR" />
+    <result column="SRC_SYS_ID" property="srcSysId" jdbcType="VARCHAR" />
+    <result column="SRC_SYS_NM" property="srcSysNm" jdbcType="VARCHAR" />
+    <result column="SRC_DB_ID" property="srcDbId" jdbcType="VARCHAR" />
+    <result column="SRC_DB_PNM" property="srcDbPnm" jdbcType="VARCHAR" />
+    <result column="SRC_TBL_ID" property="srcTblId" jdbcType="VARCHAR" />
+    <result column="SRC_TBL_LNM" property="srcTblLnm" jdbcType="VARCHAR" />
+    <result column="SRC_TBL_PNM" property="srcTblPnm" jdbcType="VARCHAR" />
+    <result column="SLT_SKP_CND_NM" property="sltSkpCndNm" jdbcType="VARCHAR" />
+    <result column="JN_CND_NM" property="jnCndNm" jdbcType="VARCHAR" />
+    <result column="APP_CRGP_ID" property="appCrgpId" jdbcType="VARCHAR" />
+    <result column="APP_CRGP_NM" property="appCrgpNm" jdbcType="VARCHAR" />
+    <result column="CNVS_CRGP_ID" property="cnvsCrgpId" jdbcType="VARCHAR" />
+    <result column="CNVS_CRGP_NM" property="cnvsCrgpNm" jdbcType="VARCHAR" />
+    <result column="REF_DESCN" property="refDescn" jdbcType="VARCHAR" />
+    <result column="PRE_FLF_DESCN" property="preFlfDescn" jdbcType="VARCHAR" />
+    <result column="TGT_CHRG" property="tgtChrg" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    TBL_MAP_ID, MAP_DF_ID, RQST_NO, RQST_SNO, OBJ_VERS, OBJ_DESCN, REG_TYP_CD, FRS_RQST_DTM, 
+    FRS_RQST_USER_ID, RQST_DTM, RQST_USER_ID, APRV_DTM, APRV_USER_ID, MAP_DF_TYPE, MAP_SNO, 
+    TBL_MAP_TYPE, TGT_SUBJ_ID, TGT_SUBJ_ALL_PATH, TGT_DB_ID, TGT_DB_PNM, TGT_TBL_ID, 
+    TGT_TBL_LNM, TGT_TBL_PNM, TGT_FLF_TYPE, SRC_BIZ_ID, SRC_BIZ_NM, SRC_SYS_ID, SRC_SYS_NM, 
+    SRC_DB_ID, SRC_DB_PNM, SRC_TBL_ID, SRC_TBL_LNM, SRC_TBL_PNM, SLT_SKP_CND_NM, JN_CND_NM, 
+    APP_CRGP_ID, APP_CRGP_NM, CNVS_CRGP_ID, CNVS_CRGP_NM, REF_DESCN, PRE_FLF_DESCN, TGT_CHRG
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from WAM_TBL_MAP
+    where TBL_MAP_ID = #{tblMapId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from WAM_TBL_MAP
+    where TBL_MAP_ID = #{tblMapId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="kr.wise.meta.mapping.service.WamTblMap" >
+    insert into WAM_TBL_MAP (TBL_MAP_ID, MAP_DF_ID, RQST_NO, 
+      RQST_SNO, OBJ_VERS, OBJ_DESCN, 
+      REG_TYP_CD, FRS_RQST_DTM, FRS_RQST_USER_ID, 
+      RQST_DTM, RQST_USER_ID, APRV_DTM, 
+      APRV_USER_ID, MAP_DF_TYPE, MAP_SNO, 
+      TBL_MAP_TYPE, TGT_SUBJ_ID, TGT_SUBJ_ALL_PATH, 
+      TGT_DB_ID, TGT_DB_PNM, TGT_TBL_ID, 
+      TGT_TBL_LNM, TGT_TBL_PNM, TGT_FLF_TYPE, 
+      SRC_BIZ_ID, SRC_BIZ_NM, SRC_SYS_ID, 
+      SRC_SYS_NM, SRC_DB_ID, SRC_DB_PNM, 
+      SRC_TBL_ID, SRC_TBL_LNM, SRC_TBL_PNM, 
+      SLT_SKP_CND_NM, JN_CND_NM, APP_CRGP_ID, 
+      APP_CRGP_NM, CNVS_CRGP_ID, CNVS_CRGP_NM, 
+      REF_DESCN, PRE_FLF_DESCN, TGT_CHRG)
+    values (#{tblMapId,jdbcType=VARCHAR}, #{mapDfId,jdbcType=VARCHAR}, #{rqstNo,jdbcType=VARCHAR}, 
+      #{rqstSno,jdbcType=DECIMAL}, #{objVers,jdbcType=DECIMAL}, #{objDescn,jdbcType=VARCHAR}, 
+      #{regTypCd,jdbcType=VARCHAR}, #{frsRqstDtm,jdbcType=TIMESTAMP}, #{frsRqstUserId,jdbcType=VARCHAR}, 
+      #{rqstDtm,jdbcType=TIMESTAMP}, #{rqstUserId,jdbcType=VARCHAR}, #{aprvDtm,jdbcType=TIMESTAMP}, 
+      #{aprvUserId,jdbcType=VARCHAR}, #{mapDfType,jdbcType=VARCHAR}, #{mapSno,jdbcType=VARCHAR}, 
+      #{tblMapType,jdbcType=VARCHAR}, #{tgtSubjId,jdbcType=VARCHAR}, #{tgtSubjAllPath,jdbcType=VARCHAR}, 
+      #{tgtDbId,jdbcType=VARCHAR}, #{tgtDbPnm,jdbcType=VARCHAR}, #{tgtTblId,jdbcType=VARCHAR}, 
+      #{tgtTblLnm,jdbcType=VARCHAR}, #{tgtTblPnm,jdbcType=VARCHAR}, #{tgtFlfType,jdbcType=VARCHAR}, 
+      #{srcBizId,jdbcType=VARCHAR}, #{srcBizNm,jdbcType=VARCHAR}, #{srcSysId,jdbcType=VARCHAR}, 
+      #{srcSysNm,jdbcType=VARCHAR}, #{srcDbId,jdbcType=VARCHAR}, #{srcDbPnm,jdbcType=VARCHAR}, 
+      #{srcTblId,jdbcType=VARCHAR}, #{srcTblLnm,jdbcType=VARCHAR}, #{srcTblPnm,jdbcType=VARCHAR}, 
+      #{sltSkpCndNm,jdbcType=VARCHAR}, #{jnCndNm,jdbcType=VARCHAR}, #{appCrgpId,jdbcType=VARCHAR}, 
+      #{appCrgpNm,jdbcType=VARCHAR}, #{cnvsCrgpId,jdbcType=VARCHAR}, #{cnvsCrgpNm,jdbcType=VARCHAR}, 
+      #{refDescn,jdbcType=VARCHAR}, #{preFlfDescn,jdbcType=VARCHAR},#{tgtChrg,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="kr.wise.meta.mapping.service.WamTblMap" >
+    insert into WAM_TBL_MAP
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="tblMapId != null" >
+        TBL_MAP_ID,
+      </if>
+      <if test="mapDfId != null" >
+        MAP_DF_ID,
+      </if>
+      <if test="rqstNo != null" >
+        RQST_NO,
+      </if>
+      <if test="rqstSno != null" >
+        RQST_SNO,
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS,
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN,
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD,
+      </if>
+      <if test="frsRqstDtm != null" >
+        FRS_RQST_DTM,
+      </if>
+      <if test="frsRqstUserId != null" >
+        FRS_RQST_USER_ID,
+      </if>
+      <if test="rqstDtm != null" >
+        RQST_DTM,
+      </if>
+      <if test="rqstUserId != null" >
+        RQST_USER_ID,
+      </if>
+      <if test="aprvDtm != null" >
+        APRV_DTM,
+      </if>
+      <if test="aprvUserId != null" >
+        APRV_USER_ID,
+      </if>
+      <if test="mapDfType != null" >
+        MAP_DF_TYPE,
+      </if>
+      <if test="mapSno != null" >
+        MAP_SNO,
+      </if>
+      <if test="tblMapType != null" >
+        TBL_MAP_TYPE,
+      </if>
+      <if test="tgtSubjId != null" >
+        TGT_SUBJ_ID,
+      </if>
+      <if test="tgtSubjAllPath != null" >
+        TGT_SUBJ_ALL_PATH,
+      </if>
+      <if test="tgtDbId != null" >
+        TGT_DB_ID,
+      </if>
+      <if test="tgtDbPnm != null" >
+        TGT_DB_PNM,
+      </if>
+      <if test="tgtTblId != null" >
+        TGT_TBL_ID,
+      </if>
+      <if test="tgtTblLnm != null" >
+        TGT_TBL_LNM,
+      </if>
+      <if test="tgtTblPnm != null" >
+        TGT_TBL_PNM,
+      </if>
+      <if test="tgtFlfType != null" >
+        TGT_FLF_TYPE,
+      </if>
+      <if test="srcBizId != null" >
+        SRC_BIZ_ID,
+      </if>
+      <if test="srcBizNm != null" >
+        SRC_BIZ_NM,
+      </if>
+      <if test="srcSysId != null" >
+        SRC_SYS_ID,
+      </if>
+      <if test="srcSysNm != null" >
+        SRC_SYS_NM,
+      </if>
+      <if test="srcDbId != null" >
+        SRC_DB_ID,
+      </if>
+      <if test="srcDbPnm != null" >
+        SRC_DB_PNM,
+      </if>
+      <if test="srcTblId != null" >
+        SRC_TBL_ID,
+      </if>
+      <if test="srcTblLnm != null" >
+        SRC_TBL_LNM,
+      </if>
+      <if test="srcTblPnm != null" >
+        SRC_TBL_PNM,
+      </if>
+      <if test="sltSkpCndNm != null" >
+        SLT_SKP_CND_NM,
+      </if>
+      <if test="jnCndNm != null" >
+        JN_CND_NM,
+      </if>
+      <if test="appCrgpId != null" >
+        APP_CRGP_ID,
+      </if>
+      <if test="appCrgpNm != null" >
+        APP_CRGP_NM,
+      </if>
+      <if test="cnvsCrgpId != null" >
+        CNVS_CRGP_ID,
+      </if>
+      <if test="cnvsCrgpNm != null" >
+        CNVS_CRGP_NM,
+      </if>
+      <if test="refDescn != null" >
+        REF_DESCN,
+      </if>
+      <if test="preFlfDescn != null" >
+        PRE_FLF_DESCN,
+      </if>
+      <if test="tgtChrg != null" >
+        TGT_CHRG,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="tblMapId != null" >
+        #{tblMapId,jdbcType=VARCHAR},
+      </if>
+      <if test="mapDfId != null" >
+        #{mapDfId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstNo != null" >
+        #{rqstNo,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstSno != null" >
+        #{rqstSno,jdbcType=DECIMAL},
+      </if>
+      <if test="objVers != null" >
+        #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="objDescn != null" >
+        #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="regTypCd != null" >
+        #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="frsRqstDtm != null" >
+        #{frsRqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="frsRqstUserId != null" >
+        #{frsRqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDtm != null" >
+        #{rqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rqstUserId != null" >
+        #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDtm != null" >
+        #{aprvDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aprvUserId != null" >
+        #{aprvUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="mapDfType != null" >
+        #{mapDfType,jdbcType=VARCHAR},
+      </if>
+      <if test="mapSno != null" >
+        #{mapSno,jdbcType=VARCHAR},
+      </if>
+      <if test="tblMapType != null" >
+        #{tblMapType,jdbcType=VARCHAR},
+      </if>
+      <if test="tgtSubjId != null" >
+        #{tgtSubjId,jdbcType=VARCHAR},
+      </if>
+      <if test="tgtSubjAllPath != null" >
+        #{tgtSubjAllPath,jdbcType=VARCHAR},
+      </if>
+      <if test="tgtDbId != null" >
+        #{tgtDbId,jdbcType=VARCHAR},
+      </if>
+      <if test="tgtDbPnm != null" >
+        #{tgtDbPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="tgtTblId != null" >
+        #{tgtTblId,jdbcType=VARCHAR},
+      </if>
+      <if test="tgtTblLnm != null" >
+        #{tgtTblLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="tgtTblPnm != null" >
+        #{tgtTblPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="tgtFlfType != null" >
+        #{tgtFlfType,jdbcType=VARCHAR},
+      </if>
+      <if test="srcBizId != null" >
+        #{srcBizId,jdbcType=VARCHAR},
+      </if>
+      <if test="srcBizNm != null" >
+        #{srcBizNm,jdbcType=VARCHAR},
+      </if>
+      <if test="srcSysId != null" >
+        #{srcSysId,jdbcType=VARCHAR},
+      </if>
+      <if test="srcSysNm != null" >
+        #{srcSysNm,jdbcType=VARCHAR},
+      </if>
+      <if test="srcDbId != null" >
+        #{srcDbId,jdbcType=VARCHAR},
+      </if>
+      <if test="srcDbPnm != null" >
+        #{srcDbPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="srcTblId != null" >
+        #{srcTblId,jdbcType=VARCHAR},
+      </if>
+      <if test="srcTblLnm != null" >
+        #{srcTblLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="srcTblPnm != null" >
+        #{srcTblPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="sltSkpCndNm != null" >
+        #{sltSkpCndNm,jdbcType=VARCHAR},
+      </if>
+      <if test="jnCndNm != null" >
+        #{jnCndNm,jdbcType=VARCHAR},
+      </if>
+      <if test="appCrgpId != null" >
+        #{appCrgpId,jdbcType=VARCHAR},
+      </if>
+      <if test="appCrgpNm != null" >
+        #{appCrgpNm,jdbcType=VARCHAR},
+      </if>
+      <if test="cnvsCrgpId != null" >
+        #{cnvsCrgpId,jdbcType=VARCHAR},
+      </if>
+      <if test="cnvsCrgpNm != null" >
+        #{cnvsCrgpNm,jdbcType=VARCHAR},
+      </if>
+      <if test="refDescn != null" >
+        #{refDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="preFlfDescn != null" >
+        #{preFlfDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="tgtChrg != null" >
+        #{tgtChrg,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.meta.mapping.service.WamTblMap" >
+    update WAM_TBL_MAP
+    <set >
+      <if test="mapDfId != null" >
+        MAP_DF_ID = #{mapDfId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstNo != null" >
+        RQST_NO = #{rqstNo,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstSno != null" >
+        RQST_SNO = #{rqstSno,jdbcType=DECIMAL},
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="frsRqstDtm != null" >
+        FRS_RQST_DTM = #{frsRqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="frsRqstUserId != null" >
+        FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDtm != null" >
+        RQST_DTM = #{rqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rqstUserId != null" >
+        RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDtm != null" >
+        APRV_DTM = #{aprvDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aprvUserId != null" >
+        APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="mapDfType != null" >
+        MAP_DF_TYPE = #{mapDfType,jdbcType=VARCHAR},
+      </if>
+      <if test="mapSno != null" >
+        MAP_SNO = #{mapSno,jdbcType=VARCHAR},
+      </if>
+      <if test="tblMapType != null" >
+        TBL_MAP_TYPE = #{tblMapType,jdbcType=VARCHAR},
+      </if>
+      <if test="tgtSubjId != null" >
+        TGT_SUBJ_ID = #{tgtSubjId,jdbcType=VARCHAR},
+      </if>
+      <if test="tgtSubjAllPath != null" >
+        TGT_SUBJ_ALL_PATH = #{tgtSubjAllPath,jdbcType=VARCHAR},
+      </if>
+      <if test="tgtDbId != null" >
+        TGT_DB_ID = #{tgtDbId,jdbcType=VARCHAR},
+      </if>
+      <if test="tgtDbPnm != null" >
+        TGT_DB_PNM = #{tgtDbPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="tgtTblId != null" >
+        TGT_TBL_ID = #{tgtTblId,jdbcType=VARCHAR},
+      </if>
+      <if test="tgtTblLnm != null" >
+        TGT_TBL_LNM = #{tgtTblLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="tgtTblPnm != null" >
+        TGT_TBL_PNM = #{tgtTblPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="tgtFlfType != null" >
+        TGT_FLF_TYPE = #{tgtFlfType,jdbcType=VARCHAR},
+      </if>
+      <if test="srcBizId != null" >
+        SRC_BIZ_ID = #{srcBizId,jdbcType=VARCHAR},
+      </if>
+      <if test="srcBizNm != null" >
+        SRC_BIZ_NM = #{srcBizNm,jdbcType=VARCHAR},
+      </if>
+      <if test="srcSysId != null" >
+        SRC_SYS_ID = #{srcSysId,jdbcType=VARCHAR},
+      </if>
+      <if test="srcSysNm != null" >
+        SRC_SYS_NM = #{srcSysNm,jdbcType=VARCHAR},
+      </if>
+      <if test="srcDbId != null" >
+        SRC_DB_ID = #{srcDbId,jdbcType=VARCHAR},
+      </if>
+      <if test="srcDbPnm != null" >
+        SRC_DB_PNM = #{srcDbPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="srcTblId != null" >
+        SRC_TBL_ID = #{srcTblId,jdbcType=VARCHAR},
+      </if>
+      <if test="srcTblLnm != null" >
+        SRC_TBL_LNM = #{srcTblLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="srcTblPnm != null" >
+        SRC_TBL_PNM = #{srcTblPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="sltSkpCndNm != null" >
+        SLT_SKP_CND_NM = #{sltSkpCndNm,jdbcType=VARCHAR},
+      </if>
+      <if test="jnCndNm != null" >
+        JN_CND_NM = #{jnCndNm,jdbcType=VARCHAR},
+      </if>
+      <if test="appCrgpId != null" >
+        APP_CRGP_ID = #{appCrgpId,jdbcType=VARCHAR},
+      </if>
+      <if test="appCrgpNm != null" >
+        APP_CRGP_NM = #{appCrgpNm,jdbcType=VARCHAR},
+      </if>
+      <if test="cnvsCrgpId != null" >
+        CNVS_CRGP_ID = #{cnvsCrgpId,jdbcType=VARCHAR},
+      </if>
+      <if test="cnvsCrgpNm != null" >
+        CNVS_CRGP_NM = #{cnvsCrgpNm,jdbcType=VARCHAR},
+      </if>
+      <if test="refDescn != null" >
+        REF_DESCN = #{refDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="preFlfDescn != null" >
+        PRE_FLF_DESCN = #{preFlfDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="tgtChrg != null" >
+        TGT_CHRG = #{tgtChrg,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where TBL_MAP_ID = #{tblMapId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="kr.wise.meta.mapping.service.WamTblMap" >
+    update WAM_TBL_MAP
+    set MAP_DF_ID = #{mapDfId,jdbcType=VARCHAR},
+      RQST_NO = #{rqstNo,jdbcType=VARCHAR},
+      RQST_SNO = #{rqstSno,jdbcType=DECIMAL},
+      OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      FRS_RQST_DTM = #{frsRqstDtm,jdbcType=TIMESTAMP},
+      FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR},
+      RQST_DTM = #{rqstDtm,jdbcType=TIMESTAMP},
+      RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      APRV_DTM = #{aprvDtm,jdbcType=TIMESTAMP},
+      APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR},
+      MAP_DF_TYPE = #{mapDfType,jdbcType=VARCHAR},
+      MAP_SNO = #{mapSno,jdbcType=VARCHAR},
+      TBL_MAP_TYPE = #{tblMapType,jdbcType=VARCHAR},
+      TGT_SUBJ_ID = #{tgtSubjId,jdbcType=VARCHAR},
+      TGT_SUBJ_ALL_PATH = #{tgtSubjAllPath,jdbcType=VARCHAR},
+      TGT_DB_ID = #{tgtDbId,jdbcType=VARCHAR},
+      TGT_DB_PNM = #{tgtDbPnm,jdbcType=VARCHAR},
+      TGT_TBL_ID = #{tgtTblId,jdbcType=VARCHAR},
+      TGT_TBL_LNM = #{tgtTblLnm,jdbcType=VARCHAR},
+      TGT_TBL_PNM = #{tgtTblPnm,jdbcType=VARCHAR},
+      TGT_FLF_TYPE = #{tgtFlfType,jdbcType=VARCHAR},
+      SRC_BIZ_ID = #{srcBizId,jdbcType=VARCHAR},
+      SRC_BIZ_NM = #{srcBizNm,jdbcType=VARCHAR},
+      SRC_SYS_ID = #{srcSysId,jdbcType=VARCHAR},
+      SRC_SYS_NM = #{srcSysNm,jdbcType=VARCHAR},
+      SRC_DB_ID = #{srcDbId,jdbcType=VARCHAR},
+      SRC_DB_PNM = #{srcDbPnm,jdbcType=VARCHAR},
+      SRC_TBL_ID = #{srcTblId,jdbcType=VARCHAR},
+      SRC_TBL_LNM = #{srcTblLnm,jdbcType=VARCHAR},
+      SRC_TBL_PNM = #{srcTblPnm,jdbcType=VARCHAR},
+      SLT_SKP_CND_NM = #{sltSkpCndNm,jdbcType=VARCHAR},
+      JN_CND_NM = #{jnCndNm,jdbcType=VARCHAR},
+      APP_CRGP_ID = #{appCrgpId,jdbcType=VARCHAR},
+      APP_CRGP_NM = #{appCrgpNm,jdbcType=VARCHAR},
+      CNVS_CRGP_ID = #{cnvsCrgpId,jdbcType=VARCHAR},
+      CNVS_CRGP_NM = #{cnvsCrgpNm,jdbcType=VARCHAR},
+      REF_DESCN = #{refDescn,jdbcType=VARCHAR},
+      PRE_FLF_DESCN = #{preFlfDescn,jdbcType=VARCHAR},
+      TGT_CHRG = #{tgtChrg,jdbcType=VARCHAR}
+    where TBL_MAP_ID = #{tblMapId,jdbcType=VARCHAR}
+  </update>
+  
+  <select id="selectTblMapList" resultMap="BaseResultMap" parameterType="kr.wise.meta.mapping.service.WamTblMap" >
+    select 
+    <include refid="Base_Column_List" />
+    	, (SELECT USER_NM FROM WAA_USER WHERE USER_ID = A.FRS_RQST_USER_ID AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD') AND REG_TYP_CD IN ('C','U')) AS FRS_RQST_USER_NM
+    	, (SELECT USER_NM FROM WAA_USER WHERE USER_ID = A.RQST_USER_ID AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD') AND REG_TYP_CD IN ('C','U')) AS RQST_USER_NM
+    	, (SELECT USER_NM FROM WAA_USER WHERE USER_ID = A.APRV_USER_ID AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD') AND REG_TYP_CD IN ('C','U')) AS APRV_USER_NM
+    from WAM_TBL_MAP A		
+    <where>
+	  <if test="mapDfId != null" >
+        AND A.MAP_DF_ID LIKE  '%'|| #{mapDfId,jdbcType=VARCHAR}||'%'
+      </if>
+      <if test="tgtTblPnm != null" >
+        AND (A.TGT_TBL_PNM LIKE  '%'||UPPER(#{tgtTblPnm,jdbcType=VARCHAR})||'%' OR A.TGT_TBL_LNM LIKE  '%'||#{tgtTblPnm,jdbcType=VARCHAR}||'%')
+      </if>
+      <if test="tgtSubjAllPath != null" >
+        AND NVL(A.TGT_SUBJ_ALL_PATH,'X') LIKE  #{tgtSubjAllPath,jdbcType=VARCHAR}||'%'
+      </if>
+      
+    </where>
+    </select>
+    
+    <select id="selectTblMapListForColMap" resultMap="BaseResultMap" parameterType="kr.wise.meta.mapping.service.WamTblMap" >
+    select 
+    <include refid="Base_Column_List" />
+    	, (SELECT USER_NM FROM WAA_USER WHERE USER_ID = A.FRS_RQST_USER_ID AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD') AND REG_TYP_CD IN ('C','U')) AS FRS_RQST_USER_NM
+    	, (SELECT USER_NM FROM WAA_USER WHERE USER_ID = A.RQST_USER_ID AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD') AND REG_TYP_CD IN ('C','U')) AS RQST_USER_NM
+    	, (SELECT USER_NM FROM WAA_USER WHERE USER_ID = A.APRV_USER_ID AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD') AND REG_TYP_CD IN ('C','U')) AS APRV_USER_NM
+    from WAM_TBL_MAP A		
+    <where>
+      EXISTS ( SELECT B.MAP_DF_ID
+               FROM WAM_COL_MAP B
+               WHERE A.MAP_DF_ID = B.MAP_DF_ID
+                 AND NVL(A.SRC_TBL_PNM,'X') = NVL(B.SRC_TBL_PNM,'X') 
+               UNION
+               SELECT B.MAP_DF_ID
+               FROM WAM_COL_MAP B
+               WHERE A.MAP_DF_ID = B.MAP_DF_ID
+                 AND NVL(B.COL_MAP_TYPE,'2') = '2' -- 잘못된 컬럼매핑정의서 삭제를 위하여 나중에 주석처리나 1로 변경해야함..
+             )
+<!--         AND (NVL(A.TBL_MAP_TYPE,'M') IN ('M','R') -->
+	  <if test="mapDfId != null" >
+        AND A.MAP_DF_ID LIKE  '%'||#{mapDfId,jdbcType=VARCHAR}||'%'
+      </if>
+      <if test="tgtTblPnm != null" >
+        AND (A.TGT_TBL_PNM LIKE  '%'||UPPER(#{tgtTblPnm,jdbcType=VARCHAR})||'%' OR A.TGT_TBL_LNM LIKE  '%'||#{tgtTblPnm,jdbcType=VARCHAR}||'%')
+      </if>
+      <if test="tgtSubjAllPath != null" >
+        AND NVL(A.TGT_SUBJ_ALL_PATH,'X') LIKE  #{tgtSubjAllPath,jdbcType=VARCHAR}||'%'
+      </if>
+      
+    </where>
+    </select>
+    
+</mapper>

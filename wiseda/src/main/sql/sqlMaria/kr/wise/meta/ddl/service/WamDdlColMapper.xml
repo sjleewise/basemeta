@@ -1,0 +1,543 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.meta.ddl.service.WamDdlColMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.meta.ddl.service.WamDdlCol" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+    <id column="DDL_COL_ID" property="ddlColId" jdbcType="VARCHAR" />
+    <result column="DDL_COL_PNM"  property="ddlColPnm" jdbcType="VARCHAR" />
+    <result column="DDL_COL_LNM"  property="ddlColLnm" jdbcType="VARCHAR" />
+    <result column="DDL_TBL_ID"   property="ddlTblId" jdbcType="VARCHAR" />
+    <result column="COL_ORD"      property="colOrd" jdbcType="DECIMAL" />
+    <result column="DATA_TYPE"    property="dataType" jdbcType="VARCHAR" />
+    <result column="DATA_LEN"     property="dataLen" jdbcType="DECIMAL" />
+    <result column="DATA_SCAL"    property="dataScal" jdbcType="DECIMAL" />
+    <result column="PK_YN"        property="pkYn" jdbcType="VARCHAR" />
+    <result column="PK_ORD"       property="pkOrd" jdbcType="DECIMAL" />
+    <result column="NONUL_YN"     property="nonulYn" jdbcType="VARCHAR" />
+    <result column="DEFLT_VAL"    property="defltVal" jdbcType="VARCHAR" />
+    <result column="RQST_DTL_SNO" property="rqstDtlSno" jdbcType="DECIMAL" />
+	<result column="DDL_TBL_PNM"  property="ddlTblPnm" jdbcType="VARCHAR" />
+	<result column="SCRT_INFO"    property="scrtInfo" jdbcType="CLOB" />
+	<result column="DDL_TRG_DCD"  property="ddlTrgDcd" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    DDL_COL_ID, DDL_COL_PNM, DDL_COL_LNM, DDL_TBL_ID, COL_ORD, DATA_TYPE, DATA_LEN, DATA_SCAL, 
+    PK_YN, PK_ORD, NONUL_YN, DEFLT_VAL, RQST_NO, RQST_SNO, RQST_DTL_SNO, OBJ_DESCN, OBJ_VERS, 
+    REG_TYP_CD, FRS_RQST_DTM, FRS_RQST_USER_ID, RQST_DTM, RQST_USER_ID, APRV_DTM, APRV_USER_ID
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 	/* WamDdlColMapper.selectByPrimaryKey */
+    		A.*
+    	  ,GET_USER_NM(A.FRS_RQST_USER_ID) AS FRS_RQST_USER_NM
+    	  ,GET_USER_NM(A.RQST_USER_ID) AS RQST_USER_NM
+    	  ,GET_USER_NM(A.APRV_USER_ID) AS APRV_USER_NM
+    from WAH_DDL_COL A
+    where A.DDL_COL_ID = #{ddlColId,jdbcType=VARCHAR}
+    	AND A.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+    
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete /* WamDdlColMapper.deleteByPrimaryKey */
+    from WAM_DDL_COL
+    where DDL_COL_ID = #{ddlColId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="kr.wise.meta.ddl.service.WamDdlCol" >
+    insert 	/* WamDdlColMapper.insert */
+    		into WAM_DDL_COL (DDL_COL_ID, DDL_COL_PNM, DDL_COL_LNM, 
+      DDL_TBL_ID, COL_ORD, DATA_TYPE, 
+      DATA_LEN, DATA_SCAL, PK_YN, 
+      PK_ORD, NONUL_YN, DEFLT_VAL, 
+      RQST_NO, RQST_SNO, RQST_DTL_SNO, 
+      OBJ_DESCN, OBJ_VERS, REG_TYP_CD, 
+      FRS_RQST_DTM, FRS_RQST_USER_ID, RQST_DTM, 
+      RQST_USER_ID, APRV_DTM, APRV_USER_ID
+      )
+    values (#{ddlColId,jdbcType=VARCHAR}, #{ddlColPnm,jdbcType=VARCHAR}, #{ddlColLnm,jdbcType=VARCHAR}, 
+      #{ddlTblId,jdbcType=VARCHAR}, #{colOrd,jdbcType=DECIMAL}, #{dataType,jdbcType=VARCHAR}, 
+      #{dataLen,jdbcType=DECIMAL}, #{dataScal,jdbcType=DECIMAL}, #{pkYn,jdbcType=VARCHAR}, 
+      #{pkOrd,jdbcType=DECIMAL}, #{nonulYn,jdbcType=VARCHAR}, #{defltVal,jdbcType=VARCHAR}, 
+      #{rqstNo,jdbcType=VARCHAR}, #{rqstSno,jdbcType=DECIMAL}, #{rqstDtlSno,jdbcType=DECIMAL}, 
+      #{objDescn,jdbcType=VARCHAR}, #{objVers,jdbcType=DECIMAL}, #{regTypCd,jdbcType=VARCHAR}, 
+      #{frsRqstDtm,jdbcType=TIMESTAMP}, #{frsRqstUserId,jdbcType=VARCHAR}, #{rqstDtm,jdbcType=TIMESTAMP}, 
+      #{rqstUserId,jdbcType=VARCHAR}, #{aprvDtm,jdbcType=TIMESTAMP}, #{aprvUserId,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="kr.wise.meta.ddl.service.WamDdlCol" >
+    insert 	/* WamDdlColMapper.insertSelective */
+    		into WAM_DDL_COL
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="ddlColId != null" >
+        DDL_COL_ID,
+      </if>
+      <if test="ddlColPnm != null" >
+        DDL_COL_PNM,
+      </if>
+      <if test="ddlColLnm != null" >
+        DDL_COL_LNM,
+      </if>
+      <if test="ddlTblId != null" >
+        DDL_TBL_ID,
+      </if>
+      <if test="colOrd != null" >
+        COL_ORD,
+      </if>
+      <if test="dataType != null" >
+        DATA_TYPE,
+      </if>
+      <if test="dataLen != null" >
+        DATA_LEN,
+      </if>
+      <if test="dataScal != null" >
+        DATA_SCAL,
+      </if>
+      <if test="pkYn != null" >
+        PK_YN,
+      </if>
+      <if test="pkOrd != null" >
+        PK_ORD,
+      </if>
+      <if test="nonulYn != null" >
+        NONUL_YN,
+      </if>
+      <if test="defltVal != null" >
+        DEFLT_VAL,
+      </if>
+      <if test="rqstNo != null" >
+        RQST_NO,
+      </if>
+      <if test="rqstSno != null" >
+        RQST_SNO,
+      </if>
+      <if test="rqstDtlSno != null" >
+        RQST_DTL_SNO,
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN,
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS,
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD,
+      </if>
+      <if test="frsRqstDtm != null" >
+        FRS_RQST_DTM,
+      </if>
+      <if test="frsRqstUserId != null" >
+        FRS_RQST_USER_ID,
+      </if>
+      <if test="rqstDtm != null" >
+        RQST_DTM,
+      </if>
+      <if test="rqstUserId != null" >
+        RQST_USER_ID,
+      </if>
+      <if test="aprvDtm != null" >
+        APRV_DTM,
+      </if>
+      <if test="aprvUserId != null" >
+        APRV_USER_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="ddlColId != null" >
+        #{ddlColId,jdbcType=VARCHAR},
+      </if>
+      <if test="ddlColPnm != null" >
+        #{ddlColPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="ddlColLnm != null" >
+        #{ddlColLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="ddlTblId != null" >
+        #{ddlTblId,jdbcType=VARCHAR},
+      </if>
+      <if test="colOrd != null" >
+        #{colOrd,jdbcType=DECIMAL},
+      </if>
+      <if test="dataType != null" >
+        #{dataType,jdbcType=VARCHAR},
+      </if>
+      <if test="dataLen != null" >
+        #{dataLen,jdbcType=DECIMAL},
+      </if>
+      <if test="dataScal != null" >
+        #{dataScal,jdbcType=DECIMAL},
+      </if>
+      <if test="pkYn != null" >
+        #{pkYn,jdbcType=VARCHAR},
+      </if>
+      <if test="pkOrd != null" >
+        #{pkOrd,jdbcType=DECIMAL},
+      </if>
+      <if test="nonulYn != null" >
+        #{nonulYn,jdbcType=VARCHAR},
+      </if>
+      <if test="defltVal != null" >
+        #{defltVal,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstNo != null" >
+        #{rqstNo,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstSno != null" >
+        #{rqstSno,jdbcType=DECIMAL},
+      </if>
+      <if test="rqstDtlSno != null" >
+        #{rqstDtlSno,jdbcType=DECIMAL},
+      </if>
+      <if test="objDescn != null" >
+        #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null" >
+        #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="frsRqstDtm != null" >
+        #{frsRqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="frsRqstUserId != null" >
+        #{frsRqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDtm != null" >
+        #{rqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rqstUserId != null" >
+        #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDtm != null" >
+        #{aprvDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aprvUserId != null" >
+        #{aprvUserId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.meta.ddl.service.WamDdlCol" >
+    update 	/* WamDdlColMapper.updateByPrimaryKeySelective */
+    		WAM_DDL_COL
+    <set >
+      <if test="ddlColPnm != null" >
+        DDL_COL_PNM = #{ddlColPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="ddlColLnm != null" >
+        DDL_COL_LNM = #{ddlColLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="ddlTblId != null" >
+        DDL_TBL_ID = #{ddlTblId,jdbcType=VARCHAR},
+      </if>
+      <if test="colOrd != null" >
+        COL_ORD = #{colOrd,jdbcType=DECIMAL},
+      </if>
+      <if test="dataType != null" >
+        DATA_TYPE = #{dataType,jdbcType=VARCHAR},
+      </if>
+      <if test="dataLen != null" >
+        DATA_LEN = #{dataLen,jdbcType=DECIMAL},
+      </if>
+      <if test="dataScal != null" >
+        DATA_SCAL = #{dataScal,jdbcType=DECIMAL},
+      </if>
+      <if test="pkYn != null" >
+        PK_YN = #{pkYn,jdbcType=VARCHAR},
+      </if>
+      <if test="pkOrd != null" >
+        PK_ORD = #{pkOrd,jdbcType=DECIMAL},
+      </if>
+      <if test="nonulYn != null" >
+        NONUL_YN = #{nonulYn,jdbcType=VARCHAR},
+      </if>
+      <if test="defltVal != null" >
+        DEFLT_VAL = #{defltVal,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstNo != null" >
+        RQST_NO = #{rqstNo,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstSno != null" >
+        RQST_SNO = #{rqstSno,jdbcType=DECIMAL},
+      </if>
+      <if test="rqstDtlSno != null" >
+        RQST_DTL_SNO = #{rqstDtlSno,jdbcType=DECIMAL},
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="frsRqstDtm != null" >
+        FRS_RQST_DTM = #{frsRqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="frsRqstUserId != null" >
+        FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDtm != null" >
+        RQST_DTM = #{rqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rqstUserId != null" >
+        RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDtm != null" >
+        APRV_DTM = #{aprvDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aprvUserId != null" >
+        APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where DDL_COL_ID = #{ddlColId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="kr.wise.meta.ddl.service.WamDdlCol" >
+    update 	/* WamDdlColMapper.updateByPrimaryKey */
+    		WAM_DDL_COL
+    set DDL_COL_PNM = #{ddlColPnm,jdbcType=VARCHAR},
+      DDL_COL_LNM = #{ddlColLnm,jdbcType=VARCHAR},
+      DDL_TBL_ID = #{ddlTblId,jdbcType=VARCHAR},
+      COL_ORD = #{colOrd,jdbcType=DECIMAL},
+      DATA_TYPE = #{dataType,jdbcType=VARCHAR},
+      DATA_LEN = #{dataLen,jdbcType=DECIMAL},
+      DATA_SCAL = #{dataScal,jdbcType=DECIMAL},
+      PK_YN = #{pkYn,jdbcType=VARCHAR},
+      PK_ORD = #{pkOrd,jdbcType=DECIMAL},
+      NONUL_YN = #{nonulYn,jdbcType=VARCHAR},
+      DEFLT_VAL = #{defltVal,jdbcType=VARCHAR},
+      RQST_NO = #{rqstNo,jdbcType=VARCHAR},
+      RQST_SNO = #{rqstSno,jdbcType=DECIMAL},
+      RQST_DTL_SNO = #{rqstDtlSno,jdbcType=DECIMAL},
+      OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      FRS_RQST_DTM = #{frsRqstDtm,jdbcType=TIMESTAMP},
+      FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR},
+      RQST_DTM = #{rqstDtm,jdbcType=TIMESTAMP},
+      RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      APRV_DTM = #{aprvDtm,jdbcType=TIMESTAMP},
+      APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR}
+    where DDL_COL_ID = #{ddlColId,jdbcType=VARCHAR}
+  </update>
+  
+  <select id="selectColList" parameterType="kr.wise.meta.ddl.service.WamDdlTbl" resultMap="BaseResultMap">
+  SELECT  	/* WamDdlColMapper.selectColList */
+          A.DDL_COL_ID        
+        , A.DDL_COL_PNM       
+        , A.DDL_COL_LNM       
+        , A.DDL_TBL_ID       
+        , A.COL_ORD           
+<!--	, A.DATA_TYPE -->
+	    , CASE WHEN A.DATA_LEN IS NULL 
+	         THEN A.DATA_TYPE
+	         ELSE (CASE WHEN A.DATA_SCAL IS NOT NULL
+	                    THEN CONCAT(A.DATA_TYPE , '(' , A.DATA_LEN , ', ' , A.DATA_SCAL , ')') 
+	                    ELSE CONCAT(A.DATA_TYPE , '(' , A.DATA_LEN , ')')
+	                     END )
+	         END AS DATA_TYPE         
+	    , A.DATA_LEN          
+	    , A.DATA_SCAL         
+	    , IFNULL(A.PK_YN, 'N') AS   PK_YN           
+	    , A.PK_ORD  
+	    , IFNULL(A.NONUL_YN, 'N') AS   NONUL_YN          
+	    , A.DEFLT_VAL         
+	    , A.RQST_NO           
+	    , A.RQST_SNO          
+	    , A.RQST_DTL_SNO      
+	    , A.OBJ_DESCN         
+	    , A.OBJ_VERS          
+	    , A.REG_TYP_CD        
+	    , A.FRS_RQST_DTM        
+	    , A.FRS_RQST_USER_ID    
+	    , A.RQST_DTM            
+	    , A.RQST_USER_ID        
+	    , A.APRV_DTM            
+	    , A.APRV_USER_ID  
+  		, GET_USER_NM(A.FRS_RQST_USER_ID) AS FRS_RQST_USER_NM
+  		, GET_USER_NM(A.RQST_USER_ID) AS RQST_USER_NM
+  		, GET_USER_NM(A.APRV_USER_ID) AS APRV_USER_NM
+  		, B.DDL_TBL_PNM
+  		, B.DDL_TBL_LNM
+  		, B.SCRT_INFO
+  FROM WAH_DDL_COL A 
+  	   INNER JOIN WAH_DDL_TBL B
+  		  ON A.DDL_TBL_ID = B.DDL_TBL_ID
+  		  AND A.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+  		  AND B.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+       INNER JOIN WAA_DB_SCH C
+          ON C.DB_SCH_ID = B.DB_SCH_ID
+         AND C.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+         AND C.REG_TYP_CD IN ('C', 'U')
+  <where>
+  	<if test="ddlTblId != null">
+  	AND A.DDL_TBL_ID = #{ddlTblId,jdbcType=VARCHAR}
+  	</if>
+  	<if test="ddlTrgDcd != null">
+  	AND B.DDL_TRG_DCD = #{ddlTrgDcd,jdbcType=VARCHAR}
+  	</if>
+  	<if test="ddlTblPnm != null">
+  	AND (B.DDL_TBL_PNM LIKE CONCAT('%' , #{ddlTblPnm,jdbcType=VARCHAR} , '%')
+  		OR B.DDL_TBL_LNM LIKE CONCAT('%' , #{ddlTblPnm,jdbcType=VARCHAR} , '%')
+  		OR B.DDL_TBL_PNM LIKE CONCAT('%' , UPPER(#{ddlTblPnm,jdbcType=VARCHAR}) , '%')
+  		OR B.DDL_TBL_LNM LIKE CONCAT('%' , UPPER(#{ddlTblPnm,jdbcType=VARCHAR}) , '%'))
+  	
+  	</if>
+  	<if test="ddlColLnm != null">
+  	AND (A.DDL_COL_PNM LIKE CONCAT('%' , #{ddlColLnm,jdbcType=VARCHAR} , '%')
+  		OR A.DDL_COL_LNM LIKE CONCAT('%' , #{ddlColLnm,jdbcType=VARCHAR} , '%')
+  		OR A.DDL_COL_PNM LIKE CONCAT('%' , UPPER(#{ddlColLnm,jdbcType=VARCHAR}) , '%')
+  		OR A.DDL_COL_LNM LIKE CONCAT('%' , UPPER(#{ddlColLnm,jdbcType=VARCHAR}) , '%'))
+  	</if>
+  	<if test="dbConnTrgId != null">
+  	AND C.DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR}
+  	</if>
+  	<if test="dbSchId != null">
+  	AND B.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+  	</if>  	
+  </where>
+  ORDER BY A.DDL_TBL_ID, COL_ORD
+  </select>
+  
+  <select id="selectDdlTblColChange" resultMap="BaseResultMap" parameterType="kr.wise.meta.ddl.service.WamDdlCol" >
+  SELECT 	/* WamDdlColMapper.selectDdlTblColChange */
+  			A.*
+  	   , GET_USER_NM(A.FRS_RQST_USER_ID) AS FRS_RQST_USER_NM
+  	   , GET_USER_NM(A.RQST_USER_ID) AS RQST_USER_NM
+  	   , GET_USER_NM(A.APRV_USER_ID) AS APRV_USER_NM
+  	   , CASE WHEN A.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d') AND A.REG_TYP_CD IN ('C', 'U') THEN '#0000FF'
+  	     ELSE NULL END AS FontColor
+    FROM WAH_DDL_COL A
+  <where>
+     AND A.DDL_TBL_ID = #{ddlTblId,jdbcType=VARCHAR}
+  </where>
+   ORDER BY A.DDL_COL_PNM, A.OBJ_VERS DESC, A.EXP_DTM DESC, A.STR_DTM DESC
+  
+  
+  
+  </select>
+  
+  <select id="selectDdlTblColHistList" parameterType="kr.wise.meta.ddl.service.WamDdlTbl" resultMap="BaseResultMap">
+  SELECT  	/* WamDdlColMapper.selectDdlTblColHistList */
+  			A.DDL_COL_ID        
+			,A.DDL_COL_PNM       
+			,A.DDL_COL_LNM       
+			,A.DDL_TBL_ID       
+			,A.COL_ORD           
+<!-- 			,A.DATA_TYPE -->
+			, CASE WHEN A.DATA_LEN IS NULL 
+	         THEN A.DATA_TYPE
+	         ELSE (CASE WHEN A.DATA_SCAL IS NOT NULL
+	                    THEN CONCAT(A.DATA_TYPE , '(' , A.DATA_LEN , ', ' , A.DATA_SCAL , ')') 
+	                    ELSE CONCAT(A.DATA_TYPE , '(' , A.DATA_LEN , ')')
+	                     END )
+	         END AS DATA_TYPE         
+			,A.DATA_LEN          
+			,A.DATA_SCAL         
+			,IFNULL(A.PK_YN, 'N') AS   PK_YN           
+			,A.PK_ORD  
+			,IFNULL(A.NONUL_YN, 'N') AS   NONUL_YN          
+			,A.DEFLT_VAL         
+			,A.RQST_NO           
+			,A.RQST_SNO          
+			,A.RQST_DTL_SNO      
+			,A.OBJ_DESCN         
+			,A.OBJ_VERS          
+			,A.REG_TYP_CD        
+			,A.FRS_RQST_DTM        
+			,A.FRS_RQST_USER_ID    
+			,A.RQST_DTM            
+			,A.RQST_USER_ID        
+			,A.APRV_DTM            
+			,A.APRV_USER_ID  
+  		,GET_USER_NM(A.FRS_RQST_USER_ID) AS FRS_RQST_USER_NM
+  		,GET_USER_NM(A.RQST_USER_ID) AS RQST_USER_NM
+  		,GET_USER_NM(A.APRV_USER_ID) AS APRV_USER_NM
+  		,B.DDL_TBL_PNM
+  		,B.DDL_TBL_LNM
+  		,B.SCRT_INFO
+  FROM WAH_DDL_COL A 
+ INNER JOIN WAH_DDL_TBL B
+  	ON A.DDL_TBL_ID = B.DDL_TBL_ID
+   AND B.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+  <where>
+  	A.REG_TYP_CD IN ('C', 'U')
+  	
+  	<if test="ddlTblId != null">
+  	AND A.DDL_TBL_ID = #{ddlTblId,jdbcType=VARCHAR}
+  	</if>
+
+  </where>
+  ORDER BY COL_ORD, A.DDL_TBL_ID, A.DDL_COL_PNM
+  </select>
+  
+  <select id="selectDdlTblColHistInfo" resultMap="BaseResultMap" parameterType="kr.wise.meta.ddl.service.WamDdlCol" >
+    select 	/* WamDdlColMapper.selectDdlTblColHistInfo */
+    		A.*
+    	  ,GET_USER_NM(A.FRS_RQST_USER_ID) AS FRS_RQST_USER_NM
+    	  ,GET_USER_NM(A.RQST_USER_ID) AS RQST_USER_NM
+    	  ,GET_USER_NM(A.APRV_USER_ID) AS APRV_USER_NM
+    from WAH_DDL_COL A
+    where A.DDL_COL_ID = #{ddlColId,jdbcType=VARCHAR}
+    	AND A.OBJ_VERS = #{objVers}
+    	
+    
+  </select>
+  
+  <select id="selectDdlIdxForColList" parameterType="kr.wise.meta.ddl.service.WamDdlTbl" resultMap="BaseResultMap">
+      SELECT  	/* WamDdlColMapper.selectDdlIdxForColList */
+      			A.DDL_COL_ID        
+			, A.DDL_COL_PNM       
+			, A.DDL_COL_LNM       
+			, A.DDL_TBL_ID       
+			, A.COL_ORD           
+			, CASE WHEN A.DATA_LEN IS NULL THEN A.DATA_TYPE
+		         ELSE (CASE WHEN A.DATA_SCAL IS NOT NULL
+	                    	THEN CONCAT(A.DATA_TYPE , '(' , A.DATA_LEN , ', ' , A.DATA_SCAL , ')') 
+	                    	ELSE CONCAT(A.DATA_TYPE , '(' , A.DATA_LEN , ')')
+	                     	END )
+		         END AS DATA_TYPE         
+			, A.DATA_LEN          
+			, A.DATA_SCAL         
+			, IFNULL(A.PK_YN, 'N') AS   PK_YN           
+			, A.PK_ORD  
+			, IFNULL(A.NONUL_YN, 'N') AS   NONUL_YN          
+			, A.DEFLT_VAL         
+			, A.RQST_NO           
+			, A.RQST_SNO          
+			, A.RQST_DTL_SNO      
+			, A.OBJ_DESCN         
+			, A.OBJ_VERS          
+			, A.REG_TYP_CD        
+			, A.FRS_RQST_DTM        
+			, A.FRS_RQST_USER_ID    
+			, A.RQST_DTM            
+			, A.RQST_USER_ID        
+			, A.APRV_DTM            
+			, A.APRV_USER_ID  
+	  		, GET_USER_NM(A.FRS_RQST_USER_ID) AS FRS_RQST_USER_NM
+	  		, GET_USER_NM(A.RQST_USER_ID) AS RQST_USER_NM
+	  		, GET_USER_NM(A.APRV_USER_ID) AS APRV_USER_NM
+	  		, B.DDL_TBL_PNM
+	  		, B.DDL_TBL_LNM	  		
+	     FROM WAM_DDL_COL A 
+	          INNER JOIN WAM_DDL_TBL B
+	  	         ON A.DDL_TBL_ID = B.DDL_TBL_ID	   
+	  WHERE 1 = 1	  	
+	  	<if test="ddlTblId != null">
+	  	AND A.DDL_TBL_ID = #{ddlTblId,jdbcType=VARCHAR}
+	  	</if>
+	  	<if test="ddlTrgDcd != null">
+	  	AND B.DDL_TRG_DCD = #{ddlTrgDcd,jdbcType=VARCHAR}
+	  	</if>
+	  	<if test="ddlTblPnm != null">
+	  	AND B.DDL_TBL_PNM =  #{ddlTblPnm,jdbcType=VARCHAR} 	  		
+	  	</if>
+	  	<if test="ddlColLnm != null">
+	  	AND (A.DDL_COL_PNM LIKE CONCAT('%' , #{ddlColLnm,jdbcType=VARCHAR} , '%')
+	  		OR A.DDL_COL_LNM LIKE CONCAT('%' , #{ddlColLnm,jdbcType=VARCHAR} , '%')
+	  		OR A.DDL_COL_PNM LIKE CONCAT('%' , UPPER(#{ddlColLnm,jdbcType=VARCHAR}) , '%')
+	  		OR A.DDL_COL_LNM LIKE CONCAT('%' , UPPER(#{ddlColLnm,jdbcType=VARCHAR}) , '%'))
+	  	
+	  	</if> 	
+	  ORDER BY A.DDL_TBL_ID, COL_ORD
+  </select>
+  
+</mapper>

@@ -1,0 +1,405 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.meta.mapping.service.WamCodMapMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.meta.mapping.service.WamCodMap" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+    <id column="CD_MAP_ID" property="cdMapId" jdbcType="VARCHAR" />
+    <result column="MAP_DF_TYPE" property="mapDfType" jdbcType="VARCHAR" />
+    <result column="CD_CNVS_TYPE" property="cdCnvsType" jdbcType="VARCHAR" />
+    <result column="CD_MAP_TYPE" property="cdMapType" jdbcType="VARCHAR" />
+    <result column="TGT_DMN_ID" property="tgtDmnId" jdbcType="VARCHAR" />
+    <result column="TGT_DMN_PNM" property="tgtDmnPnm" jdbcType="VARCHAR" />
+    <result column="TGT_DMN_LNM" property="tgtDmnLnm" jdbcType="VARCHAR" />
+    <result column="TGT_CD_VAL" property="tgtCdVal" jdbcType="VARCHAR" />
+    <result column="TGT_CD_VAL_NM" property="tgtCdValNm" jdbcType="VARCHAR" />
+    <result column="SRC_DB_ID" property="srcDbId" jdbcType="VARCHAR" />
+    <result column="SRC_DB_PNM" property="srcDbPnm" jdbcType="VARCHAR" />
+    <result column="SRC_TBL_ID" property="srcTblId" jdbcType="VARCHAR" />
+    <result column="SRC_TBL_LNM" property="srcTblLnm" jdbcType="VARCHAR" />
+    <result column="SRC_TBL_PNM" property="srcTblPnm" jdbcType="VARCHAR" />
+    <result column="SRC_COL_LNM" property="srcColLnm" jdbcType="VARCHAR" />
+    <result column="SRC_COL_PNM" property="srcColPnm" jdbcType="VARCHAR" />
+    <result column="SRC_CD_VAL" property="srcCdVal" jdbcType="VARCHAR" />
+    <result column="SRC_CD_VAL_NM" property="srcCdValNm" jdbcType="VARCHAR" />
+    
+    <result column="SRC_BIZ_ID" property="srcBizId" jdbcType="VARCHAR" />
+    <result column="SRC_BIZ_NM" property="srcBizNm" jdbcType="VARCHAR" />
+    <result column="SRC_SYS_ID" property="srcSysId" jdbcType="VARCHAR" />
+    <result column="SRC_SYS_NM" property="srcSysNm" jdbcType="VARCHAR" />
+    <result column="SRC_UPP_CD_VAL" property="srcUppCdVal" jdbcType="VARCHAR" />
+    <result column="SRC_UPP_CD_VAL_NM" property="srcUppCdValNm" jdbcType="VARCHAR" />
+    <result column="SRC_CD_DMN_CD" property="srcCdDmnCd" jdbcType="VARCHAR" />
+    
+    <result column="APP_CRGP_ID" property="appCrgpId" jdbcType="VARCHAR" />
+    <result column="APP_CRGP_NM" property="appCrgpNm" jdbcType="VARCHAR" />
+    <result column="CNVS_CRGP_ID" property="cnvsCrgpId" jdbcType="VARCHAR" />
+    <result column="CNVS_CRGP_NM" property="cnvsCrgpNm" jdbcType="VARCHAR" />
+    
+  </resultMap>
+  <sql id="Base_Column_List" >
+    CD_MAP_ID, RQST_NO, RQST_SNO, OBJ_VERS, OBJ_DESCN, REG_TYP_CD, FRS_RQST_DTM, FRS_RQST_USER_ID, 
+    RQST_DTM, RQST_USER_ID, APRV_DTM, APRV_USER_ID, MAP_DF_TYPE, CD_CNVS_TYPE, CD_MAP_TYPE, 
+    TGT_DMN_ID, TGT_DMN_PNM, TGT_DMN_LNM, TGT_CD_VAL, TGT_CD_VAL_NM, SRC_DB_ID, SRC_DB_PNM, 
+    SRC_TBL_ID, SRC_TBL_LNM, SRC_TBL_PNM, SRC_COL_LNM, SRC_COL_PNM, SRC_CD_VAL, SRC_CD_VAL_NM,
+    SRC_BIZ_ID, SRC_BIZ_NM, SRC_SYS_ID, SRC_SYS_NM, SRC_UPP_CD_VAL, SRC_UPP_CD_VAL_NM,
+    APP_CRGP_ID, APP_CRGP_NM, CNVS_CRGP_ID, CNVS_CRGP_NM,SRC_CD_DMN_CD
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select /* WamCodMapMapper.selectByPrimaryKey */
+    <include refid="Base_Column_List" />
+    from WAM_COD_MAP
+    where CD_MAP_ID = #{cdMapId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete /* WamCodMapMapper.deleteByPrimaryKey */
+    from WAM_COD_MAP
+    where CD_MAP_ID = #{cdMapId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="kr.wise.meta.mapping.service.WamCodMap" >
+    insert /* WamCodMapMapper.insert */
+    into WAM_COD_MAP (CD_MAP_ID, RQST_NO, RQST_SNO, 
+      OBJ_VERS, OBJ_DESCN, REG_TYP_CD, 
+      FRS_RQST_DTM, FRS_RQST_USER_ID, RQST_DTM, 
+      RQST_USER_ID, APRV_DTM, APRV_USER_ID, 
+      MAP_DF_TYPE, CD_CNVS_TYPE, CD_MAP_TYPE, 
+      TGT_DMN_ID, TGT_DMN_PNM, TGT_DMN_LNM, 
+      TGT_CD_VAL, TGT_CD_VAL_NM, SRC_DB_ID, 
+      SRC_DB_PNM, SRC_TBL_ID, SRC_TBL_LNM, 
+      SRC_TBL_PNM, SRC_COL_LNM, SRC_COL_PNM, 
+      SRC_CD_VAL, SRC_CD_VAL_NM)
+    values (#{cdMapId,jdbcType=VARCHAR}, #{rqstNo,jdbcType=VARCHAR}, #{rqstSno,jdbcType=DECIMAL}, 
+      #{objVers,jdbcType=DECIMAL}, #{objDescn,jdbcType=VARCHAR}, #{regTypCd,jdbcType=VARCHAR}, 
+      #{frsRqstDtm,jdbcType=TIMESTAMP}, #{frsRqstUserId,jdbcType=VARCHAR}, #{rqstDtm,jdbcType=TIMESTAMP}, 
+      #{rqstUserId,jdbcType=VARCHAR}, #{aprvDtm,jdbcType=TIMESTAMP}, #{aprvUserId,jdbcType=VARCHAR}, 
+      #{mapDfType,jdbcType=VARCHAR}, #{cdCnvsType,jdbcType=VARCHAR}, #{cdMapType,jdbcType=VARCHAR}, 
+      #{tgtDmnId,jdbcType=VARCHAR}, #{tgtDmnPnm,jdbcType=VARCHAR}, #{tgtDmnLnm,jdbcType=VARCHAR}, 
+      #{tgtCdVal,jdbcType=VARCHAR}, #{tgtCdValNm,jdbcType=VARCHAR}, #{srcDbId,jdbcType=VARCHAR}, 
+      #{srcDbPnm,jdbcType=VARCHAR}, #{srcTblId,jdbcType=VARCHAR}, #{srcTblLnm,jdbcType=VARCHAR}, 
+      #{srcTblPnm,jdbcType=VARCHAR}, #{srcColLnm,jdbcType=VARCHAR}, #{srcColPnm,jdbcType=VARCHAR}, 
+      #{srcCdVal,jdbcType=VARCHAR}, #{srcCdValNm,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="kr.wise.meta.mapping.service.WamCodMap" >
+    insert /* WamCodMapMapper.insertSelective */
+    into WAM_COD_MAP
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="cdMapId != null" >
+        CD_MAP_ID,
+      </if>
+      <if test="rqstNo != null" >
+        RQST_NO,
+      </if>
+      <if test="rqstSno != null" >
+        RQST_SNO,
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS,
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN,
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD,
+      </if>
+      <if test="frsRqstDtm != null" >
+        FRS_RQST_DTM,
+      </if>
+      <if test="frsRqstUserId != null" >
+        FRS_RQST_USER_ID,
+      </if>
+      <if test="rqstDtm != null" >
+        RQST_DTM,
+      </if>
+      <if test="rqstUserId != null" >
+        RQST_USER_ID,
+      </if>
+      <if test="aprvDtm != null" >
+        APRV_DTM,
+      </if>
+      <if test="aprvUserId != null" >
+        APRV_USER_ID,
+      </if>
+      <if test="mapDfType != null" >
+        MAP_DF_TYPE,
+      </if>
+      <if test="cdCnvsType != null" >
+        CD_CNVS_TYPE,
+      </if>
+      <if test="cdMapType != null" >
+        CD_MAP_TYPE,
+      </if>
+      <if test="tgtDmnId != null" >
+        TGT_DMN_ID,
+      </if>
+      <if test="tgtDmnPnm != null" >
+        TGT_DMN_PNM,
+      </if>
+      <if test="tgtDmnLnm != null" >
+        TGT_DMN_LNM,
+      </if>
+      <if test="tgtCdVal != null" >
+        TGT_CD_VAL,
+      </if>
+      <if test="tgtCdValNm != null" >
+        TGT_CD_VAL_NM,
+      </if>
+      <if test="srcDbId != null" >
+        SRC_DB_ID,
+      </if>
+      <if test="srcDbPnm != null" >
+        SRC_DB_PNM,
+      </if>
+      <if test="srcTblId != null" >
+        SRC_TBL_ID,
+      </if>
+      <if test="srcTblLnm != null" >
+        SRC_TBL_LNM,
+      </if>
+      <if test="srcTblPnm != null" >
+        SRC_TBL_PNM,
+      </if>
+      <if test="srcColLnm != null" >
+        SRC_COL_LNM,
+      </if>
+      <if test="srcColPnm != null" >
+        SRC_COL_PNM,
+      </if>
+      <if test="srcCdVal != null" >
+        SRC_CD_VAL,
+      </if>
+      <if test="srcCdValNm != null" >
+        SRC_CD_VAL_NM,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="cdMapId != null" >
+        #{cdMapId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstNo != null" >
+        #{rqstNo,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstSno != null" >
+        #{rqstSno,jdbcType=DECIMAL},
+      </if>
+      <if test="objVers != null" >
+        #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="objDescn != null" >
+        #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="regTypCd != null" >
+        #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="frsRqstDtm != null" >
+        #{frsRqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="frsRqstUserId != null" >
+        #{frsRqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDtm != null" >
+        #{rqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rqstUserId != null" >
+        #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDtm != null" >
+        #{aprvDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aprvUserId != null" >
+        #{aprvUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="mapDfType != null" >
+        #{mapDfType,jdbcType=VARCHAR},
+      </if>
+      <if test="cdCnvsType != null" >
+        #{cdCnvsType,jdbcType=VARCHAR},
+      </if>
+      <if test="cdMapType != null" >
+        #{cdMapType,jdbcType=VARCHAR},
+      </if>
+      <if test="tgtDmnId != null" >
+        #{tgtDmnId,jdbcType=VARCHAR},
+      </if>
+      <if test="tgtDmnPnm != null" >
+        #{tgtDmnPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="tgtDmnLnm != null" >
+        #{tgtDmnLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="tgtCdVal != null" >
+        #{tgtCdVal,jdbcType=VARCHAR},
+      </if>
+      <if test="tgtCdValNm != null" >
+        #{tgtCdValNm,jdbcType=VARCHAR},
+      </if>
+      <if test="srcDbId != null" >
+        #{srcDbId,jdbcType=VARCHAR},
+      </if>
+      <if test="srcDbPnm != null" >
+        #{srcDbPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="srcTblId != null" >
+        #{srcTblId,jdbcType=VARCHAR},
+      </if>
+      <if test="srcTblLnm != null" >
+        #{srcTblLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="srcTblPnm != null" >
+        #{srcTblPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="srcColLnm != null" >
+        #{srcColLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="srcColPnm != null" >
+        #{srcColPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="srcCdVal != null" >
+        #{srcCdVal,jdbcType=VARCHAR},
+      </if>
+      <if test="srcCdValNm != null" >
+        #{srcCdValNm,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.meta.mapping.service.WamCodMap" >
+    update /* WamCodMapMapper.updateByPrimaryKeySelective */
+    		WAM_COD_MAP
+    <set >
+      <if test="rqstNo != null" >
+        RQST_NO = #{rqstNo,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstSno != null" >
+        RQST_SNO = #{rqstSno,jdbcType=DECIMAL},
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="frsRqstDtm != null" >
+        FRS_RQST_DTM = #{frsRqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="frsRqstUserId != null" >
+        FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDtm != null" >
+        RQST_DTM = #{rqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rqstUserId != null" >
+        RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDtm != null" >
+        APRV_DTM = #{aprvDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aprvUserId != null" >
+        APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="mapDfType != null" >
+        MAP_DF_TYPE = #{mapDfType,jdbcType=VARCHAR},
+      </if>
+      <if test="cdCnvsType != null" >
+        CD_CNVS_TYPE = #{cdCnvsType,jdbcType=VARCHAR},
+      </if>
+      <if test="cdMapType != null" >
+        CD_MAP_TYPE = #{cdMapType,jdbcType=VARCHAR},
+      </if>
+      <if test="tgtDmnId != null" >
+        TGT_DMN_ID = #{tgtDmnId,jdbcType=VARCHAR},
+      </if>
+      <if test="tgtDmnPnm != null" >
+        TGT_DMN_PNM = #{tgtDmnPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="tgtDmnLnm != null" >
+        TGT_DMN_LNM = #{tgtDmnLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="tgtCdVal != null" >
+        TGT_CD_VAL = #{tgtCdVal,jdbcType=VARCHAR},
+      </if>
+      <if test="tgtCdValNm != null" >
+        TGT_CD_VAL_NM = #{tgtCdValNm,jdbcType=VARCHAR},
+      </if>
+      <if test="srcDbId != null" >
+        SRC_DB_ID = #{srcDbId,jdbcType=VARCHAR},
+      </if>
+      <if test="srcDbPnm != null" >
+        SRC_DB_PNM = #{srcDbPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="srcTblId != null" >
+        SRC_TBL_ID = #{srcTblId,jdbcType=VARCHAR},
+      </if>
+      <if test="srcTblLnm != null" >
+        SRC_TBL_LNM = #{srcTblLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="srcTblPnm != null" >
+        SRC_TBL_PNM = #{srcTblPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="srcColLnm != null" >
+        SRC_COL_LNM = #{srcColLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="srcColPnm != null" >
+        SRC_COL_PNM = #{srcColPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="srcCdVal != null" >
+        SRC_CD_VAL = #{srcCdVal,jdbcType=VARCHAR},
+      </if>
+      <if test="srcCdValNm != null" >
+        SRC_CD_VAL_NM = #{srcCdValNm,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where CD_MAP_ID = #{cdMapId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="kr.wise.meta.mapping.service.WamCodMap" >
+    update 	/* WamCodMapMapper.updateByPrimaryKey */
+    		WAM_COD_MAP
+    set RQST_NO = #{rqstNo,jdbcType=VARCHAR},
+      RQST_SNO = #{rqstSno,jdbcType=DECIMAL},
+      OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      FRS_RQST_DTM = #{frsRqstDtm,jdbcType=TIMESTAMP},
+      FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR},
+      RQST_DTM = #{rqstDtm,jdbcType=TIMESTAMP},
+      RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      APRV_DTM = #{aprvDtm,jdbcType=TIMESTAMP},
+      APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR},
+      MAP_DF_TYPE = #{mapDfType,jdbcType=VARCHAR},
+      CD_CNVS_TYPE = #{cdCnvsType,jdbcType=VARCHAR},
+      CD_MAP_TYPE = #{cdMapType,jdbcType=VARCHAR},
+      TGT_DMN_ID = #{tgtDmnId,jdbcType=VARCHAR},
+      TGT_DMN_PNM = #{tgtDmnPnm,jdbcType=VARCHAR},
+      TGT_DMN_LNM = #{tgtDmnLnm,jdbcType=VARCHAR},
+      TGT_CD_VAL = #{tgtCdVal,jdbcType=VARCHAR},
+      TGT_CD_VAL_NM = #{tgtCdValNm,jdbcType=VARCHAR},
+      SRC_DB_ID = #{srcDbId,jdbcType=VARCHAR},
+      SRC_DB_PNM = #{srcDbPnm,jdbcType=VARCHAR},
+      SRC_TBL_ID = #{srcTblId,jdbcType=VARCHAR},
+      SRC_TBL_LNM = #{srcTblLnm,jdbcType=VARCHAR},
+      SRC_TBL_PNM = #{srcTblPnm,jdbcType=VARCHAR},
+      SRC_COL_LNM = #{srcColLnm,jdbcType=VARCHAR},
+      SRC_COL_PNM = #{srcColPnm,jdbcType=VARCHAR},
+      SRC_CD_VAL = #{srcCdVal,jdbcType=VARCHAR},
+      SRC_CD_VAL_NM = #{srcCdValNm,jdbcType=VARCHAR}
+    where CD_MAP_ID = #{cdMapId,jdbcType=VARCHAR}
+  </update>
+  
+  <select id="selectCodMapList" resultMap="BaseResultMap" parameterType="kr.wise.meta.mapping.service.WamCodMap" >
+    select /* WamCodMapMapper.selectCodMapList */
+    <include refid="Base_Column_List" />
+    	, GET_USER_NM(A.FRS_RQST_USER_ID) AS FRS_RQST_USER_NM
+    	, GET_USER_NM(A.RQST_USER_ID) AS RQST_USER_NM
+    	, GET_USER_NM(A.APRV_USER_ID) AS APRV_USER_NM
+    from WAM_COD_MAP A		
+    <where>
+     <if test="tgtDmnLnm != null" >
+       AND (A.TGT_DMN_LNM LIKE CONCAT('%', #{tgtDmnLnm,jdbcType=VARCHAR}, '%')
+        	OR A.TGT_DMN_PNM LIKE CONCAT('%', #{tgtDmnLnm,jdbcType=VARCHAR}, '%'))
+    </if>
+    <if test="tgtCdVal != null" >
+       AND A.TGT_CD_VAL = #{tgtCdVal,jdbcType=VARCHAR}
+    </if>
+      
+    </where>
+    </select>
+</mapper>

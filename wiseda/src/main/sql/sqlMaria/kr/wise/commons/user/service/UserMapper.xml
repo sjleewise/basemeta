@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.commons.user.service.UserMapper" >
+<!-- 	<typeAlias  alias="loginVO" type="kr.wise.commons.cmm.LoginVO"/> -->
+
+	<!-- 로그인 처리를 위한 resultMap -->
+	<resultMap id="login" type="kr.wise.commons.cmm.LoginVO">
+		<result property="id" 		column="USER_ID" />
+		<result property="name" 	column="USER_KNM" />
+<!-- 		<result property="ihidNum" 	column="EMP_NO" /> -->
+		<result property="email" 	column="PRIMARY_EMAIL" />
+		<result property="password" column="PASSWORD" />
+		<result property="userSe" 	column="USER_GROUP_ID" />
+		<result property="orgnztId" column="DEPT_CD" />
+		<result property="uniqId" 	column="UNIQ_ID" />		
+		<result property="isAdminYn" column="IS_ADMIN_YN" />
+		<result property="isPwdExpYn" column="IS_PWD_EXP_YN" />
+		<result column="USER_GROUP_ID" property="usergId" jdbcType="VARCHAR" />
+		<result property="userHtelno" column="USER_HTELNO" />
+		<result property="partNm" column="PART_NM" />
+		
+<!--     	<result column="USERG_LNM" property="usergLnm" jdbcType="VARCHAR" /> -->
+<!--     	<result column="USERG_PNM" property="usergPnm" jdbcType="VARCHAR" />		 -->
+	</resultMap>
+	
+	
+	<select id="getLoginUserSso" parameterType="kr.wise.commons.cmm.LoginVO" resultMap="login">
+	<![CDATA[ 
+	   SELECT  
+              A.USER_ID       AS UNIQ_ID
+            , A.LOGIN_AC_ID   AS USER_ID
+            , A.LOGIN_AC_PWD  AS PASSWORD
+            , A.USER_NM       AS USER_KNM
+            , A.USERG_ID      AS USER_GROUP_ID
+            , A.DEPT_ID       AS DEPT_CD
+            -- , A.JGD_NM        AS JGD_NM
+            , A.EMAIL_ADDR    AS PRIMARY_EMAIL
+            ,CASE WHEN A.PWD_EXP_DT IS NULL OR A.PWD_EXP_DT = ''
+						THEN  'N'  
+						ELSE CASE WHEN A.PWD_EXP_DT >= now()   -- 비밀번호 만류일이  지금보다 더 나중일 경우
+						          THEN 'N'
+						          ELSE 'Y'
+						     END
+				 END AS IS_PWD_EXP_YN -- 비밀번호 만기 여부
+            -- , B.USERG_LNM     AS USERG_LNM
+        	, B.USERG_TYP_CD  -- 사용자 그룹 타입
+            , CASE B.USERG_TYP_CD  WHEN 'AD' THEN  'Y'  ELSE 'N' END AS  IS_ADMIN_YN -- 사용자 그룹 타입이 'AD'(관리자)인 경우 셋팅
+            , REPLACE(REPLACE(REPLACE(REPLACE(A.USER_HTELNO,'-',''),')',''),'(',''),' ','') AS USER_HTELNO
+            , A.PART_NM
+         FROM WAA_USER A
+		     LEFT JOIN WAA_USERG B
+                    ON A.USERG_ID = B.USERG_ID
+                   AND B.EXP_DTM = STR_TO_DATE('99991231', '%Y%m%d')
+                   AND B.REG_TYP_CD IN ('C', 'U')
+        WHERE 1 = 1
+          AND A.EXP_DTM = STR_TO_DATE('99991231', '%Y%m%d')
+          AND A.REG_TYP_CD IN ('C', 'U')
+          AND UPPER(A.LOGIN_AC_ID) = UPPER(#{id,jdbcType=VARCHAR})          
+         ]]>
+	</select>
+	<select id="getLoginUser" parameterType="kr.wise.commons.cmm.LoginVO" resultMap="login">
+	<![CDATA[ 
+		 SELECT  IFNULL(A.USER_ID, '')          AS USER_ID  
+		 		,IFNULL(A.PASSWORD, '')         AS PASSWORD         
+		 		,IFNULL(A.USER_KNM, '')         AS USER_KNM         
+		 		,IFNULL(A.USER_ENM, '')         AS USER_ENM         
+		 		,IFNULL(B.USER_GROUP_ENM, '')   AS USER_GROUP       
+		 		,IFNULL(A.IS_DELETED, '')       AS IS_DELETED       
+		 		,IFNULL(A.EMP_NO, '')           AS EMP_NO           
+		 		,IFNULL(A.DEPT_CD, '')          AS DEPT_CD          
+		 		,IFNULL(A.POSITION, '')         AS POSITION         
+		 		,IFNULL(A.OFFICE_TEL_NO, '')    AS OFFICE_TEL_NO    
+		 		,IFNULL(A.HOME_TEL_NO, '')      AS HOME_TEL_NO      
+		 		,IFNULL(A.IS_LOCKED, '')   	   AS IS_LOCKED         
+		 		,IFNULL(A.OF_PROFILE, '')   	   AS OF_PROFILE    
+		 		,IFNULL(A.MOBILE_TEL_NO, '')    AS MOBILE_TEL_NO    
+		 		,IFNULL(A.PRIMARY_EMAIL, '')    AS PRIMARY_EMAIL    
+		 		,IFNULL(A.SECONDARY_EMAIL, '')  AS SECONDARY_EMAIL  
+		 		,IFNULL(A.PWD_XPR_DTTM, '')     AS PWD_XPR_DTTM     
+		 		,IFNULL(A.ORGL_USER, '')        AS ORGL_USER        
+		 		,''                          AS ORGL_DEPT        
+		 		,''                          AS XPR_USER         
+		 		,''                          AS XPR_DEPT         
+		 		,IFNULL(A.UPDT_USER, '')        AS UPDT_USER        
+		 		,''                          AS UPDT_DEPT        
+		 		,IFNULL(A.DEFINITION, '')       AS DEFINITION       
+		 		,IFNULL(A.DESCRIPTION, '')      AS DESCRIPTION      
+		 		,IFNULL(A.REMARKS, '')          AS REMARKS          
+		 		,IFNULL(A.STA_DTTM, '')  AS STA_DTTM  
+		 		,IFNULL(A.XPR_DTTM, '')  AS XPR_DTTM  
+		 		,IFNULL(A.ORGL_DTTM,'')  AS ORGL_DTTM 
+		 		,IFNULL(A.UPDT_DTTM,'')  AS UPDT_DTTM 
+		 		-- , abcd
+		      ,IFNULL(A.USER_GROUP_ID, '') AS USER_GROUP_ID 
+		      ,IFNULL(A.EXCEL_DOWNLOAD_AUTH, '') AS EXCEL_DOWN_AUTH 
+		      ,C.OBJ_KNM AS DEPT_NM 
+		      ,CHECK_USER_ADMIN_YN(A.USER_ID) AS IS_ADMIN_YN 
+		      ,CHECK_USER_DA_YN(A.USER_ID) AS IS_DA_YN 
+		      ,IFNULL(A.ID_XPR_DTTM, '')			AS ID_XPR_DTTM 
+		      ,IFNULL(A.RETC_IP,'')		AS RETC_IP
+			  ,IFNULL(A.RETC_IP_LEVEL,'')  	AS RETC_IP_LEVEL
+		  FROM WAA_USERS A INNER JOIN WAA_USER_GROUPS B 
+		   ON A.USER_GROUP_ID  = B.USER_GROUP_ID     
+		   AND A.XPR_DTTM   = STR_TO_DATE('9999-12-31','%Y-%m-%d')            
+		   AND B.XPR_DTTM   = STR_TO_DATE('9999-12-31','%Y-%m-%d')            
+		   AND A.IS_DELETED = 'N'                     
+		   AND B.IS_DELETED = 'N'                     
+		   AND A.USER_ID   = #{id}
+		   AND A.PASSWORD = #{password}
+		   left outer join WAA_DEPT C      
+   		   on A.DEPT_CD = C.OBJ_ID 
+         ]]>
+	</select>
+	<sql id="Base_Column_List" >
+	    USER_ID, EXP_DTM, STR_DTM, LOGIN_AC_ID, LOGIN_AC_PWD, USER_NM, USERG_ID, DEPT_ID, 
+	    JGD_NM, USER_TELNO, USER_HTELNO, EMAIL_ADDR, EXCL_DWLD_AUTH_YN, ID_USE_EXP_DT, PWD_EXP_DT, 
+	    OBJ_DESCN, OBJ_VERS, REG_TYP_CD, RQST_DTM, RQST_USER_ID, APRV_DCD, APRV_DTM, APRV_USER_ID
+   </sql>
+   
+   <!-- WISE DA용 로그인 -->
+	<select id="getLoginUserDA"  parameterType="kr.wise.commons.cmm.LoginVO" resultMap="login">
+		SELECT  
+              A.USER_ID       AS UNIQ_ID
+            , A.LOGIN_AC_ID   AS USER_ID
+            , A.LOGIN_AC_PWD  AS PASSWORD
+            , A.LOGIN_AC_PWD  AS PASSWORD_ENC
+            , A.USER_NM       AS USER_KNM
+            , A.USERG_ID      AS USER_GROUP_ID
+            , A.DEPT_ID       AS DEPT_CD
+         -- , A.JGD_NM        AS JGD_NM
+            , A.EMAIL_ADDR    AS PRIMARY_EMAIL
+            , IF(A.PWD_EXP_DT = null, 'N', 'Y') AS IS_PWD_EXP_YN -- 비밀번호 만기 여부
+         -- , B.USERG_LNM     AS USERG_LNM
+        	, B.USERG_TYP_CD  -- 사용자 그룹 타입
+            , IF(B.USERG_TYP_CD = 'AD', 'Y', 'N') AS  IS_ADMIN_YN -- 사용자 그룹 타입이 'AD'(관리자)인 경우 셋팅
+		--	, A.COM_CD
+        FROM WAA_USER A
+		     LEFT JOIN WAA_USERG B
+               ON A.USERG_ID = B.USERG_ID
+              AND B.EXP_DTM = STR_TO_DATE('99991231', '%Y%m%d')
+              AND B.REG_TYP_CD IN ('C', 'U')
+        WHERE 1 = 1
+          AND A.EXP_DTM = STR_TO_DATE('99991231', '%Y%m%d')
+          AND A.REG_TYP_CD IN ('C', 'U')
+          AND UPPER(A.LOGIN_AC_ID) = UPPER(#{id,jdbcType=VARCHAR})
+          AND A.LOGIN_AC_PWD = #{password,jdbcType=VARCHAR}
+          <if test="passwordEnc != null and passwordEnc != ''" >
+		  AND LOGIN_AC_PWD_ENC = #{passwordEnc,jdbcType=VARCHAR}
+		  </if>
+          
+	</select>
+	
+	<select id="selectLoginUserbyAdmin" parameterType="kr.wise.commons.user.service.WaaUser" resultMap="login">
+		-- 업무대행용 로그인 정보 조회....
+		SELECT  
+              A.USER_ID       AS UNIQ_ID
+            , A.LOGIN_AC_ID   AS USER_ID
+            -- , A.LOGIN_AC_PWD  AS PASSWORD
+            , A.USER_NM       AS USER_KNM
+            , A.USERG_ID      AS USER_GROUP_ID
+            , A.DEPT_ID       AS DEPT_CD
+            -- , A.JGD_NM        AS JGD_NM
+            , A.EMAIL_ADDR    AS PRIMARY_EMAIL
+            -- , B.USERG_LNM     AS USERG_LNM
+        	, B.USERG_TYP_CD  -- 사용자 그룹 타입
+            , case when B.USERG_TYP_CD = 'AD' THEN 'Y' ELSE 'N' END AS  IS_ADMIN_YN -- 사용자 그룹 타입이 'AD'(관리자)인 경우 셋팅
+            , A.DEPT_ID 
+            , REPLACE(REPLACE(REPLACE(REPLACE(A.USER_HTELNO,'-',''),')',''),'(',''),' ','') AS USER_HTELNO
+        FROM WAA_USER A
+		    LEFT OUTER JOIN WAA_USERG B
+              ON A.USERG_ID = B.USERG_ID
+              AND B.EXP_DTM = STR_TO_DATE('99991231', '%Y%m%d')
+              AND B.REG_TYP_CD IN ('C', 'U')
+		    
+        WHERE 1=1
+          AND LOGIN_AC_ID  = #{loginAcId}
+          AND A.EXP_DTM = STR_TO_DATE('99991231', '%Y%m%d')
+          AND A.REG_TYP_CD IN ('C', 'U')	
+	</select>
+	
+	
+	<select id="checkDbaYn" parameterType="kr.wise.commons.user.service.WaaUser" resultType="java.lang.String">
+	 SELECT 'Y' AS DBA_YN
+	   FROM WAA_APRG A
+	  INNER JOIN WAA_APRG_USER B
+	     ON A.APRG_ID = B.APRG_ID
+	    AND B.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+        AND B.REG_TYP_CD IN ('C', 'U')
+	  WHERE A.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	    AND A.REG_TYP_CD IN ('C', 'U')
+	    AND A.APRG_NM  LIKE  'DBA%'
+		AND UPPER(B.USER_ID) = UPPER(#{id,jdbcType=VARCHAR})
+	</select>
+	
+	
+	<select id="selectModuleCount" parameterType="String" resultType="java.lang.Integer">
+<!-- 	20200727 모듈권한이 있거나(기존) + 결재권한이 있는 경우 추가 -->
+	 SELECT (COUNT(1) 
+	                   + (SELECT COUNT(1) 
+	                     FROM WAA_USER U
+	                     WHERE U.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	   			           AND U.REG_TYP_CD IN ('C','U')
+	   			           AND UPPER(U.USER_ID) = UPPER(#{id,jdbcType=VARCHAR})
+	   			           AND IFNULL(U.APRV_AUTH_CD,'') != ''  -- 결재권한이 있는 사람은 개발자로 200727 
+	                    )
+	        ) AS CNT  
+	   FROM WAM_SUBJ_OWNER SU
+	   		INNER JOIN WAA_SUBJ SB
+	   			    ON SB.SUBJ_ID = SU.SUBJ_ID
+	   			   AND SB.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	   			   AND SB.REG_TYP_CD IN ('C','U')
+	  WHERE SU.REG_TYP_CD IN ('C','U')
+	    AND UPPER(SU.USER_ID) = UPPER(#{id,jdbcType=VARCHAR})
+	</select>
+	
+	<select id="selectUsergId" parameterType="String" resultType="java.lang.String">
+	 SELECT USERG_ID
+	   FROM WAA_USERG
+	  WHERE EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	    AND REG_TYP_CD IN ('C', 'U')
+	    AND USERG_LNM = #{Userg_Lnm,jdbcType=VARCHAR}
+	</select>
+	
+		<select id="selectIdCnt" parameterType="kr.wise.commons.cmm.LoginVO" resultType="int">
+		SELECT COUNT(*)
+		  FROM WAA_USER
+		 WHERE USER_ID = #{id,jdbcType=VARCHAR}
+		   AND EXP_DTM = date_format('99991231', '%Y%m%d')
+		   AND REG_TYP_CD IN ('C', 'U')
+		   -- AND IS_LOCK = 'N'
+	</select>
+	
+	<select id="selectSaltKey" parameterType="kr.wise.commons.cmm.LoginVO" resultType="String">
+		SELECT SALT_KEY
+		  FROM WAA_USER
+		 WHERE USER_ID = #{id,jdbcType=VARCHAR}
+		   AND EXP_DTM = date_format('99991231', '%Y%m%d')
+		   AND REG_TYP_CD IN ('C', 'U')
+		   AND IS_LOCK = 'N'
+	</select>
+	
+	<select id="selectFailCnt" parameterType="kr.wise.commons.cmm.LoginVO" resultType="int">
+		SELECT IFNULL(LOGIN_FAIL_COUNT,1) AS LOGIN_FAIL_COUNT
+		  FROM WAA_USER
+		 WHERE USER_ID = #{id,jdbcType=VARCHAR}
+		   AND EXP_DTM = date_format('99991231', '%Y%m%d')
+		   AND REG_TYP_CD IN ('C', 'U')
+		   -- AND IS_LOCK = 'N'
+	</select>
+	
+		<select id="selectLockCnt" parameterType="kr.wise.commons.cmm.LoginVO" resultType="int">
+		SELECT IFNULL(LOCK_COUNT,1) AS LOGIN_FAIL_COUNT
+		  FROM WAA_USER
+		 WHERE USER_ID = #{id,jdbcType=VARCHAR}
+		   AND EXP_DTM = date_format('99991231', '%Y%m%d')
+		   AND REG_TYP_CD IN ('C', 'U')
+		   -- AND IS_LOCK = 'N'
+	</select>
+	
+	<update id="updateIsLock" parameterType="kr.wise.commons.cmm.LoginVO">
+		UPDATE WAA_USER
+		   SET LOGIN_FAIL_COUNT = (SELECT LOGIN_FAIL_COUNT+1
+		                             FROM WAA_USER
+		                            WHERE USER_ID = #{id,jdbcType=VARCHAR}
+		                              AND EXP_DTM = date_format('99991231', '%Y%m%d')
+		                              AND REG_TYP_CD IN ('C', 'U')
+		                              AND IS_LOCK = 'N')
+		       ,IS_LOCK='Y'
+		 WHERE USER_ID = #{id,jdbcType=VARCHAR}
+		   AND EXP_DTM = date_format('99991231', '%Y%m%d')
+		   AND REG_TYP_CD IN ('C', 'U')
+		   AND IS_LOCK = 'N'
+	</update>
+	
+	<update id="updateFailCnt1" parameterType="kr.wise.commons.cmm.LoginVO">
+		UPDATE WAA_USER
+		   SET LOGIN_FAIL_COUNT = (SELECT LOGIN_FAIL_COUNT+1
+		                             FROM WAA_USER
+		                            WHERE USER_ID = #{id,jdbcType=VARCHAR}
+		                              AND EXP_DTM = date_format('99991231', '%Y%m%d')
+		                              AND REG_TYP_CD IN ('C', 'U')
+		                              AND IS_LOCK = 'N')
+		 WHERE USER_ID = #{id,jdbcType=VARCHAR}
+		   AND EXP_DTM = date_format('99991231', '%Y%m%d')
+		   AND REG_TYP_CD IN ('C', 'U')
+		   AND IS_LOCK = 'N'
+	</update>
+	
+	<update id="updatePwdEnc" parameterType="kr.wise.commons.cmm.LoginVO">
+		UPDATE WAA_USER
+		   SET LOGIN_AC_PWD_ENC = #{passwordEnc, jdbcType=VARCHAR}
+		      ,SALT_KEY = #{saltKey, jdbcType=VARCHAR}
+         WHERE 1 = 1
+           AND EXP_DTM = date_format('99991231', '%Y%m%d')
+           AND REG_TYP_CD IN ('C', 'U')
+           AND UPPER(LOGIN_AC_ID) = UPPER(#{id,jdbcType=VARCHAR})
+           AND LOGIN_AC_PWD = #{password, jdbcType=VARCHAR}
+	</update>
+	
+	<update id="updateFailCnt" parameterType="kr.wise.commons.cmm.LoginVO">
+		UPDATE WAA_USER
+		   SET LOGIN_FAIL_COUNT = 1
+		 WHERE USER_ID = #{id,jdbcType=VARCHAR}
+		   AND EXP_DTM = date_format('99991231', '%Y%m%d')
+		   AND REG_TYP_CD IN ('C', 'U')
+		   AND IS_LOCK = 'N'
+	</update>
+</mapper>

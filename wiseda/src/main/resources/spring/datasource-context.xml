@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:mybatis="http://mybatis.org/schema/mybatis-spring"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	                    http://www.springframework.org/schema/beans/spring-beans-3.1.xsd"
+		>
+	<beans profile="local">
+	    <!-- 톰캣 JNDI를 사용하는 경우 -->
+		<bean id="dataSourceSpied" class="org.springframework.jndi.JndiObjectFactoryBean">
+		    <property name="jndiName" value="java:/comp/env/ds_wiseda"/>
+		</bean>
+		<bean id="modelmartdataSourceSpied" class="org.springframework.jndi.JndiObjectFactoryBean">
+		<!--      <property name="jndiName" value="java:/comp/env/ds_wiseda"/>-->
+	 	    <property name="jndiName" value="java:/comp/env/ds_mart"/>
+		</bean>
+		<bean id="dataSource" class="net.sf.log4jdbc.Log4jdbcProxyDataSource">
+	    	<constructor-arg ref="dataSourceSpied" />
+	    	<property name="logFormatter"> 
+		      <bean class="kr.wise.commons.util.Log4JdbcCustomFormatter2"> 
+		        <property name="loggingType" value="MULTI_LINE" /> 
+	<!-- 	        <property name="margin" value="12" />  -->
+		        <property name="sqlPrefix" value="SQL:::" /> 
+		      </bean> 
+		    </property> 
+	  	</bean>
+	  	
+	    <bean id="modelmartdataSource" class="net.sf.log4jdbc.Log4jdbcProxyDataSource">
+	    	<constructor-arg ref="modelmartdataSourceSpied" />
+	    	<property name="logFormatter"> 
+		      <bean class="kr.wise.commons.util.Log4JdbcCustomFormatter2"> 
+		        <property name="loggingType" value="MULTI_LINE" /> 
+	<!-- 	        <property name="margin" value="12" />  -->
+		        <property name="sqlPrefix" value="SQL:::" /> 
+		      </bean> 
+		    </property> 
+	  	</bean>
+<!-- 		<bean id="codedataSourceSpied" class="org.springframework.jndi.JndiObjectFactoryBean"> --> 
+<!-- 	 	    <property name="jndiName" value="java:/comp/env/ds_code"/> -->
+<!-- 		</bean> -->
+
+		<!-- * 기본 DBMS dataSource
+		     * dataSource 빈은 apache에서 제공하는 커넥션풀을 이용하여 생성한다
+		     * 커넥션풀은 미리 일정량의 커넥션을 구현해 놓은 뒤 커넥션 요청이 올때마다 커넥션을 제공하는 방식
+		     
+		     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		        <property name="driverClassName" value="${jdbc.driverClass}"/>
+		        <property name="url"             value="${jdbc.url}"/>
+		        <property name="username"        value="${jdbc.username}"/>
+		        <property name="password"        value="${jdbc.password}"/>      
+		        <property name="defaultAutoCommit" value="false" />  
+		    </bean> -->
+		    <!-- 
+		    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+		        <property name="driverClass" value="${jdbc.driverClass}"/>
+		        <property name="jdbcUrl"     value="${jdbc.url}"/>
+		        <property name="user"        value="${jdbc.username}"/>
+		        <property name="password"    value="${jdbc.password}"/>
+		        
+		        <property name="initialPoolSize" value="${jdbc.initialPoolSize}"/>
+		        <property name="minPoolSize"     value="${jdbc.minPoolSize}"/>
+		        <property name="maxPoolSize"     value="${jdbc.maxPoolSize}"/>
+		        <property name="idleConnectionTestPeriod" value="${jdbc.idleConnectionTestPeriod}"/>
+		        <property name="preferredTestQuery"       value="${jdbc.preferredTestQuery}" />
+		        <property name="testConnectionOnCheckin"  value="false" />        
+		    </bean>
+		     -->
+<!-- 	    톰캣 JNDI를 사용하는 경우 -->
+<!-- 		<bean id="dataSourceSpied" class="org.springframework.jndi.JndiObjectFactoryBean"> -->
+<!-- 		    <property name="jndiName" value="java:/comp/env/ds_wiseda"/> -->
+<!-- 		</bean> -->
+<!-- 		<bean id="modelmartdataSourceSpied" class="org.springframework.jndi.JndiObjectFactoryBean"> -->
+<!-- 		    <property name="jndiName" value="java:/comp/env/ds_wiseda"/> -->
+<!-- 		    <property name="jndiName" value="java:/comp/env/ds_mart"/> -->
+<!-- 		</bean> -->
+		<!-- JEUS JNDI를 사용하는 경우 -->
+<!-- 		<bean id="dataSourceSpied" class="org.springframework.jndi.JndiObjectFactoryBean"> -->
+<!-- 	    <property name="jndiName" value="ds_wiseda"/> -->
+<!-- 		</bean> -->
+<!-- 		<bean id="modelmartdataSourceSpied" class="org.springframework.jndi.JndiObjectFactoryBean"> -->
+<!-- 		    <property name="jndiName" value="ds_wiseda"/> -->
+	<!-- 	    <property name="jndiName" value="java:/comp/env/ds_mart"/> -->
+<!-- 		</bean> -->
+		<!-- JBoss JNDI를 사용하는 경우
+			 jboss폴더/standalone/standalone.xml의 oracleDS부분 찾아서 주소:1521:sid  및 user/password 작성 후 저장
+			 나머지는 동일함 (meta)-->
+	<!-- 	<bean id="dataSourceSpied" class="org.springframework.jndi.JndiObjectFactoryBean"> -->
+	<!-- 	    <property name="jndiName" value="oracleDS"/> -->
+	<!-- 	</bean> -->
+		
+		
+		<!-- WebLogic JNDI를 사용하는 경우 -->
+		<!-- 
+		<bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
+		    <property name="jndiEnvironment">
+			<props>
+			    <prop key="java.naming.factory.initial">weblogic.jndi.WLInitialContextFactory</prop>
+			    <prop key="java.naming.provider.url">t3://locahost:7001</prop>
+			</props>
+			</property>
+			<property name="jndiName" value="{WebLogic jndi Name}"/>
+		</bean>
+		 -->
+   	</beans>
+
+
+	
+	<beans profile="dev">
+		<!-- JEUS JNDI를 사용하는 경우 -->
+		<bean id="dataSourceSpied" class="org.springframework.jndi.JndiObjectFactoryBean">
+	    <property name="jndiName" value="ds_wiseda"/>
+		</bean>
+		<bean id="modelmartdataSourceSpied" class="org.springframework.jndi.JndiObjectFactoryBean">
+		    <property name="jndiName" value="ds_wiseda"/>
+<!-- 		    <property name="jndiName" value="java:/comp/env/ds_mart"/> -->
+		</bean>
+			    <!-- * log4j.xml을 이용해서 쿼리를 가독성있게 출력-->
+	    <!-- JDK 1.7 사용시 서버구동 불가... margin부분 주석처리하고 사용할것(정상작동함). 
+	    	 margin이 어떤기능인지는 아직 파악 못함.(meta) -->
+	    <bean id="dataSource" class="net.sf.log4jdbc.Log4jdbcProxyDataSource">
+	    	<constructor-arg ref="dataSourceSpied" />
+	    	<property name="logFormatter"> 
+		      <bean class="kr.wise.commons.util.Log4JdbcCustomFormatter2"> 
+		        <property name="loggingType" value="MULTI_LINE" /> 
+	<!-- 	        <property name="margin" value="12" />  -->
+		        <property name="sqlPrefix" value="SQL:::" /> 
+		      </bean> 
+		    </property> 
+	  	</bean>
+	  	
+	    <bean id="modelmartdataSource" class="net.sf.log4jdbc.Log4jdbcProxyDataSource">
+	    	<constructor-arg ref="modelmartdataSourceSpied" />
+	    	<property name="logFormatter"> 
+		      <bean class="kr.wise.commons.util.Log4JdbcCustomFormatter2"> 
+		        <property name="loggingType" value="MULTI_LINE" /> 
+	<!-- 	        <property name="margin" value="12" />  -->
+		        <property name="sqlPrefix" value="SQL:::" /> 
+		      </bean> 
+		    </property> 
+	  	</bean>
+	</beans>
+
+	<beans profile="prod">
+		<!-- JEUS JNDI를 사용하는 경우 -->
+		<bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
+	    <property name="jndiName" value="ds_wiseda"/>
+		</bean>
+		<bean id="modelmartdataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
+		    <property name="jndiName" value="ds_wiseda"/>
+<!-- 		    <property name="jndiName" value="java:/comp/env/ds_mart"/> -->
+		</bean>
+	</beans>
+	   
+</beans>

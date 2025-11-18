@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:mybatis="http://mybatis.org/schema/mybatis-spring"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	                    http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+	                    http://mybatis.org/schema/mybatis-spring 
+	                    http://mybatis.org/schema/mybatis-spring.xsd"
+		>
+
+
+	<!-- 모든 매퍼는 여기에 등록한다. DB가 틀린경우를 대비해서 
+		여기는 테스트 매퍼 등록
+	-->
+<!-- 	<bean id="testMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="kr.wise.commons.test.service.TestMapper" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	<bean id="testMapper2" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="kr.wise.commons.test.service.TestMapper2" />
+		<property name="sqlSessionFactory" ref="dqsqlSessionFactory" />
+	</bean>
+	<bean id="testMapper3" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="kr.wise.commons.test.service.TestMapper3" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+		<property name="sqlSessionFactory" ref="svnsqlSessionFactory" />
+	</bean> -->
+	
+	<mybatis:scan base-package="kr.wise.commons,kr.wise.portal,kr.wise.meta,kr.wise.dq,kr.wise.admin,kr.wise.advisor,kr.wise.sysinf"  annotation="kr.wise.commons.cmm.annotation.Mapper" factory-ref="sqlSessionFactory"/>
+	
+	
+	<!-- 외부시스템 연계 패키지 : kr.wise.sysinf.시스템명.service -->
+	<!-- ERMART7 연계 관계정보 조회 -->
+	<bean id="r7mapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="kr.wise.sysinf.erwin.service.R7MartMapper" />
+		<property name="sqlSessionFactory" ref="modelmartsqlSessionFactory" />
+	</bean>
+	
+	<bean id="pdmapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="kr.wise.sysinf.pwdesigner.service.PdMartMapper" />
+		<property name="sqlSessionFactory" ref="modelmartsqlSessionFactory" />
+	</bean>
+	
+	<!-- 	DA# 연계 -->
+	<bean id="dasmapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="kr.wise.sysinf.daSharp.service.DasMartMapper" />
+		<property name="sqlSessionFactory" ref="modelmartsqlSessionFactory" />
+	</bean>
+	
+	<!-- 	EXERD 연계 -->
+	<bean id="exerdmapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="kr.wise.sysinf.exerd.service.ExerdMartMapper" />
+		<property name="sqlSessionFactory" ref="modelmartsqlSessionFactory" />
+	</bean>
+	
+<!-- 	<bean id="codemapper" class="org.mybatis.spring.mapper.MapperFactoryBean"> -->
+<!-- 		<property name="mapperInterface" value="kr.wise.sysinf.codeSync.service.CodeSyncTgtMapper" /> -->
+<!-- 		<property name="sqlSessionFactory" ref="sqlSessionFactory" /> -->
+<!-- 	</bean> -->
+<!-- 	<bean id="messageTgtmapper" class="org.mybatis.spring.mapper.MapperFactoryBean"> -->
+<!-- 		<property name="mapperInterface" value="kr.wise.sysinf.messageSync.service.MessageSyncTgtMapper" /> -->
+<!-- 		<property name="sqlSessionFactory" ref="sqlSessionFactory" /> -->
+<!-- 	</bean> -->
+<!-- 	<bean id="messageSrcmapper" class="org.mybatis.spring.mapper.MapperFactoryBean"> -->
+<!-- 		<property name="mapperInterface" value="kr.wise.sysinf.messageSync.service.MessageSyncSrcMapper" /> -->
+<!-- 		<property name="sqlSessionFactory" ref="sqlSessionFactory" /> -->
+<!-- 	</bean> -->
+	<!-- Prism OPEN API Client 기관 리스트 조회 -->
+<!-- 	<bean id="organmapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="kr.wise.sysinf.prism.service.PrismOrganMapper" />
+		<property name="sqlSessionFactory" ref="nkissqlSessionFactory" />
+	</bean>
+	<bean id="prismresearchmapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="kr.wise.sysinf.prism.service.PrismResearchMstMapper" />
+		<property name="sqlSessionFactory" ref="nkissqlSessionFactory" />
+	</bean>
+	<bean id="prismresdetailmapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="kr.wise.sysinf.prism.service.PrismResearchDtlMapper" />
+		<property name="sqlSessionFactory" ref="nkissqlSessionFactory" />
+	</bean>
+	<bean id="prismreportmapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="kr.wise.sysinf.prism.service.PrismReportMapper" />
+		<property name="sqlSessionFactory" ref="nkissqlSessionFactory" />
+	</bean> -->
+	
+<!-- 	<mybatis:scan base-package="kr.wise.portal" factory-ref="sqlSessionFactory"/> -->
+<!-- 	<mybatis:scan base-package="kr.wise.dq" annotation="kr.wise.commons.cmm.annotation.Mapper" factory-ref="dqsqlSessionFactory"/> -->
+    <!-- 매퍼 등록 끝 -->
+
+		
+    <!-- scan for myBatis3 mappers and let them be autowired -->    
+<!--     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer"> -->
+<!--         <property name="basePackage" value="kr.wise.commons.test.service"/>                                              -->
+<!--     </bean> -->
+        
+
+    <!-- 공통코드 매퍼 -->
+<!--     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="kr.wise.egmd.cmcd.mapper"/>      
+    </bean>
+     -->
+   
+</beans>

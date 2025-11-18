@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.meta.app.service.WamAppStwdMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.meta.app.service.WamAppStwd" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+    <id column="APP_STWD_ID" property="appStwdId" jdbcType="VARCHAR" />
+    <result column="APP_STWD_LNM" property="appStwdLnm" jdbcType="VARCHAR" />
+    <result column="APP_STWD_PNM" property="appStwdPnm" jdbcType="VARCHAR" />
+    <result column="ENG_MEAN" property="engMean" jdbcType="VARCHAR" />
+    <result column="BIZ_DTL_CD" property="bizDtlCd" jdbcType="VARCHAR" />
+    <result column="ORG_DS" property="orgDs" jdbcType="VARCHAR" />
+    <result column="WD_DCD" property="wdDcd" jdbcType="VARCHAR" />
+
+  </resultMap>
+  <sql id="Base_Column_List" >
+    APP_STWD_ID, APP_STWD_LNM, APP_STWD_PNM, ENG_MEAN, RQST_NO, RQST_SNO, OBJ_DESCN, 
+    OBJ_VERS, REG_TYP_CD, FRS_RQST_DTM, FRS_RQST_USER_ID, RQST_DTM, RQST_USER_ID, APRV_DTM, 
+    APRV_USER_ID
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select /* WamAppStwdMapper.selectByPrimaryKey */
+    <include refid="Base_Column_List" />
+    from WAM_APP_STWD
+    where APP_STWD_ID = #{appStwdId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete /* WamAppStwdMapper.deleteByPrimaryKey */
+    from WAM_APP_STWD
+    where APP_STWD_ID = #{appStwdId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="kr.wise.meta.app.service.WamAppStwd" >
+    insert /* WamAppStwdMapper.insert */
+    into WAM_APP_STWD (APP_STWD_ID, APP_STWD_LNM, APP_STWD_PNM, 
+      ENG_MEAN, RQST_NO, RQST_SNO, 
+      OBJ_DESCN, OBJ_VERS, REG_TYP_CD, 
+      FRS_RQST_DTM, FRS_RQST_USER_ID, RQST_DTM, 
+      RQST_USER_ID, APRV_DTM, APRV_USER_ID
+      )
+    values (#{appStwdId,jdbcType=VARCHAR}, #{appStwdLnm,jdbcType=VARCHAR}, #{appStwdPnm,jdbcType=VARCHAR}, 
+      #{engMean,jdbcType=VARCHAR}, #{rqstNo,jdbcType=VARCHAR}, #{rqstSno,jdbcType=DECIMAL}, 
+      #{objDescn,jdbcType=VARCHAR}, #{objVers,jdbcType=DECIMAL}, #{regTypCd,jdbcType=VARCHAR}, 
+      #{frsRqstDtm,jdbcType=TIMESTAMP}, #{frsRqstUserId,jdbcType=VARCHAR}, #{rqstDtm,jdbcType=TIMESTAMP}, 
+      #{rqstUserId,jdbcType=VARCHAR}, #{aprvDtm,jdbcType=TIMESTAMP}, #{aprvUserId,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="kr.wise.meta.app.service.WamAppStwd" >
+    insert /* WamAppStwdMapper.insertSelective */
+    into WAM_APP_STWD
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="appStwdId != null" >
+        APP_STWD_ID,
+      </if>
+      <if test="appStwdLnm != null" >
+        APP_STWD_LNM,
+      </if>
+      <if test="appStwdPnm != null" >
+        APP_STWD_PNM,
+      </if>
+      <if test="engMean != null" >
+        ENG_MEAN,
+      </if>
+      <if test="rqstNo != null" >
+        RQST_NO,
+      </if>
+      <if test="rqstSno != null" >
+        RQST_SNO,
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN,
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS,
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD,
+      </if>
+      <if test="frsRqstDtm != null" >
+        FRS_RQST_DTM,
+      </if>
+      <if test="frsRqstUserId != null" >
+        FRS_RQST_USER_ID,
+      </if>
+      <if test="rqstDtm != null" >
+        RQST_DTM,
+      </if>
+      <if test="rqstUserId != null" >
+        RQST_USER_ID,
+      </if>
+      <if test="aprvDtm != null" >
+        APRV_DTM,
+      </if>
+      <if test="aprvUserId != null" >
+        APRV_USER_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="appStwdId != null" >
+        #{appStwdId,jdbcType=VARCHAR},
+      </if>
+      <if test="appStwdLnm != null" >
+        #{appStwdLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="appStwdPnm != null" >
+        #{appStwdPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="engMean != null" >
+        #{engMean,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstNo != null" >
+        #{rqstNo,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstSno != null" >
+        #{rqstSno,jdbcType=DECIMAL},
+      </if>
+      <if test="objDescn != null" >
+        #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null" >
+        #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="frsRqstDtm != null" >
+        #{frsRqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="frsRqstUserId != null" >
+        #{frsRqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDtm != null" >
+        #{rqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rqstUserId != null" >
+        #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDtm != null" >
+        #{aprvDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aprvUserId != null" >
+        #{aprvUserId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.meta.app.service.WamAppStwd" >
+    update /* WamAppStwdMapper.updateByPrimaryKeySelective */
+    	WAM_APP_STWD
+    <set >
+      <if test="appStwdLnm != null" >
+        APP_STWD_LNM = #{appStwdLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="appStwdPnm != null" >
+        APP_STWD_PNM = #{appStwdPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="engMean != null" >
+        ENG_MEAN = #{engMean,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstNo != null" >
+        RQST_NO = #{rqstNo,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstSno != null" >
+        RQST_SNO = #{rqstSno,jdbcType=DECIMAL},
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="frsRqstDtm != null" >
+        FRS_RQST_DTM = #{frsRqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="frsRqstUserId != null" >
+        FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDtm != null" >
+        RQST_DTM = #{rqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rqstUserId != null" >
+        RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDtm != null" >
+        APRV_DTM = #{aprvDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aprvUserId != null" >
+        APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where APP_STWD_ID = #{appStwdId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="kr.wise.meta.app.service.WamAppStwd" >
+    update /* WamAppStwdMapper.updateByPrimaryKey */
+    	WAM_APP_STWD
+    set APP_STWD_LNM = #{appStwdLnm,jdbcType=VARCHAR},
+      APP_STWD_PNM = #{appStwdPnm,jdbcType=VARCHAR},
+      ENG_MEAN = #{engMean,jdbcType=VARCHAR},
+      RQST_NO = #{rqstNo,jdbcType=VARCHAR},
+      RQST_SNO = #{rqstSno,jdbcType=DECIMAL},
+      OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      FRS_RQST_DTM = #{frsRqstDtm,jdbcType=TIMESTAMP},
+      FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR},
+      RQST_DTM = #{rqstDtm,jdbcType=TIMESTAMP},
+      RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      APRV_DTM = #{aprvDtm,jdbcType=TIMESTAMP},
+      APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR}
+    where APP_STWD_ID = #{appStwdId,jdbcType=VARCHAR}
+  </update>
+    <select id="selectWordChangeList" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    SELECT /* WamAppStwdMapper.selectWordChangeList */
+   		A.*
+    	 , CASE WHEN A.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d') AND A.REG_TYP_CD IN ('C', 'U') THEN '#0000FF'
+    	   ELSE NULL END AS FontColor
+      FROM WAH_APP_STWD A
+     WHERE APP_STWD_ID = #{appStwdId,jdbcType=VARCHAR}
+     ORDER BY EXP_DTM DESC, STR_DTM DESC
+  </select>
+   <select id="selectWordDetail" resultMap="BaseResultMap" parameterType="java.lang.String">
+
+  SELECT /* WamAppStwdMapper.selectWordDetail */
+  		A.*
+  	  	,GET_USER_NM(A.FRS_RQST_USER_ID) AS FRS_RQST_USER_NM
+  	  	,GET_USER_NM(A.RQST_USER_ID) AS RQST_USER_NM
+  	  	,GET_USER_NM(A.APRV_USER_ID) AS APRV_USER_NM 
+  FROM 
+  	WAM_APP_STWD A
+  WHERE A.APP_STWD_ID =  #{appStwdId,jdbcType=VARCHAR}
+    AND A.REG_TYP_CD IN ('C', 'U')
+  </select>
+   <select id="selectList" resultMap="BaseResultMap" parameterType="kr.wise.meta.app.service.WamAppStwd" >
+  	/* WamAppStwdMapper.selectList */
+  	SELECT *
+	FROM 
+  	(SELECT A.*,
+  		   GET_USER_NM(A.FRS_RQST_USER_ID) AS FRS_RQST_USER_NM,
+    	   GET_USER_NM(A.RQST_USER_ID) AS RQST_USER_NM,
+    	   GET_USER_NM(A.APRV_USER_ID) AS APRV_USER_NM 
+   	FROM WAM_APP_STWD A) TBL
+  	<where>
+		AND REG_TYP_CD IN ('C', 'U')
+      <if test="appStwdLnm != null" >
+        AND (APP_STWD_LNM LIKE CONCAT('%' , #{appStwdLnm,jdbcType=VARCHAR} , '%')
+          OR APP_STWD_PNM LIKE CONCAT('%' , #{appStwdLnm,jdbcType=VARCHAR} , '%')
+          OR APP_STWD_LNM LIKE CONCAT('%' , UPPER(#{appStwdLnm,jdbcType=VARCHAR}) , '%')
+          OR APP_STWD_PNM LIKE CONCAT('%' , UPPER(#{appStwdLnm,jdbcType=VARCHAR}) , '%'))
+      </if>
+      <if test="appStwdId != null" >
+        AND APP_STWD_ID = #{AppStwdId,jdbcType=VARCHAR}
+      </if>
+      <if test="engMean != null" >
+        AND ENG_MEAN LIKE CONCAT('%' , #{engMean,jdbcType=VARCHAR} , '%')
+      </if>
+      <if test="rqstNo != null" >
+        AND RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      </if>
+      <if test="rqstSno != null" >
+        AND RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+      </if>
+      <if test="objDescn != null" >
+        AND OBJ_DESCN LIKE CONCAT('%' , #{objDescn,jdbcType=VARCHAR} , '%')
+      </if>
+      <if test="objVers != null" >
+        AND OBJ_VERS = #{objVers,jdbcType=DECIMAL}
+      </if>
+      <if test="regTypCd != null" >
+        AND REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR}
+      </if>
+      <if test="frsRqstDtm != null" >
+        AND FRS_RQST_DTM = #{frsRqstDtm,jdbcType=DATE}
+      </if>
+      <if test="frsRqstUserId != null" >
+        AND FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR}
+      </if>
+      <if test="rqstDtm != null" >
+        AND RQST_DTM = #{rqstDtm,jdbcType=DATE}
+      </if>
+      <if test="rqstUserId != null" >
+        AND RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR}
+      </if>
+      <if test="aprvDtm != null" >
+        AND APRV_DTM = #{aprvDtm,jdbcType=DATE}
+      </if>
+      <if test="aprvUserId != null" >
+        AND APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR}
+      </if>
+      <if test="searchBgnDe !=null and searchBgnDe !=''">
+	    <![CDATA[ AND DATE_FORMAT(APRV_DTM, '%Y-%m-%d') >= #{searchBgnDe} ]]>
+	  </if>
+	  <if test="searchEndDe !=null and searchEndDe !=''">
+		<![CDATA[ AND DATE_FORMAT(APRV_DTM, '%Y-%m-%d') <= #{searchEndDe} ]]>
+	  </if>
+  	</where>
+  	ORDER BY APP_STWD_LNM
+  </select>
+    <update id="updateCheckInit" parameterType="java.lang.String" >
+    UPDATE /* WamAppStwdMapper.updateCheckInit */
+    	WAQ_APP_STWD A
+    SET A.REG_TYP_CD = (
+    					SELECT CASE WHEN A.RQST_DCD = 'DD' THEN 'D' ELSE CASE WHEN MAX(B.APP_STWD_ID) IS NULL THEN 'C' ELSE 'U' END END
+                          FROM WAM_APP_STWD B
+                         WHERE B.REG_TYP_CD IN ('C','U')
+                           AND B.APP_STWD_LNM = A.APP_STWD_LNM
+                           AND B.APP_STWD_PNM = A.APP_STWD_PNM
+                       )
+       ,A.VRF_CD = '4'
+    WHERE A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+  </update>
+</mapper>

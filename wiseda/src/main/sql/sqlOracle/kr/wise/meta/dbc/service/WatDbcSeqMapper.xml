@@ -1,0 +1,454 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.wise.meta.dbc.service.WatDbcSeqMapper">
+  <resultMap id="BaseResultMap" type="kr.wise.meta.dbc.service.WatDbcSeq" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+    <id column="DB_SCH_ID" jdbcType="VARCHAR" property="dbSchId" />
+    <id column="DBC_SEQ_NM" jdbcType="VARCHAR" property="dbcSeqNm" />
+    <result column="VERS" jdbcType="DECIMAL" property="vers" />
+    <result column="REG_TYP" jdbcType="VARCHAR" property="regTyp" />
+    <result column="REG_DTM" jdbcType="TIMESTAMP" property="regDtm" />
+    <result column="UPD_DTM" jdbcType="TIMESTAMP" property="updDtm" />
+    <result column="MINVAL" jdbcType="DECIMAL" property="minval" />
+    <result column="MAXVAL" jdbcType="DECIMAL" property="maxval" />
+    <result column="INCBY" jdbcType="DECIMAL" property="incby" />
+    <result column="CYC_YN" jdbcType="VARCHAR" property="cycYn" />
+    <result column="ORD_YN" jdbcType="VARCHAR" property="ordYn" />
+    <result column="CACHE_SZ" jdbcType="DECIMAL" property="cacheSz" />
+    <result column="LST_NUM" jdbcType="DECIMAL" property="lstNum" />
+    <result column="DESCN" jdbcType="VARCHAR" property="descn" />
+    <result column="DB_CONN_TRG_ID" jdbcType="VARCHAR" property="dbConnTrgId" />
+    <result column="DDL_SEQ_ID" jdbcType="VARCHAR" property="ddlSeqId" />
+    <result column="DBMS_TYPE" jdbcType="VARCHAR" property="dbmsType" />
+    <result column="SUBJ_ID" jdbcType="VARCHAR" property="subjId" />
+    <result column="ANA_DTM" jdbcType="TIMESTAMP" property="anaDtm" />
+    <result column="CRT_DTM" jdbcType="TIMESTAMP" property="crtDtm" />
+    <result column="CHG_DTM" jdbcType="TIMESTAMP" property="chgDtm" />
+    <result column="DDL_SEQ_DESCN" jdbcType="VARCHAR" property="ddlSeqDescn" />
+    <result column="DDL_SEQ_ERR_EXS" jdbcType="VARCHAR" property="ddlSeqErrExs" />
+    <result column="DDL_SEQ_ERR_CD" jdbcType="VARCHAR" property="ddlSeqErrCd" />
+    <result column="DDL_SEQ_ERR_DESCN" jdbcType="VARCHAR" property="ddlSeqErrDescn" />
+    <result column="DDL_SEQ_EXTNC_EXS" jdbcType="VARCHAR" property="ddlSeqExtncExs" />
+    
+    <result column="DB_CONN_TRG_LNM" jdbcType="VARCHAR" property="dbConnTrgLnm" />
+    <result column="DB_CONN_TRG_PNM" jdbcType="VARCHAR" property="dbConnTrgPnm" />
+    <result column="DB_SCH_LNM" jdbcType="VARCHAR" property="dbSchLnm" />
+    <result column="DB_SCH_PNM" jdbcType="VARCHAR" property="dbSchPnm" />
+    <result column="DBMS_TYPE" jdbcType="VARCHAR" property="dbmsType" />
+  </resultMap>
+ 
+   <sql id="Base_Column_List">
+    DB_SCH_ID, DBC_SEQ_NM, VERS, REG_TYP, REG_DTM, UPD_DTM, MINVAL, MAXVAL, INCBY, CYC_YN, 
+    ORD_YN, CACHE_SZ, LST_NUM, DESCN, DB_CONN_TRG_ID, DDL_SEQ_ID, DBMS_TYPE, SUBJ_ID, 
+    ANA_DTM, CRT_DTM, CHG_DTM, DDL_SEQ_DESCN, DDL_SEQ_ERR_EXS, DDL_SEQ_ERR_CD, DDL_SEQ_ERR_DESCN, 
+    DDL_SEQ_EXTNC_EXS
+  </sql>
+
+  <select id="selectByPrimaryKey" parameterType="map" resultMap="BaseResultMap">
+	  SELECT A.DB_SCH_ID
+	      ,B.DB_SCH_LNM
+	      ,A.DB_CONN_TRG_ID
+	      ,C.DB_CONN_TRG_LNM
+	      ,A.SUBJ_ID
+	      ,D.FULL_PATH AS SUBJ_LNM
+	      ,A.DBC_SEQ_NM
+	      ,A.DDL_SEQ_ID
+	      ,DDL_SEQ_LNM
+	      ,DDL_SEQ_PNM
+	      ,A.REG_TYP
+	      ,A.REG_DTM
+	      ,A.VERS
+	      ,A.UPD_DTM
+	      ,'SEQ' AS OBJECT_TYPE
+		  ,A.MINVAL
+		  ,A.MAXVAL
+		  ,A.INCBY
+		  ,A.CYC_YN
+		  ,A.ORD_YN
+		  ,A.CACHE_SZ
+		  ,A.LST_NUM
+		  ,A.DESCN
+		  ,C.DBMS_TYP_CD AS DBMS_TYPE
+	  FROM WAT_DBC_SEQ A
+	    LEFT OUTER JOIN WAA_DB_SCH B
+	        ON A.DB_SCH_ID = B.DB_SCH_ID
+	        AND B.REG_TYP_CD IN ('C', 'U')
+	        AND B.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	<!--         AND NVL(A.REG_TYP, 'C') IN ('C', 'U') -->
+	    LEFT OUTER JOIN WAA_DB_CONN_TRG C
+	        ON A.DB_CONN_TRG_ID = C.DB_CONN_TRG_ID
+	        AND C.REG_TYP_CD IN ('C', 'U')
+	        AND C.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	    LEFT OUTER JOIN WAA_SUBJ D
+	        ON A.SUBJ_ID = D.SUBJ_ID
+	        AND D.REG_TYP_CD IN ('C', 'U')
+	        AND D.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	    LEFT OUTER JOIN WAM_DDL_SEQ E
+	        ON A.DDL_SEQ_ID = E.DDL_SEQ_ID
+	        AND E.REG_TYP_CD IN ('C', 'U')
+    WHERE A.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+      AND A.DBC_SEQ_NM = #{dbcSeqNm,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="map">
+    delete from WAT_DBC_SEQ
+    where DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+      and DBC_SEQ_NM = #{dbcSeqNm,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="kr.wise.meta.dbc.service.WatDbcSeq">
+    insert into WAT_DBC_SEQ (DB_SCH_ID, DBC_SEQ_NM, VERS, 
+      REG_TYP, REG_DTM, UPD_DTM, 
+      MINVAL, MAXVAL, INCBY, 
+      CYC_YN, ORD_YN, CACHE_SZ, 
+      LST_NUM, DESCN, DB_CONN_TRG_ID, 
+      DDL_SEQ_ID, DBMS_TYPE, SUBJ_ID, 
+      ANA_DTM, CRT_DTM, CHG_DTM, 
+      DDL_SEQ_DESCN, DDL_SEQ_ERR_EXS, DDL_SEQ_ERR_CD, 
+      DDL_SEQ_ERR_DESCN, DDL_SEQ_EXTNC_EXS)
+    values (#{dbSchId,jdbcType=VARCHAR}, #{dbcSeqNm,jdbcType=VARCHAR}, #{vers,jdbcType=DECIMAL}, 
+      #{regTyp,jdbcType=VARCHAR}, #{regDtm,jdbcType=TIMESTAMP}, #{updDtm,jdbcType=TIMESTAMP}, 
+      #{minval,jdbcType=DECIMAL}, #{maxval,jdbcType=DECIMAL}, #{incby,jdbcType=DECIMAL}, 
+      #{cycYn,jdbcType=VARCHAR}, #{ordYn,jdbcType=VARCHAR}, #{cacheSz,jdbcType=DECIMAL}, 
+      #{lstNum,jdbcType=DECIMAL}, #{descn,jdbcType=VARCHAR}, #{dbConnTrgId,jdbcType=VARCHAR}, 
+      #{ddlSeqId,jdbcType=VARCHAR}, #{dbmsType,jdbcType=VARCHAR}, #{subjId,jdbcType=VARCHAR}, 
+      #{anaDtm,jdbcType=TIMESTAMP}, #{crtDtm,jdbcType=TIMESTAMP}, #{chgDtm,jdbcType=TIMESTAMP}, 
+      #{ddlSeqDescn,jdbcType=VARCHAR}, #{ddlSeqErrExs,jdbcType=VARCHAR}, #{ddlSeqErrCd,jdbcType=VARCHAR}, 
+      #{ddlSeqErrDescn,jdbcType=VARCHAR}, #{ddlSeqExtncExs,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="kr.wise.meta.dbc.service.WatDbcSeq">
+    insert into WAT_DBC_SEQ
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="dbSchId != null">
+        DB_SCH_ID,
+      </if>
+      <if test="dbcSeqNm != null">
+        DBC_SEQ_NM,
+      </if>
+      <if test="vers != null">
+        VERS,
+      </if>
+      <if test="regTyp != null">
+        REG_TYP,
+      </if>
+      <if test="regDtm != null">
+        REG_DTM,
+      </if>
+      <if test="updDtm != null">
+        UPD_DTM,
+      </if>
+      <if test="minval != null">
+        MINVAL,
+      </if>
+      <if test="maxval != null">
+        MAXVAL,
+      </if>
+      <if test="incby != null">
+        INCBY,
+      </if>
+      <if test="cycYn != null">
+        CYC_YN,
+      </if>
+      <if test="ordYn != null">
+        ORD_YN,
+      </if>
+      <if test="cacheSz != null">
+        CACHE_SZ,
+      </if>
+      <if test="lstNum != null">
+        LST_NUM,
+      </if>
+      <if test="descn != null">
+        DESCN,
+      </if>
+      <if test="dbConnTrgId != null">
+        DB_CONN_TRG_ID,
+      </if>
+      <if test="ddlSeqId != null">
+        DDL_SEQ_ID,
+      </if>
+      <if test="dbmsType != null">
+        DBMS_TYPE,
+      </if>
+      <if test="subjId != null">
+        SUBJ_ID,
+      </if>
+      <if test="anaDtm != null">
+        ANA_DTM,
+      </if>
+      <if test="crtDtm != null">
+        CRT_DTM,
+      </if>
+      <if test="chgDtm != null">
+        CHG_DTM,
+      </if>
+      <if test="ddlSeqDescn != null">
+        DDL_SEQ_DESCN,
+      </if>
+      <if test="ddlSeqErrExs != null">
+        DDL_SEQ_ERR_EXS,
+      </if>
+      <if test="ddlSeqErrCd != null">
+        DDL_SEQ_ERR_CD,
+      </if>
+      <if test="ddlSeqErrDescn != null">
+        DDL_SEQ_ERR_DESCN,
+      </if>
+      <if test="ddlSeqExtncExs != null">
+        DDL_SEQ_EXTNC_EXS,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="dbSchId != null">
+        #{dbSchId,jdbcType=VARCHAR},
+      </if>
+      <if test="dbcSeqNm != null">
+        #{dbcSeqNm,jdbcType=VARCHAR},
+      </if>
+      <if test="vers != null">
+        #{vers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTyp != null">
+        #{regTyp,jdbcType=VARCHAR},
+      </if>
+      <if test="regDtm != null">
+        #{regDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updDtm != null">
+        #{updDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="minval != null">
+        #{minval,jdbcType=DECIMAL},
+      </if>
+      <if test="maxval != null">
+        #{maxval,jdbcType=DECIMAL},
+      </if>
+      <if test="incby != null">
+        #{incby,jdbcType=DECIMAL},
+      </if>
+      <if test="cycYn != null">
+        #{cycYn,jdbcType=VARCHAR},
+      </if>
+      <if test="ordYn != null">
+        #{ordYn,jdbcType=VARCHAR},
+      </if>
+      <if test="cacheSz != null">
+        #{cacheSz,jdbcType=DECIMAL},
+      </if>
+      <if test="lstNum != null">
+        #{lstNum,jdbcType=DECIMAL},
+      </if>
+      <if test="descn != null">
+        #{descn,jdbcType=VARCHAR},
+      </if>
+      <if test="dbConnTrgId != null">
+        #{dbConnTrgId,jdbcType=VARCHAR},
+      </if>
+      <if test="ddlSeqId != null">
+        #{ddlSeqId,jdbcType=VARCHAR},
+      </if>
+      <if test="dbmsType != null">
+        #{dbmsType,jdbcType=VARCHAR},
+      </if>
+      <if test="subjId != null">
+        #{subjId,jdbcType=VARCHAR},
+      </if>
+      <if test="anaDtm != null">
+        #{anaDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="crtDtm != null">
+        #{crtDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="chgDtm != null">
+        #{chgDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ddlSeqDescn != null">
+        #{ddlSeqDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="ddlSeqErrExs != null">
+        #{ddlSeqErrExs,jdbcType=VARCHAR},
+      </if>
+      <if test="ddlSeqErrCd != null">
+        #{ddlSeqErrCd,jdbcType=VARCHAR},
+      </if>
+      <if test="ddlSeqErrDescn != null">
+        #{ddlSeqErrDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="ddlSeqExtncExs != null">
+        #{ddlSeqExtncExs,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.meta.dbc.service.WatDbcSeq">
+    update WAT_DBC_SEQ
+    <set>
+      <if test="vers != null">
+        VERS = #{vers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTyp != null">
+        REG_TYP = #{regTyp,jdbcType=VARCHAR},
+      </if>
+      <if test="regDtm != null">
+        REG_DTM = #{regDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updDtm != null">
+        UPD_DTM = #{updDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="minval != null">
+        MINVAL = #{minval,jdbcType=DECIMAL},
+      </if>
+      <if test="maxval != null">
+        MAXVAL = #{maxval,jdbcType=DECIMAL},
+      </if>
+      <if test="incby != null">
+        INCBY = #{incby,jdbcType=DECIMAL},
+      </if>
+      <if test="cycYn != null">
+        CYC_YN = #{cycYn,jdbcType=VARCHAR},
+      </if>
+      <if test="ordYn != null">
+        ORD_YN = #{ordYn,jdbcType=VARCHAR},
+      </if>
+      <if test="cacheSz != null">
+        CACHE_SZ = #{cacheSz,jdbcType=DECIMAL},
+      </if>
+      <if test="lstNum != null">
+        LST_NUM = #{lstNum,jdbcType=DECIMAL},
+      </if>
+      <if test="descn != null">
+        DESCN = #{descn,jdbcType=VARCHAR},
+      </if>
+      <if test="dbConnTrgId != null">
+        DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR},
+      </if>
+      <if test="ddlSeqId != null">
+        DDL_SEQ_ID = #{ddlSeqId,jdbcType=VARCHAR},
+      </if>
+      <if test="dbmsType != null">
+        DBMS_TYPE = #{dbmsType,jdbcType=VARCHAR},
+      </if>
+      <if test="subjId != null">
+        SUBJ_ID = #{subjId,jdbcType=VARCHAR},
+      </if>
+      <if test="anaDtm != null">
+        ANA_DTM = #{anaDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="crtDtm != null">
+        CRT_DTM = #{crtDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="chgDtm != null">
+        CHG_DTM = #{chgDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ddlSeqDescn != null">
+        DDL_SEQ_DESCN = #{ddlSeqDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="ddlSeqErrExs != null">
+        DDL_SEQ_ERR_EXS = #{ddlSeqErrExs,jdbcType=VARCHAR},
+      </if>
+      <if test="ddlSeqErrCd != null">
+        DDL_SEQ_ERR_CD = #{ddlSeqErrCd,jdbcType=VARCHAR},
+      </if>
+      <if test="ddlSeqErrDescn != null">
+        DDL_SEQ_ERR_DESCN = #{ddlSeqErrDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="ddlSeqExtncExs != null">
+        DDL_SEQ_EXTNC_EXS = #{ddlSeqExtncExs,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+      and DBC_SEQ_NM = #{dbcSeqNm,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="kr.wise.meta.dbc.service.WatDbcSeq">
+    update WAT_DBC_SEQ
+    set VERS = #{vers,jdbcType=DECIMAL},
+      REG_TYP = #{regTyp,jdbcType=VARCHAR},
+      REG_DTM = #{regDtm,jdbcType=TIMESTAMP},
+      UPD_DTM = #{updDtm,jdbcType=TIMESTAMP},
+      MINVAL = #{minval,jdbcType=DECIMAL},
+      MAXVAL = #{maxval,jdbcType=DECIMAL},
+      INCBY = #{incby,jdbcType=DECIMAL},
+      CYC_YN = #{cycYn,jdbcType=VARCHAR},
+      ORD_YN = #{ordYn,jdbcType=VARCHAR},
+      CACHE_SZ = #{cacheSz,jdbcType=DECIMAL},
+      LST_NUM = #{lstNum,jdbcType=DECIMAL},
+      DESCN = #{descn,jdbcType=VARCHAR},
+      DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR},
+      DDL_SEQ_ID = #{ddlSeqId,jdbcType=VARCHAR},
+      DBMS_TYPE = #{dbmsType,jdbcType=VARCHAR},
+      SUBJ_ID = #{subjId,jdbcType=VARCHAR},
+      ANA_DTM = #{anaDtm,jdbcType=TIMESTAMP},
+      CRT_DTM = #{crtDtm,jdbcType=TIMESTAMP},
+      CHG_DTM = #{chgDtm,jdbcType=TIMESTAMP},
+      DDL_SEQ_DESCN = #{ddlSeqDescn,jdbcType=VARCHAR},
+      DDL_SEQ_ERR_EXS = #{ddlSeqErrExs,jdbcType=VARCHAR},
+      DDL_SEQ_ERR_CD = #{ddlSeqErrCd,jdbcType=VARCHAR},
+      DDL_SEQ_ERR_DESCN = #{ddlSeqErrDescn,jdbcType=VARCHAR},
+      DDL_SEQ_EXTNC_EXS = #{ddlSeqExtncExs,jdbcType=VARCHAR}
+    where DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+      and DBC_SEQ_NM = #{dbcSeqNm,jdbcType=VARCHAR}
+  </update>
+  
+  <select id="selectList" parameterType="kr.wise.meta.dbc.service.WatDbcSeq" resultMap="BaseResultMap">
+	  SELECT A.DB_SCH_ID
+	      ,B.DB_SCH_LNM
+	      ,A.DB_CONN_TRG_ID
+	      ,C.DB_CONN_TRG_LNM
+	      ,A.SUBJ_ID
+	      ,D.FULL_PATH AS SUBJ_LNM
+	      ,A.DBC_SEQ_NM
+	      ,A.DDL_SEQ_ID
+	      ,DDL_SEQ_LNM
+	      ,DDL_SEQ_PNM
+	      ,A.REG_TYP
+	      ,A.REG_DTM
+	      ,A.VERS
+	      ,A.UPD_DTM
+	      ,'SEQ' AS OBJECT_TYPE
+		  ,A.MINVAL
+		  ,A.MAXVAL
+		  ,A.INCBY
+		  ,A.CYC_YN
+		  ,A.ORD_YN
+		  ,A.CACHE_SZ
+		  ,A.LST_NUM
+		  ,A.DESCN
+		  ,C.DBMS_TYP_CD AS DBMS_TYPE
+	  FROM WAT_DBC_SEQ A
+	    LEFT OUTER JOIN WAA_DB_SCH B
+	        ON A.DB_SCH_ID = B.DB_SCH_ID
+	        AND B.REG_TYP_CD IN ('C', 'U')
+	        AND B.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	<!--         AND NVL(A.REG_TYP, 'C') IN ('C', 'U') -->
+	    LEFT OUTER JOIN WAA_DB_CONN_TRG C
+	        ON A.DB_CONN_TRG_ID = C.DB_CONN_TRG_ID
+	        AND C.REG_TYP_CD IN ('C', 'U')
+	        AND C.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	    LEFT OUTER JOIN WAA_SUBJ D
+	        ON A.SUBJ_ID = D.SUBJ_ID
+	        AND D.REG_TYP_CD IN ('C', 'U')
+	        AND D.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	    LEFT OUTER JOIN WAM_DDL_SEQ E
+	        ON A.DDL_SEQ_ID = E.DDL_SEQ_ID
+	        AND E.REG_TYP_CD IN ('C', 'U')
+	  <where>
+	  <if test="dbConnTrgId != null" >
+	        AND A.DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR}
+	      </if>
+	  <if test="dbSchId != null" >
+	        AND A.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+	      </if>
+	  <if test="subjId != null" >
+	        AND A.SUBJ_ID = #{subjId,jdbcType=VARCHAR}
+	      </if>
+	  <if test="dbcSeqNm != null" >
+	        AND (DBC_SEQ_NM LIKE '%' || #{dbcSeqNm,jdbcType=VARCHAR} || '%'
+	        	OR DBC_SEQ_NM LIKE '%' || UPPER(#{dbcSeqNm,jdbcType=VARCHAR}) || '%')
+	      </if>
+	   <if test='cycYn != null '>
+		AND A.CYC_YN = #{cycYn,jdbcType=VARCHAR}
+		</if>
+		<if test='ordYn != null '>
+		AND A.ORD_YN = #{ordYn,jdbcType=VARCHAR}
+		</if>
+	  </where>
+	  ORDER BY DB_SCH_LNM, DBC_SEQ_NM
+  </select>
+</mapper>

@@ -1,0 +1,583 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.meta.app.service.WaqAppStwdMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.meta.app.service.WaqAppStwd" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+    <result column="APP_STWD_ID" property="appStwdId" jdbcType="VARCHAR" />
+    <result column="APP_STWD_LNM" property="appStwdLnm" jdbcType="VARCHAR" />
+    <result column="APP_STWD_PNM" property="appStwdPnm" jdbcType="VARCHAR" />
+    <result column="ENG_MEAN" property="engMean" jdbcType="VARCHAR" />
+    <result column="ORG_DS" property="orgDs" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    RQST_NO, RQST_SNO, APP_STWD_ID, APP_STWD_LNM, APP_STWD_PNM, RQST_DCD, RVW_STS_CD, 
+    RVW_CONTS, VRF_CD, VRF_RMK, ENG_MEAN, ORG_DS, OBJ_DESCN, OBJ_VERS, REG_TYP_CD, FRS_RQST_DTM, 
+    FRS_RQST_USER_ID, RQST_DTM, RQST_USER_ID, APRV_DTM, APRV_USER_ID
+  </sql>
+  <sql id="wam_col">
+   		, APP_STWD_LNM , APP_STWD_PNM , ENG_MEAN ,  ORG_DS 
+   		, RQST_NO , RQST_SNO , OBJ_DESCN , OBJ_VERS , REG_TYP_CD 
+		, FRS_RQST_DTM , FRS_RQST_USER_ID , RQST_DTM , RQST_USER_ID , APRV_DTM
+		, APRV_USER_ID 
+   </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="map" >
+    select /* WaqAppStwdMapper.selectByPrimaryKey */
+    <include refid="Base_Column_List" />
+    from WAQ_APP_STWD
+    where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      and RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+  </select>
+ 
+    <select id="selectRqstStndWord" resultMap="BaseResultMap" parameterType="kr.wise.meta.app.service.WaqAppStwd" >
+    SELECT /* WaqAppStwdMapper.selectRqstStndWord */
+    <include refid="Base_Column_List" />
+    FROM WAQ_APP_STWD
+    WHERE RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      AND RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="map" >
+    delete /* WaqAppStwdMapper.deleteByPrimaryKey */
+    from WAQ_APP_STWD
+    where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      and RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+  </delete>
+  <insert id="insert" parameterType="kr.wise.meta.app.service.WaqAppStwd" >
+    insert 	/* WaqAppStwdMapper.insert */
+    		into WAQ_APP_STWD (RQST_NO, RQST_SNO, APP_STWD_ID, 
+      APP_STWD_LNM, APP_STWD_PNM, RQST_DCD, 
+      RVW_STS_CD, RVW_CONTS, VRF_CD, 
+      VRF_RMK, ENG_MEAN, ORG_DS, 
+      OBJ_DESCN, OBJ_VERS, REG_TYP_CD, 
+      FRS_RQST_DTM, FRS_RQST_USER_ID, RQST_DTM, 
+      RQST_USER_ID, APRV_DTM, APRV_USER_ID
+      )
+    values (#{rqstNo,jdbcType=VARCHAR}, #{rqstSno,jdbcType=DECIMAL}, #{appStwdId,jdbcType=VARCHAR}, 
+      #{appStwdLnm,jdbcType=VARCHAR}, #{appStwdPnm,jdbcType=VARCHAR}, #{rqstDcd,jdbcType=VARCHAR}, 
+      #{rvwStsCd,jdbcType=VARCHAR}, #{rvwConts,jdbcType=VARCHAR}, #{vrfCd,jdbcType=VARCHAR}, 
+      #{vrfRmk,jdbcType=VARCHAR}, #{engMean,jdbcType=VARCHAR}, #{orgDs,jdbcType=VARCHAR}, 
+      #{objDescn,jdbcType=VARCHAR}, #{objVers,jdbcType=DECIMAL}, #{regTypCd,jdbcType=VARCHAR}, 
+      #{frsRqstDtm,jdbcType=TIMESTAMP}, #{frsRqstUserId,jdbcType=VARCHAR}, #{rqstDtm,jdbcType=TIMESTAMP}, 
+      #{rqstUserId,jdbcType=VARCHAR}, #{aprvDtm,jdbcType=TIMESTAMP}, #{aprvUserId,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="kr.wise.meta.app.service.WaqAppStwd" >
+    insert 	/* WaqAppStwdMapper.insertSelective */
+    		into WAQ_APP_STWD
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+        RQST_NO,
+        RQST_SNO,
+      <if test="appStwdId != null" >
+        APP_STWD_ID,
+      </if>
+      <if test="appStwdLnm != null" >
+        APP_STWD_LNM,
+      </if>
+      <if test="appStwdPnm != null" >
+        APP_STWD_PNM,
+      </if>
+      <if test="rqstDcd != null" >
+        RQST_DCD,
+      </if>
+      <if test="rvwStsCd != null" >
+        RVW_STS_CD,
+      </if>
+      <if test="rvwConts != null" >
+        RVW_CONTS,
+      </if>
+      <if test="vrfCd != null" >
+        VRF_CD,
+      </if>
+      <if test="vrfRmk != null" >
+        VRF_RMK,
+      </if>
+      <if test="engMean != null" >
+        ENG_MEAN,
+      </if>
+      <if test="orgDs != null" >
+        ORG_DS,
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN,
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS,
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD,
+      </if>
+      <if test="frsRqstDtm != null" >
+        FRS_RQST_DTM,
+      </if>
+      <if test="frsRqstUserId != null" >
+        FRS_RQST_USER_ID,
+      </if>
+      <if test="rqstDtm != null" >
+        RQST_DTM,
+      </if>
+      <if test="rqstUserId != null" >
+        RQST_USER_ID,
+      </if>
+      <if test="aprvDtm != null" >
+        APRV_DTM,
+      </if>
+      <if test="aprvUserId != null" >
+        APRV_USER_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+        #{rqstNo,jdbcType=VARCHAR},
+        (SELECT IFNULL(MAX(A.RQST_SNO), 0) + 1 FROM WAQ_APP_STWD A WHERE A.RQST_NO = #{rqstNo}) ,
+      <if test="appStwdId != null" >
+        #{appStwdId,jdbcType=VARCHAR},
+      </if>
+      <if test="appStwdLnm != null" >
+        #{appStwdLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="appStwdPnm != null" >
+        #{appStwdPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDcd != null" >
+        #{rqstDcd,jdbcType=VARCHAR},
+      </if>
+      <if test="rvwStsCd != null" >
+        #{rvwStsCd,jdbcType=VARCHAR},
+      </if>
+      <if test="rvwConts != null" >
+        #{rvwConts,jdbcType=VARCHAR},
+      </if>
+      <if test="vrfCd != null" >
+        #{vrfCd,jdbcType=VARCHAR},
+      </if>
+      <if test="vrfRmk != null" >
+        #{vrfRmk,jdbcType=VARCHAR},
+      </if>
+      <if test="engMean != null" >
+        #{engMean,jdbcType=VARCHAR},
+      </if>
+      <if test="orgDs != null" >
+        #{orgDs,jdbcType=VARCHAR},
+      </if>
+      <if test="objDescn != null" >
+        #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null" >
+        #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="frsRqstDtm != null" >
+        #{frsRqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="frsRqstUserId != null" >
+        #{frsRqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDtm != null" >
+        #{rqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rqstUserId != null" >
+        #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDtm != null" >
+        #{aprvDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aprvUserId != null" >
+        #{aprvUserId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.meta.app.service.WaqAppStwd" >
+    update 	/* WaqAppStwdMapper.updateByPrimaryKeySelective */
+    		WAQ_APP_STWD
+    <set >
+      <if test="appStwdId != null" >
+        APP_STWD_ID = #{appStwdId,jdbcType=VARCHAR},
+      </if>
+      <if test="appStwdLnm != null" >
+        APP_STWD_LNM = #{appStwdLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="appStwdPnm != null" >
+        APP_STWD_PNM = #{appStwdPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDcd != null" >
+        RQST_DCD = #{rqstDcd,jdbcType=VARCHAR},
+      </if>
+      <if test="rvwStsCd != null" >
+        RVW_STS_CD = #{rvwStsCd,jdbcType=VARCHAR},
+      </if>
+      <if test="rvwConts != null" >
+        RVW_CONTS = #{rvwConts,jdbcType=VARCHAR},
+      </if>
+      <if test="vrfCd != null" >
+        VRF_CD = #{vrfCd,jdbcType=VARCHAR},
+      </if>
+      <if test="vrfRmk != null" >
+        VRF_RMK = #{vrfRmk,jdbcType=VARCHAR},
+      </if>
+      <if test="engMean != null" >
+        ENG_MEAN = #{engMean,jdbcType=VARCHAR},
+      </if>
+      <if test="orgDs != null" >
+        ORG_DS = #{orgDs,jdbcType=VARCHAR},
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="frsRqstDtm != null" >
+        FRS_RQST_DTM = #{frsRqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="frsRqstUserId != null" >
+        FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDtm != null" >
+        RQST_DTM = #{rqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rqstUserId != null" >
+        RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDtm != null" >
+        APRV_DTM = #{aprvDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aprvUserId != null" >
+        APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      and RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="kr.wise.meta.app.service.WaqAppStwd" >
+    update 	/* WaqAppStwdMapper.updateByPrimaryKey */
+    		WAQ_APP_STWD
+    set APP_STWD_ID = #{appStwdId,jdbcType=VARCHAR},
+      APP_STWD_LNM = #{appStwdLnm,jdbcType=VARCHAR},
+      APP_STWD_PNM = #{appStwdPnm,jdbcType=VARCHAR},
+      RQST_DCD = #{rqstDcd,jdbcType=VARCHAR},
+      RVW_STS_CD = #{rvwStsCd,jdbcType=VARCHAR},
+      RVW_CONTS = #{rvwConts,jdbcType=VARCHAR},
+      VRF_CD = #{vrfCd,jdbcType=VARCHAR},
+      VRF_RMK = #{vrfRmk,jdbcType=VARCHAR},
+      ENG_MEAN = #{engMean,jdbcType=VARCHAR},
+      ORG_DS = #{orgDs,jdbcType=VARCHAR},
+      OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      FRS_RQST_DTM = #{frsRqstDtm,jdbcType=TIMESTAMP},
+      FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR},
+      RQST_DTM = #{rqstDtm,jdbcType=TIMESTAMP},
+      RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      APRV_DTM = #{aprvDtm,jdbcType=TIMESTAMP},
+      APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR}
+    where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      and RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+  </update>
+    <insert id="checkRequestStwd" parameterType="map">
+    
+    /* WaqAppStwdMapper.checkRequestStwd */
+    
+  	<include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSql"/>
+	--  검증쿼리 : 등록요청 중인 APP표준단어 존재....(AD011)
+	AND EXISTS (
+    		SELECT 1 FROM WAQ_MSTR E
+             INNER JOIN WAQ_APP_STWD D
+             	ON E.RQST_NO = D.RQST_NO
+             WHERE D.RQST_NO != #{rqstNo}
+               AND E.RQST_STEP_CD = 'Q'
+               AND A.APP_STWD_LNM = D.APP_STWD_LNM
+               AND A.APP_STWD_PNM = D.APP_STWD_PNM
+			   AND IFNULL(D.RVW_STS_CD, 0) != '2'
+               ) 
+  </insert>
+    <insert id="checkDupStwd" parameterType="map" >
+    
+    /* WaqAppStwdMapper.checkDupStwd */
+    
+  	<include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSql"/>
+	-- 검증쿼리
+      AND EXISTS (SELECT 1
+                  FROM WAQ_APP_STWD D
+                  WHERE A.RQST_NO = D.RQST_NO
+                    AND A.APP_STWD_LNM = D.APP_STWD_LNM
+                    AND A.APP_STWD_PNM = D.APP_STWD_PNM
+                    AND A.RQST_SNO != D.RQST_SNO)
+  </insert>
+    <insert id="checkNotExistStwd" parameterType="map" >
+    
+    /* WaqAppStwdMapper.checkNotExistStwd */
+    
+    <include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSql"/>
+	-- 검증쿼리
+      AND A.RQST_DCD = 'DD'
+      AND NOT EXISTS (SELECT 1
+	                  FROM WAM_APP_STWD D
+	                  WHERE A.APP_STWD_LNM = D.APP_STWD_LNM
+	                    AND A.APP_STWD_PNM = D.APP_STWD_PNM
+	                    AND D.REG_TYP_CD IN ('C', 'U'))
+  </insert>
+    <insert id="checkUseStwd" parameterType="map" >
+    
+    /* WaqAppStwdMapper.checkUseStwd */
+    
+	<include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSql"/>
+	-- 검증쿼리
+      AND A.RQST_DCD = 'DD'
+    --   AND EXISTS (             )
+  </insert>
+    <insert id="checkLnmExistSpac" parameterType="map" >
+    
+    /* WaqAppStwdMapper.checkLnmExistSpac */
+    
+  	<include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSql"/>
+    <![CDATA[ 
+	-- 검증쿼리
+      AND A.RQST_DCD = 'CU'
+      AND INSTR(A.APP_STWD_LNM, ' ') > 0
+    ]]>
+  </insert>
+    <insert id="checkPnmExistSpac" parameterType="map" >
+    
+    /* WaqAppStwdMapper.checkPnmExistSpac */
+    
+  	<include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSql"/>
+    <![CDATA[ 
+	-- 검증쿼리
+      AND A.RQST_DCD = 'CU'
+      AND INSTR(A.APP_STWD_PNM, ' ') > 0
+    ]]>
+  </insert>
+    <insert id="checkLnmMaxLen" parameterType="map" >
+    
+    /* WaqAppStwdMapper.checkLnmMaxLen */
+    
+  	<include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSql"/>
+    <![CDATA[ 
+	-- 검증쿼리
+      AND A.RQST_DCD = 'CU'
+      AND LENGTH(A.APP_STWD_LNM) > 15
+    ]]>
+  </insert>
+    <insert id="checkPnmMaxLen" parameterType="map" >
+    
+    /* WaqAppStwdMapper.checkPnmMaxLen */
+    
+  	<include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSql"/>
+    <![CDATA[ 
+	-- 검증쿼리
+      AND A.RQST_DCD = 'CU'
+      AND LENGTH(A.APP_STWD_PNM) > 15
+    ]]>
+  </insert>
+   <insert id="checkNoChg" parameterType="map" >
+   
+   /* WaqAppStwdMapper.checkNoChg */
+   
+  	<include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSql"/>
+	-- 검증쿼리
+      AND A.REG_TYP_CD = 'U'
+      AND EXISTS (SELECT 1
+            FROM WAM_APP_STWD D
+            WHERE A.APP_STWD_LNM = D.APP_STWD_LNM
+              AND A.APP_STWD_PNM = D.APP_STWD_PNM
+              AND IFNULL(A.ENG_MEAN,'_') = IFNULL(D.ENG_MEAN,'_')
+              AND IFNULL(A.ORG_DS,'_') = IFNULL(D.ORG_DS,'_')
+              AND IFNULL(A.OBJ_DESCN,'_') = IFNULL(D.OBJ_DESCN,'_')
+              AND D.REG_TYP_CD IN ('C','U')
+                  )
+  </insert>
+    <select id="selectrqstStndWordListbyMst" resultMap="BaseResultMap" parameterType="kr.wise.commons.rqstmst.service.WaqMstr" >
+  SELECT /* WaqAppStwdMapper.selectrqstStndWordListbyMst */
+     A.RQST_NO, A.RQST_SNO, A.APP_STWD_ID, A.APP_STWD_LNM, A.APP_STWD_PNM, A.RQST_DCD
+     <if test='rqstStepCd == "Q" '>
+     , CASE WHEN A.RVW_STS_CD = '2' THEN '2' ELSE '0' END AS RVW_STS_CD
+     </if>
+     <if test='rqstStepCd != "Q" '>
+     , A.RVW_STS_CD
+     </if>
+     , A.RVW_CONTS
+     , A.VRF_CD, A.VRF_RMK, A.ENG_MEAN, A.ORG_DS, A.OBJ_DESCN, A.OBJ_VERS, A.REG_TYP_CD, A.FRS_RQST_DTM
+     , A.FRS_RQST_USER_ID, A.RQST_DTM, A.RQST_USER_ID, A.APRV_DTM, A.APRV_USER_ID
+     , U.USER_NM AS RQST_USER_NM
+     , CASE WHEN A.VRF_CD = '2' THEN '#FF0000' END AS FontColor
+    FROM WAQ_APP_STWD A
+            LEFT OUTER JOIN WAA_USER U
+             ON A.RQST_USER_ID = U.USER_ID
+            AND U.EXP_DTM = STR_TO_DATE('99991231','%Y%m%d')
+            AND U.REG_TYP_CD IN ('C','U')
+    WHERE RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+    <if test='rqstStepCd == "Q" '>
+    	AND VRF_CD = '1'
+    </if>
+    ORDER BY RQST_SNO
+  </select>
+    <delete id="deleteByrqstSno" parameterType="kr.wise.meta.app.service.WaqAppStwd">
+    DELETE /* WaqAppStwdMapper.deleteByrqstSno */
+    FROM WAQ_APP_STWD
+    WHERE RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      AND RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+  </delete>
+    <delete id="deletebyRqstSno" parameterType="map">
+  	DELETE /* WaqAppStwdMapper.deletebyRqstSno */
+  	FROM WAQ_APP_STWD 
+  	WHERE RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+  	  AND RQST_SNO IN
+  	<foreach collection="ids" item="sid" index="index" open="(" separator="," close=")">
+  		#{sid}
+  	</foreach>
+  </delete>
+    <update id="updatervwStsCd" parameterType="kr.wise.meta.app.service.WaqAppStwd" >
+  	UPDATE /* WaqAppStwdMapper.updatervwStsCd */
+  	WAQ_APP_STWD
+  	<set>
+  	    RVW_STS_CD 	= '1' , --  승인 
+  		RVW_CONTS 	= #{rvwConts} , 
+  		APRV_DTM	= NOW() ,
+  		APRV_USER_ID = #{aprvUserId} ,
+  	</set>
+    WHERE RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      AND RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+      AND VRF_CD = '1'
+      AND IFNULL(RVW_STS_CD, '_') != '2'
+  </update>
+    <insert id="insertwam2waq" parameterType="map">
+  	INSERT 	/* WaqAppStwdMapper.insertwam2waq */
+  			INTO WAQ_APP_STWD (RQST_NO, RQST_SNO, APP_STWD_ID,  APP_STWD_LNM, APP_STWD_PNM, RQST_DCD,ENG_MEAN,  ORG_DS, OBJ_DESCN, OBJ_VERS,  RQST_DTM , RQST_USER_ID)
+  	SELECT #{reqmst.rqstNo} 
+  		  , (SELECT IFNULL(MAX(RQST_SNO), 0) FROM WAQ_APP_STWD WHERE RQST_NO = #{reqmst.rqstNo}) + ROWNUM
+  		  , APP_STWD_ID,  APP_STWD_LNM, APP_STWD_PNM
+  		  , #{reqmst.rqstDcd} AS RQST_DCD ,ENG_MEAN,  ORG_DS, OBJ_DESCN, OBJ_VERS
+  		  , NOW()
+  		  , #{reqmst.rqstUserId,jdbcType=VARCHAR}
+      FROM WAM_APP_STWD 
+     WHERE APP_STWD_ID IN 
+     <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+     	#{item.appStwdId}
+     </foreach>
+       AND REG_TYP_CD IN ('C' , 'U')
+  </insert>
+     <select id="selectWaqC" parameterType="map" resultMap="BaseResultMap">
+   	SELECT 	/* WaqAppStwdMapper.selectWaqC */
+		* FROM WAQ_APP_STWD
+   	WHERE RQST_NO = #{rqstNo}
+   	  AND RVW_STS_CD = '1'  -- 승인
+   	  AND REG_TYP_CD = 'C'
+   </select>
+     <update id="updateidByKey" parameterType="kr.wise.meta.app.service.WaqAppStwd" >
+  	UPDATE 	/* WaqAppStwdMapper.updateidByKey */
+  			WAQ_APP_STWD SET APP_STWD_ID = #{appStwdId,jdbcType=VARCHAR} , OBJ_VERS = 1
+  	 WHERE RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+       AND RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+  </update>
+    <select id="selectListByStwdLnm" resultMap="BaseResultMap" parameterType="kr.wise.meta.app.service.WaqAppStwd">
+    SELECT 	/* WaqAppStwdMapper.selectListByStwdLnm */
+    		A.STWD_LNM, A.STWD_PNM
+      FROM WAM_STWD A
+    WHERE A.STWD_LNM = #{appStwdLnm,jdbcType=VARCHAR}
+      AND A.REG_TYP_CD in ('C','U')
+  </select>
+  <update id="updateCheckInit" parameterType="java.lang.String" >
+    UPDATE 	/* WaqAppStwdMapper.updateCheckInit */
+    		WAQ_APP_STWD A
+    	SET A.REG_TYP_CD = (SELECT CASE WHEN A.RQST_DCD = 'DD' THEN 'D' ELSE CASE WHEN MAX(B.APP_STWD_ID) IS NULL THEN 'C' ELSE 'U' END END
+                        FROM WAM_APP_STWD B
+                        WHERE B.REG_TYP_CD IN ('C','U')
+                          AND B.APP_STWD_LNM = A.APP_STWD_LNM
+                          AND B.APP_STWD_PNM = A.APP_STWD_PNM)
+       ,A.VRF_CD = '4'
+    WHERE A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+  </update>
+     <update id="updateWaqCUD" parameterType="map">
+   	-- WAQ ID, VERS 등을 업데이트...
+	UPDATE 	/* WaqAppStwdMapper.updateWaqCUD */
+			WAQ_APP_STWD A
+	 INNER JOIN  WAM_APP_STWD B
+	ON B.APP_STWD_LNM = A.APP_STWD_LNM
+	AND B.APP_STWD_PNM = A.APP_STWD_PNM
+	AND B.REG_TYP_CD IN ('C', 'U')
+	SET A.APP_STWD_ID      = B.APP_STWD_ID
+	  , A.OBJ_VERS         = IFNULL(B.OBJ_VERS, 0) + 1 
+	  , A.FRS_RQST_DTM     = B.FRS_RQST_DTM
+	  , A.FRS_RQST_USER_ID = B.FRS_RQST_USER_ID
+	WHERE A.RQST_NO = #{rqstNo}
+	-- AND A.VRF_CD = '1' 		-- 등록가능
+	AND A.RVW_STS_CD = '1'  -- 승인
+	AND EXISTS (
+		SELECT 1
+		  FROM WAM_APP_STWD C
+		 WHERE C.APP_STWD_LNM = A.APP_STWD_LNM
+	       AND C.APP_STWD_PNM = A.APP_STWD_PNM
+	       AND C.REG_TYP_CD IN ('C', 'U')
+	)
+   </update>
+      <delete id="deleteWAM" parameterType="map">
+    -- WAM 삭제 (등록유형코드가REG_TYP_CD 변경, 삭제일 경우)
+	DELETE A /* WaqAppStwdMapper.deleteWAM */
+	FROM WAM_APP_STWD A
+	WHERE EXISTS (
+	    SELECT 1 FROM WAQ_APP_STWD B
+	    WHERE B.RQST_NO = #{rqstNo}
+	    AND B.RVW_STS_CD = '1'
+	    AND B.APP_STWD_PNM = A.APP_STWD_PNM
+	    AND B.APP_STWD_LNM = A.APP_STWD_LNM
+	)
+   </delete>
+      <insert id="insertWAM" parameterType="map">
+   	-- WAM 추가 (WAQ 내용을 추가, REG_TYP_CD 가 신규,변경일 경우)
+	INSERT 	/* WaqAppStwdMapper.insertWAM */
+			INTO WAM_APP_STWD 
+	SELECT 
+		APP_STWD_ID 
+	
+	<include refid="wam_col"/>
+	
+	FROM WAQ_APP_STWD A
+	WHERE A.RQST_NO = #{rqstNo}
+	AND A.RVW_STS_CD = '1'
+	AND A.REG_TYP_CD IN ('C', 'U')
+   </insert>
+      <update id="updateWAH"  parameterType="map">
+   	-- WAH 이력 만료...
+	UPDATE 	/* WaqAppStwdMapper.updateWAH */
+			WAH_APP_STWD A
+	SET EXP_DTM = NOW()
+	WHERE EXISTS (
+	    SELECT 1 FROM WAQ_APP_STWD B
+	    WHERE B.RQST_NO = #{rqstNo}
+	    AND B.RVW_STS_CD = '1'
+	    AND B.APP_STWD_PNM = A.APP_STWD_PNM
+	    AND B.APP_STWD_LNM = A.APP_STWD_LNM
+	    )
+	AND EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+   </update>
+      <insert id="insertWAH"  parameterType="map">
+   	-- WAH이력 적재...
+	INSERT 	/* WaqAppStwdMapper.insertWAH */
+			INTO WAH_APP_STWD
+	SELECT
+	    A.APP_STWD_ID 
+	    , STR_TO_DATE('9999-12-31', '%Y-%m-%d') AS EXP_DTM
+	    , NOW() AS STR_DTM 
+	
+	<include refid="wam_col"/>
+   
+	FROM WAQ_APP_STWD A
+	WHERE A.RQST_NO = #{rqstNo}
+	AND A.RVW_STS_CD = '1'
+   </insert>
+  <update id="updateWAM" parameterType="map" >
+    UPDATE 	/* WaqAppStwdMapper.updateWAM */
+    		WAM_APP_STWD A
+       SET A.APP_STWD_PNM = (SELECT STWD_PNM 
+       						   FROM WAM_STWD B
+       						  WHERE B.RQST_NO = #{rqstNo}
+       						    AND A.APP_STWD_LNM = B.STWD_LNM)
+	 WHERE EXISTS (SELECT 1
+	 				 FROM WAM_STWD B
+	 				WHERE B.RQST_NO = #{rqstNo}
+	 				  AND A.APP_STWD_LNM = B.STWD_LNM
+	 				  AND A.APP_STWD_PNM != B.STWD_PNM)
+  </update>
+</mapper>

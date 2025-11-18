@@ -1,0 +1,2204 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.dq.dqrs.service.DqrsResultMapper" >
+  <resultMap id="DqrsResultMap" type="kr.wise.dq.dqrs.service.DqrsPoiResult" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+    <id column="DB_SCH_ID" property="dbSchId" jdbcType="VARCHAR" />
+    <id column="DBC_TBL_NM" property="dbcTblNm" jdbcType="VARCHAR" />
+    <result column="DBC_TBL_KOR_NM" property="dbcTblKorNm" jdbcType="VARCHAR" />
+    <result column="ANA_TRG_YN" property="anaTrgYn" jdbcType="VARCHAR" />
+    <result column="VERS" property="vers" jdbcType="DECIMAL" />
+    <result column="REG_TYP" property="regTyp" jdbcType="VARCHAR" />
+    <result column="REG_DTM" property="regDtm" jdbcType="DATE" />
+    <result column="UPD_DTM" property="updDtm" jdbcType="DATE" />
+    <result column="EXP_DTM" property="expDtm" jdbcType="DATE" />
+    <result column="DESCN" property="descn" jdbcType="VARCHAR" />
+    <result column="DB_CONN_TRG_ID" property="dbConnTrgId" jdbcType="VARCHAR" />
+    
+    <!-- 진단대상테이블현황 -->
+    <result column="TRG_TBL_CNT" property="trgTblCnt" jdbcType="VARCHAR" />
+    <result column="TRG_EXC_CNT" property="trgExcCnt" jdbcType="VARCHAR" />
+    <result column="NT_CLLC_CNT" property="ntCllcCnt" jdbcType="VARCHAR" />
+    <result column="TRG_TBL_RT" property="trgTblRt" jdbcType="VARCHAR" />
+    <result column="TRG_EXC_RT" property="trgExcRt" jdbcType="VARCHAR" />
+    <result column="NT_CLLC_RT" property="ntCllcRt" jdbcType="VARCHAR" />
+    
+    <!-- 진단실행상태 -->
+    <result column="ANA_CML_CNT" property="anaCmlCnt" jdbcType="VARCHAR" />
+    <result column="ANA_RNN_CNT" property="anaRnnCnt" jdbcType="VARCHAR" />
+    <result column="ANA_FAL_CNT" property="anaFalCnt" jdbcType="VARCHAR" />
+    <result column="ANA_CML_RT" property="anaCmlRt" jdbcType="VARCHAR" />
+    <result column="ANA_RNN_RT" property="anaRnnRt" jdbcType="VARCHAR" />
+    <result column="ANA_FAL_RT" property="anaFalRt" jdbcType="VARCHAR" />
+    
+    <!-- 값진단결과 -->
+    <result column="ANA_TRG_COL" property="anaTrgCol" jdbcType="VARCHAR" />
+    <result column="ANA_ERR_COL" property="anaErrCol" jdbcType="VARCHAR" />
+    <result column="ER_CNT" property="erCnt" jdbcType="VARCHAR" />
+    <result column="ERR_RT" property="errRt" jdbcType="VARCHAR" />
+    
+    <!-- 검증룰 -->
+    <result column="KND_CD" property="kndCd" jdbcType="VARCHAR" />
+    <!-- 검증룰명 -->
+    <result column="KND_NM" property="kndNm" jdbcType="VARCHAR" />
+    
+    <!-- 진단대상테이블 -->
+    <result column="ANA_TRG_STATUS" property="anaTrgStatus" jdbcType="VARCHAR" />
+  	<result column="ANA_TRG_RANGE_CON" property="anaTrgRangeCon" jdbcType="VARCHAR" />
+  	<result column="ANA_DTM" property="anaDtm" jdbcType="TIMESTAMP" />
+  	
+  	<!-- 도메인 -->
+  	<result column="VRF_FRM" property="vrfFrm" jdbcType="VARCHAR" />
+  	<result column="ERR_EXC_DATA" property="errExcData" jdbcType="VARCHAR" />
+  	<result column="APRV_DTM" property="aprvDtm" jdbcType="TIMESTAMP" />
+  	<result column="DATA_PTR" property="dataPtr" jdbcType="VARCHAR" />
+  	<result column="DBC_COL_OPN" property="dbcColOpn" jdbcType="VARCHAR" />
+    
+    <!-- 참조무결성 -->
+    <result column="CH_TBL_DBC_TBL_NM" property="chTblDbcTblNm" jdbcType="VARCHAR" />
+  	<result column="CH_TBL_DBC_COL_NM" property="chTblDbcColNm" jdbcType="VARCHAR" />
+  	<result column="REL_COL_SNO" property="relColSno" jdbcType="VARCHAR" />
+  	<result column="PA_TBL_DBC_COL_NM" property="paTblDbcColNm" jdbcType="VARCHAR" />
+  	<result column="PA_TBL_DBC_TBL_NM" property="paTblDbcTblNm" jdbcType="VARCHAR" />
+  	<result column="PA_TBL_ADT_CND_SQL" property="paTblAdtCndSql" jdbcType="VARCHAR" />
+  	
+  	<!-- 필수값완전성 -->
+  	<result column="AONL_YN" property="aonlYn" jdbcType="VARCHAR" />
+    <result column="DBC_COL_NM" property="dbcColNm" jdbcType="VARCHAR" />
+    <result column="DBC_COL_KOR_NM" property="dbcColKorNm" jdbcType="VARCHAR" />
+    <result column="DATA_TYPE" property="dataType" jdbcType="VARCHAR" />
+    <result column="DATA_LEN" property="dataLen" jdbcType="VARCHAR" />
+    
+    <!-- 데이터 중복 -->
+    <result column="COL_SEQ_PNM" property="colSeqPnm" jdbcType="VARCHAR" />
+    <result column="COL_SEQ_LNM" property="colSeqLnm" jdbcType="VARCHAR" />
+    
+    <!-- 업무규칙 -->
+    <result column="BIZ_AREA_LNM" property="bizAreaLnm" jdbcType="VARCHAR" />
+    <result column="BR_ID" property="brId" jdbcType="VARCHAR" />
+    <result column="BR_NM" property="brNm" jdbcType="VARCHAR" />
+    <result column="OBJ_DESCN" property="objDescn" jdbcType="VARCHAR" />
+    <result column="CNT_SQL" property="cntSql" jdbcType="VARCHAR" />
+    <result column="ANA_SQL" property="anaSql" jdbcType="VARCHAR" />
+    <result column="ER_CNT_SQL" property="erCntSql" jdbcType="VARCHAR" />
+    
+    <!-- 진단항목대상정보 -->
+    <result column="ANA_STS_TXT" property="anaStsTxt" jdbcType="VARCHAR" />
+    <result column="ANA_STR_DTM" property="anaStrDtm" jdbcType="TIMESTAMP" />
+
+    <!-- 진단항목오류정보 -->
+    <!-- 관계분석(참조테이블, 참조컬럼) -->
+    <result column="DBC_PA_TBL_NM" property="dbcPaTblNm" jdbcType="VARCHAR" />
+    <result column="DBC_PA_COL_NM" property="dbcPaColNm" jdbcType="VARCHAR" />
+    <result column="OBJ_ID" property="objId" jdbcType="VARCHAR" />
+    <result column="OBJ_DATE" property="objDate" jdbcType="VARCHAR" />
+    <result column="PRF_KND_CD" property="prfKndCd" jdbcType="VARCHAR" />
+    <result column="COL_ERR_RATE" property="colErrRate" jdbcType="VARCHAR" />
+    <result column="ESN_ER_CNT" property="esnErCnt" jdbcType="VARCHAR" />
+    <result column="ANA_CNT" property="anaCnt" jdbcType="VARCHAR" />
+    <result column="ERR_SQL" property="errSql" jdbcType="VARCHAR" />
+    
+    <result column="STR_ANA_DTM" property="strAnaDtm" jdbcType="VARCHAR" />
+    <result column="STR_APRV_DTM" property="strAprvDtm" jdbcType="VARCHAR" />
+    <result column="STR_ANA_STR_DTM" property="strAnaStrDtm" jdbcType="VARCHAR" />
+    
+  </resultMap>
+  
+  <!-- 검증룰종합현황List -->
+  <resultMap id="ResultMap" type="kr.wise.dq.dqrs.service.DqrsResult">
+		<result column="UPP_DQI_LNM"  property="uppDqiLnm"  jdbcType="VARCHAR"  />
+		<result column="DQI_LNM"      property="dqiLnm"     jdbcType="VARCHAR"  />
+		
+		<result column="UPP_DQI_LNM"  property="cntName"    jdbcType="VARCHAR"  />
+		<result column="TOT_CNT"      property="totCnt"     jdbcType="VARCHAR"  />	
+		<result column="ERR_CNT"      property="errCnt"     jdbcType="VARCHAR"  />	
+		<result column="ERR_RATE"     property="errRate"    jdbcType="VARCHAR"  />
+		<result column="NO_EXE"       property="noExe"      jdbcType="VARCHAR"  />
+		<result column="COL_CNT"      property="colCnt"     jdbcType="VARCHAR"  />
+		<result column="TBL_CNT"      property="tblCnt"     jdbcType="VARCHAR"  />
+		<result column="SUM_RATE"     property="sumRate"    jdbcType="VARCHAR"  />
+		
+		<result column="ANA_STR_DTM"  property="anaStrDtm"  jdbcType="VARCHAR"  />
+		<result column="ANA_END_DTM"  property="anaEndDtm"  jdbcType="VARCHAR"  />
+		
+		<result column="ERR_SQL"  property="errSql"  jdbcType="CLOB"  />
+		<result column="DBC_TBL_KOR_NM"  property="dbcTblKorNm"  jdbcType="VARCHAR"  />
+		<result column="DBC_COL_KOR_NM"  property="dbcColKorNm"  jdbcType="VARCHAR"  />
+		<result column="PRF_KND_CD"  property="prfKndCd"  jdbcType="VARCHAR"  />
+		<result column="PRF_TYP"  property="prfTyp"  jdbcType="VARCHAR"  />
+		<result column="PRF_NM"  property="prfNm"  jdbcType="VARCHAR"  />
+		<result column="PRF_ID"  property="prfId"  jdbcType="VARCHAR"  />
+		<result column="DATA_TYPE"  property="dataType"  jdbcType="VARCHAR"  />
+		<result column="EXP_YN"  property="expYn"  jdbcType="VARCHAR"  />
+		<result column="EXP_RSN_CNTN"  property="expRsnCntn"  jdbcType="VARCHAR"  />
+		
+		<result column="DB_SCH_PNM"  property="dbSchPnm"  jdbcType="VARCHAR"  />
+		<result column="DB_SCH_LNM"  property="dbSchLnm"  jdbcType="VARCHAR"  />
+		<result column="DBC_TBL_NM"  property="dbcTblNm"  jdbcType="VARCHAR"  />
+		<result column="DBC_COL_NM"  property="dbcColNm"  jdbcType="VARCHAR"  />
+		
+		<result column="STND_RATE"     property="stndRate"    jdbcType="VARCHAR"  />
+		<result column="GOAL"     property="goal"    jdbcType="VARCHAR"  />
+		
+		<result column="OBJ_DESCN"     property="objDescn"    jdbcType="VARCHAR"  />
+		<result column="DATA_LEN"     property="dataLen"    jdbcType="VARCHAR"  />
+		<result column="DATA_SCAL"     property="dataScal"    jdbcType="VARCHAR"  />
+		
+		<result column="VRFC_TYP"     property="vrfcTyp"    jdbcType="VARCHAR"  />
+		<result column="ANA_STS_CD"     property="anaStsCd"    jdbcType="VARCHAR"  />
+		<result column="VRFC_NM"     property="vrfcNm"    jdbcType="VARCHAR"  />
+		<result column="VRFC_RULE"     property="vrfcRule"    jdbcType="VARCHAR"  />
+	</resultMap>
+	
+	<resultMap id="DbmsResultMap" type="kr.wise.dq.dqrs.service.DqrsDbConnTrgVO" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+	    <id column="DB_CONN_TRG_ID" jdbcType="VARCHAR" property="dbConnTrgId" />
+	    <result column="DB_CONN_TRG_PNM" jdbcType="VARCHAR" property="dbConnTrgPnm" />
+	    <result column="DB_CONN_TRG_LNM" jdbcType="VARCHAR" property="dbConnTrgLnm" />
+	    <result column="DBMS_TYP_CD" jdbcType="VARCHAR" property="dbmsTypCd" />
+	    <result column="DBMS_VERS_CD" jdbcType="VARCHAR" property="dbmsVersCd" />
+	    <result column="CONN_TRG_DB_LNK_CHRW" jdbcType="VARCHAR" property="connTrgDbLnkChrw" />
+	    <result column="CONN_TRG_LNK_URL" jdbcType="VARCHAR" property="connTrgLnkUrl" />
+	    <result column="CONN_TRG_DRVR_NM" jdbcType="VARCHAR" property="connTrgDrvrNm" />
+	    <result column="CRGP_NM" jdbcType="VARCHAR" property="crgpNm" />
+	    <result column="CRGP_CNTEL" jdbcType="VARCHAR" property="crgpCntel" />
+	    <result column="DB_CONN_AC_ID" jdbcType="VARCHAR" property="dbConnAcId" />
+	   <result column="DB_CONN_AC_PWD" jdbcType="VARCHAR" property="dbConnAcPwd" />
+	   <result column="DB_LNK_STS" jdbcType="VARCHAR" property="dbLnkSts" />
+	   <result column="DB_SCH_ID" property="dbSchId" jdbcType="VARCHAR" />
+	   <result column="DB_SCH_PNM" property="dbSchPnm" jdbcType="VARCHAR" />
+	    <result column="DB_SCH_LNM" property="dbSchLnm" jdbcType="VARCHAR" />
+	    <result column="DDL_TRG_YN" property="ddlTrgYn" jdbcType="VARCHAR" />
+	    <result column="CLT_XCL_YN" property="cltXclYn" jdbcType="VARCHAR" />
+	    <result column="DDL_TRG_DCD" property="ddlTrgDcd" jdbcType="VARCHAR" />
+	    <result column="CD_SND_TRG_YN" property="cdSndTrgYn" jdbcType="VARCHAR" />
+	    <result column="CD_AUTO_SND_YN" property="cdAutoSndYn" jdbcType="VARCHAR" />
+	    <result column="WRIT_USER_NM" property="writUserNm" jdbcType="VARCHAR" />
+	    <result column="META_MNG_YN" property="metaMngYn" jdbcType="VARCHAR" />
+	    <result column="DB_SCH_ID" property="dbSchId" jdbcType="VARCHAR" />
+	    <result column="DB_SCH_LNM" property="dbSchLnm" jdbcType="VARCHAR" />
+	    <result column="DB_SCH_PNM" property="dbSchPnm" jdbcType="VARCHAR" />
+	    <result column="INFO_SYS_NM" property="infoSysNm" jdbcType="VARCHAR" />
+	    <result column="ORG_NM" property="orgNm" jdbcType="VARCHAR" />
+	    <result column="SCH_EXST" property="schExst" jdbcType="VARCHAR" />
+	    <result column="INFO_SYS_CD" property="infoSysCd" jdbcType="VARCHAR" />
+	  </resultMap>
+	  
+	  <resultMap id="GapResultMap" type="kr.wise.dq.dqrs.service.DqrsPoiGapResult"  extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+		<result column="UPP_DQI_LNM"  property="uppDqiLnm"  jdbcType="VARCHAR"  />
+		<result column="DQI_LNM"      property="dqiLnm"     jdbcType="VARCHAR"  />
+		
+		<result column="UPP_DQI_LNM"  property="cntName"    jdbcType="VARCHAR"  />
+		<result column="TOT_CNT"      property="totCnt"     jdbcType="VARCHAR"  />	
+		<result column="ERR_CNT"      property="errCnt"     jdbcType="VARCHAR"  />	
+		<result column="ERR_RATE"     property="errRate"    jdbcType="VARCHAR"  />
+		<result column="NO_EXE"       property="noExe"      jdbcType="VARCHAR"  />
+		<result column="COL_CNT"      property="colCnt"     jdbcType="VARCHAR"  />
+		<result column="TBL_CNT"      property="tblCnt"     jdbcType="VARCHAR"  />
+		<result column="SUM_RATE"     property="sumRate"    jdbcType="VARCHAR"  />
+		
+		<result column="ANA_STR_DTM"  property="anaStrDtm"  jdbcType="VARCHAR"  />
+		<result column="ANA_END_DTM"  property="anaEndDtm"  jdbcType="VARCHAR"  />
+		
+		<result column="ERR_SQL"  property="errSql"  jdbcType="CLOB"  />
+		<result column="DBC_TBL_KOR_NM"  property="dbcTblKorNm"  jdbcType="VARCHAR"  />
+		<result column="DBC_COL_KOR_NM"  property="dbcColKorNm"  jdbcType="VARCHAR"  />
+		<result column="PRF_KND_CD"  property="prfKndCd"  jdbcType="VARCHAR"  />
+		<result column="PRF_TYP"  property="prfTyp"  jdbcType="VARCHAR"  />
+		<result column="PRF_NM"  property="prfNm"  jdbcType="VARCHAR"  />
+		<result column="PRF_ID"  property="prfId"  jdbcType="VARCHAR"  />
+		<result column="PRF_YN"  property="prfYn"  jdbcType="VARCHAR"  />
+		<result column="DATA_TYPE"  property="dataType"  jdbcType="VARCHAR"  />
+		<result column="EXP_YN"  property="expYn"  jdbcType="VARCHAR"  />
+		<result column="EXP_RSN_CNTN"  property="expRsnCntn"  jdbcType="VARCHAR"  />
+		
+		<result column="DB_SCH_PNM"  property="dbSchPnm"  jdbcType="VARCHAR"  />
+		<result column="DB_SCH_LNM"  property="dbSchLnm"  jdbcType="VARCHAR"  />
+		<result column="DBC_TBL_NM"  property="dbcTblNm"  jdbcType="VARCHAR"  />
+		<result column="DBC_COL_NM"  property="dbcColNm"  jdbcType="VARCHAR"  />
+		
+		<result column="STND_RATE"     property="stndRate"    jdbcType="VARCHAR"  />
+		<result column="GOAL"     property="goal"    jdbcType="VARCHAR"  />
+		
+		<result column="PDM_TBL_PNM"     property="pdmTblPnm"    jdbcType="VARCHAR"  />
+		<result column="PDM_COL_PNM"     property="pdmColPnm"    jdbcType="VARCHAR"  />
+		<result column="PDM_TBL_LNM"     property="pdmTblLnm"    jdbcType="VARCHAR"  />
+		<result column="PDM_COL_LNM"     property="pdmColLnm"    jdbcType="VARCHAR"  />
+		<result column="DATA_TYPE"     property="dataType"    jdbcType="VARCHAR"  />
+		<result column="GAP_STATUS"     property="gapStatus"    jdbcType="VARCHAR"  />
+		
+		<result column="SDITM_LNM"     property="sditmLnm"    jdbcType="VARCHAR"  />
+		<result column="SDITM_PNM"     property="sditmPnm"    jdbcType="VARCHAR"  />
+		<result column="OBJ_DESCN"     property="objDescn"    jdbcType="VARCHAR"  />
+		<result column="INFOTP_LNM"     property="infotpLnm"    jdbcType="VARCHAR"  />
+		
+		<result column="DMN_LNM"     property="dmnLnm"    jdbcType="VARCHAR"  />
+		<result column="DMN_PNM"     property="dmnPnm"    jdbcType="VARCHAR"  />
+		<result column="OBJ_DESCN"     property="objDescn"    jdbcType="VARCHAR"  />
+		<result column="DATA_LEN"     property="dataLen"    jdbcType="VARCHAR"  />
+		<result column="DATA_SCAL"     property="dataScal"    jdbcType="VARCHAR"  />
+		<result column="NONUL_YN"     property="noNullYn"    jdbcType="VARCHAR"  />
+		<result column="PK_ORD"     property="pkOrd"    jdbcType="VARCHAR"  />
+		<result column="PK_YN"     property="pkYn"    jdbcType="VARCHAR"  />
+		
+		<result column="ITEM_NM"     property="itemNm"    jdbcType="VARCHAR"  />
+		<result column="GAP_RATE"     property="gapRate"    jdbcType="VARCHAR"  />
+		<result column="RESULT_DATE"     property="resultDate"    jdbcType="VARCHAR"  />
+		<result column="OBJ_CNT"     property="objCnt"    jdbcType="VARCHAR"  />
+		<result column="ERROR_CNT"     property="errorCnt"    jdbcType="VARCHAR"  />
+		
+		<result column="TBL_NM"     property="tblNm"    jdbcType="VARCHAR"  />
+		<result column="STATE"     property="state"    jdbcType="VARCHAR"  />
+		<result column="DETAIL_STATUS"     property="detailStatus"    jdbcType="VARCHAR"  />
+		<result column="COL_NM"     property="colNm"    jdbcType="VARCHAR"  />
+	</resultMap>
+	
+	<select id="selectByDbms" parameterType="kr.wise.dq.dqrs.service.DqrsDbConnTrgVO" resultMap="DbmsResultMap">
+   	SELECT A.ORG_CD AS ORG_NM, A.INFO_SYS_CD AS INFO_SYS_NM, 
+			A.DBMS_TYP_CD,
+			A.DBMS_VERS_CD,
+			A.DB_CONN_TRG_LNM, -- DB명
+        	A.DB_CONN_TRG_PNM,
+        	A.CONN_TRG_LNK_URL
+        	FROM WAA_DB_CONN_TRG A
+        	INNER JOIN WAA_DB_SCH B
+        		ON A.DB_CONN_TRG_ID = B.DB_CONN_TRG_ID 
+        		AND B.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD') 
+        		AND B.REG_TYP_CD IN ('C', 'U')
+        	WHERE 1=1 
+        	<if test="dbSchId != null and dbSchId != ''" >
+				AND B.DB_SCH_ID = #{dbSchId, jdbcType=VARCHAR}
+			</if>
+			<if test="dbConnTrgId != null and dbConnTrgId != ''" >
+				AND A.DB_CONN_TRG_ID = #{dbConnTrgId, jdbcType=VARCHAR}
+			</if>
+        	AND A.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD') 
+        	AND A.REG_TYP_CD IN ('C', 'U')
+        	AND ROWNUM = 1
+   </select>
+  
+  <select id="selectDqrsResult" resultMap="ResultMap" parameterType="kr.wise.dq.dqrs.service.DqrsResult">
+	  SELECT CASE WHEN B.NO = 1 THEN A.UPP_DQI_LNM ELSE '값진단종합결과' END AS UPP_DQI_LNM 
+	       , CASE WHEN B.NO = 1 THEN A.DQI_LNM END AS DQI_LNM
+	       , SUM(A.TBL_CNT ) AS TBL_CNT    
+		   , SUM(A.COL_CNT ) AS COL_CNT 
+	       , SUM(A.ERR_CNT ) AS ERR_CNT 
+	       , ROUND(SUM(A.ERR_CNT ) / DECODE(SUM(A.TOT_CNT),0,NULL,SUM(A.TOT_CNT)) * 100, 4) AS ERR_RATE 
+	       , SUM(A.TOT_CNT ) AS TOT_CNT 
+	       , SUM(A.NO_EXE  ) AS NO_EXE 
+	  	   , CASE WHEN B.NO = 2 THEN NULL ELSE SUM(A.SUM_RATE) END AS SUM_RATE   
+	    FROM (
+	  SELECT DQI.UPP_DQI_LNM AS UPP_DQI_LNM
+		   , DQI.DQI_LNM
+		   , S.ANA_STR_DTM
+		   , S.TBL_CNT
+		   , S.COL_CNT
+	       , S.ERR_CNT
+	       , S.ERR_RATE
+	       , S.TOT_CNT
+	       , S.NO_EXE
+	  	   , ROUND(S.ERR_RATE * 100 / DECODE(SUM(S.ERR_RATE) OVER (),0,NULL,SUM(S.ERR_RATE) OVER ()),2) AS SUM_RATE
+	  	 FROM 
+	  	   (SELECT B.DQI_LNM AS UPP_DQI_LNM   
+		         , A.DQI_LNM 	            
+		      FROM WAM_DQI A
+		           INNER JOIN WAM_DQI B
+		              ON B.DQI_ID = A.UPP_DQI_ID
+		     WHERE 1 = 1        
+	  	   ) DQI
+	  	   LEFT JOIN    	    
+	  	   (  	   
+		   SELECT UPP_DQI_LNM
+		        , DQI_LNM
+		        , ANA_STR_DTM AS ANA_STR_DTM
+				, COUNT(DISTINCT DBC_TBL_NM) AS TBL_CNT
+				, COUNT(*)                   AS COL_CNT
+			    , SUM(ESN_ER_CNT)            AS ERR_CNT
+			    , ROUND((SUM(ESN_ER_CNT) / DECODE(SUM(ANA_CNT),0,NULL,SUM(ANA_CNT))) * 100, 2) AS ERR_RATE
+			    , SUM(ANA_CNT)               AS TOT_CNT
+			    , COUNT(ANA_STR_DTM)         AS NO_EXE
+			FROM (		     
+				    SELECT A.PRF_ID
+				         , U.DQI_LNM   AS UPP_DQI_LNM
+						 , DQI.DQI_LNM
+						 , A.ANA_STR_DTM
+						 , D.DB_CONN_TRG_PNM
+						 , C.DB_SCH_PNM     
+						 , B.PRF_ID AS VRFC_ID
+                         , CASE
+                              WHEN B.PRF_KND_CD = 'PC02' THEN (SELECT NVL(LISTAGG(PRFCD.USER_DF_EFVA_NM, ', ') WITHIN GROUP(ORDER BY PRFCD.USER_DF_EFVA_NM), '') FROM WAM_PRF_EFVA_USER_DF PRFCD WHERE PRFCD.PRF_ID = B.PRF_ID)
+                              WHEN B.PRF_KND_CD = 'PC03' THEN (SELECT NVL(GET_CMCD_DTL_NM('DATE_FRM_CD', PRFCD.DATE_FRM_CD), '') FROM WAM_PRF_DTFRM_ANA PRFCD WHERE PRFCD.PRF_ID = B.PRF_ID)
+                              WHEN B.PRF_KND_CD = 'PC04' THEN (SELECT NVL(GET_CMCD_DTL_NM('RNG_OPR_CD', PRFCD.RNG_OPR1) || ' ' || CASE WHEN PRFCD.RNG_OPR1 = '05' THEN '' ELSE PRFCD.RNG_EFVA1 END || NVL2(PRFCD.RNG_CNC, PRFCD.RNG_CNC || ' ' || GET_CMCD_DTL_NM('RNG_OPR_CD', PRFCD.RNG_OPR2) || ' ' || CASE WHEN PRFCD.RNG_OPR2 = '05' THEN '' ELSE PRFCD.RNG_EFVA2 END, ''), '') FROM WAM_PRF_RNG_ANA PRFCD WHERE PRFCD.PRF_ID = B.PRF_ID)
+                              WHEN B.PRF_KND_CD = 'PC05' THEN (SELECT NVL(LISTAGG(PRFCD.USER_DF_PTR_NM, ', ') WITHIN GROUP(ORDER BY PRFCD.USER_DF_PTR_NM), '') FROM WAM_PRF_PTR_USER_DF PRFCD WHERE PRFCD.PRF_ID = B.PRF_ID)
+                         END AS VRFC_NM
+                         , CASE
+                              WHEN B.PRF_KND_CD = 'PC02' THEN '코드'
+                              WHEN B.PRF_KND_CD = 'PC03' THEN '날짜'
+                              WHEN B.PRF_KND_CD = 'PC04' THEN '범위'
+                              WHEN B.PRF_KND_CD = 'PC05' THEN '패턴'
+                         END AS VRFC_RULE
+						 , B.DBC_TBL_NM
+						 , B.OBJ_NM
+						 , A.ANA_CNT
+						 , A.ESN_ER_CNT
+						 , ROUND(A.ESN_ER_CNT / DECODE(A.ANA_CNT, 0, NULL, A.ANA_CNT) * 100, 4) AS ER_RATE
+						 , 'PT01' AS PRF_KND_CD
+					  FROM WAM_PRF_RESULT A
+						   INNER JOIN WAM_PRF_MSTR B
+							  ON B.PRF_ID = A.PRF_ID
+							 AND B.REG_TYP_CD IN ('C', 'U')
+						   INNER JOIN WAA_DB_SCH C
+							  ON C.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+							 AND C.REG_TYP_CD IN ('C', 'U')
+							 AND C.DB_SCH_ID = B.DB_SCH_ID 
+						   INNER JOIN WAA_DB_CONN_TRG D
+							  ON D.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+							 AND D.REG_TYP_CD IN ('C', 'U')
+							 AND D.DB_CONN_TRG_ID = C.DB_CONN_TRG_ID  
+						   LEFT JOIN WAM_DQI DQI
+							 ON B.DQI_ID = DQI.DQI_ID 
+							AND DQI.REG_TYP_CD IN ('C', 'U')
+						   LEFT JOIN WAM_DQI U
+							 ON U.DQI_ID = DQI.UPP_DQI_ID
+							AND U.REG_TYP_CD IN ('C', 'U') 
+						   LEFT JOIN WAA_DQRS_EXP_TBL EX          
+							  ON EX.DB_SCH_ID  = B.DB_SCH_ID  
+							 AND EX.DBC_TBL_NM = B.DBC_TBL_NM
+	                       LEFT JOIN WAA_DQRS_EXP_COL EC
+	                          ON EC.DB_SCH_ID  = B.DB_SCH_ID
+	                         AND EC.DBC_TBL_NM = B.DBC_TBL_NM   
+	                         AND EC.DBC_COL_NM = B.OBJ_NM   						 
+					 WHERE  1 = 1
+					 		AND EC.DB_SCH_ID IS NULL         
+					    	AND EC.DBC_TBL_NM IS NULL
+					    	AND EC.DBC_COL_NM IS NULL
+					    	AND B.PRF_KND_CD NOT IN ('PC01', 'PT01', 'PT02')
+					   AND (A.PRF_ID, A.ANA_STR_DTM) IN (SELECT PRF_ID, MAX(ANA_STR_DTM)
+														   FROM WAM_PRF_RESULT
+														  GROUP BY PRF_ID 
+														 )   
+			           AND NVL(EX.EXP_YN,'N')='N'     
+	                   <if test="dbConnTrgId != null and dbConnTrgId != ''" >
+							AND D.DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR}
+						</if>
+						<if test="dbSchId != null and dbSchId != ''" >
+							AND C.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+						</if>
+						<if test="dbSchPnm != null and dbSchPnm != ''" >
+							AND (C.DB_SCH_PNM LIKE ('%' || #{dbSchPnm,jdbcType=VARCHAR} || '%') OR C.DB_SCH_PNM LIKE ('%' || UPPER(#{dbSchPnm,jdbcType=VARCHAR}) || '%'))
+						</if>
+						<if test="dbcTblNm != null and dbcTblNm != ''" >
+							AND (B.DBC_TBL_NM LIKE ('%' || #{dbcTblNm,jdbcType=VARCHAR} || '%') OR B.DBC_TBL_NM LIKE ('%' || UPPER(#{dbcTblNm,jdbcType=VARCHAR}) || '%'))
+						</if>
+						<if test="dbcColNm != null and dbcColNm != ''" >
+							AND (B.OBJ_NM LIKE ('%' || #{dbcColNm,jdbcType=VARCHAR} || '%') OR B.OBJ_NM LIKE ('%' || UPPER(#{dbcColNm,jdbcType=VARCHAR}) || '%'))
+						</if>
+						<if test="mngUserId != null and mngUserId != ''" >
+	                    	AND B.MNG_USER_ID = #{mngUserId,jdbcType=VARCHAR}   
+						</if>     
+				    UNION ALL 
+				                         
+					SELECT A.PRF_ID
+<!-- 					     , '완전성' AS UPP_DQI_LNM -->
+<!-- 						 , '참조관계' AS DQI_LNM -->
+						 , U.DQI_LNM   AS UPP_DQI_LNM
+						 , DQI.DQI_LNM
+						 , A.ANA_STR_DTM
+						 , D.DB_CONN_TRG_PNM
+						 , C.DB_SCH_PNM
+						 , NULL AS VRFC_ID
+						 , '참조무결성' AS VRFC_NM  
+						 , NULL AS VRFC_RULE
+						 , B.DBC_TBL_NM
+						 , B.OBJ_NM  AS DBC_COL_NM
+						 , A.ANA_CNT
+						 , A.ESN_ER_CNT
+						 , ROUND(A.ESN_ER_CNT / DECODE(A.ANA_CNT, 0, NULL, A.ANA_CNT) * 100, 4) AS ER_RATE
+						 , B.PRF_KND_CD         
+					  FROM WAM_PRF_RESULT A
+						   INNER JOIN WAM_PRF_MSTR B
+							  ON B.PRF_ID = A.PRF_ID
+							 AND B.REG_TYP_CD IN ('C', 'U')
+						   INNER JOIN WAA_DB_SCH C
+							  ON C.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+							 AND C.REG_TYP_CD IN ('C', 'U')
+							 AND C.DB_SCH_ID = B.DB_SCH_ID 
+						   INNER JOIN WAA_DB_CONN_TRG D
+							  ON D.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+							 AND D.REG_TYP_CD IN ('C', 'U')
+							 AND D.DB_CONN_TRG_ID = C.DB_CONN_TRG_ID	
+                          LEFT JOIN WAM_DQI DQI
+                             ON B.DQI_ID = DQI.DQI_ID
+                            AND DQI.REG_TYP_CD IN ('C', 'U')
+                          LEFT JOIN WAM_DQI U
+                             ON U.DQI_ID = DQI.UPP_DQI_ID
+                            AND U.REG_TYP_CD IN ('C', 'U')				   
+							LEFT JOIN WAA_DQRS_EXP_TBL EX          
+							  ON EX.DB_SCH_ID  = B.DB_SCH_ID  
+							 AND EX.DBC_TBL_NM = B.DBC_TBL_NM 			
+	                       LEFT JOIN WAA_DQRS_EXP_COL EC
+	                          ON EC.DB_SCH_ID  = B.DB_SCH_ID
+	                         AND EC.DBC_TBL_NM = B.DBC_TBL_NM   
+	                         AND EC.DBC_COL_NM = B.OBJ_NM    						 
+					 WHERE  1 = 1  
+					 		AND EC.DB_SCH_ID IS NULL         
+					    	AND EC.DBC_TBL_NM IS NULL
+					    	AND EC.DBC_COL_NM IS NULL
+					   AND B.PRF_KND_CD IN ('PT01', 'PT02')
+					   AND (A.PRF_ID, A.ANA_STR_DTM) IN (SELECT PRF_ID, MAX(ANA_STR_DTM)
+														   FROM WAM_PRF_RESULT
+														  GROUP BY PRF_ID 
+														 )  
+			           AND NVL(EX.EXP_YN,'N')='N'     
+						<if test="dbConnTrgId != null and dbConnTrgId != ''" >
+							AND D.DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR}
+						</if>
+						<if test="dbSchId != null and dbSchId != ''" >
+							AND C.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+						</if>
+						<if test="dbSchPnm != null and dbSchPnm != ''" >
+							AND (C.DB_SCH_PNM LIKE ('%' || #{dbSchPnm,jdbcType=VARCHAR} || '%') OR C.DB_SCH_PNM LIKE ('%' || UPPER(#{dbSchPnm,jdbcType=VARCHAR}) || '%'))
+						</if>
+						<if test="dbcTblNm != null and dbcTblNm != ''" >
+							AND (B.DBC_TBL_NM LIKE ('%' || #{dbcTblNm,jdbcType=VARCHAR} || '%') OR B.DBC_TBL_NM LIKE ('%' || UPPER(#{dbcTblNm,jdbcType=VARCHAR}) || '%'))
+						</if>
+						<if test="dbcColNm != null and dbcColNm != ''" >
+							AND (B.OBJ_NM LIKE ('%' || #{dbcColNm,jdbcType=VARCHAR} || '%') OR B.OBJ_NM LIKE ('%' || UPPER(#{dbcColNm,jdbcType=VARCHAR}) || '%'))
+						</if>
+						<if test="mngUserId != null and mngUserId != ''" >
+	                    	AND B.MNG_USER_ID = #{mngUserId,jdbcType=VARCHAR}   
+						</if>                                       
+				    UNION ALL                             
+					SELECT A.BR_ID
+					     , U.DQI_LNM   AS UPP_DQI_LNM
+						 , DQI.DQI_LNM
+						 , A.ANA_STR_DTM
+						 , D.DB_CONN_TRG_PNM
+						 , C.DB_SCH_PNM
+						 , NULL AS VRFC_ID     
+						 , CONCAT('업무규칙', BR_NM) AS VRFC_NM  
+						 , NULL AS VRFC_RULE
+						 , B.DBC_TBL_NM
+						 , B.DBC_COL_NM
+						 , A.ANA_CNT
+						 , A.ER_CNT AS ESN_ER_CNT
+						 , ROUND(A.ER_CNT / DECODE(A.ANA_CNT, 0, NULL, A.ANA_CNT) * 100, 4) AS ER_RATE
+						 , 'BR' AS PRF_KND_CD
+					  FROM WAM_BR_RESULT A
+						   INNER JOIN WAM_BR_MSTR B
+							  ON B.BR_ID = A.BR_ID
+							 AND B.REG_TYP_CD IN ('C', 'U')
+						   INNER JOIN WAA_DB_SCH C
+							  ON C.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+							 AND C.REG_TYP_CD IN ('C', 'U')
+							 AND C.DB_SCH_ID = B.DB_SCH_ID 
+						   INNER JOIN WAA_DB_CONN_TRG D
+							  ON D.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+							 AND D.REG_TYP_CD IN ('C', 'U')
+							 AND D.DB_CONN_TRG_ID = C.DB_CONN_TRG_ID  
+						   LEFT JOIN WAM_BR_DQI_MAP M
+						     ON M.BR_ID = B.BR_ID	 
+						   LEFT JOIN WAM_DQI DQI
+							 ON DQI.DQI_ID = M.DQI_ID 
+							AND DQI.REG_TYP_CD IN ('C', 'U')
+						   LEFT JOIN WAM_DQI U
+							 ON U.DQI_ID = DQI.UPP_DQI_ID
+							AND U.REG_TYP_CD IN ('C', 'U')
+						   LEFT JOIN WAA_DQRS_EXP_TBL EX          
+							  ON EX.DB_SCH_ID  = B.DB_SCH_ID  
+							 AND EX.DBC_TBL_NM = B.DBC_TBL_NM 				  
+	                       LEFT JOIN WAA_DQRS_EXP_COL EC
+	                          ON EC.DB_SCH_ID  = B.DB_SCH_ID
+	                         AND EC.DBC_TBL_NM = B.DBC_TBL_NM   
+	                         AND EC.DBC_COL_NM = B.DBC_TBL_NM 						 
+					 WHERE  1 = 1     
+					 		AND EC.DB_SCH_ID IS NULL         
+					    	AND EC.DBC_TBL_NM IS NULL
+					    	AND EC.DBC_COL_NM IS NULL	    
+					   AND (A.BR_ID, A.ANA_STR_DTM) IN (SELECT BR_ID, MAX(ANA_STR_DTM)
+														  FROM WAM_BR_RESULT
+														GROUP BY BR_ID 
+														)
+			           AND NVL(EX.EXP_YN,'N')='N'     
+						<if test="dbConnTrgId != null and dbConnTrgId != ''" >
+							AND D.DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR}
+						</if>
+						<if test="dbSchId != null and dbSchId != ''" >
+							AND C.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+						</if>
+						<if test="dbSchPnm != null and dbSchPnm != ''" >
+							AND (C.DB_SCH_PNM LIKE ('%' || #{dbSchPnm,jdbcType=VARCHAR} || '%') OR C.DB_SCH_PNM LIKE ('%' || UPPER(#{dbSchPnm,jdbcType=VARCHAR}) || '%'))
+						</if>
+						<if test="dbcTblNm != null and dbcTblNm != ''" >
+							AND (B.DBC_TBL_NM LIKE ('%' || #{dbcTblNm,jdbcType=VARCHAR} || '%') OR B.DBC_TBL_NM LIKE ('%' || UPPER(#{dbcTblNm,jdbcType=VARCHAR}) || '%'))
+						</if>
+						<if test="dbcColNm != null and dbcColNm != ''" >
+							AND (B.DBC_COL_NM LIKE ('%' || #{dbcColNm,jdbcType=VARCHAR} || '%') OR B.DBC_COL_NM LIKE ('%' || UPPER(#{dbcColNm,jdbcType=VARCHAR}) || '%'))
+						</if>
+						<if test="mngUserId != null and mngUserId != ''" >
+	                    	AND B.MNG_USER_ID = #{mngUserId,jdbcType=VARCHAR}   
+						</if>                  
+			 ) X
+			 GROUP BY UPP_DQI_LNM
+			        , DQI_LNM
+			        , ANA_STR_DTM
+	      ) S
+	      ON DQI.DQI_LNM = S.DQI_LNM 		        
+	 WHERE 1 = 1
+	 ) A
+	 LEFT JOIN
+	 (SELECT 1 AS NO FROM DUAL
+	   UNION
+	  SELECT 2 AS NO FROM DUAL
+	 ) B
+	 ON 1 = 1
+	 WHERE 1 = 1
+	 GROUP BY CASE WHEN B.NO = 1 THEN A.UPP_DQI_LNM ELSE '값진단종합결과' END
+	        , CASE WHEN B.NO = 1 THEN A.DQI_LNM END
+	        , B.NO            
+	 ORDER BY B.NO
+	         ,UPP_DQI_LNM
+	         ,DQI_LNM
+	 
+	</select>
+	
+	<select id="selectAnaExecuteStatus" resultMap="DqrsResultMap" parameterType="kr.wise.dq.dqrs.service.DqrsPoiResult">
+	SELECT (TO_CHAR(BB.ANA_CML_CNT, 'FM999,999,999,999,999,999,999') || ' / ' || TO_CHAR(BB.ANA_CNT, 'FM999,999,999,999,999,999,999')) AS "ANA_CML_CNT"
+	         , (TO_CHAR(BB.ANA_RNN_CNT, 'FM999,999,999,999,999,999,999') || ' / ' || TO_CHAR(BB.ANA_CNT, 'FM999,999,999,999,999,999,999')) AS "ANA_RNN_CNT"
+	         , (TO_CHAR(BB.ANA_FAL_CNT, 'FM999,999,999,999,999,999,999') || ' / ' || TO_CHAR(BB.ANA_CNT, 'FM999,999,999,999,999,999,999')) AS "ANA_FAL_CNT"
+	         , (TO_CHAR(ROUND(BB.ANA_CML_CNT / ANA_CNT * 100 , 2), 'FM999,999,999,999,999,999,999.0') || '%') AS "ANA_CML_RT"
+	         , (TO_CHAR(ROUND(BB.ANA_RNN_CNT / ANA_CNT * 100 , 2), 'FM999,999,999,999,999,999,999.0') || '%') AS "ANA_RNN_RT"
+	         , (TO_CHAR(ROUND(BB.ANA_FAL_CNT / ANA_CNT * 100 , 2), 'FM999,999,999,999,999,999,999.0') || '%') AS "ANA_FAL_RT"
+	      FROM ( SELECT COUNT(*) AS "ANA_CNT"
+	                  , SUM(CASE WHEN AA.ANA_STS_CD = '1' OR AA.ANA_STS_CD = '01' THEN 1 ELSE 0 END) AS "ANA_CML_CNT"
+	                  , SUM(CASE WHEN AA.ANA_STS_CD = '2' OR AA.ANA_STS_CD = '02' OR AA.ANA_STS_CD = '5' OR AA.ANA_STS_CD = '05' THEN 1 ELSE 0 END) AS "ANA_RNN_CNT"
+	                  , SUM(CASE WHEN AA.ANA_STS_CD = '3' OR AA.ANA_STS_CD = '03' OR AA.ANA_STS_CD = '4' OR AA.ANA_STS_CD = '04' OR AA.ANA_STS_CD = '6' OR AA.ANA_STS_CD = '06' THEN 1 ELSE 0 END) AS "ANA_FAL_CNT"
+	               FROM ( SELECT WAR.*
+	                          FROM (
+	                          			-- 검증룰
+	                          		    SELECT PRF.DB_SCH_ID
+	                                         , PRF.DBC_TBL_NM
+	                                         , PRF.OBJ_NM AS "DBC_COL_NM"
+	                                         , PRF.PRF_ID AS "OBJ_ID"
+	                                         , PRF.ANA_STR_DTM AS "ANA_STR_DTM"
+	                                         , PRF.PRF_KND_CD AS PRF_KND_CD
+	                                         , ANA_STS_CD AS "ANA_STS_CD"
+	                                      FROM ( <include refid="kr.wise.dq.dqrs.service.DqrsViewMapper.Vrfc_View" /> ) PRF
+	                                      -- 테이블, 컬럼 존재 유무 확인
+	                                      INNER JOIN WAT_DBC_TBL D
+								           	ON PRF.DB_SCH_ID = D.DB_SCH_ID 
+								           	AND PRF.DBC_TBL_NM = D.DBC_TBL_NM 
+								           	INNER JOIN WAT_DBC_COL E 
+								           	ON PRF.DB_SCH_ID = E.DB_SCH_ID 
+								           	AND PRF.DBC_TBL_NM = E.DBC_TBL_NM 
+								           	AND PRF.OBJ_NM = E.DBC_COL_NM 
+	                                      WHERE 1=1
+	                        UNION ALL
+	                        		-- 참조관계
+	                           SELECT PRF.DB_SCH_ID
+	                                         , PRF.DBC_TBL_NM
+	                                         , PRF.OBJ_NM AS "DBC_COL_NM"
+	                                         , PRF.PRF_ID AS "OBJ_ID"
+	                                         , PRF.ANA_STR_DTM AS "ANA_STR_DTM"
+	                                         , PRF.PRF_KND_CD AS PRF_KND_CD
+	                                         , ANA_STS_CD AS "ANA_STS_CD"
+	                                      FROM ( <include refid="kr.wise.dq.dqrs.service.DqrsViewMapper.Prf_View" /> ) PRF
+	                                      	-- 테이블, 컬럼 존재 유무 확인
+	                                      	INNER JOIN WAT_DBC_TBL D
+								           	ON PRF.DB_SCH_ID = D.DB_SCH_ID 
+								           	AND PRF.DBC_TBL_NM = D.DBC_TBL_NM 
+								           	INNER JOIN WAT_DBC_COL E 
+								           	ON PRF.DB_SCH_ID = E.DB_SCH_ID 
+								           	AND PRF.DBC_TBL_NM = E.DBC_TBL_NM 
+								           	AND PRF.OBJ_NM = E.DBC_COL_NM
+	                                      WHERE 1=1
+	                                      AND PRF.PRF_KND_CD IN ('PT01')
+	                        UNION ALL
+	                        		-- 중복분석
+	                           SELECT PRF.DB_SCH_ID
+	                                         , PRF.DBC_TBL_NM
+	                                         , PRF.OBJ_NM AS "DBC_COL_NM"
+	                                         , PRF.PRF_ID AS "OBJ_ID"
+	                                         , PRF.ANA_STR_DTM AS "ANA_STR_DTM"
+	                                         , PRF.PRF_KND_CD AS PRF_KND_CD
+	                                         , ANA_STS_CD AS "ANA_STS_CD"
+	                                      FROM ( <include refid="kr.wise.dq.dqrs.service.DqrsViewMapper.Prf2_View" /> ) PRF
+	                                      	-- 테이블 존재 유무 확인(중복분석은 컬럼 존재유무 확인 안 함)
+	                                      	INNER JOIN WAT_DBC_TBL D
+								           	ON PRF.DB_SCH_ID = D.DB_SCH_ID 
+								           	AND PRF.DBC_TBL_NM = D.DBC_TBL_NM 
+	                                      WHERE 1=1
+	                                      AND PRF.PRF_KND_CD IN ('PT02')      
+	                                 UNION ALL
+	                           	-- 업무규칙      
+	                           SELECT BR.DB_SCH_ID
+	                                       , BR.DBC_TBL_NM
+	                                       , BR.DBC_COL_NM
+	                                       , BR.BR_ID AS "OBJ_ID"
+	                                       , BR.ANA_STR_DTM AS "ANA_STR_DTM"
+	                                       , 'BR' AS PRF_KND_CD
+	                                       , ANA_STS_CD AS "ANA_STS_CD"
+	                                    FROM ( <include refid="kr.wise.dq.dqrs.service.DqrsViewMapper.Br_View" /> ) BR
+	                                   		-- 테이블, 컬럼 존재 유무 확인
+	                                   		INNER JOIN WAT_DBC_TBL D
+								           	ON BR.DB_SCH_ID = D.DB_SCH_ID 
+								           	AND BR.DBC_TBL_NM = D.DBC_TBL_NM 
+								           	INNER JOIN WAT_DBC_COL E 
+								           	ON BR.DB_SCH_ID = E.DB_SCH_ID 
+								           	AND BR.DBC_TBL_NM = E.DBC_TBL_NM 
+								           	AND BR.DBC_COL_NM = E.DBC_COL_NM
+	                               ) WAR
+	                  
+	                    ) AA
+	           ) BB
+	  </select>
+	  
+	  <select id="selectAnaTargetTableStatus" resultMap="DqrsResultMap" parameterType="kr.wise.dq.dqrs.service.DqrsPoiResult">
+	SELECT  (NVL(TO_CHAR(BB.TRG_TBL_CNT,'FM999,999,999,999,999,999,999'), '') || ' / ' || NVL(TO_CHAR(BB.TRG_TTL_CNT,'FM999,999,999,999,999,999,999'), '')) AS TRG_TBL_CNT-- 5
+          , (NVL(TO_CHAR(BB.TRG_EXC_CNT,'FM999,999,999,999,999,999,999'), '') || ' / ' || NVL(TO_CHAR(BB.TRG_TTL_CNT,'FM999,999,999,999,999,999,999'), '')) AS TRG_EXC_CNT -- 3
+          , (NVL(TO_CHAR(BB.NT_CLLC_CNT,'FM999,999,999,999,999,999,999'), '') || ' / ' || NVL(TO_CHAR(BB.TRG_TTL_CNT,'FM999,999,999,999,999,999,999'), '')) AS NT_CLLC_CNT -- 578
+          , (NVL(TO_CHAR(ROUND(BB.TRG_TBL_CNT / BB.TRG_TTL_CNT * 100, 2 ),'FM999,999,999,999,999,999,999.0'), '') || '%') AS TRG_TBL_RT
+          , (NVL(TO_CHAR(ROUND(BB.TRG_EXC_CNT / BB.TRG_TTL_CNT * 100, 2 ),'FM999,999,999,999,999,999,999.0'), '') || '%') AS TRG_EXC_RT
+          , (NVL(TO_CHAR(ROUND(BB.NT_CLLC_CNT / BB.TRG_TTL_CNT * 100, 2 ),'FM999,999,999,999,999,999,999.0'), '') || '%') AS NT_CLLC_RT
+      FROM ( SELECT 
+          		COUNT(*) AS TRG_TTL_CNT
+			  , SUM(CASE WHEN  AA.EXP_YN = 'N' AND AA.CLLC_YN = 'N' THEN 1 ELSE 0 END) AS TRG_TBL_CNT -- SQLINES DEMO *** 이면서 스키마수집한경우
+			  , SUM(CASE WHEN AA.EXP_YN = 'Y'  THEN 1 ELSE 0 END) AS TRG_EXC_CNT -- SQLINES DEMO *** 없이 제외여부 적용
+			  , SUM(CASE WHEN  AA.CLLC_YN = 'Y' THEN 1 ELSE 0 END) AS NT_CLLC_CNT -- SQLINES DEMO *** ��수집 안돌린 테이블/컬럼
+               FROM (SELECT DISTINCT
+                           DBC.DB_SCH_ID
+                          , DBC.DBC_TBL_NM
+                          , DBC.EXP_YN 
+                           , CASE WHEN DBC.DBC_TBL_NM IS NULL THEN 'Y'
+                          ELSE 'N' END AS CLLC_YN -- 수집이면 N
+                FROM (  <include refid="kr.wise.dq.dqrs.service.DqrsViewMapper.Base_Dbc_Col_View" /> 
+                		 ) DBC 
+                    ) AA
+		   ) BB
+  </select>
+  
+  <select id="selectValAnaResultList" resultMap="DqrsResultMap" parameterType="kr.wise.dq.dqrs.service.DqrsPoiResult">
+	    SELECT  CASE WAR.PRF_KND_CD
+		            WHEN 'YN' THEN '여부'
+		             WHEN 'RNG' THEN '범위'
+		             WHEN 'DTM' THEN '날짜'
+		             WHEN 'CD' THEN '코드'
+		             WHEN 'FRM' THEN '형식'
+		             WHEN 'NN' THEN '필수값' ELSE PRF_KND_CD END
+		           	AS "KND_CD" -- 도메인
+	          , ('진단대상 컬럼 : ' || NVL(TO_CHAR(COUNT(*), 'FM999,999,999,999,999,999,999'), '')) as "ANA_TRG_COL"
+	          , ('오류발견 컬럼 : ' || NVL(TO_CHAR(SUM(CASE WHEN ER_CNT IS NULL OR ER_CNT = 0 THEN 0 ELSE 1 END), 'FM999,999,999,999,999,999,999'), '')) AS "ANA_ERR_COL"
+	          , SUM(ANA_CNT) AS "ANA_CNT"
+	          , CASE WHEN SUM(ER_CNT) IS NULL THEN 0 ELSE SUM(ER_CNT) END AS "ER_CNT"
+	          , CASE 
+	             WHEN SUM(ANA_CNT) IS NULL OR SUM(ANA_CNT) = 0 OR  SUM(ER_CNT) IS NULL OR SUM(ER_CNT) = 0 THEN ('0.0000' || '%')
+	             ELSE (NVL(TO_CHAR(TRUNC(SUM(ER_CNT) * 100 / CASE SUM(ANA_CNT)  WHEN 0 THEN  1  ELSE SUM(ANA_CNT) END, 4), 'FM999,999,999,999,999,999,999.0000'), '') || '%')
+	            END AS "ERR_RT"
+	          , TO_CHAR(MAX(ANA_STR_DTM), 'YYYY-MM-DD HH24:MI:SS') AS "STR_ANA_STR_DTM"      
+	       FROM (
+	              SELECT DISTINCT
+	                     PRF.DB_SCH_ID
+	                   , PRF.DBC_TBL_NM
+	                   , PRF.OBJ_NM AS "DBC_COL_NM"
+	                   , PRF.PRF_ID AS "OBJ_ID"
+	                   , PRF.ANA_STR_DTM AS "ANA_STR_DTM"
+	                   , PRF.PRF_KND_CD AS PRF_KND_CD
+	                   , PRF.ANA_CNT AS "ANA_CNT"
+	                   , PRF.ESN_ER_CNT AS "ER_CNT"
+	                   , PRF.DB_CONN_TRG_ID
+	                FROM ( <include refid="kr.wise.dq.dqrs.service.DqrsViewMapper.Vrfc_View" /> ) PRF
+		          -- 테이블, 컬럼 존재 유무 확인
+		            INNER JOIN WAT_DBC_TBL D
+		           	ON PRF.DB_SCH_ID = D.DB_SCH_ID 
+		           	AND PRF.DBC_TBL_NM = D.DBC_TBL_NM 
+		           	INNER JOIN WAT_DBC_COL E 
+		           	ON PRF.DB_SCH_ID = E.DB_SCH_ID 
+		           	AND PRF.DBC_TBL_NM = E.DBC_TBL_NM 
+		           	AND PRF.OBJ_NM = E.DBC_COL_NM 
+	               WHERE ANA_CNT IS NOT NULL
+	              
+	         	  UNION ALL
+	            SELECT DISTINCT
+	                     PRF.DB_SCH_ID
+	                   , PRF.DBC_TBL_NM
+	                   , PRF.OBJ_NM AS "DBC_COL_NM"
+	                   , PRF.PRF_ID AS "OBJ_ID"
+	                   , PRF.ANA_STR_DTM AS "ANA_STR_DTM"
+	                   , '참조무결성' AS PRF_KND_CD
+	                   , PRF.ANA_CNT AS "ANA_CNT"
+	                   , PRF.ESN_ER_CNT AS "ER_CNT"
+	                   , PRF.DB_CONN_TRG_ID
+	                FROM ( <include refid="kr.wise.dq.dqrs.service.DqrsViewMapper.Prf_View" /> ) PRF
+	                     INNER JOIN  WAM_PRF_REL_TBL T
+	                     ON  PRF.PRF_ID = T.PRF_ID
+	                    AND  T.REG_TYP_CD IN ('C', 'U')
+	             INNER JOIN  WAM_PRF_REL_COL C
+	                     ON  PRF.PRF_ID = C.PRF_ID
+	                    AND  C.REG_TYP_CD IN ('C', 'U')
+	             -- 테이블, 컬럼 존재 유무 확인
+	              INNER JOIN WAT_DBC_TBL D
+		           	ON PRF.DB_SCH_ID = D.DB_SCH_ID 
+		           	AND PRF.DBC_TBL_NM = D.DBC_TBL_NM 
+	                  WHERE  PRF.PRF_KND_CD= 'PT01'
+	         	  UNION ALL
+	            SELECT DISTINCT
+	                     PRF.DB_SCH_ID
+	                   , PRF.DBC_TBL_NM
+	                   , PRF.OBJ_NM AS "DBC_COL_NM"
+	                   , PRF.PRF_ID AS "OBJ_ID"
+	                   , PRF.ANA_STR_DTM AS "ANA_STR_DTM"
+	                   , '중복데이터' AS PRF_KND_CD
+	                   , PRF.ANA_CNT AS "ANA_CNT"
+	                   , PRF.ESN_ER_CNT AS "ER_CNT"
+	                   , PRF.DB_CONN_TRG_ID
+	                FROM ( <include refid="kr.wise.dq.dqrs.service.DqrsViewMapper.Prf2_View" /> ) PRF
+	                     INNER JOIN  WAM_PRF_UNQ_COL C
+	                     ON  PRF.PRF_ID = C.PRF_ID
+	                    AND  C.REG_TYP_CD IN ('C', 'U')
+	             -- 테이블, 컬럼 존재 유무 확인
+	              INNER JOIN WAT_DBC_TBL D
+		           	ON PRF.DB_SCH_ID = D.DB_SCH_ID 
+		           	AND PRF.DBC_TBL_NM = D.DBC_TBL_NM 
+	                  WHERE  PRF.PRF_KND_CD= 'PT02'           
+	         			
+	           UNION ALL
+	              SELECT DISTINCT
+	                     BR.DB_SCH_ID
+	                   , BR.DBC_TBL_NM
+	                   , BR.DBC_COL_NM
+	                   , BR.BR_ID AS "OBJ_ID"
+	                   , BR.ANA_STR_DTM AS "ANA_STR_DTM"
+	                   , '업무규칙' AS PRF_KND_CD
+	                   , BR.ANA_CNT as "ANA_CNT"
+	                   , BR.ER_CNT as "ER_CNT"
+	                   , BR.DB_CONN_TRG_ID
+	                FROM ( <include refid="kr.wise.dq.dqrs.service.DqrsViewMapper.Br_View" /> ) BR
+	                 -- 테이블, 컬럼 존재 유무 확인
+	            INNER JOIN WAT_DBC_TBL D
+	           	ON BR.DB_SCH_ID = D.DB_SCH_ID 
+	           	AND BR.DBC_TBL_NM = D.DBC_TBL_NM 
+	           	INNER JOIN WAT_DBC_COL E 
+	           	ON BR.DB_SCH_ID = E.DB_SCH_ID 
+	           	AND BR.DBC_TBL_NM = E.DBC_TBL_NM 
+	           	AND BR.DBC_COL_NM = E.DBC_COL_NM
+	            ) WAR
+	        WHERE 1=1
+	           	 <if test="dbConnTrgId != null and dbConnTrgId != ''" >
+					AND WAR.DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR}
+				</if>
+	           	<if test="dbSchId != null and dbSchId != ''" >
+					AND WAR.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+				</if>
+	  GROUP BY PRF_KND_CD
+	  ORDER BY PRF_KND_CD
+	  </select>
+	  
+	  <select id="selectAnaTargetTableList" resultMap="DqrsResultMap" parameterType="kr.wise.dq.dqrs.service.DqrsPoiResult">
+			SELECT DISTINCT 
+	           DBC.DB_SCH_ID as "DB_SCH_ID"
+	         , DBC.DBC_TBL_NM as "DBC_TBL_NM"
+	         , CASE 
+	            WHEN DBC.EXP_YN = 'Y' THEN '제외'
+	            ELSE '대상'
+	            END AS "ANA_TRG_STATUS"
+	         ,  DBC.ANA_DTM AS "ANA_DTM"
+	         ,  DBC.ADD_CND AS "ANA_TRG_RANGE_CON"
+	         ,  DBC.DESCN AS "DESCN"    
+	         ,  DBC.ANA_DTM AS "STR_ANA_DTM"
+	      FROM ( <include refid="kr.wise.dq.dqrs.service.DqrsViewMapper.Base_Dbc_Col_View" /> ) DBC
+	     WHERE 1 = 1
+	  ORDER BY 1
+	  </select>
+	  
+	  <select id="selectDmnList" resultMap="DqrsResultMap" parameterType="kr.wise.dq.dqrs.service.DqrsPoiResult" fetchSize="2000">
+    SELECT LST.*
+ 	FROM (SELECT (NVL(WAR.DB_SCH_PNM, '') || '.' || NVL(WAR.DBC_TBL_NM, '')) AS "DBC_TBL_NM" -- 테이블
+            , WAR.DBC_COL_NM AS "DBC_COL_NM" -- 컬럼
+            , WAR.DATA_TYPE AS "DATA_TYPE" -- 데이터타입
+            , CASE
+               WHEN WAR.EXP_YN = 'N' THEN WAR.KND_NM 
+               ELSE ''
+              END AS "KND_NM" -- 검증룰명
+            , CASE
+               WHEN WAR.EXP_YN = 'N' THEN WAR.KND_CD 
+               ELSE ''
+              END AS "KND_CD" -- 도메인(dqi)
+            , CASE
+               WHEN WAR.EXP_YN = 'N' THEN WAR.VRF_FRM 
+               ELSE ''
+              END AS "VRF_FRM" -- 검증형식
+            , CASE
+               WHEN WAR.EXP_YN = 'Y' THEN  WAR.DATA_PTR 
+               ELSE ''
+              END AS "ERR_EXC_DATA" 
+            , CASE
+               WHEN WAR.EXP_YN = 'N' THEN TO_CHAR(WAR.APRV_DTM ,'YYYYMMDD HH24:MI') 
+               ELSE ''
+              END AS "STR_APRV_DTM" --  SQLINES DEMO 
+            , WAR.DATA_PTR AS DATA_PTR -- SQLINES DEMO 검증룰 설정 참고를 위해 최대 5건 제공)
+            , WAR.DESCN AS "DBC_COL_OPN" -- 의견
+    	FROM (
+    	    	SELECT PRF.DB_SCH_ID AS DB_SCH_ID
+					   , PRF.DB_SCH_PNM AS DB_SCH_PNM
+                       , PRF.DBC_TBL_NM
+                       , PRF.DBC_COL_NM AS "DBC_COL_NM"
+                       , PRF.PRF_ID AS "OBJ_ID"
+                       , PRF.ANA_STR_DTM AS "ANA_STR_DTM"
+                       , PRF.DMN_NM AS "KND_CD" -- 도메인
+                       , PRF.PRF_NM AS "KND_NM" -- 검증룰명
+                       , CASE WHEN PRF.VRF_FRM IS NOT NULL THEN PRF.VRF_FRM
+                       		ELSE PRF.PRF_NM END AS "VRF_FRM"
+                       , '' AS "ERR_EXC_DATA"
+                       , PRF.APRV_DTM as "APRV_DTM"
+                       , (SELECT
+								   NVL( RVAL.MIN_VAL1, '')
+								|| NVL2(RVAL.MIN_VAL2, ', ' || RVAL.MIN_VAL2, '')
+								|| NVL2(RVAL.MIN_VAL3, ', ' || RVAL.MIN_VAL3, '')
+								|| NVL2(RVAL.MAX_VAL1, ', ' || RVAL.MAX_VAL1, '')
+								|| NVL2(RVAL.MAX_VAL2, ', ' || RVAL.MAX_VAL2, '')
+								|| NVL2(RVAL.MAX_VAL3, ', ' || RVAL.MAX_VAL3, '')
+							  FROM WAM_PRF_RESULT RVAL
+							 WHERE RVAL.PRF_ID = PRF.PRF_ID
+							   AND RVAL.ANA_STR_DTM = PRF.ANA_STR_DTM) AS DATA_PTR
+                       , PRF.DATA_TYPE AS DATA_TYPE
+                       , PRF.DESCN AS DESCN
+                       , PRF.EXP_YN AS EXP_YN
+                    FROM ( <include refid="kr.wise.dq.dqrs.service.DqrsViewMapper.Vrfc_View_Tot" /> ) PRF
+               )WAR
+               
+    		ORDER BY WAR.DB_SCH_ID, WAR.DBC_TBL_NM, WAR.DBC_COL_NM
+ 		 
+ 		 )LST
+  </select>
+  
+  <select id="selectRefItegrityList" resultMap="DqrsResultMap" parameterType="kr.wise.dq.dqrs.service.DqrsPoiResult">
+SELECT (NVL(GET_DB_SCH_PNM(PRF.DB_SCH_ID), '') || '.' || NVL(C.CH_TBL_DBC_TBL_NM, '')) AS "CH_TBL_DBC_TBL_NM"
+         , C.CH_TBL_DBC_COL_NM AS "CH_TBL_DBC_COL_NM"
+         , C.REL_COL_SNO AS "REL_COL_SNO"
+         , C.PA_TBL_DBC_COL_NM AS "PA_TBL_DBC_COL_NM"
+         , (NVL(GET_DB_SCH_PNM(T.PA_TBL_DBC_SCH_ID), '') || '.' || NVL(C.PA_TBL_DBC_TBL_NM, '')) AS "PA_TBL_DBC_TBL_NM"
+         , T.PA_TBL_ADT_CND_SQL AS "PA_TBL_ADT_CND_SQL"
+      FROM (<include refid="kr.wise.dq.dqrs.service.DqrsViewMapper.Prf_View" />) PRF
+INNER JOIN WAM_PRF_REL_TBL T
+        ON PRF.PRF_ID = T.PRF_ID
+       AND T.REG_TYP_CD IN ('C', 'U')
+INNER JOIN WAM_PRF_REL_COL C
+        ON PRF.PRF_ID = C.PRF_ID
+       AND C.REG_TYP_CD IN ('C', 'U')
+     WHERE 1 = 1
+       AND PRF.PRF_KND_CD IN ('PT01')
+       AND EXISTS
+                 (    
+                    SELECT 1 
+                      FROM ( <include refid="kr.wise.dq.dqrs.service.DqrsViewMapper.Base_Dbc_Col_View" /> ) TRG
+                     WHERE 1 = 1
+                       AND TRG.DB_CONN_TRG_ID = C.CH_TBL_DB_CONN_TRG_ID
+                       AND TRG.DB_SCH_ID = C.CH_TBL_DBC_SCH_ID 
+                       AND TRG.DBC_TBL_NM = C.CH_TBL_DBC_TBL_NM
+                       AND TRG.DBC_COL_NM = C.CH_TBL_DBC_COL_NM
+                       -- AND TRG.EXP_YN = 'N'
+                )
+      AND EXISTS                        
+                (
+                    SELECT 1
+                      FROM ( <include refid="kr.wise.dq.dqrs.service.DqrsViewMapper.Base_Dbc_Col_View" /> ) TRG
+                     WHERE 1 = 1
+                       AND TRG.DB_CONN_TRG_ID = C.PA_TBL_DB_CONN_TRG_ID
+                       AND TRG.DB_SCH_ID = C.PA_TBL_DBC_SCH_ID
+                       AND TRG.DBC_TBL_NM = C.PA_TBL_DBC_TBL_NM
+                       AND TRG.DBC_COL_NM = C.PA_TBL_DBC_COL_NM
+                       -- AND TRG.EXP_YN = 'N'
+                )
+  </select>
+  
+  <select id="selectBrList" resultMap="DqrsResultMap" parameterType="kr.wise.dq.dqrs.service.DqrsPoiResult">
+       SELECT -- '업무규칙' as "BIZ_AREA_LNM" 	-- 분석영역
+       		BIZ.DQI_LNM as "BIZ_AREA_LNM" 				-- 분석영역
+       		, BIZ.BR_ID as "BR_ID" 					-- 업무규칙 ID
+       		, BIZ.BR_NM as "BR_NM" 					-- 업무규칙명
+       		, BIZ.OBJ_DESCN as "OBJ_DESCN" 			-- 설명
+       		, BIZ.DBC_TBL_NM as "DBC_TBL_NM" 		-- 테이블
+       		, BIZ.CNT_SQL as "CNT_SQL" 				-- 대상 전체건수 SQL
+       		, BIZ.ANA_SQL as "ANA_SQL" 				-- 오류 데이터 추출 SQL
+       		, BIZ.ER_CNT_SQL as "ER_CNT_SQL" 		-- 오류데이터별 오류건수 SQL
+             
+        FROM (<include refid="kr.wise.dq.dqrs.service.DqrsViewMapper.Br_View" />) BIZ
+        INNER JOIN ( <include refid="kr.wise.dq.dqrs.service.DqrsViewMapper.Base_Dbc_Col_View" /> ) DBC              
+           ON BIZ.DB_CONN_TRG_ID = DBC.DB_CONN_TRG_ID
+          AND BIZ.DBC_TBL_NM = DBC.DBC_TBL_NM
+          AND BIZ.DBC_COL_NM = DBC.DBC_COL_NM
+  
+  </select>
+  
+  <select id="selectExcInfoList" resultMap="DqrsResultMap" parameterType="kr.wise.dq.dqrs.service.DqrsPoiResult">
+	SELECT (NVL(DBC.DB_SCH_PNM, '') || '.' || NVL(DBC.DBC_TBL_NM, '')) AS "DBC_TBL_NM"
+         , LISTAGG(DBC.DBC_COL_NM, ', ') WITHIN GROUP(ORDER BY DBC.DBC_COL_NM) "DBC_COL_NM"  
+         , WAR.KND_CD AS "KND_CD" -- 도메인
+         , WAR.KND_NM
+         , WAR.ANA_STS_TXT
+         , WAR.ANA_STR_DTM AS "ANA_STR_DTM"
+         , WAR.ANA_STR_DTM AS "STR_ANA_STR_DTM"
+      FROM (
+                 -- 관계분석
+                 SELECT PRF.DB_SCH_ID AS "DB_SCH_ID"
+                      , CH_TBL_DBC_TBL_NM AS "DBC_TBL_NM"
+                      , CH_TBL_DBC_COL_NM AS "DBC_COL_NM"
+                      , '참조무결성' AS "KND_CD" -- 검증룰 
+                      , PRF.OBJ_NM AS "KND_NM" -- 룰명
+                      , CASE
+                         WHEN PRF.ANA_STS_CD = '01' THEN 'COMPLETED'
+                         WHEN PRF.ANA_STS_CD = '03' OR PRF.ANA_STS_CD = '04' THEN 'FAILED'
+                        END AS "ANA_STS_TXT" -- 실행상태
+                      , PRF.ANA_STR_DTM AS "ANA_STR_DTM" -- 실행일시
+					  , PRF.PRF_ID AS "OBJ_ID"
+                   FROM  ( <include refid="kr.wise.dq.dqrs.service.DqrsViewMapper.Prf_View" /> ) PRF
+                     INNER JOIN  WAM_PRF_REL_TBL T
+                     ON  PRF.PRF_ID = T.PRF_ID
+                    AND  T.REG_TYP_CD IN ('C', 'U')
+             INNER JOIN  WAM_PRF_REL_COL C
+                     ON  PRF.PRF_ID = C.PRF_ID
+                    AND  C.REG_TYP_CD IN ('C', 'U')
+                  WHERE  PRF.PRF_KND_CD= 'PT01'
+                  
+              UNION ALL
+               -- 중복데이터
+                 SELECT PRF.DB_SCH_ID AS "DB_SCH_ID"
+                      , DBC_TBL_NM AS "DBC_TBL_NM"
+                      , C.DBC_COL_NM AS "DBC_COL_NM"
+                      , '중복데이터' AS "KND_CD" -- 검증룰 
+                      , PRF.OBJ_NM AS "KND_NM" -- 룰명
+                      , CASE
+                         WHEN PRF.ANA_STS_CD = '01' THEN 'COMPLETED'
+                         WHEN PRF.ANA_STS_CD = '03' OR PRF.ANA_STS_CD = '04' THEN 'FAILED'
+                        END AS "ANA_STS_TXT" -- 실행상태
+                      , PRF.ANA_STR_DTM AS "ANA_STR_DTM" -- 실행일시
+					  , PRF.PRF_ID AS "OBJ_ID"
+                   FROM  ( <include refid="kr.wise.dq.dqrs.service.DqrsViewMapper.Prf2_View" /> ) PRF
+                     INNER JOIN  WAM_PRF_UNQ_COL C
+                     ON  PRF.PRF_ID = C.PRF_ID
+                    AND  C.REG_TYP_CD IN ('C', 'U')
+                  WHERE  PRF.PRF_KND_CD= 'PT02'
+                  
+              UNION ALL
+                  -- 칼럼
+                 SELECT PRF.DB_SCH_ID
+                      , PRF.DBC_TBL_NM
+                      , PRF.OBJ_NM AS "DBC_COL_NM"
+                      , PRF.DMN_NM AS "KND_CD" -- 검증룰
+                      , PRF.KND_NM AS "KND_NM" -- 룰명
+                      , CASE
+                         WHEN PRF.ANA_STS_CD = '01' THEN 'COMPLETED'
+                         WHEN PRF.ANA_STS_CD = '03' OR PRF.ANA_STS_CD = '04' THEN 'FAILED'
+                        END AS "ANA_STS_TXT" -- 실행상태
+                      , PRF.ANA_STR_DTM AS "ANA_STR_DTM" -- 실행일시
+                      , PRF.PRF_ID AS "OBJ_ID" 
+                   FROM ( <include refid="kr.wise.dq.dqrs.service.DqrsViewMapper.Vrfc_View" />
+					) PRF
+					
+              UNION ALL 
+                 -- 업무규칙
+                 SELECT BR.DB_SCH_ID
+                      , BR.DBC_TBL_NM
+                      , BR.DBC_COL_NM
+                      , '업무규칙' AS "KND_CD" -- 검증룰
+                      , BR.BR_NM AS "KND_NM" -- 룰명
+                      , CASE
+                         WHEN BR.ANA_STS_CD = '01' THEN 'COMPLETED'
+                         WHEN BR.ANA_STS_CD = '03' OR BR.ANA_STS_CD = '04' THEN 'FAILED'
+                        END AS "ANA_STS_TXT" -- 실행상태 
+                      , BR.ANA_STR_DTM -- 실행일시
+                      , BR.BR_ID AS "OBJ_ID"
+                 FROM ( <include refid="kr.wise.dq.dqrs.service.DqrsViewMapper.Br_View" /> ) BR
+            ) WAR
+ INNER JOIN (<include refid="kr.wise.dq.dqrs.service.DqrsViewMapper.Base_Dbc_Col_View" />) DBC
+         ON DBC.DB_SCH_ID = WAR.DB_SCH_ID
+        AND DBC.EXP_YN = 'N'
+        AND DBC.DBC_TBL_NM = WAR.DBC_TBL_NM
+        AND DBC.DBC_COL_NM  = WAR.DBC_COL_NM
+    WHERE 1=1
+         AND WAR.OBJ_ID IS NOT NULL
+   GROUP BY DBC.DB_SCH_PNM, DBC.DBC_TBL_NM, WAR.KND_CD, WAR.KND_NM, WAR.ANA_STS_TXT, WAR.ANA_STR_DTM,
+            OBJ_ID
+  </select>
+  
+  <select id="selectPrfInfo" resultMap="DqrsResultMap" parameterType="kr.wise.dq.dqrs.service.DqrsPoiResult">
+      SELECT (NVL(DBC.DB_SCH_PNM, '') || '.' || NVL(DBC.DBC_TBL_NM, '')) AS "DBC_TBL_NM" -- 테이블
+           , DBC.DBC_TBL_KOR_NM AS "DBC_TBL_KOR_NM" -- 테이블한글명
+           , LISTAGG(DBC.DBC_COL_NM, ', ') WITHIN GROUP(ORDER BY DBC.DBC_COL_NM) AS "DBC_COL_NM"  
+           , LISTAGG(DBC.DBC_COL_KOR_NM, ', ') WITHIN GROUP(ORDER BY DBC.DBC_COL_KOR_NM) AS "DBC_COL_KOR_NM"  
+           , (NVL(GET_DB_SCH_PNM(WAR.PA_DB_SCH_ID), '') || '.' || NVL(WAR.PA_DBC_TBL_NM, '')) AS "DBC_PA_TBL_NM"
+           , LISTAGG(WAR.PA_DBC_COL_NM, ', ') WITHIN GROUP(ORDER BY WAR.PA_DBC_COL_NM) AS "DBC_PA_COL_NM"  
+           , WAR.KND_CD AS "KND_CD" -- 도메인
+           , WAR.KND_NM AS "KND_NM" -- 룰명
+           , CASE 
+              WHEN WAR.ANA_CNT IS NULL THEN '0'
+              ELSE TO_CHAR(WAR.ANA_CNT, 'FM999,999,999,999,999,999,999')
+             END AS "ANA_CNT" -- 전체건수
+           , CASE 
+              WHEN WAR.ESN_ER_CNT IS NULL THEN '0'
+              ELSE TO_CHAR(WAR.ESN_ER_CNT, 'FM999,999,999,999,999,999,999')
+             END AS "ESN_ER_CNT" -- 오류건수
+           , CASE WHEN MAX(WAR.ANA_CNT) IS NULL OR MAX(WAR.ANA_CNT) ='0' THEN '0'
+      			 	ELSE NVL(TO_CHAR(ROUND(SUM(WAR.ESN_ER_CNT) / NULLIF(SUM(WAR.ANA_CNT ),0) * 100, 4)),0) END AS COL_ERR_RATE 
+           , WAR.ERR_SQL AS "ERR_SQL"
+           , WAR.OBJ_ID AS "OBJ_ID"
+           , WAR.ANA_STR_DTM AS "ANA_STR_DTM"
+           , WAR.ANA_STR_DTM AS "STR_ANA_STR_DTM"
+           , WAR.ANA_STR_DTM AS "OBJ_DATE"
+           , CASE WHEN WAR.PRF_KND_CD = 'PC01' THEN 'PT01'ELSE WAR.PRF_KND_CD END AS PRF_KND_CD
+        FROM (
+                    -- 관계분석
+                    SELECT PRF.DB_SCH_ID AS "DB_SCH_ID"
+                         , CH_TBL_DBC_TBL_NM AS "DBC_TBL_NM"
+                         , CH_TBL_DBC_COL_NM AS "DBC_COL_NM"
+                         , T.PA_TBL_DBC_SCH_ID AS "PA_DB_SCH_ID"
+                         , T.PA_TBL_DBC_TBL_NM AS "PA_DBC_TBL_NM"
+                         , C.PA_TBL_DBC_COL_NM AS "PA_DBC_COL_NM"
+                         , PRF.PRF_ID AS "OBJ_ID"
+                         , PRF.ANA_STR_DTM AS "ANA_STR_DTM"
+                         , PRF.PRF_KND_CD AS PRF_KND_CD
+                         , '참조무결성' AS "KND_CD"
+                         , PRF.OBJ_NM AS "KND_NM"
+                         , PRF.ANA_CNT AS "ANA_CNT" -- 전체건수
+                         , PRF.ESN_ER_CNT AS "ESN_ER_CNT" -- 오류건수
+                         , CASE 
+                            WHEN PRF.NULL_CNT IS NULL THEN NULL
+                            ELSE ROUND(PRF.NULL_CNT*100/CASE PRF.ANA_CNT WHEN 0 THEN 1 ELSE PRF.ANA_CNT END,2)
+                           END AS COL_ERR_RATE -- 오류추정율
+                         , '' AS "ERR_SQL" -- 오류SQL
+                      FROM ( <include refid="kr.wise.dq.dqrs.service.DqrsViewMapper.Prf_View" /> ) PRF
+                INNER JOIN WAM_PRF_REL_TBL T
+                        ON PRF.PRF_ID = T.PRF_ID
+                       AND T.REG_TYP_CD IN ('C', 'U')
+                INNER JOIN WAM_PRF_REL_COL C
+                        ON T.PRF_ID = C.PRF_ID
+                       AND T.PA_TBL_DBC_TBL_NM = C.PA_TBL_DBC_TBL_NM
+                       AND C.REG_TYP_CD IN ('C', 'U')
+                     WHERE PRF.PRF_KND_CD= 'PT01'
+                 UNION ALL
+                 -- 중복분석
+                    SELECT PRF.DB_SCH_ID AS "DB_SCH_ID"
+                         , DBC_TBL_NM AS "DBC_TBL_NM"
+                         , C.DBC_COL_NM AS "DBC_COL_NM"
+                         , '' AS "PA_DB_SCH_ID"
+                         , '' AS "PA_DBC_TBL_NM"
+                         , ''AS "PA_DBC_COL_NM"
+                         , PRF.PRF_ID AS "OBJ_ID"
+                         , PRF.ANA_STR_DTM AS "ANA_STR_DTM"
+                         , PRF.PRF_KND_CD AS PRF_KND_CD
+                         , '중복데이터' AS "KND_CD"
+                         , PRF.OBJ_NM AS "KND_NM"
+                         , PRF.ANA_CNT AS "ANA_CNT" -- 전체건수
+                         , PRF.ESN_ER_CNT AS "ESN_ER_CNT" -- 오류건수
+                         , CASE 
+                            WHEN PRF.NULL_CNT IS NULL THEN NULL
+                            ELSE ROUND(PRF.NULL_CNT*100/CASE PRF.ANA_CNT WHEN 0 THEN 1 ELSE PRF.ANA_CNT END,2)
+                           END AS COL_ERR_RATE -- 오류추정율
+                         , '' AS "ERR_SQL" -- 오류SQL
+                      FROM ( <include refid="kr.wise.dq.dqrs.service.DqrsViewMapper.Prf2_View" /> ) PRF
+                INNER JOIN  WAM_PRF_UNQ_COL C
+                     ON  PRF.PRF_ID = C.PRF_ID
+                    AND  C.REG_TYP_CD IN ('C', 'U')
+                     WHERE PRF.PRF_KND_CD= 'PT02'          
+                 UNION ALL
+                    -- 칼럼
+                    SELECT PRF.DB_SCH_ID
+                         , PRF.DBC_TBL_NM
+                         , PRF.OBJ_NM AS "DBC_COL_NM"
+                         , '' AS "PA_DB_SCH_ID"
+                         , '' AS "PA_DBC_TBL_NM"
+                         , '' AS "PA_DBC_COL_NM"
+                         , PRF.PRF_ID AS "OBJ_ID"
+                         , PRF.ANA_STR_DTM AS "ANA_STR_DTM"
+                         , PRF.PRF_KND_CD AS PRF_KND_CD
+                         , PRF.DMN_NM AS "KND_CD"
+                         , PRF.KND_NM AS "KND_NM"
+                         , PRF.ANA_CNT AS "ANA_CNT" -- 전체건수
+                         , PRF.ESN_ER_CNT AS "ESN_ER_CNT" -- 오류건수
+                         , CASE 
+                            WHEN PRF.ANA_CNT IS NULL THEN NULL
+                            ELSE ROUND(PRF.ESN_ER_CNT*100/CASE PRF.ANA_CNT WHEN 0 THEN 1 ELSE PRF.ANA_CNT END,2)
+                           END AS COL_ERR_RATE -- 오류추정율
+                         , '' AS "ERR_SQL" -- 오류SQL
+                      FROM ( <include refid="kr.wise.dq.dqrs.service.DqrsViewMapper.Vrfc_View" />  ) PRF
+                 LEFT JOIN WAM_PRF_COL_ANA C
+                        ON PRF.PRF_ID = C.PRF_ID
+                       AND C.REG_TYP_CD IN ('C', 'U')
+                 UNION ALL 
+                    -- 업무규칙
+                    SELECT BR.DB_SCH_ID
+                         , BR.DBC_TBL_NM
+                         , BR.DBC_COL_NM
+                         , '' AS "PA_DB_SCH_ID"
+                         , '' AS "PA_DBC_TBL_NM"
+                         , '' AS "PA_DBC_COL_NM"
+                         , BR.BR_ID AS "OBJ_ID"
+                         , BR.ANA_STR_DTM AS "ANA_STR_DTM"
+                         , 'BR' AS PRF_KND_CD
+                         , BR.DQI_LNM AS "KND_CD"
+                         , BR.BR_NM AS "KND_NM"
+                         , BR.ANA_CNT as ANA_CNT -- 전체건수
+                         , BR.ER_CNT as ESN_ER_CNT -- 오류건수
+                         , CASE 
+                            WHEN BR.ANA_CNT IS NULL THEN NULL
+                            ELSE ROUND(BR.ER_CNT * 100 / CASE BR.ANA_CNT WHEN 0 THEN 1 ELSE BR.ANA_CNT END,2)
+                           END AS "COL_ERR_RATE"
+                         , TO_CHAR(BR.ANA_SQL) AS "ERR_SQL" -- 오류SQL
+                      FROM ( <include refid="kr.wise.dq.dqrs.service.DqrsViewMapper.Br_View" /> ) BR
+                      ) WAR
+      INNER JOIN (<include refid="kr.wise.dq.dqrs.service.DqrsViewMapper.Base_Dbc_Col_View" />) DBC
+              ON DBC.DB_SCH_ID = WAR.DB_SCH_ID
+             AND DBC.EXP_YN = 'N'
+             AND DBC.DBC_TBL_NM = WAR.DBC_TBL_NM
+             AND DBC.DBC_COL_NM  = WAR.DBC_COL_NM
+         WHERE 1=1
+             AND WAR.OBJ_ID IS NOT NULL
+        GROUP BY DBC.DB_SCH_PNM, DBC.DBC_TBL_NM, DBC.DBC_TBL_KOR_NM, WAR.KND_CD, WAR.KND_NM, WAR.ANA_CNT, WAR.ESN_ER_CNT, 
+                 WAR.COL_ERR_RATE, WAR.ERR_SQL, WAR.OBJ_ID, WAR.ANA_STR_DTM, WAR.PRF_KND_CD, WAR.PA_DB_SCH_ID, WAR.PA_DBC_TBL_NM
+  </select>
+  
+  
+  <!-- 표준/구조 품질 POI 다운로드 -->
+  <select id="selectDbConnTrgURL" resultType="String" parameterType="kr.wise.dq.dqrs.service.DqrsPoiGapResult">
+	SELECT CONN_TRG_LNK_URL
+	  FROM WAA_DB_CONN_TRG
+	<where> 1=1
+	       <if test="dbConnTrgId != null and dbConnTrgId != ''" >
+			AND DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR}
+		</if>
+	   AND EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+	</where>
+</select>
+
+<select id="selectGovCnt" resultMap="GapResultMap" parameterType="kr.wise.dq.dqrs.service.DqrsPoiGapResult">
+SELECT /*+ LEADING(D A) */  
+		 COUNT(CASE 
+		     --    WHEN B.DBC_COL_KOR_NM IS NULL THEN '컬럼한글명 미존재'
+		        WHEN C.SDITM_LNM IS NULL THEN '용어미존재'
+		        --   WHEN B.DBC_COL_KOR_NM != C.SDITM_LNM THEN '컬럼한글명불일치'
+		          WHEN B.DATA_TYPE != D.DATA_TYPE THEN '데이터타입 불일치'
+		          WHEN B.DATA_LEN != D.DATA_LEN THEN '데이터길이 불일치'
+		          WHEN B.DATA_PNT != D.DATA_SCAL THEN '데이터소수점 자리수 불일치'
+		         END
+		   )  AS ERR_CNT
+		  , COUNT(*) AS TOT_CNT
+		FROM WAA_DB_CONN_TRG DB
+		 INNER JOIN WAA_DB_SCH SCH
+		   ON SCH.DB_CONN_TRG_ID = DB.DB_CONN_TRG_ID
+		   AND SCH.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+		   AND SCH.REG_TYP_CD IN ('C', 'U')
+		 INNER JOIN WAT_DBC_TBL A
+		   ON A.DB_SCH_ID = SCH.DB_SCH_ID
+		   AND A.DB_CONN_TRG_ID = DB.DB_CONN_TRG_ID
+		INNER JOIN WAT_DBC_COL B
+		  ON B.DBC_TBL_NM = A.DBC_TBL_NM 
+		 AND B.DB_SCH_ID = A.DB_SCH_ID
+		LEFT JOIN WAA_DQRS_SDITM C
+			ON UPPER(C.SDITM_PNM) = UPPER(B.DBC_COL_NM)
+			AND C.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+			<if test="sditmDbConnTrgId != null and sditmDbConnTrgId != ''">
+		  	AND C.DB_CONN_TRG_ID = #{sditmDbConnTrgId, jdbcType=VARCHAR}
+		  	AND C.SYS_AREA_ID = '공통'
+		  </if>
+		  <if test="sditmDbConnTrgId == null or sditmDbConnTrgId == ''">
+		  	AND C.DB_SCH_ID = A.DB_SCH_ID
+		  </if>
+		LEFT JOIN WAA_DQRS_DMN D
+		   ON D.DMN_ID = C.DMN_ID
+		    <if test="sditmDbConnTrgId != null and sditmDbConnTrgId != ''">
+		  	AND D.DB_CONN_TRG_ID = #{sditmDbConnTrgId, jdbcType=VARCHAR}
+		  	AND D.SYS_AREA_ID = '공통'
+		  </if>
+		  <if test="sditmDbConnTrgId == null or sditmDbConnTrgId == ''">
+		  	AND D.DB_SCH_ID = A.DB_SCH_ID
+		  </if>
+		   AND D.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+		LEFT JOIN WAA_DQRS_EXP_COL EC
+	        ON EC.DB_SCH_ID  = B.DB_SCH_ID
+			 AND UPPER(EC.DBC_TBL_NM) = UPPER(B.DBC_TBL_NM)   
+			 AND UPPER(EC.DBC_COL_NM) = UPPER(B.DBC_COL_NM)  
+		 LEFT JOIN WAA_DQRS_EXP_TBL EX          
+		  	ON EX.DB_SCH_ID  = B.DB_SCH_ID  
+		 	AND UPPER(EX.DBC_TBL_NM) = UPPER(B.DBC_TBL_NM)
+		WHERE 1 = 1   
+		  AND DB.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+		  AND DB.REG_TYP_CD IN ('C', 'U')
+		  AND EC.DB_SCH_ID IS NULL         
+			AND EC.DBC_TBL_NM IS NULL
+			AND EC.DBC_COL_NM IS NULL	
+			AND NVL(EX.EXP_YN,'N')='N'
+
+	   <if test="dbConnTrgId != null">
+   	   	  AND A.DB_CONN_TRG_ID = #{dbConnTrgId, jdbcType=VARCHAR}
+	   </if> 
+	   <if test="dbSchId != null">
+   	   	  AND A.DB_SCH_ID = #{dbSchId, jdbcType=VARCHAR}
+	   </if> 		           
+	 ORDER BY 
+	 	   A.DBC_TBL_NM
+	     , A.DBC_TBL_KOR_NM
+	     , B.DBC_COL_NM
+	     , B.DBC_COL_KOR_NM
+</select>
+
+<select id="selectStndDtm" resultMap="GapResultMap" parameterType="kr.wise.dq.dqrs.service.DqrsPoiGapResult">
+	SELECT MIN(DB.STR_DTM) AS ANA_STR_DTM
+	     , SYSDATE AS ANA_END_DTM
+	  FROM WAA_DB_CONN_TRG DB
+	 INNER JOIN WAA_DB_SCH SCH
+	    ON SCH.DB_CONN_TRG_ID = DB.DB_CONN_TRG_ID
+	   AND SCH.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+	   AND SCH.REG_TYP_CD IN ('C', 'U')
+	 WHERE 1=1
+	   AND DB.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+	   AND DB.REG_TYP_CD IN ('C', 'U')
+	 <if test="dbConnTrgId != null and dbConnTrgId != ''" >
+			AND DB.DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR}
+		</if>
+		<if test="dbSchId != null and dbSchId != ''" >
+			AND SCH.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+		</if>
+		<if test="dbSchPnm != null and dbSchPnm != ''" >
+			AND (SCH.DB_SCH_PNM LIKE ('%' || #{dbSchPnm,jdbcType=VARCHAR} || '%') OR SCH.DB_SCH_PNM LIKE ('%' || UPPER(#{dbSchPnm,jdbcType=VARCHAR}) || '%'))
+		</if>
+</select>
+
+<select id="selectGovSditmTblList" resultMap="GapResultMap" parameterType="kr.wise.dq.dqrs.service.DqrsPoiGapResult">
+	SELECT AA.PDM_TBL_PNM, AA.PDM_COL_PNM, WAT_DATA_TYPE AS DATA_TYPE
+		, LTRIM(CASE 
+			        WHEN AA.SDITM_LNM IS NULL THEN '표준용어에 존재하지 않는 컬럼명 입니다.'
+			          WHEN UPPER(AA.WAT_DATA_TYPE) != UPPER(AA.WAM_DATA_TYPE) THEN '데이터타입이 일치하지 않습니다.'
+			          ELSE '표준을 준수하였습니다.'
+			         END )  AS GAP_STATUS
+	FROM
+	(	SELECT 
+				  (NVL(SCH.DB_SCH_PNM, '') || '.' || NVL(A.DBC_TBL_NM, '')) AS PDM_TBL_PNM
+				  , B.DBC_COL_NM               AS PDM_COL_PNM
+				  , B.ORD 
+				  , CASE WHEN B.DATA_LEN IS NULL 
+			         THEN B.DATA_TYPE
+			         ELSE (CASE WHEN B.DATA_PNT IS NOT NULL AND B.DATA_PNT != 0 
+			                    THEN (NVL(B.DATA_TYPE, '') || '(' || NVL(B.DATA_LEN, '') || ',' || NVL(B.DATA_PNT, '') || ')') 
+			                    ELSE (NVL(B.DATA_TYPE, '') || '(' || NVL(B.DATA_LEN, '') || ')')
+			                     END )
+			         END AS WAT_DATA_TYPE
+			      , CASE WHEN C.DATA_LEN IS NULL 
+			         THEN C.DATA_TYPE
+			         ELSE (CASE WHEN C.DATA_SCAL IS NOT NULL AND C.DATA_SCAL != 0
+			                    THEN (NVL(C.DATA_TYPE, '') || '(' || NVL(C.DATA_LEN, '') || ',' || NVL(C.DATA_SCAL, '') || ')') 
+			                    ELSE (NVL(C.DATA_TYPE, '') || '(' || NVL(C.DATA_LEN, '') || ')')
+			                     END )
+			         END AS WAM_DATA_TYPE
+			      , C.SDITM_LNM
+		FROM WAA_DB_CONN_TRG DB
+		 INNER JOIN WAA_DB_SCH SCH
+		   ON SCH.DB_CONN_TRG_ID = DB.DB_CONN_TRG_ID
+		   AND SCH.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+		   AND SCH.REG_TYP_CD IN ('C', 'U')
+		 INNER JOIN WAT_DBC_TBL A
+		   ON A.DB_SCH_ID = SCH.DB_SCH_ID
+		   AND A.DB_CONN_TRG_ID = DB.DB_CONN_TRG_ID
+		INNER JOIN WAT_DBC_COL B
+		  ON B.DBC_TBL_NM = A.DBC_TBL_NM 
+		 AND B.DB_SCH_ID = A.DB_SCH_ID
+		LEFT JOIN ( SELECT C.SDITM_PNM SDITM_PNM
+						, C.SDITM_LNM SDITM_LNM
+						, C.SDITM_ID SDITM_ID
+						, C.REG_TYP_CD REG_TYP_CD
+						, D.DMN_ID DMN_ID
+
+						, D.DMN_NM DMN_LNM
+						, D.DATA_TYPE
+						, D.DATA_LEN
+						, D.DATA_SCAL
+						, C.DB_CONN_TRG_ID
+						, C.DB_SCH_ID
+					 FROM WAA_DQRS_SDITM C
+					 LEFT JOIN WAA_DQRS_DMN D
+					   ON D.DMN_ID = C.DMN_ID
+					  AND D.REG_TYP_CD IN ('C','U')
+					  AND D.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+					  AND C.DB_CONN_TRG_ID = D.DB_CONN_TRG_ID
+					  AND C.DB_SCH_ID = D.DB_SCH_ID
+					WHERE 1=1
+					  AND C.REG_TYP_CD IN ('C','U')
+					  AND C.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+					  <if test="sditmDbConnTrgId != null and sditmDbConnTrgId != ''">
+					  	AND C.DB_CONN_TRG_ID = #{sditmDbConnTrgId,jdbcType=VARCHAR}
+					  </if>
+					  <if test="sditmDbConnTrgId == null or sditmDbConnTrgId == ''">
+					  	<if test="dbConnTrgId != null and dbConnTrgId != ''" >
+							AND C.DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR}
+						 </if>
+						 <if test="dbSchId != null and dbSchId != ''" >
+							AND C.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+						 </if>
+					  </if>
+		) C 
+		  ON UPPER(C.SDITM_PNM) = RTRIM(REPLACE(UPPER(B.DBC_COL_NM),'_0123456789','')) 
+		 AND C.REG_TYP_CD IN ('C', 'U')
+		  <if test="sditmDbConnTrgId != null and sditmDbConnTrgId != ''">
+		  	AND C.DB_CONN_TRG_ID = #{sditmDbConnTrgId,jdbcType=VARCHAR}
+		  </if>
+		  <if test="sditmDbConnTrgId == null or sditmDbConnTrgId == ''">
+		  	AND C.DB_CONN_TRG_ID = SCH.DB_CONN_TRG_ID
+		 	AND C.DB_SCH_ID = SCH.DB_SCH_ID
+		  </if>
+		  LEFT JOIN WAA_DQRS_EXP_COL EC
+	        ON EC.DB_SCH_ID  = B.DB_SCH_ID
+			 AND EC.DBC_TBL_NM = B.DBC_TBL_NM   
+			 AND EC.DBC_COL_NM = B.DBC_COL_NM  
+			 LEFT JOIN WAA_DQRS_EXP_TBL EX          
+			  ON EX.DB_SCH_ID  = A.DB_SCH_ID  
+			 AND EX.DBC_TBL_NM = A.DBC_TBL_NM  
+
+		WHERE 1 = 1   
+		  AND DB.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+		  AND DB.REG_TYP_CD IN ('C', 'U')
+		 <if test="dbConnTrgId != null and dbConnTrgId != ''" >
+			AND DB.DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR}
+		 </if>
+		 <if test="dbSchId != null and dbSchId != ''" >
+			AND SCH.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+		 </if>
+		 <if test="dbSchPnm != null and dbSchPnm != ''" >
+			AND (SCH.DB_SCH_PNM LIKE '%'||#{dbSchPnm,jdbcType=VARCHAR}||'%' OR SCH.DB_SCH_PNM LIKE '%'||UPPER(#{dbSchPnm,jdbcType=VARCHAR})||'%')
+		 </if>
+		   AND EC.DB_SCH_ID IS NULL         
+			AND EC.DBC_TBL_NM IS NULL
+			AND EC.DBC_COL_NM IS NULL	
+			AND NVL(EX.EXP_YN,'N')='N' 
+	   	  
+	) AA		      
+	ORDER BY AA.PDM_TBL_PNM, AA.PDM_COL_PNM, AA.ORD
+</select>
+
+<select id="selectGovSditmList" resultMap="GapResultMap" parameterType="kr.wise.dq.dqrs.service.DqrsPoiGapResult">
+SELECT A.SDITM_LNM, A.SDITM_PNM, A.OBJ_DESCN , D.DMN_NM AS INFOTP_LNM
+	  FROM WAA_DQRS_SDITM A
+	   LEFT OUTER JOIN (
+	  	  		SELECT D.DB_CONN_TRG_ID, D.DB_SCH_ID, D.DMN_NM 
+	  	  		FROM WAA_DQRS_DMN D
+		   		WHERE D.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+		   		GROUP BY D.DB_CONN_TRG_ID, D.DB_SCH_ID, D.DMN_NM 
+		   ) D
+		   ON A.DMN_NM = D.DMN_NM 
+		   AND A.DB_CONN_TRG_ID = D.DB_CONN_TRG_ID
+	 <if test="sditmDbConnTrgId == null or sditmDbConnTrgId == ''">
+	 		AND A.DB_SCH_ID = D.DB_SCH_ID
+	 	INNER JOIN WAA_DB_SCH SCH
+		   ON SCH.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+		   AND SCH.REG_TYP_CD IN ('C', 'U')
+		   AND A.DB_SCH_ID = SCH.DB_SCH_ID
+	 </if>
+	 WHERE A.REG_TYP_CD IN ('C','U')
+	 AND A.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+	 <if test="sditmDbConnTrgId != null and sditmDbConnTrgId != ''">
+	 		AND A.DB_CONN_TRG_ID = #{sditmDbConnTrgId,jdbcType=VARCHAR}
+	 </if>
+	 <if test="sditmDbConnTrgId == null or sditmDbConnTrgId == ''">
+		 <if test="dbSchId != null and dbSchId != ''" >
+			AND SCH.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+		</if>
+	</if>
+</select>
+
+<select id="selectGovDmnList" resultMap="GapResultMap" parameterType="kr.wise.dq.dqrs.service.DqrsPoiGapResult">
+	SELECT A.DMN_NM AS DMN_LNM, A.DATA_TYPE, A.DATA_LEN
+	, case when A.DATA_SCAL is null then '' when A.DATA_SCAL ='' then '' else TO_CHAR(NVL(A.DATA_SCAL, '')) end AS DATA_SCAL
+	 , A.OBJ_DESCN
+	  FROM WAA_DQRS_DMN A
+	  <if test="sditmDbConnTrgId == null or sditmDbConnTrgId == ''">
+	  INNER JOIN WAA_DB_SCH SCH
+		   ON SCH.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+		   AND SCH.REG_TYP_CD IN ('C', 'U')
+		   AND A.DB_SCH_ID = SCH.DB_SCH_ID
+		</if>
+	 WHERE 1=1
+	   AND A.REG_TYP_CD IN ('C','U')
+	   AND A.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+	   <if test="sditmDbConnTrgId == null or sditmDbConnTrgId == ''">
+		   <if test="dbSchId != null and dbSchId != ''" >
+				AND A.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+			</if>
+		</if>
+		<if test="sditmDbConnTrgId != null and sditmDbConnTrgId != ''">
+				AND A.DB_CONN_TRG_ID = #{sditmDbConnTrgId,jdbcType=VARCHAR}
+		</if>
+</select>
+
+<select id="selectStructResultList" resultMap="GapResultMap" parameterType="kr.wise.dq.dqrs.service.DqrsPoiGapResult">
+SELECT ITEM_NM, TBL_CNT, ERR_CNT
+		, TO_CHAR(GAP_RATE, 'FM999,999,999,999,999,999,999.000') AS GAP_RATE
+		, TO_CHAR(100-GAP_RATE, 'FM999,999,999,999,999,999,999.000') AS STND_RATE
+		, TO_CHAR(SYSDATE, 'YYYY-MM-DD') AS RESULT_DATE
+	FROM 
+	(
+		SELECT '물리DB기준 테이블 현행화' AS ITEM_NM, TBL_CNT, ERR_CNT
+				,CASE WHEN TBL_CNT != 0 THEN (ERR_CNT/TBL_CNT*100) ELSE 0 END AS GAP_RATE
+		FROM (
+				SELECT COUNT(*) AS TBL_CNT
+						,COUNT(CASE WHEN B.PDM_TBL_PNM IS NULL THEN 1 END) AS ERR_CNT
+				  FROM WAT_DBC_TBL A
+				  LEFT OUTER JOIN WAA_DB_SCH D
+				    ON A.DB_SCH_ID = D.DB_SCH_ID 
+			       AND D.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+				  LEFT OUTER JOIN WAA_DQRS_TBL B
+				    ON A.DBC_TBL_NM = B.PDM_TBL_PNM 
+				 WHERE 1=1
+				<if test="dbSchId != null and dbSchId != ''" >
+					AND A.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+				</if>
+		) A
+		
+		UNION ALL 
+	SELECT '물리DB기준 컬럼 현행화' AS ITEM_NM, COL_CNT, ERR_CNT
+				,CASE WHEN COL_CNT !=0 THEN (ERR_CNT/COL_CNT*100) ELSE 0 END AS GAP_RATE
+		FROM (
+				SELECT COUNT(*) AS COL_CNT
+						,COUNT(CASE WHEN D.PDM_TBL_PNM IS NULL THEN 1 END) AS ERR_CNT
+				FROM WAT_DBC_TBL A
+			    LEFT OUTER JOIN WAA_DB_SCH E
+			      ON A.DB_SCH_ID = E.DB_SCH_ID
+				 AND E.REG_TYP_CD IN ('C','U')
+				 AND E.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+			   INNER JOIN WAT_DBC_COL AA
+			      ON A.DB_SCH_ID = AA.DB_SCH_ID 
+				 AND A.DBC_TBL_NM = AA.DBC_TBL_NM 
+				LEFT OUTER JOIN 
+				(
+					SELECT B.PDM_TBL_PNM, B.PDM_TBL_LNM, BB.PDM_COL_PNM, PDM_COL_LNM, PK_YN
+					     , DATA_TYPE, DATA_LEN, DATA_SCAL, COL_ORD, NONUL_YN, DEFLT_VAL
+					  FROM WAA_DQRS_TBL B
+				     INNER JOIN WAA_DQRS_COL BB
+					    ON BB.PDM_TBL_ID = B.PDM_TBL_ID 
+				) D
+				ON A.DBC_TBL_NM = D.PDM_TBL_PNM
+				 AND D.PDM_COL_PNM = AA.DBC_COL_NM 
+				WHERE 1=1
+				<if test="dbSchId != null and dbSchId != ''" >
+					AND A.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+				</if>
+		) A
+		
+		UNION ALL 
+		
+		SELECT '테이블정의서 기준  테이블 현행화' AS ITEM_NM, TBL_CNT, ERR_CNT
+				,CASE WHEN TBL_CNT != 0 THEN (ERR_CNT/TBL_CNT*100) ELSE 0 END AS GAP_RATE
+		FROM (
+				SELECT COUNT(*) AS TBL_CNT
+						,COUNT(CASE WHEN B.DBC_TBL_NM IS NULL THEN 1 END) AS ERR_CNT
+				FROM WAA_DQRS_TBL A
+
+				LEFT OUTER JOIN WAA_DB_SCH D
+				  ON D.DB_SCH_ID = A.DB_SCH_ID
+				 AND D.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+				LEFT OUTER JOIN WAT_DBC_TBL B
+				  ON B.DBC_TBL_NM = A.PDM_TBL_PNM
+				WHERE 1=1
+				<if test="dbSchId != null and dbSchId != ''" >
+					AND D.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+				</if>
+		) A
+		
+		UNION ALL 
+		
+		SELECT '컬럼정의서 기준 컬럼 현행화' AS ITEM_NM, COL_CNT, ERR_CNT
+				,CASE WHEN COL_CNT !=0 THEN (ERR_CNT/COL_CNT*100) ELSE 0 END AS GAP_RATE
+		FROM (
+				SELECT COUNT(*) AS COL_CNT
+						,COUNT(CASE WHEN D.DBC_COL_NM IS NULL THEN 1 END) AS ERR_CNT
+				  FROM WAA_DQRS_TBL A
+				 INNER JOIN WAA_DQRS_COL AA
+				    ON A.PDM_TBL_ID = AA.PDM_TBL_ID 
+				 
+				  LEFT OUTER JOIN WAA_DB_SCH E
+				    ON A.DB_SCH_ID = E.DB_SCH_ID
+				   AND E.REG_TYP_CD IN ('C','U')
+				   AND E.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+				  LEFT OUTER JOIN 
+				  (
+					SELECT B.DBC_TBL_NM, B.DBC_TBL_KOR_NM, B.DB_SCH_ID, BB.DBC_COL_NM
+						 , BB.DBC_COL_KOR_NM, BB.PK_YN, BB.DATA_TYPE, BB.DATA_LEN
+						 , BB.DATA_PNT, BB.ORD, BB.NULL_YN, BB.DEFLT_VAL
+					  FROM WAT_DBC_TBL B
+					 INNER JOIN WAT_DBC_COL BB
+				    	ON B.DB_SCH_ID = BB.DB_SCH_ID 
+				       AND B.DBC_TBL_NM = BB.DBC_TBL_NM 
+				  ) D
+				   ON D.DBC_TBL_NM = A.PDM_TBL_PNM
+				  AND D.DBC_TBL_KOR_NM = A.PDM_TBL_LNM
+				  AND A.DB_SCH_ID = D.DB_SCH_ID 
+				  AND AA.PDM_COL_PNM = D.DBC_COL_NM 
+				WHERE 1=1
+				<if test="dbSchId != null and dbSchId != ''" >
+					AND E.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+				</if>
+		) A
+		
+	) A
+</select>
+
+<select id="selectDbcTblList" resultMap="GapResultMap" parameterType="kr.wise.dq.dqrs.service.DqrsPoiGapResult">
+SELECT TBL_NM
+		 , CASE WHEN DETAIL_STATUS IS NULL THEN '일치' ELSE '불일치' END AS STATE
+		 , DETAIL_STATUS
+	  FROM (
+	  		SELECT (NVL(D.DB_SCH_PNM, '') || '.' || NVL(A.DBC_TBL_NM, '')) AS TBL_NM
+	  		     , CASE WHEN B.PDM_TBL_ID IS NULL THEN '물리모델 미존재' END AS DETAIL_STATUS
+	  		  FROM WAT_DBC_TBL A
+	  		  LEFT OUTER JOIN WAA_DB_SCH D
+	  		    ON A.DB_SCH_ID = D.DB_SCH_ID
+	  		   AND D.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+	  		  LEFT OUTER JOIN WAA_DQRS_TBL B
+	  		    ON A.DBC_TBL_NM = B.PDM_TBL_PNM
+	  		 WHERE 1=1
+	  		 <if test="dbSchId != null and dbSchId != ''" >
+			   AND A.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+			 </if>
+	  		) A
+	 ORDER BY TBL_NM		
+</select>
+
+<select id="selectModelDtm" resultMap="GapResultMap" parameterType="kr.wise.dq.dqrs.service.DqrsPoiGapResult">
+	SELECT SYSDATE AS ANA_END_DTM
+	      ,MIN(APRV_DTM) AS ANA_STR_DTM
+	  FROM WAA_DQRS_TBL
+	 WHERE 1=1
+	  <if test="dbConnTrgId != null and dbConnTrgId != ''" >
+			AND DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR}
+		</if>
+		<if test="dbSchId != null and dbSchId != ''" >
+			AND DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+		</if>
+		<if test="dbcTblNm != null and dbcTblNm != ''" >
+			AND (PDM_TBL_PNM LIKE ('%' || #{dbcTblNm,jdbcType=VARCHAR} || '%') OR PDM_TBL_LNM LIKE ('%' || UPPER(#{dbcTblNm,jdbcType=VARCHAR}) || '%'))
+		</if>
+</select>
+
+<select id="selectDbcColList" resultMap="GapResultMap" parameterType="kr.wise.dq.dqrs.service.DqrsPoiGapResult">
+	SELECT TBL_NM, COL_NM, DATA_TYPE
+	     , CASE WHEN DETAIL_STATUS IS NULL THEN '일치' ELSE '불일치' END AS STATE
+	     , DETAIL_STATUS
+	  FROM (
+	  		SELECT (NVL(E.DB_SCH_PNM, '') || '.' || NVL(A.DBC_TBL_NM, '')) AS TBL_NM
+	  			 , AA.DBC_COL_NM AS COL_NM
+	  			 , CASE WHEN AA.DATA_LEN IS NULL THEN AA.DATA_TYPE ELSE (
+	  			 						CASE WHEN AA.DATA_PNT IS NOT NULL AND AA.DATA_PNT != 0
+	  			 							THEN ((NVL(AA.DATA_TYPE, '') || '(' || NVL(AA.DATA_LEN, '') || ',' || NVL(AA.DATA_PNT, '') || ')'))
+	  			 							ELSE ((NVL(AA.DATA_TYPE, '') || '(' || NVL(AA.DATA_LEN, '') || ')'))
+	  			 							END )
+	  			   END AS DATA_TYPE
+	  			 , CASE WHEN D.PDM_TBL_PNM IS NULL THEN '물리모델 미존재'
+	  			 		WHEN D.PDM_COL_PNM IS NULL THEN '물리모델 컬럼 미존재'
+	  			 		WHEN NVL(D.PDM_COL_LNM,'_') != NVL(AA.DBC_COL_KOR_NM,'_') THEN '컬럼한글명불일치'
+	  			 		WHEN NVL(D.PK_YN,'N') != NVL(AA.PK_YN,'N') THEN 'PK여부불일치'
+	  			 		WHEN TRIM(TRAILING '2' FROM D.DATA_TYPE) != TRIM(TRAILING '2' FROM AA.DATA_TYPE) THEN '데이터타입불일치'
+	  			 		WHEN NVL(D.DATA_LEN,0) != NVL(AA.DATA_LEN,0) THEN '데이터길이불일치'
+	  			 		WHEN NVL(D.DATA_SCAL,0) != NVL(AA.DATA_PNT,0) THEN '소수점불일치'
+	  			 		WHEN D.COL_ORD != AA.ORD THEN '컬럼순서불일치'
+	  			 		WHEN NVL(D.NONUL_YN,'N') != (CASE WHEN AA.NULL_YN = 'Y' THEN 'N' ELSE 'Y' END) THEN 'NOT NULL여부불일치'
+	  			 		WHEN NVL(D.DEFLT_VAL,'_') != NVL(AA.DEFLT_VAL, '_') THEN 'DEFAULT불일치'
+	  			   END AS DETAIL_STATUS
+	  		  FROM WAT_DBC_TBL A
+	  		  LEFT OUTER JOIN WAA_DB_SCH E
+	  		    ON A.DB_SCH_ID = E.DB_SCH_ID
+	  		   AND E.REG_TYP_CD IN('C','U')
+	  		   AND E.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+	  		 INNER JOIN WAT_DBC_COL AA
+	  		    ON A.DB_SCH_ID = AA.DB_SCH_ID
+	  		   AND A.DBC_TBL_NM = AA.DBC_TBL_NM
+	  		  LEFT OUTER JOIN
+	  		  ( SELECT B.PDM_TBL_PNM, B.PDM_TBL_LNM
+	  		  		 , BB.PDM_COL_PNM, PDM_COL_LNM, PK_YN
+	  		  		 , DATA_TYPE, DATA_LEN, DATA_SCAL
+	  		  		 , COL_ORD, NONUL_YN, DEFLT_VAL
+	  		  	  FROM WAA_DQRS_TBL B
+	  		  	 INNER JOIN WAA_DQRS_COL BB
+	  		  	    ON BB.PDM_TBL_ID = B.PDM_TBL_ID
+	  		   ) D
+	  		    ON A.DBC_TBL_NM = D.PDM_TBL_PNM
+	  		   AND D.PDM_COL_PNM = AA.DBC_COL_NM
+			 WHERE 1=1
+			 <if test="dbSchId != null and dbSchId != ''" >
+			   AND A.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+			 </if>
+	 		) A
+</select>
+
+<select id="selectPdmTblList" resultMap="GapResultMap" parameterType="kr.wise.dq.dqrs.service.DqrsPoiGapResult">
+SELECT TBL_NM
+	     , CASE WHEN DETAIL_STATUS IS NULL THEN '일치' ELSE '불일치' END AS STATE
+	     , DETAIL_STATUS
+	  FROM (
+	  		SELECT (NVL(D.DB_SCH_PNM, '') || '.' || NVL(A.PDM_TBL_PNM, '')) AS TBL_NM
+	  			 , CASE WHEN B.DBC_TBL_NM IS NULL THEN '물리DB에 미존재' END AS DETAIL_STATUS
+	  		  FROM WAA_DQRS_TBL A
+	  		  LEFT OUTER JOIN WAA_DB_SCH D
+	  		    ON D.DB_SCH_ID = A.DB_SCH_ID
+	  		   AND D.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+	  		  LEFT OUTER JOIN WAT_DBC_TBL B
+	  		    ON B.DBC_TBL_NM = A.PDM_TBL_PNM
+	  		 WHERE 1=1
+	  		 <if test="dbSchId != null and dbSchId != ''" >
+			   AND A.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+			 </if>
+	       ) A
+	  ORDER BY TBL_NM
+</select>
+
+<select id="selectPdmColList" resultMap="GapResultMap" parameterType="kr.wise.dq.dqrs.service.DqrsPoiGapResult">
+SELECT TBL_NM, COL_NM, DATA_TYPE, DETAIL_STATUS
+      ,CASE WHEN DETAIL_STATUS IS NULL THEN '일치' ELSE '불일치' END AS STATE
+FROM (
+   SELECT (NVL(E.DB_SCH_PNM, '') || '.' || NVL(A.PDM_TBL_PNM, '')) AS TBL_NM
+        , AA.PDM_COL_PNM AS COL_NM
+        , CASE WHEN AA.DATA_LEN IS NULL THEN AA.DATA_TYPE
+          				ELSE (CASE WHEN AA.DATA_SCAL IS NOT NULL AND AA.DATA_SCAL!=0
+                  		THEN ((NVL(AA.DATA_TYPE, '') || '(' || NVL(AA.DATA_LEN, '') || ',' || NVL(AA.DATA_SCAL, '') || ')') )
+                  		ELSE ((NVL(AA.DATA_TYPE, '') || '(' || NVL(AA.DATA_LEN, '') || ')'))
+                  		 END )
+          END AS DATA_TYPE
+        , CASE WHEN D.DBC_TBL_NM IS NULL THEN '물리DB 테이블 미존재'
+         	   WHEN D.DBC_COL_NM IS NULL THEN '물리DB 컬럼 미존재'
+         	   WHEN NVL(AA.PDM_COL_LNM,'_') != NVL(D.DBC_COL_KOR_NM,'_') THEN '컬럼한글명불일치'
+         	   WHEN NVL(AA.PK_YN,'N') != NVL(D.PK_YN,'N') THEN 'PK여부불일치'
+         	   WHEN TRIM(TRAILING '2' FROM AA.DATA_TYPE ) != TRIM(TRAILING '2' FROM D.DATA_TYPE ) THEN '데이터타입불일치'
+         	   WHEN NVL(AA.DATA_LEN,0) != NVL(D.DATA_LEN,0) THEN '데이터길이불일치'
+         	   WHEN NVL(AA.DATA_SCAL,0) != NVL(D.DATA_PNT,0) THEN '소수점불일치'
+         	   WHEN AA.COL_ORD != D.ORD THEN '컬럼순서불일치'
+         	   WHEN NVL(AA.NONUL_YN ,'N') != (CASE WHEN D.NULL_YN = 'Y' THEN 'N' ELSE 'Y' END) THEN 'NOT NULL여부불일치'
+         	   WHEN NVL(AA.DEFLT_VAL ,'_') != NVL(D.DEFLT_VAL,'_') THEN 'DEFAULT불일치'
+      	  END AS DETAIL_STATUS
+   	 FROM WAA_DQRS_TBL A
+    INNER JOIN WAA_DQRS_COL AA
+       ON A.PDM_TBL_ID = AA.PDM_TBL_ID
+        LEFT OUTER JOIN WAA_DB_SCH E
+       ON A.DB_SCH_ID = E.DB_SCH_ID 
+      AND E.REG_TYP_CD IN ('C','U')
+      AND E.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+     LEFT OUTER JOIN
+      (
+          SELECT B.DBC_TBL_NM, B.DBC_TBL_KOR_NM, B.DB_SCH_ID, BB.DBC_COL_NM
+               , BB.DBC_COL_KOR_NM, BB.PK_YN, BB.DATA_TYPE, BB.DATA_LEN 
+               , BB.DATA_PNT, BB.ORD, BB.NULL_YN, BB.DEFLT_VAL 
+            FROM WAT_DBC_TBL B
+           INNER JOIN WAT_DBC_COL BB
+              ON B.DB_SCH_ID = BB.DB_SCH_ID 
+             AND B.DBC_TBL_NM = BB.DBC_TBL_NM 
+       )  D 
+       ON D.DBC_TBL_NM = A.PDM_TBL_PNM 
+      AND D.DB_SCH_ID = A.DB_SCH_ID 
+      AND AA.PDM_COL_PNM = D.DBC_COL_NM
+	WHERE 1=1
+	<if test="dbSchId != null and dbSchId != ''" >
+	  AND A.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+	</if>
+) A
+      
+</select>
+
+<select id="selectTblDbList" resultMap="GapResultMap" parameterType="kr.wise.dq.dqrs.service.DqrsPoiGapResult">
+	SELECT DB_SCH_PNM
+		 , PDM_TBL_PNM 
+		 , PDM_TBL_LNM
+		 , COL_CNT
+		 , ERR_CNT
+		 , TO_CHAR((ERR_CNT/COL_CNT)*100,'FM999,999,999,999,999,999,999.00') AS GAP_RATE
+	  FROM ( SELECT D.DB_SCH_PNM AS DB_SCH_PNM
+			 	  , A.PDM_TBL_PNM AS PDM_TBL_PNM
+			 	  , A.PDM_TBL_LNM AS PDM_TBL_LNM
+			 	  , COUNT(B.PDM_COL_ID) AS COL_CNT
+			 	  , SUM(CASE WHEN E.SDITM_PNM IS NULL THEN 1 ELSE 0 END) AS ERR_CNT
+			   FROM WAA_DQRS_TBL A
+		 	  INNER JOIN WAA_DQRS_COL B 
+		    	 ON A.PDM_TBL_ID =B.PDM_TBL_ID 
+	      	   
+	      	   LEFT OUTER JOIN WAA_DB_SCH D 
+	        	 ON A.DB_SCH_ID = D.DB_SCH_ID 
+	       	 	AND D.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+	      	   LEFT JOIN WAM_SDITM E 
+	        	 ON E.SDITM_PNM = B.PDM_COL_PNM 
+	       	 	AND E.REG_TYP_CD IN ('U', 'C')
+	     	  WHERE 1=1
+	     	  <if test="dbSchId != null and dbSchId != ''" >
+			    AND A.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+			  </if>
+		 	  GROUP BY D.DB_SCH_PNM, A.PDM_TBL_PNM, A.PDM_TBL_LNM
+			) A
+</select>
+
+<select id="selectColDbList" resultMap="GapResultMap" parameterType="kr.wise.dq.dqrs.service.DqrsPoiGapResult">
+SELECT D.DB_SCH_PNM
+		 , A.PDM_TBL_PNM
+		 , B.PDM_COL_PNM
+		 , B.PDM_COL_LNM
+		 , B.DATA_TYPE
+		 , B.DATA_LEN
+		 , B.DATA_SCAL
+		 , B.PK_YN
+		 , B.PK_ORD
+		 , B.NONUL_YN
+		 , CASE WHEN H.SDITM_PNM IS NULL THEN '표준용어에 등록되지 않은 영문 약어명으로 컬럼명을 정의하였습니다. 표준을 위배합니다.' 
+		 		WHEN B.DATA_TYPE != H.DATA_TYPE THEN '표준용어에 등록되어 있는 영문 약어명으로 컬럼명을 정의하였지만,  데이터 타입이 일치하지 않습니다. 표준을 위배합니다.'
+		 		WHEN B.DATA_LEN != H.DATA_LEN THEN '표준용어에 등록되어 있는 영문 약어명으로 컬럼명을 정의하였지만,  데이터 타입의 전체 길이가 일치하지 않습니다. 표준을 위배합니다.'
+		 		WHEN NVL(B.DATA_SCAL,0) != NVL(H.DATA_SCAL,0) THEN '표준용어에 등록되어 있는 영문 약어명으로 컬럼명을 정의하였지만,  데이터 타입의 소수점 길이가 일치하지 않습니다. 표준을 위배합니다.'
+		 		ELSE '표준용어에 등록되어 있는 영문 약어명으로 컬럼명을 정의하였고, 데이터 타입도 도메인 정보와 일치합니다. 표준을 준수합니다.' END AS DETAIL_STATUS
+	 FROM WAA_DQRS_TBL A
+    INNER JOIN WAA_DQRS_COL B 
+       ON A.PDM_TBL_ID =B.PDM_TBL_ID 
+
+	 LEFT OUTER JOIN WAA_DB_SCH D 
+	   ON A.DB_SCH_ID = D.DB_SCH_ID 
+	  AND D.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+	 LEFT JOIN (
+	 			SELECT E.SDITM_PNM, E.REG_TYP_CD, G.DATA_TYPE, G.DATA_LEN, G.DATA_SCAL
+	 			  FROM WAM_SDITM E
+	 			   LEFT JOIN WAM_DMN F ON E.DMN_ID = F.DMN_ID AND F.REG_TYP_CD IN ('C', 'U')
+	 			   LEFT JOIN WAA_INFO_TYPE G ON F.INFOTP_ID = G.INFOTP_ID AND G.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+	 			) H
+	   ON H.SDITM_PNM = B.PDM_COL_PNM AND H.REG_TYP_CD IN ('C', 'U')
+
+    WHERE 1=1
+	<if test="dbSchId != null and dbSchId != ''" >
+	  AND A.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+	</if>
+    GROUP BY D.DB_SCH_PNM, A.PDM_TBL_PNM, B.PDM_COL_PNM, B.PDM_COL_LNM, B.DATA_TYPE, B.DATA_LEN, B.DATA_SCAL, B.PK_YN, B.PK_ORD, B.NONUL_YN, H.SDITM_PNM, H.DATA_TYPE, H.DATA_LEN, H.DATA_SCAL 
+</select>
+
+<select id="selectGovStructResultList" resultMap="GapResultMap" parameterType="kr.wise.dq.dqrs.service.DqrsPoiGapResult">
+SELECT ITEM_NM, TBL_CNT, ERR_CNT
+		, TO_CHAR(GAP_RATE, 'FM999,999,999,999,999,999,999.000') AS GAP_RATE
+		, TO_CHAR(100-GAP_RATE, 'FM999,999,999,999,999,999,999.000') AS STND_RATE
+		, TO_CHAR(SYSDATE, 'YYYY-MM-DD') AS RESULT_DATE
+	FROM 
+	(
+		SELECT '물리DB기준 테이블 현행화' AS ITEM_NM, TBL_CNT, ERR_CNT
+				,CASE WHEN TBL_CNT != 0 THEN (ERR_CNT/TBL_CNT*100) ELSE 0 END AS GAP_RATE
+		FROM (
+				SELECT COUNT(*) AS TBL_CNT
+						,COUNT(CASE WHEN B.TBL_PNM IS NULL THEN 1 END) AS ERR_CNT
+				  FROM WAT_DBC_TBL A
+				  LEFT OUTER JOIN WAA_DB_SCH D
+				    ON A.DB_SCH_ID = D.DB_SCH_ID 
+			       AND D.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+				  LEFT OUTER JOIN(
+				  	SELECT B.TBL_PNM, B.DB_SCH_ID FROM WAA_DQRS_TBL B
+				  	WHERE B.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+				  	<if test="dbSchId != null and dbSchId != ''" >
+					AND B.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+					</if>
+				  	GROUP BY B.TBL_PNM, B.DB_SCH_ID
+				  	) B
+				    ON A.DBC_TBL_NM = B.TBL_PNM
+				   LEFT JOIN WAA_DQRS_EXP_TBL EX          
+					  ON EX.DB_SCH_ID  = A.DB_SCH_ID  
+					 AND EX.DBC_TBL_NM = A.DBC_TBL_NM  
+				 WHERE 1=1
+				<if test="dbSchId != null and dbSchId != ''" >
+					AND A.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+				</if>
+				AND NVL(EX.EXP_YN,'N')='N'
+		) A
+		
+		UNION ALL 
+		SELECT '물리DB기준 컬럼 현행화' AS ITEM_NM, COL_CNT, ERR_CNT
+				,CASE WHEN COL_CNT !=0 THEN (ERR_CNT/COL_CNT*100) ELSE 0 END AS GAP_RATE
+		FROM (
+				SELECT COUNT(*) AS COL_CNT
+						,COUNT(
+						CASE WHEN D.TBL_PNM IS NULL THEN '물리모델 미존재'
+	  			 		WHEN D.COL_PNM IS NULL THEN '물리모델 컬럼 미존재'
+	  			 	-- 	WHEN NVL(D.COL_LNM,'_') != NVL(AA.DBC_COL_KOR_NM,'_') THEN '컬럼한글명불일치'
+	  			 	-- 	WHEN NVL(D.PK_YN,'N') != NVL(AA.PK_YN,'N') THEN 'PK여부불일치'
+	  			 		WHEN TRIM(TRAILING '2' FROM D.DATA_TYPE) != TRIM(TRAILING '2' FROM AA.DATA_TYPE) THEN '데이터타입불일치'
+	  			 		WHEN NVL(D.DATA_LEN,0) != NVL(AA.DATA_LEN,0) THEN '데이터길이불일치'
+	  			 		WHEN NVL(D.SCAL,0) != NVL(AA.DATA_PNT,0) THEN '소수점불일치'
+	  			 	--	WHEN D.COL_ORD != AA.ORD THEN '컬럼순서불일치'
+	  			 	 	WHEN NVL(UPPER(D.NULL_YN),'N') != (CASE WHEN UPPER(AA.NULL_YN) = 'Y' THEN 'N' ELSE 'Y' END) THEN 'NOT NULL여부불일치'
+	  			 		END )AS ERR_CNT
+				FROM WAT_DBC_TBL A
+			    LEFT OUTER JOIN WAA_DB_SCH E
+			      ON A.DB_SCH_ID = E.DB_SCH_ID
+				 AND E.REG_TYP_CD IN ('C','U')
+				 AND E.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+			   INNER JOIN WAT_DBC_COL AA
+			      ON A.DB_SCH_ID = AA.DB_SCH_ID 
+				 AND A.DBC_TBL_NM = AA.DBC_TBL_NM 
+				LEFT OUTER JOIN 
+				(
+					SELECT B.TBL_PNM, B.TBL_LNM, B.COL_PNM, COL_LNM, 
+						   DATA_TYPE, DATA_LEN, SCAL, NULL_YN, DB_SCH_ID, PK_YN, COL_ORD
+					  FROM WAA_DQRS_TBL B
+					  WHERE B.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+				) D
+				ON A.DBC_TBL_NM = D.TBL_PNM
+				 AND D.COL_PNM = AA.DBC_COL_NM 
+				 AND D.DB_SCH_ID = AA.DB_SCH_ID 
+				 LEFT JOIN WAA_DQRS_EXP_COL EC
+		        ON EC.DB_SCH_ID  = AA.DB_SCH_ID
+				 AND EC.DBC_TBL_NM = AA.DBC_TBL_NM   
+				 AND EC.DBC_COL_NM = AA.DBC_COL_NM  
+				 LEFT JOIN WAA_DQRS_EXP_TBL EX          
+				  ON EX.DB_SCH_ID  = AA.DB_SCH_ID  
+				 AND EX.DBC_TBL_NM = AA.DBC_TBL_NM  
+				WHERE 1=1
+				<if test="dbSchId != null and dbSchId != ''" >
+					AND A.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+				</if>
+				AND EC.DB_SCH_ID IS NULL         
+					AND EC.DBC_TBL_NM IS NULL
+					AND EC.DBC_COL_NM IS NULL	
+				AND NVL(EX.EXP_YN,'N')='N'
+		) A
+		
+		UNION ALL 
+		
+		SELECT '테이블정의서 기준  테이블 현행화' AS ITEM_NM, TBL_CNT, ERR_CNT
+				,CASE WHEN TBL_CNT != 0 THEN (ERR_CNT/TBL_CNT*100) ELSE 0 END AS GAP_RATE
+		FROM (
+				SELECT COUNT(*) AS TBL_CNT
+						,COUNT(CASE WHEN AA.ERR_DBC_TBL_NM IS NULL THEN 1 END) AS ERR_CNT
+				FROM	( SELECT A.TBL_PNM, B.DBC_TBL_NM AS ERR_DBC_TBL_NM
+					FROM WAA_DQRS_TBL A
+					LEFT OUTER JOIN WAA_DB_SCH D
+					  ON A.DB_SCH_ID = D.DB_SCH_ID
+					 AND D.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+					LEFT OUTER JOIN (
+						SELECT B.DBC_TBL_NM, B.DB_SCH_ID 
+							FROM WAT_DBC_TBL B
+					  ) B
+					ON B.DBC_TBL_NM = A.TBL_PNM
+					AND B.DB_SCH_ID = A.DB_SCH_ID 
+					
+					WHERE 1=1
+					<if test="dbSchId != null and dbSchId != ''" >
+						AND A.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+					</if>
+					AND A.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+					GROUP BY A.TBL_PNM, B.DBC_TBL_NM
+					) AA
+			) A
+		
+		UNION ALL 
+		SELECT '컬럼정의서 기준 컬럼 현행화' AS ITEM_NM, COL_CNT, ERR_CNT
+				,CASE WHEN COL_CNT !=0 THEN (ERR_CNT/COL_CNT*100) ELSE 0 END AS GAP_RATE
+		FROM (
+				SELECT COUNT(*) AS COL_CNT
+						,COUNT(		
+						CASE WHEN D.DBC_TBL_NM IS NULL THEN '물리DB 테이블 미존재'
+		         	   WHEN D.DBC_COL_NM IS NULL THEN '물리DB 컬럼 미존재'
+		         	-- WHEN NVL(A.COL_LNM,'_') != NVL(D.DBC_COL_KOR_NM,'_') THEN '컬럼한글명불일치'
+		         	-- WHEN NVL(A.PK_YN,'N') != NVL(D.PK_YN,'N') THEN 'PK여부불일치'
+		         	   WHEN TRIM(TRAILING '2' FROM A.DATA_TYPE ) != TRIM(TRAILING '2' FROM D.DATA_TYPE ) THEN '데이터타입불일치'
+		         	   WHEN NVL(A.DATA_LEN,0) != NVL(D.DATA_LEN,0) THEN '데이터길이불일치'
+		         	   WHEN NVL(A.SCAL,0) != NVL(D.DATA_PNT,0) THEN '소수점불일치'
+		         	-- WHEN A.COL_ORD != D.ORD THEN '컬럼순서불일치'
+		         	   WHEN NVL(UPPER(A.NULL_YN) ,'N') != (CASE WHEN UPPER(D.NULL_YN) = 'Y' THEN 'N' ELSE 'Y' END) THEN 'NOT NULL여부불일치'
+						END
+						) AS ERR_CNT
+				  FROM WAA_DQRS_TBL A
+				  LEFT OUTER JOIN WAA_DB_SCH E
+				    ON A.DB_SCH_ID = E.DB_SCH_ID
+				   AND E.REG_TYP_CD IN ('C','U')
+				   AND E.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+				  LEFT OUTER JOIN 
+				  (
+					SELECT B.DBC_TBL_NM, B.DBC_TBL_KOR_NM, B.DB_SCH_ID, BB.DBC_COL_NM
+						 , BB.DBC_COL_KOR_NM, BB.PK_YN, BB.DATA_TYPE, BB.DATA_LEN
+						 , BB.DATA_PNT, BB.ORD, BB.NULL_YN, BB.DEFLT_VAL
+					  FROM WAT_DBC_TBL B
+					 INNER JOIN WAT_DBC_COL BB
+				    	ON B.DB_SCH_ID = BB.DB_SCH_ID 
+				       AND B.DBC_TBL_NM = BB.DBC_TBL_NM 
+				  ) D
+				   ON D.DBC_TBL_NM = A.TBL_PNM
+				  AND A.DB_SCH_ID = D.DB_SCH_ID 
+				  AND A.COL_PNM = D.DBC_COL_NM 
+				WHERE 1=1
+				<if test="dbSchId != null and dbSchId != ''" >
+					AND E.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+				</if>
+				AND A.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+		) A
+		
+	) A
+</select>
+
+<select id="selectGovDbcTblList" resultMap="GapResultMap" parameterType="kr.wise.dq.dqrs.service.DqrsPoiGapResult">
+SELECT TBL_NM
+		 , CASE WHEN DETAIL_STATUS IS NULL THEN '일치' ELSE '불일치' END AS STATE
+		 , DETAIL_STATUS
+	  FROM (
+	  		SELECT (NVL(D.DB_SCH_PNM, '') || '.' || NVL(A.DBC_TBL_NM, '')) AS TBL_NM
+	  		     , CASE WHEN B.TBL_PNM IS NULL THEN '개별모델 미존재' END AS DETAIL_STATUS
+	  		  FROM WAT_DBC_TBL A
+	  		  LEFT OUTER JOIN WAA_DB_SCH D
+	  		    ON A.DB_SCH_ID = D.DB_SCH_ID
+	  		   AND D.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+	  		  LEFT OUTER JOIN  (SELECT B.TBL_PNM, B.DB_SCH_ID
+	  		  	FROM WAA_DQRS_TBL B
+	  		  		WHERE B.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+	  		  		<if test="dbSchId != null and dbSchId != ''" >
+					   AND B.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+					 </if>
+	  		  		GROUP BY B.TBL_PNM, B.DB_SCH_ID
+	  		  	) B
+	  		    ON A.DBC_TBL_NM = B.TBL_PNM
+	  		    AND A.DB_SCH_ID = B.DB_SCH_ID 
+	  		  LEFT JOIN WAA_DQRS_EXP_TBL EX          
+				  ON EX.DB_SCH_ID  = A.DB_SCH_ID  
+				 AND EX.DBC_TBL_NM = A.DBC_TBL_NM
+	  		 WHERE 1=1
+	  		 <if test="dbSchId != null and dbSchId != ''" >
+			   AND A.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+			 </if>
+			 AND NVL(EX.EXP_YN,'N')='N'  
+	  		) A
+	 ORDER BY TBL_NM
+</select>
+
+<select id="selectGovDbcColList" resultMap="GapResultMap" parameterType="kr.wise.dq.dqrs.service.DqrsPoiGapResult">
+SELECT TBL_NM, COL_NM, DATA_TYPE
+	     , CASE WHEN DETAIL_STATUS IS NULL THEN '일치' ELSE '불일치' END AS STATE
+	     , DETAIL_STATUS
+	  FROM (
+	  		SELECT (NVL(E.DB_SCH_PNM, '') || '.' || NVL(A.DBC_TBL_NM, '')) AS TBL_NM
+	  			 , AA.DBC_COL_NM AS COL_NM
+	  			 , CASE WHEN AA.DATA_LEN IS NULL THEN AA.DATA_TYPE ELSE (
+	  			 						CASE WHEN AA.DATA_PNT IS NOT NULL AND AA.DATA_PNT != 0
+	  			 							THEN ((NVL(AA.DATA_TYPE, '') || '(' || NVL(AA.DATA_LEN, '') || ',' || NVL(AA.DATA_PNT, '') || ')'))
+	  			 							ELSE ((NVL(AA.DATA_TYPE, '') || '(' || NVL(AA.DATA_LEN, '') || ')'))
+	  			 							END )
+	  			   END AS DATA_TYPE
+	  			 , CASE WHEN D.TBL_PNM IS NULL THEN '물리모델 미존재'
+	  			 		WHEN D.COL_PNM IS NULL THEN '물리모델 컬럼 미존재'
+	  			 -- 	WHEN NVL(D.COL_LNM,'_') != NVL(AA.DBC_COL_KOR_NM,'_') THEN '컬럼한글명불일치'
+	  			 -- 	WHEN NVL(D.PK_YN,'N') != NVL(AA.PK_YN,'N') THEN 'PK여부불일치'
+	  			 		WHEN TRIM(TRAILING '2' FROM D.DATA_TYPE) != TRIM(TRAILING '2' FROM AA.DATA_TYPE) THEN '데이터타입불일치'
+	  			 		WHEN NVL(D.DATA_LEN,0) != NVL(AA.DATA_LEN,0) THEN '데이터길이불일치'
+	  			 		WHEN NVL(D.SCAL,0) != NVL(AA.DATA_PNT,0) THEN '소수점불일치'
+	  			 --		WHEN D.COL_ORD != AA.ORD THEN '컬럼순서불일치'
+	  			 	 	WHEN NVL(UPPER(D.NULL_YN),'N') != (CASE WHEN UPPER(AA.NULL_YN) = 'Y' THEN 'N' ELSE 'Y' END) THEN 'NOT NULL여부불일치'
+	  			   END AS DETAIL_STATUS
+	  		  FROM WAT_DBC_TBL A
+	  		  LEFT OUTER JOIN WAA_DB_SCH E
+	  		    ON A.DB_SCH_ID = E.DB_SCH_ID
+	  		   AND E.REG_TYP_CD IN('C','U')
+	  		   AND E.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+	  		 INNER JOIN WAT_DBC_COL AA
+	  		    ON A.DB_SCH_ID = AA.DB_SCH_ID
+	  		   AND A.DBC_TBL_NM = AA.DBC_TBL_NM
+	  		  LEFT OUTER JOIN
+	  		  ( SELECT TBL_PNM, TBL_LNM
+	  		  		 , COL_PNM, COL_LNM, PK_YN
+	  		  		 , DATA_TYPE, DATA_LEN, SCAL
+	  		  		 , NULL_YN, COL_ORD,  DB_SCH_ID
+	  		  	  FROM WAA_DQRS_TBL B
+	  		  	  WHERE B.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+	  		   ) D
+	  		    ON A.DBC_TBL_NM = D.TBL_PNM
+	  		   AND D.COL_PNM = AA.DBC_COL_NM
+	  		   AND A.DB_SCH_ID = D.DB_SCH_ID
+	  		   LEFT JOIN WAA_DQRS_EXP_COL EC
+		        ON EC.DB_SCH_ID  = AA.DB_SCH_ID
+				 AND EC.DBC_TBL_NM = AA.DBC_TBL_NM   
+				 AND EC.DBC_COL_NM = AA.DBC_COL_NM  
+			   LEFT JOIN WAA_DQRS_EXP_TBL EX          
+				  ON EX.DB_SCH_ID  = A.DB_SCH_ID  
+				 AND EX.DBC_TBL_NM = A.DBC_TBL_NM  
+			 WHERE 1=1
+			 <if test="dbSchId != null and dbSchId != ''" >
+			   AND A.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+			 </if>
+			 	AND EC.DB_SCH_ID IS NULL         
+			    AND EC.DBC_TBL_NM IS NULL
+			    AND EC.DBC_COL_NM IS NULL	
+				AND NVL(EX.EXP_YN,'N')='N' 
+	 		) A
+</select>
+
+<select id="selectGovTblList" resultMap="GapResultMap" parameterType="kr.wise.dq.dqrs.service.DqrsPoiGapResult">
+SELECT TBL_NM
+	     , CASE WHEN DETAIL_STATUS IS NULL THEN '일치' ELSE '불일치' END AS STATE
+	     , DETAIL_STATUS
+	  FROM (
+	  		SELECT (NVL(D.DB_SCH_PNM, '') || '.' || NVL(A.TBL_PNM, '')) AS TBL_NM
+	  			 , CASE WHEN B.DBC_TBL_NM IS NULL THEN '물리DB에 미존재' END AS DETAIL_STATUS
+	  		  FROM WAA_DQRS_TBL A
+	  		LEFT OUTER JOIN WAA_DB_SCH D
+	  		    ON D.DB_SCH_ID = A.DB_SCH_ID
+	  		   AND D.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+	  		  LEFT OUTER JOIN(
+	  		  	SELECT B.DBC_TBL_NM, B.DB_SCH_ID 
+	  		  	FROM WAT_DBC_TBL B
+	  		  	) B
+	  		    ON B.DBC_TBL_NM = A.TBL_PNM
+	  		    AND B.DB_SCH_ID = A.DB_SCH_ID 
+	  		 WHERE 1=1
+	  		 <if test="dbSchId != null and dbSchId != ''" >
+			   AND A.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+			 </if>
+			 AND A.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+			   GROUP BY A.TBL_PNM, B.DBC_TBL_NM, D.DB_SCH_PNM
+	       ) A
+	  ORDER BY TBL_NM
+</select>
+
+<select id="selectGovColList" resultMap="GapResultMap" parameterType="kr.wise.dq.dqrs.service.DqrsPoiGapResult">
+SELECT TBL_NM, COL_NM, DATA_TYPE, DETAIL_STATUS
+      ,CASE WHEN DETAIL_STATUS IS NULL THEN '일치' ELSE '불일치' END AS STATE
+FROM (
+   SELECT (NVL(E.DB_SCH_PNM, '') || '.' || NVL(A.TBL_PNM, '')) AS TBL_NM
+        , A.COL_PNM AS COL_NM
+        , CASE WHEN A.DATA_LEN IS NULL THEN A.DATA_TYPE
+        		WHEN A.DATA_LEN = 0 THEN A.DATA_TYPE
+          				ELSE (CASE WHEN A.SCAL IS NOT NULL AND A.SCAL!=0
+                  		THEN ((NVL(A.DATA_TYPE, '') || '(' || NVL(A.DATA_LEN, '') || ',' || NVL(A.SCAL, '') || ')') )
+                  		ELSE ((NVL(A.DATA_TYPE, '') || '(' || NVL(A.DATA_LEN, '') || ')'))
+                  		 END )
+          END AS DATA_TYPE
+        , CASE WHEN D.DBC_TBL_NM IS NULL THEN '물리DB 테이블 미존재'
+         	   WHEN D.DBC_COL_NM IS NULL THEN '물리DB 컬럼 미존재'
+         	-- WHEN NVL(A.COL_LNM,'_') != NVL(D.DBC_COL_KOR_NM,'_') THEN '컬럼한글명불일치'
+         --    WHEN NVL(A.PK_YN,'N') != NVL(D.PK_YN,'N') THEN 'PK여부불일치'
+         	   WHEN TRIM(TRAILING '2' FROM A.DATA_TYPE ) != TRIM(TRAILING '2' FROM D.DATA_TYPE ) THEN '데이터타입불일치'
+         	   WHEN NVL(A.DATA_LEN,0) != NVL(D.DATA_LEN,0) THEN '데이터길이불일치'
+         	   WHEN NVL(A.SCAL,0) != NVL(D.DATA_PNT,0) THEN '소수점불일치'
+         --	   WHEN A.COL_ORD != D.ORD THEN '컬럼순서불일치'
+         	   WHEN NVL(UPPER(A.NULL_YN) ,'N') != (CASE WHEN UPPER(D.NULL_YN) = 'Y' THEN 'N' ELSE 'Y' END) THEN 'NOT NULL여부불일치'
+      	  END AS DETAIL_STATUS
+   	 FROM WAA_DQRS_TBL A
+     LEFT OUTER JOIN WAA_DB_SCH E
+       ON A.DB_SCH_ID = E.DB_SCH_ID 
+      AND E.REG_TYP_CD IN ('C','U')
+      AND E.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+     LEFT OUTER JOIN
+      (
+          SELECT B.DBC_TBL_NM, B.DBC_TBL_KOR_NM, B.DB_SCH_ID, BB.DBC_COL_NM
+               , BB.DBC_COL_KOR_NM, BB.PK_YN, BB.DATA_TYPE, BB.DATA_LEN 
+               , BB.DATA_PNT, BB.ORD, BB.NULL_YN, BB.DEFLT_VAL 
+            FROM WAT_DBC_TBL B
+           INNER JOIN WAT_DBC_COL BB
+              ON B.DB_SCH_ID = BB.DB_SCH_ID 
+             AND B.DBC_TBL_NM = BB.DBC_TBL_NM 
+       )  D 
+       ON D.DBC_TBL_NM = A.TBL_PNM 
+      AND D.DB_SCH_ID = A.DB_SCH_ID 
+      AND A.COL_PNM = D.DBC_COL_NM
+	WHERE 1=1
+	<if test="dbSchId != null and dbSchId != ''" >
+	  AND A.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+	</if>
+	AND A.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+	) A
+      
+</select>
+
+<select id="selectGovTblDbList" resultMap="GapResultMap" parameterType="kr.wise.dq.dqrs.service.DqrsPoiGapResult">
+	SELECT DB_SCH_PNM
+		 , PDM_TBL_PNM 
+		 , PDM_TBL_LNM
+		 , COL_CNT
+		 , ERR_CNT
+		 , TO_CHAR((ERR_CNT/COL_CNT)*100,'FM999,999,999,999,999,999,999.00') AS GAP_RATE
+	  FROM ( SELECT B.DB_SCH_PNM AS DB_SCH_PNM
+			 	  , A.TBL_PNM AS PDM_TBL_PNM
+			 	  , A.TBL_LNM AS PDM_TBL_LNM
+			 	  , COUNT(A.COL_ID) AS COL_CNT
+			 	  , SUM(CASE WHEN C.SDITM_PNM IS NULL THEN 1 ELSE 0 END) AS ERR_CNT
+			   FROM WAA_DQRS_TBL A
+	      	   LEFT OUTER JOIN WAA_DB_SCH B
+	        	 ON A.DB_SCH_ID = B.DB_SCH_ID 
+	       	 	AND B.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+	      	   LEFT JOIN WAA_DQRS_SDITM C
+	        	 ON C.SDITM_PNM = A.COL_PNM  
+	        	 AND C.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+	        	 <if test="sditmDbConnTrgId != null and sditmDbConnTrgId != ''">
+	        	 	AND C.DB_CONN_TRG_ID = #{sditmDbConnTrgId,jdbcType=VARCHAR}
+	        	 </if>
+	        	 <if test="sditmDbConnTrgId == null or sditmDbConnTrgId == ''">
+	        	 	AND C.DB_SCH_ID = A.DB_SCH_ID
+	        	 </if>
+	     	  WHERE 1=1
+	     	  <if test="sditmDbConnTrgId == null or sditmDbConnTrgId == ''">
+		     	  <if test="dbSchId != null and dbSchId != ''" >
+				    AND A.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+				  </if>
+			  </if>
+			  AND A.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+		 	  GROUP BY B.DB_SCH_PNM, A.TBL_PNM, A.TBL_LNM
+			) A
+</select>
+
+<select id="selectGovColDbList" resultMap="GapResultMap" parameterType="kr.wise.dq.dqrs.service.DqrsPoiGapResult">
+SELECT B.DB_SCH_PNM
+		 , A.TBL_PNM AS PDM_TBL_PNM
+		 , A.COL_PNM AS PDM_COL_PNM
+		 , A.COL_LNM AS PDM_COL_LNM
+		 , D.DATA_TYPE AS DATA_TYPE
+		 , D.DATA_LEN AS DATA_LEN
+		 , D.DATA_SCAL AS DATA_SCAL
+		 , A.PK_YN AS PK_YN
+		 , NULLIF(A.PK_ORD,0) AS PK_ORD
+		 , A.NULL_YN AS NONUL_YN
+		 , CASE WHEN D.SDITM_PNM IS NULL THEN '표준용어에 등록되지 않은 영문 약어명으로 컬럼명을 정의하였습니다. 표준을 위배합니다.' 
+		 		WHEN A.DATA_TYPE != D.DATA_TYPE THEN '표준용어에 등록되어 있는 영문 약어명으로 컬럼명을 정의하였지만,  데이터 타입이 일치하지 않습니다. 표준을 위배합니다.'
+		 		WHEN A.DATA_LEN != D.DATA_LEN THEN '표준용어에 등록되어 있는 영문 약어명으로 컬럼명을 정의하였지만,  데이터 타입의 전체 길이가 일치하지 않습니다. 표준을 위배합니다.'
+		 		WHEN NVL(A.SCAL,0) != NVL(D.DATA_SCAL,0) THEN '표준용어에 등록되어 있는 영문 약어명으로 컬럼명을 정의하였지만,  데이터 타입의 소수점 길이가 일치하지 않습니다. 표준을 위배합니다.'
+		 		ELSE '표준용어에 등록되어 있는 영문 약어명으로 컬럼명을 정의하였고, 데이터 타입도 도메인 정보와 일치합니다. 표준을 준수합니다.' END AS DETAIL_STATUS
+	 FROM WAA_DQRS_TBL A
+	 LEFT OUTER JOIN WAA_DB_SCH B
+	   ON A.DB_SCH_ID = B.DB_SCH_ID 
+	  AND B.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+	 LEFT JOIN (
+	 			SELECT C.SDITM_PNM, E.DATA_TYPE, E.DATA_LEN, E.DATA_SCAL, C.DB_SCH_ID, C.DB_CONN_TRG_ID
+	 			  FROM WAA_DQRS_SDITM C
+	 			  LEFT JOIN WAA_DQRS_DMN E
+				  ON E.DMN_ID = C.DMN_ID
+	    		  AND E.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+	 			   WHERE C.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+	 			   
+	 			) D
+	   ON UPPER(A.COL_PNM) = UPPER(D.SDITM_PNM)
+	   <if test="sditmDbConnTrgId != null and sditmDbConnTrgId != ''">
+       	 	AND D.DB_CONN_TRG_ID = #{sditmDbConnTrgId,jdbcType=VARCHAR}
+       </if>
+	   <if test="sditmDbConnTrgId == null or sditmDbConnTrgId == ''">
+	   		AND A.DB_SCH_ID = D.DB_SCH_ID
+	   </if>
+
+    WHERE 1=1
+    <if test="sditmDbConnTrgId == null or sditmDbConnTrgId == ''">
+		<if test="dbSchId != null and dbSchId != ''" >
+		  AND A.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+		</if>
+	</if>
+	AND A.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+    GROUP BY B.DB_SCH_PNM, A.TBL_PNM, A.COL_PNM, A.COL_LNM, D.DATA_TYPE, D.DATA_LEN, D.DATA_SCAL, A.PK_YN, A.PK_ORD, A.NULL_YN, D.SDITM_PNM, A.DATA_TYPE, A.DATA_LEN, A.SCAL
+</select>
+
+
+
+<select id="selectInfoSys"  parameterType="kr.wise.dq.dqrs.service.DqrsDbConnTrgVO" resultMap="DbmsResultMap">
+	SELECT DB_CONN_TRG_ID
+	      ,DB_CONN_TRG_PNM
+	      ,DB_CONN_TRG_LNM
+	      ,DBMS_TYP_CD
+	      ,DBMS_VERS_CD
+	      ,CONN_TRG_LNK_URL
+	      ,INFO_SYS_CD
+	  FROM WAA_DB_CONN_TRG
+	 WHERE EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+	 <if test='dbConnTrgId != null and dbConnTrgId != ""' >
+	   AND DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR}
+	 </if>
+	 <if test='dbmsTypCd != null and dbmsTypCd != ""' >
+	   AND DBMS_TYP_CD = #{dbmsTypCd,jdbcType=VARCHAR}
+	 </if>
+</select>
+<update id="updateInfoSys"  parameterType="kr.wise.dq.dqrs.service.DqrsDbConnTrgVO" >
+	UPDATE WAA_DB_CONN_TRG
+	   SET INFO_SYS_CD = #{infoSysCd,jdbcType=VARCHAR}
+	 WHERE EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+	   AND DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR}
+</update>
+</mapper>

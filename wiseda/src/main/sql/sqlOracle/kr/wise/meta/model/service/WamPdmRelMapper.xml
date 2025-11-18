@@ -1,0 +1,514 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.meta.model.service.WamPdmRelMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.meta.model.service.WamPdmRel" extends="kr.wise.meta.model.service.WaqPdmRelMapper.BaseResultMap">
+    <id column="PDM_REL_ID" property="pdmRelId" jdbcType="VARCHAR" />
+    <id column="PA_ENTY_ID" property="paEntyId" jdbcType="VARCHAR" />
+    <id column="PA_ATTR_ID" property="paAttrId" jdbcType="VARCHAR" />
+    <id column="CH_ENTY_ID" property="chEntyId" jdbcType="VARCHAR" />
+    <id column="CH_ATTR_ID" property="chAttrId" jdbcType="VARCHAR" />
+    <result column="PDM_REL_PNM" property="pdmRelPnm" jdbcType="VARCHAR" />
+    <result column="PDM_REL_LNM" property="pdmRelLnm" jdbcType="VARCHAR" />
+    <result column="REL_TYP_CD" property="relTypCd" jdbcType="VARCHAR" />
+    <result column="CRD_TYP_CD" property="crdTypCd" jdbcType="VARCHAR" />
+    <result column="PA_OPT_TYP_CD" property="paOptTypCd" jdbcType="VARCHAR" />
+    <result column="PA_SUBJ_ID" property="paSubjId" jdbcType="VARCHAR" />
+    <result column="CH_SUBJ_ID" property="chSubjId" jdbcType="VARCHAR" />
+<!--     <result column="RQST_NO" property="rqstNo" jdbcType="VARCHAR" /> -->
+<!--     <result column="RQST_SNO" property="rqstSno" jdbcType="DECIMAL" /> -->
+<!--     <result column="RQST_DTL_SNO" property="rqstDtlSno" jdbcType="DECIMAL" /> -->
+<!--     <result column="OBJ_DESCN" property="objDescn" jdbcType="VARCHAR" /> -->
+<!--     <result column="OBJ_VERS" property="objVers" jdbcType="DECIMAL" /> -->
+<!--     <result column="REG_TYP_CD" property="regTypCd" jdbcType="VARCHAR" /> -->
+<!--     <result column="FRS_RQST_DTM" property="frsRqstDtm" jdbcType="TIMESTAMP" /> -->
+<!--     <result column="FRS_RQST_USER_ID" property="frsRqstUserId" jdbcType="VARCHAR" /> -->
+<!--     <result column="RQST_DTM" property="rqstDtm" jdbcType="TIMESTAMP" /> -->
+<!--     <result column="RQST_USER_ID" property="rqstUserId" jdbcType="VARCHAR" /> -->
+<!--     <result column="APRV_DTM" property="aprvDtm" jdbcType="TIMESTAMP" /> -->
+<!--     <result column="APRV_USER_ID" property="aprvUserId" jdbcType="VARCHAR" /> -->
+  </resultMap>
+  <sql id="Base_Column_List" >
+    PDM_REL_ID, PA_ENTY_ID, PA_ATTR_ID, CH_ENTY_ID, CH_ATTR_ID, PDM_REL_PNM, PDM_REL_LNM, 
+    REL_TYP_CD, CRD_TYP_CD, PA_OPT_TYP_CD, PA_SUBJ_ID, CH_SUBJ_ID, RQST_NO, RQST_SNO, 
+    RQST_DTL_SNO, OBJ_DESCN, OBJ_VERS, REG_TYP_CD, FRS_RQST_DTM, FRS_RQST_USER_ID, RQST_DTM, 
+    RQST_USER_ID, APRV_DTM, APRV_USER_ID
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="map" >
+    select 
+    <include refid="Base_Column_List" />
+    from WAM_PDM_REL
+    where PDM_REL_ID = #{pdmRelId,jdbcType=VARCHAR}
+      and PA_ENTY_ID = #{paEntyId,jdbcType=VARCHAR}
+      and PA_ATTR_ID = #{paAttrId,jdbcType=VARCHAR}
+      and CH_ENTY_ID = #{chEntyId,jdbcType=VARCHAR}
+      and CH_ATTR_ID = #{chAttrId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="map" >
+    delete from WAM_PDM_REL
+    where PDM_REL_ID = #{pdmRelId,jdbcType=VARCHAR}
+      and PA_ENTY_ID = #{paEntyId,jdbcType=VARCHAR}
+      and PA_ATTR_ID = #{paAttrId,jdbcType=VARCHAR}
+      and CH_ENTY_ID = #{chEntyId,jdbcType=VARCHAR}
+      and CH_ATTR_ID = #{chAttrId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="kr.wise.meta.model.service.WamPdmRel" >
+    insert into WAM_PDM_REL (PDM_REL_ID, PA_ENTY_ID, PA_ATTR_ID, 
+      CH_ENTY_ID, CH_ATTR_ID, PDM_REL_PNM, 
+      PDM_REL_LNM, REL_TYP_CD, CRD_TYP_CD, 
+      PA_OPT_TYP_CD, PA_SUBJ_ID, CH_SUBJ_ID, 
+      RQST_NO, RQST_SNO, RQST_DTL_SNO, 
+      OBJ_DESCN, OBJ_VERS, REG_TYP_CD, 
+      FRS_RQST_DTM, FRS_RQST_USER_ID, RQST_DTM, 
+      RQST_USER_ID, APRV_DTM, APRV_USER_ID
+      )
+    values (#{pdmRelId,jdbcType=VARCHAR}, #{paEntyId,jdbcType=VARCHAR}, #{paAttrId,jdbcType=VARCHAR}, 
+      #{chEntyId,jdbcType=VARCHAR}, #{chAttrId,jdbcType=VARCHAR}, #{pdmRelPnm,jdbcType=VARCHAR}, 
+      #{pdmRelLnm,jdbcType=VARCHAR}, #{relTypCd,jdbcType=VARCHAR}, #{crdTypCd,jdbcType=VARCHAR}, 
+      #{paOptTypCd,jdbcType=VARCHAR}, #{paSubjId,jdbcType=VARCHAR}, #{chSubjId,jdbcType=VARCHAR}, 
+      #{rqstNo,jdbcType=VARCHAR}, #{rqstSno,jdbcType=DECIMAL}, #{rqstDtlSno,jdbcType=DECIMAL}, 
+      #{objDescn,jdbcType=VARCHAR}, #{objVers,jdbcType=DECIMAL}, #{regTypCd,jdbcType=VARCHAR}, 
+      #{frsRqstDtm,jdbcType=TIMESTAMP}, #{frsRqstUserId,jdbcType=VARCHAR}, #{rqstDtm,jdbcType=TIMESTAMP}, 
+      #{rqstUserId,jdbcType=VARCHAR}, #{aprvDtm,jdbcType=TIMESTAMP}, #{aprvUserId,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="kr.wise.meta.model.service.WamPdmRel" >
+    insert into WAM_PDM_REL
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="pdmRelId != null" >
+        PDM_REL_ID,
+      </if>
+      <if test="paEntyId != null" >
+        PA_ENTY_ID,
+      </if>
+      <if test="paAttrId != null" >
+        PA_ATTR_ID,
+      </if>
+      <if test="chEntyId != null" >
+        CH_ENTY_ID,
+      </if>
+      <if test="chAttrId != null" >
+        CH_ATTR_ID,
+      </if>
+      <if test="pdmRelPnm != null" >
+        PDM_REL_PNM,
+      </if>
+      <if test="pdmRelLnm != null" >
+        PDM_REL_LNM,
+      </if>
+      <if test="relTypCd != null" >
+        REL_TYP_CD,
+      </if>
+      <if test="crdTypCd != null" >
+        CRD_TYP_CD,
+      </if>
+      <if test="paOptTypCd != null" >
+        PA_OPT_TYP_CD,
+      </if>
+      <if test="paSubjId != null" >
+        PA_SUBJ_ID,
+      </if>
+      <if test="chSubjId != null" >
+        CH_SUBJ_ID,
+      </if>
+      <if test="rqstNo != null" >
+        RQST_NO,
+      </if>
+      <if test="rqstSno != null" >
+        RQST_SNO,
+      </if>
+      <if test="rqstDtlSno != null" >
+        RQST_DTL_SNO,
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN,
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS,
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD,
+      </if>
+      <if test="frsRqstDtm != null" >
+        FRS_RQST_DTM,
+      </if>
+      <if test="frsRqstUserId != null" >
+        FRS_RQST_USER_ID,
+      </if>
+      <if test="rqstDtm != null" >
+        RQST_DTM,
+      </if>
+      <if test="rqstUserId != null" >
+        RQST_USER_ID,
+      </if>
+      <if test="aprvDtm != null" >
+        APRV_DTM,
+      </if>
+      <if test="aprvUserId != null" >
+        APRV_USER_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="pdmRelId != null" >
+        #{pdmRelId,jdbcType=VARCHAR},
+      </if>
+      <if test="paEntyId != null" >
+        #{paEntyId,jdbcType=VARCHAR},
+      </if>
+      <if test="paAttrId != null" >
+        #{paAttrId,jdbcType=VARCHAR},
+      </if>
+      <if test="chEntyId != null" >
+        #{chEntyId,jdbcType=VARCHAR},
+      </if>
+      <if test="chAttrId != null" >
+        #{chAttrId,jdbcType=VARCHAR},
+      </if>
+      <if test="pdmRelPnm != null" >
+        #{pdmRelPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="pdmRelLnm != null" >
+        #{pdmRelLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="relTypCd != null" >
+        #{relTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="crdTypCd != null" >
+        #{crdTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="paOptTypCd != null" >
+        #{paOptTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="paSubjId != null" >
+        #{paSubjId,jdbcType=VARCHAR},
+      </if>
+      <if test="chSubjId != null" >
+        #{chSubjId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstNo != null" >
+        #{rqstNo,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstSno != null" >
+        #{rqstSno,jdbcType=DECIMAL},
+      </if>
+      <if test="rqstDtlSno != null" >
+        #{rqstDtlSno,jdbcType=DECIMAL},
+      </if>
+      <if test="objDescn != null" >
+        #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null" >
+        #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="frsRqstDtm != null" >
+        #{frsRqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="frsRqstUserId != null" >
+        #{frsRqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDtm != null" >
+        #{rqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rqstUserId != null" >
+        #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDtm != null" >
+        #{aprvDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aprvUserId != null" >
+        #{aprvUserId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.meta.model.service.WamPdmRel" >
+    update WAM_PDM_REL
+    <set >
+      <if test="pdmRelPnm != null" >
+        PDM_REL_PNM = #{pdmRelPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="pdmRelLnm != null" >
+        PDM_REL_LNM = #{pdmRelLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="relTypCd != null" >
+        REL_TYP_CD = #{relTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="crdTypCd != null" >
+        CRD_TYP_CD = #{crdTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="paOptTypCd != null" >
+        PA_OPT_TYP_CD = #{paOptTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="paSubjId != null" >
+        PA_SUBJ_ID = #{paSubjId,jdbcType=VARCHAR},
+      </if>
+      <if test="chSubjId != null" >
+        CH_SUBJ_ID = #{chSubjId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstNo != null" >
+        RQST_NO = #{rqstNo,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstSno != null" >
+        RQST_SNO = #{rqstSno,jdbcType=DECIMAL},
+      </if>
+      <if test="rqstDtlSno != null" >
+        RQST_DTL_SNO = #{rqstDtlSno,jdbcType=DECIMAL},
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="frsRqstDtm != null" >
+        FRS_RQST_DTM = #{frsRqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="frsRqstUserId != null" >
+        FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDtm != null" >
+        RQST_DTM = #{rqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rqstUserId != null" >
+        RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDtm != null" >
+        APRV_DTM = #{aprvDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aprvUserId != null" >
+        APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where PDM_REL_ID = #{pdmRelId,jdbcType=VARCHAR}
+      and PA_ENTY_ID = #{paEntyId,jdbcType=VARCHAR}
+      and PA_ATTR_ID = #{paAttrId,jdbcType=VARCHAR}
+      and CH_ENTY_ID = #{chEntyId,jdbcType=VARCHAR}
+      and CH_ATTR_ID = #{chAttrId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="kr.wise.meta.model.service.WamPdmRel" >
+    update WAM_PDM_REL
+    set PDM_REL_PNM = #{pdmRelPnm,jdbcType=VARCHAR},
+      PDM_REL_LNM = #{pdmRelLnm,jdbcType=VARCHAR},
+      REL_TYP_CD = #{relTypCd,jdbcType=VARCHAR},
+      CRD_TYP_CD = #{crdTypCd,jdbcType=VARCHAR},
+      PA_OPT_TYP_CD = #{paOptTypCd,jdbcType=VARCHAR},
+      PA_SUBJ_ID = #{paSubjId,jdbcType=VARCHAR},
+      CH_SUBJ_ID = #{chSubjId,jdbcType=VARCHAR},
+      RQST_NO = #{rqstNo,jdbcType=VARCHAR},
+      RQST_SNO = #{rqstSno,jdbcType=DECIMAL},
+      RQST_DTL_SNO = #{rqstDtlSno,jdbcType=DECIMAL},
+      OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      FRS_RQST_DTM = #{frsRqstDtm,jdbcType=TIMESTAMP},
+      FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR},
+      RQST_DTM = #{rqstDtm,jdbcType=TIMESTAMP},
+      RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      APRV_DTM = #{aprvDtm,jdbcType=TIMESTAMP},
+      APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR}
+    where PDM_REL_ID = #{pdmRelId,jdbcType=VARCHAR}
+      and PA_ENTY_ID = #{paEntyId,jdbcType=VARCHAR}
+      and PA_ATTR_ID = #{paAttrId,jdbcType=VARCHAR}
+      and CH_ENTY_ID = #{chEntyId,jdbcType=VARCHAR}
+      and CH_ATTR_ID = #{chAttrId,jdbcType=VARCHAR}
+  </update>
+  
+  <select id="getPdmRelList" parameterType="kr.wise.meta.model.service.WamPdmRel" resultMap="BaseResultMap">
+  SELECT A.*
+  	   , B.FULL_PATH AS PA_SUBJ_PNM
+  	   , C.PDM_TBL_PNM AS PA_ENTY_PNM
+  	   , D.PDM_COL_PNM AS PA_ATTR_PNM
+  	   , E.FULL_PATH AS CH_SUBJ_PNM
+  	   , F.PDM_TBL_PNM AS CH_ENTY_PNM
+  	   , G.PDM_COL_PNM AS CH_ATTR_PNM
+  	   , U.USER_NM AS APRV_USER_NM
+  	   , U2.USER_NM AS RQST_USER_NM
+    FROM WAM_PDM_REL A
+   INNER JOIN WAA_SUBJ B
+      ON A.PA_SUBJ_ID = B.SUBJ_ID
+     AND B.REG_TYP_CD IN ('C', 'U')
+     AND B.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+   INNER JOIN WAM_PDM_TBL C
+      ON A.PA_SUBJ_ID = C.SUBJ_ID
+     AND A.PA_ENTY_ID = C.PDM_TBL_ID
+     AND C.REG_TYP_CD IN ('C', 'U')
+   INNER JOIN WAM_PDM_COL D
+      ON A.PA_ENTY_ID = D.PDM_TBL_ID
+     AND A.PA_ATTR_ID = D.PDM_COL_ID
+     AND D.REG_TYP_CD IN ('C', 'U')
+   INNER JOIN WAA_SUBJ E
+      ON A.CH_SUBJ_ID = E.SUBJ_ID
+     AND E.REG_TYP_CD IN ('C', 'U')
+     AND E.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+   INNER JOIN WAM_PDM_TBL F
+      ON A.CH_SUBJ_ID = F.SUBJ_ID
+     AND A.CH_ENTY_ID = F.PDM_TBL_ID
+     AND F.REG_TYP_CD IN ('C', 'U')
+   INNER JOIN WAM_PDM_COL G
+      ON A.CH_ENTY_ID = G.PDM_TBL_ID
+     AND A.CH_ATTR_ID = G.PDM_COL_ID
+     AND G.REG_TYP_CD IN ('C', 'U')
+    LEFT OUTER JOIN WAA_USER U
+      ON A.APRV_USER_ID = U.USER_ID
+     AND U.REG_TYP_CD IN ('C', 'U')
+     AND U.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+    LEFT OUTER JOIN WAA_USER U2
+      ON A.RQST_USER_ID = U2.USER_ID
+     AND U2.REG_TYP_CD IN ('C', 'U')
+     AND U2.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+   WHERE A.REG_TYP_CD IN ('C', 'U')
+     AND (A.PA_ENTY_ID = #{paEntyId,jdbcType=VARCHAR}
+         OR A.CH_ENTY_ID = #{paEntyId,jdbcType=VARCHAR})
+  </select>
+  <select id="getPdmRelHistList" parameterType="kr.wise.meta.model.service.WamPdmRel" resultMap="BaseResultMap">
+  SELECT A.*
+  	   , B.FULL_PATH AS PA_SUBJ_PNM
+  	   , C.PDM_TBL_PNM AS PA_ENTY_PNM
+  	   , D.PDM_COL_PNM AS PA_ATTR_PNM
+  	   , E.FULL_PATH AS CH_SUBJ_PNM
+  	   , F.PDM_TBL_PNM AS CH_ENTY_PNM
+  	   , G.PDM_COL_PNM AS CH_ATTR_PNM
+  	   , U.USER_NM AS APRV_USER_NM
+  	   , U2.USER_NM AS RQST_USER_NM
+  	   , CASE WHEN A.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD') AND A.REG_TYP_CD IN ('C', 'U') THEN '#0000FF' END AS FontColor
+    FROM WAH_PDM_REL A
+   INNER JOIN WAA_SUBJ B
+      ON A.PA_SUBJ_ID = B.SUBJ_ID
+     AND B.REG_TYP_CD IN ('C', 'U')
+     AND B.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+   INNER JOIN WAM_PDM_TBL C
+      ON A.PA_SUBJ_ID = C.SUBJ_ID
+     AND A.PA_ENTY_ID = C.PDM_TBL_ID
+     AND C.REG_TYP_CD IN ('C', 'U')
+   INNER JOIN WAM_PDM_COL D
+      ON A.PA_ENTY_ID = D.PDM_TBL_ID
+     AND A.PA_ATTR_ID = D.PDM_COL_ID
+     AND D.REG_TYP_CD IN ('C', 'U')
+   INNER JOIN WAA_SUBJ E
+      ON A.CH_SUBJ_ID = E.SUBJ_ID
+     AND E.REG_TYP_CD IN ('C', 'U')
+     AND E.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+   INNER JOIN WAM_PDM_TBL F
+      ON A.CH_SUBJ_ID = F.SUBJ_ID
+     AND A.CH_ENTY_ID = F.PDM_TBL_ID
+     AND F.REG_TYP_CD IN ('C', 'U')
+   INNER JOIN WAM_PDM_COL G
+      ON A.CH_ENTY_ID = G.PDM_TBL_ID
+     AND A.CH_ATTR_ID = G.PDM_COL_ID
+     AND G.REG_TYP_CD IN ('C', 'U')
+    LEFT OUTER JOIN WAA_USER U
+      ON A.APRV_USER_ID = U.USER_ID
+     AND U.REG_TYP_CD IN ('C', 'U')
+     AND U.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+    LEFT OUTER JOIN WAA_USER U2
+      ON A.RQST_USER_ID = U2.USER_ID
+     AND U2.REG_TYP_CD IN ('C', 'U')
+     AND U2.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+   WHERE 1=1
+     AND (A.PA_ENTY_ID = #{paEntyId,jdbcType=VARCHAR}
+         OR A.CH_ENTY_ID = #{paEntyId,jdbcType=VARCHAR})
+   ORDER BY A.EXP_DTM DESC, A.STR_DTM DESC
+  </select>
+  
+  <select id="getPdmRelListHistPage" parameterType="kr.wise.meta.model.service.WamPdmRel" resultMap="BaseResultMap">
+  SELECT A.*
+  	   , B.FULL_PATH AS PA_SUBJ_PNM
+  	   , C.PDM_TBL_PNM AS PA_ENTY_PNM
+  	   , D.PDM_COL_PNM AS PA_ATTR_PNM
+  	   , E.FULL_PATH AS CH_SUBJ_PNM
+  	   , F.PDM_TBL_PNM AS CH_ENTY_PNM
+  	   , G.PDM_COL_PNM AS CH_ATTR_PNM
+  	   , U.USER_NM AS APRV_USER_NM
+  	   , U2.USER_NM AS RQST_USER_NM
+    FROM WAH_PDM_REL A
+   INNER JOIN WAA_SUBJ B
+      ON A.PA_SUBJ_ID = B.SUBJ_ID
+     AND B.REG_TYP_CD IN ('C', 'U')
+     AND B.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+   INNER JOIN WAH_PDM_TBL C
+      ON A.PA_SUBJ_ID = C.SUBJ_ID
+     AND A.PA_ENTY_ID = C.PDM_TBL_ID
+     AND C.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+   INNER JOIN WAH_PDM_COL D
+      ON A.PA_ENTY_ID = D.PDM_TBL_ID
+     AND A.PA_ATTR_ID = D.PDM_COL_ID
+     AND D.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+   INNER JOIN WAA_SUBJ E
+      ON A.CH_SUBJ_ID = E.SUBJ_ID
+     AND E.REG_TYP_CD IN ('C', 'U')
+     AND E.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+   INNER JOIN WAH_PDM_TBL F
+      ON A.CH_SUBJ_ID = F.SUBJ_ID
+     AND A.CH_ENTY_ID = F.PDM_TBL_ID
+     AND F.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+   INNER JOIN WAH_PDM_COL G
+      ON A.CH_ENTY_ID = G.PDM_TBL_ID
+     AND A.CH_ATTR_ID = G.PDM_COL_ID
+     AND G.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+    LEFT OUTER JOIN WAA_USER U
+      ON A.APRV_USER_ID = U.USER_ID
+     AND U.REG_TYP_CD IN ('C', 'U')
+     AND U.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+    LEFT OUTER JOIN WAA_USER U2
+      ON A.RQST_USER_ID = U2.USER_ID
+     AND U2.REG_TYP_CD IN ('C', 'U')
+     AND U2.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+   WHERE A.REG_TYP_CD IN ('C', 'U')
+     AND A.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+     AND (A.PA_ENTY_ID = #{paEntyId,jdbcType=VARCHAR}
+         OR A.CH_ENTY_ID = #{paEntyId,jdbcType=VARCHAR})
+  </select>
+  <select id="getPdmRelHistListHistPage" parameterType="kr.wise.meta.model.service.WamPdmRel" resultMap="BaseResultMap">
+  SELECT A.*
+  	   , B.FULL_PATH AS PA_SUBJ_PNM
+  	   , C.PDM_TBL_PNM AS PA_ENTY_PNM
+  	   , D.PDM_COL_PNM AS PA_ATTR_PNM
+  	   , E.FULL_PATH AS CH_SUBJ_PNM
+  	   , F.PDM_TBL_PNM AS CH_ENTY_PNM
+  	   , G.PDM_COL_PNM AS CH_ATTR_PNM
+  	   , U.USER_NM AS APRV_USER_NM
+  	   , U2.USER_NM AS RQST_USER_NM
+  	   , CASE WHEN A.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD') AND A.REG_TYP_CD IN ('C', 'U') THEN '#0000FF' END AS FontColor
+    FROM WAH_PDM_REL A
+   INNER JOIN WAA_SUBJ B
+      ON A.PA_SUBJ_ID = B.SUBJ_ID
+     AND B.REG_TYP_CD IN ('C', 'U')
+     AND B.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+   INNER JOIN WAH_PDM_TBL C
+      ON A.PA_SUBJ_ID = C.SUBJ_ID
+     AND A.PA_ENTY_ID = C.PDM_TBL_ID
+     AND C.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+   INNER JOIN WAH_PDM_COL D
+      ON A.PA_ENTY_ID = D.PDM_TBL_ID
+     AND A.PA_ATTR_ID = D.PDM_COL_ID
+     AND D.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+   INNER JOIN WAA_SUBJ E
+      ON A.CH_SUBJ_ID = E.SUBJ_ID
+     AND E.REG_TYP_CD IN ('C', 'U')
+     AND E.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+   INNER JOIN WAH_PDM_TBL F
+      ON A.CH_SUBJ_ID = F.SUBJ_ID
+     AND A.CH_ENTY_ID = F.PDM_TBL_ID
+     AND F.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+   INNER JOIN WAH_PDM_COL G
+      ON A.CH_ENTY_ID = G.PDM_TBL_ID
+     AND A.CH_ATTR_ID = G.PDM_COL_ID
+     AND G.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+    LEFT OUTER JOIN WAA_USER U
+      ON A.APRV_USER_ID = U.USER_ID
+     AND U.REG_TYP_CD IN ('C', 'U')
+     AND U.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+    LEFT OUTER JOIN WAA_USER U2
+      ON A.RQST_USER_ID = U2.USER_ID
+     AND U2.REG_TYP_CD IN ('C', 'U')
+     AND U2.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+   WHERE 1=1
+     AND (A.PA_ENTY_ID = #{paEntyId,jdbcType=VARCHAR}
+         OR A.CH_ENTY_ID = #{paEntyId,jdbcType=VARCHAR})
+   ORDER BY A.EXP_DTM DESC, A.STR_DTM DESC
+  </select>
+</mapper>

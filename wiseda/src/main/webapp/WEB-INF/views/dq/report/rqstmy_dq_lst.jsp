@@ -1,0 +1,1 @@
+<%@include file="../../meta/stnd/rqstmy_lst.jsp" %>

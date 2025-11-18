@@ -1,0 +1,1402 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.meta.gap.service.IdxGapMapper" >
+<resultMap id="BaseResultMap" type="kr.wise.meta.gap.service.IdxGapVO" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+	<id column="GAP_STATUS" property="gapStatus" jdbcType="VARCHAR" />
+    <result column="DB_CONN_TRG_ID" property="dbConnTrgId" jdbcType="VARCHAR" />
+    <result column="DB_CONN_TRG_LNM" property="dbConnTrgLnm" jdbcType="VARCHAR" />
+    <result column="DB_SCH_ID" property="dbSchId" jdbcType="VARCHAR" />
+    <result column="DB_SCH_LNM" property="dbSchLnm" jdbcType="VARCHAR" />
+    <result column="DBC_TBL_NM" property="dbcTblNm" jdbcType="VARCHAR" />
+    <result column="DBC_IDX_NM" property="dbcIdxNm" jdbcType="VARCHAR" />
+    <result column="DBC_TBL_SPAC_NM" property="dbcTblSpacNm" jdbcType="VARCHAR" />
+    <result column="PK_YN" property="pkYn" jdbcType="VARCHAR" />
+    <result column="UQ_YN" property="uqYn" jdbcType="VARCHAR" />
+    <result column="COL_EACNT" property="colEacnt" jdbcType="VARCHAR" />
+    <result column="DESCN" property="descn" jdbcType="VARCHAR" />
+    <result column="DDL_IDX_ERR_DESCN" property="ddlIdxErrDescn" jdbcType="VARCHAR" />
+    <result column="DDL_IDX_COL_ERR_DESCN" property="ddlIdxColErrDescn" jdbcType="VARCHAR" />
+    <result column="DDL_IDX_ID" property="ddlIdxId" jdbcType="VARCHAR" />
+    <result column="DDL_IDX_PNM" property="ddlIdxPnm" jdbcType="VARCHAR" />
+    <result column="DDL_IDX_LNM" property="ddlIdxLnm" jdbcType="VARCHAR" />
+    <result column="IDX_TYP_CD" property="idxTypCd" jdbcType="VARCHAR" />
+    <result column="IDX_SPAC_ID" property="idxSpacId" jdbcType="VARCHAR" />
+    <result column="IDX_SPAC_PNM" property="idxSpacPnm" jdbcType="VARCHAR" />
+    
+    <result column="DDL_IDX_COL_ID" property="ddlIdxColId" jdbcType="VARCHAR" />
+    <result column="DDL_IDX_COL_PNM" property="ddlIdxColPnm" jdbcType="VARCHAR" />
+    <result column="DDL_IDX_COL_ORD" property="ddlIdxColOrd" jdbcType="VARCHAR" />
+    <result column="SORT_TYP" property="sortTyp" jdbcType="VARCHAR" />
+    <result column="DATA_TYPE" property="dataType" jdbcType="VARCHAR" />
+    <result column="DATA_LEN" property="dataLen" jdbcType="VARCHAR" />
+    <result column="DATA_SCAL" property="dataScal" jdbcType="VARCHAR" />
+    <result column="OBJ_DESCN" property="objDescn" jdbcType="VARCHAR" />
+    <result column="DBC_IDX_COL_NM" property="dbcIdxColNm" jdbcType="VARCHAR" />
+    <result column="ORD" property="ord" jdbcType="VARCHAR" />
+    <result column="SORT_TYPE" property="sortType" jdbcType="VARCHAR" />
+    <result column="DATA_PNT" property="dataPnt" jdbcType="VARCHAR" />
+    <result column="GAP_CONTS" property="gapConts" jdbcType="VARCHAR" />
+    <result column="DDL_PK_YN" property="ddlPkYn" jdbcType="VARCHAR" />
+    <result column="DDL_UQ_YN" property="ddlUqYn" jdbcType="VARCHAR" />
+    <result column="DDL_TBL_PNM" property="ddlTblPnm" jdbcType="VARCHAR" />
+    <result column="DDL_IDX_COL_CNT" property="ddlIdxColCnt" jdbcType="VARCHAR" />
+    
+    
+    <result column="DDL_TSF_IDX_ID" property="ddlTsfIdxId" jdbcType="VARCHAR" />
+    <result column="DDL_TSF_IDX_PNM" property="ddlTsfIdxPnm" jdbcType="VARCHAR" />
+    <result column="DDL_TSF_IDX_LNM" property="ddlTsfIdxLnm" jdbcType="VARCHAR" />
+    <result column="DDL_TSF_IDX_COL_ID" property="ddlTsfIdxColId" jdbcType="VARCHAR" />
+    <result column="DDL_TSF_IDX_COL_PNM" property="ddlTsfIdxColPnm" jdbcType="VARCHAR" />
+    <result column="DDL_TSF_IDX_COL_ORD" property="ddlTsfIdxColOrd" jdbcType="VARCHAR" />
+    <result column="TSF_SORT_TYP" property="tsfSortTyp" jdbcType="VARCHAR" />
+    <result column="DDL_TSF_PK_YN" property="ddlTsfPkYn" jdbcType="VARCHAR" />
+    <result column="DDL_TSF_UQ_YN" property="ddlTsfUqYn" jdbcType="VARCHAR" />
+    <result column="DDL_TSF_TBL_PNM" property="ddlTsfTblPnm" jdbcType="VARCHAR" />
+    <result column="DDL_TSF_IDX_COL_CNT" property="ddlTsfIdxColCnt" jdbcType="VARCHAR" />
+    <result column="DB_TSF_CONN_TRG_ID" property="dbTsfConnTrgId" jdbcType="VARCHAR" />
+    <result column="DB_TSF_CONN_TRG_LNM" property="dbTsfConnTrgLnm" jdbcType="VARCHAR" />
+    <result column="DB_TSF_SCH_ID" property="dbTsfSchId" jdbcType="VARCHAR" />
+    <result column="DB_TSF_SCH_LNM" property="dbTsfSchLnm" jdbcType="VARCHAR" />
+    
+    <result column="DBC_REAL_TBL_NM" property="dbcRealTblNm" jdbcType="VARCHAR" />
+    <result column="DBC_REAL_IDX_NM" property="dbcRealIdxNm" jdbcType="VARCHAR" />
+    <result column="COL_REAL_EACNT" property="colRealEacnt" jdbcType="VARCHAR" />
+</resultMap>
+
+	<select id="selectIdxGapAnalyze" parameterType="kr.wise.meta.gap.service.IdxGapVO" resultMap="BaseResultMap">
+	SELECT A.*
+	     , CASE WHEN A.GAP_STATUS = 'GAP' THEN '#FF0000' END AS FontColor
+	  FROM (
+			SELECT A.DB_SCH_ID
+                 , A.DBC_TBL_NM
+                 , A.DBC_IDX_NM
+                 , A.DB_CONN_TRG_ID
+                 , A.DBC_IDX_KOR_NM
+                 , A.REG_TYP
+                 , A.VERS
+                 , A.DESCN
+                 , A.DBC_TBL_SPAC_NM
+                 , A.PK_YN
+                 , A.UQ_YN
+                 , A.COL_EACNT
+                 , A.DDL_IDX_ERR_EXS
+                 , A.DDL_IDX_ERR_DESCN
+                 , A.DDL_IDX_COL_ERR_EXS
+                 , A.DDL_IDX_COL_ERR_DESCN
+			     , S.DB_SCH_LNM
+			     , DB.DB_CONN_TRG_LNM
+			     , IDX.DDL_IDX_ID
+			     , IDX.DDL_IDX_PNM
+			     , IDX.DDL_IDX_LNM
+			     , IDX.IDX_TYP_CD
+			     , IDX.IDX_SPAC_ID
+			     , TS.DB_TBL_SPAC_PNM AS IDX_SPAC_PNM
+			     , CASE WHEN A.DDL_IDX_ERR_EXS = 'Y' THEN 'GAP'
+			       ELSE CASE WHEN A.DDL_IDX_COL_ERR_EXS = 'Y' THEN 'GAP'
+			       ELSE 'NML' END END AS GAP_STATUS
+			  FROM WAT_DBC_IDX A
+			 INNER JOIN WAA_DB_SCH S
+			    ON A.DB_SCH_ID = S.DB_SCH_ID
+			   AND S.REG_TYP_CD IN ('C', 'U')
+			   AND S.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+			 INNER JOIN WAA_DB_CONN_TRG DB
+			    ON A.DB_CONN_TRG_ID = DB.DB_CONN_TRG_ID
+			   AND DB.REG_TYP_CD IN ('C', 'U')
+			   AND DB.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+			  LEFT OUTER JOIN WAM_DDL_IDX IDX
+			    ON A.DBC_IDX_NM = IDX.DDL_IDX_PNM
+			   AND IDX.REG_TYP_CD IN ('C', 'U')
+			  LEFT OUTER JOIN WAA_TBL_SPAC TS
+			    ON IDX.IDX_SPAC_ID = TS.DB_TBL_SPAC_ID
+			   AND TS.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+			   AND TS.REG_TYP_CD IN ('C', 'U')
+			) A
+	  <where>
+		   <if test="gapStatus != null">
+		   AND A.GAP_STATUS = #{gapStatus,jdbcType=VARCHAR}
+		   </if>
+		   <if test="dbConnTrgId != null">
+		   AND A.DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR}
+		   </if>
+		   <if test="dbSchId != null">
+		   AND A.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+		   </if>
+		   <if test="dbcIdxNm != null">
+		   AND A.DBC_IDX_NM LIKE '%' || #{dbcIdxNm,jdbcType=VARCHAR} || '%'
+		   		
+		   </if>
+		   <if test="dbcIdxColNm != null">
+		   AND EXISTS ( SELECT 1
+		   				  FROM WAT_DBC_IDX_COL B
+		   				 WHERE B.DBC_IDX_NM = A.DBC_IDX_NM
+		   				   AND B.DB_SCH_ID = A.DB_SCH_ID
+		   				   AND (B.DBC_IDX_COL_NM = #{dbcIdxColNm,jdbcType=VARCHAR}
+		   				   		OR B.DBC_IDX_COL_NM = #{dbcIdxColNm,jdbcType=VARCHAR} )
+		   			  )
+		   
+		   </if>
+		 </where>
+		 ORDER BY A.DDL_IDX_PNM 
+	  
+	</select>
+	
+	<select id="selectDbcIdxColList" parameterType="kr.wise.meta.gap.service.IdxGapVO" resultMap="BaseResultMap">
+	SELECT A.*
+	     , CASE WHEN DDL.DDL_IDX_COL_PNM IS NULL THEN '#FF0000' END AS FontColor
+	  FROM WAT_DBC_IDX_COL A
+	 INNER JOIN WAT_DBC_IDX B
+	    ON A.DB_SCH_ID = B.DB_SCH_ID
+	   AND A.DBC_TBL_NM = B.DBC_TBL_NM
+	   AND A.DBC_IDX_NM = B.DBC_IDX_NM
+	 INNER JOIN WAA_DB_SCH S
+	    ON A.DB_SCH_ID = S.DB_SCH_ID
+	   AND S.REG_TYP_CD IN ('C', 'U')
+	   AND S.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	  LEFT OUTER JOIN ( SELECT A.DDL_IDX_COL_ID
+	                         , A.DDL_IDX_COL_PNM
+	                         , B.DDL_IDX_ID
+	                         , B.DDL_IDX_PNM
+	                      FROM WAM_DDL_IDX_COL A
+	                     INNER JOIN WAM_DDL_IDX B
+	                        ON A.DDL_IDX_ID = B.DDL_IDX_ID
+	                       AND B.REG_TYP_CD IN ('C', 'U')
+	                     INNER JOIN WAM_DDL_TBL C
+	                        ON B.DDL_TBL_ID = C.DDL_TBL_ID
+	                       AND C.REG_TYP_CD IN ('C', 'U')
+	                  ) DDL
+	    ON A.DBC_IDX_COL_NM = DDL.DDL_IDX_COL_PNM
+	   AND A.DBC_IDX_NM = DDL.DDL_IDX_PNM
+	 <where>
+	 	AND A.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+	 	AND A.DBC_IDX_NM = #{dbcIdxNm,jdbcType=VARCHAR}
+	 </where>
+	 ORDER BY A.ORD
+	</select>
+	<select id="selectDdlIdxColList" parameterType="kr.wise.meta.gap.service.IdxGapVO" resultMap="BaseResultMap">
+		SELECT A.*
+		     , DC.DATA_TYPE
+		     , DC.DATA_LEN
+		     , DC.DATA_SCAL
+		     , B.DDL_IDX_PNM
+		     , B.DDL_IDX_LNM
+		     , CASE WHEN DBC.DBC_IDX_COL_NM IS NULL THEN '#FF0000' END AS FontColor
+		  FROM WAM_DDL_IDX_COL A
+		 INNER JOIN WAM_DDL_IDX B
+		    ON A.DDL_IDX_ID = B.DDL_IDX_ID
+		   AND B.REG_TYP_CD IN ('C',  'U')
+		 INNER JOIN WAM_DDL_TBL DT
+		    ON B.DDL_TBL_ID = DT.DDL_TBL_ID
+		   AND DT.REG_TYP_CD IN ('C', 'U')
+		 INNER JOIN WAM_DDL_COL DC
+		    ON A.DDL_COL_ID = DC.DDL_COL_ID
+		   AND DC.REG_TYP_CD IN ('C', 'U')
+		  LEFT OUTER JOIN WAT_DBC_IDX_COL DBC
+		    ON DT.DB_SCH_ID = DBC.DB_SCH_ID
+		   AND B.DDL_IDX_PNM = DBC.DBC_IDX_NM
+		   AND A.DDL_IDX_COL_PNM = DBC.DBC_IDX_COL_NM
+		<where>
+	 	   AND DT.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+	 	   AND B.DDL_IDX_PNM = #{ddlIdxPnm,jdbcType=VARCHAR}
+	    </where>
+	    ORDER BY A.DDL_IDX_COL_ORD 
+	</select>
+	
+	
+<select id="selectDdlDbcIdxGapList" parameterType="kr.wise.meta.gap.service.IdxGapVO" resultMap="BaseResultMap">
+SELECT A.* 
+     , SCH.DB_SCH_PNM AS DB_SCH_LNM
+     , TRG.DB_CONN_TRG_PNM AS DB_CONN_TRG_LNM
+     , CASE WHEN A.GAP_STATUS = 'GAP' THEN '#FF0000' END AS FontColor
+FROM (
+           SELECT  DDL_IDX_PNM
+                  ,MAX(DDL_TBL_PNM) AS DDL_TBL_PNM
+                  ,COALESCE(MAX(PK_IDX_YN),'N') as DDL_PK_YN
+                  ,COALESCE(MAX(UK_IDX_YN),'N') as DDL_UQ_YN
+                  ,COUNT(DDL_IDX_COL_PNM) AS DDL_IDX_COL_CNT
+                  ,MAX(DBC_IDX_NM) as DBC_IDX_NM
+                  ,MAX(PK_YN) as PK_YN
+                  ,MAX(UQ_YN) as UQ_YN
+                  ,COUNT(DBC_IDX_COL_NM)  as COL_EACNT
+                  ,CASE WHEN COUNT(GAP_STATUS) > 0 THEN 'GAP' ELSE 'NML' END AS GAP_STATUS
+                  ,CASE WHEN COUNT(DDL_IDX_COL_PNM) = 0 THEN '[DDL인덱스미존재]'
+                        WHEN COUNT(DBC_IDX_COL_NM) = 0 THEN '[DBC인덱스미존재]'
+                   ELSE MAX(GAP_CONTS) END AS GAP_CONTS
+                  ,MAX(DB_SCH_ID) AS DB_SCH_ID
+                  ,MAX(DB_CONN_TRG_ID) AS DB_CONN_TRG_ID
+             FROM (
+                    SELECT  
+                     CASE WHEN COALESCE(DDL.DDL_IDX_COL_ORD,0)   != COALESCE(DBC.ORD,0)
+                          OR COALESCE(DDL.PK_IDX_YN,'-') != COALESCE(DBC.PK_YN,'-') 
+                          OR COALESCE(DDL.UK_IDX_YN,'-')  != COALESCE(DBC.UQ_YN,'-')
+                          OR COALESCE(DDL.SORT_TYP,'-') != COALESCE(DBC.SORT_TYPE,'-')
+                     THEN 'GAP'
+                     ELSE NULL END AS GAP_STATUS,
+                     CASE WHEN DBC_IDX_NM IS NULL THEN '[DBC인덱스컬럼미존재]' END ||
+                     CASE WHEN DDL_IDX_PNM IS NOT NULL AND DBC_IDX_NM IS NOT NULL
+                          AND (COALESCE(DDL.DDL_IDX_COL_ORD,0)   != COALESCE(DBC.ORD,0)
+                          OR COALESCE(DDL.PK_IDX_YN,'-') != COALESCE(DBC.PK_YN,'-') 
+                          OR COALESCE(DDL.UK_IDX_YN,'-')  != COALESCE(DBC.UQ_YN,'-')
+                          OR COALESCE(DDL.SORT_TYP,'-') != COALESCE(DBC.SORT_TYPE,'-')) THEN '[컬럼GAP존재]'
+                          END AS GAP_CONTS
+                    ,DDL.DDL_IDX_ID
+           		 ,COALESCE(DDL.DDL_IDX_PNM, DBC.DBC_IDX_NM) AS DDL_IDX_PNM
+           	     ,DDL.PK_IDX_YN
+                    ,DDL.UK_IDX_YN
+                    ,DDL.DDL_IDX_COL_ID
+                    ,DDL.DDL_IDX_COL_PNM
+                    ,DDL.DDL_IDX_COL_LNM
+                    ,DDL.DDL_COL_ID
+                    ,DDL.DDL_IDX_COL_ORD
+                    ,DDL.SORT_TYP
+                    ,COALESCE(DDL.DB_CONN_TRG_ID, DBC.DB_CONN_TRG_ID ) AS DB_CONN_TRG_ID
+                    ,COALESCE(DDL.DB_SCH_ID, DBC.DB_SCH_ID ) AS DB_SCH_ID
+                    ,COALESCE(DDL.DDL_TBL_PNM, DBC.DBC_TBL_NM) AS DDL_TBL_PNM
+                    ,DBC.DBC_TBL_NM
+                    ,DBC.DBC_IDX_NM
+                    ,DBC.DBC_IDX_COL_NM
+                    ,DBC.DBC_TBL_SPAC_NM
+                    ,DBC.PK_YN
+                    ,DBC.UQ_YN
+                    ,DBC.COL_EACNT
+                    ,DBC.SORT_TYPE
+                    ,DBC.ORD
+                    FROM 
+                    (SELECT A.DB_SCH_ID
+                            ,A.DB_CONN_TRG_ID
+                            ,A.DDL_IDX_ID 
+                            ,A.DDL_IDX_PNM
+                            ,A.PK_IDX_YN
+                            ,DECODE(IDX_TYP_CD, 'U', 'Y','N') AS UK_IDX_YN 
+                            ,B.DDL_IDX_COL_ID
+                            ,B.DDL_IDX_COL_PNM
+                            ,B.DDL_IDX_COL_LNM
+                            ,B.DDL_COL_ID
+                            ,B.DDL_IDX_COL_ORD
+                            ,B.SORT_TYP
+                            ,C.DDL_TBL_PNM
+                            ,C.DDL_TBL_LNM
+                    FROM WAM_DDL_IDX A
+                    INNER JOIN 
+                    WAM_DDL_IDX_COL B
+                    ON A.DDL_IDX_ID = B.DDL_IDX_ID
+                    INNER JOIN WAM_DDL_TBL C
+                    ON A.DDL_TBL_ID = C.DDL_TBL_ID
+                    INNER JOIN WAA_DB_SCH SCH
+                    ON A.DB_CONN_TRG_ID = SCH.DB_CONN_TRG_ID
+                    AND A.DB_SCH_ID = SCH.DB_SCH_ID
+                    AND SCH.REG_TYP_CD IN ('C', 'U')
+                    AND SCH.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+                    WHERE 1=1
+                <choose>
+            		<when test="gapDcd.equals('DC')">
+            			AND SCH.DDL_TRG_DCD = 'D'		--개발
+            		</when>
+            		<when test="gapDcd.equals('TC')">
+            			AND SCH.DDL_TRG_DCD = 'T'		--테스트
+            		</when>
+            		<when test="gapDcd.equals('RC')">
+            			AND SCH.DDL_TRG_DCD = 'R'		--운영
+            		</when>
+                </choose>
+                	    AND SCH.DDL_TRG_YN = 'Y'			--DDL대상여부
+                    ) DDL
+                    FULL OUTER JOIN 
+                    (SELECT C.DB_SCH_ID
+                            ,C.DB_CONN_TRG_ID
+                            ,C.DDL_IDX_ID
+                            ,C.DBC_IDX_NM
+                            ,C.PK_YN
+                            ,C.UQ_YN
+                            ,D.DBC_IDX_COL_NM
+                            ,D.DBC_IDX_COL_KOR_NM
+                            ,D.DDL_IDX_COL_ID
+                            ,D.ORD
+                            ,D.SORT_TYPE
+                            ,C.COL_EACNT 
+                            ,C.DBC_TBL_SPAC_NM
+                            ,C.DBC_TBL_NM
+                            ,E.DBC_TBL_KOR_NM
+                    FROM WAT_DBC_IDX C
+                    INNER JOIN WAT_DBC_IDX_COL D
+                    ON C.DB_SCH_ID = D.DB_SCH_ID
+                    AND C.DBC_TBL_NM = D.DBC_TBL_NM
+                    AND C.DBC_IDX_NM = D.DBC_IDX_NM
+                    INNER JOIN WAA_DB_SCH SCH
+                    ON C.DB_CONN_TRG_ID = SCH.DB_CONN_TRG_ID
+                    AND C.DB_SCH_ID = SCH.DB_SCH_ID
+                    AND SCH.REG_TYP_CD IN ('C', 'U')
+                    AND SCH.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+                    LEFT OUTER JOIN WAT_DBC_TBL E
+                    ON C.DBC_TBL_NM = E.DBC_TBL_NM
+                    AND C.DB_SCH_ID = E.DB_SCH_ID
+                    AND C.DB_CONN_TRG_ID = E.DB_CONN_TRG_ID
+                    WHERE 1=1
+                <choose>
+            		<when test="gapDcd.equals('DC')">
+            			AND SCH.DDL_TRG_DCD = 'D'		--개발
+            		</when>
+            		<when test="gapDcd.equals('TC')">
+            			AND SCH.DDL_TRG_DCD = 'T'		--테스트
+            		</when>
+            		<when test="gapDcd.equals('RC')">
+            			AND SCH.DDL_TRG_DCD = 'R'		--운영
+            		</when>
+                </choose>
+                	    AND SCH.DDL_TRG_YN = 'Y'			--DDL대상여부
+                    ) DBC
+                    ON DDL.DB_SCH_ID = DBC.DB_SCH_ID
+                    AND DDL.DDL_IDX_PNM = DBC.DBC_IDX_NM
+                    AND DDL.DDL_IDX_COL_PNM = DBC.DBC_IDX_COL_NM
+                    <where> 
+                    <if test="ddlTblPnm != null">
+		            AND (UPPER(DBC.DBC_TBL_NM) 	   LIKE '%' || UPPER(#{ddlTblPnm,jdbcType=VARCHAR}) || '%' OR UPPER(DDL.DDL_TBL_PNM) LIKE '%' || UPPER(#{ddlTblPnm,jdbcType=VARCHAR}) || '%'
+		              OR UPPER(DBC.DBC_TBL_KOR_NM) LIKE '%' || UPPER(#{ddlTblPnm,jdbcType=VARCHAR}) || '%' OR UPPER(DDL.DDL_TBL_LNM) LIKE '%' || UPPER(#{ddlTblPnm,jdbcType=VARCHAR}) || '%'
+		                )
+		            </if>
+		            </where>
+                ) GROUP BY DDL_IDX_PNM
+           ) A
+           LEFT OUTER JOIN WAA_DB_SCH SCH
+           ON A.DB_CONN_TRG_ID = SCH.DB_CONN_TRG_ID
+           AND A.DB_SCH_ID = SCH.DB_SCH_ID
+           AND SCH.REG_TYP_CD IN ('C', 'U')
+           AND SCH.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+           LEFT OUTER JOIN WAA_DB_CONN_TRG TRG
+           ON A.DB_CONN_TRG_ID = TRG.DB_CONN_TRG_ID
+           AND TRG.REG_TYP_CD IN ('C', 'U')
+           AND TRG.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+	      <where>
+		   <if test="gapStatus != null">
+		   AND A.GAP_STATUS = #{gapStatus,jdbcType=VARCHAR}
+		   </if>
+		   <if test="dbConnTrgId != null">
+		   AND A.DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR}
+		   </if>
+		   <if test="dbSchId != null">
+		   AND A.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+		   </if>
+		   <if test="dbcIdxNm != null">
+		   AND (UPPER(A.DBC_IDX_NM) LIKE '%' || UPPER(#{dbcIdxNm,jdbcType=VARCHAR}) || '%' OR UPPER(A.DDL_IDX_PNM)  LIKE '%' || UPPER(#{dbcIdxNm,jdbcType=VARCHAR}) || '%')
+		   		
+		   </if>
+		   
+		   <if test="dbcIdxColNm != null">
+		   AND EXISTS ( SELECT 1
+		   				  FROM WAT_DBC_IDX_COL B
+		   				 WHERE B.DBC_IDX_NM = A.DBC_IDX_NM
+		   				   AND B.DB_SCH_ID = A.DB_SCH_ID
+		   				   AND (UPPER(B.DBC_IDX_COL_NM) = UPPER(#{dbcIdxColNm,jdbcType=VARCHAR})
+		   				   	 OR UPPER(B.DBC_IDX_COL_NM) = UPPER(#{dbcIdxColNm,jdbcType=VARCHAR}) )
+		   			  )
+		   
+		   </if>
+		 </where>
+		 ORDER BY GAP_STATUS, GAP_CONTS,DDL_TBL_PNM, DDL_IDX_PNM 
+	  
+	</select>
+	
+		<select id="selectDdlDbcIdxColGapList" parameterType="kr.wise.meta.gap.service.IdxGapVO" resultMap="BaseResultMap">
+SELECT A.* 
+     , CASE WHEN A.GAP_STATUS = 'GAP' THEN '#FF0000' END AS FontColor
+FROM (
+              SELECT  
+                     CASE WHEN COALESCE(DDL.DDL_IDX_COL_ORD,0)   != COALESCE(DBC.ORD,0)
+                          OR COALESCE(DDL.PK_IDX_YN,'N') != COALESCE(DBC.PK_YN,'N') 
+                          OR COALESCE(DDL.UK_IDX_YN,'-')  != COALESCE(DBC.UQ_YN,'-')
+                          OR COALESCE(DDL.SORT_TYP,'-') != COALESCE(DBC.SORT_TYPE,'-')
+                     THEN 'GAP'
+                     ELSE 'NML' END AS GAP_STATUS
+                    ,DDL.DDL_IDX_ID
+           	        ,COALESCE(DDL.DDL_IDX_PNM, DBC.DBC_IDX_NM) AS DDL_IDX_PNM
+           	        ,COALESCE(DDL.PK_IDX_YN,'N')       AS DDL_PK_YN
+                    ,DDL.UK_IDX_YN       AS DDL_UQ_YN
+                    ,DDL.DDL_IDX_COL_ID
+                    ,DDL.DDL_IDX_COL_PNM
+                    ,DDL.DDL_IDX_COL_LNM
+                    ,DDL.DDL_COL_ID
+                    ,DDL.DDL_IDX_COL_ORD
+                    ,DDL.SORT_TYP
+                    ,DDL.DB_CONN_TRG_ID
+                    ,DDL.DB_SCH_ID
+                    ,DDL.DDL_TBL_PNM
+                    ,DBC.DBC_TBL_NM
+                    ,DBC.DBC_IDX_NM
+                    ,DBC.DBC_IDX_COL_NM
+                    ,DBC.DBC_TBL_SPAC_NM
+                    ,DBC.PK_YN
+                    ,DBC.UQ_YN
+                    ,DBC.COL_EACNT
+                    ,DBC.SORT_TYPE
+                    ,DBC.ORD
+                    FROM 
+                    (SELECT A.DB_SCH_ID
+                            ,A.DB_CONN_TRG_ID
+                            ,A.DDL_IDX_ID 
+                            ,A.DDL_IDX_PNM
+                            ,A.PK_IDX_YN
+                            ,DECODE(IDX_TYP_CD, 'U', 'Y','N') AS UK_IDX_YN 
+                            ,B.DDL_IDX_COL_ID
+                            ,B.DDL_IDX_COL_PNM
+                            ,B.DDL_IDX_COL_LNM
+                            ,B.DDL_COL_ID
+                            ,B.DDL_IDX_COL_ORD
+                            ,B.SORT_TYP
+                            ,C.DDL_TBL_PNM
+                            ,C.DDL_TBL_LNM
+                    FROM WAM_DDL_IDX A
+                    INNER JOIN 
+                    WAM_DDL_IDX_COL B
+                    ON A.DDL_IDX_ID = B.DDL_IDX_ID
+                    INNER JOIN WAM_DDL_TBL C
+                    ON A.DDL_TBL_ID = C.DDL_TBL_ID
+                    INNER JOIN WAA_DB_SCH SCH
+                    ON A.DB_CONN_TRG_ID = SCH.DB_CONN_TRG_ID
+                    AND A.DB_SCH_ID = SCH.DB_SCH_ID
+                    AND SCH.REG_TYP_CD IN ('C', 'U')
+                    AND SCH.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+                    WHERE 1=1
+                <choose>
+            		<when test="gapDcd.equals('DC')">
+            			AND SCH.DDL_TRG_DCD = 'D'		--개발
+            		</when>
+            		<when test="gapDcd.equals('TC')">
+            			AND SCH.DDL_TRG_DCD = 'T'		--테스트
+            		</when>
+            		<when test="gapDcd.equals('RC')">
+            			AND SCH.DDL_TRG_DCD = 'R'		--운영
+            		</when>
+                </choose>
+                    ) DDL
+                    FULL OUTER JOIN 
+                    (SELECT C.DB_SCH_ID
+                            ,C.DB_CONN_TRG_ID
+                            ,C.DDL_IDX_ID
+                            ,C.DBC_IDX_NM
+                            ,C.PK_YN
+                            ,C.UQ_YN
+                            ,D.DBC_IDX_COL_NM
+                            ,D.DBC_IDX_COL_KOR_NM
+                            ,D.DDL_IDX_COL_ID
+                            ,D.ORD
+                            ,D.SORT_TYPE
+                            ,C.COL_EACNT 
+                            ,C.DBC_TBL_SPAC_NM
+                            ,C.DBC_TBL_NM
+                            ,E.DBC_TBL_KOR_NM
+                    FROM WAT_DBC_IDX C
+                    INNER JOIN WAT_DBC_IDX_COL D
+                    ON C.DB_SCH_ID = D.DB_SCH_ID
+                    AND C.DBC_TBL_NM = D.DBC_TBL_NM
+                    AND C.DBC_IDX_NM = D.DBC_IDX_NM
+                    INNER JOIN WAA_DB_SCH SCH
+                    ON C.DB_CONN_TRG_ID = SCH.DB_CONN_TRG_ID
+                    AND C.DB_SCH_ID = SCH.DB_SCH_ID
+                    AND SCH.REG_TYP_CD IN ('C', 'U')
+                    AND SCH.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+                    LEFT OUTER JOIN WAT_DBC_TBL E
+                    ON C.DBC_TBL_NM = E.DBC_TBL_NM
+                    AND C.DB_SCH_ID = E.DB_SCH_ID
+                    AND C.DB_CONN_TRG_ID = E.DB_CONN_TRG_ID
+                    WHERE 1=1
+                <choose>
+            		<when test="gapDcd.equals('DC')">
+            			AND SCH.DDL_TRG_DCD = 'D'		--개발
+            		</when>
+            		<when test="gapDcd.equals('TC')">
+            			AND SCH.DDL_TRG_DCD = 'T'		--테스트
+            		</when>
+            		<when test="gapDcd.equals('RC')">
+            			AND SCH.DDL_TRG_DCD = 'R'		--운영
+            		</when>
+                </choose>
+                    ) DBC
+                    ON DDL.DB_SCH_ID = DBC.DB_SCH_ID
+                    AND DDL.DDL_IDX_PNM = DBC.DBC_IDX_NM
+                    AND DDL.DDL_IDX_COL_PNM = DBC.DBC_IDX_COL_NM
+                    <where>
+                       AND (DDL.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR} OR DBC.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR})
+                       AND (UPPER(DDL.DDL_IDX_PNM) = UPPER(#{ddlIdxPnm,jdbcType=VARCHAR})  
+                         OR UPPER(DBC.DBC_IDX_NM) = UPPER(#{dbcIdxNm,jdbcType=VARCHAR}) )
+                     </where>
+           ) A	  
+	</select>
+	
+	
+<select id="selectDdlTsfIdxGapList" parameterType="kr.wise.meta.gap.service.IdxGapVO" resultMap="BaseResultMap">
+SELECT A.* 
+     , CASE WHEN A.GAP_STATUS = 'GAP' THEN '#FF0000' END AS FontColor
+FROM (
+           SELECT  DDL_IDX_PNM
+                  ,MAX(DDL_TBL_PNM) AS DDL_TBL_PNM
+                  ,MAX(PK_IDX_YN) as DDL_PK_YN
+                  ,MAX(UK_IDX_YN) as DDL_UQ_YN
+                  ,COUNT(DDL_IDX_COL_PNM) AS DDL_IDX_COL_CNT
+                  ,MAX(DDL_TSF_IDX_PNM) as DDL_TSF_IDX_PNM
+                  ,MAX(DDL_TSF_PK_IDX_YN) as DDL_TSF_PK_YN
+                  ,MAX(DDL_TSF_UK_IDX_YN) as DDL_TSF_UQ_YN
+                  ,COUNT(DDL_TSF_IDX_COL_PNM)  as DDL_TSF_IDX_COL_CNT
+                  ,CASE WHEN COUNT(GAP_STATUS) > 0 THEN 'GAP' ELSE 'NML' END AS GAP_STATUS
+                  ,CASE WHEN COUNT(DDL_IDX_COL_PNM) = 0 THEN '[DDL인덱스미존재]'
+                        WHEN COUNT(DDL_TSF_IDX_COL_PNM) = 0 THEN '[DDL운영인덱스미존재]'
+                   ELSE MAX(GAP_CONTS) END AS GAP_CONTS
+                  ,MAX(DB_SCH_ID) AS DB_SCH_ID
+                  ,MAX(DB_CONN_TRG_ID) AS DB_CONN_TRG_ID
+                  ,MAX(DB_SCH_PNM) AS DB_SCH_LNM
+                  ,MAX(DB_CONN_TRG_PNM) AS DB_CONN_TRG_LNM
+                  ,MAX(DB_TSF_CONN_TRG_ID) AS DB_TSF_CONN_TRG_ID
+                  ,MAX(DB_TSF_CONN_TRG_LNM) AS DB_TSF_CONN_TRG_LNM
+                  ,MAX(DB_TSF_SCH_ID) AS DB_TSF_SCH_ID
+                  ,MAX(DB_TSF_SCH_LNM) AS DB_TSF_SCH_LNM
+                  ,MAX(DDL_TSF_TBL_PNM) AS DDL_TSF_TBL_PNM
+                  ,MAX(DDL_IDX_ID) AS DDL_IDX_ID
+                  ,MAX(DDL_TSF_IDX_ID) AS DDL_TSF_IDX_ID
+             FROM (
+                    SELECT  
+                     CASE WHEN COALESCE(DDL.DDL_IDX_COL_ORD,0)   != COALESCE(TSF.DDL_IDX_COL_ORD,0)
+                          OR COALESCE(DDL.PK_IDX_YN,'-') != COALESCE(TSF.PK_IDX_YN,'-') 
+                          OR COALESCE(DDL.UK_IDX_YN,'-')  != COALESCE(TSF.UK_IDX_YN,'-')
+                          OR COALESCE(DDL.SORT_TYP,'-') != COALESCE(TSF.SORT_TYP,'-')
+                     THEN 'GAP'
+                     ELSE NULL END AS GAP_STATUS,
+                     CASE WHEN DDL.DDL_IDX_PNM IS NULL THEN '[DDL개발인덱스컬럼미존재]' END 
+                          || CASE WHEN TSF.DDL_IDX_PNM IS NULL THEN '[DDL운영인덱스컬럼미존재]' END ||
+                     CASE WHEN DDL.DDL_IDX_PNM IS NOT NULL AND TSF.DDL_IDX_PNM IS NOT NULL
+                          AND (COALESCE(DDL.DDL_IDX_COL_ORD,0)   != COALESCE(TSF.DDL_IDX_COL_ORD,0)
+                          OR COALESCE(DDL.PK_IDX_YN,'-') != COALESCE(TSF.PK_IDX_YN,'-') 
+                          OR COALESCE(DDL.UK_IDX_YN,'-')  != COALESCE(TSF.UK_IDX_YN,'-')
+                          OR COALESCE(DDL.SORT_TYP,'-') != COALESCE(TSF.SORT_TYP,'-')) THEN '[컬럼GAP존재]'
+                          END AS GAP_CONTS
+                    ,DDL.DDL_IDX_ID
+           		    ,COALESCE(DDL.DDL_IDX_PNM, TSF.DDL_IDX_PNM) AS DDL_IDX_PNM
+           	        ,DDL.PK_IDX_YN
+                    ,DDL.UK_IDX_YN
+                    ,DDL.DDL_IDX_COL_ID
+                    ,DDL.DDL_IDX_COL_PNM
+                    ,DDL.DDL_IDX_COL_LNM
+                    ,DDL.DDL_COL_ID
+                    ,DDL.DDL_IDX_COL_ORD
+                    ,DDL.SORT_TYP
+                    ,DDL.DB_CONN_TRG_ID
+                    ,DDL.DB_SCH_ID
+                    ,DDL.DDL_TBL_PNM
+                    ,DDL.DB_SCH_PNM
+                    ,DDL.DB_CONN_TRG_PNM
+                    ,TSF.DDL_IDX_ID       DDL_TSF_IDX_ID
+           		    ,TSF.DDL_IDX_PNM      DDL_TSF_IDX_PNM
+           	        ,TSF.PK_IDX_YN        DDL_TSF_PK_IDX_YN
+                    ,TSF.UK_IDX_YN        DDL_TSF_UK_IDX_YN
+                    ,TSF.DDL_IDX_COL_ID   DDL_TSF_IDX_COL_ID
+                    ,TSF.DDL_IDX_COL_PNM  DDL_TSF_IDX_COL_PNM
+                    ,TSF.DDL_IDX_COL_LNM  DDL_TSF_IDX_COL_LNM
+                    ,TSF.DDL_COL_ID       DDL_TSF_COL_ID
+                    ,TSF.DDL_IDX_COL_ORD  DDL_TSF_IDX_COL_ORD
+                    ,TSF.SORT_TYP         TSF_SORT_TYP
+                    ,TSF.DB_CONN_TRG_ID   DB_TSF_CONN_TRG_ID
+                    ,TSF.TGT_DB_SCH_ID    DB_TSF_SCH_ID
+                    ,TSF.DDL_TBL_PNM      DDL_TSF_TBL_PNM
+                    ,TSF.DB_SCH_PNM       DB_TSF_SCH_LNM
+                    ,TSF.DB_CONN_TRG_PNM  DB_TSF_CONN_TRG_LNM
+                    FROM 
+                    (SELECT A.DB_SCH_ID
+                            ,A.DB_CONN_TRG_ID
+                            ,SCH.DB_SCH_PNM
+                            ,TRG.DB_CONN_TRG_PNM
+                            ,A.DDL_IDX_ID 
+                            ,A.DDL_IDX_PNM
+                            ,A.PK_IDX_YN
+                            ,DECODE(IDX_TYP_CD, 'U', 'Y','N') AS UK_IDX_YN 
+                            ,B.DDL_IDX_COL_ID
+                            ,B.DDL_IDX_COL_PNM
+                            ,B.DDL_IDX_COL_LNM
+                            ,B.DDL_COL_ID
+                            ,B.DDL_IDX_COL_ORD
+                            ,DECODE(B.SORT_TYP,1, 'ASC','DESC') SORT_TYP
+                            ,C.DDL_TBL_PNM
+                            ,C.DDL_TBL_LNM
+                    FROM WAM_DDL_IDX A
+                    INNER JOIN 
+                    WAM_DDL_IDX_COL B
+                    ON A.DDL_IDX_ID = B.DDL_IDX_ID
+                    INNER JOIN WAM_DDL_TBL C
+                    ON A.DDL_TBL_ID = C.DDL_TBL_ID
+                    INNER JOIN WAA_DB_SCH SCH
+                    ON A.DB_CONN_TRG_ID = SCH.DB_CONN_TRG_ID
+                    AND A.DB_SCH_ID = SCH.DB_SCH_ID
+                    AND SCH.DDL_TRG_DCD = 'D'  --개발만
+                    AND SCH.REG_TYP_CD IN ('C', 'U')
+                    AND SCH.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+                    LEFT OUTER JOIN WAA_DB_CONN_TRG TRG
+                    ON SCH.DB_CONN_TRG_ID =TRG.DB_CONN_TRG_ID
+                    AND TRG.REG_TYP_CD IN ('C', 'U')
+                    AND TRG.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+                    ) DDL
+                    FULL OUTER JOIN 
+                    (SELECT A.TGT_DB_SCH_ID
+                            ,A.SRC_DB_SCH_ID
+                            ,SCH.DB_SCH_PNM
+                            ,TRG.DB_CONN_TRG_ID
+                            ,TRG.DB_CONN_TRG_PNM
+                            ,A.DDL_IDX_ID 
+                            ,A.DDL_IDX_PNM
+                            ,A.PK_IDX_YN
+                            ,DECODE(IDX_TYP_CD, 'U', 'Y','N') AS UK_IDX_YN 
+                            ,B.DDL_IDX_COL_ID
+                            ,B.DDL_IDX_COL_PNM
+                            ,B.DDL_IDX_COL_LNM
+                            ,B.DDL_COL_ID
+                            ,B.DDL_IDX_COL_ORD
+                            ,DECODE(B.SORT_TYP,1, 'ASC','DESC') SORT_TYP
+                            ,C.DDL_TBL_PNM
+                            ,C.DDL_TBL_LNM
+                    FROM WAM_DDL_TSF_IDX A
+                    INNER JOIN 
+                    WAM_DDL_TSF_IDX_COL B
+                    ON A.DDL_IDX_ID = B.DDL_IDX_ID
+                    INNER JOIN WAM_DDL_TSF_TBL C
+                    ON A.DDL_TBL_ID = C.DDL_TBL_ID
+                    AND A.TGT_DB_SCH_ID = C.TGT_DB_SCH_ID
+                    INNER JOIN WAA_DB_SCH SCH
+                    ON A.TGT_DB_SCH_ID = SCH.DB_SCH_ID
+                    AND SCH.REG_TYP_CD IN ('C', 'U')
+                    AND SCH.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+                    LEFT OUTER JOIN WAA_DB_CONN_TRG TRG
+                    ON SCH.DB_CONN_TRG_ID = TRG.DB_CONN_TRG_ID
+                    AND TRG.REG_TYP_CD IN ('C', 'U')
+                    AND TRG.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+                    ) TSF
+                    ON DDL.DB_SCH_ID = TSF.SRC_DB_SCH_ID
+                    AND DDL.DDL_IDX_ID = TSF.DDL_IDX_ID
+                    AND DDL.DDL_IDX_COL_ID = TSF.DDL_IDX_COL_ID
+                    <where> 
+                    <if test="ddlTblPnm != null">
+		            AND (TSF.DDL_TBL_PNM LIKE '%' || #{ddlTblPnm,jdbcType=VARCHAR} || '%' OR DDL.DDL_TBL_PNM  LIKE '%' || #{ddlTblPnm,jdbcType=VARCHAR} || '%'
+		                 OR TSF.DDL_TBL_LNM LIKE '%' || #{ddlTblPnm,jdbcType=VARCHAR} || '%' OR DDL.DDL_TBL_LNM  LIKE '%' || #{ddlTblPnm,jdbcType=VARCHAR} || '%'
+		                )
+		            </if>
+		            </where>
+                ) GROUP BY DDL_IDX_PNM
+           ) A
+	      <where>
+		   <if test="gapStatus != null">
+		   AND A.GAP_STATUS = #{gapStatus,jdbcType=VARCHAR}
+		   </if>
+		   <if test="dbConnTrgId != null">
+		   AND A.DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR}
+		   </if>
+		   <if test="dbSchId != null">
+		   AND A.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+		   </if>
+		   <if test="dbcIdxNm != null">
+		   AND (A.DDL_TSF_IDX_PNM LIKE '%' || #{dbcIdxNm,jdbcType=VARCHAR} || '%' OR A.DDL_IDX_PNM  LIKE '%' || #{dbcIdxNm,jdbcType=VARCHAR} || '%')
+		   		
+		   </if>
+		 </where>
+		 ORDER BY GAP_STATUS, GAP_CONTS,DDL_TBL_PNM, DDL_IDX_PNM 
+	  
+	</select>
+	
+<select id="selectDdlTsfIdxColGapList" parameterType="kr.wise.meta.gap.service.IdxGapVO" resultMap="BaseResultMap">
+SELECT A.* 
+     , CASE WHEN A.GAP_STATUS = 'GAP' THEN '#FF0000' END AS FontColor
+FROM (
+           SELECT  
+                     CASE WHEN COALESCE(DDL.DDL_IDX_COL_ORD,0)   != COALESCE(TSF.DDL_IDX_COL_ORD,0)
+                          OR COALESCE(DDL.PK_IDX_YN,'-') != COALESCE(TSF.PK_IDX_YN,'-') 
+                          OR COALESCE(DDL.UK_IDX_YN,'-')  != COALESCE(TSF.UK_IDX_YN,'-')
+                          OR COALESCE(DDL.SORT_TYP,'-') != COALESCE(TSF.SORT_TYP,'-')
+                     THEN 'GAP'
+                     ELSE 'NML' END AS GAP_STATUS
+                    ,DDL.DDL_IDX_ID
+           		    ,COALESCE(DDL.DDL_IDX_PNM, TSF.DDL_IDX_PNM) AS DDL_IDX_PNM
+           	        ,DDL.PK_IDX_YN AS DDL_PK_YN
+                    ,DDL.UK_IDX_YN AS DDL_UQ_YN
+                    ,DDL.DDL_IDX_COL_ID
+                    ,DDL.DDL_IDX_COL_PNM
+                    ,DDL.DDL_IDX_COL_LNM
+                    ,DDL.DDL_COL_ID
+                    ,DDL.DDL_IDX_COL_ORD
+                    ,DDL.SORT_TYP
+                    ,DDL.DB_CONN_TRG_ID
+                    ,DDL.DB_SCH_ID
+                    ,DDL.DDL_TBL_PNM
+                    ,DDL.DB_SCH_PNM
+                    ,DDL.DB_CONN_TRG_PNM
+                    ,TSF.DDL_IDX_ID       DDL_TSF_IDX_ID
+           		    ,TSF.DDL_IDX_PNM      DDL_TSF_IDX_PNM
+           	        ,TSF.PK_IDX_YN        DDL_TSF_PK_YN
+                    ,TSF.UK_IDX_YN        DDL_TSF_UQ_YN
+                    ,TSF.DDL_IDX_COL_ID   DDL_TSF_IDX_COL_ID
+                    ,TSF.DDL_IDX_COL_PNM  DDL_TSF_IDX_COL_PNM
+                    ,TSF.DDL_IDX_COL_LNM  DDL_TSF_IDX_COL_LNM
+                    ,TSF.DDL_COL_ID       DDL_TSF_COL_ID
+                    ,TSF.DDL_IDX_COL_ORD  DDL_TSF_IDX_COL_ORD
+                    ,TSF.SORT_TYP         TSF_SORT_TYP
+                    ,TSF.DB_CONN_TRG_ID   DB_TSF_CONN_TRG_ID
+                    ,TSF.TGT_DB_SCH_ID    DB_TSF_SCH_ID
+                    ,TSF.DDL_TBL_PNM      DDL_TSF_TBL_PNM
+                    ,TSF.DB_SCH_PNM       DB_TSF_SCH_LNM
+                    ,TSF.DB_CONN_TRG_PNM  DB_TSF_CONN_TRG_LNM
+                    FROM 
+                    (SELECT A.DB_SCH_ID
+                            ,A.DB_CONN_TRG_ID
+                            ,SCH.DB_SCH_PNM
+                            ,TRG.DB_CONN_TRG_PNM
+                            ,A.DDL_IDX_ID 
+                            ,A.DDL_IDX_PNM
+                            ,A.PK_IDX_YN
+                            ,DECODE(IDX_TYP_CD, 'U', 'Y','N') AS UK_IDX_YN 
+                            ,B.DDL_IDX_COL_ID
+                            ,B.DDL_IDX_COL_PNM
+                            ,B.DDL_IDX_COL_LNM
+                            ,B.DDL_COL_ID
+                            ,B.DDL_IDX_COL_ORD
+                            ,DECODE(B.SORT_TYP,1, 'ASC','DESC') SORT_TYP
+                            ,C.DDL_TBL_PNM
+                            ,C.DDL_TBL_LNM
+                    FROM WAM_DDL_IDX A
+                    INNER JOIN 
+                    WAM_DDL_IDX_COL B
+                    ON A.DDL_IDX_ID = B.DDL_IDX_ID
+                    INNER JOIN WAM_DDL_TBL C
+                    ON A.DDL_TBL_ID = C.DDL_TBL_ID
+                    INNER JOIN WAA_DB_SCH SCH
+                    ON A.DB_CONN_TRG_ID = SCH.DB_CONN_TRG_ID
+                    AND A.DB_SCH_ID = SCH.DB_SCH_ID
+                    AND SCH.DDL_TRG_DCD = 'D'  --개발만
+                    AND SCH.REG_TYP_CD IN ('C', 'U')
+                    AND SCH.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+                    LEFT OUTER JOIN WAA_DB_CONN_TRG TRG
+                    ON SCH.DB_CONN_TRG_ID =TRG.DB_CONN_TRG_ID
+                    AND TRG.REG_TYP_CD IN ('C', 'U')
+                    AND TRG.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+                    ) DDL
+                    FULL OUTER JOIN 
+                    (SELECT A.TGT_DB_SCH_ID
+                            ,A.SRC_DB_SCH_ID
+                            ,SCH.DB_SCH_PNM
+                            ,TRG.DB_CONN_TRG_ID
+                            ,TRG.DB_CONN_TRG_PNM
+                            ,A.DDL_IDX_ID 
+                            ,A.DDL_IDX_PNM
+                            ,A.PK_IDX_YN
+                            ,DECODE(IDX_TYP_CD, 'U', 'Y','N') AS UK_IDX_YN 
+                            ,B.DDL_IDX_COL_ID
+                            ,B.DDL_IDX_COL_PNM
+                            ,B.DDL_IDX_COL_LNM
+                            ,B.DDL_COL_ID
+                            ,B.DDL_IDX_COL_ORD
+                            ,DECODE(B.SORT_TYP,1, 'ASC','DESC') SORT_TYP
+                            ,C.DDL_TBL_PNM
+                            ,C.DDL_TBL_LNM
+                    FROM WAM_DDL_TSF_IDX A
+                    INNER JOIN 
+                    WAM_DDL_TSF_IDX_COL B
+                    ON A.DDL_IDX_ID = B.DDL_IDX_ID
+                    INNER JOIN WAM_DDL_TSF_TBL C
+                    ON A.DDL_TBL_ID = C.DDL_TBL_ID
+                    AND A.TGT_DB_SCH_ID = C.TGT_DB_SCH_ID
+                    INNER JOIN WAA_DB_SCH SCH
+                    ON A.TGT_DB_SCH_ID = SCH.DB_SCH_ID
+                    AND SCH.REG_TYP_CD IN ('C', 'U')
+                    AND SCH.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+                    LEFT OUTER JOIN WAA_DB_CONN_TRG TRG
+                    ON SCH.DB_CONN_TRG_ID = TRG.DB_CONN_TRG_ID
+                    AND TRG.REG_TYP_CD IN ('C', 'U')
+                    AND TRG.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+                    ) TSF
+                    ON DDL.DB_SCH_ID = TSF.SRC_DB_SCH_ID
+                    AND DDL.DDL_IDX_ID = TSF.DDL_IDX_ID
+                    AND DDL.DDL_IDX_COL_ID = TSF.DDL_IDX_COL_ID
+                    <where> 
+		            AND (DDL.DDL_IDX_ID = #{ddlIdxId,jdbcType=VARCHAR} OR TSF.DDL_IDX_ID = #{ddlTsfIdxId,jdbcType=VARCHAR})
+		            AND (DDL.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR} OR TSF.TGT_DB_SCH_ID = #{dbTsfSchId,jdbcType=VARCHAR} )
+		            </where>
+           ) A
+		 ORDER BY DDL_IDX_COL_ORD, DDL_TSF_IDX_COL_ORD
+	  
+	</select>
+	
+	<select id="selectDdlTsfDbcIdxGapList" parameterType="kr.wise.meta.gap.service.IdxGapVO" resultMap="BaseResultMap">
+SELECT A.* 
+     , SCH.DB_SCH_PNM AS DB_SCH_LNM
+     , TRG.DB_CONN_TRG_PNM AS DB_CONN_TRG_LNM
+     , CASE WHEN A.GAP_STATUS = 'GAP' THEN '#FF0000' END AS FontColor
+FROM (
+           SELECT  DDL_IDX_PNM
+                  ,MAX(DDL_TBL_PNM) AS DDL_TBL_PNM
+                  ,MAX(PK_IDX_YN) as DDL_PK_YN
+                  ,MAX(UK_IDX_YN) as DDL_UQ_YN
+                  ,COUNT(DDL_IDX_COL_PNM) AS DDL_IDX_COL_CNT
+                  ,MAX(DBC_IDX_NM) as DBC_IDX_NM
+                  ,MAX(PK_YN) as PK_YN
+                  ,MAX(UQ_YN) as UQ_YN
+                  ,COUNT(DBC_IDX_COL_NM)  as COL_EACNT
+                  ,CASE WHEN COUNT(GAP_STATUS) > 0 THEN 'GAP' ELSE 'NML' END AS GAP_STATUS
+                  ,CASE WHEN COUNT(DDL_IDX_COL_PNM) = 0 THEN '[DDL운영인덱스미존재]'
+                        WHEN COUNT(DBC_IDX_COL_NM) = 0 THEN '[DBC운영인덱스미존재]'
+                   ELSE MAX(GAP_CONTS) END AS GAP_CONTS
+                  ,MAX(DB_SCH_ID) AS DB_SCH_ID
+                  ,MAX(DB_CONN_TRG_ID) AS DB_CONN_TRG_ID
+             FROM (
+                    SELECT  
+                     CASE WHEN SUBSTR(DBC.DBC_IDX_NM, -4,2) ='_E' THEN NULL
+                          WHEN COALESCE(DDL.DDL_IDX_COL_ORD,0)   != COALESCE(DBC.ORD,0)
+                          OR COALESCE(DDL.PK_IDX_YN,'-') != COALESCE(DBC.PK_YN,'-') 
+                          OR COALESCE(DDL.UK_IDX_YN,'-')  != COALESCE(DBC.UQ_YN,'-')
+                          OR COALESCE(DDL.SORT_TYP,'-') != COALESCE(DBC.SORT_TYPE,'-')
+                     THEN 'GAP'
+                     ELSE NULL END AS GAP_STATUS,
+                     CASE WHEN DDL_IDX_PNM IS NULL AND SUBSTR(COALESCE(DBC.DBC_IDX_NM,'-'), -4,2) != '_E' THEN '[DDL운영인덱스컬럼미존재]' END 
+                          || CASE WHEN DBC_IDX_NM IS NULL THEN '[DBC운영인덱스컬럼미존재]' END ||
+                     CASE WHEN SUBSTR(COALESCE(DBC.DBC_IDX_NM,'-'), -4,2) ='_E' THEN ''
+                          WHEN DDL_IDX_PNM IS NOT NULL AND DBC_IDX_NM IS NOT NULL
+                          AND (COALESCE(DDL.DDL_IDX_COL_ORD,0)   != COALESCE(DBC.ORD,0)
+                          OR COALESCE(DDL.PK_IDX_YN,'-') != COALESCE(DBC.PK_YN,'-') 
+                          OR COALESCE(DDL.UK_IDX_YN,'-')  != COALESCE(DBC.UQ_YN,'-')
+                          OR COALESCE(DDL.SORT_TYP,'-') != COALESCE(DBC.SORT_TYPE,'-')) THEN '[컬럼GAP존재]'
+                          END AS GAP_CONTS
+                    ,DDL.DDL_IDX_ID
+           		 ,COALESCE(DDL.DDL_IDX_PNM, DBC.DBC_IDX_NM) AS DDL_IDX_PNM
+           	     ,DDL.PK_IDX_YN
+                    ,DDL.UK_IDX_YN
+                    ,DDL.DDL_IDX_COL_ID
+                    ,DDL.DDL_IDX_COL_PNM
+                    ,DDL.DDL_IDX_COL_LNM
+                    ,DDL.DDL_COL_ID
+                    ,DDL.DDL_IDX_COL_ORD
+                    ,DDL.SORT_TYP
+                    ,COALESCE(DDL.DB_CONN_TRG_ID, DBC.DB_CONN_TRG_ID ) AS DB_CONN_TRG_ID
+                    ,COALESCE(DDL.DB_SCH_ID, DBC.DB_SCH_ID ) AS DB_SCH_ID
+                    ,COALESCE(DDL.DDL_TBL_PNM, DBC.DBC_TBL_NM) AS DDL_TBL_PNM
+                    ,DBC.DBC_TBL_NM
+                    ,DBC.DBC_IDX_NM
+                    ,DBC.DBC_IDX_COL_NM
+                    ,DBC.DBC_TBL_SPAC_NM
+                    ,DBC.PK_YN
+                    ,DBC.UQ_YN
+                    ,DBC.COL_EACNT
+                    ,DBC.SORT_TYPE
+                    ,DBC.ORD
+                    FROM 
+                    (SELECT A.TGT_DB_SCH_ID DB_SCH_ID
+                            ,TRG.DB_CONN_TRG_ID
+                            ,A.DDL_IDX_ID 
+                            ,A.DDL_IDX_PNM
+                            ,A.PK_IDX_YN
+                            ,DECODE(IDX_TYP_CD, 'U', 'Y','N') AS UK_IDX_YN 
+                            ,B.DDL_IDX_COL_ID
+                            ,B.DDL_IDX_COL_PNM
+                            ,B.DDL_IDX_COL_LNM
+                            ,B.DDL_COL_ID
+                            ,B.DDL_IDX_COL_ORD
+                            ,DECODE(B.SORT_TYP,1, 'ASC','DESC') SORT_TYP
+                            ,C.DDL_TBL_PNM
+                            ,C.DDL_TBL_LNM
+                    FROM WAM_DDL_TSF_IDX A
+                    INNER JOIN 
+                    WAM_DDL_TSF_IDX_COL B
+                    ON A.DDL_IDX_ID = B.DDL_IDX_ID
+                    INNER JOIN WAM_DDL_TBL C
+                    ON A.DDL_TBL_ID = C.DDL_TBL_ID
+                    INNER JOIN WAA_DB_SCH SCH
+                    ON A.TGT_DB_SCH_ID = SCH.DB_SCH_ID
+                    AND SCH.DDL_TRG_DCD = 'R'  --운영만
+                    AND SCH.REG_TYP_CD IN ('C', 'U')
+                    AND SCH.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+                    LEFT OUTER JOIN WAA_DB_CONN_TRG TRG
+                    ON SCH.DB_CONN_TRG_ID = TRG.DB_CONN_TRG_ID
+                    AND TRG.REG_TYP_CD IN ('C', 'U')
+                    AND TRG.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+                    ) DDL
+                    FULL OUTER JOIN 
+                    (SELECT C.DB_SCH_ID
+                            ,C.DB_CONN_TRG_ID
+                            ,C.DDL_IDX_ID
+                            ,C.DBC_IDX_NM
+                            ,C.PK_YN
+                            ,C.UQ_YN
+                            ,D.DBC_IDX_COL_NM
+                            ,D.DBC_IDX_COL_KOR_NM
+                            ,D.DDL_IDX_COL_ID
+                            ,D.ORD
+                            ,D.SORT_TYPE
+                            ,C.COL_EACNT 
+                            ,C.DBC_TBL_SPAC_NM
+                            ,C.DBC_TBL_NM
+                            ,E.DBC_TBL_KOR_NM
+                    FROM WAT_DBC_IDX C
+                    INNER JOIN WAT_DBC_IDX_COL D
+                    ON C.DB_SCH_ID = D.DB_SCH_ID
+                    AND C.DBC_TBL_NM = D.DBC_TBL_NM
+                    AND C.DBC_IDX_NM = D.DBC_IDX_NM
+                    INNER JOIN WAA_DB_SCH SCH
+                    ON C.DB_CONN_TRG_ID = SCH.DB_CONN_TRG_ID
+                    AND C.DB_SCH_ID = SCH.DB_SCH_ID
+                    AND SCH.DDL_TRG_DCD = 'R'  --운영만
+                    AND SCH.REG_TYP_CD IN ('C', 'U')
+                    AND SCH.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+                    LEFT OUTER JOIN WAT_DBC_TBL E
+                    ON C.DBC_TBL_NM = E.DBC_TBL_NM
+                    AND C.DB_SCH_ID = E.DB_SCH_ID
+                    AND C.DB_CONN_TRG_ID = E.DB_CONN_TRG_ID
+                    ) DBC
+                    ON DDL.DB_SCH_ID = DBC.DB_SCH_ID
+                    AND DDL.DDL_IDX_PNM = DBC.DBC_IDX_NM
+                    AND DDL.DDL_IDX_COL_PNM = DBC.DBC_IDX_COL_NM
+                    <where> 
+                    <if test="ddlTblPnm != null">
+		            AND (DBC.DBC_TBL_NM LIKE '%' || #{ddlTblPnm,jdbcType=VARCHAR} || '%' OR DDL.DDL_TBL_PNM  LIKE '%' || #{ddlTblPnm,jdbcType=VARCHAR} || '%'
+		                 OR DBC.DBC_TBL_KOR_NM LIKE '%' || #{ddlTblPnm,jdbcType=VARCHAR} || '%' OR DDL.DDL_TBL_LNM  LIKE '%' || #{ddlTblPnm,jdbcType=VARCHAR} || '%'
+		                )
+		            </if>
+		            </where>
+                ) GROUP BY DDL_IDX_PNM
+           ) A
+           LEFT OUTER JOIN WAA_DB_SCH SCH
+           ON A.DB_CONN_TRG_ID = SCH.DB_CONN_TRG_ID
+           AND A.DB_SCH_ID = SCH.DB_SCH_ID
+           AND SCH.REG_TYP_CD IN ('C', 'U')
+           AND SCH.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+           LEFT OUTER JOIN WAA_DB_CONN_TRG TRG
+           ON A.DB_CONN_TRG_ID = TRG.DB_CONN_TRG_ID
+           AND TRG.REG_TYP_CD IN ('C', 'U')
+           AND TRG.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+	      <where>
+		   <if test="gapStatus != null">
+		   AND A.GAP_STATUS = #{gapStatus,jdbcType=VARCHAR}
+		   </if>
+		   <if test="dbConnTrgId != null">
+		   AND A.DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR}
+		   </if>
+		   <if test="dbSchId != null">
+		   AND A.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+		   </if>
+		   <if test="dbcIdxNm != null">
+		   AND (A.DBC_IDX_NM LIKE '%' || #{dbcIdxNm,jdbcType=VARCHAR} || '%' OR A.DDL_IDX_PNM  LIKE '%' || #{dbcIdxNm,jdbcType=VARCHAR} || '%')
+		   		
+		   </if>
+		   
+		   <if test="dbcIdxColNm != null">
+		   AND EXISTS ( SELECT 1
+		   				  FROM WAT_DBC_IDX_COL B
+		   				 WHERE B.DBC_IDX_NM = A.DBC_IDX_NM
+		   				   AND B.DB_SCH_ID = A.DB_SCH_ID
+		   				   AND (B.DBC_IDX_COL_NM = #{dbcIdxColNm,jdbcType=VARCHAR}
+		   				   		OR B.DBC_IDX_COL_NM = #{dbcIdxColNm,jdbcType=VARCHAR} )
+		   			  )
+		   
+		   </if>
+		 </where>
+		 ORDER BY GAP_STATUS, GAP_CONTS,DDL_TBL_PNM, DDL_IDX_PNM 
+	  
+	</select>
+	
+<select id="selectDdlTsfDbcIdxColGapList" parameterType="kr.wise.meta.gap.service.IdxGapVO" resultMap="BaseResultMap">
+SELECT A.* 
+     , CASE WHEN A.GAP_STATUS = 'GAP' THEN '#FF0000' END AS FontColor
+FROM (
+              SELECT  
+                     CASE WHEN SUBSTR(DBC.DBC_IDX_NM, -4,2) ='_E' THEN 'NML'
+                          WHEN COALESCE(DDL.DDL_IDX_COL_ORD,0)   != COALESCE(DBC.ORD,0)
+                          OR COALESCE(DDL.PK_IDX_YN,'-') != COALESCE(DBC.PK_YN,'-') 
+                          OR COALESCE(DDL.UK_IDX_YN,'-')  != COALESCE(DBC.UQ_YN,'-')
+                          OR COALESCE(DDL.SORT_TYP,'-') != COALESCE(DBC.SORT_TYPE,'-')
+                     THEN 'GAP'
+                     ELSE 'NML' END AS GAP_STATUS
+                    ,DDL.DDL_IDX_ID
+           	        ,COALESCE(DDL.DDL_IDX_PNM, DBC.DBC_IDX_NM) AS DDL_IDX_PNM
+           	        ,DDL.PK_IDX_YN       AS DDL_PK_YN
+                    ,DDL.UK_IDX_YN       AS DDL_UQ_YN
+                    ,DDL.DDL_IDX_COL_ID
+                    ,DDL.DDL_IDX_COL_PNM
+                    ,DDL.DDL_IDX_COL_LNM
+                    ,DDL.DDL_COL_ID
+                    ,DDL.DDL_IDX_COL_ORD
+                    ,DDL.SORT_TYP
+                    ,DDL.DB_CONN_TRG_ID
+                    ,DDL.DB_SCH_ID
+                    ,DDL.DDL_TBL_PNM
+                    ,DBC.DBC_TBL_NM
+                    ,DBC.DBC_IDX_NM
+                    ,DBC.DBC_IDX_COL_NM
+                    ,DBC.DBC_TBL_SPAC_NM
+                    ,DBC.PK_YN
+                    ,DBC.UQ_YN
+                    ,DBC.COL_EACNT
+                    ,DBC.SORT_TYPE
+                    ,DBC.ORD
+                    FROM 
+                     (SELECT A.TGT_DB_SCH_ID DB_SCH_ID
+                            ,TRG.DB_CONN_TRG_ID
+                            ,A.DDL_IDX_ID 
+                            ,A.DDL_IDX_PNM
+                            ,A.PK_IDX_YN
+                            ,DECODE(IDX_TYP_CD, 'U', 'Y','N') AS UK_IDX_YN 
+                            ,B.DDL_IDX_COL_ID
+                            ,B.DDL_IDX_COL_PNM
+                            ,B.DDL_IDX_COL_LNM
+                            ,B.DDL_COL_ID
+                            ,B.DDL_IDX_COL_ORD
+                            ,DECODE(B.SORT_TYP,1, 'ASC','DESC') SORT_TYP
+                            ,C.DDL_TBL_PNM
+                            ,C.DDL_TBL_LNM
+                    FROM WAM_DDL_TSF_IDX A
+                    INNER JOIN 
+                    WAM_DDL_TSF_IDX_COL B
+                    ON A.DDL_IDX_ID = B.DDL_IDX_ID
+                    INNER JOIN WAM_DDL_TBL C
+                    ON A.DDL_TBL_ID = C.DDL_TBL_ID
+                    INNER JOIN WAA_DB_SCH SCH
+                    ON A.TGT_DB_SCH_ID = SCH.DB_SCH_ID
+                    AND SCH.DDL_TRG_DCD = 'R'  --운영만
+                    AND SCH.REG_TYP_CD IN ('C', 'U')
+                    AND SCH.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+                    LEFT OUTER JOIN WAA_DB_CONN_TRG TRG
+                    ON SCH.DB_CONN_TRG_ID = TRG.DB_CONN_TRG_ID
+                    AND TRG.REG_TYP_CD IN ('C', 'U')
+                    AND TRG.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+                    ) DDL
+                    FULL OUTER JOIN 
+                    (SELECT C.DB_SCH_ID
+                            ,C.DB_CONN_TRG_ID
+                            ,C.DDL_IDX_ID
+                            ,C.DBC_IDX_NM
+                            ,C.PK_YN
+                            ,C.UQ_YN
+                            ,D.DBC_IDX_COL_NM
+                            ,D.DBC_IDX_COL_KOR_NM
+                            ,D.DDL_IDX_COL_ID
+                            ,D.ORD
+                            ,D.SORT_TYPE
+                            ,C.COL_EACNT 
+                            ,C.DBC_TBL_SPAC_NM
+                            ,C.DBC_TBL_NM
+                            ,E.DBC_TBL_KOR_NM
+                    FROM WAT_DBC_IDX C
+                    INNER JOIN WAT_DBC_IDX_COL D
+                    ON C.DB_SCH_ID = D.DB_SCH_ID
+                    AND C.DBC_TBL_NM = D.DBC_TBL_NM
+                    AND C.DBC_IDX_NM = D.DBC_IDX_NM
+                    INNER JOIN WAA_DB_SCH SCH
+                    ON C.DB_CONN_TRG_ID = SCH.DB_CONN_TRG_ID
+                    AND C.DB_SCH_ID = SCH.DB_SCH_ID
+                    AND SCH.DDL_TRG_DCD = 'R'  --운영만
+                    AND SCH.REG_TYP_CD IN ('C', 'U')
+                    AND SCH.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+                    LEFT OUTER JOIN WAT_DBC_TBL E
+                    ON C.DBC_TBL_NM = E.DBC_TBL_NM
+                    AND C.DB_SCH_ID = E.DB_SCH_ID
+                    AND C.DB_CONN_TRG_ID = E.DB_CONN_TRG_ID
+                    ) DBC
+                    ON DDL.DB_SCH_ID = DBC.DB_SCH_ID
+                    AND DDL.DDL_IDX_PNM = DBC.DBC_IDX_NM
+                    AND DDL.DDL_IDX_COL_PNM = DBC.DBC_IDX_COL_NM
+                    <where>
+                       AND (DDL.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR} OR DBC.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR})
+                       AND (DDL.DDL_IDX_PNM = #{ddlIdxPnm,jdbcType=VARCHAR}  OR DBC.DBC_IDX_NM = #{dbcIdxNm,jdbcType=VARCHAR})
+                     </where>
+           ) A	  
+	</select>
+	
+<select id="selectDbcIdxGapList" parameterType="kr.wise.meta.gap.service.IdxGapVO" resultMap="BaseResultMap">
+SELECT A.*                                                                                                                                                                                                              
+     , CASE WHEN A.GAP_STATUS = 'GAP' THEN '#FF0000' END AS FontColor
+     , GET_DB_SCH_PNM(DB_SCH_ID) AS DB_SCH_LNM
+     , GET_TRG_DB_PNM(DB_CONN_TRG_ID) AS DB_CONN_TRG_LNM
+     , GET_DB_SCH_PNM(DB_TSF_SCH_ID) AS DB_TSF_SCH_LNM
+     , GET_TRG_DB_PNM(DB_TSF_CONN_TRG_ID) AS DB_TSF_CONN_TRG_LNM
+FROM (                                                                                                                             
+           SELECT  DBC_IDX_NM                                                                                                     
+                  ,MAX(DBC_TBL_NM) AS DBC_TBL_NM                                                                                 
+                  ,MAX(PK_YN) as PK_YN                                                                                     
+                  ,MAX(UQ_YN) as UQ_YN                                                                                     
+                  ,COUNT(DBC_IDX_COL_NM) AS COL_EACNT                                                                       
+                  ,MAX(DBC_REAL_IDX_NM) as DBC_REAL_IDX_NM                                                                                   
+                  ,MAX(DDL_TSF_PK_YN) as DDL_TSF_PK_YN                                                                                             
+                  ,MAX(DDL_TSF_UQ_YN) as DDL_TSF_UQ_YN                                                                                             
+                  ,COUNT(DBC_REAL_IDX_COL_NM)  as COL_REAL_EACNT                                                                             
+                  ,CASE WHEN COUNT(GAP_STATUS) > 0 THEN 'GAP' ELSE 'NML' END AS GAP_STATUS                                         
+                  ,CASE WHEN COUNT(DBC_IDX_COL_NM) = 0 THEN '[DBC개발인덱스미존재]'
+                        WHEN COUNT(DBC_REAL_IDX_COL_NM) = 0 THEN '[DBC운영인덱스미존재]'
+                   ELSE MAX(GAP_CONTS) END AS GAP_CONTS                                                                 
+                  ,MAX(DB_SCH_ID) AS DB_SCH_ID                                                                                     
+                  ,MAX(DB_CONN_TRG_ID) AS DB_CONN_TRG_ID                                                                           
+                  ,MAX(DB_TSF_SCH_ID) AS DB_TSF_SCH_ID
+                  ,MAX(DB_TSF_CONN_TRG_ID) AS DB_TSF_CONN_TRG_ID
+             FROM (                                                                                                                
+                    SELECT                                                                                                         
+                     CASE WHEN COALESCE(DBC.ORD,0)   != COALESCE(DBC.ORD,0)                                                      
+                          OR COALESCE(DBC.PK_YN,'-') != COALESCE(DBCR.PK_YN,'-')                                                          
+                          OR COALESCE(DBC.UQ_YN,'-')  != COALESCE(DBCR.UQ_YN,'-')                                                         
+                          OR COALESCE(DBC.SORT_TYPE,'-') != COALESCE(DBCR.SORT_TYPE,'-')                                                       
+                     THEN 'GAP'                                                                                                    
+                     ELSE NULL END AS GAP_STATUS,                                                                                  
+                     CASE WHEN DBC.DBC_IDX_NM IS NULL THEN '[DBC개발인덱스컬럼미존재]' END  
+                          || CASE WHEN DBCR.DBC_IDX_NM IS NULL THEN '[DBC운영인덱스컬럼미존재]' END ||                                          
+                     CASE WHEN SUBSTR(COALESCE(DBC.DBC_IDX_NM,'-'), -4,2) ='_E' THEN ''                                                 
+                          WHEN DBC.DBC_IDX_NM IS NOT NULL AND DBCR.DBC_IDX_NM IS NOT NULL                                                  
+                          AND (COALESCE(DBC.ORD,0)   != COALESCE(DBCR.ORD,0)                                                      
+                          OR COALESCE(DBC.PK_YN,'-') != COALESCE(DBCR.PK_YN,'-')                                                          
+                          OR COALESCE(DBC.UQ_YN,'-')  != COALESCE(DBCR.UQ_YN,'-')                                                         
+                          OR COALESCE(DBC.SORT_TYPE,'-') != COALESCE(DBCR.SORT_TYPE,'-')) THEN '[컬럼GAP존재]'                                 
+                          END AS GAP_CONTS                                                                                                                                                                                
+           		    ,COALESCE(DBC.DBC_IDX_NM, DBCR.DBC_IDX_NM) AS DBC_IDX_NM                                                                
+           	        ,DBC.PK_YN                                                                                                    
+                    ,DBC.UQ_YN                                                                                                 
+                    ,DBC.DDL_IDX_COL_ID                                                                                            
+                    ,DBC.DBC_IDX_COL_NM                                                                                           
+                    ,DBC.ORD                                                                                           
+                    ,DBC.SORT_TYPE                                                                                                  
+                    ,DBC.DB_CONN_TRG_ID
+                    ,DBC.DB_SCH_ID
+                    ,COALESCE(DBC.DBC_TBL_NM, DBCR.DBC_TBL_NM) AS DBC_TBL_NM
+                    ,DBCR.DBC_TBL_NM       AS DBC_REAL_TBL_NM                                                                                            
+                    ,DBCR.DBC_IDX_NM       AS DBC_REAL_IDX_NM                                                                                         
+                    ,DBCR.DBC_IDX_COL_NM   AS DBC_REAL_IDX_COL_NM                                                                                         
+                    ,DBCR.PK_YN            AS DDL_TSF_PK_YN                                                                                                 
+                    ,DBCR.UQ_YN            AS DDL_TSF_UQ_YN                                                                                            
+                    ,DBCR.COL_EACNT                                                                                                 
+                    ,DBCR.SORT_TYPE                                                                                                 
+                    ,DBCR.ORD         
+                    ,DBCR.DB_SCH_ID      AS DB_TSF_SCH_ID
+                    ,DBCR.DB_CONN_TRG_ID AS DB_TSF_CONN_TRG_ID
+                    FROM                                                                                                           
+                     (SELECT C.DB_SCH_ID                                                                                           
+                             ,C.DB_CONN_TRG_ID                                                                                     
+                             ,C.DDL_IDX_ID                                                                                         
+                             ,C.DBC_IDX_NM                                                                                         
+                             ,C.PK_YN                                                                                              
+                             ,C.UQ_YN                                                                                              
+                             ,D.DBC_IDX_COL_NM                                                                                     
+                             ,D.DBC_IDX_COL_KOR_NM                                                                                 
+                             ,D.DDL_IDX_COL_ID                                                                                     
+                             ,D.ORD                                                                                                
+                             ,D.SORT_TYPE                                                                                          
+                             ,C.COL_EACNT                                                                                          
+                             ,C.DBC_TBL_SPAC_NM                                                                                    
+                             ,C.DBC_TBL_NM                                                                                         
+                             ,E.DBC_TBL_KOR_NM 
+                             ,MAP.SRC_DB_SCH_ID
+                             ,MAP.TGT_DB_SCH_ID
+                     FROM WAT_DBC_IDX C                                                                                            
+                     INNER JOIN WAT_DBC_IDX_COL D                                                                                  
+                     ON C.DB_SCH_ID = D.DB_SCH_ID                                                                                  
+                     AND C.DBC_TBL_NM = D.DBC_TBL_NM                                                                               
+                     AND C.DBC_IDX_NM = D.DBC_IDX_NM                                                                               
+                     INNER JOIN WAA_DB_SCH SCH                                                                                     
+                     ON C.DB_CONN_TRG_ID = SCH.DB_CONN_TRG_ID                                                                      
+                     AND C.DB_SCH_ID = SCH.DB_SCH_ID                                                                               
+                     AND SCH.DDL_TRG_DCD = 'D'  --개발만                                                                           
+                     AND SCH.REG_TYP_CD IN ('C', 'U')                                                                              
+                     AND SCH.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')                                                             
+                     LEFT OUTER JOIN WAT_DBC_TBL E                                                                                 
+                     ON C.DBC_TBL_NM = E.DBC_TBL_NM                                                                                
+                     AND C.DB_SCH_ID = E.DB_SCH_ID                                                                                 
+                     AND C.DB_CONN_TRG_ID = E.DB_CONN_TRG_ID 
+                      LEFT JOIN WAA_DB_MAP MAP
+                    ON MAP.SRC_DB_SCH_ID = C.DB_SCH_ID
+                    AND MAP.REG_TYP_CD IN ('C', 'U')
+                    AND MAP.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+                     ) DBC                                                                                                         
+                     FULL OUTER JOIN                                                                                               
+                    (SELECT C.DB_SCH_ID                                                                                            
+                            ,C.DB_CONN_TRG_ID                                                                                      
+                            ,C.DDL_IDX_ID                                                                                          
+                            ,C.DBC_IDX_NM                                                                                          
+                            ,C.PK_YN                                                                                               
+                            ,C.UQ_YN                                                                                               
+                            ,D.DBC_IDX_COL_NM                                                                                      
+                            ,D.DBC_IDX_COL_KOR_NM                                                                                  
+                            ,D.DDL_IDX_COL_ID                                                                                      
+                            ,D.ORD                                                                                                 
+                            ,D.SORT_TYPE                                                                                           
+                            ,C.COL_EACNT                                                                                           
+                            ,C.DBC_TBL_SPAC_NM                                                                                     
+                            ,C.DBC_TBL_NM                                                                                          
+                            ,E.DBC_TBL_KOR_NM  
+                            ,MAP.SRC_DB_SCH_ID
+                            ,MAP.TGT_DB_SCH_ID
+                    FROM WAT_DBC_IDX C                                                                                             
+                    INNER JOIN WAT_DBC_IDX_COL D                                                                                   
+                    ON C.DB_SCH_ID = D.DB_SCH_ID                                                                                   
+                    AND C.DBC_TBL_NM = D.DBC_TBL_NM                                                                                
+                    AND C.DBC_IDX_NM = D.DBC_IDX_NM                                                                                
+                    INNER JOIN WAA_DB_SCH SCH                                                                                      
+                    ON C.DB_CONN_TRG_ID = SCH.DB_CONN_TRG_ID                                                                       
+                    AND C.DB_SCH_ID = SCH.DB_SCH_ID                                                                                
+                    AND SCH.DDL_TRG_DCD = 'R'  --개발만                                                                            
+                    AND SCH.REG_TYP_CD IN ('C', 'U')                                                                               
+                    AND SCH.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')                                                              
+                    LEFT OUTER JOIN WAT_DBC_TBL E                                                                                  
+                    ON C.DBC_TBL_NM = E.DBC_TBL_NM                                                                                 
+                    AND C.DB_SCH_ID = E.DB_SCH_ID                                                                                  
+                    AND C.DB_CONN_TRG_ID = E.DB_CONN_TRG_ID  
+                    LEFT JOIN WAA_DB_MAP MAP
+                    ON MAP.TGT_DB_SCH_ID = C.DB_SCH_ID
+                    AND MAP.REG_TYP_CD IN ('C', 'U')
+                    AND MAP.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+                    ) DBCR                                                                                                         
+                    ON DBC.DBC_IDX_NM = DBCR.DBC_IDX_NM                                                                           
+                    AND DBC.DBC_IDX_COL_NM = DBCR.DBC_IDX_COL_NM
+                    AND DBC.SRC_DB_SCH_ID  = DBCR.SRC_DB_SCH_ID 
+                    AND DBC.TGT_DB_SCH_ID  = DBCR.TGT_DB_SCH_ID 
+                    <where> 
+                    <if test="ddlTblPnm != null">
+		            AND (DBC.DBC_TBL_NM LIKE '%' || #{ddlTblPnm,jdbcType=VARCHAR} || '%' OR DBCR.DBC_TBL_NM  LIKE '%' || #{ddlTblPnm,jdbcType=VARCHAR} || '%'
+		                 OR DBC.DBC_TBL_KOR_NM LIKE '%' || #{ddlTblPnm,jdbcType=VARCHAR} || '%' OR DBCR.DBC_TBL_KOR_NM  LIKE '%' || #{ddlTblPnm,jdbcType=VARCHAR} || '%'
+		                )
+		            </if>
+		            </where>
+                ) GROUP BY DBC_IDX_NM
+           ) A
+	      <where>
+		   <if test="gapStatus != null">
+		   AND A.GAP_STATUS = #{gapStatus,jdbcType=VARCHAR}
+		   </if>
+		   <if test="dbConnTrgId != null">
+		   AND (A.DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR} OR A.DB_TSF_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR})
+		   </if>
+		   <if test="dbSchId != null">
+		   AND (A.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR} OR A.DB_TSF_SCH_ID = #{dbSchId,jdbcType=VARCHAR})
+		   </if>
+		   <if test="dbcIdxNm != null">
+		   AND (A.DBC_IDX_NM LIKE '%' || #{dbcIdxNm,jdbcType=VARCHAR} || '%' OR A.DBC_REAL_IDX_NM  LIKE '%' || #{dbcIdxNm,jdbcType=VARCHAR} || '%')
+		   		
+		   </if>
+		   
+		   <if test="dbcIdxColNm != null">
+		   AND EXISTS ( SELECT 1
+		   				  FROM WAT_DBC_IDX_COL B
+		   				 WHERE B.DBC_IDX_NM = A.DBC_IDX_NM
+		   				   AND B.DB_SCH_ID = A.DB_SCH_ID
+		   				   AND (B.DBC_IDX_COL_NM = #{dbcIdxColNm,jdbcType=VARCHAR}
+		   				   		OR B.DBC_IDX_COL_NM = #{dbcIdxColNm,jdbcType=VARCHAR} )
+		   			  )
+		   
+		   </if>
+		 </where>
+		 ORDER BY GAP_STATUS, GAP_CONTS,DBC_TBL_NM, DBC_IDX_NM 
+	  
+	</select>
+	
+<select id="selectDbcIdxColGapList" parameterType="kr.wise.meta.gap.service.IdxGapVO" resultMap="BaseResultMap">
+SELECT A.* 
+     , CASE WHEN A.GAP_STATUS = 'GAP' THEN '#FF0000' END AS FontColor
+FROM (
+               SELECT                                                                                                         
+                     CASE WHEN COALESCE(DBC.ORD,0)   != COALESCE(DBC.ORD,0)                                                      
+                          OR COALESCE(DBC.PK_YN,'-') != COALESCE(DBCR.PK_YN,'-')                                                          
+                          OR COALESCE(DBC.UQ_YN,'-')  != COALESCE(DBCR.UQ_YN,'-')                                                         
+                          OR COALESCE(DBC.SORT_TYPE,'-') != COALESCE(DBCR.SORT_TYPE,'-')                                                       
+                     THEN 'GAP'                                                                                                    
+                     ELSE 'NML' END AS GAP_STATUS                                                                                                                                                                                                              
+           		    ,COALESCE(DBC.DBC_IDX_NM, DBCR.DBC_IDX_NM) AS DBC_IDX_NM                                                                
+           	        ,DBC.PK_YN                                                                                                    
+                    ,DBC.UQ_YN                                                                                                 
+                    ,DBC.DDL_IDX_COL_ID                                                                                            
+                    ,DBC.DBC_IDX_COL_NM                                                                                           
+                    ,DBC.ORD                                                                                           
+                    ,DBC.SORT_TYPE                                                                                                  
+                    ,DBC.DB_CONN_TRG_ID
+                    ,DBC.DB_SCH_ID
+                    ,COALESCE(DBC.DBC_TBL_NM, DBCR.DBC_TBL_NM) AS DBC_TBL_NM
+                    ,DBCR.DBC_TBL_NM       AS DBC_REAL_TBL_NM                                                                                            
+                    ,DBCR.DBC_IDX_NM       AS DBC_REAL_IDX_NM                                                                                         
+                    ,DBCR.DBC_IDX_COL_NM   AS DBC_REAL_IDX_COL_NM                                                                                         
+                    ,DBCR.PK_YN            AS DDL_TSF_PK_YN                                                                                                 
+                    ,DBCR.UQ_YN            AS DDL_TSF_UQ_YN                                                                                                                                                                                            
+                    ,DBCR.SORT_TYPE      AS TSF_SORT_TYP                                                                                           
+                    ,DBCR.ORD            AS DDL_TSF_IDX_COL_ORD
+                    ,DBCR.DB_SCH_ID      AS DB_TSF_SCH_ID
+                    ,DBCR.DB_CONN_TRG_ID AS DB_TSF_CONN_TRG_ID
+                    FROM                                                                                                           
+                     (SELECT C.DB_SCH_ID                                                                                           
+                             ,C.DB_CONN_TRG_ID                                                                                     
+                             ,C.DDL_IDX_ID                                                                                         
+                             ,C.DBC_IDX_NM                                                                                         
+                             ,C.PK_YN                                                                                              
+                             ,C.UQ_YN                                                                                              
+                             ,D.DBC_IDX_COL_NM                                                                                     
+                             ,D.DBC_IDX_COL_KOR_NM                                                                                 
+                             ,D.DDL_IDX_COL_ID                                                                                     
+                             ,D.ORD                                                                                                
+                             ,D.SORT_TYPE                                                                                          
+                             ,C.COL_EACNT                                                                                          
+                             ,C.DBC_TBL_SPAC_NM                                                                                    
+                             ,C.DBC_TBL_NM                                                                                         
+                             ,E.DBC_TBL_KOR_NM 
+                             ,MAP.SRC_DB_SCH_ID
+                             ,MAP.TGT_DB_SCH_ID
+                     FROM WAT_DBC_IDX C                                                                                            
+                     INNER JOIN WAT_DBC_IDX_COL D                                                                                  
+                     ON C.DB_SCH_ID = D.DB_SCH_ID                                                                                  
+                     AND C.DBC_TBL_NM = D.DBC_TBL_NM                                                                               
+                     AND C.DBC_IDX_NM = D.DBC_IDX_NM                                                                               
+                     INNER JOIN WAA_DB_SCH SCH                                                                                     
+                     ON C.DB_CONN_TRG_ID = SCH.DB_CONN_TRG_ID                                                                      
+                     AND C.DB_SCH_ID = SCH.DB_SCH_ID                                                                               
+                     AND SCH.DDL_TRG_DCD = 'D'  --개발만                                                                           
+                     AND SCH.REG_TYP_CD IN ('C', 'U')                                                                              
+                     AND SCH.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')                                                             
+                     LEFT OUTER JOIN WAT_DBC_TBL E                                                                                 
+                     ON C.DBC_TBL_NM = E.DBC_TBL_NM                                                                                
+                     AND C.DB_SCH_ID = E.DB_SCH_ID                                                                                 
+                     AND C.DB_CONN_TRG_ID = E.DB_CONN_TRG_ID 
+                      LEFT JOIN WAA_DB_MAP MAP
+                    ON MAP.SRC_DB_SCH_ID = C.DB_SCH_ID
+                    AND MAP.REG_TYP_CD IN ('C', 'U')
+                    AND MAP.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+                     ) DBC                                                                                                         
+                     FULL OUTER JOIN                                                                                               
+                    (SELECT C.DB_SCH_ID                                                                                            
+                            ,C.DB_CONN_TRG_ID                                                                                      
+                            ,C.DDL_IDX_ID                                                                                          
+                            ,C.DBC_IDX_NM                                                                                          
+                            ,C.PK_YN                                                                                               
+                            ,C.UQ_YN                                                                                               
+                            ,D.DBC_IDX_COL_NM                                                                                      
+                            ,D.DBC_IDX_COL_KOR_NM                                                                                  
+                            ,D.DDL_IDX_COL_ID                                                                                      
+                            ,D.ORD                                                                                                 
+                            ,D.SORT_TYPE                                                                                           
+                            ,C.COL_EACNT                                                                                           
+                            ,C.DBC_TBL_SPAC_NM                                                                                     
+                            ,C.DBC_TBL_NM                                                                                          
+                            ,E.DBC_TBL_KOR_NM  
+                            ,MAP.SRC_DB_SCH_ID
+                            ,MAP.TGT_DB_SCH_ID
+                    FROM WAT_DBC_IDX C                                                                                             
+                    INNER JOIN WAT_DBC_IDX_COL D                                                                                   
+                    ON C.DB_SCH_ID = D.DB_SCH_ID                                                                                   
+                    AND C.DBC_TBL_NM = D.DBC_TBL_NM                                                                                
+                    AND C.DBC_IDX_NM = D.DBC_IDX_NM                                                                                
+                    INNER JOIN WAA_DB_SCH SCH                                                                                      
+                    ON C.DB_CONN_TRG_ID = SCH.DB_CONN_TRG_ID                                                                       
+                    AND C.DB_SCH_ID = SCH.DB_SCH_ID                                                                                
+                    AND SCH.DDL_TRG_DCD = 'R'  --개발만                                                                            
+                    AND SCH.REG_TYP_CD IN ('C', 'U')                                                                               
+                    AND SCH.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')                                                              
+                    LEFT OUTER JOIN WAT_DBC_TBL E                                                                                  
+                    ON C.DBC_TBL_NM = E.DBC_TBL_NM                                                                                 
+                    AND C.DB_SCH_ID = E.DB_SCH_ID                                                                                  
+                    AND C.DB_CONN_TRG_ID = E.DB_CONN_TRG_ID  
+                    LEFT JOIN WAA_DB_MAP MAP
+                    ON MAP.TGT_DB_SCH_ID = C.DB_SCH_ID
+                    AND MAP.REG_TYP_CD IN ('C', 'U')
+                    AND MAP.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+                    ) DBCR                                                                                                         
+                    ON DBC.DBC_IDX_NM = DBCR.DBC_IDX_NM                                                                           
+                    AND DBC.DBC_IDX_COL_NM = DBCR.DBC_IDX_COL_NM
+                    AND DBC.SRC_DB_SCH_ID  = DBCR.SRC_DB_SCH_ID 
+                    AND DBC.TGT_DB_SCH_ID  = DBCR.TGT_DB_SCH_ID 
+                    <where>
+                     AND (DBC.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR} OR DBCR.DB_SCH_ID = #{dbTsfSchId,jdbcType=VARCHAR})
+                     AND (DBC.DBC_IDX_NM = #{ddlIdxPnm,jdbcType=VARCHAR}  OR DBCR.DBC_IDX_NM = #{dbcRealIdxNm,jdbcType=VARCHAR})
+                     </where>
+           ) A
+           ORDER BY ORD	  
+	</select>
+	
+	
+	
+</mapper>

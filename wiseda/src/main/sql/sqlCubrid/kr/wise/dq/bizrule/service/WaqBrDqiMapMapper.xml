@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.dq.bizrule.service.WaqBrDqiMapMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.dq.bizrule.service.WaqBrDqiMap"  extends="kr.wise.dq.bizrule.service.WaqBrMstrMapper.BaseResultMap">
+<!--     <id column="RQST_NO" property="rqstNo" jdbcType="VARCHAR" /> -->
+<!--     <id column="RQST_SNO" property="rqstSno" jdbcType="DECIMAL" /> -->
+<!--     <result column="BR_ID" property="brId" jdbcType="VARCHAR" /> -->
+    <result column="DQI_LNM" property="dqiLnm" jdbcType="VARCHAR" />
+    <result column="DQI_ID" property="dqiId" jdbcType="VARCHAR" />
+<!--     <result column="VRF_CD" property="vrfCd" jdbcType="VARCHAR" /> -->
+<!--     <result column="VRF_RMK" property="vrfRmk" jdbcType="VARCHAR" /> -->
+<!--     <result column="RVW_STS_CD" property="rvwStsCd" jdbcType="VARCHAR" /> -->
+<!--     <result column="RVW_CONTS" property="rvwConts" jdbcType="VARCHAR" /> -->
+<!--     <result column="OBJ_DESCN" property="objDescn" jdbcType="VARCHAR" /> -->
+<!--     <result column="OBJ_VERS" property="objVers" jdbcType="DECIMAL" /> -->
+<!--     <result column="REG_TYP_CD" property="regTypCd" jdbcType="VARCHAR" /> -->
+<!--     <result column="FRS_RQST_DTM" property="frsRqstDtm" jdbcType="TIMESTAMP" /> -->
+<!--     <result column="FRS_RQST_USER_ID" property="frsRqstUserId" jdbcType="VARCHAR" /> -->
+<!--     <result column="RQST_DTM" property="rqstDtm" jdbcType="TIMESTAMP" /> -->
+<!--     <result column="RQST_USER_ID" property="rqstUserId" jdbcType="VARCHAR" /> -->
+<!--     <result column="APRV_DTM" property="aprvDtm" jdbcType="TIMESTAMP" /> -->
+<!--     <result column="APRV_USER_ID" property="aprvUserId" jdbcType="VARCHAR" /> -->
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    RQST_NO, RQST_SNO, BR_ID, DQI_LNM, DQI_ID, VRF_CD, VRF_RMK, RVW_STS_CD, RVW_CONTS, 
+    OBJ_DESCN, OBJ_VERS, REG_TYP_CD, FRS_RQST_DTM, FRS_RQST_USER_ID, RQST_DTM, RQST_USER_ID, 
+    APRV_DTM, APRV_USER_ID
+  </sql>
+  
+    <sql id="wam_col">
+   		, OBJ_DESCN , OBJ_VERS , RQST_NO , RQST_SNO ,  REG_TYP_CD 
+		, FRS_RQST_DTM , FRS_RQST_USER_ID , RQST_DTM , RQST_USER_ID , APRV_DTM
+		, APRV_USER_ID  
+   </sql>
+  
+  <delete id="deleteByPrimaryKey" parameterType="map" >
+    delete from WAQ_BR_DQI_MAP
+    where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      and RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+  </delete>
+
+  <insert id="insertSelective" parameterType="kr.wise.dq.bizrule.service.WaqBrMstr" >
+    insert into WAQ_BR_DQI_MAP
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+        RQST_NO,
+        RQST_SNO,
+      <if test="brId != null" >
+        BR_ID,
+      </if>
+      <if test="dqiLnm != null" >
+        DQI_LNM,
+      </if>
+      <if test="dqiId != null" >
+        DQI_ID,
+      </if>
+      <if test="vrfCd != null" >
+        VRF_CD,
+      </if>
+      <if test="vrfRmk != null" >
+        VRF_RMK,
+      </if>
+      <if test="rvwStsCd != null" >
+        RVW_STS_CD,
+      </if>
+      <if test="rvwConts != null" >
+        RVW_CONTS,
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN,
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS,
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD,
+      </if>
+      <if test="frsRqstDtm != null" >
+        FRS_RQST_DTM,
+      </if>
+      <if test="frsRqstUserId != null" >
+        FRS_RQST_USER_ID,
+      </if>
+      <if test="rqstDtm != null" >
+        RQST_DTM,
+      </if>
+      <if test="rqstUserId != null" >
+        RQST_USER_ID,
+      </if>
+      <if test="aprvDtm != null" >
+        APRV_DTM,
+      </if>
+      <if test="aprvUserId != null" >
+        APRV_USER_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      #{rqstNo,jdbcType=VARCHAR},
+        (SELECT MAX(RQST_SNO) FROM WAQ_BR_MSTR WHERE RQST_NO = #{rqstNo}) ,
+      <if test="brId != null" >
+        #{brId,jdbcType=VARCHAR},
+      </if>
+      <if test="dqiLnm != null" >
+        #{dqiLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="dqiId != null" >
+        #{dqiId,jdbcType=VARCHAR},
+      </if>
+      <if test="vrfCd != null" >
+        #{vrfCd,jdbcType=VARCHAR},
+      </if>
+      <if test="vrfRmk != null" >
+        #{vrfRmk,jdbcType=VARCHAR},
+      </if>
+      <if test="rvwStsCd != null" >
+        #{rvwStsCd,jdbcType=VARCHAR},
+      </if>
+      <if test="rvwConts != null" >
+        #{rvwConts,jdbcType=VARCHAR},
+      </if>
+      <if test="objDescn != null" >
+        #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null" >
+        #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="frsRqstDtm != null" >
+        #{frsRqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="frsRqstUserId != null" >
+        #{frsRqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDtm != null" >
+        #{rqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rqstUserId != null" >
+        #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDtm != null" >
+        #{aprvDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aprvUserId != null" >
+        #{aprvUserId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.dq.bizrule.service.WaqBrMstr" >
+    update WAQ_BR_DQI_MAP
+    <set >
+      <if test="brId != null" >
+        BR_ID = #{brId,jdbcType=VARCHAR},
+      </if>
+      <if test="dqiLnm != null" >
+        DQI_LNM = #{dqiLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="dqiId != null" >
+        DQI_ID = #{dqiId,jdbcType=VARCHAR},
+      </if>
+      <if test="vrfCd != null" >
+        VRF_CD = #{vrfCd,jdbcType=VARCHAR},
+      </if>
+      <if test="vrfRmk != null" >
+        VRF_RMK = #{vrfRmk,jdbcType=VARCHAR},
+      </if>
+      <if test="rvwStsCd != null" >
+        RVW_STS_CD = #{rvwStsCd,jdbcType=VARCHAR},
+      </if>
+      <if test="rvwConts != null" >
+        RVW_CONTS = #{rvwConts,jdbcType=VARCHAR},
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="frsRqstDtm != null" >
+        FRS_RQST_DTM = #{frsRqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="frsRqstUserId != null" >
+        FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDtm != null" >
+        RQST_DTM = #{rqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rqstUserId != null" >
+        RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDtm != null" >
+        APRV_DTM = #{aprvDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aprvUserId != null" >
+        APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      and RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+  </update>
+  
+  <update id="updatervwStsCd" parameterType="kr.wise.dq.bizrule.service.WaqBrMstr" >
+  	UPDATE WAQ_BR_DQI_MAP
+  	<set>
+  	    RVW_STS_CD 	= #{rvwStsCd} , 
+  		RVW_CONTS 	= #{rvwConts} , 
+  		APRV_DTM	= SYSDATETIME ,
+  		APRV_USER_ID = #{aprvUserId} ,
+  	</set>
+    WHERE RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      AND RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+      AND VRF_CD = '1'
+      AND NVL(RVW_STS_CD, '_') != '2'
+  </update>
+  
+  <update id="updateidByKey" parameterType="kr.wise.dq.bizrule.service.WaqBrMstr" >
+  	UPDATE WAQ_BR_DQI_MAP SET BR_ID = #{brId,jdbcType=VARCHAR}
+  	 WHERE RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+       AND RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+  </update>
+  
+  <update id="updateWaqCUD" parameterType="map">
+   	--WAQ ID, VERS 등을 업데이트...
+	UPDATE WAQ_BR_DQI_MAP A
+	SET (BR_ID, OBJ_VERS, FRS_RQST_DTM, FRS_RQST_USER_ID) = (
+	    SELECT 
+	          B.BR_ID AS BR_ID
+	        , NVL(B.OBJ_VERS, 0) + 1 AS OBJ_VERS
+	        , B.FRS_RQST_DTM
+	        , B.FRS_RQST_USER_ID
+	    FROM WAM_BR_DQI_MAP B
+	    WHERE B.BR_ID = A.BR_ID
+	    AND B.DQI_ID = A.DQI_ID
+	)
+	WHERE A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+	
+	AND EXISTS (
+		SELECT 1
+		  FROM WAM_BR_DQI_MAP B
+		 WHERE B.BR_ID = A.BR_ID
+		   AND B.DQI_ID = A.DQI_ID
+	        
+	)
+   </update>
+  
+  <delete id="deleteWAM" parameterType="map">
+    --WAM 삭제 (등록유형코드가REG_TYP_CD 변경, 삭제일 경우)
+	DELETE FROM WAM_BR_DQI_MAP A
+	WHERE EXISTS (
+	    SELECT 1 FROM WAQ_BR_DQI_MAP B
+	    WHERE B.RQST_NO = #{rqstNo}
+	    AND B.BR_ID = A.BR_ID
+	    --AND B.DQI_ID = A.DQI_ID
+	)
+   </delete>
+   
+   <insert id="insertWAM" parameterType="map">
+   	--WAM 추가 (WAQ 내용을 추가, REG_TYP_CD 가 신규,변경일 경우)
+	INSERT INTO WAM_BR_DQI_MAP
+	SELECT 
+		BR_ID , DQI_ID
+	
+	<include refid="wam_col"/>
+	
+	FROM WAQ_BR_DQI_MAP A
+	WHERE A.RQST_NO = #{rqstNo}
+	AND A.REG_TYP_CD IN ('C', 'U')
+   </insert>
+  
+  <update id="updateWAH"  parameterType="map">
+   	--WAH 이력 만료...
+	UPDATE WAH_BR_DQI_MAP A
+	SET EXP_DTM = SYSDATETIME
+	WHERE EXISTS (
+	    SELECT 1 FROM WAQ_BR_DQI_MAP B
+	    WHERE B.RQST_NO = #{rqstNo}
+	    AND B.BR_ID = A.BR_ID
+	    AND B.DQI_ID = A.DQI_ID
+	    )
+	AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+   </update>
+  
+  <insert id="insertWAH"  parameterType="map">
+   	--WAH이력 적재...
+	INSERT INTO WAH_BR_DQI_MAP
+	SELECT
+	    A.BR_ID AS BR_ID
+	    , A.DQI_ID AS DQI_ID
+	    , TO_DATE( '9999-12-31', 'YYYY-MM-DD') AS EXP_DTM
+	    , SYSDATETIME AS STR_DTM 
+	
+	<include refid="wam_col"/>
+   
+	FROM WAQ_BR_DQI_MAP A
+	WHERE A.RQST_NO = #{rqstNo}
+   </insert>
+  
+  <update id="updateDelId" parameterType="java.lang.String">
+    update WAQ_BR_DQI_MAP A
+       set (A.BR_ID, A.OBJ_VERS) =
+                          
+             (select D.BR_ID, D.OBJ_VERS
+                            
+             from WAQ_BR_MSTR B 
+             JOIN WAM_BR_MSTR C 
+               ON B.BR_NM  = C.BR_NM   
+             INNER JOIN WAM_BR_DQI_MAP D
+               ON C.BR_ID = D.BR_ID 
+             where 1=1 
+             AND B.RQST_NO = A.RQST_NO
+             AND B.RQST_SNO = A.RQST_SNO
+                               )
+	 where RQST_NO = #{rqstNo,jdbcType=VARCHAR} 
+
+     
+  </update>
+  
+   <!--  OBJ_ID, OBJ_VERS UPDATE  -->
+  <update id="updateObjInfo" parameterType="java.lang.String">
+    update WAQ_BR_DQI_MAP A
+       set REG_TYP_CD = 
+             (select case when max(B.RQST_DCD) = 'DD' then 'D' else case when MAX(B.BR_ID) IS NULL then 'C' else 'U' end end
+                 from WAQ_BR_MSTR B
+                 where B.REG_TYP_CD in ('C','U')
+                 AND B.RQST_NO = #{rqstNo,jdbcType=VARCHAR} )
+WHERE RQST_NO = #{rqstNo,jdbcType=VARCHAR} 
+  </update>
+  
+  <insert id="insertwam2waq" parameterType="map">
+  	INSERT INTO WAQ_BR_DQI_MAP (RQST_NO, RQST_SNO, BR_ID, DQI_LNM, DQI_ID, OBJ_DESCN, OBJ_VERS)
+  	SELECT #{reqmst.rqstNo} 
+  		  , (SELECT NVL(MAX(RQST_SNO), 0) FROM WAQ_BR_DQI_MAP WHERE RQST_NO = #{reqmst.rqstNo}) + ROWNUM
+  		  , A.BR_ID, D.FULL_PATH, A.DQI_ID, A.OBJ_DESCN, A.OBJ_VERS
+      FROM WAM_BR_DQI_MAP A 
+      INNER JOIN WAM_DQI D
+      	ON A.DQI_ID = D.DQI_ID
+      	AND D.REG_TYP_CD IN ('C', 'U')
+      
+     WHERE A.BR_ID IN 
+     <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+     	#{item.brId}
+     </foreach>
+       AND A.REG_TYP_CD IN ('C' , 'U')
+  </insert>
+  
+</mapper>

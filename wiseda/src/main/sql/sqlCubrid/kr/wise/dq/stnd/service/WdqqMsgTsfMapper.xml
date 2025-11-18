@@ -1,0 +1,730 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.dq.stnd.service.WdqqMsgTsfMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.dq.stnd.service.WdqqMsgTsf"  extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+    <id column="RQST_NO" 		property="rqstNo" 	jdbcType="VARCHAR" />
+    <id column="RQST_SNO" 		property="rqstSno" 	jdbcType="DECIMAL" />
+    <result column="MSG_ID" 	property="msgId" 	jdbcType="VARCHAR" />
+    <result column="MSG_CD" 	property="msgCd" jdbcType="VARCHAR" />
+    <result column="MSG_CONTS" 	property="msgConts" jdbcType="VARCHAR" />
+    <result column="USE_YN" 	property="useYn" jdbcType="VARCHAR" />
+    <result column="TYP_DIV_CD" 	property="typDivCd" jdbcType="VARCHAR" />
+    <result column="BIZ_DIV_CD" 	property="bizDivCd" jdbcType="VARCHAR" />
+    <result column="SYS_DIV_CD" 	property="sysDivCd" jdbcType="VARCHAR" />
+    <result column="TGT_DB_CONN_TRG_ID" property="tgtDbConnTrgId" 	jdbcType="VARCHAR" />
+    <result column="TGT_DB_CONN_TRG_PNM" property="tgtDbConnTrgPnm" 	jdbcType="VARCHAR" />
+    <result column="TGT_DB_SCH_ID" property="tgtDbSchId" 	jdbcType="VARCHAR" />
+    <result column="TGT_DB_SCH_PNM" property="tgtDbSchPnm" 	jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    RQST_NO, RQST_SNO, TGT_DB_CONN_TRG_ID, TGT_DB_CONN_TRG_PNM, TGT_DB_SCH_ID, TGT_DB_SCH_PNM, 
+    MSG_ID, MSG_CD, MSG_CONTS, RQST_DCD, RVW_STS_CD, RVW_CONTS, VRF_CD, VRF_RMK, OBJ_DESCN, OBJ_VERS, 
+    REG_TYP_CD, FRS_RQST_DTM, FRS_RQST_USER_ID, RQST_DTM, RQST_USER_ID, APRV_DTM, APRV_USER_ID, USE_YN, TYP_DIV_CD, BIZ_DIV_CD, SYS_DIV_CD
+  </sql>
+  <sql id="WDQQ_Column_List" >
+    A.RQST_NO, A.RQST_SNO, A.TGT_DB_CONN_TRG_ID, A.TGT_DB_CONN_TRG_PNM, A.TGT_DB_SCH_ID, A.TGT_DB_SCH_PNM, 
+    A.MSG_ID, A.MSG_CD, A.MSG_CONTS, A.RQST_DCD, A.RVW_STS_CD, A.RVW_CONTS, A.VRF_CD, A.VRF_RMK, A.OBJ_DESCN, A.OBJ_VERS, 
+    A.REG_TYP_CD, A.FRS_RQST_DTM, A.FRS_RQST_USER_ID, A.RQST_DTM, A.RQST_USER_ID, A.APRV_DTM, A.APRV_USER_ID, A.USE_YN, A.TYP_DIV_CD, A.BIZ_DIV_CD, A.SYS_DIV_CD
+  </sql>
+  <sql id="WDQM_col_list">
+     A.MSG_CD, A.MSG_CONTS, A.TGT_DB_CONN_TRG_ID, A.TGT_DB_SCH_ID, A.RQST_NO, A.RQST_SNO, A.OBJ_DESCN, A.OBJ_VERS, 
+     A.REG_TYP_CD, A.FRS_RQST_DTM, A.FRS_RQST_USER_ID, A.RQST_DTM, A.RQST_USER_ID, A.APRV_DTM, A.APRV_USER_ID, A.USE_YN, A.TYP_DIV_CD, A.BIZ_DIV_CD, A.SYS_DIV_CD
+  </sql>
+  
+   <select id="selectMsgListTsf" resultMap="BaseResultMap" parameterType="kr.wise.dq.stnd.service.WdqqMsgTsf">
+      SELECT *
+      FROM WDQM_MSG A
+      WHERE 1=1
+      <if test="msgCd!=null">
+       AND MSG_CD LIKE '%'||#{msgCd,jdbcType=VARCHAR}||'%'
+      </if>
+      <if test="useYn!=null">
+       AND USE_YN = #{useYn,jdbcType=VARCHAR}
+      </if>
+       <if test="typDivCd!=null">
+       AND TYP_DIV_CD = #{typDivCd,jdbcType=VARCHAR}
+      </if>
+       <if test="bizDivCd!=null">
+       AND BIZ_DIV_CD = #{bizDivCd,jdbcType=VARCHAR}
+      </if>
+
+  </select>
+  
+  <insert id="insertSelective" parameterType="kr.wise.dq.stnd.service.WdqqMsgTsf" >
+   	<selectKey keyProperty="rqstSno" resultType="int" order="BEFORE" statementType="PREPARED">
+  		SELECT CASE WHEN MAX(RQST_SNO) IS NULL THEN 1
+  		            ELSE MAX(RQST_SNO)+1 END AS RQST_SNO
+  	      FROM WDQQ_MSG_TSF
+  	     WHERE RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+  	</selectKey> 
+<!--    	<selectKey keyProperty="rqstDtlSno" resultType="int" order="BEFORE" statementType="PREPARED">
+   		SELECT NVL(MAX(RQST_DTL_SNO), 0) + 1 FROM WDQQ_CD_VAL WHERE RQST_NO = #{rqstNo,jdbcType=VARCHAR} AND RQST_SNO = #{rqstSno,jdbcType=VARCHAR}
+   	</selectKey> --> 
+    insert into WDQQ_MSG_TSF
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="rqstNo != null" >
+        RQST_NO,
+      </if>
+      <if test="rqstSno != null" >
+        RQST_SNO,
+      </if>
+       <if test="tgtDbConnTrgId != null" >
+        TGT_DB_CONN_TRG_ID,
+      </if>
+        <if test="tgtDbConnTrgPnm != null" >
+        TGT_DB_CONN_TRG_PNM,
+      </if>
+        <if test="tgtDbSchId != null" >
+        TGT_DB_SCH_ID,
+      </if>
+        <if test="tgtDbSchPnm != null" >
+        TGT_DB_SCH_PNM,
+      </if>
+      <if test="msgId != null" >
+        MSG_ID, 
+      </if>
+      <if test="msgCd != null" >
+        MSG_CD , 
+      </if>
+      <if test="msgConts != null" >
+        MSG_CONTS , 
+      </if>
+      <if test="rqstDcd != null" >
+        RQST_DCD , 
+      </if>
+      <if test="rvwStsCd != null" >
+        RVW_STS_CD ,
+      </if>
+      <if test="rvwConts != null" >
+        RVW_CONTS ,
+      </if>
+      <if test="vrfCd != null" >
+        VRF_CD,
+      </if>
+      <if test="vrfRmk != null" >
+        VRF_RMK,
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN,
+      </if>
+        OBJ_VERS,
+      <if test="regTypCd != null" >
+        REG_TYP_CD,
+      </if>
+        FRS_RQST_DTM,
+        FRS_RQST_USER_ID,
+      <if test="rqstUserId != null" >
+        RQST_USER_ID,
+      </if>
+      <if test="useYn != null" >
+        USE_YN,
+      </if>
+      <if test="typDivCd != null" >
+        TYP_DIV_CD,
+      </if>
+      <if test="bizDivCd != null" >
+        BIZ_DIV_CD,
+      </if>
+      <if test="sysDivCd != null" >
+        SYS_DIV_CD,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="rqstNo != null" >
+        #{rqstNo,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstSno != null" >
+        #{rqstSno,jdbcType=DECIMAL},
+      </if>
+        <if test="tgtDbConnTrgId != null" >
+        #{tgtDbConnTrgId,jdbcType=VARCHAR},
+      </if>
+       <if test="tgtDbConnTrgPnm != null" >
+        #{tgtDbConnTrgPnm,jdbcType=VARCHAR},
+      </if>
+        <if test="tgtDbSchId != null" >
+        #{tgtDbSchId,jdbcType=VARCHAR},
+      </if>
+        <if test="tgtDbSchPnm != null" >
+        #{tgtDbSchPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="msgId != null" >
+       #{msgId,jdbcType=VARCHAR},
+      </if>
+      <if test="msgCd != null" >
+         #{msgCd,jdbcType=VARCHAR},
+      </if>
+      <if test="msgConts != null" >
+       #{msgConts,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDcd != null" >
+        #{rqstDcd,jdbcType=VARCHAR},
+      </if>
+      <if test="rvwStsCd != null" >
+        #{rvwStsCd,jdbcType=VARCHAR},
+      </if>
+      <if test="rvwConts != null" >
+        #{rvwConts,jdbcType=VARCHAR},
+      </if>
+      <if test="vrfCd != null" >
+        #{vrfCd,jdbcType=VARCHAR},
+      </if>
+      <if test="vrfRmk != null" >
+        #{vrfRmk,jdbcType=VARCHAR},
+      </if>
+      <if test="objDescn != null" >
+        #{objDescn,jdbcType=VARCHAR},
+      </if>
+        1, 
+      <if test="regTypCd != null" >
+        #{regTypCd,jdbcType=VARCHAR},
+      </if>
+        SYSDATETIME ,
+        #{frsRqstUserId,jdbcType=VARCHAR},
+      <if test="rqstUserId != null" >
+        #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+        <if test="useYn != null" >
+        #{useYn,jdbcType=VARCHAR},
+      </if>
+       <if test="typDivCd != null" >
+         #{typDivCd,jdbcType=VARCHAR},
+      </if>
+      <if test="bizDivCd != null" >
+        #{bizDivCd,jdbcType=VARCHAR},
+      </if>
+      <if test="sysDivCd != null" >
+        #{sysDivCd,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <select id="selectRqstList" resultMap="BaseResultMap" parameterType="kr.wise.commons.rqstmst.service.WaqMstr">
+      SELECT 
+          A.RQST_NO, A.RQST_SNO,A.TGT_DB_CONN_TRG_ID,A.TGT_DB_CONN_TRG_PNM,A.TGT_DB_SCH_ID, A.TGT_DB_SCH_PNM, 
+    A.MSG_ID, A.MSG_CD, A.MSG_CONTS, A.RQST_DCD,
+    <if test='rqstStepCd == "Q" '>
+      CASE WHEN A.RVW_STS_CD = '2' THEN '2' ELSE '0' END AS RVW_STS_CD
+     </if>
+     <if test='rqstStepCd != "Q" '>
+      A.RVW_STS_CD
+     </if>,
+    CASE WHEN A.VRF_CD = '2' THEN '#FF0000' END AS FontColor,
+    A.RVW_CONTS, A.VRF_CD, A.VRF_RMK, A.USE_YN,A.TYP_DIV_CD, A.BIZ_DIV_CD, A.SYS_DIV_CD,  A.OBJ_DESCN,
+    A.OBJ_VERS, A.REG_TYP_CD, A.FRS_RQST_DTM, A.FRS_RQST_USER_ID, A.RQST_DTM, A.RQST_USER_ID, A.APRV_DTM, 
+    A.APRV_USER_ID
+      FROM WDQQ_MSG_TSF A
+      WHERE RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      <if test='rqstStepCd == "Q" or rqstStepCd == "A" '>
+      AND VRF_CD = '1'
+      </if>
+      ORDER BY A.RQST_SNO
+  </select>
+    <select id="selectRqstDetail" resultMap="BaseResultMap" parameterType="kr.wise.dq.stnd.service.WdqqMsgTsf">
+      SELECT 
+            *
+      FROM WDQQ_MSG_TSF A
+      WHERE RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      AND RQST_SNO = #{rqstSno,jdbcType=VARCHAR}
+  </select>
+  
+      <select id="selectMsgWamList" resultMap="BaseResultMap" parameterType="kr.wise.dq.stnd.service.WdqqMsgTsf">
+      SELECT 
+            A.*
+            ,B.DB_CONN_TRG_PNM AS TGT_DB_CONN_TRG_PNM
+            ,C.DB_SCH_PNM AS TGT_DB_SCH_PNM
+      FROM WDQM_MSG_TSF A
+      LEFT OUTER JOIN WAA_DB_CONN_TRG B
+      ON A.TGT_DB_CONN_TRG_ID = B.DB_CONN_TRG_ID
+      AND B.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+      AND B.REG_TYP_CD IN ('C', 'U')
+      LEFT OUTER JOIN WAA_DB_SCH C
+      ON A.TGT_DB_SCH_ID = C.DB_SCH_ID
+      AND C.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+      AND C.REG_TYP_CD IN ('C', 'U')
+      WHERE 1=1
+       <if test="msgCd != null" >
+        AND A.MSG_CD LIKE '%'||#{msgCd,jdbcType=VARCHAR}||'%'
+      </if>
+       <if test="msgConts != null" >
+        AND A.MSG_CONTS LIKE '%'||#{msgConts,jdbcType=VARCHAR}||'%'
+      </if>
+      <if test="typDivCd != null" >
+        AND A.TYP_DIV_CD LIKE '%'||#{typDivCd,jdbcType=VARCHAR}||'%'
+      </if>
+      <if test="bizDivCd != null" >
+        AND A.BIZ_DIV_CD LIKE '%'||#{bizDivCd,jdbcType=VARCHAR}||'%'
+      </if>
+      <if test="useYn != null" >
+        AND A.USE_YN =#{useYn,jdbcType=VARCHAR}
+      </if>
+       <if test="tgtDbConnTrgId != null" >
+        AND A.TGT_DB_CONN_TRG_ID = #{tgtDbConnTrgId,jdbcType=VARCHAR}
+      </if>
+      <if test="tgtDbSchId != null" >
+        AND A.TGT_DB_SCH_ID = #{tgtDbSchId,jdbcType=VARCHAR}
+      </if>
+  </select>
+  
+    <delete id="deleteRqstList" parameterType="kr.wise.dq.stnd.service.WdqqMsgTsf">
+    --WAQ 삭제 
+	DELETE FROM WDQQ_MSG_TSF A
+    WHERE A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+    AND A.RQST_SNO = #{rqstSno,jdbcType=VARCHAR}
+   </delete>
+    <!-- 검증로직 시작 -->
+  <update id="updateCheckInit" parameterType="java.lang.String" >
+    UPDATE WDQQ_MSG_TSF A
+    SET A.REG_TYP_CD = (select case when A.RQST_DCD = 'DD' then 'D' else case when MAX(B.MSG_ID) IS NULL then 'C' else 'U' end end
+                        from WDQM_MSG_TSF B
+                        where B.REG_TYP_CD in ('C','U')
+                          and B.MSG_ID = A.MSG_ID
+                          AND A.TGT_DB_CONN_TRG_ID = B.TGT_DB_CONN_TRG_ID
+                          AND A.TGT_DB_SCH_ID = B.TGT_DB_SCH_ID
+                         )
+       ,A.VRF_CD = '4'
+       ,A.RVW_STS_CD = '0'
+    WHERE A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+  </update>
+  
+  
+  <update id="updateTgtDb" parameterType="java.lang.String" >
+    UPDATE WDQQ_MSG_TSF A
+    SET A.TGT_DB_CONN_TRG_ID = (SELECT MAX(DB_CONN_TRG_ID)
+                                FROM WAA_DB_CONN_TRG B 
+                                WHERE A.TGT_DB_CONN_TRG_PNM = B.DB_CONN_TRG_PNM 
+                                  AND B.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+                                  AND B.REG_TYP_CD IN ('C', 'U')
+                                )
+    , A.TGT_DB_SCH_ID = (SELECT MAX(DB_SCH_ID)
+                                FROM WAA_DB_SCH C
+                                INNER JOIN WAA_DB_CONN_TRG D
+                                 ON C.DB_CONN_TRG_ID = D.DB_CONN_TRG_ID
+                                AND C.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+                                AND D.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+                                AND C.REG_TYP_CD IN ('C', 'U')
+                                AND D.REG_TYP_CD IN ('C', 'U')
+                                WHERE A.TGT_DB_CONN_TRG_PNM = D.DB_CONN_TRG_PNM
+                                  AND A.TGT_DB_SCH_PNM = C.DB_SCH_PNM 
+                                )
+    WHERE A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+    AND (A.TGT_DB_CONN_TRG_ID IS NULL OR A.TGT_DB_SCH_ID IS NULL)
+  </update>
+  
+  <insert id="checkNotChgData" parameterType="map">
+  	<!-- <include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSnoSql"/> -->
+  	  	<include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.updateVrfNotChg"/>
+--검증쿼리
+      and A.REG_TYP_CD = 'U'
+      and exists (select 1
+                  from WDQM_MSG_TSF D
+                  where A.MSG_ID = D.MSG_ID
+                    AND A.TGT_DB_CONN_TRG_ID = D.TGT_DB_CONN_TRG_ID
+                    AND A.TGT_DB_SCH_ID = D.TGT_DB_SCH_ID
+			        and NVL(A.MSG_CD      , '_') = NVL(D.MSG_CD      , '_')
+			        and NVL(A.MSG_CONTS      , '_') = NVL(D.MSG_CONTS      , '_')
+			        and NVL(A.OBJ_DESCN      , '_') = NVL(D.OBJ_DESCN      , '_')
+			        and NVL(A.USE_YN     , '_') = NVL(D.USE_YN      , '_')
+			        and NVL(A.TYP_DIV_CD     , '_') = NVL(D.TYP_DIV_CD      , '_')
+			        and NVL(A.BIZ_DIV_CD     , '_') = NVL(D.BIZ_DIV_CD      , '_')
+			        and NVL(A.SYS_DIV_CD     , '_') = NVL(D.SYS_DIV_CD      , '_')
+                    and D.REG_TYP_CD IN ('C','U')
+                  )
+  </insert>
+
+  <insert id="checkDupMsgTsf" parameterType="map">                        
+  	<include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSql"/>
+--검증쿼리 MT001 중복건수 체크
+      AND EXISTS (SELECT 1
+                  FROM WDQQ_MSG_TSF D
+                  WHERE A.RQST_NO = D.RQST_NO
+                    AND A.MSG_ID = D.MSG_ID
+                    AND A.TGT_DB_CONN_TRG_ID = D.TGT_DB_CONN_TRG_ID
+                    AND A.TGT_DB_SCH_ID = D.TGT_DB_SCH_ID
+                    AND A.RQST_SNO != D.RQST_SNO)
+  </insert>
+  
+    <insert id="checkDupMsgTsfOtherRqst" parameterType="map">                        
+  	<include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSql"/>
+    --검증쿼리 MT002 타요청서 기존재 체크
+      AND EXISTS (SELECT 1
+                  FROM WDQQ_MSG_TSF D
+                  WHERE A.RQST_NO != D.RQST_NO
+                    AND A.MSG_ID = D.MSG_ID
+                    AND A.TGT_DB_CONN_TRG_ID = D.TGT_DB_CONN_TRG_ID
+                    AND A.TGT_DB_SCH_ID = D.TGT_DB_SCH_ID
+                    AND EXISTS (SELECT 1 FROM WAQ_MSTR Q WHERE D.RQST_NO = Q.RQST_NO AND Q.RQST_STEP_CD = 'Q' )
+                    )
+  </insert>
+   <insert id="checkTgtDb" parameterType="map">                        
+  	<include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSql"/>
+    --검증쿼리 MT003 타겟db정보 미존재
+      AND (A.TGT_DB_CONN_TRG_ID IS NULL OR A.TGT_DB_SCH_ID IS NULL) 
+  </insert>
+ 
+ 
+ 
+  <!-- 결재처리 -->
+  <update id="updatervwStsCd" parameterType="kr.wise.dq.stnd.service.WdqqMsgTsf">
+  	UPDATE WDQQ_MSG_TSF
+  	<set>
+  	    RVW_STS_CD 	= #{rvwStsCd} , 
+  		RVW_CONTS 	= #{rvwConts} , 
+  		APRV_DTM	= SYSDATETIME ,
+  		APRV_USER_ID = #{aprvUserId} ,
+  	</set>
+    WHERE RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      AND RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+      AND VRF_CD = '1'
+      AND NVL(RVW_STS_CD, '_') != '2'
+  </update>
+
+  <!-- 적재 쿼리 -->
+  <update id="updateWaqCUD" parameterType="map">
+   	--WAQ ID, VERS 등을 업데이트...
+	UPDATE WDQQ_MSG_TSF A
+		SET (OBJ_VERS, FRS_RQST_DTM, FRS_RQST_USER_ID) = (
+			SELECT 
+				  NVL(C.OBJ_VERS, 0) + 1 AS OBJ_VERS
+				, C.FRS_RQST_DTM
+				, C.FRS_RQST_USER_ID
+			  FROM WDQQ_MSG_TSF B
+			 INNER JOIN WDQM_MSG_TSF C
+				ON B.MSG_ID = C.MSG_ID 
+               AND B.TGT_DB_CONN_TRG_ID = C.TGT_DB_CONN_TRG_ID
+               AND B.TGT_DB_SCH_ID = C.TGT_DB_SCH_ID
+			   AND B.RVW_STS_CD = '1'
+			   WHERE B.RQST_NO = #{rqstNo}
+			   AND A.MSG_ID = B.MSG_ID
+			   AND A.TGT_DB_CONN_TRG_ID = B.TGT_DB_CONN_TRG_ID
+               AND A.TGT_DB_SCH_ID = B.TGT_DB_SCH_ID
+	)
+	WHERE A.RQST_NO = #{rqstNo}
+	  AND A.VRF_CD = '1' --등록가능
+	  AND EXISTS (
+			 SELECT 1
+			   FROM WDQQ_MSG_TSF B
+			 INNER JOIN WDQM_MSG_TSF C
+				ON B.MSG_ID = C.MSG_ID 
+               AND B.TGT_DB_CONN_TRG_ID = C.TGT_DB_CONN_TRG_ID
+               AND B.TGT_DB_SCH_ID = C.TGT_DB_SCH_ID
+			  WHERE A.RQST_NO = B.RQST_NO 
+			  AND A.RQST_SNO = B.RQST_SNO
+			  AND B.RVW_STS_CD = '1'
+			  AND A.MSG_ID = B.MSG_ID
+			  AND A.TGT_DB_CONN_TRG_ID = B.TGT_DB_CONN_TRG_ID
+              AND A.TGT_DB_SCH_ID = B.TGT_DB_SCH_ID
+	)
+   </update>
+  
+
+   <delete id="deleteWAM" parameterType="map">
+    --WAM 삭제 (등록유형코드가REG_TYP_CD 변경, 삭제일 경우)
+	DELETE FROM WDQM_MSG_TSF A
+	 WHERE EXISTS (
+		SELECT 1 FROM WDQQ_MSG_TSF B 
+		 WHERE B.RQST_NO = #{rqstNo}
+	       AND B.RVW_STS_CD = '1'
+	       AND B.VRF_CD = '1'
+	       AND A.MSG_ID = B.MSG_ID
+	       AND A.TGT_DB_CONN_TRG_ID = B.TGT_DB_CONN_TRG_ID
+           AND A.TGT_DB_SCH_ID = B.TGT_DB_SCH_ID
+	)
+   </delete>
+   
+   <insert id="insertWAM" parameterType="map">
+   	-- WAM 추가 (WAQ 내용을 추가, REG_TYP_CD 가 신규,변경일 경우)
+	INSERT INTO WDQM_MSG_TSF
+	SELECT 
+		A.MSG_ID
+	  , <include refid="WDQM_col_list"/>
+	  FROM WDQQ_MSG_TSF A
+	 WHERE A.RQST_NO = #{rqstNo}
+	   AND A.VRF_CD = '1'
+	   AND A.REG_TYP_CD IN ('C', 'U')
+	   AND A.RVW_STS_CD = '1'
+   </insert>
+   
+   <update id="updateWAH"  parameterType="map">
+   	--WAH 이력 만료...
+	UPDATE WDQH_MSG_TSF A 
+	SET A.EXP_DTM = SYSDATETIME
+	WHERE EXISTS (
+		SELECT 1 FROM WDQQ_MSG_TSF C
+	     WHERE C.RQST_NO = #{rqstNo}
+	       AND C.MSG_ID = A.MSG_ID
+	       AND C.TGT_DB_CONN_TRG_ID = A.TGT_DB_CONN_TRG_ID
+           AND C.TGT_DB_SCH_ID = A.TGT_DB_SCH_ID
+	       AND C.VRF_CD = '1'
+	       AND C.RVW_STS_CD = '1'
+	)
+	AND A.EXP_DTM = TO_DATE('9999-12-31','YYYY-MM-DD')
+   </update>
+   
+   <insert id="insertWAH"  parameterType="map">
+   	--WAH이력 적재...
+	INSERT INTO WDQH_MSG_TSF
+	SELECT 
+			A.MSG_ID
+		  , TO_DATE('9999-12-31','YYYY-MM-DD') AS EXP_DTM
+		  , SYSDATETIME AS STR_DTM 
+		  , <include refid="WDQM_col_list"/>
+	  FROM WDQQ_MSG_TSF A
+	 WHERE A.RQST_NO = #{rqstNo}
+	   AND A.VRF_CD = '1'
+	   AND A.RVW_STS_CD = '1'
+    </insert>
+  
+       <insert id="insertWaqCdRejected" parameterType="map" >
+  	       INSERT INTO WDQQ_CD_VAL(
+                        RQST_NO
+                        ,RQST_SNO
+                        ,RQST_DTL_SNO
+                        ,CD_VAL_ID
+                        ,CD_VAL
+                        ,CD_VAL_NM
+                        ,RQST_DCD
+                        ,RVW_STS_CD
+                        ,RVW_CONTS
+                        ,VRF_CD
+                        ,VRF_RMK
+                        ,DMN_ID
+                        ,DMN_LNM
+                        ,UPP_CD_VAL_ID
+                        ,UPP_CD_VAL
+                        ,OBJ_DESCN
+                        ,OBJ_VERS
+                        ,REG_TYP_CD
+                        ,FRS_RQST_DTM
+                        ,FRS_RQST_USER_ID
+                        ,RQST_DTM
+                        ,RQST_USER_ID
+                        ,APRV_DTM
+                        ,APRV_USER_ID,
+                        VV_NOTE1,
+                        VV_NOTE2,
+                        VV_NOTE3, 
+                        VV_NOTE4,
+                        VV_NOTE5, 
+                        VV_NOTE_NM1,
+                        VV_NOTE_NM2, 
+                        VV_NOTE_NM3, 
+                        VV_NOTE_NM4,
+                        VV_NOTE_NM5, 
+                        OUTL_CNTN1, 
+                        OUTL_CNTN2, 
+                        USE_YN ,
+                        DISP_ORD
+  	       )
+  	       SELECT 
+  	                    #{reqmst.rqstNo,jdbcType=VARCHAR}
+                        ,A.RQST_SNO
+                        ,A.RQST_DTL_SNO
+                        ,A.CD_VAL_ID
+                        ,A.CD_VAL
+                        ,A.CD_VAL_NM
+                        ,A.RQST_DCD
+                        ,'0'
+                        ,NULL
+                        ,NULL
+                        ,NULL
+                        ,A.DMN_ID
+                        ,A.DMN_LNM
+                        ,A.UPP_CD_VAL_ID
+                        ,A.UPP_CD_VAL
+                        ,A.OBJ_DESCN
+                        ,A.OBJ_VERS
+                        ,A.REG_TYP_CD
+                        ,A.FRS_RQST_DTM
+                        ,A.FRS_RQST_USER_ID
+                        ,A.RQST_DTM
+                        ,A.RQST_USER_ID
+                        ,NULL
+                        ,NULL
+                        ,A.VV_NOTE1,
+                        A.VV_NOTE2,
+                        A.VV_NOTE3, 
+                        A.VV_NOTE4,
+                        A.VV_NOTE5, 
+                        A.VV_NOTE_NM1,
+                        A.VV_NOTE_NM2, 
+                        A.VV_NOTE_NM3, 
+                        A.VV_NOTE_NM4,
+                        A.VV_NOTE_NM5, 
+                        A.OUTL_CNTN1, 
+                        A.OUTL_CNTN2, 
+                        A.USE_YN 
+                       ,A.DISP_ORD
+  	          FROM WDQQ_CD_VAL A
+  	          INNER JOIN WDQQ_DMN B
+  	          ON A.DMN_LNM = B.DMN_LNM
+  	          AND A.RQST_NO = B.RQST_NO
+  	          AND A.RQST_SNO = B.RQST_SNO
+  	          WHERE B.RQST_NO = #{oldRqstNo,jdbcType=VARCHAR}
+  	          AND B.RVW_STS_CD = '2'
+       </insert>
+          <insert id="insertnoWaqdelCdVal" parameterType="map" >
+          --삭제유효값 대상 추가
+  	          INSERT INTO WDQQ_CD_VAL(                           
+                        RQST_NO                      
+                        ,RQST_SNO                    
+                        ,RQST_DTL_SNO                
+                        ,CD_VAL_ID                   
+                        ,CD_VAL                      
+                        ,CD_VAL_NM                   
+                        ,RQST_DCD                    
+                        ,RVW_STS_CD                  
+                        ,RVW_CONTS                   
+                        ,VRF_CD                      
+                        ,VRF_RMK                     
+                        ,DMN_ID                      
+                        ,DMN_LNM                     
+                        ,UPP_CD_VAL_ID               
+                        ,UPP_CD_VAL                  
+                        ,OBJ_DESCN                   
+                        ,OBJ_VERS                    
+                        ,REG_TYP_CD                  
+                        ,FRS_RQST_DTM                
+                        ,FRS_RQST_USER_ID            
+                        ,RQST_DTM                    
+                        ,RQST_USER_ID                
+                        ,APRV_DTM                    
+                        ,APRV_USER_ID,               
+                        VV_NOTE1,                    
+                        VV_NOTE2,                    
+                        VV_NOTE3,                    
+                        VV_NOTE4,                    
+                        VV_NOTE5,                    
+                        VV_NOTE_NM1,                 
+                        VV_NOTE_NM2,                 
+                        VV_NOTE_NM3,                 
+                        VV_NOTE_NM4,                 
+                        VV_NOTE_NM5,                 
+                        OUTL_CNTN1,                  
+                        OUTL_CNTN2,                  
+                        USE_YN ,                     
+                        DISP_ORD                     
+  	       )                                         
+           SELECT                                              	                                                 
+  	                    #{rqstNo,jdbcType=VARCHAR}                                                      
+                        ,B.RQST_SNO                                                                     
+                        ,NVL((SELECT MAX(RQST_DTL_SNO)+1
+                          FROM WDQQ_CD_VAL Q 
+                          WHERE Q.RQST_NO = #{rqstNo,jdbcType=VARCHAR}  
+                          AND B.RQST_SNO = Q.RQST_SNO),1)
+                        ,C.CD_VAL_ID                                                                    
+                        ,C.CD_VAL                                                                       
+                        ,C.CD_VAL_NM                                                                    
+                        ,'DD'                                                                           
+                        ,'0'                                                                            
+                        ,NULL                                                                           
+                        ,NULL                                                                           
+                        ,NULL                      
+                        ,C.DMN_ID                  
+                        ,B.DMN_LNM                 
+                        ,C.UPP_CD_VAL_ID           
+                        ,GET_CD_VAL_NM(C.UPP_CD_VAL_ID) UPP_CD_VAL              
+                        ,C.OBJ_DESCN               
+                        ,C.OBJ_VERS                
+                        ,'D'                       
+                        ,C.FRS_RQST_DTM            
+                        ,C.FRS_RQST_USER_ID        
+                        ,C.RQST_DTM                
+                        ,C.RQST_USER_ID            
+                        ,NULL                      
+                        ,NULL                      
+                        ,C.VV_NOTE1,               
+                        C.VV_NOTE2,                
+                        C.VV_NOTE3,                
+                        C.VV_NOTE4,                
+                        C.VV_NOTE5,                
+                        C.VV_NOTE_NM1,             
+                        C.VV_NOTE_NM2,             
+                        C.VV_NOTE_NM3,             
+                        C.VV_NOTE_NM4,             
+                        C.VV_NOTE_NM5,             
+                        C.OUTL_CNTN1,              
+                        C.OUTL_CNTN2,              
+                        C.USE_YN                   
+                       ,C.DISP_ORD                 
+  	        FROM WDQM_DMN A                         
+      INNER JOIN WDQQ_DMN B                         
+      ON A.DMN_ID = B.DMN_ID                       
+      INNER JOIN WDQM_CD_VAL C                      
+      ON A.DMN_ID = C.DMN_ID                       
+      LEFT OUTER JOIN WDQQ_CD_VAL D                 
+      ON C.CD_VAL = D.CD_VAL                       
+      --AND C.CD_VAL_NM = D.CD_VAL_NM                
+      AND B.RQST_NO = D.RQST_NO                    
+      AND B.RQST_SNO = D.RQST_SNO                  
+      WHERE B.RQST_NO = #{rqstNo,jdbcType=VARCHAR}  
+      AND D.CD_VAL IS NULL                         
+       </insert>
+       
+       <insert id="insertWaqRejected" parameterType="map" >
+  	       INSERT INTO WDQQ_MSG_TSF(
+                        RQST_NO
+                      , RQST_SNO
+                      , TGT_DB_CONN_TRG_ID
+                      , TGT_DB_CONN_TRG_PNM
+                      , TGT_DB_SCH_ID
+                      , TGT_DB_SCH_PNM
+                      , MSG_ID
+                      , MSG_CD
+                      , MSG_CONTS
+                      , RQST_DCD
+                      , RVW_STS_CD
+                      , RVW_CONTS
+                      , VRF_CD
+                      , VRF_RMK
+                      , OBJ_DESCN
+                      , OBJ_VERS
+                      , REG_TYP_CD
+                      , FRS_RQST_DTM
+                      , FRS_RQST_USER_ID
+                      , RQST_DTM
+                      , RQST_USER_ID
+                      , APRV_DTM
+                      , APRV_USER_ID
+                      , USE_YN
+                      , TYP_DIV_CD
+                      , BIZ_DIV_CD
+                      , SYS_DIV_CD
+  	       )
+  	       SELECT 
+  	                    #{reqmst.rqstNo,jdbcType=VARCHAR}
+                        ,A.RQST_SNO
+                       , A.TGT_DB_CONN_TRG_ID
+                       , A.TGT_DB_CONN_TRG_PNM
+                       , A.TGT_DB_SCH_ID
+                       , A.TGT_DB_SCH_PNM
+                       , A.MSG_ID
+                       , A.MSG_CD
+                       , A.MSG_CONTS
+                       , A.RQST_DCD
+                       , NULL
+                       , NULL
+                       , NULL
+                       , NULL
+                       , A.OBJ_DESCN
+                       , A.OBJ_VERS
+                       , A.REG_TYP_CD
+                       , A.FRS_RQST_DTM
+                       , A.FRS_RQST_USER_ID
+                       , A.RQST_DTM
+                       , A.RQST_USER_ID
+                       , NULL
+                       , NULL
+                       , A.USE_YN
+                       , A.TYP_DIV_CD
+                       , A.BIZ_DIV_CD
+                       , A.SYS_DIV_CD
+  	          FROM WDQQ_MSG_TSF A
+  	          WHERE A.RQST_NO = #{oldRqstNo,jdbcType=VARCHAR}
+  	          AND A.RVW_STS_CD = '2'
+       </insert>
+      
+</mapper>
+
+
+

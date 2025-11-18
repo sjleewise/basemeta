@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.wise.commons.code.service.CodeSyncSrcMapper">
+  <resultMap id="SimpleCdBaseResultMap" type="kr.wise.commons.code.service.SimpleCodeVo">
+   <result column="SMPL_LCCD" 	jdbcType="VARCHAR" property="smplLccd" />
+   <result column="SMPL_MCCD" 	jdbcType="VARCHAR" property="smplMccd" />
+   <result column="SMPL_SCCD" 	jdbcType="VARCHAR" property="smplSccd" />
+   <result column="SMPL_LCCD_NM" 	jdbcType="VARCHAR" property="smplLccdNm" />
+   <result column="SMPL_MCCD_NM" 	jdbcType="VARCHAR" property="smplMccdNm" />    
+   <result column="SMPL_SCCD_NM" 	jdbcType="VARCHAR" property="smplSccdNm" />    
+   <result column="SMPL_CD_STS_YN" 	jdbcType="VARCHAR" property="smplCdStsYn" />    
+   <result column="ETC_CD1" 	jdbcType="VARCHAR" property="etcCd1" />    
+   <result column="ETC_CD2" 	jdbcType="VARCHAR" property="etcCd2" />    
+   <result column="ETC_CD3" 	jdbcType="VARCHAR" property="etcCd3" />    
+   <result column="ETC_CD4" 	jdbcType="VARCHAR" property="etcCd4" />    
+   <result column="ETC_CD5" 	jdbcType="VARCHAR" property="etcCd5" />    
+   <result column="ETC_CD_NM1" 	jdbcType="VARCHAR" property="etcCdNm1" />    
+   <result column="ETC_CD_NM2" 	jdbcType="VARCHAR" property="etcCdNm2" />    
+   <result column="ETC_CD_NM3" 	jdbcType="VARCHAR" property="etcCdNm3" />    
+   <result column="ETC_CD_NM4" 	jdbcType="VARCHAR" property="etcCdNm4" />    
+   <result column="ETC_CD_NM5" 	jdbcType="VARCHAR" property="etcCdNm5" />    
+   <result column="CD_OUTL_CNTN1" 	jdbcType="VARCHAR" property="cdOutlCntn1" />    
+   <result column="CD_OUTL_CNTN2" 	jdbcType="VARCHAR" property="cdOutlCntn2" />    
+   <result column="ARY_SQNC_NO" 	jdbcType="VARCHAR" property="arySqncNo" />    
+   <result column="RMRK_CNTN" 	jdbcType="VARCHAR" property="rmrkCntn" />
+   <result column="GAP_STATUS" 	jdbcType="VARCHAR" property="gapStatus" />      
+  </resultMap>
+    <resultMap id="ComplexCdBaseResultMap" type="kr.wise.commons.code.service.ComplexCodeVo">
+     <result column="COEX_DTL_CD" 	jdbcType="VARCHAR" property="coexDtlCd" />
+     <result column="COEX_UPRN_CD" 	jdbcType="VARCHAR" property="coexUprnCd" />
+     <result column="COEX_LVL_NO" 	jdbcType="VARCHAR" property="coexLvlNo" />       
+     <result column="COEX_CD_NM" 	jdbcType="VARCHAR" property="coexCdNm" />
+     <result column="COEX_CD_STS_YN" 	jdbcType="VARCHAR" property="coexCdStsYn" />
+     <result column="ETC_CD1" 	jdbcType="VARCHAR" property="etcCd1" />
+     <result column="ETC_CD2" 	jdbcType="VARCHAR" property="etcCd2" />
+     <result column="ETC_CD3" 	jdbcType="VARCHAR" property="etcCd3" />
+     <result column="ETC_CD4" 	jdbcType="VARCHAR" property="etcCd4" />
+     <result column="ETC_CD5" 	jdbcType="VARCHAR" property="etcCd5" />
+     <result column="ETC_CD_NM1" 	jdbcType="VARCHAR" property="etcCdNm1" />
+     <result column="ETC_CD_NM2" 	jdbcType="VARCHAR" property="etcCdNm2" />
+     <result column="ETC_CD_NM3" 	jdbcType="VARCHAR" property="etcCdNm3" />
+     <result column="ETC_CD_NM4" 	jdbcType="VARCHAR" property="etcCdNm4" />
+     <result column="ETC_CD_NM5" 	jdbcType="VARCHAR" property="etcCdNm5" />
+     <result column="CD_OUTL_CNTN1" 	jdbcType="VARCHAR" property="cdOutlCntn1" />
+     <result column="CD_OUTL_CNTN2" 	jdbcType="VARCHAR" property="cdOutlCntn2" />
+     <result column="ARY_SQNC_NO" 	jdbcType="VARCHAR" property="arySqncNo" />
+     <result column="RMRK_CNTN" 	jdbcType="VARCHAR" property="rmrkCntn" />
+     <result column="GAP_STATUS" 	jdbcType="VARCHAR" property="gapStatus" />
+  </resultMap>
+  
+  <insert id="insertSimpleCodeToMeta" parameterType = "kr.wise.commons.code.service.SimpleCodeVo">
+  	INSERT INTO WAT_SMP_CD(SMPL_LCCD, SMPL_MCCD, SMPL_SCCD, SMPL_LCCD_NM, SMPL_MCCD_NM, SMPL_SCCD_NM, 
+  	       SMPL_CD_STS_YN, ETC_CD1, ETC_CD2, ETC_CD3, ETC_CD4, ETC_CD5, ETC_CD_NM1, 
+  	       ETC_CD_NM2, ETC_CD_NM3, ETC_CD_NM4, ETC_CD_NM5, CD_OUTL_CNTN1, CD_OUTL_CNTN2, ARY_SQNC_NO, RMRK_CNTN)
+  	  VALUES( 
+  	     #{smplLccd   ,jdbcType = VARCHAR}
+        ,#{smplMccd   ,jdbcType = VARCHAR}  
+        ,#{smplSccd   ,jdbcType = VARCHAR}  
+        ,#{smplLccdNm ,jdbcType = VARCHAR}  
+        ,#{smplMccdNm ,jdbcType = VARCHAR}  
+        ,#{smplSccdNm ,jdbcType = VARCHAR}  
+        ,#{smplCdStsYn,jdbcType = VARCHAR}  
+        ,#{etcCd1     ,jdbcType = VARCHAR}  
+        ,#{etcCd2     ,jdbcType = VARCHAR}  
+        ,#{etcCd3     ,jdbcType = VARCHAR}  
+        ,#{etcCd4     ,jdbcType = VARCHAR}  
+        ,#{etcCd5     ,jdbcType = VARCHAR}  
+        ,#{etcCdNm1   ,jdbcType = VARCHAR}  
+        ,#{etcCdNm2   ,jdbcType = VARCHAR}  
+        ,#{etcCdNm3   ,jdbcType = VARCHAR}  
+        ,#{etcCdNm4   ,jdbcType = VARCHAR}  
+        ,#{etcCdNm5   ,jdbcType = VARCHAR}  
+        ,#{cdOutlCntn1,jdbcType = VARCHAR}  
+        ,#{cdOutlCntn2,jdbcType = VARCHAR}  
+        ,#{arySqncNo  ,jdbcType = VARCHAR}  
+        ,#{rmrkCntn   ,jdbcType = VARCHAR}  
+  	  )
+  	  </insert>
+<insert id="simpleCodeGapExec" >
+  	INSERT INTO WAT_GAP_SMP_CD
+    SELECT 
+        A.SMPL_LCCD
+       ,A.SMPL_MCCD
+       ,A.SMPL_SCCD
+       ,A.SMPL_LCCD_NM 
+       ,A.SMPL_MCCD_NM
+       ,A.SMPL_SCCD_NM
+       ,A.SMPL_CD_STS_YN
+       ,A.ETC_CD1      
+       ,A.ETC_CD2      
+       ,A.ETC_CD3      
+       ,A.ETC_CD4      
+       ,A.ETC_CD5      
+       ,A.ETC_CD_NM1   
+       ,A.ETC_CD_NM2   
+       ,A.ETC_CD_NM3   
+       ,A.ETC_CD_NM4   
+       ,A.ETC_CD_NM5   
+       ,A.CD_OUTL_CNTN1
+       ,A.CD_OUTL_CNTN2
+       ,A.ARY_SQNC_NO  
+       ,A.RMRK_CNTN   
+       ,'U' AS GAP_STATUS
+   FROM V_SIMPLE_CD_LIST A
+   INNER JOIN WAT_SMP_CD B
+   ON COALESCE(A.SMPL_LCCD,'-') = COALESCE(B.SMPL_LCCD,'-')
+   AND COALESCE(A.SMPL_MCCD,'-')= COALESCE(B.SMPL_MCCD,'-')
+   AND COALESCE(A.SMPL_SCCD,'-')= COALESCE(B.SMPL_SCCD,'-')
+   WHERE COALESCE(A.ETC_CD1      ,'-')   !=    COALESCE(B.ETC_CD1      ,'-')  
+         OR COALESCE(A.ETC_CD2      ,'-')   !=    COALESCE(B.ETC_CD2      ,'-')
+         OR COALESCE(A.ETC_CD3      ,'-')   !=    COALESCE(B.ETC_CD3      ,'-')
+         OR COALESCE(A.ETC_CD4      ,'-')   !=    COALESCE(B.ETC_CD4      ,'-')
+         OR COALESCE(A.ETC_CD5      ,'-')   !=    COALESCE(B.ETC_CD5      ,'-')
+         OR COALESCE(A.ETC_CD_NM1   ,'-')   !=    COALESCE(B.ETC_CD_NM1   ,'-')
+         OR COALESCE(A.ETC_CD_NM2   ,'-')   !=    COALESCE(B.ETC_CD_NM2   ,'-')
+         OR COALESCE(A.ETC_CD_NM3   ,'-')   !=    COALESCE(B.ETC_CD_NM3   ,'-')
+         OR COALESCE(A.ETC_CD_NM4   ,'-')   !=    COALESCE(B.ETC_CD_NM4   ,'-')
+         OR COALESCE(A.ETC_CD_NM5   ,'-')   !=    COALESCE(B.ETC_CD_NM5   ,'-')
+         OR COALESCE(A.CD_OUTL_CNTN1,'-')   !=    COALESCE(B.CD_OUTL_CNTN1,'-')
+         OR COALESCE(A.CD_OUTL_CNTN2,'-')   !=    COALESCE(B.CD_OUTL_CNTN2,'-')
+         OR COALESCE(A.ARY_SQNC_NO  ,0)   !=    COALESCE(B.ARY_SQNC_NO  ,  0)
+         OR COALESCE(A.RMRK_CNTN    ,'-')   !=    COALESCE(B.RMRK_CNTN    ,'-')
+       UNION ALL
+     SELECT 
+        A.SMPL_LCCD
+       ,A.SMPL_MCCD
+       ,A.SMPL_SCCD
+       ,A.SMPL_LCCD_NM 
+       ,A.SMPL_MCCD_NM
+       ,A.SMPL_SCCD_NM
+       ,A.SMPL_CD_STS_YN
+       ,A.ETC_CD1      
+       ,A.ETC_CD2      
+       ,A.ETC_CD3      
+       ,A.ETC_CD4      
+       ,A.ETC_CD5      
+       ,A.ETC_CD_NM1   
+       ,A.ETC_CD_NM2   
+       ,A.ETC_CD_NM3   
+       ,A.ETC_CD_NM4   
+       ,A.ETC_CD_NM5   
+       ,A.CD_OUTL_CNTN1
+       ,A.CD_OUTL_CNTN2
+       ,A.ARY_SQNC_NO  
+       ,A.RMRK_CNTN   
+       ,'I' AS GAP_STATUS
+    FROM V_SIMPLE_CD_LIST A
+    LEFT OUTER JOIN WAT_SMP_CD B
+    ON COALESCE(A.SMPL_LCCD,'-') = COALESCE(B.SMPL_LCCD,'-')
+    AND COALESCE(A.SMPL_MCCD,'-')= COALESCE(B.SMPL_MCCD,'-')
+    AND COALESCE(A.SMPL_SCCD,'-')= COALESCE(B.SMPL_SCCD,'-')
+    WHERE B.SMPL_LCCD IS NULL
+       AND B.SMPL_MCCD IS NULL
+       AND B.SMPL_SCCD IS NULL
+       UNION ALL
+    SELECT 
+        B.SMPL_LCCD
+       ,B.SMPL_MCCD
+       ,B.SMPL_SCCD
+       ,B.SMPL_LCCD_NM 
+       ,B.SMPL_MCCD_NM
+       ,B.SMPL_SCCD_NM
+       ,B.SMPL_CD_STS_YN
+       ,B.ETC_CD1      
+       ,B.ETC_CD2      
+       ,B.ETC_CD3      
+       ,B.ETC_CD4      
+       ,B.ETC_CD5      
+       ,B.ETC_CD_NM1   
+       ,B.ETC_CD_NM2   
+       ,B.ETC_CD_NM3   
+       ,B.ETC_CD_NM4   
+       ,B.ETC_CD_NM5   
+       ,B.CD_OUTL_CNTN1
+       ,B.CD_OUTL_CNTN2
+       ,TO_NUMBER(B.ARY_SQNC_NO)
+       ,B.RMRK_CNTN   
+       ,'D' AS GAP_STATUS
+    FROM V_SIMPLE_CD_LIST A
+    RIGHT OUTER JOIN WAT_SMP_CD B
+    ON COALESCE(A.SMPL_LCCD,'-') = COALESCE(B.SMPL_LCCD,'-')
+    AND COALESCE(A.SMPL_MCCD,'-')= COALESCE(B.SMPL_MCCD,'-')
+    AND COALESCE(A.SMPL_SCCD,'-')= COALESCE(B.SMPL_SCCD,'-')
+    WHERE A.SMPL_LCCD IS NULL
+       AND A.SMPL_MCCD IS NULL
+       AND A.SMPL_SCCD IS NULL  	  
+  	  </insert>
+      <delete id ="deleteWatSmpCd">
+         DELETE FROM WAT_SMP_CD
+      </delete>
+      <delete id ="deleteWatGapSmpCd">
+         DELETE FROM WAT_GAP_SMP_CD
+      </delete>
+      <select id="getGapSimpleCodeList" resultMap="SimpleCdBaseResultMap">
+  	     SELECT * FROM WAT_GAP_SMP_CD
+      </select>
+       <delete id ="deleteWatCmpCd">
+         DELETE FROM WAT_CMP_CD
+      </delete>
+      <delete id ="deleteWatGapCmpCd">
+         DELETE FROM WAT_GAP_CMP_CD
+      </delete>
+      <select id="getGapComplexCodeList" resultMap="ComplexCdBaseResultMap">
+  	     SELECT * FROM WAT_GAP_CMP_CD
+      </select>
+      
+    <insert id="insertComplexCodeToMeta" parameterType = "kr.wise.commons.code.service.ComplexCodeVo">
+  	INSERT INTO WAT_CMP_CD(COEX_DTL_CD,COEX_UPRN_CD,COEX_LVL_NO,COEX_CD_NM,COEX_CD_STS_YN,ETC_CD1,ETC_CD2,ETC_CD3
+                           ,ETC_CD4,ETC_CD5,ETC_CD_NM1,ETC_CD_NM2,ETC_CD_NM3,ETC_CD_NM4,ETC_CD_NM5,CD_OUTL_CNTN1,CD_OUTL_CNTN2
+                           ,ARY_SQNC_NO,RMRK_CNTN)
+  	  VALUES( 
+            #{coexDtlCd     ,jdbcType = VARCHAR}
+            ,#{coexUprnCd    ,jdbcType = VARCHAR}
+            ,#{coexLvlNo     ,jdbcType = VARCHAR}
+            ,#{coexCdNm      ,jdbcType = VARCHAR}
+            ,#{coexCdStsYn   ,jdbcType = VARCHAR}
+            ,#{etcCd1        ,jdbcType = VARCHAR}
+            ,#{etcCd2        ,jdbcType = VARCHAR}
+            ,#{etcCd3        ,jdbcType = VARCHAR}
+            ,#{etcCd4        ,jdbcType = VARCHAR}
+            ,#{etcCd5        ,jdbcType = VARCHAR}
+            ,#{etcCdNm1      ,jdbcType = VARCHAR}
+            ,#{etcCdNm2      ,jdbcType = VARCHAR}
+            ,#{etcCdNm3      ,jdbcType = VARCHAR}
+            ,#{etcCdNm4      ,jdbcType = VARCHAR}
+            ,#{etcCdNm5      ,jdbcType = VARCHAR}
+            ,#{cdOutlCntn1   ,jdbcType = VARCHAR}
+            ,#{cdOutlCntn2   ,jdbcType = VARCHAR}
+            ,#{arySqncNo     ,jdbcType = VARCHAR}
+            ,#{rmrkCntn      ,jdbcType = VARCHAR}  
+  	  )
+  	  </insert>
+ <insert id="complexCodeGapExec" >
+  	INSERT INTO WAT_GAP_CMP_CD                                        
+    SELECT                                                          
+      A.COEX_DTL_CD                                                 
+     ,A.COEX_UPRN_CD                                                     
+     ,A.COEX_LVL_NO                                                      
+     ,A.COEX_CD_NM                                                       
+     ,A.COEX_CD_STS_YN                                                   
+     ,A.ETC_CD1                                                          
+     ,A.ETC_CD2                                                          
+     ,A.ETC_CD3                                                          
+     ,A.ETC_CD4                                                          
+     ,A.ETC_CD5                                                          
+     ,A.ETC_CD_NM1                                                       
+     ,A.ETC_CD_NM2                                                       
+     ,A.ETC_CD_NM3                                                       
+     ,A.ETC_CD_NM4                                                       
+     ,A.ETC_CD_NM5                                                       
+     ,A.CD_OUTL_CNTN1                                                    
+     ,A.CD_OUTL_CNTN2                                                    
+     ,A.ARY_SQNC_NO                                                      
+            ,A.RMRK_CNTN                                                 
+       ,'U' AS GAP_STATUS                                           
+   FROM V_COMPLEX_CD_LIST A                                         
+   INNER JOIN WAT_CMP_CD B                                          
+   ON COALESCE(A.COEX_DTL_CD,'-') = COALESCE(B.COEX_DTL_CD,'-')               
+   AND COALESCE(A.COEX_UPRN_CD,'-')= COALESCE(B.COEX_UPRN_CD,'-')             
+   WHERE COALESCE(TO_CHAR(A.COEX_LVL_NO)   ,'-') !=   COALESCE(TO_CHAR(B.COEX_LVL_NO)   ,'-')   
+      OR COALESCE(A.COEX_CD_NM    ,'-') !=   COALESCE(B.COEX_CD_NM    ,'-')         
+      OR COALESCE(A.COEX_CD_STS_YN,'-') !=   COALESCE(B.COEX_CD_STS_YN,'-')         
+      OR COALESCE(A.ETC_CD1       ,'-') !=   COALESCE(B.ETC_CD1       ,'-')         
+      OR COALESCE(A.ETC_CD2       ,'-') !=   COALESCE(B.ETC_CD2       ,'-')         
+      OR COALESCE(A.ETC_CD3       ,'-') !=   COALESCE(B.ETC_CD3       ,'-')         
+      OR COALESCE(A.ETC_CD4       ,'-') !=   COALESCE(B.ETC_CD4       ,'-')         
+      OR COALESCE(A.ETC_CD5       ,'-') !=   COALESCE(B.ETC_CD5       ,'-')         
+      OR COALESCE(A.ETC_CD_NM1    ,'-') !=   COALESCE(B.ETC_CD_NM1    ,'-')         
+      OR COALESCE(A.ETC_CD_NM2    ,'-') !=   COALESCE(B.ETC_CD_NM2    ,'-')         
+      OR COALESCE(A.ETC_CD_NM3    ,'-') !=   COALESCE(B.ETC_CD_NM3    ,'-')         
+      OR COALESCE(A.ETC_CD_NM4    ,'-') !=   COALESCE(B.ETC_CD_NM4    ,'-')         
+      OR COALESCE(A.ETC_CD_NM5    ,'-') !=   COALESCE(B.ETC_CD_NM5    ,'-')         
+      OR COALESCE(A.CD_OUTL_CNTN1 ,'-') !=   COALESCE(B.CD_OUTL_CNTN1 ,'-')         
+      OR COALESCE(A.CD_OUTL_CNTN2 ,'-') !=   COALESCE(B.CD_OUTL_CNTN2 ,'-')         
+      OR COALESCE(TO_CHAR(A.ARY_SQNC_NO)   ,'-') !=   COALESCE(TO_CHAR(B.ARY_SQNC_NO)   ,'-')         
+      OR COALESCE(A.RMRK_CNTN     ,'-') !=   COALESCE(B.RMRK_CNTN     ,'-')         
+UNION ALL                                                           
+ SELECT                                                             
+      A.COEX_DTL_CD                                                 
+     ,A.COEX_UPRN_CD                                                     
+     ,A.COEX_LVL_NO                                                      
+     ,A.COEX_CD_NM                                                       
+     ,A.COEX_CD_STS_YN                                                   
+     ,A.ETC_CD1                                                          
+     ,A.ETC_CD2                                                          
+     ,A.ETC_CD3                                                          
+     ,A.ETC_CD4                                                          
+     ,A.ETC_CD5                                                          
+     ,A.ETC_CD_NM1                                                       
+     ,A.ETC_CD_NM2                                                       
+     ,A.ETC_CD_NM3                                                       
+     ,A.ETC_CD_NM4                                                       
+     ,A.ETC_CD_NM5                                                       
+     ,A.CD_OUTL_CNTN1                                                    
+     ,A.CD_OUTL_CNTN2                                                    
+     ,A.ARY_SQNC_NO                                                      
+     ,A.RMRK_CNTN                                                 
+     ,'I' AS GAP_STATUS                                           
+    FROM V_COMPLEX_CD_LIST A                                        
+    LEFT OUTER JOIN WAT_CMP_CD B                                    
+      ON COALESCE(A.COEX_DTL_CD,'-') = COALESCE(B.COEX_DTL_CD,'-')              
+     AND COALESCE(A.COEX_UPRN_CD,'-')= COALESCE(B.COEX_UPRN_CD,'-')            
+    WHERE B.COEX_DTL_CD IS NULL                                     
+      AND B.COEX_UPRN_CD IS NULL      
+      AND A.COEX_DTL_CD IS NOT NULL
+      AND A.COEX_UPRN_CD IS NOT NULL                               
+UNION ALL                                                       
+    SELECT                                                          
+        B.COEX_DTL_CD                                           
+       ,B.COEX_UPRN_CD                                                    
+       ,TO_NUMBER(B.COEX_LVL_NO)                                           
+       ,B.COEX_CD_NM                                                       
+       ,B.COEX_CD_STS_YN                                                   
+       ,B.ETC_CD1                                                          
+       ,B.ETC_CD2                                                          
+       ,B.ETC_CD3                                                          
+       ,B.ETC_CD4                                                          
+       ,B.ETC_CD5                                                          
+       ,B.ETC_CD_NM1                                                       
+       ,B.ETC_CD_NM2                                                       
+       ,B.ETC_CD_NM3                                                       
+       ,B.ETC_CD_NM4                                                       
+       ,B.ETC_CD_NM5                                                       
+       ,B.CD_OUTL_CNTN1                                                    
+       ,B.CD_OUTL_CNTN2                                                    
+       ,TO_NUMBER(B.ARY_SQNC_NO)                                           
+       ,B.RMRK_CNTN                                                 
+       ,'D' AS GAP_STATUS                                           
+    FROM V_COMPLEX_CD_LIST A                                        
+    RIGHT OUTER JOIN WAT_CMP_CD B                                   
+      ON COALESCE(A.COEX_DTL_CD,'-') = COALESCE(B.COEX_DTL_CD,'-')              
+     AND COALESCE(A.COEX_UPRN_CD,'-')= COALESCE(B.COEX_UPRN_CD,'-')            
+    WHERE A.COEX_DTL_CD IS NULL                                     
+       AND A.COEX_UPRN_CD IS NULL                                     
+  	  </insert>
+</mapper>
+
+
+
+

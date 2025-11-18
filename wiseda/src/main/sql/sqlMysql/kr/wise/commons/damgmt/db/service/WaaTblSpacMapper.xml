@@ -1,0 +1,362 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.commons.damgmt.db.service.WaaTblSpacMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.commons.damgmt.db.service.WaaTblSpac" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+    <id column="DB_TBL_SPAC_ID" property="dbTblSpacId" jdbcType="VARCHAR" />
+<!--     <result column="EXP_DTM" property="expDtm" jdbcType="TIMESTAMP" /> -->
+<!--     <result column="STR_DTM" property="strDtm" jdbcType="TIMESTAMP" /> -->
+    <result column="DB_TBL_SPAC_PNM" property="dbTblSpacPnm" jdbcType="VARCHAR" />
+    <result column="DB_TBL_SPAC_LNM" property="dbTblSpacLnm" jdbcType="VARCHAR" />
+    <result column="DB_CONN_TRG_ID" property="dbConnTrgId" jdbcType="VARCHAR" />
+    <result column="DB_SCH_ID" property="dbSchId" jdbcType="VARCHAR" />
+    <result column="TBL_SPAC_TYP_CD" property="tblSpacTypCd" jdbcType="VARCHAR" />
+    <result column="DDL_DISPLAY" property="ddlDisplay" jdbcType="VARCHAR" />
+    <result column="DEFAULT_USAGE" property="defaultUsage" jdbcType="VARCHAR" />
+    <result column="DB_TBL_SPAC_DATAFILE" property="dbTblSpacDatafile" jdbcType="VARCHAR" />
+    <result column="DB_TBL_SPAC_GROUP" property="dbTblSpacGroup" jdbcType="VARCHAR" />
+    <result column="DB_TBL_SPAC_INIT_SIZE" property="dbTblSpacInitSize" jdbcType="VARCHAR" />
+    <result column="DB_TBL_SPAC_NEXT_SIZE" property="dbTblSpacNextSize" jdbcType="VARCHAR" />
+    <result column="DB_TBL_SPAC_MAX_SIZE" property="dbTblSpacMaxSize" jdbcType="VARCHAR" />
+    <result column="DB_TBL_SPAC_WRN" property="dbTblSpacWrn" jdbcType="VARCHAR" />
+    <result column="DB_TBL_SPAC_MGN" property="dbTblSpacMgn" jdbcType="VARCHAR" />
+    <result column="DB_TBL_SPAC_SCRIPT" property="dbTblSpacScript" jdbcType="VARCHAR" />
+<!--     <result column="OBJ_DESCN" property="objDescn" jdbcType="VARCHAR" /> -->
+<!--     <result column="OBJ_VERS" property="objVers" jdbcType="DECIMAL" /> -->
+<!--     <result column="REG_TYP_CD" property="regTypCd" jdbcType="VARCHAR" /> -->
+<!--     <result column="WRIT_DTM" property="writDtm" jdbcType="TIMESTAMP" /> -->
+<!--     <result column="WRIT_USER_ID" property="writUserId" jdbcType="VARCHAR" /> -->
+  </resultMap>
+  <sql id="Base_Column_List" >
+    DB_TBL_SPAC_ID, EXP_DTM, STR_DTM, DB_TBL_SPAC_PNM, DB_TBL_SPAC_LNM, DB_CONN_TRG_ID, 
+    TBL_SPAC_TYP_CD, DDL_DISPLAY, DEFAULT_USAGE, DB_TBL_SPAC_DATAFILE, DB_TBL_SPAC_GROUP, 
+    DB_TBL_SPAC_INIT_SIZE, DB_TBL_SPAC_NEXT_SIZE, DB_TBL_SPAC_MAX_SIZE, DB_TBL_SPAC_WRN, 
+    DB_TBL_SPAC_MGN, DB_TBL_SPAC_SCRIPT, OBJ_DESCN, OBJ_VERS, REG_TYP_CD, WRIT_DTM, WRIT_USER_ID
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    SELECT 
+    <include refid="Base_Column_List" />
+      FROM WAA_TBL_SPAC
+     WHERE DB_TBL_SPAC_ID = #{dbTblSpacId,jdbcType=VARCHAR}
+       AND EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+       AND REG_TYP_CD IN ('C', 'U')
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from WAA_TBL_SPAC
+    where DB_TBL_SPAC_ID = #{dbTblSpacId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="kr.wise.commons.damgmt.db.service.WaaTblSpac" >
+    insert into WAA_TBL_SPAC (DB_TBL_SPAC_ID, EXP_DTM, STR_DTM, 
+      DB_TBL_SPAC_PNM, DB_TBL_SPAC_LNM, DB_CONN_TRG_ID, 
+      TBL_SPAC_TYP_CD, DDL_DISPLAY, DEFAULT_USAGE, 
+      DB_TBL_SPAC_DATAFILE, DB_TBL_SPAC_GROUP, DB_TBL_SPAC_INIT_SIZE, 
+      DB_TBL_SPAC_NEXT_SIZE, DB_TBL_SPAC_MAX_SIZE, DB_TBL_SPAC_WRN, 
+      DB_TBL_SPAC_MGN, DB_TBL_SPAC_SCRIPT, OBJ_DESCN, 
+      OBJ_VERS, REG_TYP_CD, WRIT_DTM, 
+      WRIT_USER_ID)
+    values (#{dbTblSpacId,jdbcType=VARCHAR}, #{expDtm,jdbcType=TIMESTAMP}, #{strDtm,jdbcType=TIMESTAMP}, 
+      #{dbTblSpacPnm,jdbcType=VARCHAR}, #{dbTblSpacLnm,jdbcType=VARCHAR}, #{dbConnTrgId,jdbcType=VARCHAR}, 
+      #{tblSpacTypCd,jdbcType=VARCHAR}, #{ddlDisplay,jdbcType=VARCHAR}, #{defaultUsage,jdbcType=VARCHAR}, 
+      #{dbTblSpacDatafile,jdbcType=VARCHAR}, #{dbTblSpacGroup,jdbcType=VARCHAR}, #{dbTblSpacInitSize,jdbcType=VARCHAR}, 
+      #{dbTblSpacNextSize,jdbcType=VARCHAR}, #{dbTblSpacMaxSize,jdbcType=VARCHAR}, #{dbTblSpacWrn,jdbcType=VARCHAR}, 
+      #{dbTblSpacMgn,jdbcType=VARCHAR}, #{dbTblSpacScript,jdbcType=VARCHAR}, #{objDescn,jdbcType=VARCHAR}, 
+      #{objVers,jdbcType=DECIMAL}, #{regTypCd,jdbcType=VARCHAR}, #{writDtm,jdbcType=TIMESTAMP}, 
+      #{writUserId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="kr.wise.commons.damgmt.db.service.WaaTblSpac" >
+    insert into WAA_TBL_SPAC
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="dbTblSpacId != null" >
+        DB_TBL_SPAC_ID,
+      </if>
+        EXP_DTM,
+        STR_DTM,
+      <if test="dbTblSpacPnm != null" >
+        DB_TBL_SPAC_PNM,
+      </if>
+      <if test="dbTblSpacLnm != null" >
+        DB_TBL_SPAC_LNM,
+      </if>
+      <if test="dbConnTrgId != null" >
+        DB_CONN_TRG_ID,
+      </if>
+      <if test="tblSpacTypCd != null" >
+        TBL_SPAC_TYP_CD,
+      </if>
+      <if test="ddlDisplay != null" >
+        DDL_DISPLAY,
+      </if>
+      <if test="defaultUsage != null" >
+        DEFAULT_USAGE,
+      </if>
+      <if test="dbTblSpacDatafile != null" >
+        DB_TBL_SPAC_DATAFILE,
+      </if>
+      <if test="dbTblSpacGroup != null" >
+        DB_TBL_SPAC_GROUP,
+      </if>
+      <if test="dbTblSpacInitSize != null" >
+        DB_TBL_SPAC_INIT_SIZE,
+      </if>
+      <if test="dbTblSpacNextSize != null" >
+        DB_TBL_SPAC_NEXT_SIZE,
+      </if>
+      <if test="dbTblSpacMaxSize != null" >
+        DB_TBL_SPAC_MAX_SIZE,
+      </if>
+      <if test="dbTblSpacWrn != null" >
+        DB_TBL_SPAC_WRN,
+      </if>
+      <if test="dbTblSpacMgn != null" >
+        DB_TBL_SPAC_MGN,
+      </if>
+      <if test="dbTblSpacScript != null" >
+        DB_TBL_SPAC_SCRIPT,
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN,
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS,
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD,
+      </if>
+        WRIT_DTM,
+      <if test="writUserId != null" >
+        WRIT_USER_ID,
+      </if>
+      
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="dbTblSpacId != null" >
+        #{dbTblSpacId,jdbcType=VARCHAR},
+      </if>
+        STR_TO_DATE('9999-12-31', '%Y-%m-%d'),
+        NOW(),
+      <if test="dbTblSpacPnm != null" >
+        #{dbTblSpacPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="dbTblSpacLnm != null" >
+        #{dbTblSpacLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="dbConnTrgId != null" >
+        #{dbConnTrgId,jdbcType=VARCHAR},
+      </if>
+      <if test="tblSpacTypCd != null" >
+        #{tblSpacTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="ddlDisplay != null" >
+        #{ddlDisplay,jdbcType=VARCHAR},
+      </if>
+      <if test="defaultUsage != null" >
+        #{defaultUsage,jdbcType=VARCHAR},
+      </if>
+      <if test="dbTblSpacDatafile != null" >
+        #{dbTblSpacDatafile,jdbcType=VARCHAR},
+      </if>
+      <if test="dbTblSpacGroup != null" >
+        #{dbTblSpacGroup,jdbcType=VARCHAR},
+      </if>
+      <if test="dbTblSpacInitSize != null" >
+        #{dbTblSpacInitSize,jdbcType=VARCHAR},
+      </if>
+      <if test="dbTblSpacNextSize != null" >
+        #{dbTblSpacNextSize,jdbcType=VARCHAR},
+      </if>
+      <if test="dbTblSpacMaxSize != null" >
+        #{dbTblSpacMaxSize,jdbcType=VARCHAR},
+      </if>
+      <if test="dbTblSpacWrn != null" >
+        #{dbTblSpacWrn,jdbcType=VARCHAR},
+      </if>
+      <if test="dbTblSpacMgn != null" >
+        #{dbTblSpacMgn,jdbcType=VARCHAR},
+      </if>
+      <if test="dbTblSpacScript != null" >
+        #{dbTblSpacScript,jdbcType=VARCHAR},
+      </if>
+      <if test="objDescn != null" >
+        #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null" >
+        #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      	NOW(),
+      <if test="writUserId != null" >
+        #{writUserId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.commons.damgmt.db.service.WaaTblSpac" >
+    update WAA_TBL_SPAC
+    <set >
+      <if test="expDtm != null" >
+        EXP_DTM = #{expDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="strDtm != null" >
+        STR_DTM = #{strDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dbTblSpacPnm != null" >
+        DB_TBL_SPAC_PNM = #{dbTblSpacPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="dbTblSpacLnm != null" >
+        DB_TBL_SPAC_LNM = #{dbTblSpacLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="dbConnTrgId != null" >
+        DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR},
+      </if>
+      <if test="tblSpacTypCd != null" >
+        TBL_SPAC_TYP_CD = #{tblSpacTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="ddlDisplay != null" >
+        DDL_DISPLAY = #{ddlDisplay,jdbcType=VARCHAR},
+      </if>
+      <if test="defaultUsage != null" >
+        DEFAULT_USAGE = #{defaultUsage,jdbcType=VARCHAR},
+      </if>
+      <if test="dbTblSpacDatafile != null" >
+        DB_TBL_SPAC_DATAFILE = #{dbTblSpacDatafile,jdbcType=VARCHAR},
+      </if>
+      <if test="dbTblSpacGroup != null" >
+        DB_TBL_SPAC_GROUP = #{dbTblSpacGroup,jdbcType=VARCHAR},
+      </if>
+      <if test="dbTblSpacInitSize != null" >
+        DB_TBL_SPAC_INIT_SIZE = #{dbTblSpacInitSize,jdbcType=VARCHAR},
+      </if>
+      <if test="dbTblSpacNextSize != null" >
+        DB_TBL_SPAC_NEXT_SIZE = #{dbTblSpacNextSize,jdbcType=VARCHAR},
+      </if>
+      <if test="dbTblSpacMaxSize != null" >
+        DB_TBL_SPAC_MAX_SIZE = #{dbTblSpacMaxSize,jdbcType=VARCHAR},
+      </if>
+      <if test="dbTblSpacWrn != null" >
+        DB_TBL_SPAC_WRN = #{dbTblSpacWrn,jdbcType=VARCHAR},
+      </if>
+      <if test="dbTblSpacMgn != null" >
+        DB_TBL_SPAC_MGN = #{dbTblSpacMgn,jdbcType=VARCHAR},
+      </if>
+      <if test="dbTblSpacScript != null" >
+        DB_TBL_SPAC_SCRIPT = #{dbTblSpacScript,jdbcType=VARCHAR},
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="writDtm != null" >
+        WRIT_DTM = #{writDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="writUserId != null" >
+        WRIT_USER_ID = #{writUserId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where DB_TBL_SPAC_ID = #{dbTblSpacId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="kr.wise.commons.damgmt.db.service.WaaTblSpac" >
+    update WAA_TBL_SPAC
+    set EXP_DTM = #{expDtm,jdbcType=TIMESTAMP},
+      STR_DTM = #{strDtm,jdbcType=TIMESTAMP},
+      DB_TBL_SPAC_PNM = #{dbTblSpacPnm,jdbcType=VARCHAR},
+      DB_TBL_SPAC_LNM = #{dbTblSpacLnm,jdbcType=VARCHAR},
+      DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR},
+      TBL_SPAC_TYP_CD = #{tblSpacTypCd,jdbcType=VARCHAR},
+      DDL_DISPLAY = #{ddlDisplay,jdbcType=VARCHAR},
+      DEFAULT_USAGE = #{defaultUsage,jdbcType=VARCHAR},
+      DB_TBL_SPAC_DATAFILE = #{dbTblSpacDatafile,jdbcType=VARCHAR},
+      DB_TBL_SPAC_GROUP = #{dbTblSpacGroup,jdbcType=VARCHAR},
+      DB_TBL_SPAC_INIT_SIZE = #{dbTblSpacInitSize,jdbcType=VARCHAR},
+      DB_TBL_SPAC_NEXT_SIZE = #{dbTblSpacNextSize,jdbcType=VARCHAR},
+      DB_TBL_SPAC_MAX_SIZE = #{dbTblSpacMaxSize,jdbcType=VARCHAR},
+      DB_TBL_SPAC_WRN = #{dbTblSpacWrn,jdbcType=VARCHAR},
+      DB_TBL_SPAC_MGN = #{dbTblSpacMgn,jdbcType=VARCHAR},
+      DB_TBL_SPAC_SCRIPT = #{dbTblSpacScript,jdbcType=VARCHAR},
+      OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      WRIT_DTM = #{writDtm,jdbcType=TIMESTAMP},
+      WRIT_USER_ID = #{writUserId,jdbcType=VARCHAR},
+    where DB_TBL_SPAC_ID = #{dbTblSpacId,jdbcType=VARCHAR}
+  </update>
+  
+  <update id="updateExpDtm" parameterType="kr.wise.commons.damgmt.db.service.WaaTblSpac">
+  UPDATE WAA_TBL_SPAC
+     SET EXP_DTM = NOW()
+   WHERE DB_TBL_SPAC_ID = #{dbTblSpacId,jdbcType=VARCHAR}
+     AND EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+     AND REG_TYP_CD IN ('C', 'U')
+  
+  </update>
+  
+  <select id="getDbTblSpacList" parameterType="kr.wise.commons.damgmt.db.service.WaaTblSpac" resultMap="BaseResultMap">
+  SELECT A.*
+  	   , GET_USER_NM(A.WRIT_USER_ID) AS WRIT_USER_NM
+  	FROM WAA_TBL_SPAC A
+         INNER JOIN WAA_DB_CONN_TRG DB
+            ON A.DB_CONN_TRG_ID = DB.DB_CONN_TRG_ID
+           AND DB.REG_TYP_CD IN ('C', 'U')
+           AND DB.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')          	 
+   WHERE A.REG_TYP_CD IN ('C', 'U')
+     AND A.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+   	  <if test="dbConnTrgId != null" >
+     AND A.DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR}
+      </if>  
+   	  <if test="dbTblSpacLnm != null" >
+     AND ( 
+     	   A.DB_TBL_SPAC_PNM LIKE CONCAT( '%' , #{dbTblSpacLnm,jdbcType=VARCHAR} , '%')
+     	OR A.DB_TBL_SPAC_PNM LIKE CONCAT( '%' , UPPER(#{dbTblSpacLnm,jdbcType=VARCHAR}) , '%')
+     	OR A.DB_TBL_SPAC_LNM LIKE CONCAT( '%' , #{dbTblSpacLnm,jdbcType=VARCHAR} , '%')
+     	OR A.DB_TBL_SPAC_LNM LIKE CONCAT( '%' , UPPER(#{dbTblSpacLnm,jdbcType=VARCHAR}) , '%')
+     	  )
+      </if>  
+   	  <if test="tblSpacTypCd != null" >
+       AND A.TBL_SPAC_TYP_CD = #{tblSpacTypCd,jdbcType=VARCHAR}
+      </if>  
+   	  <if test="ddlDisplay != null" >
+       AND A.DDL_DISPLAY = #{ddlDisplay,jdbcType=VARCHAR}
+      </if>  
+    ORDER BY A.DB_TBL_SPAC_PNM 
+  </select>
+  
+  <update id="deleteDbTblSpac" parameterType="kr.wise.commons.damgmt.db.service.WaaTblSpac">
+  UPDATE WAA_TBL_SPAC 
+     SET REG_TYP_CD = 'D'
+   WHERE DB_TBL_SPAC_ID = #{dbTblSpacId}
+     AND EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+     AND REG_TYP_CD IN ('C', 'U')
+  
+  </update>
+  
+  <select id="selectByPnm" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    SELECT 
+    <include refid="Base_Column_List" />
+      FROM WAA_TBL_SPAC
+     WHERE DB_TBL_SPAC_PNM = #{dbTblSpacPnm,jdbcType=VARCHAR}
+       AND EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+       AND REG_TYP_CD IN ('C', 'U')
+  </select>
+  
+<!-- 오라클에서 사용하지 않는 쿼리 -->
+<!--   <select id="selectTblSpacMap" resultMap="BaseResultMap" parameterType="kr.wise.commons.damgmt.db.service.WaaTblSpac">
+    SELECT 
+	    A.DB_TBL_SPAC_ID, A.EXP_DTM, A.STR_DTM, A.DB_TBL_SPAC_PNM, A.DB_TBL_SPAC_LNM, A.DB_CONN_TRG_ID, 
+	    A.TBL_SPAC_TYP_CD, A.DDL_DISPLAY, A.DEFAULT_USAGE, A.DB_TBL_SPAC_DATAFILE, A.DB_TBL_SPAC_GROUP, 
+	    A.DB_TBL_SPAC_INIT_SIZE, A.DB_TBL_SPAC_NEXT_SIZE, A.DB_TBL_SPAC_MAX_SIZE, A.DB_TBL_SPAC_WRN, 
+	    A.DB_TBL_SPAC_MGN, A.DB_TBL_SPAC_SCRIPT, A.OBJ_DESCN, A.OBJ_VERS, A.REG_TYP_CD, A.WRIT_DTM, A.WRIT_USER_ID, A.DB_TBL_SPAC_FREE_SIZE
+      FROM WAA_TBL_SPAC A
+     INNER JOIN WAA_DB_CONN_TRG DB
+        ON A.DB_CONN_TRG_ID = DB.DB_CONN_TRG_ID
+       AND DB.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+       AND DB.REG_TYP_CD IN ('C', 'U')
+     WHERE A.DB_TBL_SPAC_LNM = #{dbTblSpacLnm,jdbcType=VARCHAR}
+       AND DB.DB_CONN_TRG_LNM = #{dbConnTrgLnm,jdbcType=VARCHAR}
+       AND A.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+       AND A.REG_TYP_CD IN ('C', 'U')
+  </select> -->
+</mapper>

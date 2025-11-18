@@ -1,0 +1,625 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.portal.myjob.service.RequestJobMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.portal.myjob.service.WaqReqMst" >
+    <result column="REQUEST_ID" property="requestId"  jdbcType="VARCHAR" />
+    <result column="ORGL_DTTM" property="orglDttm" jdbcType="VARCHAR" />
+    <result column="ORGL_USER" property="orglUser" jdbcType="VARCHAR"/>
+    <result column="OF_BIZ_TYPE" property="ofBizType" jdbcType="VARCHAR"/>
+    <result column="BIZ_NM" property="bizNm" jdbcType="VARCHAR"/>
+    <result column="REQUEST_STATUS" property="requestStatus" jdbcType="VARCHAR"/>
+    <result column="TOT_CNT" property="totCnt" jdbcType="DECIMAL"/>
+    <result column="REQUEST_STATUS_ID" property="requestStatusId" jdbcType="VARCHAR"/>
+    <result column="OF_BIZ_TYPE_ID" property="ofBizTypeId" jdbcType="VARCHAR"/>
+    <result column="REQ_BGN_DE" property="reqBgnde" jdbcType="VARCHAR"/>
+    <result column="REQ_END_DE" property="reqEndde" jdbcType="VARCHAR"/>
+    <result column="TOT_CNT" property="totCnt" />
+    <result column="RN" property="rn"  />
+    <result column="APRV_ID" property="aprvId" jdbcType="VARCHAR"/>
+    <result column="APRV_MTHD" property="aprvMthd" jdbcType="VARCHAR"/>
+    <result column="CNT" property="cnt" />
+    <result column="CSR_NO" property="csrNo"/>
+    <result column="USER_ID" property="userId"/>
+    
+
+  </resultMap>
+
+  <select id="searchMyRegReq" parameterType="java.util.Map" resultMap="BaseResultMap" >
+  <if test="recordCountPerPage != null" >
+  SELECT * FROM ( SELECT rownum rn, TB.* FROM (
+	</if>
+	SELECT /* RequestJobMapper.searchMyRegReq */
+			B.REQUEST_ID
+	      ,X.VALUE_KNM AS OF_BIZ_TYPE
+	      ,BIZ_NM
+	      ,B.OF_BIZ_TYPE AS OF_BIZ_TYPE_ID
+	      ,Y.VALUE_KNM AS REQUEST_STATUS
+	      ,B.REQUEST_STATUS AS REQUEST_STATUS_ID
+	      ,TO_CHAR(B.ORGL_DTTM, 'YYYY-MM-DD HH24:MI:SS') AS ORGL_DTTM
+	      ,CASE OF_BIZ_TYPE
+	         WHEN '5'
+	           THEN (SELECT COUNT(*) FROM WAQ_REQ_DMN A WHERE A.REQUEST_ID = B.REQUEST_ID)
+	         ELSE 0
+	       END AS CNT
+	      ,GET_USER_KNM(B.ORGL_USER) AS ORGL_USER
+	      ,B.ORGL_USER AS ORGL_USER_ID
+	      ,CSR_NO
+	      ,MAX(CNT.CNT) AS TOT_CNT              
+	      ,CASE WHEN IFNULL(USER_ID_01, '_') = '_'
+           THEN CASE WHEN IFNULL(USER_ID_02, '_') = '_'
+                THEN CASE WHEN IFNULL(USER_ID_03, '_') = '_'
+                     THEN CASE WHEN IFNULL(USER_ID_04, '_') = '_'
+                          THEN CASE WHEN IFNULL(USER_ID_05, '_') = '_'
+                               THEN USER_ID_06
+                               ELSE USER_ID_05 END
+                          ELSE USER_ID_04 END
+                     ELSE USER_ID_03 END
+                ELSE USER_ID_02 END
+           ELSE USER_ID_01 END AS APRV_ID
+           ,CASE WHEN IFNULL(USER_ID_01, '_') = '_'
+           THEN CASE WHEN IFNULL(USER_ID_02, '_') = '_'
+                THEN CASE WHEN IFNULL(USER_ID_03, '_') = '_'
+                     THEN CASE WHEN IFNULL(USER_ID_04, '_') = '_'
+                          THEN CASE WHEN IFNULL(USER_ID_05, '_') = '_'
+                               THEN APRV_MTHD_06
+                               ELSE APRV_MTHD_05 END
+                          ELSE APRV_MTHD_04 END
+                     ELSE APRV_MTHD_03 END
+                ELSE APRV_MTHD_02 END
+           ELSE APRV_MTHD_01 END AS APRV_MTHD
+    	  FROM WAQ_REQ_MST B
+	  	    		   		             LEFT OUTER JOIN (
+
+                        SELECT REQUEST_ID, COUNT(1) AS CNT
+                        FROM WAQ_REQ_PDM_TBL
+                        GROUP BY REQUEST_ID
+                        UNION ALL
+
+                        SELECT REQUEST_ID, COUNT(1) AS CNT
+                        FROM WAQ_REQ_DB_DDL_TBL
+                        GROUP BY REQUEST_ID
+                        UNION ALL
+
+                        SELECT REQUEST_ID, COUNT(1) AS CNT
+                        FROM WAQ_REQ_TRM_DATAELMT
+                        GROUP BY REQUEST_ID
+                        UNION ALL
+
+                        SELECT REQUEST_ID, COUNT(1) AS CNT
+                        FROM WAQ_REQ_DMN
+                        GROUP BY REQUEST_ID
+                        UNION ALL
+
+                        SELECT REQUEST_ID, COUNT(1) AS CNT
+                        FROM WAQ_REQ_TRM
+
+                        GROUP BY REQUEST_ID
+                        UNION ALL
+
+                        SELECT REQUEST_ID, COUNT(1) AS CNT
+                        FROM WAQ_REQ_WORD
+
+                        GROUP BY REQUEST_ID
+                        UNION ALL
+
+                        SELECT REQUEST_ID, COUNT(1) AS CNT
+                        FROM WAQ_REQ_DMN_GRP
+                        GROUP BY REQUEST_ID
+                        UNION ALL
+
+                        SELECT REQUEST_ID, COUNT(1) AS CNT
+                        FROM WAQ_REQ_DB_DDL_FUNC
+                        GROUP BY REQUEST_ID
+                        UNION ALL
+
+                        SELECT REQUEST_ID, COUNT(1) AS CNT
+                        FROM WAQ_REQ_MAP_NHIC_MST
+                        GROUP BY REQUEST_ID
+                        UNION ALL
+                        
+                        SELECT REQUEST_ID, COUNT(1) AS CNT
+                        FROM WAQ_REQ_DB_TUNE
+                        GROUP BY REQUEST_ID
+                        UNION ALL
+                        
+                        SELECT REQUEST_ID, COUNT(1) AS CNT
+                        FROM WAQ_REQ_PDM_CDC
+                        GROUP BY REQUEST_ID
+                        UNION ALL
+                        
+                        SELECT REQUEST_ID, COUNT(1) AS CNT
+                        FROM WAQ_REQ_CDBOOK
+                        GROUP BY REQUEST_ID
+                        UNION ALL
+                        
+                        SELECT REQUEST_ID, COUNT(1) AS CNT
+                        FROM WAQ_REQ_DUP_DATA
+                        GROUP BY REQUEST_ID
+	          )CNT
+	             ON B.REQUEST_ID = CNT.REQUEST_ID
+		   LEFT OUTER JOIN (
+			SELECT REQUEST_ID,
+			        MAX(USER_ID_01) AS USER_ID_01,
+			        MAX(APRV_MTHD_01) AS APRV_MTHD_01,
+			        MAX(USER_ID_02) AS USER_ID_02,
+			        MAX(APRV_MTHD_02) AS APRV_MTHD_02,
+			        MAX(USER_ID_03) AS USER_ID_03,
+			        MAX(APRV_MTHD_03) AS APRV_MTHD_03,
+			        MAX(USER_ID_04) AS USER_ID_04,
+			        MAX(APRV_MTHD_04) AS APRV_MTHD_04,
+			        MAX(USER_ID_05) AS USER_ID_05,
+			        MAX(APRV_MTHD_05) AS APRV_MTHD_05,
+			        MAX(USER_ID_06) AS USER_ID_06,
+			        MAX(APRV_MTHD_06) AS APRV_MTHD_06
+			FROM
+			(SELECT REQUEST_ID
+			      ,CASE APRV_STEP WHEN 1 THEN USER_ID
+			       ELSE ''  END USER_ID_01
+			      ,CASE APRV_STEP WHEN 1 THEN APRV_MTHD
+			       ELSE ''  END APRV_MTHD_01
+			      ,''   AS USER_ID_02
+			      ,''   AS APRV_MTHD_02
+			      ,''   AS USER_ID_03
+			      ,''   AS APRV_MTHD_03
+			      ,''   AS USER_ID_04
+			      ,''   AS APRV_MTHD_04
+			      ,''   AS USER_ID_05
+			      ,''   AS APRV_MTHD_05
+			      ,''   AS USER_ID_06
+			      ,''   AS APRV_MTHD_06
+			FROM WAA_APRV_PRCS
+			WHERE APRV_STATUS = '0'
+			UNION ALL
+			SELECT REQUEST_ID
+			      ,''   AS USER_ID_01
+			      ,''   AS APRV_MTHD_01
+			      ,CASE APRV_STEP WHEN 2 THEN USER_ID
+			       ELSE ''  END USER_ID_02
+			      ,CASE APRV_STEP WHEN 2 THEN APRV_MTHD
+			       ELSE ''  END APRV_MTHD_02
+			      ,''   AS USER_ID_03
+			      ,''   AS APRV_MTHD_03
+			      ,''   AS USER_ID_04
+			      ,''   AS APRV_MTHD_04
+			      ,''   AS USER_ID_05
+			      ,''   AS APRV_MTHD_05
+			      ,''   AS USER_ID_06
+			      ,''   AS APRV_MTHD_06
+			FROM WAA_APRV_PRCS
+			WHERE APRV_STATUS = '0'
+			UNION ALL
+			SELECT REQUEST_ID
+			      ,''   AS USER_ID_01
+			      ,''   AS APRV_MTHD_01
+			      ,''   AS USER_ID_02
+			      ,''   AS APRV_MTHD_02
+			      ,CASE APRV_STEP WHEN 3 THEN USER_ID
+			       ELSE ''  END USER_ID_03
+			      ,CASE APRV_STEP WHEN 3 THEN APRV_MTHD
+			       ELSE ''  END APRV_MTHD_03
+			      ,''   AS USER_ID_04
+			      ,''   AS APRV_MTHD_04
+			      ,''   AS USER_ID_05
+			      ,''   AS APRV_MTHD_05
+			      ,''   AS USER_ID_06
+			      ,''   AS APRV_MTHD_06
+			FROM WAA_APRV_PRCS
+			WHERE APRV_STATUS = '0'
+			UNION ALL
+			SELECT REQUEST_ID
+			      ,''   AS USER_ID_01
+			      ,''   AS APRV_MTHD_01
+			      ,''   AS USER_ID_02
+			      ,''   AS APRV_MTHD_02
+			      ,''   AS USER_ID_03
+			      ,''   AS APRV_MTHD_03
+			      ,CASE APRV_STEP WHEN 4 THEN USER_ID
+			       ELSE ''  END USER_ID_04
+			      ,CASE APRV_STEP WHEN 4 THEN APRV_MTHD
+			       ELSE ''  END APRV_MTHD_04
+			      ,''   AS USER_ID_05
+			      ,''   AS APRV_MTHD_05
+			      ,''   AS USER_ID_06
+			      ,''   AS APRV_MTHD_06
+			FROM WAA_APRV_PRCS
+			WHERE APRV_STATUS = '0'
+			UNION ALL
+			SELECT REQUEST_ID
+			      ,''   AS USER_ID_01
+			      ,''   AS APRV_MTHD_01
+			      ,''   AS USER_ID_02
+			      ,''   AS APRV_MTHD_02
+			      ,''   AS USER_ID_03
+			      ,''   AS APRV_MTHD_03
+			      ,''   AS USER_ID_04
+			      ,''   AS APRV_MTHD_04
+			      ,CASE APRV_STEP WHEN 5 THEN USER_ID
+			       ELSE ''  END USER_ID_05
+			      ,CASE APRV_STEP WHEN 5 THEN APRV_MTHD
+			       ELSE ''  END APRV_MTHD_05
+			      ,''   AS USER_ID_06
+			      ,''   AS APRV_MTHD_06
+			FROM WAA_APRV_PRCS
+			WHERE APRV_STATUS = '0'
+			UNION ALL
+			SELECT REQUEST_ID
+			      ,''   AS USER_ID_01
+			      ,''   AS APRV_MTHD_01
+			      ,''   AS USER_ID_02
+			      ,''   AS APRV_MTHD_02
+			      ,''   AS USER_ID_03
+			      ,''   AS APRV_MTHD_03
+			      ,''   AS USER_ID_04
+			      ,''   AS APRV_MTHD_04
+			      ,''   AS USER_ID_05
+			      ,''   AS APRV_MTHD_05
+			      ,CASE APRV_STEP WHEN 6 THEN USER_ID
+			       ELSE ''  END USER_ID_06
+			      ,CASE APRV_STEP WHEN 6 THEN APRV_MTHD
+			       ELSE ''  END APRV_MTHD_06
+			FROM WAA_APRV_PRCS
+			WHERE APRV_STATUS = '0'
+			)
+			GROUP BY REQUEST_ID) D
+			ON B.REQUEST_ID = D.REQUEST_ID	   
+			
+			LEFT OUTER JOIN WAA_COMMON_CODE X
+            ON B.OF_BIZ_TYPE = X.VALUE
+            AND X.CODE_NAME = 'RQST_BIZ_TYPE'
+            
+            LEFT OUTER JOIN WAA_COMMON_CODE Y
+            ON B.REQUEST_STATUS = Y.VALUE
+            AND Y.CODE_NAME = 'STATUS_CODE'
+			
+			
+	 WHERE 1 = 1
+	 AND	B.ORGL_USER =  #{userId}
+	 				<if test="requestId != null and requestId != ''" >
+						<![CDATA[ AND	B.REQUEST_ID =#{requestId}  		]]>
+					</if>
+	 	 			
+					 <if test="requestStatus != null and requestStatus != '' ">
+						<![CDATA[ AND	REQUEST_STATUS =  #{requestStatus}]]>
+					</if>
+					
+<!-- 					 <if test="orglDttm != null and orglDttm != '' ">
+						<![CDATA[ AND	B.ORGL_DTTM =  #{orglDttm}]]>
+						</if> -->
+	
+					 	 <if test="ofBizType != null and ofBizType != '' ">
+						<![CDATA[ AND	B.OF_BIZ_TYPE =  #{ofBizType}]]>
+					</if>
+					
+ 						<if test="ntceBgnde != null and ntceBgnde != '' and ntceEndde != null and ntceEndde != '' ">
+						<![CDATA[  AND DATE_FORMAT(B.ORGL_DTTM,'%Y-%m-%d')  BETWEEN #{ntceBgnde} AND #{ntceEndde}  
+						]]>
+					</if>
+	 	 			
+                      GROUP BY   B.REQUEST_ID
+				      ,OF_BIZ_TYPE
+				      ,BIZ_NM
+				      ,REQUEST_STATUS
+				      ,B.ORGL_DTTM
+				      ,B.ORGL_USER
+				      ,CSR_NO
+			          ,USER_ID_01
+			          ,USER_ID_02
+			          ,USER_ID_03
+			          ,USER_ID_04
+			          ,USER_ID_05
+			          ,USER_ID_06
+			          ,APRV_MTHD_01
+			          ,APRV_MTHD_02
+			          ,APRV_MTHD_03
+			          ,APRV_MTHD_04
+			          ,APRV_MTHD_05
+			          ,APRV_MTHD_06	
+			          ,X.VALUE_KNM
+                      ,Y.VALUE_KNM
+                      ,B.OF_BIZ_TYPE
+                      ,B.REQUEST_STATUS                      
+	 ORDER BY ORGL_DTTM DESC, TO_NUMBER(B.REQUEST_ID) DESC
+	 <if test="recordCountPerPage != null" >
+	 <![CDATA[ ) TB ) WHERE ROWNUM <= #{recordCountPerPage} ]]>
+	 </if>
+<!-- 			) TB ) WHERE rn BETWEEN #{firstIndex} + 1 AND #{firstIndex} + #{recordCountPerPage} -->
+  </select>
+  
+  
+  <select id="searchMyRegCount" parameterType="java.util.Map" resultMap="BaseResultMap" >
+
+		SELECT /* RequestJobMapper.searchMyRegCount */
+			COUNT(*) TOT_CNT
+		FROM (SELECT B.REQUEST_ID
+	      ,X.VALUE_KNM AS OF_BIZ_TYPE
+	      ,BIZ_NM
+	      ,B.OF_BIZ_TYPE AS OF_BIZ_TYPE_ID
+	      ,Y.VALUE_KNM AS REQUEST_STATUS
+	      ,B.REQUEST_STATUS AS REQUEST_STATUS_ID
+	      ,TO_CHAR(B.ORGL_DTTM, 'YYYY-MM-DD HH24:MI:SS') AS ORGL_DTTM
+	      ,CASE OF_BIZ_TYPE
+	         WHEN '5'
+	           THEN (SELECT COUNT(*) FROM WAQ_REQ_DMN A WHERE A.REQUEST_ID = B.REQUEST_ID)
+	         ELSE 0
+	       END AS CNT
+	      ,GET_USER_KNM(B.ORGL_USER) AS ORGL_USER
+	      ,B.ORGL_USER AS ORGL_USER_ID
+	      ,CSR_NO
+	      ,MAX(CNT.CNT) AS TOT_CNT              
+	      ,CASE WHEN IFNULL(USER_ID_01, '_') = '_'
+           THEN CASE WHEN IFNULL(USER_ID_02, '_') = '_'
+                THEN CASE WHEN IFNULL(USER_ID_03, '_') = '_'
+                     THEN CASE WHEN IFNULL(USER_ID_04, '_') = '_'
+                          THEN CASE WHEN IFNULL(USER_ID_05, '_') = '_'
+                               THEN USER_ID_06
+                               ELSE USER_ID_05 END
+                          ELSE USER_ID_04 END
+                     ELSE USER_ID_03 END
+                ELSE USER_ID_02 END
+           ELSE USER_ID_01 END AS APRV_ID
+           ,CASE WHEN IFNULL(USER_ID_01, '_') = '_'
+           THEN CASE WHEN IFNULL(USER_ID_02, '_') = '_'
+                THEN CASE WHEN IFNULL(USER_ID_03, '_') = '_'
+                     THEN CASE WHEN IFNULL(USER_ID_04, '_') = '_'
+                          THEN CASE WHEN IFNULL(USER_ID_05, '_') = '_'
+                               THEN APRV_MTHD_06
+                               ELSE APRV_MTHD_05 END
+                          ELSE APRV_MTHD_04 END
+                     ELSE APRV_MTHD_03 END
+                ELSE APRV_MTHD_02 END
+           ELSE APRV_MTHD_01 END AS APRV_MTHD
+    	  FROM WAQ_REQ_MST B
+	  	    		   		             LEFT OUTER JOIN (
+
+                        SELECT REQUEST_ID, COUNT(1) AS CNT
+                        FROM WAQ_REQ_PDM_TBL
+                        GROUP BY REQUEST_ID
+                        UNION ALL
+
+                        SELECT REQUEST_ID, COUNT(1) AS CNT
+                        FROM WAQ_REQ_DB_DDL_TBL
+                        GROUP BY REQUEST_ID
+                        UNION ALL
+
+                        SELECT REQUEST_ID, COUNT(1) AS CNT
+                        FROM WAQ_REQ_TRM_DATAELMT
+                        GROUP BY REQUEST_ID
+                        UNION ALL
+
+                        SELECT REQUEST_ID, COUNT(1) AS CNT
+                        FROM WAQ_REQ_DMN
+                        GROUP BY REQUEST_ID
+                        UNION ALL
+
+                        SELECT REQUEST_ID, COUNT(1) AS CNT
+                        FROM WAQ_REQ_TRM
+
+                        GROUP BY REQUEST_ID
+                        UNION ALL
+
+                        SELECT REQUEST_ID, COUNT(1) AS CNT
+                        FROM WAQ_REQ_WORD
+
+                        GROUP BY REQUEST_ID
+                        UNION ALL
+
+                        SELECT REQUEST_ID, COUNT(1) AS CNT
+                        FROM WAQ_REQ_DMN_GRP
+                        GROUP BY REQUEST_ID
+                        UNION ALL
+
+                        SELECT REQUEST_ID, COUNT(1) AS CNT
+                        FROM WAQ_REQ_DB_DDL_FUNC
+                        GROUP BY REQUEST_ID
+                        UNION ALL
+
+                        SELECT REQUEST_ID, COUNT(1) AS CNT
+                        FROM WAQ_REQ_MAP_NHIC_MST
+                        GROUP BY REQUEST_ID
+                        UNION ALL
+                        
+                        SELECT REQUEST_ID, COUNT(1) AS CNT
+                        FROM WAQ_REQ_DB_TUNE
+                        GROUP BY REQUEST_ID
+                        UNION ALL
+                        
+                        SELECT REQUEST_ID, COUNT(1) AS CNT
+                        FROM WAQ_REQ_PDM_CDC
+                        GROUP BY REQUEST_ID
+                        UNION ALL
+                        
+                        SELECT REQUEST_ID, COUNT(1) AS CNT
+                        FROM WAQ_REQ_CDBOOK
+                        GROUP BY REQUEST_ID
+                        UNION ALL
+                        
+                        SELECT REQUEST_ID, COUNT(1) AS CNT
+                        FROM WAQ_REQ_DUP_DATA
+                        GROUP BY REQUEST_ID
+	          )CNT
+	             ON B.REQUEST_ID = CNT.REQUEST_ID
+		   LEFT OUTER JOIN (
+			SELECT REQUEST_ID,
+			        MAX(USER_ID_01) AS USER_ID_01,
+			        MAX(APRV_MTHD_01) AS APRV_MTHD_01,
+			        MAX(USER_ID_02) AS USER_ID_02,
+			        MAX(APRV_MTHD_02) AS APRV_MTHD_02,
+			        MAX(USER_ID_03) AS USER_ID_03,
+			        MAX(APRV_MTHD_03) AS APRV_MTHD_03,
+			        MAX(USER_ID_04) AS USER_ID_04,
+			        MAX(APRV_MTHD_04) AS APRV_MTHD_04,
+			        MAX(USER_ID_05) AS USER_ID_05,
+			        MAX(APRV_MTHD_05) AS APRV_MTHD_05,
+			        MAX(USER_ID_06) AS USER_ID_06,
+			        MAX(APRV_MTHD_06) AS APRV_MTHD_06
+			FROM
+			(SELECT REQUEST_ID
+			      ,CASE APRV_STEP WHEN 1 THEN USER_ID
+			       ELSE ''  END USER_ID_01
+			      ,CASE APRV_STEP WHEN 1 THEN APRV_MTHD
+			       ELSE ''  END APRV_MTHD_01
+			      ,''   AS USER_ID_02
+			      ,''   AS APRV_MTHD_02
+			      ,''   AS USER_ID_03
+			      ,''   AS APRV_MTHD_03
+			      ,''   AS USER_ID_04
+			      ,''   AS APRV_MTHD_04
+			      ,''   AS USER_ID_05
+			      ,''   AS APRV_MTHD_05
+			      ,''   AS USER_ID_06
+			      ,''   AS APRV_MTHD_06
+			FROM WAA_APRV_PRCS
+			WHERE APRV_STATUS = '0'
+			UNION ALL
+			SELECT REQUEST_ID
+			      ,''   AS USER_ID_01
+			      ,''   AS APRV_MTHD_01
+			      ,CASE APRV_STEP WHEN 2 THEN USER_ID
+			       ELSE ''  END USER_ID_02
+			      ,CASE APRV_STEP WHEN 2 THEN APRV_MTHD
+			       ELSE ''  END APRV_MTHD_02
+			      ,''   AS USER_ID_03
+			      ,''   AS APRV_MTHD_03
+			      ,''   AS USER_ID_04
+			      ,''   AS APRV_MTHD_04
+			      ,''   AS USER_ID_05
+			      ,''   AS APRV_MTHD_05
+			      ,''   AS USER_ID_06
+			      ,''   AS APRV_MTHD_06
+			FROM WAA_APRV_PRCS
+			WHERE APRV_STATUS = '0'
+			UNION ALL
+			SELECT REQUEST_ID
+			      ,''   AS USER_ID_01
+			      ,''   AS APRV_MTHD_01
+			      ,''   AS USER_ID_02
+			      ,''   AS APRV_MTHD_02
+			      ,CASE APRV_STEP WHEN 3 THEN USER_ID
+			       ELSE ''  END USER_ID_03
+			      ,CASE APRV_STEP WHEN 3 THEN APRV_MTHD
+			       ELSE ''  END APRV_MTHD_03
+			      ,''   AS USER_ID_04
+			      ,''   AS APRV_MTHD_04
+			      ,''   AS USER_ID_05
+			      ,''   AS APRV_MTHD_05
+			      ,''   AS USER_ID_06
+			      ,''   AS APRV_MTHD_06
+			FROM WAA_APRV_PRCS
+			WHERE APRV_STATUS = '0'
+			UNION ALL
+			SELECT REQUEST_ID
+			      ,''   AS USER_ID_01
+			      ,''   AS APRV_MTHD_01
+			      ,''   AS USER_ID_02
+			      ,''   AS APRV_MTHD_02
+			      ,''   AS USER_ID_03
+			      ,''   AS APRV_MTHD_03
+			      ,CASE APRV_STEP WHEN 4 THEN USER_ID
+			       ELSE ''  END USER_ID_04
+			      ,CASE APRV_STEP WHEN 4 THEN APRV_MTHD
+			       ELSE ''  END APRV_MTHD_04
+			      ,''   AS USER_ID_05
+			      ,''   AS APRV_MTHD_05
+			      ,''   AS USER_ID_06
+			      ,''   AS APRV_MTHD_06
+			FROM WAA_APRV_PRCS
+			WHERE APRV_STATUS = '0'
+			UNION ALL
+			SELECT REQUEST_ID
+			      ,''   AS USER_ID_01
+			      ,''   AS APRV_MTHD_01
+			      ,''   AS USER_ID_02
+			      ,''   AS APRV_MTHD_02
+			      ,''   AS USER_ID_03
+			      ,''   AS APRV_MTHD_03
+			      ,''   AS USER_ID_04
+			      ,''   AS APRV_MTHD_04
+			      ,CASE APRV_STEP WHEN 5 THEN USER_ID
+			       ELSE ''  END USER_ID_05
+			      ,CASE APRV_STEP WHEN 5 THEN APRV_MTHD
+			       ELSE ''  END APRV_MTHD_05
+			      ,''   AS USER_ID_06
+			      ,''   AS APRV_MTHD_06
+			FROM WAA_APRV_PRCS
+			WHERE APRV_STATUS = '0'
+			UNION ALL
+			SELECT REQUEST_ID
+			      ,''   AS USER_ID_01
+			      ,''   AS APRV_MTHD_01
+			      ,''   AS USER_ID_02
+			      ,''   AS APRV_MTHD_02
+			      ,''   AS USER_ID_03
+			      ,''   AS APRV_MTHD_03
+			      ,''   AS USER_ID_04
+			      ,''   AS APRV_MTHD_04
+			      ,''   AS USER_ID_05
+			      ,''   AS APRV_MTHD_05
+			      ,CASE APRV_STEP WHEN 6 THEN USER_ID
+			       ELSE ''  END USER_ID_06
+			      ,CASE APRV_STEP WHEN 6 THEN APRV_MTHD
+			       ELSE ''  END APRV_MTHD_06
+			FROM WAA_APRV_PRCS
+			WHERE APRV_STATUS = '0'
+			)
+			GROUP BY REQUEST_ID) D
+			ON B.REQUEST_ID = D.REQUEST_ID	   
+			
+			LEFT OUTER JOIN WAA_COMMON_CODE X
+            ON B.OF_BIZ_TYPE = X.VALUE
+            AND X.CODE_NAME = 'RQST_BIZ_TYPE'
+            
+            LEFT OUTER JOIN WAA_COMMON_CODE Y
+            ON B.REQUEST_STATUS = Y.VALUE
+            AND Y.CODE_NAME = 'STATUS_CODE'
+			
+			
+	 WHERE 1 = 1
+	 AND	B.ORGL_USER =  #{userId}
+	 				<if test="requestId != null and requestId != ''" >
+						<![CDATA[ AND	B.REQUEST_ID =#{requestId}  		]]>
+					</if>
+	 	 			
+					 <if test="requestStatus != null and requestStatus != '' ">
+						<![CDATA[ AND	REQUEST_STATUS =  #{requestStatus}]]>
+					</if>
+					
+<!-- 					 <if test="orglDttm != null and orglDttm != '' ">
+						<![CDATA[ AND	B.ORGL_DTTM =  #{orglDttm}]]>
+						</if> -->
+	
+					 	 <if test="ofBizType != null and ofBizType != '' ">
+						<![CDATA[ AND	B.OF_BIZ_TYPE =  #{ofBizType}]]>
+					</if>
+					
+ 						<if test="reqBgnde != null and reqBgnde != '' and reqEndde != null and reqEndde != '' ">
+						<![CDATA[  AND TO_CHAR(B.ORGL_DTTM,'%Y-%m-%d')  BETWEEN #{reqBgnde} AND #{reqEndde}  
+						]]>
+					</if>
+	 	 			
+                      GROUP BY   B.REQUEST_ID
+				      ,OF_BIZ_TYPE
+				      ,BIZ_NM
+				      ,REQUEST_STATUS
+				      ,B.ORGL_DTTM
+				      ,B.ORGL_USER
+				      ,CSR_NO
+			          ,USER_ID_01
+			          ,USER_ID_02
+			          ,USER_ID_03
+			          ,USER_ID_04
+			          ,USER_ID_05
+			          ,USER_ID_06
+			          ,APRV_MTHD_01
+			          ,APRV_MTHD_02
+			          ,APRV_MTHD_03
+			          ,APRV_MTHD_04
+			          ,APRV_MTHD_05
+			          ,APRV_MTHD_06	
+			          ,X.VALUE_KNM
+                      ,Y.VALUE_KNM
+                      ,B.OF_BIZ_TYPE
+                      ,B.REQUEST_STATUS       	       ) TB 
+	 
+  </select>
+    
+</mapper>

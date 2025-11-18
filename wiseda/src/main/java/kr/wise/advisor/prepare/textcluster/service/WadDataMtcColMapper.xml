@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.wise.advisor.prepare.textcluster.service.WadDataMtcColMapper">
+  <resultMap id="BaseResultMap" type="kr.wise.advisor.prepare.textcluster.service.WadDataMtcCol" extends="kr.wise.advisor.prepare.textcluster.service.WadDataMtcTblMapper.BaseResultMap">
+    <id column="MTC_ID" jdbcType="VARCHAR" property="mtcId" />
+    <id column="MTC_COL_SNO" jdbcType="DECIMAL" property="mtcColSno" />
+    <result column="SRC_DBC_COL_NM" jdbcType="VARCHAR" property="srcDbcColNm" />
+    <result column="TGT_DBC_COL_NM" jdbcType="VARCHAR" property="tgtDbcColNm" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    MTC_ID, MTC_COL_SNO, SRC_DBC_COL_NM, TGT_DBC_COL_NM, RQST_NO, RQST_SNO, OBJ_DESCN, 
+    OBJ_VERS, REG_TYP_CD, RQST_DTM, RQST_USER_ID
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="map" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from WAD_DATA_MTC_COL
+    where MTC_ID = #{mtcId,jdbcType=VARCHAR}
+      and MTC_COL_SNO = #{mtcColSno,jdbcType=DECIMAL}
+  </select>
+  
+  <select id="selectColList" parameterType="string" resultMap="BaseResultMap">
+  --데이터매칭 컬럼 목록 by 매칭ID
+  SELECT A.MTC_ID
+  	   , A.SRC_DB_CONN_TRG_ID
+  	   , A.SRC_DBC_SCH_ID
+  	   , A.SRC_DBC_TBL_NM
+  	   , A.TGT_DB_CONN_TRG_ID
+  	   , A.TGT_DBC_SCH_ID
+  	   , A.TGT_DBC_TBL_NM
+  	   , B.MTC_COL_SNO 
+  	   , B.SRC_DBC_COL_NM
+  	   , B.TGT_DBC_COL_NM  
+    FROM WAD_DATA_MTC_TBL A
+    JOIN WAD_DATA_MTC_COL B
+      ON A.MTC_ID = B.MTC_ID
+   WHERE A.MTC_ID = #{mtcId,jdbcType=VARCHAR}
+   
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="map">
+    delete from WAD_DATA_MTC_COL
+    where MTC_ID = #{mtcId,jdbcType=VARCHAR}
+      and MTC_COL_SNO = #{mtcColSno,jdbcType=DECIMAL}
+  </delete>
+  
+  <delete id="deleteByMtcId" parameterType="map">
+    delete from WAD_DATA_MTC_COL
+    where MTC_ID = #{mtcId,jdbcType=VARCHAR}    
+  </delete>
+  
+  <insert id="insert" parameterType="kr.wise.advisor.prepare.textcluster.service.WadDataMtcCol">
+    insert into WAD_DATA_MTC_COL (MTC_ID, MTC_COL_SNO, SRC_DBC_COL_NM, 
+      TGT_DBC_COL_NM, RQST_NO, RQST_SNO, 
+      OBJ_DESCN, OBJ_VERS, REG_TYP_CD, 
+      RQST_DTM, RQST_USER_ID)
+    values (#{mtcId,jdbcType=VARCHAR}, #{mtcColSno,jdbcType=DECIMAL}, #{srcDbcColNm,jdbcType=VARCHAR}, 
+      #{tgtDbcColNm,jdbcType=VARCHAR}, #{rqstNo,jdbcType=VARCHAR}, #{rqstSno,jdbcType=DECIMAL}, 
+      #{objDescn,jdbcType=VARCHAR}, #{objVers,jdbcType=DECIMAL}, #{regTypCd,jdbcType=VARCHAR}, 
+      #{rqstDtm,jdbcType=TIMESTAMP}, #{rqstUserId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="kr.wise.advisor.prepare.textcluster.service.WadDataMtcCol">
+    insert into WAD_DATA_MTC_COL
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="mtcId != null">
+        MTC_ID,
+      </if>
+      <if test="mtcColSno != null">
+        MTC_COL_SNO,
+      </if>
+      <if test="srcDbcColNm != null">
+        SRC_DBC_COL_NM,
+      </if>
+      <if test="tgtDbcColNm != null">
+        TGT_DBC_COL_NM,
+      </if>
+      <if test="rqstNo != null">
+        RQST_NO,
+      </if>
+      <if test="rqstSno != null">
+        RQST_SNO,
+      </if>
+      <if test="objDescn != null">
+        OBJ_DESCN,
+      </if>
+      
+        OBJ_VERS,     
+        REG_TYP_CD,      
+        RQST_DTM,
+     
+      <if test="rqstUserId != null">
+        RQST_USER_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="mtcId != null">
+        #{mtcId,jdbcType=VARCHAR},
+      </if>
+      <if test="mtcColSno != null">
+        #{mtcColSno,jdbcType=DECIMAL},
+      </if>
+      <if test="srcDbcColNm != null">
+        #{srcDbcColNm,jdbcType=VARCHAR},
+      </if>
+      <if test="tgtDbcColNm != null">
+        #{tgtDbcColNm,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstNo != null">
+        #{rqstNo,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstSno != null">
+        #{rqstSno,jdbcType=DECIMAL},
+      </if>
+      <if test="objDescn != null">
+        #{objDescn,jdbcType=VARCHAR},
+      </if>
+     
+        1,
+        'C',      
+        SYSDATE,
+     
+      <if test="rqstUserId != null">
+        #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.advisor.prepare.textcluster.service.WadDataMtcCol">
+    update WAD_DATA_MTC_COL
+    <set>
+      <if test="srcDbcColNm != null">
+        SRC_DBC_COL_NM = #{srcDbcColNm,jdbcType=VARCHAR},
+      </if>
+      <if test="tgtDbcColNm != null">
+        TGT_DBC_COL_NM = #{tgtDbcColNm,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstNo != null">
+        RQST_NO = #{rqstNo,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstSno != null">
+        RQST_SNO = #{rqstSno,jdbcType=DECIMAL},
+      </if>
+      <if test="objDescn != null">
+        OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null">
+        OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null">
+        REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDtm != null">
+        RQST_DTM = #{rqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rqstUserId != null">
+        RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where MTC_ID = #{mtcId,jdbcType=VARCHAR}
+      and MTC_COL_SNO = #{mtcColSno,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="kr.wise.advisor.prepare.textcluster.service.WadDataMtcCol">
+    update WAD_DATA_MTC_COL
+    set SRC_DBC_COL_NM = #{srcDbcColNm,jdbcType=VARCHAR},
+      TGT_DBC_COL_NM = #{tgtDbcColNm,jdbcType=VARCHAR},
+      RQST_NO = #{rqstNo,jdbcType=VARCHAR},
+      RQST_SNO = #{rqstSno,jdbcType=DECIMAL},
+      OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      RQST_DTM = #{rqstDtm,jdbcType=TIMESTAMP},
+      RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR}
+    where MTC_ID = #{mtcId,jdbcType=VARCHAR}
+      and MTC_COL_SNO = #{mtcColSno,jdbcType=DECIMAL}
+  </update>
+</mapper>

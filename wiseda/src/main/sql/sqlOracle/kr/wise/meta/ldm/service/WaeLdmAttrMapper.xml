@@ -1,0 +1,482 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.meta.ldm.service.WaeLdmAttrMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.meta.ldm.service.WaqLdmAttr" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+    <id column="RQST_NO"      property="rqstNo" jdbcType="VARCHAR" />
+    <id column="RQST_SNO"     property="rqstSno" jdbcType="DECIMAL" />
+    <id column="RQST_DTL_SNO" property="rqstDtlSno" jdbcType="DECIMAL" />
+    
+    <result column="LDM_ENTY_ID"  property="ldmEntyId"  jdbcType="VARCHAR" />
+    <result column="LDM_ENTY_LNM" property="ldmEntyLnm" jdbcType="VARCHAR" />
+    <result column="LDM_ATTR_ID"  property="ldmAttrId"  jdbcType="VARCHAR" />    
+    <result column="LDM_ATTR_LNM" property="ldmAttrLnm" jdbcType="VARCHAR" />
+            
+    <result column="SUBJ_ID"   property="subjId"   jdbcType="VARCHAR" />
+    <result column="SUBJ_LNM"  property="subjLnm"  jdbcType="VARCHAR" />
+    <result column="SDITM_ID"  property="sditmId"  jdbcType="VARCHAR" />
+    <result column="ATTR_ORD"  property="attrOrd"   jdbcType="DECIMAL" />
+    <result column="DATA_TYPE" property="dataType" jdbcType="VARCHAR" />
+    <result column="DATA_LEN"  property="dataLen"  jdbcType="DECIMAL" />
+    <result column="DATA_SCAL" property="dataScal" jdbcType="DECIMAL" />
+    <result column="PK_YN"     property="pkYn"     jdbcType="VARCHAR" />
+    <result column="PK_ORD"    property="pkOrd"    jdbcType="DECIMAL" />
+    <result column="NONUL_YN"  property="nonulYn"  jdbcType="VARCHAR" />
+    <result column="DEFLT_VAL" property="defltVal" jdbcType="VARCHAR" />    
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    RQST_NO, RQST_SNO, RQST_DTL_SNO, LDM_ATTR_ID, LDM_ATTR_PNM, LDM_ATTR_LNM, BF_LDM_ATTR_PNM, 
+    RQST_DCD, VRF_CD, VRF_RMK, LDM_ENTY_ID, LDM_ENTY_PNM, MDL_LNM, UPP_SUBJ_LNM, SUBJ_ID, 
+    SUBJ_LNM, SDITM_ID, ATTR_ORD, DATA_TYPE, DATA_LEN, DATA_SCAL, PK_YN, PK_ORD, NONUL_YN, 
+    DEFLT_VAL, OBJ_DESCN, OBJ_VERS, REG_TYP_CD, FRS_RQST_DTM, FRS_RQST_USER_ID, RQST_DTM, 
+    RQST_USER_ID, APRV_DTM, APRV_USER_ID, ENC_YN
+  </sql>
+  <sql id="Base_Column_List2" >
+      A.RQST_NO, A.RQST_SNO, A.RQST_DTL_SNO, A.LDM_ATTR_ID, A.LDM_ATTR_PNM, A.LDM_ATTR_LNM, A.BF_LDM_ATTR_PNM 
+    , A.RQST_DCD, A.VRF_CD, A.VRF_RMK, A.LDM_ENTY_ID, A.LDM_ENTY_PNM, A.MDL_LNM, A.UPP_SUBJ_LNM, A.SUBJ_ID
+    , A.SUBJ_LNM, A.SDITM_ID, A.ATTR_ORD, A.DATA_TYPE, A.DATA_LEN, A.DATA_SCAL
+    , CASE WHEN A.PK_YN IS NULL THEN 'N' ELSE A.PK_YN END AS PK_YN, A.PK_ORD
+    , CASE WHEN A.NONUL_YN IS NULL THEN 'N' ELSE A.NONUL_YN END AS NONUL_YN 
+    , A.DEFLT_VAL, A.OBJ_DESCN, A.OBJ_VERS, A.REG_TYP_CD, A.FRS_RQST_DTM, A.FRS_RQST_USER_ID, A.RQST_DTM 
+    , A.RQST_USER_ID, A.APRV_DTM, A.APRV_USER_ID, B.FULL_PATH
+  </sql>
+
+  <sql id="waq_Column_List" >
+    RQST_NO, RQST_SNO, RQST_DTL_SNO, LDM_ATTR_ID, LDM_ATTR_PNM, LDM_ATTR_LNM, BF_LDM_ATTR_PNM, 
+    RQST_DCD, VRF_CD, VRF_RMK, LDM_ENTY_ID, LDM_ENTY_PNM, MDL_LNM, UPP_SUBJ_LNM, SUBJ_ID, 
+    SUBJ_LNM, SDITM_ID, ATTR_ORD, DATA_TYPE, DATA_LEN, DATA_SCAL, PK_YN, PK_ORD, NONUL_YN, 
+    DEFLT_VAL, OBJ_DESCN, OBJ_VERS, REG_TYP_CD, FRS_RQST_DTM, FRS_RQST_USER_ID, RQST_DTM, 
+    RQST_USER_ID, APRV_DTM, APRV_USER_ID
+  </sql>
+
+  <select id="selectLdmColDetail" resultMap="BaseResultMap" parameterType="kr.wise.meta.ldm.service.WaqLdmAttr" >
+    select 
+    <include refid="Base_Column_List" />
+    from WAE_LDM_ATTR
+    where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      and RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+      and RQST_DTL_SNO = #{rqstDtlSno,jdbcType=DECIMAL}
+  </select>
+
+  <select id="selectLdmColRqstList" parameterType="kr.wise.commons.rqstmst.service.WaqMstr" resultMap="BaseResultMap">
+  	SELECT 
+  	<include refid="Base_Column_List2"/>
+   	, CASE WHEN A.VRF_CD = '2' THEN '#FF0000' ELSE CASE WHEN A.VRF_CD = '5' THEN '#0000FF'  END END AS FontColor   
+ 	--, CASE WHEN A.VRF_CD = '2' THEN '#FF0000' END AS FontColor
+  	, U.USER_NM AS RQST_USER_NM
+  	, A.ENC_YN
+  	FROM WAE_LDM_ATTR A
+  	JOIN WAQ_LDM_ENTY B
+  	  ON A.RQST_NO = B.RQST_NO
+  	 AND A.RQST_SNO = B.RQST_SNO
+  	LEFT OUTER JOIN WAA_USER U
+  	  ON A.RQST_USER_ID = U.USER_ID
+  	 AND U.REG_TYP_CD IN ('C', 'U')
+  	 AND U.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+  	WHERE A.RQST_NO = #{rqstNo}
+  	<if test='rqstSno != null'>
+      AND A.RQST_SNO = #{rqstSno}
+  	</if>
+  	ORDER BY A.RQST_SNO, A.ATTR_ORD
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="kr.wise.meta.ldm.service.WaqLdmAttr" >
+    delete from WAE_LDM_ATTR
+    where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      and RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+      and RQST_DTL_SNO = #{rqstDtlSno,jdbcType=DECIMAL}
+  </delete>
+  
+  <insert id="insert" parameterType="kr.wise.meta.ldm.service.WaqLdmAttr" >
+    insert into WAE_LDM_ATTR (RQST_NO, RQST_SNO, RQST_DTL_SNO, 
+      LDM_ATTR_ID, LDM_ATTR_PNM, LDM_ATTR_LNM, 
+      BF_LDM_ATTR_PNM, RQST_DCD, VRF_CD, 
+      VRF_RMK, LDM_ENTY_ID, LDM_ENTY_PNM, 
+      MDL_LNM, UPP_SUBJ_LNM, SUBJ_ID, 
+      SUBJ_LNM, SDITM_ID, ATTR_ORD, 
+      DATA_TYPE, DATA_LEN, DATA_SCAL, 
+      PK_YN, PK_ORD, NONUL_YN, 
+      DEFLT_VAL, OBJ_DESCN, OBJ_VERS, 
+      REG_TYP_CD, FRS_RQST_DTM, FRS_RQST_USER_ID, 
+      RQST_DTM, RQST_USER_ID, APRV_DTM, 
+      APRV_USER_ID)
+    values (#{rqstNo,jdbcType=VARCHAR}, #{rqstSno,jdbcType=DECIMAL}, #{rqstDtlSno,jdbcType=DECIMAL}, 
+      #{pdmColId,jdbcType=VARCHAR}, #{pdmColPnm,jdbcType=VARCHAR}, #{pdmColLnm,jdbcType=VARCHAR}, 
+      #{bfLdmColPnm,jdbcType=VARCHAR}, #{rqstDcd,jdbcType=VARCHAR}, #{vrfCd,jdbcType=VARCHAR}, 
+      #{vrfRmk,jdbcType=VARCHAR}, #{pdmTblId,jdbcType=VARCHAR}, #{pdmTblPnm,jdbcType=VARCHAR}, 
+      #{mdlLnm,jdbcType=VARCHAR}, #{uppSubjLnm,jdbcType=VARCHAR}, #{subjId,jdbcType=VARCHAR}, 
+      #{subjLnm,jdbcType=VARCHAR}, #{sditmId,jdbcType=VARCHAR}, #{attrOrd,jdbcType=DECIMAL}, 
+      #{dataType,jdbcType=VARCHAR}, #{dataLen,jdbcType=DECIMAL}, #{dataScal,jdbcType=DECIMAL}, 
+      #{pkYn,jdbcType=VARCHAR}, #{pkOrd,jdbcType=DECIMAL}, #{nonulYn,jdbcType=VARCHAR}, 
+      #{defltVal,jdbcType=VARCHAR}, #{objDescn,jdbcType=VARCHAR}, #{objVers,jdbcType=DECIMAL}, 
+      #{regTypCd,jdbcType=VARCHAR}, #{frsRqstDtm,jdbcType=TIMESTAMP}, #{frsRqstUserId,jdbcType=VARCHAR}, 
+      #{rqstDtm,jdbcType=TIMESTAMP}, #{rqstUserId,jdbcType=VARCHAR}, #{aprvDtm,jdbcType=TIMESTAMP}, 
+      #{aprvUserId,jdbcType=VARCHAR})
+  </insert>
+  
+  <insert id="insertSelective" parameterType="kr.wise.meta.ldm.service.WaeLdmAttr" >
+  	
+    INSERT INTO WAE_LDM_ATTR
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="rqstNo != null" >
+        RQST_NO,
+      </if>
+      <if test="fullPath != null" >
+        FULL_PATH,
+      </if>      
+      <if test="ldmEntyLnm != null" >
+        LDM_ENTY_LNM,
+      </if>      
+      <if test="ldmAttrLnm != null" >
+        LDM_ATTR_LNM,
+      </if>
+      
+      <if test="attrOrd != null" >
+        ATTR_ORD,
+      </if>
+      <if test="dataType != null" >
+        DATA_TYPE,
+      </if>
+      <if test="dataLen != null" >
+        DATA_LEN,
+      </if>
+      <if test="dataScal != null" >
+        DATA_SCAL,
+      </if>
+        PK_YN,
+      <if test="pkOrd != null" >
+        PK_ORD,
+      </if>
+        NONUL_YN,
+      <if test="defltVal != null" >
+        DEFLT_VAL,
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN,
+      </if>        
+      <if test="regTypCd != null" >
+        REG_TYP_CD,
+      </if>
+        FRS_RQST_DTM,
+        FRS_RQST_USER_ID,
+        RQST_DTM,
+      <if test="rqstUserId != null" >
+        RQST_USER_ID,
+      </if>
+       
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="rqstNo != null" >
+        #{rqstNo,jdbcType=VARCHAR},
+      </if>
+      <if test="fullPath != null" >
+        #{fullPath,jdbcType=VARCHAR},
+      </if>
+      <if test="ldmEntyLnm != null" >
+        #{ldmEntyLnm,jdbcType=VARCHAR},
+      </if>      
+      <if test="ldmAttrLnm != null" >
+        #{ldmAttrLnm,jdbcType=VARCHAR},
+      </if>
+      
+      <if test="attrOrd != null" >
+        #{attrOrd,jdbcType=DECIMAL},
+      </if>
+      <if test="dataType != null" >
+        #{dataType,jdbcType=VARCHAR},
+      </if>
+      <if test="dataLen != null" >
+        #{dataLen,jdbcType=DECIMAL},
+      </if>
+      <if test="dataScal != null" >
+        #{dataScal,jdbcType=DECIMAL},
+      </if>
+        #{pkYn,jdbcType=VARCHAR},
+      <if test="pkOrd != null" >
+        #{pkOrd,jdbcType=DECIMAL},
+      </if>
+        #{nonulYn,jdbcType=VARCHAR},
+      <if test="defltVal != null" >
+        #{defltVal,jdbcType=VARCHAR},
+      </if>
+      <if test="objDescn != null" >
+        #{objDescn,jdbcType=VARCHAR},
+      </if>       
+      <if test="regTypCd != null" >
+        #{regTypCd,jdbcType=VARCHAR},
+      </if>
+        SYSDATE ,
+        #{frsRqstUserId,jdbcType=VARCHAR},
+        SYSDATE,
+      <if test="rqstUserId != null" >
+        #{rqstUserId,jdbcType=VARCHAR},
+      </if>        
+    </trim>
+  </insert> 
+  
+  <insert id="insertByRqstSno" parameterType="kr.wise.meta.ldm.service.WaqLdmEnty"> 
+    --테이블 추가시 WAM에 존재하는 컬럼 추가한다.
+  	INSERT INTO WAE_LDM_ATTR(
+	      RQST_NO, RQST_SNO, RQST_DTL_SNO, LDM_ATTR_ID, LDM_ATTR_PNM, LDM_ATTR_LNM, RQST_DCD
+	    , LDM_ENTY_ID, LDM_ENTY_PNM, SUBJ_ID, SDITM_ID, ATTR_ORD, DATA_TYPE, DATA_LEN, DATA_SCAL, PK_YN, PK_ORD, NONUL_YN, DEFLT_VAL
+	    , OBJ_DESCN, OBJ_VERS, FRS_RQST_DTM, FRS_RQST_USER_ID, RQST_DTM, RQST_USER_ID, ENC_YN
+	)
+	SELECT B.RQST_NO, B.RQST_SNO
+	      , (SELECT NVL(MAX(RQST_DTL_SNO), 0) 
+	           FROM WAE_LDM_ATTR 
+	          WHERE RQST_NO = #{rqstNo} 
+	            AND RQST_SNO = #{rqstSno} 
+	         ) + ROWNUM AS RQST_DTL_SNO
+	      , C.LDM_ATTR_ID, C.LDM_ATTR_PNM, C.LDM_ATTR_LNM, 'CU' AS RQST_DCD
+	      , C.LDM_ENTY_ID
+	      , A.LDM_ENTY_PNM
+	      , A.SUBJ_ID
+	      , C.SDITM_ID
+	      , C.ATTR_ORD
+	      , C.DATA_TYPE
+	      , C.DATA_LEN
+	      , C.DATA_SCAL
+	      , NVL(C.PK_YN,'N')
+	      , C.PK_ORD
+	      , NVL(C.NONUL_YN,'N')
+	      , C.DEFLT_VAL
+	      , C.OBJ_DESCN
+	      , C.OBJ_VERS,  B.FRS_RQST_DTM, B.FRS_RQST_USER_ID, SYSDATE, B.RQST_USER_ID, C.ENC_YN
+	  FROM WAM_LDM_TBL A 
+	       INNER JOIN WAQ_LDM_ENTY B
+	         ON A.LDM_ENTY_ID = B.LDM_ENTY_ID
+	       INNER JOIN WAM_LDM_COL C
+	          ON A.LDM_ENTY_ID = C.LDM_ENTY_ID
+	WHERE B.RQST_NO = #{rqstNo}
+	  AND B.RQST_SNO = #{rqstSno}
+  </insert>
+
+  
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.meta.ldm.service.WaeLdmAttr" >
+    update WAE_LDM_ATTR
+    <set >
+      <if test="pdmColId != null" >
+        LDM_ATTR_ID = #{pdmColId,jdbcType=VARCHAR},
+      </if>
+        LDM_ATTR_PNM = #{pdmColPnm,jdbcType=VARCHAR},
+        LDM_ATTR_LNM = #{pdmColLnm,jdbcType=VARCHAR},
+      <if test="bfLdmColPnm != null" >
+        BF_LDM_ATTR_PNM = #{bfLdmColPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDcd != null" >
+        RQST_DCD = #{rqstDcd,jdbcType=VARCHAR},
+      </if>
+      <if test="vrfCd != null" >
+        VRF_CD = #{vrfCd,jdbcType=VARCHAR},
+      </if>
+      <if test="vrfRmk != null" >
+        VRF_RMK = #{vrfRmk,jdbcType=VARCHAR},
+      </if>
+      <if test="pdmTblId != null" >
+        LDM_ENTY_ID = #{pdmTblId,jdbcType=VARCHAR},
+      </if>
+      <if test="pdmTblPnm != null" >
+        LDM_ENTY_PNM = #{pdmTblPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="mdlLnm != null" >
+        MDL_LNM = #{mdlLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="uppSubjLnm != null" >
+        UPP_SUBJ_LNM = #{uppSubjLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="subjId != null" >
+        SUBJ_ID = #{subjId,jdbcType=VARCHAR},
+      </if>
+      <if test="subjLnm != null" >
+        SUBJ_LNM = #{subjLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="sditmId != null" >
+        SDITM_ID = #{sditmId,jdbcType=VARCHAR},
+      </if>
+        ATTR_ORD = #{attrOrd,jdbcType=DECIMAL},
+        DATA_TYPE = #{dataType,jdbcType=VARCHAR},
+        DATA_LEN = #{dataLen,jdbcType=DECIMAL},
+        DATA_SCAL = #{dataScal,jdbcType=DECIMAL},
+        PK_YN = #{pkYn,jdbcType=VARCHAR},
+        PK_ORD = #{pkOrd,jdbcType=DECIMAL},
+        NONUL_YN = #{nonulYn,jdbcType=VARCHAR},
+        DEFLT_VAL = #{defltVal,jdbcType=VARCHAR},
+        OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      <if test="objVers != null" >
+        OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="frsRqstDtm != null" >
+        FRS_RQST_DTM = #{frsRqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="frsRqstUserId != null" >
+        FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR},
+      </if>
+        RQST_DTM = SYSDATE ,
+      <if test="rqstUserId != null" >
+        RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+        ENC_YN = #{encYn,jdbcType=VARCHAR},
+    </set>
+    where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      and RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+      and RQST_DTL_SNO = #{rqstDtlSno,jdbcType=DECIMAL}
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="kr.wise.meta.ldm.service.WaqLdmAttr" > 
+    update WAE_LDM_ATTR
+    set LDM_ATTR_ID = #{pdmColId,jdbcType=VARCHAR},
+      LDM_ATTR_PNM = #{pdmColPnm,jdbcType=VARCHAR},
+      LDM_ATTR_LNM = #{pdmColLnm,jdbcType=VARCHAR},
+      BF_LDM_ATTR_PNM = #{bfLdmColPnm,jdbcType=VARCHAR},
+      RQST_DCD = #{rqstDcd,jdbcType=VARCHAR},
+      VRF_CD = #{vrfCd,jdbcType=VARCHAR},
+      VRF_RMK = #{vrfRmk,jdbcType=VARCHAR},
+      LDM_ENTY_ID = #{pdmTblId,jdbcType=VARCHAR},
+      LDM_ENTY_PNM = #{pdmTblPnm,jdbcType=VARCHAR},
+      MDL_LNM = #{mdlLnm,jdbcType=VARCHAR},
+      UPP_SUBJ_LNM = #{uppSubjLnm,jdbcType=VARCHAR},
+      SUBJ_ID = #{subjId,jdbcType=VARCHAR},
+      SUBJ_LNM = #{subjLnm,jdbcType=VARCHAR},
+      SDITM_ID = #{sditmId,jdbcType=VARCHAR},
+      ATTR_ORD = #{attrOrd,jdbcType=DECIMAL},
+      DATA_TYPE = #{dataType,jdbcType=VARCHAR},
+      DATA_LEN = #{dataLen,jdbcType=DECIMAL},
+      DATA_SCAL = #{dataScal,jdbcType=DECIMAL},
+      PK_YN = #{pkYn,jdbcType=VARCHAR},
+      PK_ORD = #{pkOrd,jdbcType=DECIMAL},
+      NONUL_YN = #{nonulYn,jdbcType=VARCHAR},
+      DEFLT_VAL = #{defltVal,jdbcType=VARCHAR},
+      OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      FRS_RQST_DTM = #{frsRqstDtm,jdbcType=TIMESTAMP},
+      FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR},
+      RQST_DTM = #{rqstDtm,jdbcType=TIMESTAMP},
+      RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      APRV_DTM = #{aprvDtm,jdbcType=TIMESTAMP},
+      APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR}
+    where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      and RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+      and RQST_DTL_SNO = #{rqstDtlSno,jdbcType=DECIMAL}
+  </update>
+  
+  
+  <delete id="deleteByrqstSno" parameterType="kr.wise.meta.ldm.service.WaeLdmAttr">
+    DELETE FROM WAE_LDM_ATTR
+    WHERE RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      AND RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+  </delete>
+  
+  <insert id="insertWaqLdmTblForWae" parameterType="kr.wise.meta.ldm.service.WaeLdmAttr">
+    
+  	INSERT INTO WAQ_LDM_ENTY
+  	(
+	    RQST_NO
+	  , RQST_SNO
+	  , FULL_PATH 	  
+	  , LDM_ENTY_LNM	      
+	  , RQST_DCD	      	      	      
+	  , OBJ_VERS
+	  , FRS_RQST_DTM
+	  , FRS_RQST_USER_ID
+	  , RQST_DTM
+	  , RQST_USER_ID
+	)
+	SELECT RQST_NO
+	      , (SELECT NVL(MAX(RQST_SNO), 0) 
+	           FROM WAQ_LDM_ENTY 
+	          WHERE RQST_NO = #{rqstNo, jdbcType=VARCHAR}
+	         ) + ROWNUM AS RQST_SNO
+	      , FULL_PATH	      
+	      , LDM_ENTY_LNM 	      
+	      , 'CU' AS RQST_DCD	      	      	      
+	      , 1       AS OBJ_VERS
+	      , SYSDATE AS FRS_RQST_DTM
+	      , #{frsRqstUserId, jdbcType=VARCHAR} AS FRS_RQST_USER_ID
+	      , SYSDATE AS RQST_DTM
+	      , #{rqstUserId, jdbcType=VARCHAR} AS RQST_USER_ID
+	  FROM (
+	        SELECT A.RQST_NO	      	     
+	              , A.FULL_PATH
+	              , A.LDM_ENTY_LNM	               	      	              
+	          FROM WAE_LDM_ATTR A 	      
+	         WHERE A.RQST_NO = #{rqstNo, jdbcType=VARCHAR}
+	         GROUP BY A.RQST_NO
+	                , A.FULL_PATH
+	                , A.LDM_ENTY_LNM
+	  )
+  </insert>
+  
+   <insert id="insertWaqLdmColForWae" parameterType="kr.wise.meta.ldm.service.WaeLdmAttr"> 
+    
+  	INSERT INTO WAQ_LDM_ATTR 
+  	(
+	    RQST_NO
+      , RQST_SNO 
+      , RQST_DTL_SNO         
+      , LDM_ENTY_LNM
+      , LDM_ATTR_LNM  
+      , LDM_ATTR_PNM                 
+      , SUBJ_ID
+      , SUBJ_LNM
+      , RQST_DCD	      	      	      
+      , OBJ_VERS
+      , FRS_RQST_DTM
+      , FRS_RQST_USER_ID
+      , RQST_DTM
+      , RQST_USER_ID
+      , ATTR_ORD
+	  , DATA_TYPE
+	  , DATA_LEN
+	  , DATA_SCAL
+	  , PK_YN
+	  , PK_ORD
+	  , NONUL_YN
+	  , DEFLT_VAL
+	  , OBJ_DESCN	     
+	)
+	SELECT A.RQST_NO
+         , B.RQST_SNO 
+         , (SELECT NVL(MAX(RQST_DTL_SNO), 0) 
+              FROM WAQ_LDM_ATTR 
+             WHERE RQST_NO = #{rqstNo, jdbcType=VARCHAR}
+            ) + ROWNUM AS RQST_DTL_SNO         
+         , A.LDM_ENTY_LNM 	         
+         , A.LDM_ATTR_LNM   
+         , '' AS LDM_ATTR_PNM   
+         , C.SUBJ_ID
+         , C.SUBJ_LNM
+         , 'CU' AS RQST_DCD	      	      	      
+         , 1       AS OBJ_VERS
+         , SYSDATE AS FRS_RQST_DTM
+         , #{frsRqstUserId, jdbcType=VARCHAR} AS FRS_RQST_USER_ID
+         , SYSDATE AS RQST_DTM
+         , #{rqstUserId, jdbcType=VARCHAR} AS RQST_USER_ID
+         , A.ATTR_ORD
+	     , A.DATA_TYPE
+	     , A.DATA_LEN
+	     , A.DATA_SCAL
+	     , A.PK_YN
+	     , A.PK_ORD
+	     , A.NONUL_YN
+	     , A.DEFLT_VAL
+	     , A.OBJ_DESCN	     
+      FROM WAE_LDM_ATTR A 
+           LEFT JOIN WAQ_LDM_ENTY B
+             ON B.RQST_NO      = A.RQST_NO
+            AND B.FULL_PATH    = A.FULL_PATH 	      
+            AND B.LDM_ENTY_LNM = A.LDM_ENTY_LNM
+           LEFT JOIN WAA_SUBJ C
+             ON C.EXP_DTM = TO_DATE('9999-12-31','YYYY-MM-DD')
+            AND C.REG_TYP_CD IN ('C','U')
+            AND C.FULL_PATH = A.FULL_PATH  
+     WHERE A.RQST_NO = #{rqstNo, jdbcType=VARCHAR}
+  </insert>
+  
+ 
+</mapper>
+
+

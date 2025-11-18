@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.meta.mta.service.MtaGapMapper" >
+<resultMap id="BaseResultMap" type="kr.wise.meta.mta.service.MtaGapVO">
+	<id column="GAP_STATUS" property="gapStatus" jdbcType="VARCHAR" />
+	<result column="MTA_ORG_CD" property="mtaOrgCd" jdbcType="VARCHAR" />
+    <result column="MTA_DB_CONN_TRG_ID" property="mtaDbConnTrgId" jdbcType="VARCHAR" />
+	<result column="MTA_INFO_SYS_CD" property="mtaInfoSysCd" jdbcType="VARCHAR" />
+	<result column="MTA_TBL_PNM" property="mtaTblPnm" jdbcType="VARCHAR" />
+	<result column="MTA_TBL_LNM" property="mtaTblLnm" jdbcType="VARCHAR" />
+	<result column="MTA_COL_CNT" property="mtaColCnt" jdbcType="VARCHAR" />
+	<result column="DBC_ORG_CD" property="dbcOrgCd" jdbcType="VARCHAR" />
+	<result column="DB_CONN_TRG_LNM" property="dbConnTrgLnm" jdbcType="VARCHAR" />
+	<result column="DB_SCH_LNM" property="dbSchLnm" jdbcType="VARCHAR" />
+	<result column="DBC_TBL_NM" property="dbcTblNm" jdbcType="VARCHAR" />
+	<result column="DBC_TBL_KOR_NM" property="dbcTblKorNm" jdbcType="VARCHAR" />
+	<result column="DBC_INFO_SYS_CD" property="dbcInfoSysCd" jdbcType="VARCHAR" />
+	<result column="DBC_COL_CNT" property="dbcColCnt" jdbcType="VARCHAR" />
+	<result column="DB_CONN_TRG_ID" property="dbConnTrgId" jdbcType="VARCHAR" />
+	<result column="DB_SCH_ID" property="dbSchId" jdbcType="VARCHAR" />
+	<result column="MTA_TBL_ID" property="mtaTblId" jdbcType="VARCHAR" />
+	<result column="GAP_CONTS" property="gapConts" jdbcType="VARCHAR" />
+	<!-- 컬럼용 -->
+	<result column="DBC_DB_CONN_TRG_ID" property="dbcDbConnTrgId" jdbcType="VARCHAR" />
+	<result column="DBC_DB_CONN_TRG_PNM" property="dbcDbConnTrgPnm" jdbcType="VARCHAR" />
+	<result column="DBC_DB_CONN_TRG_LNM" property="dbcDbConnTrgLnm" jdbcType="VARCHAR" />
+	<result column="DBC_DB_SCH_ID" property="dbcDbSchId" jdbcType="VARCHAR" />
+	<result column="DBC_TBL_PNM" property="dbcTblPnm" jdbcType="VARCHAR" />
+	<result column="DBC_TBL_LNM" property="dbcTblLnm" jdbcType="VARCHAR" />
+	<result column="DBC_COL_PNM" property="dbcColPnm" jdbcType="VARCHAR" />
+	<result column="DBC_COL_LNM" property="dbcColLnm" jdbcType="VARCHAR" />
+	<result column="DBC_COL_ORD" property="dbcColOrd" jdbcType="VARCHAR" />
+	<result column="DBC_PK_YN" property="dbcPkYn" jdbcType="VARCHAR" />
+	<result column="DBC_DATA_TYPE" property="dbcDataType" jdbcType="VARCHAR" />
+	<result column="DBC_DATA_LEN" property="dbcDataLen" jdbcType="VARCHAR" />
+	<result column="DBC_DATA_SCAL" property="dbcDataScal" jdbcType="VARCHAR" />
+	<result column="DBC_NONUL_YN" property="dbcNonulYn" jdbcType="VARCHAR" />
+	<result column="DBC_DEFLT_VAL" property="dbcDefltVal" jdbcType="VARCHAR" />
+	<result column="MTA_DB_CONN_TRG_PNM" property="mtaDbConnTrgPnm" jdbcType="VARCHAR" />
+	<result column="MTA_DB_CONN_TRG_LNM" property="mtaDbConnTrgLnm" jdbcType="VARCHAR" />
+	<result column="MTA_COL_ID" property="mtaColId" jdbcType="VARCHAR" />
+	<result column="MTA_COL_PNM" property="mtaColPnm" jdbcType="VARCHAR" />
+	<result column="MTA_COL_LNM" property="mtaColLnm" jdbcType="VARCHAR" />
+	<result column="MTA_COL_ORD" property="mtaColOrd" jdbcType="VARCHAR" />
+	<result column="MTA_PK_YN" property="mtaPkYn" jdbcType="VARCHAR" />
+	<result column="MTA_DATA_TYPE" property="mtaDataType" jdbcType="VARCHAR" />
+	<result column="MTA_DATA_LEN" property="mtaDataLen" jdbcType="VARCHAR" />
+	<result column="MTA_DATA_SCAL" property="mtaDataScal" jdbcType="VARCHAR" />
+	<result column="MTA_NONUL_YN" property="mtaNonulYn" jdbcType="VARCHAR" />
+	<result column="MTA_DEFLT_VAL" property="mtaDefltVal" jdbcType="VARCHAR" />
+</resultMap>
+
+<select id="selectMtaGapAnalyze" resultMap="BaseResultMap" parameterType="kr.wise.meta.mta.service.MtaGapVO">
+	SELECT A.*
+      ,CASE WHEN A.GAP_STATUS = 'GAP' THEN '#FF0000' END AS FontColor
+  FROM (
+        SELECT  
+	  		  MTA.ORG_CD MTA_ORG_CD
+			, MTA.DB_CONN_TRG_ID MTA_DB_CONN_TRG_ID
+			, MTA.INFO_SYS_CD MTA_INFO_SYS_CD
+			, MTA.MTA_TBL_PNM
+			, MTA.MTA_TBL_LNM
+          	, MCOL.MTA_COL_CNT
+          	, DB.DB_CONN_TRG_PNM
+          	, DB.DB_CONN_TRG_LNM
+          	, SCH.DB_SCH_LNM
+          	, T.DBC_TBL_NM
+          	, (SELECT ORG_CD FROM WAA_INFO_SYS 
+          		WHERE EXP_DTM = TO_DATE('99991231','YYYYMMDD') 
+          		  AND INFO_SYS_CD = DB.INFO_SYS_CD) AS DBC_ORG_CD
+          	, DB.INFO_SYS_CD DBC_INFO_SYS_CD
+            , DBCCOL.DBC_COL_CNT
+          	, DB.DB_CONN_TRG_ID
+			, SCH.DB_SCH_ID
+          	, MTA.MTA_TBL_ID
+          	, CASE WHEN NVL(MTA.MTA_TBL_ID, '') = '' THEN 'GAP'
+          			  WHEN NVL(T.DBC_TBL_NM, '') = '' THEN 'GAP'
+          			  WHEN NVL(MCOL.MTA_COL_CNT, 0) != NVL(DBCCOL.DBC_COL_CNT, 0) THEN 'GAP'
+          	ELSE 'NML' END AS GAP_STATUS
+          	, CASE WHEN NVL(MTA.MTA_TBL_ID, '') = '' THEN '메타데이터 테이블 미존재'
+          			  WHEN NVL(T.DBC_TBL_NM, '') = '' THEN '메타수집 테이블 미존재'
+          			  WHEN NVL(MCOL.MTA_COL_CNT, 0) != NVL(DBCCOL.DBC_COL_CNT, 0) THEN '컬럼건수 불일치'
+          	ELSE '정상' END AS GAP_CONTS
+		 FROM 	WAT_DBC_TBL T
+			INNER JOIN WAA_DB_SCH SCH ON T.DB_SCH_ID = SCH.DB_SCH_ID
+			    AND SCH.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+			    AND SCH.REG_TYP_CD IN ('C', 'U')
+			INNER JOIN WAA_DB_CONN_TRG DB ON T.DB_CONN_TRG_ID = DB.DB_CONN_TRG_ID
+				AND DB.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+				AND DB.REG_TYP_CD IN ('C', 'U')
+			LEFT OUTER JOIN WAM_MTA_TBL MTA ON MTA.DB_CONN_TRG_ID = DB.DB_CONN_TRG_ID
+			   AND MTA.INFO_SYS_CD = DB.INFO_SYS_CD
+			   AND MTA.MTA_TBL_PNM = T.DBC_TBL_NM
+			   AND MTA.INFO_SYS_CD = #{infoSysCd,jdbcType=VARCHAR}
+			   AND MTA.DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR}
+			   AND MTA.ORG_CD = #{orgCd,jdbcType=VARCHAR}
+			LEFT OUTER JOIN (SELECT MTA_TBL_ID, COUNT(1) AS MTA_COL_CNT
+		   								FROM WAM_MTA_COL
+		   							  WHERE NVL(REG_TYP_CD,'C') IN ('C', 'U')
+		   							  GROUP BY MTA_TBL_ID) MCOL ON MTA.MTA_TBL_ID = MCOL.MTA_TBL_ID
+			LEFT OUTER JOIN ( SELECT DB_SCH_ID, DBC_TBL_NM, COUNT(1) AS DBC_COL_CNT
+		                                FROM WAT_DBC_COL
+		                               WHERE 1 = 1
+		                               GROUP BY DB_SCH_ID, DBC_TBL_NM ) DBCCOL ON T.DB_SCH_ID = DBCCOL.DB_SCH_ID
+				AND T.DBC_TBL_NM = DBCCOL.DBC_TBL_NM								
+		 WHERE 1=1
+		 	 <if test="dbSchId != null">
+             AND T.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+             </if>
+             <if test="dbConnTrgId != null">
+             AND T.DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR}
+             </if>
+             <if test="dbConnTrgLnm != null">
+             AND ( DB.DB_CONN_TRG_PNM LIKE '%' || UPPER(#{dbConnTrgLnm,jdbcType=VARCHAR}) || '%'
+             	OR DB.DB_CONN_TRG_LNM LIKE '%' || UPPER(#{dbConnTrgLnm,jdbcType=VARCHAR}) || '%'	)
+             </if>
+             <if test="tblNm != null">
+             AND (     T.DBC_TBL_NM = #{tblNm,jdbcType=VARCHAR} 
+                   
+                   <!-- OR  T.DBC_TBL_KOR_NM LIKE '%' || #{tblNm,jdbcType=VARCHAR}  || '%'
+                    OR MTA.MTA_TBL_PNM  LIKE '%' || UPPER(#{tblNm,jdbcType=VARCHAR}) || '%'
+                    OR MTA.MTA_TBL_LNM LIKE '%' || UPPER(#{tblNm,jdbcType=VARCHAR}) || '%' -->
+                    )
+             </if>
+             AND NVL(T.REG_TYP_CD,'C') IN ('C', 'U')
+             ) A
+     	<where>
+     	<if test="gapStatus != null">
+        AND A.GAP_STATUS = #{gapStatus,jdbcType=VARCHAR}
+        </if>
+        <if test="orgNm != null">
+        AND ( A.MTA_ORG_CD IN (SELECT ORG_CD FROM WAA_ORG
+        						WHERE REG_TYP_CD IN ('C', 'U')
+        						  AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+        						  AND ORG_NM LIKE '%' || #{orgNm, jdbcType=VARCHAR} || '%' )
+           OR A.DBC_ORG_CD IN (SELECT ORG_CD FROM WAA_ORG
+        						WHERE REG_TYP_CD IN ('C', 'U')
+        						  AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+        						  AND ORG_NM LIKE '%' || #{orgNm, jdbcType=VARCHAR} || '%' )	)
+        </if>
+        <if test="infoSysNm != null">
+        AND ( A.MTA_INFO_SYS_CD IN (SELECT INFO_SYS_CD FROM WAA_INFO_SYS
+        						     WHERE EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+        						       AND INFO_SYS_NM LIKE '%' || #{infoSysNm, jdbcType=VARCHAR} || '%' )
+           OR A.DBC_INFO_SYS_CD IN (SELECT INFO_SYS_CD FROM WAA_INFO_SYS
+        						     WHERE EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+        						       AND INFO_SYS_NM LIKE '%' || #{infoSysNm, jdbcType=VARCHAR} || '%' )	)
+        </if>
+     	</where>
+     	ORDER BY A.GAP_STATUS
+	</select>
+	
+	<select id="selectMtaColGapList" resultMap="BaseResultMap" parameterType="java.lang.String" >
+WITH DBC_COL AS
+	(	SELECT 
+				  B.DB_CONN_TRG_ID AS DBC_DB_CONN_TRG_ID
+				, D.DB_CONN_TRG_PNM AS DBC_DB_CONN_TRG_PNM
+				, D.DB_CONN_TRG_LNM AS DBC_DB_CONN_TRG_LNM
+				, B.DB_SCH_ID AS DBC_DB_SCH_ID
+				, C.DB_SCH_PNM
+				, C.DB_SCH_LNM
+				, B.DBC_TBL_NM AS DBC_TBL_PNM
+				, B.DBC_TBL_KOR_NM AS DBC_TBL_LNM	
+				, A.DBC_COL_NM AS DBC_COL_PNM
+				, A.DBC_COL_KOR_NM AS DBC_COL_LNM        
+				, A.ORD            AS DBC_COL_ORD
+				, A.PK_YN AS DBC_PK_YN
+				, A.DATA_TYPE AS DBC_DATA_TYPE
+				, A.DATA_LEN AS DBC_DATA_LEN
+				, A.DATA_PNT AS DBC_DATA_SCAL	
+				, CASE WHEN A.NULL_YN = 'Y' THEN 'N' ELSE 'Y' END  AS DBC_NONUL_YN
+				, A.DEFLT_VAL AS DBC_DEFLT_VAL
+		FROM WAT_DBC_COL A
+		INNER JOIN WAT_DBC_TBL B ON A.DB_SCH_ID = B.DB_SCH_ID
+		AND A.DBC_TBL_NM = B.DBC_TBL_NM
+		INNER JOIN WAA_DB_SCH C ON B.DB_SCH_ID = C.DB_SCH_ID
+		AND NVL(C.REG_TYP_CD,'C') IN ('C', 'U')
+		AND C.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+		INNER JOIN WAA_DB_CONN_TRG D ON D.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+		AND D.DB_CONN_TRG_ID = C.DB_CONN_TRG_ID
+		WHERE A.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+	      AND A.DBC_TBL_NM = #{dbcTblNm,jdbcType=VARCHAR}
+	)
+	, WAM_COL AS
+	(	SELECT 
+				  B.DB_CONN_TRG_ID AS MTA_DB_CONN_TRG_ID
+				, D.DB_CONN_TRG_PNM AS MTA_DB_CONN_TRG_PNM
+				, D.DB_CONN_TRG_LNM AS MTA_DB_CONN_TRG_LNM
+				, B.MTA_TBL_ID
+				, B.MTA_TBL_PNM 
+				, B.MTA_TBL_LNM
+				, A.MTA_COL_ID
+				, A.MTA_COL_PNM
+				, A.MTA_COL_LNM        
+				, A.COL_ORD AS MTA_COL_ORD
+				, A.PK_YN AS MTA_PK_YN
+				, A.DATA_TYPE AS MTA_DATA_TYPE
+				, A.DATA_LEN AS MTA_DATA_LEN
+				, A.DATA_SCAL AS MTA_DATA_SCAL	
+				, CASE WHEN A.NONUL_YN = 'Y' THEN 'Y' ELSE 'N' END  AS MTA_NONUL_YN
+				, A.DEFLT_VAL AS MTA_DEFLT_VAL
+		FROM WAM_MTA_COL A
+		INNER JOIN WAM_MTA_TBL B ON A.MTA_TBL_ID = B.MTA_TBL_ID
+		AND NVL(A.REG_TYP_CD,'C') IN ('C', 'U')
+		INNER JOIN WAA_DB_CONN_TRG D ON D.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+		AND D.DB_CONN_TRG_ID = B.DB_CONN_TRG_ID
+		WHERE  NVL(B.REG_TYP_CD, 'C') IN ('C', 'U')
+		AND	A.MTA_TBL_ID = #{mtaTblId,jdbcType=VARCHAR}
+	)
+	SELECT X.*,                                                             
+	       CASE WHEN X.GAP_STATUS = 'GAP' THEN '#FF0000' END AS FontColor
+	FROM (
+		SELECT A.*
+			, CASE WHEN NVL(A.MTA_TBL_PNM, '') = '' THEN 'GAP'
+					WHEN NVL(A.DBC_TBL_PNM, '') = '' THEN 'GAP'
+					WHEN NVL(A.MTA_COL_LNM,'') != NVL(A.DBC_COL_LNM,'') THEN 'GAP'
+					WHEN NVL(A.MTA_PK_YN,'') != NVL(A.DBC_PK_YN,'') THEN 'GAP'
+					WHEN NVL(A.MTA_NONUL_YN,'') != NVL(A.DBC_NONUL_YN,'') THEN  'GAP'
+					WHEN NVL(A.MTA_DATA_TYPE,'') != NVL(A.DBC_DATA_TYPE,'') THEN 'GAP'
+					WHEN NVL(A.MTA_DATA_LEN,'') != NVL(A.DBC_DATA_LEN,'') THEN 'GAP'
+					ELSE 'NML' END AS GAP_STATUS
+			, CASE WHEN NVL(A.MTA_TBL_PNM, '') = '' THEN '메타정보 컬럼 미존재'
+					WHEN NVL(A.DBC_TBL_PNM, '') = '' THEN '메타수집 컬럼 미존재'
+					WHEN NVL(A.MTA_COL_LNM,'') != NVL(A.DBC_COL_LNM,'') THEN '컬럼한글명 불일치'
+					WHEN NVL(A.MTA_PK_YN,'') != NVL(A.DBC_PK_YN,'') THEN 'PK 불일치'
+					WHEN NVL(A.MTA_NONUL_YN,'') != NVL(A.DBC_NONUL_YN,'') THEN 'NOTNULL 불일치'
+					WHEN NVL(A.MTA_DATA_TYPE,'') != NVL(A.DBC_DATA_TYPE,'') THEN '타입 불일치'
+					WHEN NVL(A.MTA_DATA_LEN,'') != NVL(A.DBC_DATA_LEN,'') THEN '길이 불일치'
+					ELSE '정상' END AS GAP_CONTS
+		FROM (
+			SELECT   DC.DBC_DB_CONN_TRG_ID
+						, DC.DBC_DB_CONN_TRG_PNM
+						, DC.DBC_DB_CONN_TRG_LNM
+						, DC.DBC_DB_SCH_ID
+						, DC.DBC_TBL_PNM
+						, DC.DBC_TBL_LNM
+						, DC.DBC_COL_PNM
+						, DC.DBC_COL_LNM
+						, DC.DBC_COL_ORD
+						, DC.DBC_PK_YN
+						, DC.DBC_DATA_TYPE
+						, DC.DBC_DATA_LEN
+						, DC.DBC_DATA_SCAL
+						, DC.DBC_NONUL_YN
+						, DC.DBC_DEFLT_VAL
+						, MC.MTA_DB_CONN_TRG_ID
+						, MC.MTA_DB_CONN_TRG_PNM
+						, MC.MTA_DB_CONN_TRG_LNM
+						, MC.MTA_TBL_ID
+						, MC.MTA_TBL_PNM
+						, MC.MTA_TBL_LNM
+						, MC.MTA_COL_ID
+						, MC.MTA_COL_PNM
+						, MC.MTA_COL_LNM
+						, MC.MTA_COL_ORD
+						, MC.MTA_PK_YN
+						, MC.MTA_DATA_TYPE
+						, MC.MTA_DATA_LEN
+						, MC.MTA_DATA_SCAL
+						, MC.MTA_NONUL_YN
+						, MC.MTA_DEFLT_VAL
+			FROM WAM_COL MC
+			LEFT OUTER JOIN DBC_COL DC
+			ON MC.MTA_TBL_PNM = DC.DBC_TBL_PNM
+			AND MC.MTA_COL_PNM = DC.DBC_COL_PNM
+			UNION
+			SELECT   DC.DBC_DB_CONN_TRG_ID
+					, DC.DBC_DB_CONN_TRG_PNM
+					, DC.DBC_DB_CONN_TRG_LNM
+					, DC.DBC_DB_SCH_ID
+					, DC.DBC_TBL_PNM
+					, DC.DBC_TBL_LNM
+					, DC.DBC_COL_PNM
+					, DC.DBC_COL_LNM
+					, DC.DBC_COL_ORD
+					, DC.DBC_PK_YN
+					, DC.DBC_DATA_TYPE
+					, DC.DBC_DATA_LEN
+					, DC.DBC_DATA_SCAL
+					, DC.DBC_NONUL_YN
+					, DC.DBC_DEFLT_VAL
+					, MC.MTA_DB_CONN_TRG_ID
+					, MC.MTA_DB_CONN_TRG_PNM
+					, MC.MTA_DB_CONN_TRG_LNM
+					, MC.MTA_TBL_ID
+					, MC.MTA_TBL_PNM
+					, MC.MTA_TBL_LNM
+					, MC.MTA_COL_ID
+					, MC.MTA_COL_PNM
+					, MC.MTA_COL_LNM
+					, MC.MTA_COL_ORD
+					, MC.MTA_PK_YN
+					, MC.MTA_DATA_TYPE
+					, MC.MTA_DATA_LEN
+					, MC.MTA_DATA_SCAL
+					, MC.MTA_NONUL_YN
+					, MC.MTA_DEFLT_VAL
+			FROM WAM_COL MC
+			RIGHT OUTER JOIN DBC_COL DC
+			ON MC.MTA_TBL_PNM = DC.DBC_TBL_PNM
+			AND MC.MTA_COL_PNM = DC.DBC_COL_PNM
+		) AS A
+	) AS X
+	<!-- ORDER BY X.GAP_STATUS, NVL(X.DBC_COL_PNM, X.MTA_COL_PNM) -->
+	ORDER BY TO_NUMBER(X.DBC_COL_ORD)
+  </select>  
+</mapper>

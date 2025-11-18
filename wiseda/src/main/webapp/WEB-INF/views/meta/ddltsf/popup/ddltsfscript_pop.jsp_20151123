@@ -1,0 +1,86 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c"   uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn"  uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="s" %>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
+<%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
+<%@ page import="kr.wise.commons.WiseMetaConfig" %>
+
+
+<html>
+<head>
+<title>DDL SCRIPT</title>
+
+<script type="text/javascript">
+
+var popRqst = "${search.popRqst}";
+
+$(document).ready(function() {
+	
+	//마우스 오버 이미지 초기화
+	//imgConvert($('div.tab_navi a img'));
+	
+// 	$("#tabs").tabs();
+	
+
+	//팝업 닫기 (팝업 타입에 W(윈도우오픈), I(iframe팝업), L(레이어드팝업))
+    $("div.pop_tit_close").click(function(){
+//	     	alert(1);
+    	//iframe 형태의 팝업일 경우
+    	if ("${search.popType}" == "I") {
+    		parent.closeLayerPop();
+    	} else {
+    		window.close();
+    	}
+    	
+    });
+		
+		
+	    
+});
+
+$(window).load(function() {
+	
+	
+	loadDetail();
+	
+});
+function loadDetail(){
+	var scriptJson = opener.grid_sheet.GetSaveJson(0);
+	var objId = "&objId=";
+	
+	for (var i=0; i<scriptJson.data.length; i++) {
+		objId += scriptJson.data[i].objId;
+		if(i<scriptJson.data.length-1) {
+			objId += "|";
+			
+		}
+	}
+	
+	$('div#ddlScriptDtl').load('<c:url value="/meta/ddltsf/ajaxgrid/ddltsfscript_pop_dtl.do"/>', objId, function(){
+		
+// 	alert("test1");
+	});
+// 	alert("test");
+}
+
+
+</script>
+    
+</head>
+<body>
+<div class="pop_tit"> <!-- 팝업가로사이즈 여기서 조절하면 됩니다 기본은 100% -->
+	<!-- 팝업 타이틀 시작 -->
+	<div class="pop_tit_icon"></div>
+    <div class="pop_tit_txt">DDL Script</div>
+    <div class="pop_tit_close"><a>창닫기</a></div>
+    <!-- 팝업 타이틀 끝 -->
+    
+    <div id="ddlScriptDtl"></div>
+
+   
+</div>
+</body>
+</html>

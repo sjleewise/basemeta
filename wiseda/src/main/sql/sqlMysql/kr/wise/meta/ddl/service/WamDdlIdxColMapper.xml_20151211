@@ -1,0 +1,678 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.wise.meta.ddl.service.WamDdlIdxColMapper"> 
+  <resultMap id="BaseResultMap" type="kr.wise.meta.ddl.service.WamDdlIdxCol" extends="kr.wise.meta.ddl.service.WamDdlIdxMapper.BaseResultMap">
+    <id column="DDL_IDX_COL_ID" jdbcType="VARCHAR" property="ddlIdxColId" />
+    <result column="DDL_IDX_COL_PNM" jdbcType="VARCHAR" property="ddlIdxColPnm" />
+    <result column="DDL_IDX_COL_LNM" jdbcType="VARCHAR" property="ddlIdxColLnm" />
+<!--     <result column="DDL_IDX_ID" jdbcType="VARCHAR" property="ddlIdxId" /> -->
+    <result column="DDL_COL_ID" jdbcType="VARCHAR" property="ddlColId" />
+    <result column="DDL_IDX_COL_ORD" jdbcType="DECIMAL" property="ddlIdxColOrd" />
+    <result column="SORT_TYP" jdbcType="VARCHAR" property="sortTyp" />
+    <result column="DATA_TYPE" property="dataType" jdbcType="VARCHAR" />
+    <result column="DATA_LEN" property="dataLen" jdbcType="DECIMAL" />
+    <result column="DATA_SCAL" property="dataScal" jdbcType="DECIMAL" />
+    <result column="PK_YN" property="pkYn" jdbcType="VARCHAR" />
+    <result column="PK_ORD" property="pkOrd" jdbcType="DECIMAL" />
+    <result column="NONUL_YN" property="nonulYn" jdbcType="VARCHAR" />
+    <result column="DEFLT_VAL" property="defltVal" jdbcType="VARCHAR" />
+    <result column="FULL_PATH" property="fullPath" jdbcType="VARCHAR" />
+<!--     <result column="RQST_NO" jdbcType="VARCHAR" property="rqstNo" /> -->
+<!--     <result column="RQST_SNO" jdbcType="DECIMAL" property="rqstSno" /> -->
+<!--     <result column="RQST_DTL_SNO" jdbcType="DECIMAL" property="rqstDtlSno" /> -->
+<!--     <result column="OBJ_DESCN" jdbcType="VARCHAR" property="objDescn" /> -->
+<!--     <result column="OBJ_VERS" jdbcType="DECIMAL" property="objVers" /> -->
+<!--     <result column="REG_TYP_CD" jdbcType="VARCHAR" property="regTypCd" /> -->
+<!--     <result column="FRS_RQST_DTM" jdbcType="TIMESTAMP" property="frsRqstDtm" /> -->
+<!--     <result column="FRS_RQST_USER_ID" jdbcType="VARCHAR" property="frsRqstUserId" /> -->
+<!--     <result column="RQST_DTM" jdbcType="TIMESTAMP" property="rqstDtm" /> -->
+<!--     <result column="RQST_USER_ID" jdbcType="VARCHAR" property="rqstUserId" /> -->
+<!--     <result column="APRV_DTM" jdbcType="TIMESTAMP" property="aprvDtm" /> -->
+<!--     <result column="APRV_USER_ID" jdbcType="VARCHAR" property="aprvUserId" /> -->
+  </resultMap>
+  <sql id="Base_Column_List">
+    DDL_IDX_COL_ID, DDL_IDX_COL_PNM, DDL_IDX_COL_LNM, DDL_IDX_ID, DDL_COL_ID, DDL_IDX_COL_ORD, 
+    SORT_TYP, RQST_NO, RQST_SNO, RQST_DTL_SNO, OBJ_DESCN, OBJ_VERS, REG_TYP_CD, FRS_RQST_DTM, 
+    FRS_RQST_USER_ID, RQST_DTM, RQST_USER_ID, APRV_DTM, APRV_USER_ID
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from WAM_DDL_IDX_COL
+    where DDL_IDX_COL_ID = #{ddlIdxColId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from WAM_DDL_IDX_COL
+    where DDL_IDX_COL_ID = #{ddlIdxColId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="kr.wise.meta.ddl.service.WamDdlIdxCol">
+    insert into WAM_DDL_IDX_COL (DDL_IDX_COL_ID, DDL_IDX_COL_PNM, DDL_IDX_COL_LNM, 
+      DDL_IDX_ID, DDL_COL_ID, DDL_IDX_COL_ORD, 
+      SORT_TYP, RQST_NO, RQST_SNO, 
+      RQST_DTL_SNO, OBJ_DESCN, OBJ_VERS, 
+      REG_TYP_CD, FRS_RQST_DTM, FRS_RQST_USER_ID, 
+      RQST_DTM, RQST_USER_ID, APRV_DTM, 
+      APRV_USER_ID)
+    values (#{ddlIdxColId,jdbcType=VARCHAR}, #{ddlIdxColPnm,jdbcType=VARCHAR}, #{ddlIdxColLnm,jdbcType=VARCHAR}, 
+      #{ddlIdxId,jdbcType=VARCHAR}, #{ddlColId,jdbcType=VARCHAR}, #{ddlIdxColOrd,jdbcType=DECIMAL}, 
+      #{sortTyp,jdbcType=VARCHAR}, #{rqstNo,jdbcType=VARCHAR}, #{rqstSno,jdbcType=DECIMAL}, 
+      #{rqstDtlSno,jdbcType=DECIMAL}, #{objDescn,jdbcType=VARCHAR}, #{objVers,jdbcType=DECIMAL}, 
+      #{regTypCd,jdbcType=VARCHAR}, #{frsRqstDtm,jdbcType=TIMESTAMP}, #{frsRqstUserId,jdbcType=VARCHAR}, 
+      #{rqstDtm,jdbcType=TIMESTAMP}, #{rqstUserId,jdbcType=VARCHAR}, #{aprvDtm,jdbcType=TIMESTAMP}, 
+      #{aprvUserId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="kr.wise.meta.ddl.service.WamDdlIdxCol">
+    insert into WAM_DDL_IDX_COL
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="ddlIdxColId != null">
+        DDL_IDX_COL_ID,
+      </if>
+      <if test="ddlIdxColPnm != null">
+        DDL_IDX_COL_PNM,
+      </if>
+      <if test="ddlIdxColLnm != null">
+        DDL_IDX_COL_LNM,
+      </if>
+      <if test="ddlIdxId != null">
+        DDL_IDX_ID,
+      </if>
+      <if test="ddlColId != null">
+        DDL_COL_ID,
+      </if>
+      <if test="ddlIdxColOrd != null">
+        DDL_IDX_COL_ORD,
+      </if>
+      <if test="sortTyp != null">
+        SORT_TYP,
+      </if>
+      <if test="rqstNo != null">
+        RQST_NO,
+      </if>
+      <if test="rqstSno != null">
+        RQST_SNO,
+      </if>
+      <if test="rqstDtlSno != null">
+        RQST_DTL_SNO,
+      </if>
+      <if test="objDescn != null">
+        OBJ_DESCN,
+      </if>
+      <if test="objVers != null">
+        OBJ_VERS,
+      </if>
+      <if test="regTypCd != null">
+        REG_TYP_CD,
+      </if>
+      <if test="frsRqstDtm != null">
+        FRS_RQST_DTM,
+      </if>
+      <if test="frsRqstUserId != null">
+        FRS_RQST_USER_ID,
+      </if>
+      <if test="rqstDtm != null">
+        RQST_DTM,
+      </if>
+      <if test="rqstUserId != null">
+        RQST_USER_ID,
+      </if>
+      <if test="aprvDtm != null">
+        APRV_DTM,
+      </if>
+      <if test="aprvUserId != null">
+        APRV_USER_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="ddlIdxColId != null">
+        #{ddlIdxColId,jdbcType=VARCHAR},
+      </if>
+      <if test="ddlIdxColPnm != null">
+        #{ddlIdxColPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="ddlIdxColLnm != null">
+        #{ddlIdxColLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="ddlIdxId != null">
+        #{ddlIdxId,jdbcType=VARCHAR},
+      </if>
+      <if test="ddlColId != null">
+        #{ddlColId,jdbcType=VARCHAR},
+      </if>
+      <if test="ddlIdxColOrd != null">
+        #{ddlIdxColOrd,jdbcType=DECIMAL},
+      </if>
+      <if test="sortTyp != null">
+        #{sortTyp,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstNo != null">
+        #{rqstNo,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstSno != null">
+        #{rqstSno,jdbcType=DECIMAL},
+      </if>
+      <if test="rqstDtlSno != null">
+        #{rqstDtlSno,jdbcType=DECIMAL},
+      </if>
+      <if test="objDescn != null">
+        #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null">
+        #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null">
+        #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="frsRqstDtm != null">
+        #{frsRqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="frsRqstUserId != null">
+        #{frsRqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDtm != null">
+        #{rqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rqstUserId != null">
+        #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDtm != null">
+        #{aprvDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aprvUserId != null">
+        #{aprvUserId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.meta.ddl.service.WamDdlIdxCol">
+    update WAM_DDL_IDX_COL
+    <set>
+      <if test="ddlIdxColPnm != null">
+        DDL_IDX_COL_PNM = #{ddlIdxColPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="ddlIdxColLnm != null">
+        DDL_IDX_COL_LNM = #{ddlIdxColLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="ddlIdxId != null">
+        DDL_IDX_ID = #{ddlIdxId,jdbcType=VARCHAR},
+      </if>
+      <if test="ddlColId != null">
+        DDL_COL_ID = #{ddlColId,jdbcType=VARCHAR},
+      </if>
+      <if test="ddlIdxColOrd != null">
+        DDL_IDX_COL_ORD = #{ddlIdxColOrd,jdbcType=DECIMAL},
+      </if>
+      <if test="sortTyp != null">
+        SORT_TYP = #{sortTyp,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstNo != null">
+        RQST_NO = #{rqstNo,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstSno != null">
+        RQST_SNO = #{rqstSno,jdbcType=DECIMAL},
+      </if>
+      <if test="rqstDtlSno != null">
+        RQST_DTL_SNO = #{rqstDtlSno,jdbcType=DECIMAL},
+      </if>
+      <if test="objDescn != null">
+        OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null">
+        OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null">
+        REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="frsRqstDtm != null">
+        FRS_RQST_DTM = #{frsRqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="frsRqstUserId != null">
+        FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDtm != null">
+        RQST_DTM = #{rqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rqstUserId != null">
+        RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDtm != null">
+        APRV_DTM = #{aprvDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aprvUserId != null">
+        APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where DDL_IDX_COL_ID = #{ddlIdxColId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="kr.wise.meta.ddl.service.WamDdlIdxCol">
+    update WAM_DDL_IDX_COL
+    set DDL_IDX_COL_PNM = #{ddlIdxColPnm,jdbcType=VARCHAR},
+      DDL_IDX_COL_LNM = #{ddlIdxColLnm,jdbcType=VARCHAR},
+      DDL_IDX_ID = #{ddlIdxId,jdbcType=VARCHAR},
+      DDL_COL_ID = #{ddlColId,jdbcType=VARCHAR},
+      DDL_IDX_COL_ORD = #{ddlIdxColOrd,jdbcType=DECIMAL},
+      SORT_TYP = #{sortTyp,jdbcType=VARCHAR},
+      RQST_NO = #{rqstNo,jdbcType=VARCHAR},
+      RQST_SNO = #{rqstSno,jdbcType=DECIMAL},
+      RQST_DTL_SNO = #{rqstDtlSno,jdbcType=DECIMAL},
+      OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      FRS_RQST_DTM = #{frsRqstDtm,jdbcType=TIMESTAMP},
+      FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR},
+      RQST_DTM = #{rqstDtm,jdbcType=TIMESTAMP},
+      RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      APRV_DTM = #{aprvDtm,jdbcType=TIMESTAMP},
+      APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR}
+    where DDL_IDX_COL_ID = #{ddlIdxColId,jdbcType=VARCHAR}
+  </update>
+  
+  
+  <select id="selectDdlTblIdxColList" parameterType="kr.wise.meta.ddl.service.WamDdlIdxCol" resultMap="BaseResultMap">
+  SELECT A.*
+  	   , GET_USER_NM(A.FRS_RQST_USER_ID) AS FRS_RQST_USER_NM
+  	   , GET_USER_NM(A.RQST_USER_ID) AS RQST_USER_NM
+  	   , GET_USER_NM(A.APRV_USER_ID) AS APRV_USER_NM
+  	   , D.DATA_TYPE
+  	   , D.DATA_LEN
+  	   , D.DATA_SCAL
+  	   , D.PK_YN
+  	   , D.PK_ORD
+  	   , D.NONUL_YN
+  	   , D.DEFLT_VAL
+       , B.DDL_IDX_LNM
+       , C.DDL_TBL_PNM
+       , C.DDL_TBL_LNM
+       , S.FULL_PATH
+    FROM WAM_DDL_IDX_COL A 
+   INNER JOIN WAM_DDL_IDX B
+      ON A.DDL_IDX_ID = B.DDL_IDX_ID
+     AND B.REG_TYP_CD IN ('C', 'U')
+   INNER JOIN WAM_DDL_TBL C
+      ON B.DDL_TBL_ID = C.DDL_TBL_ID
+     AND C.REG_TYP_CD IN ('C', 'U')
+   INNER JOIN WAM_PDM_TBL P
+      ON C.PDM_TBL_ID = P.PDM_TBL_ID
+     AND P.REG_TYP_CD IN ('C', 'U')
+   INNER JOIN WAA_SUBJ S
+      ON P.SUBJ_ID = S.SUBJ_ID
+     AND S.REG_TYP_CD IN ('C', 'U')
+     AND S.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+   INNER JOIN WAM_DDL_COL D
+      ON A.DDL_COL_ID = D.DDL_COL_ID
+     AND D.REG_TYP_CD IN ('C', 'U') 
+  <where>
+  <if test="ddlTblId != null">
+	 AND C.DDL_TBL_ID = #{ddlTblId,jdbcType=VARCHAR}
+  </if>
+  <if test="ddlTblPnm != null">
+	 AND C.DDL_TBL_PNM = #{ddlTblPnm,jdbcType=VARCHAR}
+  </if>
+  <if test="fullPath != null">
+	 AND S.FULL_PATH = #{fullPath,jdbcType=VARCHAR}
+  </if>
+  </where>
+  ORDER BY A.DDL_IDX_ID, DDL_IDX_COL_ORD, DDL_IDX_COL_PNM
+  </select>
+  
+  <select id="selectDdlIdxColList" parameterType="kr.wise.meta.ddl.service.WamDdlIdxCol" resultMap="BaseResultMap">
+  SELECT A.*
+  	   , B.DDL_IDX_PNM
+  	   , B.DDL_IDX_LNM
+  	   , C.DDL_TBL_PNM
+  	   , C.DDL_TBL_LNM
+       , U.USER_NM AS FRS_RQST_USER_NM
+       , U1.USER_NM AS RQST_USER_NM
+       , U2.USER_NM AS APRV_USER_NM
+    FROM WAM_DDL_IDX_COL A
+   INNER JOIN WAM_DDL_IDX B
+      ON A.DDL_IDX_ID = B.DDL_IDX_ID
+     AND B.REG_TYP_CD IN ('C', 'U')
+   INNER JOIN WAM_DDL_TBL C
+      ON B.DDL_TBL_ID = C.DDL_TBL_ID
+     AND C.REG_TYP_CD IN ('C', 'U')
+    LEFT OUTER JOIN WAA_USER U
+      ON A.FRS_RQST_USER_ID = U.USER_ID
+     AND U.REG_TYP_CD IN ('C', 'U')
+     AND U.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+    LEFT OUTER JOIN WAA_USER U1
+      ON A.RQST_USER_ID = U1.USER_ID
+     AND U1.REG_TYP_CD IN ('C', 'U')
+     AND U1.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+    LEFT OUTER JOIN WAA_USER U2
+      ON A.APRV_USER_ID = U2.USER_ID
+     AND U2.REG_TYP_CD IN ('C', 'U')
+     AND U2.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+   
+   <where>
+     AND A.DDL_IDX_ID = #{ddlIdxId}
+     AND A.REG_TYP_CD IN ('C', 'U')
+   </where>
+   ORDER BY A.DDL_IDX_COL_ORD, A.DDL_IDX_COL_PNM
+  
+  </select>
+  <select id="selectDdlIdxColInfo" parameterType="kr.wise.meta.ddl.service.WamDdlIdxCol" resultMap="BaseResultMap">
+  SELECT A.*
+  	   , B.DDL_IDX_PNM
+  	   , B.DDL_IDX_LNM
+  	   , C.DDL_TBL_PNM
+  	   , C.DDL_TBL_LNM
+       , U.USER_NM AS FRS_RQST_USER_NM
+       , U1.USER_NM AS RQST_USER_NM
+       , U2.USER_NM AS APRV_USER_NM
+    FROM WAM_DDL_IDX_COL A
+   INNER JOIN WAM_DDL_IDX B
+      ON A.DDL_IDX_ID = B.DDL_IDX_ID
+     AND B.REG_TYP_CD IN ('C', 'U')
+   INNER JOIN WAM_DDL_TBL C
+      ON B.DDL_TBL_ID = C.DDL_TBL_ID
+     AND C.REG_TYP_CD IN ('C', 'U')
+    LEFT OUTER JOIN WAA_USER U
+      ON A.FRS_RQST_USER_ID = U.USER_ID
+     AND U.REG_TYP_CD IN ('C', 'U')
+     AND U.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+    LEFT OUTER JOIN WAA_USER U1
+      ON A.RQST_USER_ID = U1.USER_ID
+     AND U1.REG_TYP_CD IN ('C', 'U')
+     AND U1.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+    LEFT OUTER JOIN WAA_USER U2
+      ON A.APRV_USER_ID = U2.USER_ID
+     AND U2.REG_TYP_CD IN ('C', 'U')
+     AND U2.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+     
+     <where>
+     AND A.DDL_IDX_COL_ID = #{ddlIdxColId}
+     AND A.REG_TYP_CD IN ('C', 'U')
+   </where>
+  </select>
+  
+  <select id="selectColChangeList" parameterType="kr.wise.meta.ddl.service.WamDdlIdxCol" resultMap="BaseResultMap">
+  SELECT A.*
+  	   , B.DDL_IDX_PNM
+  	   , B.DDL_IDX_LNM
+  	   , C.DDL_TBL_PNM
+  	   , C.DDL_TBL_LNM
+       , U.USER_NM AS FRS_RQST_USER_NM
+       , U1.USER_NM AS RQST_USER_NM
+       , U2.USER_NM AS APRV_USER_NM
+       , CASE WHEN A.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD') AND A.REG_TYP_CD IN ('C', 'U') THEN '#0000FF'
+    	 ELSE NULL END AS FontColor
+    FROM WAH_DDL_IDX_COL A
+    LEFT JOIN WAM_DDL_IDX B
+      ON A.DDL_IDX_ID = B.DDL_IDX_ID
+     AND B.REG_TYP_CD IN ('C', 'U')
+    LEFT JOIN WAM_DDL_TBL C
+      ON B.DDL_TBL_ID = C.DDL_TBL_ID
+     AND C.REG_TYP_CD IN ('C', 'U')
+    LEFT OUTER JOIN WAA_USER U
+      ON A.FRS_RQST_USER_ID = U.USER_ID
+     AND U.REG_TYP_CD IN ('C', 'U')
+     AND U.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+    LEFT OUTER JOIN WAA_USER U1
+      ON A.RQST_USER_ID = U1.USER_ID
+     AND U1.REG_TYP_CD IN ('C', 'U')
+     AND U1.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+    LEFT OUTER JOIN WAA_USER U2
+      ON A.APRV_USER_ID = U2.USER_ID
+     AND U2.REG_TYP_CD IN ('C', 'U')
+     AND U2.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+     
+   <where>
+   	<if test="ddlIdxId != null">
+     AND B.DDL_IDX_ID = #{ddlIdxId}
+   	</if>
+   	<if test="ddlTblId != null">
+     AND C.DDL_TBL_ID = #{ddlTblId}
+   	</if>
+   </where>
+   ORDER BY A.EXP_DTM DESC, A.STR_DTM DESC
+  </select>
+  
+  <select id="selectDdlIdxColHistList" parameterType="kr.wise.meta.ddl.service.WamDdlIdxCol" resultMap="BaseResultMap">
+SELECT * FROM (  
+                 SELECT A.*
+                 	   , B.DDL_IDX_PNM
+                 	   , B.DDL_IDX_LNM
+                 	   , C.DDL_TBL_PNM
+                 	   , C.DDL_TBL_LNM
+                      , U.USER_NM AS FRS_RQST_USER_NM
+                      , U1.USER_NM AS RQST_USER_NM
+                      , U2.USER_NM AS APRV_USER_NM
+                   FROM WAH_DDL_IDX_COL A
+                  INNER JOIN WAH_DDL_IDX B
+                     ON A.DDL_IDX_ID = B.DDL_IDX_ID
+                   -- AND A.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+                   -- AND B.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+                  INNER JOIN WAH_DDL_TBL C
+                     ON B.DDL_TBL_ID = C.DDL_TBL_ID
+                    AND C.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+                   LEFT OUTER JOIN WAA_USER U
+                     ON A.FRS_RQST_USER_ID = U.USER_ID
+                    AND U.REG_TYP_CD IN ('C', 'U')
+                    AND U.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+                   LEFT OUTER JOIN WAA_USER U1
+                     ON A.RQST_USER_ID = U1.USER_ID
+                    AND U1.REG_TYP_CD IN ('C', 'U')
+                    AND U1.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+                   LEFT OUTER JOIN WAA_USER U2
+                     ON A.APRV_USER_ID = U2.USER_ID
+                    AND U2.REG_TYP_CD IN ('C', 'U')
+                    AND U2.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+                  <where>
+                    AND A.DDL_IDX_ID = #{ddlIdxId}
+                    AND A.REG_TYP_CD IN ('C', 'U')
+                    and B.OBJ_VERS = #{objVers,jdbcType=VARCHAR}
+                    AND B.DDL_IDX_ID =#{ddlIdxId,jdbcType=VARCHAR}
+               <![CDATA[ AND A.OBJ_VERS <= #{objVers,jdbcType=VARCHAR}]]>
+               <![CDATA[ AND TO_NUMBER(SUBSTR(A.RQST_NO,5)) >= TO_NUMBER(SUBSTR(B.RQST_NO,5))]]>
+                <if test="objVers > 1">   
+                         and TO_NUMBER(SUBSTR(A.RQST_NO,5)) > (SELECT TO_NUMBER(SUBSTR(RQST_NO,5)) FROM WAH_DDL_IDX WHERE DDL_IDX_ID =#{ddlIdxId,jdbcType=VARCHAR} AND OBJ_VERS = #{objVers,jdbcType=VARCHAR}-1)
+                </if>
+                  </where>
+                  UNION ALL
+                   SELECT A.*
+                 	   , B.DDL_IDX_PNM
+                 	   , B.DDL_IDX_LNM
+                 	   , C.DDL_TBL_PNM
+                 	   , C.DDL_TBL_LNM
+                      , U.USER_NM AS FRS_RQST_USER_NM
+                      , U1.USER_NM AS RQST_USER_NM
+                      , U2.USER_NM AS APRV_USER_NM
+                   FROM WAH_DDL_IDX_COL A
+                  INNER JOIN WAH_DDL_IDX B
+                     ON A.DDL_IDX_ID = B.DDL_IDX_ID
+                    --AND B.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+                  INNER JOIN WAH_DDL_TBL C
+                     ON B.DDL_TBL_ID = C.DDL_TBL_ID
+                    AND C.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+                   LEFT OUTER JOIN WAA_USER U
+                     ON A.FRS_RQST_USER_ID = U.USER_ID
+                    AND U.REG_TYP_CD IN ('C', 'U')
+                    AND U.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+                   LEFT OUTER JOIN WAA_USER U1
+                     ON A.RQST_USER_ID = U1.USER_ID
+                    AND U1.REG_TYP_CD IN ('C', 'U')
+                    AND U1.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+                   LEFT OUTER JOIN WAA_USER U2
+                     ON A.APRV_USER_ID = U2.USER_ID
+                    AND U2.REG_TYP_CD IN ('C', 'U')
+                    AND U2.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+                 <where> 
+                   and b.obj_vers = #{objVers,jdbcType=VARCHAR}
+                   AND B.DDL_IDX_ID = #{ddlIdxId,jdbcType=VARCHAR}
+                   AND A.RQST_NO = B.RQST_NO
+                   AND A.REG_TYP_CD IN ('D')
+                 </where>
+                  )
+          ORDER BY DDL_IDX_COL_ORD, DDL_IDX_COL_PNM
+  
+  </select>
+  
+  <select id="selectDdlIdxColHistInfo" parameterType="kr.wise.meta.ddl.service.WamDdlIdxCol" resultMap="BaseResultMap">
+  SELECT A.*
+  	   , B.DDL_IDX_PNM
+  	   , B.DDL_IDX_LNM
+  	   , C.DDL_TBL_PNM
+  	   , C.DDL_TBL_LNM
+       , U.USER_NM AS FRS_RQST_USER_NM
+       , U1.USER_NM AS RQST_USER_NM
+       , U2.USER_NM AS APRV_USER_NM
+    FROM WAH_DDL_IDX_COL A
+   INNER JOIN WAH_DDL_IDX B
+      ON A.DDL_IDX_ID = B.DDL_IDX_ID
+     AND B.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+   INNER JOIN WAH_DDL_TBL C
+      ON B.DDL_TBL_ID = C.DDL_TBL_ID
+     AND C.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+    LEFT OUTER JOIN WAA_USER U
+      ON A.FRS_RQST_USER_ID = U.USER_ID
+     AND U.REG_TYP_CD IN ('C', 'U')
+     AND U.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+    LEFT OUTER JOIN WAA_USER U1
+      ON A.RQST_USER_ID = U1.USER_ID
+     AND U1.REG_TYP_CD IN ('C', 'U')
+     AND U1.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+    LEFT OUTER JOIN WAA_USER U2
+      ON A.APRV_USER_ID = U2.USER_ID
+     AND U2.REG_TYP_CD IN ('C', 'U')
+     AND U2.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+     
+     <where>
+     AND A.DDL_IDX_COL_ID = #{ddlIdxColId}
+     AND A.OBJ_VERS = #{objVers}
+   </where>
+  </select>
+  
+  <select id="selectIdxColChangeHistList" parameterType="kr.wise.meta.ddl.service.WamDdlIdxCol" resultMap="BaseResultMap">
+  SELECT A.*
+  	   , B.DDL_IDX_PNM
+  	   , B.DDL_IDX_LNM
+  	   , C.DDL_TBL_PNM
+  	   , C.DDL_TBL_LNM
+       , U.USER_NM AS FRS_RQST_USER_NM
+       , U1.USER_NM AS RQST_USER_NM
+       , U2.USER_NM AS APRV_USER_NM
+       , CASE WHEN A.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD') AND A.REG_TYP_CD IN ('C', 'U') THEN '#0000FF'
+    	 ELSE NULL END AS FontColor
+    FROM WAH_DDL_IDX_COL A
+    LEFT JOIN WAH_DDL_IDX B
+      ON A.DDL_IDX_ID = B.DDL_IDX_ID
+     AND B.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+    LEFT JOIN WAH_DDL_TBL C
+      ON B.DDL_TBL_ID = C.DDL_TBL_ID
+     AND C.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+    LEFT OUTER JOIN WAA_USER U
+      ON A.FRS_RQST_USER_ID = U.USER_ID
+     AND U.REG_TYP_CD IN ('C', 'U')
+     AND U.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+    LEFT OUTER JOIN WAA_USER U1
+      ON A.RQST_USER_ID = U1.USER_ID
+     AND U1.REG_TYP_CD IN ('C', 'U')
+     AND U1.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+    LEFT OUTER JOIN WAA_USER U2
+      ON A.APRV_USER_ID = U2.USER_ID
+     AND U2.REG_TYP_CD IN ('C', 'U')
+     AND U2.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+     
+   <where>
+   	<if test="ddlIdxId != null">
+     AND B.DDL_IDX_ID = #{ddlIdxId}
+   	</if>
+   	<if test="ddlTblId != null">
+     AND C.DDL_TBL_ID = #{ddlTblId}
+   	</if>
+<!--    	AND A.OBJ_VERS =  -->
+   </where>
+   ORDER BY A.EXP_DTM DESC, A.STR_DTM DESC
+  </select>
+  
+  <select id="selectDdlTblIdxColHistList" parameterType="kr.wise.meta.ddl.service.WamDdlIdxCol" resultMap="BaseResultMap">
+  SELECT A.*
+  	   , GET_USER_NM(A.FRS_RQST_USER_ID) AS FRS_RQST_USER_NM
+  	   , GET_USER_NM(A.RQST_USER_ID) AS RQST_USER_NM
+  	   , GET_USER_NM(A.APRV_USER_ID) AS APRV_USER_NM
+  	   , D.DATA_TYPE
+  	   , D.DATA_LEN
+  	   , D.DATA_SCAL
+  	   , D.PK_YN
+  	   , D.PK_ORD
+  	   , D.NONUL_YN
+  	   , D.DEFLT_VAL
+       , B.DDL_IDX_LNM
+       , C.DDL_TBL_PNM
+       , C.DDL_TBL_LNM
+       , S.FULL_PATH
+    FROM WAH_DDL_IDX_COL A 
+   INNER JOIN WAH_DDL_IDX B
+      ON A.DDL_IDX_ID = B.DDL_IDX_ID
+     AND B.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+   INNER JOIN WAH_DDL_TBL C
+      ON B.DDL_TBL_ID = C.DDL_TBL_ID
+     AND C.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+   INNER JOIN WAM_PDM_TBL P
+      ON C.PDM_TBL_ID = P.PDM_TBL_ID
+     AND P.REG_TYP_CD IN ('C', 'U')
+   INNER JOIN WAA_SUBJ S
+      ON P.SUBJ_ID = S.SUBJ_ID
+     AND S.REG_TYP_CD IN ('C', 'U')
+     AND S.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+   INNER JOIN WAH_DDL_COL D
+      ON A.DDL_COL_ID = D.DDL_COL_ID
+     AND D.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+  <where>
+  <if test="ddlTblId != null">
+	 AND C.DDL_TBL_ID = #{ddlTblId,jdbcType=VARCHAR}
+  </if>
+  <if test="ddlTblPnm != null">
+	 AND C.DDL_TBL_PNM = #{ddlTblPnm,jdbcType=VARCHAR}
+  </if>
+  <if test="fullPath != null">
+	 AND S.FULL_PATH = #{fullPath,jdbcType=VARCHAR}
+  </if>
+  </where>
+  ORDER BY A.DDL_IDX_ID, DDL_IDX_COL_ORD, DDL_IDX_COL_PNM
+  </select>
+  
+    <select id="selectOneColChangeList" parameterType="kr.wise.meta.ddl.service.WamDdlIdxCol" resultMap="BaseResultMap">
+  SELECT A.*
+  	   , B.DDL_IDX_PNM
+  	   , B.DDL_IDX_LNM
+  	   , C.DDL_TBL_PNM
+  	   , C.DDL_TBL_LNM
+       , U.USER_NM AS FRS_RQST_USER_NM
+       , U1.USER_NM AS RQST_USER_NM
+       , U2.USER_NM AS APRV_USER_NM
+       , CASE WHEN A.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD') AND A.REG_TYP_CD IN ('C', 'U') THEN '#0000FF'
+    	 ELSE NULL END AS FontColor
+    FROM WAH_DDL_IDX_COL A
+    LEFT JOIN WAM_DDL_IDX B
+      ON A.DDL_IDX_ID = B.DDL_IDX_ID
+     AND B.REG_TYP_CD IN ('C', 'U')
+    LEFT JOIN WAM_DDL_TBL C
+      ON B.DDL_TBL_ID = C.DDL_TBL_ID
+     AND C.REG_TYP_CD IN ('C', 'U')
+    LEFT OUTER JOIN WAA_USER U
+      ON A.FRS_RQST_USER_ID = U.USER_ID
+     AND U.REG_TYP_CD IN ('C', 'U')
+     AND U.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+    LEFT OUTER JOIN WAA_USER U1
+      ON A.RQST_USER_ID = U1.USER_ID
+     AND U1.REG_TYP_CD IN ('C', 'U')
+     AND U1.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+    LEFT OUTER JOIN WAA_USER U2
+      ON A.APRV_USER_ID = U2.USER_ID
+     AND U2.REG_TYP_CD IN ('C', 'U')
+     AND U2.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+     
+   <where>
+   	<if test="ddlIdxId != null">
+     AND B.DDL_IDX_ID = #{ddlIdxId}
+   	</if>
+   	<if test="ddlTblId != null">
+     AND C.DDL_TBL_ID = #{ddlTblId}
+   	</if>
+   	<if test="ddlIdxColId != null">
+     AND A.DDL_IDX_COL_ID = #{ddlIdxColId}
+   	</if>
+   </where>
+   ORDER BY A.EXP_DTM DESC, A.STR_DTM DESC
+  </select>
+</mapper>

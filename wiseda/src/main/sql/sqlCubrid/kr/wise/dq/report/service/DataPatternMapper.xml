@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.dq.report.service.DataPatternMapper" >
+  <resultMap id="DptrnResultMap" type="kr.wise.dq.report.service.DataPatternVO" extends="kr.wise.commons.damgmt.schedule.service.WamShdMapper.ShdResultMap">
+    <result column="OBJ_ID" property="objId" jdbcType="VARCHAR" />
+    <result column="ESN_ER_DATA_SNO" property="esnErDataSno" jdbcType="INTEGER" />
+    <result column="ER_DATA_SNO" property="erDataSno" jdbcType="INTEGER" />
+    <result column="COL_CNT" property="colCnt" jdbcType="INTEGER" />
+    <result column="HEADER_TEXT" property="headerText" jdbcType="VARCHAR" />
+    <result column="PK_DATA_YN" property="pkDataYn" jdbcType="VARCHAR" />
+    
+    <result column="PRFC_SCRIPT" property="prfcScript" jdbcType="VARCHAR" />
+    
+    <result column="COL_NM1" property="colNm1" jdbcType="VARCHAR" />
+    <result column="COL_NM2" property="colNm2" jdbcType="VARCHAR" />
+    <result column="COL_NM3" property="colNm3" jdbcType="VARCHAR" />
+    <result column="COL_NM4" property="colNm4" jdbcType="VARCHAR" />
+    <result column="COL_NM5" property="colNm5" jdbcType="VARCHAR" />
+    <result column="COL_NM6" property="colNm6" jdbcType="VARCHAR" />
+    <result column="COL_NM7" property="colNm7" jdbcType="VARCHAR" />
+    <result column="COL_NM8" property="colNm8" jdbcType="VARCHAR" />
+    <result column="COL_NM9" property="colNm9" jdbcType="VARCHAR" />
+    <result column="COL_NM10" property="colNm10" jdbcType="VARCHAR" />
+    
+    <result column="COL_NM11" property="colNm11" jdbcType="VARCHAR" />
+    <result column="COL_NM12" property="colNm12" jdbcType="VARCHAR" />
+    <result column="COL_NM13" property="colNm13" jdbcType="VARCHAR" />
+    <result column="COL_NM14" property="colNm14" jdbcType="VARCHAR" />
+    <result column="COL_NM15" property="colNm15" jdbcType="VARCHAR" />
+    <result column="COL_NM16" property="colNm16" jdbcType="VARCHAR" />
+    <result column="COL_NM17" property="colNm17" jdbcType="VARCHAR" />
+    <result column="COL_NM18" property="colNm18" jdbcType="VARCHAR" />
+    <result column="COL_NM19" property="colNm19" jdbcType="VARCHAR" />
+    <result column="COL_NM20" property="colNm20" jdbcType="VARCHAR" />
+    
+    <result column="COL_NM21" property="colNm21" jdbcType="VARCHAR" />
+    <result column="COL_NM22" property="colNm22" jdbcType="VARCHAR" />
+    <result column="COL_NM23" property="colNm23" jdbcType="VARCHAR" />
+    <result column="COL_NM24" property="colNm24" jdbcType="VARCHAR" />
+    <result column="COL_NM25" property="colNm25" jdbcType="VARCHAR" />
+    <result column="COL_NM26" property="colNm26" jdbcType="VARCHAR" />
+    <result column="COL_NM27" property="colNm27" jdbcType="VARCHAR" />
+    <result column="COL_NM28" property="colNm28" jdbcType="VARCHAR" />
+    <result column="COL_NM29" property="colNm29" jdbcType="VARCHAR" />
+    <result column="COL_NM30" property="colNm30" jdbcType="VARCHAR" />
+    
+  </resultMap>
+  
+  <resultMap id="AnaResultMap" type="kr.wise.dq.report.service.DataPatternVO">
+    <result column="OBJ_ID" property="objId" jdbcType="VARCHAR" />
+    <result column="ANA_STR_DTM" property="anaStrDtm" jdbcType="VARCHAR" />
+    <result column="ANA_END_DTM" property="anaEndDtm" jdbcType="VARCHAR" />
+    <result column="ANA_DGR" property="anaDgr" jdbcType="DECIMAL" />
+    <result column="ANA_CNT" property="anaCnt" jdbcType="DECIMAL" />
+    <result column="ER_CNT" property="erCnt" jdbcType="DECIMAL" />
+    <result column="ANA_USER_ID" property="anaUserId" jdbcType="VARCHAR" />
+    <result column="ANA_USER_NM" property="anaUserNm" jdbcType="VARCHAR" />
+    <result column="ER_RATE" property="erRate" jdbcType="VARCHAR" />
+  </resultMap>
+  
+<select id="dptrnList" resultMap="DptrnResultMap" parameterType="kr.wise.dq.report.service.DataPatternVO">
+
+SELECT A.${objIdCol} 																									
+		 , A.${erDataSnoCol} AS ER_DATA_SNO
+		 , A.COL_CNT 												
+		 ${colNm}
+	<if test="objIdCol != null and objIdCol == 'PRF_ID' ">
+		 ,CASE WHEN P.PRF_ID IS NULL THEN NULL ELSE '#FF0000' END AS FontColor
+		 ,CASE WHEN P.PRF_ID IS NULL THEN NULL ELSE '1' END AS PK_DATA_YN
+	</if>
+  FROM ${objErrTbl} A				
+  	<if test="objIdCol != null and objIdCol == 'PRF_ID' ">
+  			LEFT OUTER JOIN (SELECT PRF_ID, ANA_STR_DTM, ESN_ER_DATA_SNO
+                           FROM WAM_PRF_ERR_DATA_PKDATA
+                          GROUP BY PRF_ID, ANA_STR_DTM, ESN_ER_DATA_SNO ) P
+          ON A.PRF_ID = P.PRF_ID
+         AND A.ANA_STR_DTM = P.ANA_STR_DTM
+         AND A.ESN_ER_DATA_SNO = P.ESN_ER_DATA_SNO
+     </if>		
+<![CDATA[					
+WHERE A.${erDataSnoCol} <> 0				
+   AND A.${objIdCol} = #{objId, jdbcType=VARCHAR}
+   AND A.ANA_STR_DTM = DATE_FORMAT('${objDate}','%Y-%m-%d %H:%i:%s')
+ ORDER BY A.${erDataSnoCol}							
+ ]]>
+</select>
+
+<select id="dptrnListNoDate" resultMap="DptrnResultMap" parameterType="kr.wise.dq.report.service.DataPatternVO">
+
+SELECT A.${objIdCol} 																									
+		 , A.${erDataSnoCol} AS ER_DATA_SNO
+		 , A.COL_CNT 												
+		 ${colNm}
+	<if test="objIdCol != null and objIdCol == 'PRF_ID' ">
+		 ,CASE WHEN P.PRF_ID IS NULL THEN NULL ELSE '#FF0000' END AS FontColor
+		 ,CASE WHEN P.PRF_ID IS NULL THEN NULL ELSE '1' END AS PK_DATA_YN
+	</if>
+  FROM ${objErrTbl} A				
+  	<if test="objIdCol != null and objIdCol == 'PRF_ID' ">
+  			LEFT OUTER JOIN (SELECT PRF_ID, ANA_STR_DTM, ESN_ER_DATA_SNO
+                           FROM WAM_PRF_ERR_DATA_PKDATA
+                          GROUP BY PRF_ID, ANA_STR_DTM, ESN_ER_DATA_SNO ) P
+          ON A.PRF_ID = P.PRF_ID
+         AND A.ANA_STR_DTM = P.ANA_STR_DTM
+         AND A.ESN_ER_DATA_SNO = P.ESN_ER_DATA_SNO
+     </if>		
+<![CDATA[					
+WHERE A.${erDataSnoCol} <> 0				
+   AND A.${objIdCol} = #{objId, jdbcType=VARCHAR}
+   AND A.ANA_STR_DTM = (SELECT MAX(ANA_STR_DTM) FROM WAM_PRF_ERR_DATA WHERE PRF_ID = #{objId, jdbcType=VARCHAR})
+   AND A.${erDataSnoCol} <= 100
+ ORDER BY A.${erDataSnoCol}							
+ ]]>
+</select>
+
+<select id="selectPkDptrnList" resultMap="DptrnResultMap" parameterType="kr.wise.dq.report.service.DataPatternVO">
+<![CDATA[
+ SELECT A.PRF_ID 																									
+		 , P.ESN_ER_DATA_PK_SNO AS ER_DATA_SNO
+		 , P.COL_CNT 												
+		 ${colNm}
+  FROM WAM_PRF_ERR_DATA A				
+  			INNER JOIN WAM_PRF_ERR_DATA_PKDATA P
+                ON A.PRF_ID = P.PRF_ID
+               AND A.ANA_STR_DTM = P.ANA_STR_DTM
+               AND A.ESN_ER_DATA_SNO = P.ESN_ER_DATA_SNO	
+WHERE P.ESN_ER_DATA_SNO = #{erDataSno, jdbcType=VARCHAR }			
+   AND A.PRF_ID = #{objId, jdbcType=VARCHAR}
+   AND A.ANA_STR_DTM = DATE_FORMAT('${objDate}','%Y-%m-%d %H:%i:%s')
+   AND P.ESN_ER_DATA_PK_SNO <> 0
+ ORDER BY P.ESN_ER_DATA_SNO						
+ ]]>
+</select>
+
+<select id="selectPrfAnaResDtl" resultMap="AnaResultMap" parameterType="kr.wise.dq.report.service.DataPatternVO">
+ SELECT PRF_ID AS OBJ_ID
+           ,DATE_FORMAT(ANA_STR_DTM,'%Y-%m-%d %H:%i:%s') AS ANA_STR_DTM
+	       ,DATE_FORMAT(ANA_END_DTM,'%Y-%m-%d %H:%i:%s') AS ANA_END_DTM
+	       ,ANA_DGR
+	       ,ANA_CNT
+	       ,ESN_ER_CNT AS ER_CNT
+	       ,ANA_LOG_ID
+	       ,GET_USER_NM(ANA_USER_ID) AS ANA_USER_NM
+	       ,(CASE WHEN ANA_CNT IS NULL THEN NULL 
+                        ELSE RTRIM(TO_CHAR(CASE WHEN ANA_CNT = '0' THEN '0'
+                                       ELSE TO_CHAR(ROUND(ESN_ER_CNT*100/ANA_CNT,2))
+                                       END ,'FM9990D99') )
+                        END ) AS ER_RATE
+  FROM WAM_PRF_RESULT
+ WHERE PRF_ID = #{objId, jdbcType=VARCHAR}
+ 	<if test="objDate == ''">
+ 		AND ANA_STR_DTM = DATE_FORMAT('99991231000000','%Y-%m-%d %H:%i:%s')
+ 	</if>
+ 	<if test="objDate != ''">
+    	AND ANA_STR_DTM = DATE_FORMAT('${objDate}','%Y-%m-%d %H:%i:%s')
+    </if>
+</select>
+
+<select id="selectBrAnaResDtl" resultMap="AnaResultMap" parameterType="kr.wise.dq.report.service.DataPatternVO">
+ SELECT BR_ID AS OBJ_ID
+           ,DATE_FORMAT(ANA_STR_DTM,'%Y-%m-%d %H:%i:%s') AS ANA_STR_DTM
+	       ,DATE_FORMAT(ANA_END_DTM,'%Y-%m-%d %H:%i:%s') AS ANA_END_DTM
+	       ,ANA_DGR
+	       ,ANA_CNT
+	       ,ER_CNT
+	       ,ANA_LOG_ID
+	       ,GET_USER_NM(ANA_USER_ID) AS ANA_USER_NM
+	       ,(CASE WHEN ANA_CNT IS NULL THEN NULL 
+                        ELSE (CASE WHEN ANA_CNT = '0' THEN '0'
+                                       ELSE TO_CHAR(ROUND(ER_CNT*100/ANA_CNT,2))
+                                       END )
+                        END ) AS ER_RATE
+  FROM WAM_BR_RESULT
+ WHERE BR_ID = #{objId, jdbcType=VARCHAR}
+  	<if test="objDate == ''">
+ 		AND ANA_STR_DTM = DATE_FORMAT('99991231000000','%Y-%m-%d %H:%i:%s')
+ 	</if>
+ 	<if test="objDate != ''">
+    	AND ANA_STR_DTM = DATE_FORMAT('${objDate}','%Y-%m-%d %H:%i:%s')
+    </if>
+</select>
+
+
+<select id="dptrnHeader" resultMap="DptrnResultMap" parameterType="kr.wise.dq.report.service.DataPatternVO">
+SELECT  NVL(A.COL_CNT, 0) AS COL_CNT
+  FROM ${objResTbl} R
+          INNER JOIN ${objErrTbl} A 
+           <if test="objIdCol != 'BR_ID' ">
+		 	  ON R.PRF_ID = A.PRF_ID
+		   </if>
+           <if test="objIdCol == 'BR_ID' ">
+		 	  ON R.BR_ID = A.BR_ID
+		   </if>
+             AND R.ANA_STR_DTM = A.ANA_STR_DTM
+ WHERE 1=1
+   <if test="objIdCol == 'PRF_ID' ">
+ 	AND A.ESN_ER_DATA_SNO = 0
+   </if>
+   <if test="objIdCol == 'BR_ID' ">
+ 	AND A.ER_DATA_SNO = 0
+   </if>
+   <if test="objIdCol == 'PK_DATA' ">
+    AND A.ESN_ER_DATA_SNO = #{erDataSno, jdbcType=VARCHAR }
+ 	AND A.ESN_ER_DATA_PK_SNO = 0
+   </if>
+   
+   <if test="objIdCol != 'BR_ID' ">
+ 	   AND A.PRF_ID = #{objId, jdbcType=VARCHAR}
+   </if>
+    <if test="objIdCol == 'BR_ID' ">
+ 	  AND A.BR_ID = #{objId, jdbcType=VARCHAR}
+   </if>
+ 	<if test="objDate == ''">
+ 		AND A.ANA_STR_DTM = DATE_FORMAT('99991231000000','%Y-%m-%d %H:%i:%s')
+ 	</if>
+ 	<if test="objDate != ''">
+    	AND A.ANA_STR_DTM = DATE_FORMAT('${objDate}','%Y-%m-%d %H:%i:%s')
+    </if>
+</select>
+
+<select id="DptrnHeaderText" resultMap="DptrnResultMap" parameterType="kr.wise.dq.report.service.DataPatternVO">
+ SELECT  A.COL_CNT
+           ,${headerTextColNm} AS HEADER_TEXT
+FROM ${objResTbl} R
+          INNER JOIN ${objErrTbl} A 
+               ON R.${objIdCol} = A.${objIdCol}
+              AND R.ANA_STR_DTM = A.ANA_STR_DTM
+WHERE 1=1  			  
+AND A.${erDataSnoCol} = 0				
+AND A.${objIdCol} = #{objId, jdbcType=VARCHAR}
+AND A.ANA_STR_DTM = DATE_FORMAT('${objDate}','%Y-%m-%d %H:%i:%s')
+</select>
+
+<select id="PkDptrnHeaderText" resultMap="DptrnResultMap" parameterType="kr.wise.dq.report.service.DataPatternVO">
+ SELECT  A.COL_CNT
+           ,${headerTextColNm} AS HEADER_TEXT
+FROM ${objResTbl} R
+          INNER JOIN ${objErrTbl} A 
+               ON R.PRF_ID = A.PRF_ID
+              AND R.ANA_STR_DTM = A.ANA_STR_DTM
+WHERE 1=1  			  
+AND A.ESN_ER_DATA_PK_SNO = 0	
+AND A.ESN_ER_DATA_SNO = #{erDataSno, jdbcType=VARCHAR }			
+AND A.PRF_ID = #{objId, jdbcType=VARCHAR}
+AND A.ANA_STR_DTM = DATE_FORMAT('${objDate}','%Y-%m-%d %H:%i:%s')
+</select>
+  
+<select id="selectPrfcScript" resultType="String" parameterType="kr.wise.dq.report.service.DataPatternVO">
+ SELECT A.PRFC_SCRIPT
+FROM WAM_PRF_MSTR A
+WHERE 1=1	
+AND A.PRF_ID = #{objId, jdbcType=VARCHAR}
+AND A.REG_TYP_CD IN ('C', 'U')
+AND A.PRFC_SCRIPT IS NOT NULL
+</select>
+
+<update id="updatePrfcScript" parameterType="kr.wise.dq.report.service.DataPatternVO">
+UPDATE WAM_PRF_MSTR
+   SET PRFC_SCRIPT = #{prfcScript, jdbcType=VARCHAR}
+ WHERE PRF_ID = #{objId, jdbcType=VARCHAR}
+   AND REG_TYP_CD IN ('C', 'U')
+</update>
+</mapper>

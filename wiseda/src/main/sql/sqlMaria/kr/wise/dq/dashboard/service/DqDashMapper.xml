@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.dq.dashboard.service.DqDashMapper" >
+
+    <resultMap id="dataDQList" type="kr.wise.dq.dashboard.service.DqdashSystemVO" >
+        <result column="BIZAREA_NM" property="bizareaNm"  />
+        <result column="TBL_CNT" property="tblCnt"  />
+        <result column="COL_CNT" property="colCnt"  />
+    	<result column="BRA_CNT"  property="braCnt"  />
+    	<result column="ANA_CNT"  property="anaCnt"  />
+    	<result column="ERR_CNT"  property="errCnt"  />
+    	<result column="ERR_RATE" property="errRate"  />
+    </resultMap>
+    
+    <resultMap id="dataDQListSub" type="kr.wise.dq.dashboard.service.DqdashSystemVO" >
+    	<result column="BIZAREA_NM" property="bizareaNm"  />
+        <result column="BRA_CNT" property="braCnt"  />
+        <result column="IMP_CNT"  property="nonPrc"  />
+    	<result column="ERR_PRC"  property="errPrc"  />
+    	<result column="IMP_PRC"  property="impPrc"  />
+    	<result column="IMP_END"  property="impEnd"  />
+    </resultMap>
+    
+    
+    <resultMap id="bizareaImpvResultMap" type="kr.wise.dq.dashboard.service.DqdashSystemVO" >
+    	<result column="BIZAREA_NM" property="bizareaNm"  />
+        <result column="BR_CNT" property="braCnt"  />
+        <result column="ANA_CNT"  property="anaCnt"  />
+    	<result column="ERR_CNT"  property="errCnt"  />
+    	<result column="CS_CNT"  property="csCnt"  />
+    	<result column="IM_CNT"  property="imCnt"  />
+    </resultMap>
+    
+
+    
+    <resultMap id="errChart" type="kr.wise.dq.dashboard.service.DbcAllErrChartVO" >
+        <result column="NO_ERR" property="noErr"  />
+    	<result column="NO_ERR_PST"  property="noErrPst"  />	
+    	<result column="TOTAL"  property="total"  />
+        <result column="ANA_ACT_CNT" property="anaActCnt"  />
+    	<result column="ERR_CNT"  property="errCnt"  />	
+    	<result column="ERR_RATE"  property="errRate"  />
+    </resultMap>
+    
+    
+    <resultMap id="totcntmap" type="kr.wise.portal.dashboard.service.TotalCountVO" >
+        <result column="CNT_NAME" property="cntName"  />
+    	<result column="TOT_CNT"  property="totCnt"  />
+    	<result column="PAGE"  property="page"  />	
+   </resultMap>
+    
+    <select id="getDataDQList" resultMap="dataDQList">
+		SELECT C.BIZ_AREA_LNM AS BIZAREA_NM
+		       <![CDATA[   
+		      ,FORMAT(SUM(A.TBL_CNT),0) AS TBL_CNT
+		      ,FORMAT(SUM(A.COL_CNT),0) AS COL_CNT
+		      ,FORMAT(COUNT(A.BR_ID),0) AS BRA_CNT  
+		      ,FORMAT(SUM(CASE WHEN coalesce(X.ER_CNT,0) > 0 THEN 1 END),0) AS ERR_CNT  
+		      ,DECODE(SUM(NVL(X.ANA_CNT,0)),0,0,ROUND(SUM(NVL(X.ER_CNT,0))*100/SUM(NVL(X.ANA_CNT,0)),2)) AS ERR_RATE
+		    ]]>
+		FROM (SELECT M.BR_ID
+		            ,M.BIZ_AREA_ID
+		            ,COUNT(T.CNT)AS TBL_CNT
+		            ,SUM(C.CNT) AS COL_CNT 
+		      FROM WAM_BR_MSTR M LEFT OUTER JOIN (SELECT DB_CONN_TRG_ID
+		                                                ,DBC_TBL_NM
+		                                                ,COUNT(*)AS CNT 
+		                                          FROM WAT_DBC_TBL 
+		                                          GROUP BY DB_CONN_TRG_ID, DBC_TBL_NM
+		                                         )T
+		                                    ON M.DB_CONN_TRG_ID = T.DB_CONN_TRG_ID
+		                                    AND UPPER(M.DBC_TBL_NM) = UPPER(T.DBC_TBL_NM)    
+		                         LEFT OUTER JOIN (SELECT BB.DB_CONN_TRG_ID
+		                                                ,DBC_TBL_NM
+		                                                ,COUNT(*)AS CNT 
+		                                          FROM WAT_DBC_COL AA LEFT OUTER JOIN WAA_DB_SCH BB
+                                                  ON AA.DB_SCH_ID = BB.DB_SCH_ID
+		                                          GROUP BY DB_CONN_TRG_ID, DBC_TBL_NM
+		                                         )C
+		                                    ON M.DB_CONN_TRG_ID = C.DB_CONN_TRG_ID                   
+		                                    AND UPPER(T.DBC_TBL_NM) = UPPER(C.DBC_TBL_NM) 
+		      WHERE M.REG_TYP_CD IN ('C','U')
+		      GROUP BY M.BR_ID, M.BIZ_AREA_ID
+		     )A INNER JOIN WAM_BIZ_AREA B
+		              ON A.BIZ_AREA_ID = B.BIZ_AREA_ID
+		              AND B.REG_TYP_CD IN ('C','U')
+		        INNER JOIN WAM_BIZ_AREA C
+		              ON C.BIZ_AREA_ID = B.UPP_BIZ_AREA_ID
+		              AND C.REG_TYP_CD IN ('C','U')
+		              AND C.BIZ_AREA_LVL = 2  
+		        LEFT OUTER JOIN (SELECT A.BR_ID
+		                          ,A.ANA_CNT
+		                          ,A.ER_CNT
+		                          ,A.ANA_DGR
+		                    FROM WAM_BR_RESULT A
+		                    WHERE ANA_DGR = (SELECT MAX(ANA_DGR) FROM WAM_BR_RESULT B
+		                                     WHERE A.BR_ID = B.BR_ID
+		                                       AND A.ANA_STR_DTM = B.ANA_STR_DTM)
+		                   )X   
+		              ON A.BR_ID = X.BR_ID         
+		GROUP BY C.BIZ_AREA_LNM
+		
+		     
+		      
+		
+    </select>
+    
+    <select id="getJobTeamDQList" resultMap="dataDQListSub">    
+     <![CDATA[      
+		SELECT C.BIZ_AREA_LNM  AS BIZAREA_NM                    
+		      ,COUNT(M.BR_ID) AS BRA_CNT      
+		      ,SUM(DECODE(R.ER_CNT, 0, 0, 1 ))AS IMP_CNT                    
+		      ,SUM(CASE WHEN E.ANA_JOB_ID IS NOT NULL AND R.ER_CNT <> E.ER_CNT 
+		                THEN 1
+		                ELSE 0
+		                END
+		          )AS ERR_PRC                    
+		      ,SUM(CASE WHEN I.ANA_JOB_ID IS NOT NULL AND E.ER_CNT <> I.IMP_CNT 
+		                THEN 1
+		                ELSE 0
+		                END
+		          )AS IMP_PRC                    
+		      ,SUM(CASE WHEN I.ANA_JOB_ID IS NOT NULL AND E.ER_CNT = I.IMP_CNT 
+		                THEN 1
+		                ELSE 0
+		                END
+		          )AS IMP_END
+		FROM WAM_BR_MSTR M INNER JOIN WAM_BIZ_AREA B
+		                         ON M.BIZ_AREA_ID = B.BIZ_AREA_ID
+		                         AND B.REG_TYP_CD IN ('C','U')
+		                   INNER JOIN WAM_BIZ_AREA C
+		                         ON C.BIZ_AREA_ID = B.UPP_BIZ_AREA_ID
+		                         AND C.REG_TYP_CD IN ('C','U')
+		                         AND C.BIZ_AREA_LVL = 2
+		                   LEFT OUTER JOIN (SELECT A.BR_ID
+		                                          ,A.ER_CNT
+		                                          ,A.ANA_DGR
+		                                          ,A.ANA_STR_DTM
+		                                    FROM WAM_BR_RESULT A
+		                                    WHERE A.ANA_DGR = (SELECT MAX(B.ANA_DGR) 
+		                                                       FROM WAM_BR_RESULT B
+		                                                       WHERE A.BR_ID = B.BR_ID
+		                                                      )
+		                                   )R
+		                              ON M.BR_ID = R.BR_ID                         
+		                   LEFT OUTER JOIN WAM_IM_ACT_MSTR A                    
+		                              ON R.BR_ID = A.ANA_JOB_ID      
+		                              AND R.ANA_STR_DTM = A.ANA_STR_DTM        
+		                   LEFT OUTER JOIN (SELECT ANA_JOB_ID
+		                                          ,ANA_STR_DTM
+		                                          ,COUNT(*) AS ER_CNT 
+		                                    FROM WAM_CS_ANA_CD
+		                                    GROUP BY ANA_JOB_ID, ANA_STR_DTM
+		                                   )E
+		                              ON R.BR_ID = E.ANA_JOB_ID                         
+		                              AND A.ANA_STR_DTM = E.ANA_STR_DTM  
+		                   LEFT OUTER JOIN (SELECT ANA_STR_DTM
+		                                          ,ANA_JOB_ID
+		                                          ,COUNT(*) AS IMP_CNT 
+		                                    FROM WAM_IM_ACT_CD
+		                                    GROUP BY ANA_STR_DTM, ANA_JOB_ID
+		                                   )I   
+		                              ON R.BR_ID = I.ANA_JOB_ID                         
+		                              AND A.ANA_STR_DTM = I.ANA_STR_DTM  
+		WHERE M.REG_TYP_CD IN ('C','U')                    
+		                            
+		GROUP BY C.BIZ_AREA_LNM  
+      ]]>
+    </select>
+    
+    <select id="selectBizAareaImpvList" resultMap="bizareaImpvResultMap">    
+     <![CDATA[      
+		SELECT B.BIZ_AREA_LNM  AS BIZAREA_NM
+		       , COUNT(M.BR_ID) AS BR_CNT 
+		       , SUM( CASE WHEN R.BR_ID IS NOT NULL THEN 1 ELSE 0 END ) AS ANA_CNT
+		       , SUM( CASE WHEN R.ER_CNT > 0 THEN 1 ELSE 0 END ) AS ERR_CNT
+		       , SUM( CASE WHEN C.ANA_JOB_ID IS NOT NULL THEN 1 ELSE 0 END ) AS CS_CNT
+		       , SUM( CASE WHEN I.ANA_JOB_ID IS NOT NULL THEN 1 ELSE 0 END ) AS IM_CNT
+		  FROM WAM_BR_MSTR M 
+		       INNER JOIN WAM_BIZ_AREA B
+		          ON M.BIZ_AREA_ID = B.BIZ_AREA_ID
+		         AND B.REG_TYP_CD IN ('C','U')
+		        LEFT OUTER JOIN (SELECT A.BR_ID ,A.ER_CNT ,A.ANA_DGR ,A.ANA_STR_DTM
+		                           FROM WAM_BR_RESULT A
+		                          WHERE A.ANA_DGR = (SELECT MAX(B.ANA_DGR) 
+				                                               FROM WAM_BR_RESULT B
+				                                                 --  업무규칙별 최근차수 ???
+				                                                 --  최근차수의 업무규칙
+				                                             --  WHERE A.BR_ID = B.BR_ID 
+				                                              ) )R
+		          ON M.BR_ID = R.BR_ID
+		        --  개선계획
+		        LEFT OUTER JOIN WAM_CS_ANA_MSTR C                    
+		          ON R.BR_ID = C.ANA_JOB_ID      
+		         AND R.ANA_STR_DTM = C.ANA_STR_DTM 
+		        --  개선활동
+		        LEFT OUTER JOIN WAM_IM_ACT_MSTR I                    
+		          ON C.ANA_JOB_ID = I.ANA_JOB_ID      
+		         AND C.ANA_STR_DTM = I.ANA_STR_DTM 
+		WHERE M.REG_TYP_CD IN ('C','U')
+		GROUP BY B.BIZ_AREA_LNM  
+		ORDER BY 3 DESC , 4 DESC 
+      ]]>
+    </select>
+    
+    <select id="selectDqErrChartList" resultMap="errChart">
+			SELECT SUM(R.ANA_CNT) AS ANA_ACT_CNT  
+			      ,SUM(R.ER_CNT) AS ERR_CNT      
+			      ,DECODE(SUM(R.ANA_CNT),0,100,DECODE(SUM(R.ER_CNT),0,0,ROUND(((SUM(R.ER_CNT))/SUM(R.ANA_CNT)*100),2))) AS ERR_RATE 
+			FROM WAA_DB_CONN_TRG DB INNER JOIN (SELECT BR_ID 
+			                                       ,DB_CONN_TRG_ID 
+			                                 FROM WAM_BR_MSTR   
+			                                 WHERE REG_TYP_CD IN ('C','U') 
+			                                )M  
+			                           ON DB.DB_CONN_TRG_ID = M.DB_CONN_TRG_ID   
+			                           AND DB.EXP_DTM = '99991231'    
+			                           AND DB.REG_TYP_CD IN ('C','U') 
+			                     INNER JOIN (SELECT A.BR_ID    
+			                                       ,B.DQI_ID    
+			                                 FROM (SELECT BR_ID
+			                                             ,DQI_ID  
+			                                       FROM WAM_BR_DQI_MAP  
+			                                       WHERE REG_TYP_CD IN ('C', 'U')                   
+			                                      )A INNER JOIN (SELECT A.DQI_LNM                       
+			                                                           ,A.DQI_ID          
+			                                                           ,CASE WHEN A.DQI_LVL > 1     
+			                                                                 THEN (SELECT DQI_LNM      
+			                                                                       FROM WAM_DQI              
+			                                                                       WHERE DQI_ID = A.UPP_DQI_ID 
+			                                                                       AND REG_TYP_CD IN ('C', 'U')  
+			                                                                      )END AS UPP_DQI_NM                           
+			                                                           ,A.UPP_DQI_ID    
+			                                                     FROM (SELECT *           
+			                                                           FROM WAM_DQI 
+			                                                           WHERE REG_TYP_CD IN ('C','U')) A                 
+			                                                           START WITH A.DQI_LVL = 1                           
+			                                                           CONNECT BY PRIOR A.DQI_ID = UPP_DQI_ID                
+			                                                          )B                                                      
+			                                               ON A.DQI_ID = B.DQI_ID 
+			                                )DQI                            
+			                           ON M.BR_ID = DQI.BR_ID                  
+			                     INNER JOIN (SELECT BR_ID        
+			                                       ,ANA_DGR     
+			                                       ,ANA_CNT 
+			                                       ,ER_CNT     
+			                                 FROM WAM_BR_RESULT      
+			                                 WHERE ANA_DGR IS NOT NULL 
+			                                )R                        
+			                           ON M.BR_ID = R.BR_ID            
+			                     INNER JOIN (SELECT BR_ID
+			                                       ,MAX(ANA_DGR) AS ANA_DGR  
+			                                 FROM WAM_BR_RESULT 
+			                                 GROUP BY BR_ID 
+			                                )X   
+			                           ON R.BR_ID = X.BR_ID         
+			                           AND R.ANA_DGR = X.ANA_DGR
+    </select>
+    
+	<select id="selectTotCntDqCri" resultMap="totcntmap">
+		SELECT '진단대상DB' AS CNT_NAME
+ 		<!--  SELECT 'DBMS' AS CNT_NAME -->
+		       ,FORMAT(COUNT(DB_CONN_TRG_ID), '0') AS TOT_CNT
+		       ,'/dq/criinfo/anatrg/anadbmsrqst.do?linkFlag=1' AS PAGE
+		  FROM WAA_DB_CONN_TRG DB
+		 WHERE DB.EXP_DTM = '99991231'    
+		   AND DB.REG_TYP_CD IN ('C','U') 
+		UNION ALL
+		SELECT '업무영역' AS CNT_NAME	
+ 		<!--  SELECT 'BUSINESS AREA' AS CNT_NAME -->
+		       ,FORMAT(COUNT(BIZ_AREA_ID), '0') AS TOT_CNT
+		       ,'/dq/criinfo/bizarea/bizarea_lst.do?linkFlag=1' AS PAGE
+		  FROM WAM_BIZ_AREA
+		 WHERE REG_TYP_CD IN ('C','U') 
+		   AND UPP_BIZ_AREA_ID IS NOT NULL
+		UNION ALL
+		SELECT '데이터품질지표' AS CNT_NAME	
+ 		<!--  SELECT 'DQI' AS CNT_NAME -->
+		       ,FORMAT(COUNT(DQI_ID), '0') AS TOT_CNT
+		       ,'/dq/criinfo/dqi/dqi_lst.do?linkFlag=1' AS PAGE
+		  FROM WAM_DQI
+		 WHERE REG_TYP_CD IN ('C','U') 
+		   AND UPP_DQI_ID IS NOT NULL
+		UNION ALL
+		SELECT '중요정보항목' AS CNT_NAME	
+ 		<!--  SELECT 'CTQ' AS CNT_NAME -->
+		       ,FORMAT(COUNT(CTQ_ID), '0') AS TOT_CNT
+		       ,'/dq/criinfo/ctq/ctq_lst.do?linkFlag=1' AS PAGE
+		  FROM WAM_CTQ
+		 WHERE REG_TYP_CD IN ('C','U') 
+		UNION ALL 
+		SELECT '프로파일' AS CNT_NAME
+		<!--  SELECT 'PROFILE' AS CNT_NAME -->
+		       ,FORMAT(COUNT(PRF_ID), '0') AS TOT_CNT
+		       ,'/dq/profile/profile_list.do?linkFlag=1' AS PAGE
+		  FROM WAM_PRF_MSTR
+		 WHERE REG_TYP_CD IN ('C','U') 
+		UNION ALL
+		SELECT '업무규칙' AS CNT_NAME
+		<!--  SELECT 'BUSINESS RULES' AS CNT_NAME -->
+		       ,FORMAT(COUNT(BR_ID), '0') AS TOT_CNT
+		       ,'/dq/bizrule/bizrule_lst.do?linkFlag=1' AS PAGE
+		  FROM WAM_BR_MSTR
+		 WHERE REG_TYP_CD IN ('C','U') 
+	</select>
+    
+</mapper>

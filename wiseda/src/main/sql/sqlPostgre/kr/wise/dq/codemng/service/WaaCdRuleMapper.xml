@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.dq.codemng.service.WaaCdRuleMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.dq.codemng.service.WaaCdRule" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+
+    <result column="CD_RULE_ID"		   property="cdRuleId"	   jdbcType="VARCHAR"/>
+    <result column="DB_CONN_TRG_LNM"   property="dbConnTrgLnm" jdbcType="VARCHAR" />
+    <result column="DB_CONN_TRG_PNM"   property="dbConnTrgPnm" jdbcType="VARCHAR" />
+    <result column="DB_CONN_TRG_ID"   property="dbConnTrgId" jdbcType="VARCHAR" />
+<!--     <result column="DB_SCH_PNM"        property="dbSchPnm"     jdbcType="VARCHAR" />
+    <result column="DB_SCH_LNM"        property="dbSchLnm"     jdbcType="VARCHAR" /> -->
+<!--     <result column="DBC_TBL_NM"        property="dbcTblNm"     jdbcType="VARCHAR" />
+    <result column="DBC_TBL_KOR_NM"    property="dbcTblKorNm"  jdbcType="VARCHAR" /> -->
+    <result column="CD_RULE_NM"        property="cdRuleNm"     jdbcType="VARCHAR" />
+    <result column="CD_SQL"            property="cdSql"        jdbcType="VARCHAR" />
+    <result column="CD_CLS_COL_NM"     property="cdClsColNm"   jdbcType="VARCHAR" />
+    <result column="CD_CLS_NM_COL_NM"  property="cdClsNmColNm" jdbcType="VARCHAR" />
+    <result column="CD_ID_COL_NM"      property="cdIdColNm"    jdbcType="VARCHAR" />
+    <result column="CD_NM_COL_NM"      property="cdNmColNm"    jdbcType="VARCHAR" />
+    <result column="OBJ_DESCN"         property="objDescn"     jdbcType="VARCHAR" />
+    <result column="CD_TYP_CD"         property="cdTypCd"      jdbcType="VARCHAR" />
+    <result column="DB_SCH_ID"         property="dbSchId"      jdbcType="VARCHAR" />
+    <result column="DB_SCH_PNM"         property="dbSchPnm"      jdbcType="VARCHAR" />
+  </resultMap>
+  
+
+ 
+  <sql id="Base_Column_List" >
+   	  CD_RULE_ID       
+	, DB_CONN_TRG_ID  
+    , CD_RULE_NM      
+    , CD_SQL          
+    , CD_CLS_COL_NM      
+    , CD_CLS_NM_COL_NM
+    , CD_ID_COL_NM       
+    , CD_NM_COL_NM    
+    , OBJ_DESCN       
+    , WRIT_DTM        
+  </sql>
+ 
+    <insert id="insertSelective" parameterType="kr.wise.dq.codemng.service.WaaCdRule" >
+    insert into WAA_CD_RULE
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+       CD_RULE_ID,
+       DB_CONN_TRG_ID,
+       CD_RULE_NM,
+       CD_SQL,
+       CD_CLS_COL_NM,
+       CD_CLS_NM_COL_NM,
+       CD_ID_COL_NM,
+       CD_NM_COL_NM,
+       <if test="objDescn != null" >
+        OBJ_DESCN,
+      </if>
+       WRIT_DTM,
+       CD_TYP_CD,
+       DB_SCH_ID 
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+        #{cdRuleId,jdbcType=VARCHAR},
+        #{dbConnTrgId,jdbcType=VARCHAR},
+     	#{cdRuleNm,jdbcType=VARCHAR},
+        #{cdSql,jdbcType=VARCHAR},
+        #{cdClsColNm,jdbcType=VARCHAR},
+        #{cdClsNmColNm,jdbcType=VARCHAR},
+        #{cdIdColNm,jdbcType=VARCHAR},
+        #{cdNmColNm,jdbcType=VARCHAR},        
+      <if test="objDescn != null" >
+        #{objDescn,jdbcType=CLOB},
+      </if>
+      	NOW(),
+      	#{cdTypCd,jdbcType=VARCHAR},
+      	#{dbSchId,jdbcType=VARCHAR}
+    </trim>
+  </insert>
+  
+  <select id="selectCodeMngList" resultMap = "BaseResultMap" parameterType="kr.wise.dq.codemng.service.WaaCdRule">
+	 SELECT R.CD_RULE_ID
+	      , R.DB_CONN_TRG_ID
+	      , D.DB_CONN_TRG_LNM
+	      , D.DB_CONN_TRG_PNM
+	      , R.CD_RULE_NM
+	      , R.CD_SQL
+	      , R.CD_CLS_COL_NM
+	      , R.CD_CLS_NM_COL_NM
+	      , R.CD_ID_COL_NM
+	      , R.CD_NM_COL_NM
+	      , R.OBJ_DESCN
+	      , R.CD_TYP_CD
+	      , R.DB_SCH_ID
+	      , S.DB_SCH_PNM
+	      , S.DB_SCH_LNM
+	  FROM WAA_CD_RULE R
+	  	LEFT OUTER JOIN WAA_DB_SCH S
+			ON R.DB_SCH_ID = S.DB_SCH_ID
+			 AND S.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+			 AND S.REG_TYP_CD IN ('C','U')
+  	   	LEFT JOIN WAA_DB_CONN_TRG D
+		 ON S.DB_CONN_TRG_ID=D.DB_CONN_TRG_ID
+	      AND D.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+	      AND D.REG_TYP_CD IN ('C','U')
+		    
+	 WHERE 1 = 1
+	 <if test="dbConnTrgId != null and dbConnTrgId !=''">
+	 AND R.DB_CONN_TRG_ID LIKE  '%' || #{dbConnTrgId,jdbcType=VARCHAR} || '%'
+	 </if>
+	 <if test="cdClsColNm != null and cdClsColNm !=''">
+	 AND R.CD_CLS_COL_NM LIKE '%'|| #{cdClsColNm,jdbcType=VARCHAR} || '%'
+	 </if>
+	 <if test="cdIdColNm != null and cdIdColNm !=''">
+	 AND R.CD_ID_COL_NM LIKE '%'|| #{cdIdColNm,jdbcType=VARCHAR} || '%'
+	 </if>
+	 <if test="cdRuleNm != null and cdRuleNm !=''">
+	 AND R.CD_RULE_NM LIKE '%' || #{cdRuleNm,jdbcType=VARCHAR} || '%'
+	 </if>
+	 <if test="dbSchId != null and dbSchId !=''">
+	 AND S.DB_SCH_ID LIKE '%'|| #{dbSchId,jdbcType=VARCHAR} || '%'
+	 </if>
+	 <if test="cdTypCd != null and cdTypCd !=''">
+	 AND R.CD_TYP_CD = #{cdTypCd,jdbcType=VARCHAR}
+	 </if>
+	 <if test="cdRuleNm != null and cdRuleNm !=''">
+	 AND R.CD_RULE_NM LIKE '%' || #{cdRuleNm,jdbcType=VARCHAR} || '%'
+	 </if>
+	 ORDER BY R.WRIT_DTM
+  </select>
+  
+  <select id="selectCodeMngList2" resultMap = "BaseResultMap" parameterType="kr.wise.dq.codemng.service.WaaCdRule">
+	 SELECT R.CD_RULE_ID
+	      , R.DB_CONN_TRG_ID
+	      , D.DB_CONN_TRG_LNM
+	      , D.DB_CONN_TRG_PNM
+	      , R.CD_RULE_NM
+	      , R.CD_SQL
+	      , R.CD_CLS_COL_NM
+	      , R.CD_CLS_NM_COL_NM
+	      , R.CD_ID_COL_NM
+	      , R.CD_NM_COL_NM
+	      , R.OBJ_DESCN
+	      , R.CD_TYP_CD
+	      , R.DB_SCH_ID
+	      , S.DB_SCH_PNM
+	      , S.DB_SCH_LNM
+	  FROM WAA_CD_RULE R
+	  	LEFT OUTER JOIN WAA_DB_SCH S
+			ON R.DB_SCH_ID = S.DB_SCH_ID
+			 AND S.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+			 AND S.REG_TYP_CD IN ('C','U')
+  	   	LEFT JOIN WAA_DB_CONN_TRG D
+		 ON R.DB_CONN_TRG_ID=D.DB_CONN_TRG_ID
+	      AND D.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+	      AND D.REG_TYP_CD IN ('C','U')
+		    
+	 WHERE 1 = 1
+	 <if test="dbConnTrgId != null and dbConnTrgId !=''">
+	 AND R.DB_CONN_TRG_ID LIKE  '%' || #{dbConnTrgId,jdbcType=VARCHAR} || '%'
+	 </if>
+	 <if test="cdClsColNm != null and cdClsColNm !=''">
+	 AND R.CD_CLS_COL_NM LIKE '%'|| #{cdClsColNm,jdbcType=VARCHAR} || '%'
+	 </if>
+	 <if test="cdIdColNm != null and cdIdColNm !=''">
+	 AND R.CD_ID_COL_NM LIKE '%'|| #{cdIdColNm,jdbcType=VARCHAR} || '%'
+	 </if>
+	 <if test="cdRuleNm != null and cdRuleNm !=''">
+	 AND R.CD_RULE_NM LIKE '%' || #{cdRuleNm,jdbcType=VARCHAR} || '%'
+	 </if>
+	 <if test="dbSchId != null and dbSchId !=''">
+	 AND S.DB_SCH_ID LIKE '%'|| #{dbSchId,jdbcType=VARCHAR} || '%'
+	 </if>
+	 ORDER BY R.WRIT_DTM
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="map">
+  	DELETE FROM WAA_CD_RULE
+  	 WHERE CD_RULE_ID = #{cdRuleId,jdbcType=VARCHAR}
+  </delete>
+  
+  
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.dq.codemng.service.WaaCdRule" >
+    update WAA_CD_RULE
+    <set >
+      <if test="dbConnTrgId != null" >
+        DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR},
+      </if>
+      <if test="cdRuleNm != null" >
+     	CD_RULE_NM = #{cdRuleNm,jdbcType=VARCHAR},
+      </if>
+      <if test="cdSql != null" >
+        CD_SQL = #{cdSql,jdbcType=VARCHAR},
+      </if> 
+      <if test="cdClsColNm != null" >
+     	CD_CLS_COL_NM = #{cdClsColNm,jdbcType=VARCHAR},
+      </if>
+      <if test="cdClsNmColNm != null" >
+     	CD_CLS_NM_COL_NM = #{cdClsNmColNm,jdbcType=VARCHAR},
+      </if>
+      <if test="cdIdColNm != null" >
+     	CD_ID_COL_NM = #{cdIdColNm,jdbcType=VARCHAR},
+      </if>
+      <if test="cdNmColNm != null" >
+     	CD_NM_COL_NM = #{cdNmColNm,jdbcType=VARCHAR},
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN = #{objDescn,jdbcType=CLOB},
+      </if>
+      <if test="cdTypCd != null" >
+        CD_TYP_CD = #{cdTypCd,jdbcType=CLOB},
+      </if>
+      <if test="dbSchId != null" >
+        DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where CD_RULE_ID = #{cdRuleId,jdbcType=VARCHAR}
+  </update>
+</mapper>

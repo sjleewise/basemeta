@@ -1,0 +1,958 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.commons.damgmt.gov.service.GovLstMapper">
+	<resultMap id="BaseResultMap" type="kr.wise.commons.damgmt.gov.service.WaaGovStwd"
+		extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+		<id column="STWD_ID" property="stwdId" jdbcType="VARCHAR" />
+		<id column="ENACT_DGR" property="enactDgr" jdbcType="VARCHAR" />
+		<result column="STWD_LNM" property="stwdLnm" jdbcType="VARCHAR" />
+		<result column="STWD_PNM" property="stwdPnm" jdbcType="VARCHAR" />
+		<result column="ENG_NM" property="engNm" jdbcType="VARCHAR" />
+
+		<result column="OBJ_DESCN" property="objDescn" jdbcType="VARCHAR" />
+		<result column="DMN_YN" property="dmnYn" jdbcType="VARCHAR" />
+		<result column="DMN_LNM" property="dmnLnm" jdbcType="VARCHAR" />
+		<result column="SYNONYMS" property="synonyms" jdbcType="VARCHAR" />
+		<result column="PROHIBITS" property="prohibits" jdbcType="VARCHAR" />
+		<result column="REG_TYP_CD" property="regTypCd" jdbcType="VARCHAR" />
+		<result column="REG_DTM" property="regDtm" jdbcType="VARCHAR" />
+		<result column="REG_USER_ID" property="regUserId" jdbcType="VARCHAR" />
+		<result column="APL_DTM" property="aplDtm" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<resultMap id="BaseResultMap2"
+		type="kr.wise.commons.damgmt.gov.service.WaaGovSditm" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+		<id column="SDITM_ID" property="sditmId" jdbcType="VARCHAR" />
+		<id column="ENACT_DGR" property="enactDgr" jdbcType="VARCHAR" />
+		<result column="SDITM_LNM" property="sditmLnm" jdbcType="VARCHAR" />
+		<result column="SDITM_PNM" property="sditmPnm" jdbcType="VARCHAR" />
+		<result column="OBJ_DESCN" property="objDescn" jdbcType="VARCHAR" />
+		<result column="DMN_ID" property="dmnId" jdbcType="VARCHAR" />
+		<result column="DMN_LNM" property="dmnLnm" jdbcType="VARCHAR" />
+		<result column="SAVE_TYPE" property="saveType" jdbcType="VARCHAR" />
+		<result column="EXAM_DATA" property="examData" jdbcType="VARCHAR" />
+		<result column="CD_VAL_RULE" property="cdValRule" jdbcType="VARCHAR" />
+		<result column="GOV_STND_CD" property="govStndCd" jdbcType="VARCHAR" />
+		<result column="GOV_ORG_NM" property="govOrgNm" jdbcType="VARCHAR" />
+		<result column="REG_TYP_CD" property="regTypCd" jdbcType="VARCHAR" />
+		<result column="REG_DTM" property="regDtm" jdbcType="VARCHAR" />
+		<result column="REG_USER_ID" property="regUserId" jdbcType="VARCHAR" />
+		<result column="APL_DTM" property="aplDtm" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<resultMap id="BaseResultMap3" type="kr.wise.commons.damgmt.gov.service.WaaGovDmn"
+		extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+		<id column="DMN_ID" property="dmnId" jdbcType="VARCHAR" />
+		<id column="ENACT_DGR" property="enactDgr" jdbcType="VARCHAR" />
+		<result column="UPP_DMNG_LNM" property="uppDmngLnm" jdbcType="VARCHAR" />
+		<result column="DMNG_LNM" property="dmngLnm" jdbcType="VARCHAR" />
+		<result column="DMN_LNM" property="dmnLnm" jdbcType="VARCHAR" />
+		<result column="DMN_PNM" property="dmnPnm" jdbcType="VARCHAR" />
+		<result column="OBJ_DESCN" property="objDescn" jdbcType="VARCHAR" />
+		<result column="DATA_TYPE" property="dataType" jdbcType="VARCHAR" />
+		<result column="DATA_LEN" property="dataLen" jdbcType="VARCHAR" />
+		<result column="DATA_SCAL" property="dataScal" jdbcType="VARCHAR" />
+		<result column="SAVE_TYPE" property="saveType" jdbcType="VARCHAR" />
+		<result column="EXAM_DATA" property="examData" jdbcType="VARCHAR" />
+		<result column="UNIT_TYPE" property="unitType" jdbcType="VARCHAR" />
+		<result column="CD_VAL_RULE" property="cdValRule" jdbcType="VARCHAR" />
+		<result column="REG_TYP_CD" property="regTypCd" jdbcType="VARCHAR" />
+		<result column="REG_DTM" property="regDtm" jdbcType="VARCHAR" />
+		<result column="REG_USER_ID" property="regUserId" jdbcType="VARCHAR" />
+		<result column="APL_DTM" property="aplDtm" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<resultMap id="BaseResultMap4" type="kr.wise.commons.damgmt.gov.service.WaaGovCdVal" 
+		extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+	<id column="CD_VAL_ID" property="cdValId" jdbcType="VARCHAR" />
+	<id column="CD_VAL" property="cdVal" jdbcType="VARCHAR" />
+	<result column="CD_VAL_NM" property="cdValNm" jdbcType="VARCHAR" />
+	<result column="DMN_ID" property="dmnId" jdbcType="VARCHAR" />
+	<result column="DMN_LNM" property="dmnLnm" jdbcType="VARCHAR" />
+	<result column="UPP_CD_VAL_ID" property="uppCdValId" jdbcType="VARCHAR" />
+	<result column="OBJ_DESCN" property="objDescn" jdbcType="VARCHAR" />
+	<result column="REG_TYP_CD" property="regTypCd" jdbcType="VARCHAR" />
+	<result column="REG_DTM" property="regDtm" jdbcType="VARCHAR" />
+	<result column="REG_USER_ID" property="regUserId" jdbcType="VARCHAR" />
+	<result column="DISP_ORD" property="dispOrd" jdbcType="VARCHAR" />
+	<result column="APL_STR_DT" property="aplStrDt" jdbcType="VARCHAR" />
+	<result column="APL_END_DT" property="aplEndDt" jdbcType="VARCHAR" />
+	<result column="USE_YN" property="useYn" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		STWD_ID, ENACT_DGR, STWD_LNM, STWD_PNM, ENG_NM, OBJ_DESCN, DMN_YN, DMN_LNM
+		, SYNONYMS, PROHIBITS
+	</sql>
+
+	<sql id="Base_Column_List2">
+		SDITM_ID, ENACT_DGR, SDITM_LNM, SDITM_PNM, OBJ_DESCN, DMN_ID, DMN_LNM
+		, SAVE_TYPE, EXAM_DATA, CD_VAL_RULE, GOV_STND_CD, GOV_ORG_NM
+	</sql>
+
+	<sql id="Base_Column_List3">
+		DMN_ID, ENACT_DGR, UPP_DMNG_LNM, DMNG_LNM, DMN_LNM, DMN_PNM, OBJ_DESCN
+		, DATA_TYPE, DATA_LEN, DATA_SCAL, SAVE_TYPE, EXAM_DATA, UNIT_TYPE,
+		CD_VAL_RULE
+	</sql>
+
+
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="map">
+		select
+		<include refid="Base_Column_List" />
+		from WAA_GOV_STWD
+		<where>
+			<if test="stwdId != null">
+				AND STWD_ID = #{stwdId,jdbcType=VARCHAR}
+			</if>
+			<if test="enactDgr != null">
+				AND ENACT_DGR = #{enactDgr,jdbcType=VARCHAR}
+			</if>
+			<if test="stwdLnm != null">
+				AND STWD_LNM = #{stwdLnm,jdbcType=VARCHAR}
+			</if>
+			<if test="stwdPnm != null">
+				AND STWD_PNM = #{stwdPnm,jdbcType=DECIMAL}
+			</if>
+			<if test="engNm != null">
+				AND ENG_NM = #{engNm,jdbcType=VARCHAR}
+			</if>
+			<if test="objDescn != null">
+				AND OBJ_DESCN = #{objDescn,jdbcType=VARCHAR}
+			</if>
+			<if test="dmnYn != null">
+				AND DMN_YN = #{dmnYn,jdbcType=VARCHAR}
+			</if>
+			<if test="dmnLnm != null">
+				AND DMN_LNM = #{dmnLnm,jdbcType=VARCHAR}
+			</if>
+			<if test="synonyms != null">
+				AND SYNONYMS = #{synonyms,jdbcType=VARCHAR}
+			</if>
+			<if test="prohibits != null">
+				AND PROHIBITS = #{prohibits,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+
+	<delete id="deleteByPrimaryKey" parameterType="map">
+		delete from WAA_DMNG_INFOTP_MAP
+		where DMNG_ID = #{dmngId,jdbcType=VARCHAR}
+		and INFOTP_ID = #{infotpId,jdbcType=VARCHAR}
+	</delete>
+
+	<delete id="deleteSelective" parameterType="map">
+		delete from WAA_GOV_STWD
+		where STWD_LNM = #{stwdLnm,jdbcType=VARCHAR}
+		and STWD_PNM = #{stwdPnm,jdbcType=VARCHAR}
+	</delete>
+
+	<insert id="insert"
+		parameterType="kr.wise.commons.damgmt.dmnginfo.service.WaaDmngInfotpMap">
+		insert into WAA_DMNG_INFOTP_MAP (DMNG_ID, INFOTP_ID, EXP_DTM,
+		STR_DTM, OBJ_DESCN, OBJ_VERS,
+		WRIT_DTM, WRIT_USER_ID)
+		values (#{dmngId,jdbcType=VARCHAR}, #{infotpId,jdbcType=VARCHAR},
+		#{expDtm,jdbcType=DATE},
+		#{strDtm,jdbcType=DATE}, #{objDescn,jdbcType=VARCHAR}, #{objVers,jdbcType=DECIMAL},
+		#{writDtm,jdbcType=DATE}, #{writUserId,jdbcType=VARCHAR})
+	</insert>
+
+	<insert id="insertSelective" parameterType="kr.wise.commons.damgmt.gov.service.WaaGovStwd">
+		insert into WAA_GOV_STWD
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="stwdId != null">
+				STWD_ID,
+			</if>
+			<if test="enactDgr != null">
+				ENACT_DGR,
+			</if>
+			<if test="stwdLnm != null">
+				STWD_LNM,
+			</if>
+			<if test="stwdPnm != null">
+				STWD_PNM,
+			</if>
+			<if test="engNm != null">
+				ENG_NM,
+			</if>
+			<if test="objDescn != null">
+				OBJ_DESCN,
+			</if>
+			<if test="dmnYn != null">
+				DMN_YN,
+			</if>
+			<if test="dmnLnm != null">
+				DMN_LNM,
+			</if>
+			<if test="synonyms != null">
+				SYNONYMS,
+			</if>
+			<if test="prohibits != null">
+				PROHIBITS,
+			</if>
+			<if test="regTypCd != null">
+				REG_TYP_CD,
+			</if>
+			REG_DTM
+			<if test="regUserId != null">
+				REG_USER_ID
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="stwdId != null">
+				#{stwdId,jdbcType=VARCHAR},
+			</if>
+			<if test="enactDgr != null">
+				#{enactDgr,jdbcType=VARCHAR},
+			</if>
+			<if test="stwdLnm != null">
+				#{stwdLnm,jdbcType=VARCHAR},
+			</if>
+			<if test="stwdPnm != null">
+				#{stwdPnm,jdbcType=DECIMAL},
+			</if>
+			<if test="engNm != null">
+				#{engNm,jdbcType=VARCHAR},
+			</if>
+			<if test="objDescn != null">
+				#{objDescn,jdbcType=VARCHAR},
+			</if>
+			<if test="dmnYn != null">
+				#{dmnYn,jdbcType=VARCHAR},
+			</if>
+			<if test="dmnLnm != null">
+				#{dmnLnm,jdbcType=VARCHAR},
+			</if>
+			<if test="synonyms != null">
+				#{synonyms,jdbcType=VARCHAR},
+			</if>
+			<if test="prohibits != null">
+				#{prohibits,jdbcType=VARCHAR},
+			</if>
+			<if test="regTypCd != null">
+				#{regTypCd,jdbcType=VARCHAR},
+			</if>
+			NOW(),
+			<if test="regUserId != null">
+				#{regUserId,jdbcType=VARCHAR},
+			</if>
+
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="kr.wise.commons.damgmt.gov.service.WaaGovStwd">
+		update WAA_GOV_STWD
+		<set>
+			<if test="stwdId != null">
+				STWD_ID = #{stwdId,jdbcType=VARCHAR},
+			</if>
+			<if test="enactDgr != null">
+				ENACT_DGR = #{enactDgr,jdbcType=VARCHAR},
+			</if>
+			<if test="stwdLnm != null">
+				STWD_LNM = #{stwdLnm,jdbcType=VARCHAR},
+			</if>
+			<if test="stwdPnm != null">
+				STWD_PNM = #{stwdPnm,jdbcType=DECIMAL},
+			</if>
+			<if test="engNm != null">
+				ENG_NM = #{engNm,jdbcType=VARCHAR},
+			</if>
+			<if test="objDescn != null">
+				OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+			</if>
+			<if test="dmnYn != null">
+				DMN_YN = #{dmnYn,jdbcType=VARCHAR},
+			</if>
+			<if test="dmnLnm != null">
+				DMN_LNM = #{dmnLnm,jdbcType=VARCHAR},
+			</if>
+			<if test="synonyms != null">
+				SYNONYMS = #{synonyms,jdbcType=VARCHAR},
+			</if>
+			<if test="prohibits != null">
+				PROHIBITS = #{prohibits,jdbcType=VARCHAR}
+			</if>
+		</set>
+		where STWD_ID = #{stwdId,jdbcType=VARCHAR}
+	</update>
+
+
+	<update id="updateByPrimaryKey"
+		parameterType="kr.wise.commons.damgmt.dmnginfo.service.WaaDmngInfotpMap">
+		update WAA_DMNG_INFOTP_MAP
+		set EXP_DTM = #{expDtm,jdbcType=DATE},
+		STR_DTM = #{strDtm,jdbcType=DATE},
+		OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+		OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+		WRIT_DTM = #{writDtm,jdbcType=DATE},
+		WRIT_USER_ID = #{writUserId,jdbcType=VARCHAR}
+		where DMNG_ID = #{dmngId,jdbcType=VARCHAR}
+		and INFOTP_ID = #{infotpId,jdbcType=VARCHAR}
+	</update>
+	<select id="selectList" parameterType="kr.wise.commons.damgmt.gov.service.WaaGovStwd" resultMap="BaseResultMap">
+		SELECT A.STWD_ID
+		      ,A.ENACT_DGR
+		      ,A.STWD_LNM
+		      ,A.STWD_PNM
+		      ,A.ENG_NM
+		      ,A.OBJ_DESCN
+		      ,A.DMN_YN
+		      ,A.DMN_LNM
+		      ,A.SYNONYMS
+		      ,A.PROHIBITS
+		FROM WAA_GOV_STWD A
+		<if test="stwdLnm != null">
+			(UPPER(A.STWD_LNM) = '%'||UPPER(#{stwdLnm,jdbcType=VARCHAR})||'%'
+				OR UPPER(A.STWD_LNM) = '%'||UPPER(#{stwdPnm,jdbcType=VARCHAR})||'%')
+		</if>
+		<if test="objDescn != null">
+			A.OBJ_DESCN = '%'||#{objDescn,jdbcType=VARCHAR}||'%'
+		</if>
+		ORDER BY A.STWD_LNM
+	</select>
+
+	<update id="updateExpDtm" parameterType="kr.wise.commons.damgmt.gov.service.WaaGovStwd">
+		UPDATE WAA_GOV_STWD SET
+		APL_DTM = NOW()
+		WHERE STWD_LNM = #{stwdLnm}
+		AND STWD_PNM = #{stwdPnm}
+		<!-- AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD') -->
+	</update>
+
+	<!-- ============================공통표준 용어 관리============================= -->
+	<!-- ============================공통표준 용어 관리============================= -->
+	<!-- ============================공통표준 용어 관리============================= -->
+
+	<select id="selectByPrimaryKeyBySditm" parameterType="kr.wise.commons.damgmt.gov.service.WaaGovSditm"
+		resultMap="BaseResultMap2">
+		SELECT
+		A.SDITM_ID,
+		A.ENACT_DGR,
+		A.SDITM_LNM,
+		A.SDITM_PNM,
+		A.OBJ_DESCN,
+		A.DMN_ID,
+		A.DMN_LNM,
+		A.SAVE_TYPE,
+		A.EXAM_DATA,
+		A.CD_VAL_RULE,
+		A.GOV_STND_CD,
+		A.GOV_ORG_NM
+		FROM WAA_GOV_SDITM A
+		WHERE 1=1
+		<if test="sditmLnm != null">
+			A.SDITM_LNM = '%'||#{sditmLnm,jdbcType=VARCHAR}||'%'
+		</if>
+		<if test="objDescn != null">
+			A.OBJ_DESCN = '%'||#{objDescn,jdbcType=VARCHAR}||'%'
+		</if>
+		ORDER BY A.SDITM_LNM
+
+	</select>
+
+
+	<select id="selectListBySditm" parameterType="kr.wise.commons.damgmt.gov.service.WaaGovSditm"
+		resultMap="BaseResultMap2">
+		SELECT
+		A.SDITM_ID,
+		A.ENACT_DGR,
+		A.SDITM_LNM,
+		A.SDITM_PNM,
+		A.OBJ_DESCN,
+		A.DMN_ID,
+		A.DMN_LNM,
+		A.SAVE_TYPE,
+		A.EXAM_DATA,
+		A.CD_VAL_RULE,
+		A.GOV_STND_CD,
+		A.GOV_ORG_NM
+		FROM WAA_GOV_SDITM A
+		ORDER BY A.SDITM_LNM
+	</select>
+
+	<!-- <select id="selectCheckLstsditm" parameterType="kr.wise.commons.damgmt.gov.service.WaaGovSditm" 
+		resultMap="BaseResultMap2"> -->
+	<!-- SELECT -->
+	<!-- A.SDITM_ID, -->
+	<!-- A.ENACT_DGR, -->
+	<!-- A.SDITM_LNM, -->
+	<!-- A.SDITM_PNM, -->
+	<!-- A.OBJ_DESCN, -->
+	<!-- A.DMN_ID, -->
+	<!-- A.DMN_LNM, -->
+	<!-- A.SAVE_TYPE, -->
+	<!-- A.EXAM_DATA, -->
+	<!-- A.CD_VAL_RULE, -->
+	<!-- A.GOV_STND_CD, -->
+	<!-- A.GOV_ORG_NM -->
+	<!-- FROM WAA_GOV_SDITM A -->
+	<!-- <if test="sditmLnm != null" > -->
+	<!-- WHERE SDITM_LNM = #{sditmLnm,jdbcType=VARCHAR} -->
+	<!-- </if> -->
+	<!-- ORDER BY A.SDITM_LNM -->
+	<!-- </select> -->
+
+	<select id="selectByPrimaryKeySditm" resultMap="BaseResultMap"
+		parameterType="map">
+		select
+		<include refid="Base_Column_List2" />
+		from WAA_GOV_SDITM
+		<if test="sditmLnm != null">
+			WHERE SDITM_LNM = #{sditmLnm,jdbcType=VARCHAR}
+		</if>
+		<!-- <if test="sditmPnm != null" > -->
+		<!-- AND SDITM_PNM = #{sditmPnm,jdbcType=DECIMAL} -->
+		<!-- </if> -->
+	</select>
+
+
+
+	<delete id="deleteSelectivebysditm" parameterType="map">
+		delete from WAA_GOV_SDITM
+		where SDITM_LNM = #{sditmLnm,jdbcType=VARCHAR}
+		and SDITM_PNM = #{sditmPnm,jdbcType=VARCHAR}
+	</delete>
+
+	<insert id="insertSelectivebySditm" parameterType="kr.wise.commons.damgmt.gov.service.WaaGovSditm">
+		insert into WAA_GOV_SDITM
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="sditmId != null">
+				SDITM_ID,
+			</if>
+			<if test="enactDgr != null">
+				ENACT_DGR,
+			</if>
+			<if test="sditmLnm != null">
+				SDITM_LNM,
+			</if>
+			<if test="sditmPnm != null">
+				SDITM_PNM,
+			</if>
+			<if test="objDescn != null">
+				OBJ_DESCN,
+			</if>
+			<if test="dmnId != null">
+				DMN_ID,
+			</if>
+			<if test="dmnLnm != null">
+				DMN_LNM,
+			</if>
+			<if test="saveType != null">
+				SAVE_TYPE,
+			</if>
+			<if test="examData != null">
+				EXAM_DATA,
+			</if>
+			<if test="cdValRule != null">
+				CD_VAL_RULE,
+			</if>
+			<if test="govStndCd != null">
+				GOV_STND_CD,
+			</if>
+			<if test="govOrgNm != null">
+				GOV_ORG_NM,
+			</if>
+			<if test="regTypCd != null">
+				REG_TYP_CD
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="sditmId != null">
+				#{sditmId,jdbcType=VARCHAR},
+			</if>
+			<if test="enactDgr != null">
+				#{enactDgr,jdbcType=VARCHAR},
+			</if>
+			<if test="sditmLnm != null">
+				#{sditmLnm,jdbcType=VARCHAR},
+			</if>
+			<if test="sditmPnm != null">
+				#{sditmPnm,jdbcType=DECIMAL},
+			</if>
+			<if test="objDescn != null">
+				#{objDescn,jdbcType=VARCHAR},
+			</if>
+			<if test="dmnId != null">
+				#{dmnId,jdbcType=VARCHAR},
+			</if>
+			<if test="dmnLnm != null">
+				#{dmnLnm,jdbcType=VARCHAR},
+			</if>
+			<if test="saveType != null">
+				#{saveType,jdbcType=VARCHAR},
+			</if>
+			<if test="examData != null">
+				#{examData,jdbcType=VARCHAR},
+			</if>
+			<if test="cdValRule != null">
+				#{cdValRule,jdbcType=VARCHAR},
+			</if>
+			<if test="govStndCd != null">
+				#{govStndCd,jdbcType=VARCHAR},
+			</if>
+			<if test="govOrgNm != null">
+				#{govOrgNm,jdbcType=VARCHAR},
+			</if>
+			<if test="regTypCd != null">
+				#{regTypCd,jdbcType=VARCHAR},
+			</if>
+
+		</trim>
+	</insert>
+
+
+	<update id="updateByPrimaryKeySelectiveSditm" parameterType="kr.wise.commons.damgmt.gov.service.WaaGovSditm">
+		update WAA_GOV_SDITM
+		<set>
+			<if test="sditmId != null">
+				AND SDITM_ID = #{sditmId,jdbcType=VARCHAR}
+			</if>
+			<if test="enactDgr != null">
+				AND ENACT_DGR = #{enactDgr,jdbcType=VARCHAR}
+			</if>
+			<if test="sditmLnm != null">
+				AND SDITM_LNM = #{sditmLnm,jdbcType=VARCHAR}
+			</if>
+			<if test="sditmPnm != null">
+				AND SDITM_PNM = #{sditmPnm,jdbcType=DECIMAL}
+			</if>
+			<if test="objDescn != null">
+				AND OBJ_DESCN = #{objDescn,jdbcType=VARCHAR}
+			</if>
+			<if test="dmnId != null">
+				AND DMN_ID = #{dmnId,jdbcType=VARCHAR}
+			</if>
+			<if test="dmnLnm != null">
+				AND DMN_LNM = #{dmnLnm,jdbcType=VARCHAR}
+			</if>
+			<if test="saveType != null">
+				AND SAVE_TYPE = #{saveType,jdbcType=VARCHAR}
+			</if>
+			<if test="examData != null">
+				AND EXAM_DATA = #{examData,jdbcType=VARCHAR}
+			</if>
+			<if test="cdValRule != null">
+				AND CD_VAL_RULE = #{cdValRule,jdbcType=VARCHAR}
+			</if>
+			<if test="govStndCd != null">
+				AND GOV_STND_CD = #{govStndCd,jdbcType=VARCHAR}
+			</if>
+			<if test="govOrgNm != null">
+				AND GOV_ORG_NM = #{govOrgNm,jdbcType=VARCHAR}
+			</if>
+		</set>
+		where SDITM_ID = #{sditmId,jdbcType=VARCHAR}
+	</update>
+
+
+	<update id="updateByPrimaryKeysditm" parameterType="kr.wise.commons.damgmt.gov.service.WaaGovSditm">
+		update WAA_GOV_SDITM
+		set EXP_DTM = #{expDtm,jdbcType=DATE},
+		STR_DTM = #{strDtm,jdbcType=DATE},
+		OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+		OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+		WRIT_DTM = #{writDtm,jdbcType=DATE},
+		WRIT_USER_ID = #{writUserId,jdbcType=VARCHAR}
+		where DMNG_ID = #{dmngId,jdbcType=VARCHAR}
+		and INFOTP_ID = #{infotpId,jdbcType=VARCHAR}
+	</update>
+
+	<update id="updateExpDtmSditm" parameterType="kr.wise.commons.damgmt.gov.service.WaaGovSditm">
+		UPDATE WAA_GOV_SDITM
+		SET APL_DTM = NOW()
+		WHERE SDITM_LNM = #{sditmLnm}
+		AND SDITM_PNM = #{sditmPnm}
+		<!-- AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD') -->
+	</update>
+
+	<!-- ============================공통표준 도메인 관리============================= -->
+	<!-- ============================공통표준 도메인 관리============================= -->
+	<!-- ============================공통표준 도메인 관리============================= -->
+	<select id="selectByPrimaryKey_dmn" parameterType="kr.wise.commons.damgmt.gov.service.WaaGovDmn"
+		resultMap="BaseResultMap3">
+		SELECT
+		A.DMN_ID ,
+		A.ENACT_DGR ,
+		A.UPP_DMNG_LNM ,
+		A.DMNG_LNM ,
+		A.DMN_LNM ,
+		A.OBJ_DESCN ,
+		A.DATA_TYPE ,
+		A.DATA_LEN ,
+		A.DATA_SCAL ,
+		A.SAVE_TYPE ,
+		A.EXAM_DATA ,
+		A.UNIT_TYPE ,
+		A.CD_VAL_RULE
+		FROM WAA_GOV_DMN A
+		<if test="dmnLnm != null">
+			WHERE A.DMN_LNM = '%'||#{dmnLnm,jdbcType=VARCHAR}||'%'
+		</if>
+		<!-- <if test="objDescn != null" > -->
+		<!-- A.OBJ_DESCN = '%'||#{objDescn,jdbcType=VARCHAR}||'%' -->
+		<!-- </if> -->
+		ORDER BY A.DMN_LNM
+	</select>
+
+	<select id="selectList_DMN" parameterType="kr.wise.commons.damgmt.gov.service.WaaGovDmn"
+		resultMap="BaseResultMap3">
+		SELECT
+		A.DMN_ID ,
+		A.ENACT_DGR ,
+		A.UPP_DMNG_LNM ,
+		A.DMNG_LNM ,
+		A.DMN_LNM ,
+		A.OBJ_DESCN ,
+		A.DATA_TYPE ,
+		A.DATA_LEN ,
+		A.DATA_SCAL ,
+		A.SAVE_TYPE ,
+		A.EXAM_DATA ,
+		A.UNIT_TYPE ,
+		A.CD_VAL_RULE
+		FROM WAA_GOV_DMN A
+		ORDER BY A.DMN_LNM
+	</select>
+
+	<select id="selectByPrimaryKey_dmn2" parameterType="kr.wise.commons.damgmt.gov.service.WaaGovDmn"
+		resultMap="BaseResultMap3">
+		SELECT
+		A.DMN_ID ,
+		A.ENACT_DGR ,
+		A.UPP_DMNG_LNM ,
+		A.DMNG_LNM ,
+		A.DMN_LNM ,
+		A.OBJ_DESCN ,
+		A.DATA_TYPE ,
+		A.DATA_LEN ,
+		A.DATA_SCAL ,
+		A.SAVE_TYPE ,
+		A.EXAM_DATA ,
+		A.UNIT_TYPE ,
+		A.CD_VAL_RULE
+		FROM WAA_GOV_DMN A
+		<if test="dmnLnm != null">
+			WHERE A.DMN_LNM = '%'||#{dmnLnm,jdbcType=VARCHAR}||'%'
+		</if>
+	</select>
+
+	<update id="updateByPrimaryKeySelective_dmn" parameterType="kr.wise.commons.damgmt.gov.service.WaaGovDmn">
+		update WAA_GOV_DMN
+		<set>
+			<if test="dmnId != null">
+				DMN_ID = #{dmnId,jdbcType=VARCHAR},
+			</if>
+			<if test="enactDgr != null">
+				ENACT_DGR = #{enactDgr,jdbcType=VARCHAR},
+			</if>
+			<if test="uppDmngLnm != null">
+				UPP_DMNG_LNM = #{uppDmngLnm,jdbcType=VARCHAR},
+			</if>
+			<if test="dmngLnm != null">
+				DMNG_LNM = #{dmngLnm,jdbcType=DECIMAL},
+			</if>
+			<if test="dmnLnm != null">
+				DMN_LNM = #{dmnLnm,jdbcType=VARCHAR},
+			</if>
+			<if test="dmnPnm != null">
+				DMN_PNM = #{dmnPnm,jdbcType=VARCHAR},
+			</if>
+			<if test="objDescn != null">
+				OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+			</if>
+			<if test="dataType != null">
+				DATA_TYPE = #{dataType,jdbcType=VARCHAR},
+			</if>
+			<if test="dataLen != null">
+				DATA_LEN = #{dataLen,jdbcType=VARCHAR},
+			</if>
+			<if test="dataScal != null">
+				DATA_SCAL = #{dataScal,jdbcType=VARCHAR},
+			</if>
+			<if test="saveType != null">
+				SAVE_TYPE = #{saveType,jdbcType=VARCHAR},
+			</if>
+			<if test="unitType != null">
+				UNIT_TYPE = #{unitType,jdbcType=VARCHAR},
+			</if>
+			<if test="examData != null">
+				EXAM_DATA = #{examData,jdbcType=VARCHAR},
+			</if>
+			<if test="cdValRule != null">
+				CD_VAL_RULE = #{cdValRule,jdbcType=VARCHAR}
+			</if>
+		</set>
+		where DMN_ID = #{dmnId,jdbcType=VARCHAR}
+	</update>
+	
+		<update id="updateExpDtm_dmn" parameterType="kr.wise.commons.damgmt.gov.service.WaaGovDmn">
+		UPDATE WAA_GOV_DMN 
+		SET APL_DTM = NOW()
+		WHERE DMN_LNM = #{dmnLnm}
+		AND DMN_PNM = #{dmnPnm}
+		<!-- AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD') -->
+	</update>
+
+
+	<insert id="insertSelective_dmn" parameterType="kr.wise.commons.damgmt.gov.service.WaaGovDmn">
+		insert into WAA_GOV_DMN
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="dmnId != null">
+				DMN_ID,
+			</if>
+			<if test="enactDgr != null">
+				ENACT_DGR,
+			</if>
+			<if test="uppDmngLnm != null">
+				UPP_DMNG_LNM,
+			</if>
+			<if test="dmngLnm != null">
+				DMNG_LNM,
+			</if>
+			<if test="dmnLnm != null">
+				DMN_LNM,
+			</if>
+			<if test="dmnPnm != null">
+				DMN_PNM,
+			</if>
+			<if test="objDescn != null">
+				OBJ_DESCN,
+			</if>
+			<if test="dataType != null">
+				DATA_TYPE,
+			</if>
+			<if test="dataLen != null">
+				DATA_LEN,
+			</if>
+			<if test="dataScal != null">
+				DATA_SCAL,
+			</if>
+			<if test="saveType != null">
+				SAVE_TYPE,
+			</if>
+			<if test="unitType != null">
+				UNIT_TYPE,
+			</if>
+			<if test="examData != null">
+				EXAM_DATA,
+			</if>
+			<if test="cdValRule != null">
+				CD_VAL_RULE
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="dmnId != null" >
+	       #{dmnId,jdbcType=VARCHAR},
+	      </if>
+	      <if test="enactDgr != null" >
+	       #{enactDgr,jdbcType=VARCHAR},
+	      </if>
+	      <if test="uppDmngLnm != null" >
+	       #{uppDmngLnm,jdbcType=VARCHAR},
+	      </if>
+	      <if test="dmngLnm != null" >
+	       #{dmngLnm,jdbcType=DECIMAL},
+	      </if>
+	      <if test="dmnLnm != null" >
+	       #{dmnLnm,jdbcType=VARCHAR},
+	      </if>
+	       <if test="dmnPnm != null" >
+	        #{dmnPnm,jdbcType=VARCHAR},
+	      </if>
+	       <if test="objDescn != null" >
+	      #{objDescn,jdbcType=VARCHAR},
+	      </if>
+	       <if test="dataType != null" >
+	       #{dataType,jdbcType=VARCHAR},
+	      </if>
+	       <if test="dataLen != null" >
+	       #{dataLen,jdbcType=VARCHAR},
+	      </if>
+	       <if test="dataScal != null" >
+	       #{dataScal,jdbcType=VARCHAR},
+	      </if>
+		  <if test="saveType != null" >
+	        #{saveType,jdbcType=VARCHAR},
+	      </if>
+		  <if test="unitType != null" >
+	        #{unitType,jdbcType=VARCHAR},
+	      </if>
+		  <if test="examData != null" >
+	      #{examData,jdbcType=VARCHAR},
+	      </if>
+		  <if test="cdValRule != null" >
+	       #{cdValRule,jdbcType=VARCHAR}
+	      </if>
+
+		</trim>
+	</insert>
+	
+	<delete id="deleteSelective_dmn" parameterType="map">
+		DELETE FROM WAA_GOV_DMN
+		WHERE DMN_LNM = #{dmnLnm,jdbcType=VARCHAR}
+		AND DMNG_LNM = #{dmngLnm,jdbcType=VARCHAR}
+	</delete>
+	
+	<!-- ============================공통표준 유효값 관리============================= -->
+	<!-- ============================공통표준 유효값 관리============================= -->
+	<!-- ============================공통표준 유효값 관리============================= -->
+	<select id="selectByPrimaryKey_cdVal" parameterType="kr.wise.commons.damgmt.gov.service.WaaGovCdVal"
+		resultMap="BaseResultMap4">
+		SELECT
+		A.CD_VAL_ID,
+		A.CD_VAL,
+		A.CD_VAL_NM,
+		A.DMN_ID,
+		A.DMN_LNM,
+		A.UPP_CD_VAL_ID,
+		A.OBJ_DESCN,
+		A.REG_TYP_CD,
+		A.DISP_ORD,
+		A.USE_YN
+		FROM WAA_GOV_CD_VAL A
+		<if test="cdValNm != null">
+			WHERE A.CD_VAL_NM = '%'||#{cdValNm,jdbcType=VARCHAR}||'%'
+		</if>
+		<!-- <if test="objDescn != null" > -->
+		<!-- A.OBJ_DESCN = '%'||#{objDescn,jdbcType=VARCHAR}||'%' -->
+		<!-- </if> -->
+		ORDER BY A.CD_VAL_NM
+	</select>
+	
+	<select id="selectList_cdVal" parameterType="kr.wise.commons.damgmt.gov.service.WaaGovCdVal"
+		resultMap="BaseResultMap4">
+		SELECT
+		A.CD_VAL_ID,
+		A.CD_VAL,
+		A.CD_VAL_NM,
+		A.DMN_ID,
+		A.DMN_LNM,
+		A.UPP_CD_VAL_ID,
+		A.OBJ_DESCN,
+		A.REG_TYP_CD,
+		A.DISP_ORD,
+		A.USE_YN
+		FROM WAA_GOV_CD_VAL A
+		ORDER BY A.CD_VAL_NM
+	</select>
+	
+	<select id="selectByPrimaryKey_cdVal2" parameterType="kr.wise.commons.damgmt.gov.service.WaaGovCdVal"
+		resultMap="BaseResultMap4">
+		SELECT
+		A.CD_VAL_ID,
+		A.CD_VAL,
+		A.CD_VAL_NM,
+		A.DMN_ID,
+		A.DMN_LNM,
+		A.UPP_CD_VAL_ID,
+		A.OBJ_DESCN,
+		A.REG_TYP_CD,
+		A.DISP_ORD,
+		A.USE_YN
+		FROM WAA_GOV_CD_VAL A
+		<if test="cdValNm != null">
+			WHERE A.CD_VAL_NM = '%'||#{cdValNm,jdbcType=VARCHAR}||'%'
+		</if>
+	</select>
+	
+	<update id="updateByPrimaryKeySelective_cdVal" parameterType="kr.wise.commons.damgmt.gov.service.WaaGovCdVal">
+		update WAA_GOV_CD_VAL
+		<set>
+			<if test="cdValId != null">
+				CD_VAL_ID = #{dmnId,jdbcType=VARCHAR},
+			</if>
+			<if test="cdVal != null">
+				CD_VAL = #{enactDgr,jdbcType=VARCHAR},
+			</if>
+			<if test="dmnId != null">
+				DMN_ID = #{dmngLnm,jdbcType=DECIMAL},
+			</if>
+			<if test="dmnLnm != null">
+				DMN_LNM = #{dmnLnm,jdbcType=VARCHAR},
+			</if>
+			<if test="uppCdValId != null">
+				UPP_CD_VAL_ID = #{dmnPnm,jdbcType=VARCHAR},
+			</if>
+			<if test="objDescn != null">
+				OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+			</if>
+			<if test="regTypCd != null">
+				REG_TYP_CD = #{dataType,jdbcType=VARCHAR},
+			</if>
+			<if test="regDtm != null">
+				REG_DTM = #{regDtm,jdbcType=VARCHAR},
+			</if>
+			<if test="regUserId != null">
+				REG_USER_ID = #{regUserId,jdbcType=VARCHAR},
+			</if>
+			<if test="dispOrd != null">
+				DISP_ORD = #{dispOrd,jdbcType=VARCHAR},
+			</if>
+			<if test="useYn != null">
+				USE_YN = #{useYn,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where CD_VAL_NM = #{cdValNm,jdbcType=VARCHAR}
+	</update>
+	
+<!-- 	<update id="updateExpDtm_cdVal" parameterType="kr.wise.commons.damgmt.gov.service.WaaGovCdVal">
+		UPDATE WAA_GOV_CD_VAL 
+		SET APL_DTM = NOW()
+		WHERE DMN_LNM = #{dmnLnm}
+		AND DMN_PNM = #{dmnPnm}
+		AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	</update> -->
+	
+	
+	
+	<insert id="insertSelective_cdVal" parameterType="kr.wise.commons.damgmt.gov.service.WaaGovCdVal">
+		insert into WAA_GOV_CD_VAL
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+				CD_VAL_ID,
+				CD_VAL,
+				CD_VAL_NM,
+				DMN_ID,
+				DMN_LNM,
+			<if test="uppCdValId != null">
+				UPP_CD_VAL_ID,
+			</if>
+			<if test="objDescn != null">
+				OBJ_DESCN,
+			</if>
+			<if test="regTypCd != null">
+				REG_TYP_CD,
+			</if>
+			<if test="dispOrd != null">
+				DISP_ORD
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+	       #{cdValId,jdbcType=VARCHAR},
+	       #{cdVal,jdbcType=VARCHAR},
+	       #{cdValNm,jdbcType=VARCHAR},
+	       (SELECT DMN_ID FROM WAA_GOV_DMN WHERE DMN_LNM = #{dmnLnm,jdbcType=VARCHAR}),
+	       #{dmnLnm,jdbcType=VARCHAR},
+	       <if test="uppCdValId != null" >
+	        #{uppCdValId,jdbcType=VARCHAR},
+	      </if>
+	       <if test="objDescn != null" >
+	      #{objDescn,jdbcType=VARCHAR},
+	      </if>
+	       <if test="regTypCd != null" >
+	       #{regTypCd,jdbcType=VARCHAR},
+	      </if>
+	       <if test="dispOrd != null" >
+	       #{dispOrd,jdbcType=VARCHAR},
+	      </if>
+
+		</trim>
+	</insert>
+	
+	<delete id="deleteSelective_cdVal" parameterType="map">
+		DELETE FROM WAA_GOV_CD_VAL
+		WHERE CD_VAL = #{cdVal,jdbcType=VARCHAR}
+		AND CD_VAL_NM = #{cdValNm,jdbcType=VARCHAR}
+	</delete>
+</mapper>

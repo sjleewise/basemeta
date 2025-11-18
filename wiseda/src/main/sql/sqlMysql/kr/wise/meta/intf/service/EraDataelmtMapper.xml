@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.meta.intf.service.EraDataelmtMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.meta.intf.service.EraDataelmt" >
+    <result column="ORIGIN_TERMNM" property="originTermnm" jdbcType="VARCHAR" />
+    <result column="ORIGIN_TERMNMEN" property="originTermnmen" jdbcType="VARCHAR" />
+    <result column="TERMNM" property="termnm" jdbcType="VARCHAR" />
+    <result column="TERMNMEN" property="termnmen" jdbcType="VARCHAR" />
+    <result column="DOMAINNM" property="domainnm" jdbcType="VARCHAR" />
+    <result column="DOMAINNMEN" property="domainnmen" jdbcType="VARCHAR" />
+    <result column="INFOTYPE" property="infotype" jdbcType="VARCHAR" />
+    <result column="DATA_TYPE" property="dataType" jdbcType="VARCHAR" />
+    <result column="DESCRIPTION" property="description" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <select id="selectEraDataelmtOne" parameterType="map" resultMap="BaseResultMap" >
+  
+    SELECT 	/* EraDataelmtMapper.selectEraDataelmtOne */
+    		#{searchVal} AS ORIGIN_TERMNM
+	     , CASE WHEN OBJ_KNM != #{searchVal}  
+                THEN OBJ_ENM || SUBSTR(#{searchVal}, LENGTH(OBJ_KNM)+1)
+                ELSE OBJ_ENM END AS ORIGIN_TERMNMEN
+         , #{searchVal} AS TERMNM
+	     , CASE WHEN OBJ_KNM != #{searchVal}  
+                THEN OBJ_ENM || SUBSTR(#{searchVal}, LENGTH(OBJ_KNM)+1)
+                ELSE OBJ_ENM END AS TERMNMEN
+	     -- , OBJ_KNM AS TERMNM
+	     -- , OBJ_ENM AS TERMNMEN
+	     , DMN_KNM AS DOMAINNM
+	     , DMN_KNM AS INFOTYPE
+	     , DATA_TYPE ||
+	       CASE WHEN DATA_LENGTH > 0 THEN '(' || DATA_LENGTH ||
+	            CASE WHEN DATA_SCALE > 0 THEN ',' || DATA_SCALE END || ')'
+	          END AS DATA_TYPE
+	     , DESCRIPTION
+	  FROM V_DATAELMT
+	 WHERE 1 = 1
+	   AND OBJ_KNM = RTRIM(#{searchVal},'0123456789')
+		
+  </select>
+  <select id="selectEraDataelmt" parameterType="map" resultMap="BaseResultMap" >
+  
+	    SELECT /* EraDataelmtMapper.selectEraDataelmt */
+	       OBJ_KNM AS ORIGIN_TERMNM
+	     , OBJ_ENM AS ORIGIN_TERMNMEN
+	     , OBJ_KNM AS TERMNM
+	     , OBJ_ENM AS TERMNMEN
+	     , DMN_KNM AS DOMAINNM
+<!-- 	     , DMN_ENM AS DOMAINNMEN -->
+	     , DMN_KNM AS INFOTYPE
+	     , DATA_TYPE ||
+	       CASE WHEN DATA_LENGTH > 0 THEN '(' || DATA_LENGTH ||
+	            CASE WHEN DATA_SCALE > 0 THEN ',' || DATA_SCALE END || ')'
+	          END AS DATA_TYPE
+	     , DESCRIPTION
+	  FROM V_DATAELMT
+	 WHERE 1 = 1
+	 <!--  A:%%, F:뒤%, B:앞%, E:=  -->
+	 <if test='searchCon == "A" '>
+	   AND OBJ_KNM LIKE '%' || #{searchVal} || '%'
+	 </if>
+	 <if test='searchCon == "F" '>
+	   AND OBJ_KNM LIKE  #{searchVal} || '%'
+	 </if>
+	 <if test='searchCon == "B" '>
+	   AND OBJ_KNM LIKE '%' || #{searchVal} 
+	 </if>
+	 <if test='searchCon == "E" '>
+	   AND OBJ_KNM LIKE #{searchVal} 
+	 </if>
+	 
+  </select>
+  
+  <select id="selectEraDataelmtEn" parameterType="map" resultMap="BaseResultMap" >
+	  SELECT /* EraDataelmtMapper.selectEraDataelmtEn */
+	  	   OBJ_KNM AS ORIGIN_TERMNM
+	     , OBJ_ENM AS ORIGIN_TERMNMEN
+	     , OBJ_KNM AS TERMNM
+	     , OBJ_ENM AS TERMNMEN
+	     , DMN_KNM AS DOMAINNM
+<!-- 	     , DMN_ENM AS DOMAINNMEN -->
+	     , DMN_KNM AS INFOTYPE
+	     , DATA_TYPE ||
+	       CASE WHEN DATA_LENGTH > 0 THEN '(' || DATA_LENGTH ||
+	            CASE WHEN DATA_SCALE > 0 THEN ',' || DATA_SCALE END || ')'
+	          END AS DATA_TYPE
+	     , DESCRIPTION
+	  FROM V_DATAELMT
+	 WHERE  1 = 1
+	 <!--  A:%%, F:뒤%, B:앞%, E:=  -->
+	 <if test='searchCon == "A" '>
+	   AND OBJ_ENM LIKE '%' || #{searchVal} || '%'
+	 </if>
+	 <if test='searchCon == "F" '>
+	   AND OBJ_ENM LIKE  #{searchVal} || '%'
+	 </if>
+	 <if test='searchCon == "B" '>
+	   AND OBJ_eNM LIKE '%' || #{searchVal} 
+	 </if>	 
+	 <if test='searchCon == "E" '>
+	   AND OBJ_KNM LIKE #{searchVal} 
+	 </if>
+  </select>
+</mapper>

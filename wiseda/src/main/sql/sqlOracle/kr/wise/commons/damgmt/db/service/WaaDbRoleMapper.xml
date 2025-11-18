@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.commons.damgmt.db.service.WaaDbRoleMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.commons.damgmt.db.service.WaaDbRole" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+    <id column="ROLE_ID" property="roleId" jdbcType="VARCHAR" />
+<!--     <id column="EXP_DTM" property="expDtm" jdbcType="TIMESTAMP" /> -->
+<!--     <result column="STR_DTM" property="strDtm" jdbcType="TIMESTAMP" /> -->
+    <result column="DB_CONN_TRG_ID" property="dbConnTrgId" jdbcType="VARCHAR" />
+    <result column="ROLE_PNM" property="rolePnm" jdbcType="VARCHAR" />
+    <result column="ROLE_LNM" property="roleLnm" jdbcType="VARCHAR" />
+<!--     <result column="OBJ_DESCN" property="objDescn" jdbcType="VARCHAR" /> -->
+<!--     <result column="OBJ_VERS" property="objVers" jdbcType="DECIMAL" /> -->
+<!--     <result column="REG_TYP_CD" property="regTypCd" jdbcType="VARCHAR" /> -->
+<!--     <result column="WRIT_DTM" property="writDtm" jdbcType="TIMESTAMP" /> -->
+<!--     <result column="WRIT_USER_ID" property="writUserId" jdbcType="VARCHAR" /> -->
+	<result column="DB_CONN_TRG_PNM" property="dbConnTrgPnm" jdbcType="VARCHAR" />
+	<result column="DB_CONN_TRG_LNM" property="dbConnTrgLnm" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ROLE_ID, EXP_DTM, STR_DTM, DB_CONN_TRG_ID, ROLE_PNM, ROLE_LNM, OBJ_DESCN, OBJ_VERS, 
+    REG_TYP_CD, WRIT_DTM, WRIT_USER_ID
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+      FROM WAA_DB_ROLE
+     WHERE ROLE_ID = #{roleId,jdbcType=VARCHAR}
+       AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+       AND REG_TYP_CD IN ('C', 'U')
+       
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="map" >
+    delete from WAA_DB_ROLE
+    where ROLE_ID = #{roleId,jdbcType=VARCHAR}
+      and EXP_DTM = #{expDtm,jdbcType=TIMESTAMP}
+  </delete>
+  <insert id="insert" parameterType="kr.wise.commons.damgmt.db.service.WaaDbRole" >
+    insert into WAA_DB_ROLE (ROLE_ID, EXP_DTM, STR_DTM, 
+      DB_CONN_TRG_ID, ROLE_PNM, ROLE_LNM, 
+      OBJ_DESCN, OBJ_VERS, REG_TYP_CD, 
+      WRIT_DTM, WRIT_USER_ID)
+    values (#{roleId,jdbcType=VARCHAR}, #{expDtm,jdbcType=TIMESTAMP}, #{strDtm,jdbcType=TIMESTAMP}, 
+      #{dbConnTrgId,jdbcType=VARCHAR}, #{rolePnm,jdbcType=VARCHAR}, #{roleLnm,jdbcType=VARCHAR}, 
+      #{objDescn,jdbcType=VARCHAR}, #{objVers,jdbcType=DECIMAL}, #{regTypCd,jdbcType=VARCHAR}, 
+      #{writDtm,jdbcType=TIMESTAMP}, #{writUserId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="kr.wise.commons.damgmt.db.service.WaaDbRole" >
+    insert into WAA_DB_ROLE
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="roleId != null" >
+        ROLE_ID,
+      </if>
+        EXP_DTM,
+        STR_DTM,
+      <if test="dbConnTrgId != null" >
+        DB_CONN_TRG_ID,
+      </if>
+      <if test="rolePnm != null" >
+        ROLE_PNM,
+      </if>
+      <if test="roleLnm != null" >
+        ROLE_LNM,
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN,
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS,
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD,
+      </if>
+        WRIT_DTM,
+      <if test="writUserId != null" >
+        WRIT_USER_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="roleId != null" >
+        #{roleId,jdbcType=VARCHAR},
+      </if>
+	    TO_DATE('9999-12-31', 'YYYY-MM-DD'),
+	    SYSDATE,
+      <if test="dbConnTrgId != null" >
+        #{dbConnTrgId,jdbcType=VARCHAR},
+      </if>
+      <if test="rolePnm != null" >
+        #{rolePnm,jdbcType=VARCHAR},
+      </if>
+      <if test="roleLnm != null" >
+        #{roleLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="objDescn != null" >
+        #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null" >
+        #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      	SYSDATE,
+      <if test="writUserId != null" >
+        #{writUserId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.commons.damgmt.db.service.WaaDbRole" >
+    update WAA_DB_ROLE
+    <set >
+      <if test="strDtm != null" >
+        STR_DTM = #{strDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dbConnTrgId != null" >
+        DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR},
+      </if>
+      <if test="rolePnm != null" >
+        ROLE_PNM = #{rolePnm,jdbcType=VARCHAR},
+      </if>
+      <if test="roleLnm != null" >
+        ROLE_LNM = #{roleLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="writDtm != null" >
+        WRIT_DTM = #{writDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="writUserId != null" >
+        WRIT_USER_ID = #{writUserId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ROLE_ID = #{roleId,jdbcType=VARCHAR}
+      and EXP_DTM = #{expDtm,jdbcType=TIMESTAMP}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="kr.wise.commons.damgmt.db.service.WaaDbRole" >
+    update WAA_DB_ROLE
+    set STR_DTM = #{strDtm,jdbcType=TIMESTAMP},
+      DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR},
+      ROLE_PNM = #{rolePnm,jdbcType=VARCHAR},
+      ROLE_LNM = #{roleLnm,jdbcType=VARCHAR},
+      OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      WRIT_DTM = #{writDtm,jdbcType=TIMESTAMP},
+      WRIT_USER_ID = #{writUserId,jdbcType=VARCHAR}
+    where ROLE_ID = #{roleId,jdbcType=VARCHAR}
+      and EXP_DTM = #{expDtm,jdbcType=TIMESTAMP}
+  </update>
+  
+  <select id="getDbRoleList" parameterType="kr.wise.commons.damgmt.db.service.WaaDbRole" resultMap="BaseResultMap">
+  SELECT A.*
+  	   , U.USER_NM AS WRIT_USER_NM
+  	FROM WAA_DB_ROLE A
+  	LEFT OUTER JOIN WAA_USER U
+  	  ON A.WRIT_USER_ID = U.USER_ID
+  	 AND U.REG_TYP_CD IN ('C', 'U')
+  	 AND U.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+  	 
+   WHERE A.REG_TYP_CD IN ('C', 'U')
+     AND A.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+   	  <if test="dbConnTrgId != null" >
+     AND A.DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR}
+      </if>  
+   	  <if test="roleLnm != null" >
+     AND (A.ROLE_PNM LIKE '%' || #{roleLnm,jdbcType=VARCHAR} || '%'
+     	OR A.ROLE_PNM LIKE '%' || UPPER(#{roleLnm,jdbcType=VARCHAR}) || '%'
+     	OR A.ROLE_LNM LIKE '%' || #{roleLnm,jdbcType=VARCHAR} || '%'
+     	OR A.ROLE_LNM LIKE '%' || UPPER(#{roleLnm,jdbcType=VARCHAR}) || '%')
+      </if>  
+
+     
+  </select>
+  
+  <update id="deleteDbRole" parameterType="kr.wise.commons.damgmt.db.service.WaaDbRole">
+  UPDATE WAA_DB_ROLE
+     SET REG_TYP_CD = 'D'
+   WHERE ROLE_ID = #{roleId}
+     AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+     AND REG_TYP_CD IN ('C', 'U')
+  
+  </update>
+  
+  <select id="selectByPnm" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+      FROM WAA_DB_ROLE
+     WHERE ROLE_PNM = #{rolePnm,jdbcType=VARCHAR}
+       AND DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR}
+       AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+       AND REG_TYP_CD IN ('C', 'U')
+  </select>
+  
+  <update id="updateExpDtm" parameterType="kr.wise.commons.damgmt.db.service.WaaDbRole">
+  UPDATE WAA_DB_ROLE
+     SET EXP_DTM = SYSDATE
+   WHERE ROLE_ID = #{roleId,jdbcType=VARCHAR}
+     AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+     AND REG_TYP_CD IN ('C', 'U')
+  
+  </update>
+  
+  <select id="selectRoleList" resultMap="BaseResultMap" parameterType="kr.wise.commons.damgmt.db.service.WaaDbRole">		
+	 SELECT
+	        A.*
+	       ,B.DB_CONN_TRG_PNM AS DB_CONN_TRG_PNM
+	       ,B.DB_CONN_TRG_LNM AS DB_CONN_TRG_LNM
+	       ,GET_USER_NM(A.WRIT_USER_ID) AS WRIT_USER_NM
+	  FROM WAA_DB_ROLE A 
+	 INNER JOIN WAA_DB_CONN_TRG B
+	 	ON A.DB_CONN_TRG_ID = B.DB_CONN_TRG_ID 
+	   AND B.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')
+	   AND B.REG_TYP_CD IN ('C', 'U')
+		  <where>
+	  		AND A.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')
+	  		AND A.REG_TYP_CD IN ('C', 'U')
+	        <if test="dbConnTrgPnm != null">
+	        	AND (UPPER(B.DB_CONN_TRG_PNM) = UPPER(#{dbConnTrgPnm}) OR UPPER(B.DB_CONN_TRG_LNM) = UPPER(#{dbConnTrgPnm}))
+	        </if>
+	
+	        <if test="rolePnm != null">
+	        	AND (UPPER(A.ROLE_PNM) LIKE '%'||UPPER(#{rolePnm})||'%' OR UPPER(A.ROLE_LNM) LIKE '%'||UPPER(#{rolePnm})||'%')
+	        </if>
+	      </where>
+	</select>
+  
+</mapper>

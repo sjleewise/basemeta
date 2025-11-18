@@ -1,0 +1,1176 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.meta.stnd.service.WamDmnMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.meta.stnd.service.WamDmn" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+    <id column="DMN_ID" property="dmnId" jdbcType="VARCHAR" />
+    <result column="DMN_LNM" 		   property="dmnLnm" jdbcType="VARCHAR" />
+    <result column="DMN_PNM" 		   property="dmnPnm" jdbcType="VARCHAR" />
+    <result column="DMNG_ID" 		   property="dmngId" jdbcType="VARCHAR" />
+    <result column="DMNG_LNM" 		   property="dmngLnm" jdbcType="VARCHAR" />
+    <result column="UPP_DMNG_ID" 	   property="uppDmngId" jdbcType="VARCHAR" />
+    <result column="UPP_DMNG_LNM" 	   property="uppDmngLnm" jdbcType="VARCHAR" />
+    <result column="INFOTP_ID" 		   property="infotpId" jdbcType="VARCHAR" />
+    <result column="INFOTP_LNM" 	   property="infotpLnm" jdbcType="VARCHAR" />
+    <result column="UPP_DMN_ID" 	   property="uppDmnId" jdbcType="VARCHAR" />
+    <result column="SUBJ_ID" 	   	   property="subjId" jdbcType="VARCHAR" />
+    <result column="LST_ENTY_ID" 	   property="lstEntyId" jdbcType="VARCHAR" />
+    <result column="LST_ENTY_PNM" 	   property="lstEntyPnm" jdbcType="VARCHAR" />
+    <result column="LST_ENTY_LNM" 	   property="lstEntyLnm" jdbcType="VARCHAR" />
+    <result column="LST_ATTR_ID" 	   property="lstAttrId" jdbcType="VARCHAR" />
+    <result column="LST_ATTR_PNM" 	   property="lstAttrPnm" jdbcType="VARCHAR" />
+    <result column="LST_ATTR_LNM" 	   property="lstAttrLnm" jdbcType="VARCHAR" />
+    <result column="CD_VAL_TYP_CD" 	   property="cdValTypCd" jdbcType="VARCHAR" />
+    <result column="CD_VAL_IVW_CD" 	   property="cdValIvwCd" jdbcType="VARCHAR" />
+    <result column="SDITM_AUTO_CRT_YN" property="sditmAutoCrtYn" jdbcType="VARCHAR" />
+    <result column="DATA_FRM" 	 	   property="dataFrm" jdbcType="VARCHAR" />
+    <result column="CRG_USER_ID" 	   property="crgUserId" jdbcType="VARCHAR" />
+    <result column="DMN_ORG_DS" 	   property="dmnOrgDs" jdbcType="VARCHAR" />
+    <result column="DMN_ORG_TXT" 	   property="dmnOrgTxt" jdbcType="VARCHAR" />
+    <result column="CD_VAL" 		   property="cdVal" jdbcType="VARCHAR" />
+    <result column="CD_VAL_NM" 	  	   property="cdValNm" jdbcType="VARCHAR" />
+    <result column="DMN_ENG_MEAN" 	   property="dmnEngMean" jdbcType="VARCHAR" />
+    <result column="DATA_TYPE" 		   property="dataType" jdbcType="VARCHAR" />
+    <result column="DATA_LEN" 		   property="dataLen" jdbcType="VARCHAR" />
+    <result column="DATA_SCAL" 		   property="dataScal" jdbcType="VARCHAR" />
+    <result column="LNM_CRI_DS" 	   property="lnmCriDs" jdbcType="VARCHAR" />
+    <result column="PNM_CRI_DS" 	   property="pnmCriDs" jdbcType="VARCHAR" />
+    <result column="FRS_RQST_USER_NM"  property="frsRqstUserNm" jdbcType="VARCHAR" />
+    <result column="RQST_USER_NM" 	   property="rqstUserNm" jdbcType="VARCHAR" />
+    <result column="APRV_USER_NM" 	   property="aprvUserNm" jdbcType="VARCHAR" />
+    <result column="ENC_YN" 		   property="encYn" jdbcType="VARCHAR" />
+    <result column="DMN_DSCD" 		   property="dmnDscd" jdbcType="VARCHAR" />
+    <result column="TRANS_YN" 		   property="transYn" jdbcType="VARCHAR" />
+    <result column="DMN_MIN_VAL"       property="dmnMinVal" jdbcType="VARCHAR" />
+    <result column="DMN_MAX_VAL"       property="dmnMaxVal" jdbcType="VARCHAR" />
+    <result column="SUB_CD_YN" 		   property="subCdYn" jdbcType="VARCHAR" />
+    <result column="DUP_YN" 		   property="dupYn" jdbcType="VARCHAR" />
+    <result column="UPP_DMN_LNM" 		   property="uppDmnLnm" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    DMN_ID, DMN_LNM, DMN_PNM, DMNG_ID, INFOTP_ID, UPP_DMN_ID, SUBJ_ID, LST_ENTY_ID, LST_ENTY_PNM, 
+    LST_ENTY_LNM, CD_VAL_TYP_CD, CD_VAL_IVW_CD, SDITM_AUTO_CRT_YN, DATA_FRM, CRG_USER_ID, 
+    DMN_ORG_DS, RQST_NO, RQST_SNO, OBJ_DESCN, OBJ_VERS, REG_TYP_CD, FRS_RQST_DTM, FRS_RQST_USER_ID, 
+    RQST_DTM, RQST_USER_ID, APRV_DTM, APRV_USER_ID, LNM_CRI_DS,ENC_YN,DUP_YN,DMN_DSCD,DMN_ORG_TXT,SUB_CD_YN, STND_ASRT
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select A.*, 
+           G.DMNG_LNM,
+           G.UPP_DMNG_LNM,
+           (SELECT USER_NM FROM WAA_USER WHERE USER_ID = A.FRS_RQST_USER_ID AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD') AND REG_TYP_CD IN ('C','U')) AS FRS_RQST_USER_NM,
+           (SELECT USER_NM FROM WAA_USER WHERE USER_ID = A.RQST_USER_ID AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD') AND REG_TYP_CD IN ('C','U')) AS RQST_USER_NM,
+           (SELECT USER_NM FROM WAA_USER WHERE USER_ID = A.APRV_USER_ID AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD') AND REG_TYP_CD IN ('C','U')) AS APRV_USER_NM,
+           <!-- 
+    	   GET_USER_NM(A.FRS_RQST_USER_ID) AS FRS_RQST_USER_NM,
+    	   GET_USER_NM(A.RQST_USER_ID) AS RQST_USER_NM,
+    	   (SELECT USER_NM FROM WAA_USER WHERE USER_ID = A.APRV_USER_ID AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD') AND REG_TYP_CD IN ('C','U')) AS APRV_USER_NM,
+    	    -->
+	       B.INFOTP_LNM,
+    	   B.DATA_TYPE,
+    	   B.DATA_LEN,
+    	   B.DATA_SCAL
+    	   , NVL( (
+               SELECT D.DATA_TYPE_NM FROM WAA_DATA_TYPE_MAPRU C
+                  INNER JOIN WAA_DBMS_DATA_TYPE D
+                  ON C.DBMS_DATA_TYPE_ID = D.DBMS_DATA_TYPE_ID
+                      AND C.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+                      AND C.REG_TYP_CD IN ('C', 'U')
+                      AND D.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+                      AND D.REG_TYP_CD IN ('C', 'U')
+                      AND D.DBMS_TYP_CD='ORA' 
+                  WHERE C.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+                     AND C.REG_TYP_CD IN ('C', 'U')  
+                     AND C.LGC_DATA_TYPE=B.DATA_TYPE
+                     AND ROWNUM = 1
+               ),B.DATA_TYPE
+           ) AS oraDataType
+           , NVL( (
+               SELECT D.DATA_TYPE_NM FROM WAA_DATA_TYPE_MAPRU C
+                  INNER JOIN WAA_DBMS_DATA_TYPE D
+                  ON C.DBMS_DATA_TYPE_ID = D.DBMS_DATA_TYPE_ID
+                      AND C.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+                      AND C.REG_TYP_CD IN ('C', 'U')
+                      AND D.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+                      AND D.REG_TYP_CD IN ('C', 'U')
+                      AND D.DBMS_TYP_CD='MSQ' 
+                  WHERE C.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+                     AND C.REG_TYP_CD IN ('C', 'U')  
+                     AND C.LGC_DATA_TYPE=B.DATA_TYPE
+                     AND ROWNUM = 1
+               ),B.DATA_TYPE
+           ) AS msDataType
+  		   , NVL( (
+               SELECT D.DATA_TYPE_NM FROM WAA_DATA_TYPE_MAPRU C
+                  INNER JOIN WAA_DBMS_DATA_TYPE D
+                  ON C.DBMS_DATA_TYPE_ID = D.DBMS_DATA_TYPE_ID
+                      AND C.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+                      AND C.REG_TYP_CD IN ('C', 'U')
+                      AND D.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+                      AND D.REG_TYP_CD IN ('C', 'U')
+                  WHERE C.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+                     AND C.REG_TYP_CD IN ('C', 'U')  
+                     AND C.LGC_DATA_TYPE=B.DATA_TYPE
+                     AND D.DBMS_TYP_CD='MYS'
+                     AND ROWNUM = 1  
+               ),B.DATA_TYPE
+           ) AS myDataType
+           ,(SELECT C.DMN_LNM FROM WAM_DMN C WHERE C.DMN_ID = A.UPP_DMN_ID) AS UPP_DMN_LNM
+    from WAM_DMN A 
+           INNER JOIN V_WAA_DMNG G
+              ON A.DMNG_ID = G.DMNG_ID
+           INNER JOIN WAA_INFO_TYPE B
+		      ON A.INFOTP_ID = B.INFOTP_ID
+		  	 AND B.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+    where A.DMN_ID = #{dmnId,jdbcType=VARCHAR}
+  </select>
+  <select id="selectTop30" resultMap="BaseResultMap" parameterType="kr.wise.meta.stnd.service.WamDmn">
+  <![CDATA[
+	  SELECT * FROM (  
+		 SELECT A.*, B.DATA_TYPE, B.DATA_LEN, B.DATA_SCAL 
+		 FROM WAM_DMN A
+		  	INNER JOIN WAA_INFO_TYPE B
+		  	   ON A.INFOTP_ID = B.INFOTP_ID
+		  	  AND B.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+		  	 WHERE  A.REG_TYP_CD IN ('C', 'U')
+		     ORDER BY A.RQST_DTM DESC
+		     )
+	WHERE ROWNUM <= 30
+  ]]>
+  </select>
+  <select id="selectList" resultMap="BaseResultMap" parameterType="kr.wise.meta.stnd.service.WamDmn" >
+  	SELECT A.*
+  	     , B.DATA_TYPE
+  	     , B.DATA_LEN
+  	     , B.DATA_SCAL 
+  	     ,(SELECT C.DMN_LNM FROM WAM_DMN C WHERE C.DMN_ID = A.UPP_DMN_ID) AS UPP_DMN_LNM
+  	  FROM WAM_DMN A 
+     INNER JOIN V_WAA_DMNG G
+        ON A.DMNG_ID = G.DMNG_ID
+  	 INNER JOIN WAA_INFO_TYPE B
+  	    ON A.INFOTP_ID = B.INFOTP_ID
+  	   AND B.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+  	<where>
+       AND A.REG_TYP_CD IN ('C', 'U')
+      <if test="dmnLnm != null" >
+       AND (DMN_LNM LIKE '%' || #{dmnLnm,jdbcType=VARCHAR} || '%'
+  	    OR DMN_PNM LIKE '%' || #{dmnLnm,jdbcType=VARCHAR} || '%'
+   	    OR DMN_LNM LIKE '%' || UPPER(#{dmnLnm,jdbcType=VARCHAR}) || '%'
+  	    OR DMN_PNM LIKE '%' || UPPER(#{dmnLnm,jdbcType=VARCHAR}) || '%')
+      </if>
+      <if test="dmnId != null" >
+        AND A.DMN_ID = #{dmnId,jdbcType=VARCHAR}
+      </if>
+      <if test="infotpId != null" >
+        AND A.INFOTP_ID = #{infotpId,jdbcType=VARCHAR}
+      </if>
+      <if test="uppDmnId != null" >
+        AND A.UPP_DMN_ID = #{uppDmnId,jdbcType=VARCHAR}
+      </if>
+      <if test="subjId != null" >
+        AND A.SUBJ_ID = #{subjId,jdbcType=VARCHAR}
+      </if>
+      <if test="lstEntyId != null" >
+        AND A.LST_ENTY_ID = #{lstEntyId,jdbcType=VARCHAR}
+      </if>
+      <if test="lstEntyPnm != null" >
+        AND A.LST_ENTY_PNM = #{lstEntyPnm,jdbcType=VARCHAR}
+      </if>
+      <if test="lstEntyLnm != null" >
+        AND A.LST_ENTY_LNM = #{lstEntyLnm,jdbcType=VARCHAR}
+      </if>
+      <if test="cdValTypCd != null" >
+        AND A.CD_VAL_TYP_CD = #{cdValTypCd,jdbcType=VARCHAR}
+      </if>
+      <if test="cdValIvwCd != null" >
+        AND A.CD_VAL_IVW_CD = #{cdValIvwCd,jdbcType=VARCHAR}
+      </if>
+      <if test="sditmAutoCrtYn != null" >
+        AND A.SDITM_AUTO_CRT_YN = #{sditmAutoCrtYn,jdbcType=VARCHAR}
+      </if>
+      <if test="dataFrm != null" >
+        AND A.DATA_FRM = #{dataFrm,jdbcType=VARCHAR}
+      </if>
+      <if test="crgUserId != null" >
+        AND A.CRG_USER_ID = #{crgUserId,jdbcType=VARCHAR}
+      </if>
+      <if test="dmnOrgDs != null" >
+        AND A.DMN_ORG_DS = #{dmnOrgDs,jdbcType=VARCHAR}
+      </if>
+      <if test="dataType != null" >
+        AND B.DATA_TYPE = #{dataType,jdbcType=VARCHAR}
+      </if>
+      <if test="rqstNo != null" >
+        AND A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      </if>
+      <if test="rqstSno != null" >
+        AND A.RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+      </if>
+      <if test="objDescn != null" >
+        AND A.OBJ_DESCN LIKE '%' || #{objDescn,jdbcType=VARCHAR} || '%'
+      </if>
+      <if test="objVers != null" >
+        AND A.OBJ_VERS = #{objVers,jdbcType=DECIMAL}
+      </if>
+      <if test="regTypCd != null" >
+        AND A.REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR}
+      </if>
+      <if test="frsRqstDtm != null" >
+        AND A.FRS_RQST_DTM = #{frsRqstDtm,jdbcType=DATE}
+      </if>
+      <if test="frsRqstUserId != null" >
+        AND A.FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR}
+      </if>
+      <if test="rqstDtm != null" >
+        AND A.RQST_DTM = #{rqstDtm,jdbcType=DATE}
+      </if>
+      <if test="rqstUserId != null" >
+        AND A.RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR}
+      </if>
+      <if test="aprvDtm != null" >
+        AND A.APRV_DTM = #{aprvDtm,jdbcType=DATE}
+      </if>
+      <if test="aprvUserId != null" >
+        AND A.APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR}
+      </if>
+      <if test="dmngId != null" >
+        AND G.DMNG_ID = #{dmngId,jdbcType=VARCHAR}
+      </if>
+      <if test="uppDmngId != null" >
+        AND G.UPP_DMNG_ID = #{uppDmngId,jdbcType=VARCHAR}
+      </if>
+      <if test="searchBgnDe !=null and searchBgnDe !=''">
+		<![CDATA[ AND TO_CHAR(A.APRV_DTM, 'YYYY-MM-DD') >= #{searchBgnDe} ]]>
+	  </if>
+	  <if test="searchEndDe !=null and searchEndDe !=''">
+		<![CDATA[ AND TO_CHAR(A.APRV_DTM, 'YYYY-MM-DD') <= #{searchEndDe} ]]>
+	  </if>
+	  <if test="encYn != null" >
+        AND A.ENC_YN = #{encYn,jdbcType=VARCHAR}
+      </if>
+        <if test="dmnDscd != null" >
+        AND A.DMN_DSCD = #{dmnDscd,jdbcType=VARCHAR}
+      </if>
+      <if test="transYn != null" >
+        AND A.TRANS_YN = #{transYn,jdbcType=VARCHAR}
+      </if>
+      <if test="fullPath != null" >
+        AND A.FULL_PATH LIKE '%' || #{fullPath,jdbcType=VARCHAR} || '%'
+      </if>
+      <if test="stndAsrt != null" >
+        AND A.STND_ASRT = #{stndAsrt,jdbcType=VARCHAR}
+      </if>
+  	</where>
+  	ORDER BY DMN_LNM
+  </select>
+  
+  <select id="selectList2" resultMap="BaseResultMap" parameterType="kr.wise.meta.stnd.service.WamDmn" >
+  	SELECT A.*
+  	     , B.DATA_TYPE
+  	     , B.DATA_LEN
+  	     , B.DATA_SCAL 
+  	     ,(SELECT C.DMN_LNM FROM WAM_DMN C WHERE C.DMN_ID = A.UPP_DMN_ID) AS UPP_DMN_LNM
+  	  FROM WAM_DMN A 
+     INNER JOIN V_WAA_DMNG G
+        ON A.DMNG_ID = G.DMNG_ID
+  	 INNER JOIN WAA_INFO_TYPE B
+  	    ON A.INFOTP_ID = B.INFOTP_ID
+  	   AND B.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+  	<where>
+       AND A.REG_TYP_CD IN ('C', 'U')
+      <if test="dmnLnm != null" >
+       AND (DMN_LNM LIKE '%' || #{dmnLnm,jdbcType=VARCHAR} || '%'
+  	    OR DMN_PNM LIKE '%' || #{dmnLnm,jdbcType=VARCHAR} || '%'
+   	    OR DMN_LNM LIKE '%' || UPPER(#{dmnLnm,jdbcType=VARCHAR}) || '%'
+  	    OR DMN_PNM LIKE '%' || UPPER(#{dmnLnm,jdbcType=VARCHAR}) || '%')
+      </if>
+      <if test="dmnId != null" >
+        AND A.DMN_ID = #{dmnId,jdbcType=VARCHAR}
+      </if>
+      <if test="infotpId != null" >
+        AND A.INFOTP_ID = #{infotpId,jdbcType=VARCHAR}
+      </if>
+      <if test="uppDmnId != null" >
+        AND A.UPP_DMN_ID = #{uppDmnId,jdbcType=VARCHAR}
+      </if>
+      <if test="subjId != null" >
+        AND A.SUBJ_ID = #{subjId,jdbcType=VARCHAR}
+      </if>
+      <if test="lstEntyId != null" >
+        AND A.LST_ENTY_ID = #{lstEntyId,jdbcType=VARCHAR}
+      </if>
+      <if test="lstEntyPnm != null" >
+        AND A.LST_ENTY_PNM = #{lstEntyPnm,jdbcType=VARCHAR}
+      </if>
+      <if test="lstEntyLnm != null" >
+        AND A.LST_ENTY_LNM = #{lstEntyLnm,jdbcType=VARCHAR}
+      </if>
+      <if test="cdValTypCd != null" >
+        AND A.CD_VAL_TYP_CD = #{cdValTypCd,jdbcType=VARCHAR}
+      </if>
+      <if test="cdValIvwCd != null" >
+        AND A.CD_VAL_IVW_CD = #{cdValIvwCd,jdbcType=VARCHAR}
+      </if>
+      <if test="sditmAutoCrtYn != null" >
+        AND A.SDITM_AUTO_CRT_YN = #{sditmAutoCrtYn,jdbcType=VARCHAR}
+      </if>
+      <if test="dataFrm != null" >
+        AND A.DATA_FRM = #{dataFrm,jdbcType=VARCHAR}
+      </if>
+      <if test="crgUserId != null" >
+        AND A.CRG_USER_ID = #{crgUserId,jdbcType=VARCHAR}
+      </if>
+      <if test="dmnOrgDs != null" >
+        AND A.DMN_ORG_DS = #{dmnOrgDs,jdbcType=VARCHAR}
+      </if>
+      <if test="dataType != null" >
+        AND B.DATA_TYPE = #{dataType,jdbcType=VARCHAR}
+      </if>
+      <if test="rqstNo != null" >
+        AND A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      </if>
+      <if test="rqstSno != null" >
+        AND A.RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+      </if>
+      <if test="objDescn != null" >
+        AND A.OBJ_DESCN LIKE '%' || #{objDescn,jdbcType=VARCHAR} || '%'
+      </if>
+      <if test="objVers != null" >
+        AND A.OBJ_VERS = #{objVers,jdbcType=DECIMAL}
+      </if>
+      <if test="regTypCd != null" >
+        AND A.REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR}
+      </if>
+      <if test="frsRqstDtm != null" >
+        AND A.FRS_RQST_DTM = #{frsRqstDtm,jdbcType=DATE}
+      </if>
+      <if test="frsRqstUserId != null" >
+        AND A.FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR}
+      </if>
+      <if test="rqstDtm != null" >
+        AND A.RQST_DTM = #{rqstDtm,jdbcType=DATE}
+      </if>
+      <if test="rqstUserId != null" >
+        AND A.RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR}
+      </if>
+      <if test="aprvDtm != null" >
+        AND A.APRV_DTM = #{aprvDtm,jdbcType=DATE}
+      </if>
+      <if test="aprvUserId != null" >
+        AND A.APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR}
+      </if>
+      <if test="dmngId != null" >
+        AND G.DMNG_ID = #{dmngId,jdbcType=VARCHAR}
+      </if>
+      <if test="uppDmngId != null" >
+        AND G.UPP_DMNG_ID = #{uppDmngId,jdbcType=VARCHAR}
+      </if>
+      <if test="searchBgnDe !=null and searchBgnDe !=''">
+		<![CDATA[ AND TO_CHAR(A.APRV_DTM, 'YYYY-MM-DD') >= #{searchBgnDe} ]]>
+	  </if>
+	  <if test="searchEndDe !=null and searchEndDe !=''">
+		<![CDATA[ AND TO_CHAR(A.APRV_DTM, 'YYYY-MM-DD') <= #{searchEndDe} ]]>
+	  </if>
+	  <if test="encYn != null" >
+        AND A.ENC_YN = #{encYn,jdbcType=VARCHAR}
+      </if>
+        <if test="dmnDscd != null" >
+        AND A.DMN_DSCD = #{dmnDscd,jdbcType=VARCHAR}
+      </if>
+      <if test="transYn != null" >
+        AND A.TRANS_YN = #{transYn,jdbcType=VARCHAR}
+      </if>
+      <if test="fullPath != null" >
+        AND A.FULL_PATH LIKE '%' || #{fullPath,jdbcType=VARCHAR} || '%'
+      </if>
+  	</where>
+  	ORDER BY DMN_LNM
+  </select>
+  
+  <select id="selectListSLC" resultMap="BaseResultMap" parameterType="kr.wise.meta.stnd.service.WamDmn" >
+  	SELECT A.*
+  	     , B.DATA_TYPE
+  	     , B.DATA_LEN
+  	     , B.DATA_SCAL
+  	     , DD.DMN_ENG_MEAN
+  	  FROM WAM_DMN A 
+     INNER JOIN V_WAA_DMNG G
+        ON A.DMNG_ID = G.DMNG_ID
+  	 INNER JOIN WAA_INFO_TYPE B
+  	    ON A.INFOTP_ID = B.INFOTP_ID
+  	   AND B.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+	  LEFT OUTER JOIN (SELECT A.OBJ_ID
+                             ,LISTAGG(B.ENG_MEAN, '_') WITHIN GROUP (ORDER BY A.WD_SNO) AS DMN_ENG_MEAN
+                         FROM WAM_STWD_CNFG A
+                        INNER JOIN WAM_STWD B
+                           ON A.STWD_ID = B.STWD_ID
+                          AND B.REG_TYP_CD IN ('C','U')
+                        GROUP BY A.OBJ_ID ) DD
+     ON A.DMN_ID = DD.OBJ_ID  
+  	<where>
+       AND A.REG_TYP_CD IN ('C', 'U')
+      <if test="dmnLnm != null" >
+       AND (DMN_LNM LIKE '%' || #{dmnLnm,jdbcType=VARCHAR} || '%'
+  	    OR DMN_PNM LIKE '%' || #{dmnLnm,jdbcType=VARCHAR} || '%'
+   	    OR DMN_LNM LIKE '%' || UPPER(#{dmnLnm,jdbcType=VARCHAR}) || '%'
+  	    OR DMN_PNM LIKE '%' || UPPER(#{dmnLnm,jdbcType=VARCHAR}) || '%')
+      </if>
+      <if test="dmnId != null" >
+        AND A.DMN_ID = #{dmnId,jdbcType=VARCHAR}
+      </if>
+      <if test="infotpId != null" >
+        AND A.INFOTP_ID = #{infotpId,jdbcType=VARCHAR}
+      </if>
+      <if test="uppDmnId != null" >
+        AND A.UPP_DMN_ID = #{uppDmnId,jdbcType=VARCHAR}
+      </if>
+      <if test="subjId != null" >
+        AND A.SUBJ_ID = #{subjId,jdbcType=VARCHAR}
+      </if>
+      <if test="lstEntyId != null" >
+        AND A.LST_ENTY_ID = #{lstEntyId,jdbcType=VARCHAR}
+      </if>
+      <if test="lstEntyPnm != null" >
+        AND A.LST_ENTY_PNM = #{lstEntyPnm,jdbcType=VARCHAR}
+      </if>
+      <if test="lstEntyLnm != null" >
+        AND A.LST_ENTY_LNM = #{lstEntyLnm,jdbcType=VARCHAR}
+      </if>
+      <if test="cdValTypCd != null" >
+        AND A.CD_VAL_TYP_CD = #{cdValTypCd,jdbcType=VARCHAR}
+      </if>
+      <if test="cdValIvwCd != null" >
+        AND A.CD_VAL_IVW_CD = #{cdValIvwCd,jdbcType=VARCHAR}
+      </if>
+      <if test="sditmAutoCrtYn != null" >
+        AND A.SDITM_AUTO_CRT_YN = #{sditmAutoCrtYn,jdbcType=VARCHAR}
+      </if>
+      <if test="dataFrm != null" >
+        AND A.DATA_FRM = #{dataFrm,jdbcType=VARCHAR}
+      </if>
+      <if test="crgUserId != null" >
+        AND A.CRG_USER_ID = #{crgUserId,jdbcType=VARCHAR}
+      </if>
+      <if test="dmnOrgDs != null" >
+        AND A.DMN_ORG_DS = #{dmnOrgDs,jdbcType=VARCHAR}
+      </if>
+      <if test="dataType != null" >
+        AND B.DATA_TYPE = #{dataType,jdbcType=VARCHAR}
+      </if>
+      <if test="rqstNo != null" >
+        AND A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      </if>
+      <if test="rqstSno != null" >
+        AND A.RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+      </if>
+      <if test="objDescn != null" >
+        AND A.OBJ_DESCN LIKE '%' || #{objDescn,jdbcType=VARCHAR} || '%'
+      </if>
+      <if test="objVers != null" >
+        AND A.OBJ_VERS = #{objVers,jdbcType=DECIMAL}
+      </if>
+      <if test="regTypCd != null" >
+        AND A.REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR}
+      </if>
+      <if test="frsRqstDtm != null" >
+        AND A.FRS_RQST_DTM = #{frsRqstDtm,jdbcType=DATE}
+      </if>
+      <if test="frsRqstUserId != null" >
+        AND A.FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR}
+      </if>
+      <if test="rqstDtm != null" >
+        AND A.RQST_DTM = #{rqstDtm,jdbcType=DATE}
+      </if>
+      <if test="rqstUserId != null" >
+        AND A.RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR}
+      </if>
+      <if test="aprvDtm != null" >
+        AND A.APRV_DTM = #{aprvDtm,jdbcType=DATE}
+      </if>
+      <if test="aprvUserId != null" >
+        AND A.APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR}
+      </if>
+      <if test="dmngId != null" >
+        AND G.DMNG_ID = #{dmngId,jdbcType=VARCHAR}
+      </if>
+      <if test="uppDmngId != null" >
+        AND G.UPP_DMNG_ID = #{uppDmngId,jdbcType=VARCHAR}
+      </if>
+      <if test="searchBgnDe !=null and searchBgnDe !=''">
+		<![CDATA[ AND TO_CHAR(A.APRV_DTM, 'YYYY-MM-DD') >= #{searchBgnDe} ]]>
+	  </if>
+	  <if test="searchEndDe !=null and searchEndDe !=''">
+		<![CDATA[ AND TO_CHAR(A.APRV_DTM, 'YYYY-MM-DD') <= #{searchEndDe} ]]>
+	  </if>
+	  	<if test="encYn != null" >
+        AND A.ENC_YN = #{encYn,jdbcType=VARCHAR}
+      </if>
+         <if test="dmnDscd != null" >
+        AND A.DMN_DSCD = #{dmnDscd,jdbcType=VARCHAR}
+      </if>
+      <if test="stndAsrt != null" >
+        AND A.STND_ASRT = #{stndAsrt,jdbcType=VARCHAR}
+      </if>
+  	</where>
+  	ORDER BY DMN_LNM
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from WAM_DMN
+    where DMN_ID = #{dmnId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="kr.wise.meta.stnd.service.WamDmn" >
+    insert into WAM_DMN (DMN_ID, DMN_LNM, DMN_PNM, 
+      DMNG_ID, INFOTP_ID, UPP_DMN_ID, 
+      SUBJ_ID, LST_ENTY_ID, LST_ENTY_PNM, 
+      LST_ENTY_LNM, CD_VAL_TYP_CD, CD_VAL_IVW_CD, 
+      SDITM_AUTO_CRT_YN, DATA_FRM, CRG_USER_ID, 
+      DMN_ORG_DS, RQST_NO, RQST_SNO, 
+      OBJ_DESCN, OBJ_VERS, REG_TYP_CD, 
+      FRS_RQST_DTM, FRS_RQST_USER_ID, RQST_DTM, 
+      RQST_USER_ID, APRV_DTM, APRV_USER_ID,ENC_YN,
+      DMN_DSCD,DMN_ORG_TXT,SUB_CD_YN
+      )
+    values (#{dmnId,jdbcType=VARCHAR}, #{dmnLnm,jdbcType=VARCHAR}, #{dmnPnm,jdbcType=VARCHAR}, 
+      #{dmngId,jdbcType=VARCHAR}, #{infotpId,jdbcType=VARCHAR}, #{uppDmnId,jdbcType=VARCHAR}, 
+      #{subjId,jdbcType=VARCHAR}, #{lstEntyId,jdbcType=VARCHAR}, #{lstEntyPnm,jdbcType=VARCHAR}, 
+      #{lstEntyLnm,jdbcType=VARCHAR}, #{cdValTypCd,jdbcType=VARCHAR}, #{cdValIvwCd,jdbcType=VARCHAR}, 
+      #{sditmAutoCrtYn,jdbcType=VARCHAR}, #{dataFrm,jdbcType=VARCHAR}, #{crgUserId,jdbcType=VARCHAR}, 
+      #{dmnOrgDs,jdbcType=VARCHAR}, #{rqstNo,jdbcType=VARCHAR}, #{rqstSno,jdbcType=DECIMAL}, 
+      #{objDescn,jdbcType=VARCHAR}, #{objVers,jdbcType=DECIMAL}, #{regTypCd,jdbcType=VARCHAR}, 
+      #{frsRqstDtm,jdbcType=DATE}, #{frsRqstUserId,jdbcType=VARCHAR}, #{rqstDtm,jdbcType=DATE}, 
+      #{rqstUserId,jdbcType=VARCHAR}, #{aprvDtm,jdbcType=DATE}, #{aprvUserId,jdbcType=VARCHAR}, #{encYn,jdbcType=VARCHAR},
+      #{dmnDscd,jdbcType=VARCHAR},#{dmnOrgTxt,jdbcType=VARCHAR},#{subCdYn,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="kr.wise.meta.stnd.service.WamDmn" >
+    insert into WAM_DMN
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="dmnId != null" >
+        DMN_ID,
+      </if>
+      <if test="dmnLnm != null" >
+        DMN_LNM,
+      </if>
+      <if test="dmnPnm != null" >
+        DMN_PNM,
+      </if>
+      <if test="dmngId != null" >
+        DMNG_ID,
+      </if>
+      <if test="infotpId != null" >
+        INFOTP_ID,
+      </if>
+      <if test="uppDmnId != null" >
+        UPP_DMN_ID,
+      </if>
+      <if test="subjId != null" >
+        SUBJ_ID,
+      </if>
+      <if test="lstEntyId != null" >
+        LST_ENTY_ID,
+      </if>
+      <if test="lstEntyPnm != null" >
+        LST_ENTY_PNM,
+      </if>
+      <if test="lstEntyLnm != null" >
+        LST_ENTY_LNM,
+      </if>
+      <if test="cdValTypCd != null" >
+        CD_VAL_TYP_CD,
+      </if>
+      <if test="cdValIvwCd != null" >
+        CD_VAL_IVW_CD,
+      </if>
+      <if test="sditmAutoCrtYn != null" >
+        SDITM_AUTO_CRT_YN,
+      </if>
+      <if test="dataFrm != null" >
+        DATA_FRM,
+      </if>
+      <if test="crgUserId != null" >
+        CRG_USER_ID,
+      </if>
+      <if test="dmnOrgDs != null" >
+        DMN_ORG_DS,
+      </if>
+      <if test="rqstNo != null" >
+        RQST_NO,
+      </if>
+      <if test="rqstSno != null" >
+        RQST_SNO,
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN,
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS,
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD,
+      </if>
+      <if test="frsRqstDtm != null" >
+        FRS_RQST_DTM,
+      </if>
+      <if test="frsRqstUserId != null" >
+        FRS_RQST_USER_ID,
+      </if>
+      <if test="rqstDtm != null" >
+        RQST_DTM,
+      </if>
+      <if test="rqstUserId != null" >
+        RQST_USER_ID,
+      </if>
+      <if test="aprvDtm != null" >
+        APRV_DTM,
+      </if>
+      <if test="aprvUserId != null" >
+        APRV_USER_ID,
+      </if>
+      <if test="encYn != null" >
+        ENC_YN,
+      </if>
+      <if test="dmnDscd != null" >
+        DMN_DSCD,
+      </if>
+      <if test="dmnOrgTxt != null" >
+        DMN_ORG_TXT,
+      </if>
+      <if test="subCdYn != null" >
+        SUB_CD_YN,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="dmnId != null" >
+        #{dmnId,jdbcType=VARCHAR},
+      </if>
+      <if test="dmnLnm != null" >
+        #{dmnLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="dmnPnm != null" >
+        #{dmnPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="dmngId != null" >
+        #{dmngId,jdbcType=VARCHAR},
+      </if>
+      <if test="infotpId != null" >
+        #{infotpId,jdbcType=VARCHAR},
+      </if>
+      <if test="uppDmnId != null" >
+        #{uppDmnId,jdbcType=VARCHAR},
+      </if>
+      <if test="subjId != null" >
+        #{subjId,jdbcType=VARCHAR},
+      </if>
+      <if test="lstEntyId != null" >
+        #{lstEntyId,jdbcType=VARCHAR},
+      </if>
+      <if test="lstEntyPnm != null" >
+        #{lstEntyPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="lstEntyLnm != null" >
+        #{lstEntyLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="cdValTypCd != null" >
+        #{cdValTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="cdValIvwCd != null" >
+        #{cdValIvwCd,jdbcType=VARCHAR},
+      </if>
+      <if test="sditmAutoCrtYn != null" >
+        #{sditmAutoCrtYn,jdbcType=VARCHAR},
+      </if>
+      <if test="dataFrm != null" >
+        #{dataFrm,jdbcType=VARCHAR},
+      </if>
+      <if test="crgUserId != null" >
+        #{crgUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="dmnOrgDs != null" >
+        #{dmnOrgDs,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstNo != null" >
+        #{rqstNo,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstSno != null" >
+        #{rqstSno,jdbcType=DECIMAL},
+      </if>
+      <if test="objDescn != null" >
+        #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null" >
+        #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="frsRqstDtm != null" >
+        #{frsRqstDtm,jdbcType=DATE},
+      </if>
+      <if test="frsRqstUserId != null" >
+        #{frsRqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDtm != null" >
+        #{rqstDtm,jdbcType=DATE},
+      </if>
+      <if test="rqstUserId != null" >
+        #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDtm != null" >
+        #{aprvDtm,jdbcType=DATE},
+      </if>
+      <if test="aprvUserId != null" >
+        #{aprvUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="encYn != null" >
+        #{encYn,jdbcType=VARCHAR},
+      </if>
+      <if test="dmnDscd != null" >
+         #{dmnDscd,jdbcType=VARCHAR},
+      </if>
+      <if test="dmnOrgTxt != null" >
+         #{dmnOrgTxt,jdbcType=VARCHAR},
+      </if>
+      <if test="subCdYn != null" >
+         #{subCdYn,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.meta.stnd.service.WamDmn" >
+    update WAM_DMN
+    <set >
+      <if test="dmnLnm != null" >
+        DMN_LNM = #{dmnLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="dmnPnm != null" >
+        DMN_PNM = #{dmnPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="dmngId != null" >
+        DMNG_ID = #{dmngId,jdbcType=VARCHAR},
+      </if>
+      <if test="infotpId != null" >
+        INFOTP_ID = #{infotpId,jdbcType=VARCHAR},
+      </if>
+      <if test="uppDmnId != null" >
+        UPP_DMN_ID = #{uppDmnId,jdbcType=VARCHAR},
+      </if>
+      <if test="subjId != null" >
+        SUBJ_ID = #{subjId,jdbcType=VARCHAR},
+      </if>
+      <if test="lstEntyId != null" >
+        LST_ENTY_ID = #{lstEntyId,jdbcType=VARCHAR},
+      </if>
+      <if test="lstEntyPnm != null" >
+        LST_ENTY_PNM = #{lstEntyPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="lstEntyLnm != null" >
+        LST_ENTY_LNM = #{lstEntyLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="cdValTypCd != null" >
+        CD_VAL_TYP_CD = #{cdValTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="cdValIvwCd != null" >
+        CD_VAL_IVW_CD = #{cdValIvwCd,jdbcType=VARCHAR},
+      </if>
+      <if test="sditmAutoCrtYn != null" >
+        SDITM_AUTO_CRT_YN = #{sditmAutoCrtYn,jdbcType=VARCHAR},
+      </if>
+      <if test="dataFrm != null" >
+        DATA_FRM = #{dataFrm,jdbcType=VARCHAR},
+      </if>
+      <if test="crgUserId != null" >
+        CRG_USER_ID = #{crgUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="dmnOrgDs != null" >
+        DMN_ORG_DS = #{dmnOrgDs,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstNo != null" >
+        RQST_NO = #{rqstNo,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstSno != null" >
+        RQST_SNO = #{rqstSno,jdbcType=DECIMAL},
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="frsRqstDtm != null" >
+        FRS_RQST_DTM = #{frsRqstDtm,jdbcType=DATE},
+      </if>
+      <if test="frsRqstUserId != null" >
+        FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDtm != null" >
+        RQST_DTM = #{rqstDtm,jdbcType=DATE},
+      </if>
+      <if test="rqstUserId != null" >
+        RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDtm != null" >
+        APRV_DTM = #{aprvDtm,jdbcType=DATE},
+      </if>
+      <if test="aprvUserId != null" >
+        APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR},
+      </if>
+       <if test="encYn != null" >
+        ENC_YN = #{encYn,jdbcType=VARCHAR},
+      </if>
+       <if test="dmnDscd != null" >
+         DMN_DSCD = #{dmnDscd,jdbcType=VARCHAR},
+      </if>
+       <if test="dmnOrgTxt != null" >
+         DMN_ORG_TXT = #{dmnOrgTxt,jdbcType=VARCHAR},
+      </if>
+       <if test="subCdYn != null" >
+         SUB_CD_YN = #{subCdYn,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where DMN_ID = #{dmnId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="kr.wise.meta.stnd.service.WamDmn" >
+    update WAM_DMN
+    set DMN_LNM = #{dmnLnm,jdbcType=VARCHAR},
+      DMN_PNM = #{dmnPnm,jdbcType=VARCHAR},
+      DMNG_ID = #{dmngId,jdbcType=VARCHAR},
+      INFOTP_ID = #{infotpId,jdbcType=VARCHAR},
+      UPP_DMN_ID = #{uppDmnId,jdbcType=VARCHAR},
+      SUBJ_ID = #{subjId,jdbcType=VARCHAR},
+      LST_ENTY_ID = #{lstEntyId,jdbcType=VARCHAR},
+      LST_ENTY_PNM = #{lstEntyPnm,jdbcType=VARCHAR},
+      LST_ENTY_LNM = #{lstEntyLnm,jdbcType=VARCHAR},
+      CD_VAL_TYP_CD = #{cdValTypCd,jdbcType=VARCHAR},
+      CD_VAL_IVW_CD = #{cdValIvwCd,jdbcType=VARCHAR},
+      SDITM_AUTO_CRT_YN = #{sditmAutoCrtYn,jdbcType=VARCHAR},
+      DATA_FRM = #{dataFrm,jdbcType=VARCHAR},
+      CRG_USER_ID = #{crgUserId,jdbcType=VARCHAR},
+      DMN_ORG_DS = #{dmnOrgDs,jdbcType=VARCHAR},
+      RQST_NO = #{rqstNo,jdbcType=VARCHAR},
+      RQST_SNO = #{rqstSno,jdbcType=DECIMAL},
+      OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      FRS_RQST_DTM = #{frsRqstDtm,jdbcType=DATE},
+      FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR},
+      RQST_DTM = #{rqstDtm,jdbcType=DATE},
+      RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      APRV_DTM = #{aprvDtm,jdbcType=DATE},
+      APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR},
+      ENC_YN = #{encYn,jdbcType=VARCHAR},
+      DMN_DSCD = #{dmnDscd,jdbcType=VARCHAR},
+      DMN_ORG_TXT = #{dmnOrgTxt,jdbcType=VARCHAR},
+      SUB_CD_YN = #{subCdYn,jdbcType=VARCHAR}
+    where DMN_ID = #{dmnId,jdbcType=VARCHAR}
+  </update>
+  <insert id="insertWamDmn" parameterType="java.lang.String" >
+	insert into WAM_DMN
+	(<include refid="Base_Column_List" />)
+	select 
+	<include refid="Base_Column_List" />
+	from WAH_DMN
+	where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+	  and EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+	  and REG_TYP_CD in ('C','U')
+  </insert>
+  <delete id="deleteWamDmn" parameterType="java.lang.String" >
+	delete WAM_DMN
+	where DMN_ID in (select DMN_ID from WAH_DMN
+	                 where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+	                   and EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+	                 )
+  </delete>
+  
+  <select id="selectDmnChangeList" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    SELECT A.*
+         , (SELECT USER_NM FROM WAA_USER WHERE USER_ID = A.RQST_USER_ID AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD') AND REG_TYP_CD IN ('C','U')) AS RQST_USER_NM 
+    	 , CASE WHEN A.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD') AND A.REG_TYP_CD IN ('C', 'U') THEN '#0000FF'
+    	   ELSE NULL END AS FontColor
+      FROM WAH_DMN A
+     WHERE A.DMN_ID = #{dmnId,jdbcType=VARCHAR}
+     ORDER BY A.EXP_DTM DESC, A.STR_DTM DESC
+  </select>
+  
+  <select id="selectDmnListWithCdVal" parameterType="kr.wise.meta.stnd.service.WamDmn" resultMap="BaseResultMap">
+  SELECT A.*
+  	     , B.DATA_TYPE
+  	     , B.DATA_LEN
+  	     , B.DATA_SCAL 
+  	     , C.CD_VAL
+  	     , C.CD_VAL_NM
+  	  FROM WAM_DMN A 
+     INNER JOIN V_WAA_DMNG G
+        ON A.DMNG_ID = G.DMNG_ID
+  	 INNER JOIN WAA_INFO_TYPE B
+  	    ON A.INFOTP_ID = B.INFOTP_ID
+  	   AND B.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+  	 INNER JOIN WAM_CD_VAL C
+  	    ON A.DMN_ID = C.DMN_ID
+  	   AND C.REG_TYP_CD IN ('C', 'U')
+  	<where>
+       AND A.REG_TYP_CD IN ('C', 'U')
+      <if test="dmnLnm != null" >
+       AND (DMN_LNM LIKE '%' || #{dmnLnm,jdbcType=VARCHAR} || '%'
+  	    OR DMN_PNM LIKE '%' || #{dmnLnm,jdbcType=VARCHAR} || '%'
+   	    OR DMN_LNM LIKE '%' || UPPER(#{dmnLnm,jdbcType=VARCHAR}) || '%'
+  	    OR DMN_PNM LIKE '%' || UPPER(#{dmnLnm,jdbcType=VARCHAR}) || '%')
+      </if>
+      <if test="dmnId != null" >
+        AND A.DMN_ID = #{dmnId,jdbcType=VARCHAR}
+      </if>
+      <if test="cdValTypCd != null" >
+        AND A.CD_VAL_TYP_CD = #{cdValTypCd,jdbcType=VARCHAR}
+      </if>
+      <if test="infotpId != null" >
+        AND A.INFOTP_ID = #{infotpId,jdbcType=VARCHAR}
+      </if>
+      <if test="uppDmnId != null" >
+        AND A.UPP_DMN_ID = #{uppDmnId,jdbcType=VARCHAR}
+      </if>
+      <if test="subjId != null" >
+        AND A.SUBJ_ID = #{subjId,jdbcType=VARCHAR}
+      </if>
+      <if test="dataType != null" >
+        AND B.DATA_TYPE = #{dataType,jdbcType=VARCHAR}
+      </if>
+      <if test="objDescn != null" >
+        AND A.OBJ_DESCN LIKE '%' || #{objDescn,jdbcType=VARCHAR} || '%'
+      </if>
+      <if test="cdVal != null" >
+        AND C.CD_VAL LIKE '%' || #{cdVal,jdbcType=VARCHAR} || '%'
+      </if>
+      <if test="cdValNm != null" >
+        AND C.CD_VAL_NM LIKE '%' || #{cdValNm,jdbcType=VARCHAR} || '%'
+      </if>
+      <if test="dmngId != null" >
+        AND G.DMNG_ID = #{dmngId,jdbcType=VARCHAR}
+      </if>
+      <if test="uppDmngId != null" >
+        AND G.UPP_DMNG_ID = #{uppDmngId,jdbcType=VARCHAR}
+      </if>
+      <if test="searchBgnDe !=null and searchBgnDe !=''">
+		<![CDATA[ AND TO_CHAR(A.APRV_DTM, 'YYYY-MM-DD') >= #{searchBgnDe} ]]>
+	  </if>
+	  <if test="searchEndDe !=null and searchEndDe !=''">
+		<![CDATA[ AND TO_CHAR(A.APRV_DTM, 'YYYY-MM-DD') <= #{searchEndDe} ]]>
+	  </if>
+	  <if test="encYn != null" >
+        AND a.ENC_YN = #{encYn,jdbcType=VARCHAR}
+      </if>
+      <if test="fullPath != null" >
+        AND A.FULL_PATH LIKE '%' || #{fullPath,jdbcType=VARCHAR} || '%'
+      </if>
+      <if test="stndAsrt != null" >
+        AND A.STND_ASRT = #{stndAsrt,jdbcType=VARCHAR}
+      </if>
+  	</where>
+  	ORDER BY DMN_LNM, C.CD_VAL
+  
+  </select>
+  
+  <update id="saveDmnTransYnPrc" parameterType="kr.wise.meta.stnd.service.WamDmn">
+     UPDATE WAH_DMN
+     SET TRANS_YN = DECODE(#{transYn,jdbcType=VARCHAR},'1', 'Y', '0','N')
+     WHERE DMN_ID = #{dmnId,jdbcType=VARCHAR}
+     AND EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+     AND REG_TYP_CD IN ('C', 'U')
+  </update>
+  
+    <select id="selectDmnTransList" resultMap="BaseResultMap" parameterType="kr.wise.meta.stnd.service.WamDmn" >
+  	SELECT   A.DMN_ID                               
+           , A.EXP_DTM                              
+           , A.STR_DTM                              
+           , A.DMN_LNM                              
+           , A.DMN_PNM                              
+           , A.LNM_CRI_DS                           
+           , A.DMNG_ID                              
+           , A.INFOTP_ID                            
+           , A.UPP_DMN_ID                           
+           , A.SUBJ_ID                              
+           , A.LST_ENTY_ID                          
+           , A.LST_ENTY_PNM                         
+           , A.LST_ENTY_LNM                         
+           , A.LST_ATTR_ID                          
+           , A.LST_ATTR_PNM                         
+           , A.LST_ATTR_LNM                         
+           , A.CD_VAL_TYP_CD                        
+           , A.CD_VAL_IVW_CD                        
+           , A.SDITM_AUTO_CRT_YN                    
+           , A.DATA_FRM                             
+           , A.CRG_USER_ID                          
+           , A.DMN_ORG_DS                           
+           , A.RQST_NO                              
+           , A.RQST_SNO                             
+           , A.OBJ_DESCN                            
+           , A.OBJ_VERS                             
+           , A.REG_TYP_CD                           
+           , A.FRS_RQST_DTM                         
+           , A.FRS_RQST_USER_ID                     
+           , A.RQST_DTM                             
+           , A.RQST_USER_ID                         
+           , A.APRV_DTM                             
+           , A.APRV_USER_ID                         
+           , A.FULL_PATH                            
+           , A.PNM_CRI_DS                           
+           , A.ENC_YN                               
+           , A.DMN_DSCD       
+           , A.DMN_ORG_TXT                
+           , A.SUB_CD_YN                
+           , DECODE(A.TRANS_YN,'Y','1','0') TRANS_YN
+  	       , B.DATA_TYPE
+  	       , B.DATA_LEN
+  	       , B.DATA_SCAL 
+  	       , A.STND_ASRT
+  	  FROM WAH_DMN A 
+     INNER JOIN V_WAA_DMNG G
+        ON A.DMNG_ID = G.DMNG_ID
+  	 INNER JOIN WAA_INFO_TYPE B
+  	    ON A.INFOTP_ID = B.INFOTP_ID
+  	   AND B.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+  	<where>
+       AND A.REG_TYP_CD IN ('C', 'U')
+       AND A.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+      <if test="dmnLnm != null" >
+       AND (DMN_LNM LIKE '%' || #{dmnLnm,jdbcType=VARCHAR} || '%'
+  	    OR DMN_PNM LIKE '%' || #{dmnLnm,jdbcType=VARCHAR} || '%'
+   	    OR DMN_LNM LIKE '%' || UPPER(#{dmnLnm,jdbcType=VARCHAR}) || '%'
+  	    OR DMN_PNM LIKE '%' || UPPER(#{dmnLnm,jdbcType=VARCHAR}) || '%')
+      </if>
+      <if test="dmnId != null" >
+        AND A.DMN_ID = #{dmnId,jdbcType=VARCHAR}
+      </if>
+      <if test="infotpId != null" >
+        AND A.INFOTP_ID = #{infotpId,jdbcType=VARCHAR}
+      </if>
+      <if test="uppDmnId != null" >
+        AND A.UPP_DMN_ID = #{uppDmnId,jdbcType=VARCHAR}
+      </if>
+      <if test="subjId != null" >
+        AND A.SUBJ_ID = #{subjId,jdbcType=VARCHAR}
+      </if>
+      <if test="lstEntyId != null" >
+        AND A.LST_ENTY_ID = #{lstEntyId,jdbcType=VARCHAR}
+      </if>
+      <if test="lstEntyPnm != null" >
+        AND A.LST_ENTY_PNM = #{lstEntyPnm,jdbcType=VARCHAR}
+      </if>
+      <if test="lstEntyLnm != null" >
+        AND A.LST_ENTY_LNM = #{lstEntyLnm,jdbcType=VARCHAR}
+      </if>
+      <if test="cdValTypCd != null" >
+        AND A.CD_VAL_TYP_CD = #{cdValTypCd,jdbcType=VARCHAR}
+      </if>
+      <if test="cdValIvwCd != null" >
+        AND A.CD_VAL_IVW_CD = #{cdValIvwCd,jdbcType=VARCHAR}
+      </if>
+      <if test="sditmAutoCrtYn != null" >
+        AND A.SDITM_AUTO_CRT_YN = #{sditmAutoCrtYn,jdbcType=VARCHAR}
+      </if>
+      <if test="dataFrm != null" >
+        AND A.DATA_FRM = #{dataFrm,jdbcType=VARCHAR}
+      </if>
+      <if test="crgUserId != null" >
+        AND A.CRG_USER_ID = #{crgUserId,jdbcType=VARCHAR}
+      </if>
+      <if test="dmnOrgDs != null" >
+        AND A.DMN_ORG_DS = #{dmnOrgDs,jdbcType=VARCHAR}
+      </if>
+      <if test="dataType != null" >
+        AND B.DATA_TYPE = #{dataType,jdbcType=VARCHAR}
+      </if>
+      <if test="rqstNo != null" >
+        AND A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      </if>
+      <if test="rqstSno != null" >
+        AND A.RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+      </if>
+      <if test="objDescn != null" >
+        AND A.OBJ_DESCN LIKE '%' || #{objDescn,jdbcType=VARCHAR} || '%'
+      </if>
+      <if test="objVers != null" >
+        AND A.OBJ_VERS = #{objVers,jdbcType=DECIMAL}
+      </if>
+      <if test="regTypCd != null" >
+        AND A.REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR}
+      </if>
+      <if test="frsRqstDtm != null" >
+        AND A.FRS_RQST_DTM = #{frsRqstDtm,jdbcType=DATE}
+      </if>
+      <if test="frsRqstUserId != null" >
+        AND A.FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR}
+      </if>
+      <if test="rqstDtm != null" >
+        AND A.RQST_DTM = #{rqstDtm,jdbcType=DATE}
+      </if>
+      <if test="rqstUserId != null" >
+        AND A.RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR}
+      </if>
+      <if test="aprvDtm != null" >
+        AND A.APRV_DTM = #{aprvDtm,jdbcType=DATE}
+      </if>
+      <if test="aprvUserId != null" >
+        AND A.APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR}
+      </if>
+      <if test="dmngId != null" >
+        AND G.DMNG_ID = #{dmngId,jdbcType=VARCHAR}
+      </if>
+      <if test="uppDmngId != null" >
+        AND G.UPP_DMNG_ID = #{uppDmngId,jdbcType=VARCHAR}
+      </if>
+      <if test="searchBgnDe !=null and searchBgnDe !=''">
+		<![CDATA[ AND TO_CHAR(A.APRV_DTM, 'YYYY-MM-DD') >= #{searchBgnDe} ]]>
+	  </if>
+	  <if test="searchEndDe !=null and searchEndDe !=''">
+		<![CDATA[ AND TO_CHAR(A.APRV_DTM, 'YYYY-MM-DD') <= #{searchEndDe} ]]>
+	  </if>
+	  <if test="encYn != null" >
+        AND A.ENC_YN = #{encYn,jdbcType=VARCHAR}
+      </if>
+        <if test="dmnDscd != null" >
+        AND A.DMN_DSCD = #{dmnDscd,jdbcType=VARCHAR}
+      </if>
+      <if test="transYn != null" >
+        AND A.TRANS_YN = #{transYn,jdbcType=VARCHAR}
+      </if>
+      <if test="stndAsrt != null" >
+        AND A.STND_ASRT = #{stndAsrt,jdbcType=VARCHAR}
+      </if>
+  	</where>
+  	ORDER BY TRANS_YN desc,DMN_LNM
+  </select>
+  
+    <update id="updateSditmTransYnPrc" parameterType="kr.wise.meta.stnd.service.WamDmn">
+     UPDATE WAH_SDITM
+     SET TRANS_YN = 'Y'
+     WHERE DMN_ID = #{dmnId,jdbcType=VARCHAR}
+     AND EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+     AND REG_TYP_CD IN ('C', 'U')
+  </update>
+  
+  
+   <select id="selectDmnComparisonList" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    SELECT A.*
+         , '#0000FF' AS FontColor
+         , Z.DATA_TYPE, Z.DATA_LEN, Z.DATA_SCAL 
+      FROM WAM_DMN A
+      LEFT OUTER JOIN WAA_INFO_TYPE Z
+       ON A.INFOTP_ID = Z.INFOTP_ID
+      AND Z.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+     WHERE DMN_ID = #{dmnId,jdbcType=VARCHAR}
+     UNION ALL
+     SELECT A.*
+         , '#000000' AS FontColor
+         , Z.DATA_TYPE, Z.DATA_LEN, Z.DATA_SCAL
+      FROM WAM_DMN A
+      LEFT OUTER JOIN WAA_INFO_TYPE Z
+       ON A.INFOTP_ID = Z.INFOTP_ID
+      AND Z.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+     WHERE DMN_ID != #{dmnId,jdbcType=VARCHAR}
+       AND EXISTS ( SELECT 1
+                    FROM WAM_DMN B
+                    WHERE B.DMN_LNM = A.DMN_LNM 
+                     AND B.DMN_ID = #{dmnId,jdbcType=VARCHAR}
+                  )
+     
+  </select>
+</mapper>

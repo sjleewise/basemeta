@@ -1,0 +1,1396 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.meta.subjarea.service.WaaSubjMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.meta.subjarea.service.WaaSubj" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+    <id column="SUBJ_ID" property="subjId" jdbcType="VARCHAR" />
+    <result column="SUBJ_LNM"     property="subjLnm"    jdbcType="VARCHAR" />
+    <result column="SUBJ_PNM"     property="subjPnm"    jdbcType="VARCHAR" />
+    <result column="SUBJ_ABR_NM"  property="subjAbrNm"  jdbcType="VARCHAR" />
+    <result column="UPP_SUBJ_ID"  property="uppSubjId"  jdbcType="VARCHAR" />
+    <result column="UPP_SUBJ_NM"  property="uppSubjNm"  jdbcType="VARCHAR" />
+    <result column="SUBJ_LVL"     property="subjLvl"    jdbcType="DECIMAL" />
+    <result column="SUBJ_LVL"     property="Level"      jdbcType="DECIMAL" />
+    <result column="STD_APL_YN"   property="stdAplYn"   jdbcType="VARCHAR" />
+    <result column="LECY_DCD"     property="lecyDcd"    jdbcType="VARCHAR" />
+    <result column="SYS_AREA_ID"  property="sysAreaId"  jdbcType="VARCHAR" />
+    <result column="SYS_AREA_LNM" property="sysAreaLnm" jdbcType="VARCHAR" />
+    <result column="DBMS_TYP_CD"  property="dbmsTypCd"  jdbcType="VARCHAR" /> 
+    
+    <result column="REA_TBL_CNT" property="reaTblCnt" jdbcType="VARCHAR" />
+    <result column="NO_STD_TBL_CNT" property="noStdTblCnt" jdbcType="VARCHAR" />
+    
+     
+    <result column="USER_ID"         property="userId"        jdbcType="VARCHAR" /> 
+    <result column="USER_NM"         property="userNm"        jdbcType="VARCHAR" />
+    <result column="USER_EMAIL_ADDR" property="userEmailAddr" jdbcType="VARCHAR" />  
+    <result column="SUBJ_OWNER_ID"   property="subjOwnerId"   jdbcType="VARCHAR" /> 
+    <result column="SUBJ_BIZ_DCD"    property="subjBizDcd"    jdbcType="VARCHAR" />
+    <result column="RQST_RESN"       property="rqstResn"      jdbcType="VARCHAR" />
+    <result column="DEPT_NM"         property="deptNm"        jdbcType="VARCHAR" />
+    <result column="OWNER_YN"        property="ownerYn"       jdbcType="VARCHAR" />
+    <result column="OWNER_CHECK"     property="ownerCheck"    jdbcType="VARCHAR" />
+    <result column="STND_ASRT"       property="stndAsrt"      jdbcType="VARCHAR" />
+  </resultMap>
+
+  <!-- for 문 사용 SQL --> 
+ <sql id="SelectSql" >
+    SELECT SUBJ_ID     
+	     , EXP_DTM     
+	     , STR_DTM     
+	     , SUBJ_LNM
+	     , SUBJ_PNM
+	     , SUBJ_ABR_NM     
+	     , UPP_SUBJ_ID 
+	     , SUBJ_LVL
+	     , STD_APL_YN
+	     , LECY_DCD    
+	     , OBJ_DESCN   
+	     , OBJ_VERS    
+	     , REG_TYP_CD  
+	     , WRIT_DTM    
+	     , WRIT_USER_ID
+	     , SYS_AREA_ID
+	     , FULL_PATH 
+        , UPP_SUBJ_ID||SUBJ_ID AS ORDER_COLUMN   
+        , DBMS_TYP_CD     
+        , STND_ASRT     
+     FROM WAA_SUBJ
+    WHERE SUBJ_LVL = #{item}
+      AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+      AND REG_TYP_CD  IN ('C','U')
+  </sql>
+
+  <sql id="Base_Column_List" >
+    SUBJ_ID, EXP_DTM, STR_DTM, SUBJ_LNM, SUBJ_PNM, SUBJ_ABR_NM, UPP_SUBJ_ID, SUBJ_LVL  
+    , STD_APL_YN, LECY_DCD, OBJ_DESCN, OBJ_VERS, REG_TYP_CD, WRIT_DTM, WRIT_USER_ID, SYS_AREA_ID    
+    , DBMS_TYP_CD 
+    , STND_ASRT
+  </sql>
+  
+  <select id="selectList" resultMap="BaseResultMap" parameterType="kr.wise.meta.subjarea.service.WaaSubj" >
+  	SELECT  A.SUBJ_ID     
+		, A.EXP_DTM     
+		, A.STR_DTM     
+		, A.SUBJ_LNM
+		, A.SUBJ_PNM
+		, A.SUBJ_ABR_NM
+		, A.UPP_SUBJ_ID 
+		, A.SUBJ_LVL
+		, A.STD_APL_YN    
+		, A.OBJ_DESCN   
+		, A.OBJ_VERS    
+		, A.REG_TYP_CD  
+		, A.WRIT_DTM    
+		, A.WRIT_USER_ID
+		, A.SYS_AREA_ID
+		, A.FULL_PATH 
+		, B.SUBJ_LNM AS UPP_SUBJ_NM
+	    , GET_USER_NM(A.WRIT_USER_ID) AS WRIT_USER_NM	  
+	    , A.DBMS_TYP_CD  
+	    , A.STND_ASRT
+	  FROM (
+<!-- 	  		collection = 전달받은 인자값 -->
+<!-- 	  		item   = 전달받은 인자값을 다른이름으로 대체  -->
+<!-- 	  		open 해당 구문이 시작할떄  -->
+<!-- 	  		lose 해당구문이 끝날떄 -->
+<!-- 			separator  한번 이상 반복할때 반복되는 사이에  해당 문을 넣어줌 -->
+	  		<foreach collection="lvlList" item="item" index="index" open="" separator="UNION ALL" close="">
+				<include refid="SelectSql" />	      
+			</foreach>
+	       ) A
+	      INNER JOIN WAA_SYS_AREA C
+	         ON A.SYS_AREA_ID = C.SYS_AREA_ID
+	        AND C.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	        AND C.REG_TYP_CD IN ('C','U')
+	       LEFT OUTER JOIN WAA_SUBJ B
+	         ON A.UPP_SUBJ_ID = B.SUBJ_ID
+	        AND B.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	        AND B.REG_TYP_CD IN ('C','U')
+
+  	<where>
+		AND A.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')
+  		AND A.REG_TYP_CD IN ('C', 'U')
+      <if test="subjLnm != null" >
+        AND A.SUBJ_LNM = #{subjLnm,jdbcType=VARCHAR}
+      </if>
+      <if test="subjPnm != null" >
+        AND A.SUBJ_PNM = #{subjPnm,jdbcType=VARCHAR}
+      </if>
+      <if test="subjAbrNm != null" >
+        AND A.SUBJ_ABR_NM = #{subjAbrNm,jdbcType=VARCHAR}
+      </if>
+      <if test="uppSubjId != null" >
+        AND A.UPP_SUBJ_ID = #{uppSubjId,jdbcType=VARCHAR}
+      </if>
+      <if test="subjLvl != null" >
+        AND A.SUBJ_LVL = #{subjLvl,jdbcType=DECIMAL}
+      </if>
+      <if test="stdAplYn != null" >
+        AND A.STD_APL_YN = #{stdAplYn,jdbcType=VARCHAR}
+      </if>
+      <if test="lecyDcd != null" >
+        AND A.LECY_DCD = #{lecyDcd,jdbcType=VARCHAR}
+      </if>
+      <if test="sysAreaId != null" >
+        AND A.SYS_AREA_ID = #{sysAreaId,jdbcType=VARCHAR}
+      </if>
+  	</where>
+  	 ORDER BY A.SYS_AREA_ID, A.FULL_PATH, A.SUBJ_LVL
+  </select>
+  <select id="selectListOrderSys" resultMap="BaseResultMap" parameterType="kr.wise.meta.subjarea.service.WaaSubj" >
+  	 SELECT  A.SUBJ_ID     
+		, A.EXP_DTM     
+		, A.STR_DTM     
+		, A.SUBJ_LNM
+		, A.SUBJ_PNM
+		, A.SUBJ_ABR_NM
+		, A.UPP_SUBJ_ID 
+		, A.SUBJ_LVL
+		, A.STD_APL_YN
+		, A.LECY_DCD    
+		, A.OBJ_DESCN   
+		, A.OBJ_VERS    
+		, A.REG_TYP_CD  
+		, A.WRIT_DTM    
+		, A.WRIT_USER_ID
+		, A.SYS_AREA_ID
+		, A.FULL_PATH 
+		, B.SUBJ_LNM AS UPP_SUBJ_NM
+	    , GET_USER_NM(A.WRIT_USER_ID) AS WRIT_USER_NM
+	    , T.REA_TBL_CNT
+	    , C.SYS_AREA_LNM	
+	    , A.DBMS_TYP_CD     
+	    , A.STND_ASRT
+	  FROM (
+<!-- 	  		collection = 전달받은 인자값 -->
+<!-- 	  		item   = 전달받은 인자값을 다른이름으로 대체  -->
+<!-- 	  		open 해당 구문이 시작할떄  -->
+<!-- 	  		lose 해당구문이 끝날떄 -->
+<!-- 			separator  한번 이상 반복할때 반복되는 사이에  해당 문을 넣어줌 -->
+	  		<foreach collection="lvlList" item="item" index="index" open="" separator="UNION ALL" close="">
+				<include refid="SelectSql" />	      
+			</foreach>
+	       ) A
+	      INNER JOIN WAA_SYS_AREA C
+	         ON A.SYS_AREA_ID = C.SYS_AREA_ID
+	        AND C.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	        AND C.REG_TYP_CD IN ('C','U')
+	        	        
+	       LEFT OUTER JOIN WAA_SUBJ B
+	         ON A.UPP_SUBJ_ID = B.SUBJ_ID
+	        AND B.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	        AND B.REG_TYP_CD IN ('C','U')
+	       LEFT OUTER JOIN ( SELECT SUBJ_ID
+                                  , COUNT(1) AS REA_TBL_CNT
+                               FROM WAM_PDM_TBL
+                              WHERE REG_TYP_CD IN ('C', 'U')
+                              GROUP BY SUBJ_ID
+	       				   ) T
+	  		 ON A.SUBJ_ID = T.SUBJ_ID 
+
+  	<where>
+		AND A.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')
+  		AND A.REG_TYP_CD IN ('C', 'U')
+      <if test="subjLnm != null" >
+        AND (A.SUBJ_LNM LIKE '%' || #{subjLnm,jdbcType=VARCHAR} || '%'
+        	OR A.SUBJ_PNM LIKE '%' || #{subjLnm,jdbcType=VARCHAR} || '%'
+        	OR A.SUBJ_LNM LIKE '%' || UPPER(#{subjLnm,jdbcType=VARCHAR}) || '%'
+        	OR A.SUBJ_PNM LIKE '%' || UPPER(#{subjLnm,jdbcType=VARCHAR}) || '%')
+      </if>
+      
+      <if test="subjAbrNm != null" >
+        AND A.SUBJ_ABR_NM = #{subjAbrNm,jdbcType=VARCHAR}
+      </if>
+      <if test="uppSubjId != null" >
+        AND A.UPP_SUBJ_ID = #{uppSubjId,jdbcType=VARCHAR}
+      </if>
+      <if test="subjLvl != null" >
+        AND A.SUBJ_LVL = #{subjLvl,jdbcType=DECIMAL}
+      </if>
+      <if test="stdAplYn != null" >
+        AND A.STD_APL_YN = #{stdAplYn,jdbcType=VARCHAR}
+      </if>
+      <if test="lecyDcd != null" >
+        AND C.LECY_DCD = #{lecyDcd,jdbcType=VARCHAR}  
+      </if>
+      <if test="sysAreaId != null" >
+       AND  A.SYS_AREA_ID = #{sysAreaId,jdbcType=VARCHAR}
+      </if>
+      <if test="fullPath != null" >
+       AND A.FULL_PATH LIKE '%' || #{fullPath,jdbcType=VARCHAR} || '%'
+      </if>
+  	</where>
+	
+	 ORDER BY A.SYS_AREA_ID, A.FULL_PATH, A.SUBJ_LVL
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from WAA_SUBJ
+    where SUBJ_ID = #{subjId,jdbcType=VARCHAR}
+    AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+    AND REG_TYP_CD IN ('C', 'U')
+  </select>
+  
+  <select id="selectChkSubjExists" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    SELECT SUBJ_ID    
+      FROM WAA_SUBJ
+     WHERE 1 = 1 
+       AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+       AND REG_TYP_CD IN ('C', 'U')
+       AND SYS_AREA_ID = #{sysAreaId,jdbcType=VARCHAR}
+  </select>
+  
+  <delete id="deleteAll">
+  	DELETE FROM WAA_SUBJ
+  </delete>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from WAA_SUBJ
+    where SUBJ_ID = #{subjId,jdbcType=VARCHAR}
+  </delete>
+  
+  <update id="deleteRegTyp" parameterType="kr.wise.meta.subjarea.service.WaaSubj" >
+    UPDATE WAA_SUBJ
+    SET REG_TYP_CD = #{regTypCd}
+    where SUBJ_ID = #{subjId,jdbcType=VARCHAR}
+  </update>
+  
+  <insert id="insert" parameterType="kr.wise.meta.subjarea.service.WaaSubj" >
+    <selectKey keyProperty="subjId" resultType="string" order="BEFORE" statementType="STATEMENT">
+    		<include refid="kr.wise.commons.cmm.service.CommonMapper.getObjId"/>
+<!--   		SELECT OBJ_ID.NEXTVAL FROM DUAL -->
+  	</selectKey>
+    insert into WAA_SUBJ (SUBJ_ID, EXP_DTM, STR_DTM, 
+      SUBJ_LNM, SUBJ_PNM, SUBJ_ABR_NM, 
+      UPP_SUBJ_ID, SUBJ_LVL, STD_APL_YN, 
+      LECY_DCD, OBJ_DESCN, OBJ_VERS, 
+      REG_TYP_CD, WRIT_DTM, WRIT_USER_ID, 
+      SYS_AREA_ID)
+    values (#{subjId,jdbcType=VARCHAR}, #{expDtm,jdbcType=DATE}, #{strDtm,jdbcType=DATE}, 
+      #{subjLnm,jdbcType=VARCHAR}, #{subjPnm,jdbcType=VARCHAR}, #{subjAbrNm,jdbcType=VARCHAR}, 
+      #{uppSubjId,jdbcType=VARCHAR}, #{subjLvl,jdbcType=DECIMAL}, #{stdAplYn,jdbcType=VARCHAR}, 
+      #{lecyDcd,jdbcType=VARCHAR}, #{objDescn,jdbcType=VARCHAR}, #{objVers,jdbcType=DECIMAL}, 
+      #{regTypCd,jdbcType=VARCHAR}, #{writDtm,jdbcType=DATE}, #{writUserId,jdbcType=VARCHAR}, 
+      #{sysAreaId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="kr.wise.meta.subjarea.service.WaaSubj" >
+
+    insert into WAA_SUBJ
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="subjId != null" >
+        SUBJ_ID,
+      </if>
+        EXP_DTM,
+        STR_DTM,
+      <if test="subjLnm != null" >
+        SUBJ_LNM,
+      </if>
+      <if test="subjPnm != null" >
+        SUBJ_PNM,
+      </if>
+      <if test="subjAbrNm != null" >
+        SUBJ_ABR_NM,
+      </if>
+      <if test="uppSubjId != null" >
+        UPP_SUBJ_ID,
+      </if>
+      <if test="subjLvl != null" >
+        SUBJ_LVL,
+      </if>
+      <if test="stdAplYn != null" >
+        STD_APL_YN,
+      </if>
+      <if test="lecyDcd != null" >
+        LECY_DCD,
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN,
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS,
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD,
+      </if>
+        WRIT_DTM,
+      <if test="writUserId != null" >
+        WRIT_USER_ID,
+      </if>
+      <if test="sysAreaId != null" >
+        SYS_AREA_ID,
+      </if>
+      <if test="dbmsTypCd != null" >
+        DBMS_TYP_CD,
+      </if>
+      <if test="stndAsrt != null" >
+        STND_ASRT,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="subjId != null" >
+        #{subjId,jdbcType=VARCHAR},
+      </if>
+        TO_DATE('9999-12-31', 'YYYY-MM-DD'),
+        SYSDATE,
+      <if test="subjLnm != null" >
+        #{subjLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="subjPnm != null" >
+        #{subjPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="subjAbrNm != null" >
+        #{subjAbrNm,jdbcType=VARCHAR},
+      </if>
+      <if test="uppSubjId != null" >
+        #{uppSubjId,jdbcType=VARCHAR},
+      </if>
+      <if test="subjLvl != null" >
+        #{subjLvl,jdbcType=DECIMAL},
+      </if>
+      <if test="stdAplYn != null" >
+        #{stdAplYn,jdbcType=VARCHAR},
+      </if>
+      <if test="lecyDcd != null" >
+        #{lecyDcd,jdbcType=VARCHAR},
+      </if>
+      <if test="objDescn != null" >
+        #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null" >
+        #{regTypCd,jdbcType=VARCHAR},
+      </if>
+		SYSDATE,
+      <if test="writUserId != null" >
+        #{writUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="sysAreaId != null" >
+        #{sysAreaId,jdbcType=VARCHAR},
+      </if>  
+       <if test="dbmsTypCd != null" >
+        #{dbmsTypCd,jdbcType=VARCHAR}, 
+      </if>    
+      <if test="stndAsrt != null" >
+        #{stndAsrt,jdbcType=VARCHAR}, 
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.meta.subjarea.service.WaaSubj" >
+    update WAA_SUBJ
+    <set >
+      <if test="expDtm != null" >
+        EXP_DTM = #{expDtm,jdbcType=DATE},
+      </if>
+      <if test="strDtm != null" >
+        STR_DTM = #{strDtm,jdbcType=DATE},
+      </if>
+      <if test="subjLnm != null" >
+        SUBJ_LNM = #{subjLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="subjPnm != null" >
+        SUBJ_PNM = #{subjPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="subjAbrNm != null" >
+        SUBJ_ABR_NM = #{subjAbrNm,jdbcType=VARCHAR},
+      </if>
+      <if test="uppSubjId != null" >
+        UPP_SUBJ_ID = #{uppSubjId,jdbcType=VARCHAR},
+      </if>
+      <if test="subjLvl != null" >
+        SUBJ_LVL = #{subjLvl,jdbcType=DECIMAL},
+      </if>
+      <if test="stdAplYn != null" >
+        STD_APL_YN = #{stdAplYn,jdbcType=VARCHAR},
+      </if>
+      <if test="lecyDcd != null" >
+        LECY_DCD = #{lecyDcd,jdbcType=VARCHAR},
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="writDtm != null" >
+        WRIT_DTM = #{writDtm,jdbcType=DATE},
+      </if>
+      <if test="writUserId != null" >
+        WRIT_USER_ID = #{writUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="sysAreaId != null" >
+        SYS_AREA_ID = #{sysAreaId,jdbcType=VARCHAR},
+      </if>       
+       <if test="stndAsrt != null" >
+        STND_ASRT = #{stndAsrt,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where SUBJ_ID = #{subjId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="kr.wise.meta.subjarea.service.WaaSubj" >
+    update WAA_SUBJ
+    set EXP_DTM = #{expDtm,jdbcType=DATE},
+      STR_DTM = #{strDtm,jdbcType=DATE},
+      SUBJ_LNM = #{subjLnm,jdbcType=VARCHAR},
+      SUBJ_PNM = #{subjPnm,jdbcType=VARCHAR},
+      SUBJ_ABR_NM = #{subjAbrNm,jdbcType=VARCHAR},
+      UPP_SUBJ_ID = #{uppSubjId,jdbcType=VARCHAR},
+      SUBJ_LVL = #{subjLvl,jdbcType=DECIMAL},
+      STD_APL_YN = #{stdAplYn,jdbcType=VARCHAR},
+      LECY_DCD = #{lecyDcd,jdbcType=VARCHAR},
+      OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      WRIT_DTM = #{writDtm,jdbcType=DATE},
+      WRIT_USER_ID = #{writUserId,jdbcType=VARCHAR},
+      SYS_AREA_ID = #{sysAreaId,jdbcType=VARCHAR}
+    where SUBJ_ID = #{subjId,jdbcType=VARCHAR}
+  </update>
+  
+  <update id="updateExpDtm" parameterType="kr.wise.meta.subjarea.service.WaaSubj">
+  UPDATE WAA_SUBJ
+  SET EXP_DTM = SYSDATE
+  WHERE SUBJ_ID = #{subjId,jdbcType=VARCHAR}
+  AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+  </update>
+  
+  <update id="updateAllSubjNm" parameterType="kr.wise.meta.subjarea.service.WaaSubj" >
+  	<!-- 
+    UPDATE WAA_SUBJ A
+	   SET FULL_PATH = (SELECT CASE WHEN B.SUBJ_LVL = 1 THEN C.SYS_AREA_LNM ||'>'|| D.SUBJ_LNM ||'>'|| B.SUBJ_LNM
+	                                WHEN B.SUBJ_LVL = 0 THEN C.SYS_AREA_LNM ||'>'|| B.SUBJ_LNM 
+	                            END      
+                          FROM WAA_SUBJ B
+                               INNER JOIN WAA_SYS_AREA C
+                                  ON C.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+                                 AND C.REG_TYP_CD IN ('C', 'U')
+                                 AND C.SYS_AREA_ID = B.SYS_AREA_ID  
+                               LEFT JOIN WAA_SUBJ D
+                                  ON D.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+                                 AND D.REG_TYP_CD IN ('C', 'U')
+                                 AND D.SUBJ_ID = B.UPP_SUBJ_ID    
+                         WHERE B.SUBJ_ID = A.SUBJ_ID
+                           AND B.REG_TYP_CD IN ('C', 'U')
+						   AND B.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD') 
+         		       )
+    WHERE A.REG_TYP_CD IN ('C', 'U')
+      AND A.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')            		       
+   -->
+           		     
+  UPDATE WAA_SUBJ T
+	 SET FULL_PATH = (
+                     SELECT B.SYS_AREA_LNM ||'>'|| A.FULL_PATH AS FULL_PATH
+                       FROM (  
+                              SELECT A.SUBJ_ID
+                                   , A.SYS_AREA_ID
+                                   , SUBSTR(SYS_CONNECT_BY_PATH(SUBJ_LNM, '>'), 2) AS FULL_PATH
+                                FROM 
+                                  (SELECT A.*
+                                    FROM WAA_SUBJ A
+                                   WHERE A.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')
+                                     AND A.REG_TYP_CD IN ('C', 'U')
+                                  ) A         
+                              CONNECT BY PRIOR A.SUBJ_ID = A.UPP_SUBJ_ID   
+                                  AND A.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')
+                                  AND A.REG_TYP_CD IN ('C', 'U')                           
+                                START WITH UPP_SUBJ_ID IS NULL 
+                             ) A
+                             INNER JOIN WAA_SYS_AREA B
+                                ON B.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')
+                               AND B.REG_TYP_CD IN ('C', 'U')
+                               AND B.SYS_AREA_ID = A.SYS_AREA_ID
+                        WHERE A.SUBJ_ID = T.SUBJ_ID       
+                       )  
+   WHERE T.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')
+     AND T.REG_TYP_CD IN ('C', 'U') 	
+	
+  </update>
+  
+  <select id="selectUppSubjBySubjNm" resultMap="BaseResultMap" parameterType="kr.wise.meta.subjarea.service.WaaSubj" >
+  --상위주제영역 find by 상위주제영역명 and 레벨
+  	SELECT * FROM WAA_SUBJ
+	 WHERE EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')    
+	   AND REG_TYP_CD IN ('C', 'U')
+	   AND SUBJ_LNM = #{uppSubjNm,jdbcType=VARCHAR}
+   	   AND SUBJ_LVL = #{subjLvl, jdbcType=DECIMAL} - 1
+   	   AND STND_ASRT = #{stndAsrt, jdbcType=VARCHAR}
+  </select>
+  
+  <select id="selectMetaList" resultMap="BaseResultMap" parameterType="kr.wise.meta.subjarea.service.WaaSubj" >
+  	  SELECT  A.SUBJ_ID     
+		, A.EXP_DTM     
+		, A.STR_DTM     
+		, A.SUBJ_LNM
+		, A.SUBJ_PNM
+		, A.SUBJ_ABR_NM
+		, A.UPP_SUBJ_ID 
+		, A.SUBJ_LVL
+		, A.STD_APL_YN  
+		, A.LECY_DCD  
+		, A.OBJ_DESCN   
+		, A.OBJ_VERS    
+		, A.REG_TYP_CD  
+		, A.WRIT_DTM    
+		, A.WRIT_USER_ID
+		, A.SYS_AREA_ID
+		, A.FULL_PATH 
+		, B.SUBJ_LNM AS UPP_SUBJ_NM
+	    , GET_USER_NM(A.WRIT_USER_ID) AS WRIT_USER_NM
+	    , T.REA_TBL_CNT
+	    , T.NO_STD_TBL_CNT
+	    , T.NO_STD_SUBJ_ID
+	    , A.STND_ASRT 	    
+	  FROM (
+<!-- 	  		collection = 전달받은 인자값 -->
+<!-- 	  		item   = 전달받은 인자값을 다른이름으로 대체  -->
+<!-- 	  		open 해당 구문이 시작할떄  -->
+<!-- 	  		lose 해당구문이 끝날떄 -->
+<!-- 			separator  한번 이상 반복할때 반복되는 사이에  해당 문을 넣어줌 -->
+	  		<foreach collection="lvlList" item="item" index="index" open="" separator="UNION ALL" close="">
+				<include refid="SelectSql" />	      
+			</foreach>
+	       ) A
+	      INNER JOIN WAA_SYS_AREA C
+	         ON A.SYS_AREA_ID = C.SYS_AREA_ID
+	        AND C.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	        AND C.REG_TYP_CD IN ('C','U')
+	       LEFT OUTER JOIN WAA_SUBJ B
+	         ON A.UPP_SUBJ_ID = B.SUBJ_ID
+	        AND B.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	        AND B.REG_TYP_CD IN ('C','U')
+	        
+	       LEFT OUTER JOIN (SELECT COUNT(1) AS REA_TBL_CNT
+	                             , SUM(CASE WHEN STD_APL_YN = 'N' THEN 1 END ) AS NO_STD_TBL_CNT
+	                             , SUBJ_ID AS NO_STD_SUBJ_ID
+	                          FROM WAM_PDM_TBL
+	                         WHERE REG_TYP_CD IN ('C', 'U')
+	                         GROUP BY SUBJ_ID )T
+        ON A.SUBJ_ID = T.NO_STD_SUBJ_ID
+  	<where>
+		AND A.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')
+  		AND A.REG_TYP_CD IN ('C', 'U')
+      <if test="subjLnm != null" >
+        AND (A.FULL_PATH LIKE '%' || #{subjLnm,jdbcType=VARCHAR} || '%'
+        	OR A.FULL_PATH LIKE '%' || UPPER(#{subjLnm,jdbcType=VARCHAR}) || '%')
+      </if>
+      
+      <if test="subjAbrNm != null" >
+        AND A.SUBJ_ABR_NM = #{subjAbrNm,jdbcType=VARCHAR}
+      </if>
+      <if test="uppSubjId != null" >
+        AND A.UPP_SUBJ_ID = #{uppSubjId,jdbcType=VARCHAR}
+      </if>
+      <if test="subjLvl != null" >
+        AND A.SUBJ_LVL = #{subjLvl,jdbcType=DECIMAL}
+      </if>
+      <if test="stdAplYn != null" >
+        AND A.STD_APL_YN = #{stdAplYn,jdbcType=VARCHAR}
+      </if>
+      <if test="lecyDcd != null" >
+        AND C.LECY_DCD = #{lecyDcd,jdbcType=VARCHAR}   
+      </if>
+      <if test="sysAreaId != null" >
+       AND  A.SYS_AREA_ID = #{sysAreaId,jdbcType=VARCHAR}
+      </if>
+      <if test="subjId != null">
+      	AND A.SUBJ_ID = #{subjId,jdbcType=VARCHAR}
+      </if>
+  	</where>
+		ORDER BY A.SYS_AREA_ID, A.FULL_PATH, A.SUBJ_LVL
+  </select>
+  
+  <!--   주제영역권한 등록요청 시작 -->
+<select id="selectSubjOwnerRqstList" parameterType="kr.wise.commons.rqstmst.service.WaqMstr" resultMap="BaseResultMap" >
+	/*** kr.wise.meta.subjarea.service.WaaSubjMapper.selectSubjOwnerRqstList ***/
+  	-- 요청서 리스트 조회
+  	SELECT    A.SUBJ_OWNER_ID
+  	        , A.RQST_NO
+			, A.RQST_SNO
+			, A.SUBJ_ID
+			, A.SUBJ_LNM
+			, A.SUBJ_PNM
+			, A.USER_ID
+			, A.USER_NM
+			, A.SUBJ_BIZ_DCD
+<!-- 			, A.STND_OWNER_YN -->
+<!-- 			, A.PDM_OWNER_YN -->
+<!-- 			, A.DDL_OWNER_YN  -->
+			, A.RQST_DCD
+			<if test='rqstStepCd == "Q" '>
+		     , CASE WHEN A.RVW_STS_CD = '2' THEN '2' ELSE '0' END AS RVW_STS_CD
+		     </if>
+		      <if test='rqstStepCd != "Q" '>
+		     , A.RVW_STS_CD
+		     </if>
+			, A.RVW_CONTS
+			, A.VRF_CD
+			, A.VRF_RMK
+			, A.RQST_RESN
+			, A.OBJ_DESCN
+			, A.OBJ_VERS
+			, A.REG_TYP_CD
+			, A.FRS_RQST_DTM
+			, A.FRS_RQST_USER_ID
+			, A.RQST_DTM
+			, A.RQST_USER_ID
+     		, U.USER_NM AS RQST_USER_NM
+     		, CASE WHEN A.VRF_CD = '2' THEN '#FF0000' END AS FontColor
+    FROM WAQ_SUBJ_OWNER A
+	    LEFT OUTER JOIN WAA_USER U
+	      ON A.RQST_USER_ID = U.USER_ID
+	     AND U.REG_TYP_CD IN ('C', 'U')
+	     AND U.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD') 
+    WHERE A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+    <if test='rqstStepCd == "Q" or rqstStepCd == "A" '>
+    	AND A.VRF_CD = '1'
+    </if>
+    ORDER BY A.RQST_SNO  	  	
+</select>
+
+
+<insert id="insertRqst" parameterType="kr.wise.meta.subjarea.service.WaaSubj" >
+	/*** kr.wise.meta.subjarea.service.WaaSubjMapper.insertRqst ***/
+  	<selectKey keyProperty="rqstSno" resultType="int" statementType="PREPARED" order="BEFORE">
+		SELECT NVL(MAX(RQST_SNO), 0) + 1 FROM WAQ_SUBJ_OWNER WHERE RQST_NO = #{rqstNo}
+  	</selectKey>
+    insert into WAQ_SUBJ_OWNER
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+        RQST_NO,
+        RQST_SNO,
+        SUBJ_OWNER_ID,
+        SUBJ_ID,
+        SUBJ_LNM,
+        SUBJ_PNM,
+        USER_ID,
+        USER_NM,
+        SUBJ_BIZ_DCD,
+<!--         STND_OWNER_YN, -->
+<!--         PDM_OWNER_YN, -->
+<!--         DDL_OWNER_YN, -->
+        RQST_DCD,
+        RVW_STS_CD,
+        RVW_CONTS,
+        VRF_CD,
+        VRF_RMK,
+        RQST_RESN,
+        OBJ_DESCN,
+        OBJ_VERS,
+        REG_TYP_CD,
+        FRS_RQST_DTM,
+        FRS_RQST_USER_ID,
+        RQST_DTM,
+        RQST_USER_ID,
+
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+        #{rqstNo,jdbcType=VARCHAR},
+        #{rqstSno,jdbcType=DECIMAL},
+        #{subjOwnerId,jdbcType=VARCHAR},
+        #{subjId,jdbcType=VARCHAR},
+        TRIM(#{subjLnm,jdbcType=VARCHAR}),
+        #{subjPnm,jdbcType=VARCHAR},
+        TRIM(#{userId,jdbcType=VARCHAR}),
+        TRIM(#{userNm,jdbcType=VARCHAR}),
+        #{subjBizDcd,jdbcType=VARCHAR},
+<!--         #{stndOwnerYn,jdbcType=VARCHAR}, -->
+<!--         #{pdmOwnerYn,jdbcType=VARCHAR}, -->
+<!--         #{ddlOwnerYn,jdbcType=VARCHAR}, -->
+        #{rqstDcd,jdbcType=VARCHAR},
+        #{rvwStsCd,jdbcType=VARCHAR},
+        #{rvwConts,jdbcType=VARCHAR},
+        #{vrfCd,jdbcType=VARCHAR},
+        #{vrfRmk,jdbcType=VARCHAR},
+        #{rqstResn,jdbcType=VARCHAR},
+        #{objDescn,jdbcType=VARCHAR},
+        1 ,
+        #{regTypCd,jdbcType=VARCHAR},
+        SYSDATE ,
+        #{frsRqstUserId,jdbcType=VARCHAR},
+        SYSDATE ,
+        #{rqstUserId,jdbcType=VARCHAR},
+    </trim>
+  </insert>
+   <update id="updateByPrimaryKeySubjOwner" parameterType="kr.wise.meta.subjarea.service.WaaSubj" >
+    update WAQ_SUBJ_OWNER
+	    set  SUBJ_OWNER_ID =    #{subjOwnerId,jdbcType=VARCHAR}   
+	        ,SUBJ_ID =           #{subjId,jdbcType=VARCHAR}                
+	        ,SUBJ_LNM =         TRIM(#{subjLnm,jdbcType=VARCHAR})           
+	        ,SUBJ_PNM =         #{subjPnm,jdbcType=VARCHAR}           
+	        ,USER_ID =          TRIM(#{userId,jdbcType=VARCHAR})            
+	        ,USER_NM =          TRIM(#{userNm,jdbcType=VARCHAR})   
+	        ,SUBJ_BIZ_DCD = #{subjBizDcd,jdbcType=VARCHAR}
+<!-- 	        ,STND_OWNER_YN = #{stndOwnerYn,jdbcType=VARCHAR} -->
+<!--             ,PDM_OWNER_YN = #{pdmOwnerYn,jdbcType=VARCHAR} -->
+<!--             ,DDL_OWNER_YN = #{ddlOwnerYn,jdbcType=VARCHAR}        -->
+	        ,RQST_DCD =         #{rqstDcd,jdbcType=VARCHAR}           
+	        ,RVW_STS_CD =       #{rvwStsCd,jdbcType=VARCHAR}          
+	        ,RVW_CONTS =        #{rvwConts,jdbcType=VARCHAR}          
+	        ,VRF_CD =           #{vrfCd,jdbcType=VARCHAR}             
+	        ,VRF_RMK =          #{vrfRmk,jdbcType=VARCHAR}            
+	        ,RQST_RESN =        #{rqstResn,jdbcType=VARCHAR}          
+	        ,OBJ_DESCN =        #{objDescn,jdbcType=VARCHAR}          
+	        ,OBJ_VERS =         1                                     
+	        ,REG_TYP_CD =       #{regTypCd,jdbcType=VARCHAR}          
+	        ,FRS_RQST_DTM =     SYSDATE                               
+	        ,FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR}     
+	        ,RQST_DTM =         SYSDATE                               
+	        ,RQST_USER_ID =     #{rqstUserId,jdbcType=VARCHAR}  
+    where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      and RQST_SNO = #{rqstSno,jdbcType=DECIMAL}   
+  </update> 
+    <update id="deleteByrqstSno" parameterType="kr.wise.meta.subjarea.service.WaaSubj" >
+   delete WAQ_SUBJ_OWNER
+    where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      and RQST_SNO = #{rqstSno,jdbcType=DECIMAL}   
+  </update>
+     <update id="updateSubjId" parameterType="string">
+  	--SUBJ_ID 업데이트
+    UPDATE WAQ_SUBJ_OWNER A
+      SET A.SUBJ_ID = (
+    					SELECT B.SUBJ_ID
+                          FROM WAA_SUBJ B 
+                         WHERE B.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+					   	   AND B.REG_TYP_CD IN ('C', 'U')
+                           AND B.FULL_PATH = A.SUBJ_LNM
+                       )
+    WHERE A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}  	
+  </update> 
+   <update id="updateUserId" parameterType="string">
+  	--USER_ID 업데이트
+    UPDATE WAQ_SUBJ_OWNER A
+      SET A.USER_ID = (
+    					SELECT B.USER_ID
+                          FROM WAA_USER B 
+                         WHERE B.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+					   	   AND B.REG_TYP_CD IN ('C', 'U')
+                           AND B.USER_NM = A.USER_NM
+                       )
+    WHERE A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}  	
+  </update> 
+   <update id="updateCheckInit" parameterType="string">
+  	--요청구분 업데이트
+    UPDATE WAQ_SUBJ_OWNER A
+      SET (A.REG_TYP_CD, A.SUBJ_OWNER_ID ) = (
+    					SELECT CASE WHEN A.RQST_DCD = 'DD' THEN 'D' ELSE CASE WHEN MAX(B.SUBJ_OWNER_ID ) IS NULL THEN 'C' ELSE 'U' END END
+    					       ,MAX(B.SUBJ_OWNER_ID )
+                          FROM WAM_SUBJ_OWNER B 
+                         WHERE B.SUBJ_ID = A.SUBJ_ID
+                           AND B.USER_ID   = A.USER_ID
+                           AND B.SUBJ_BIZ_DCD   = A.SUBJ_BIZ_DCD
+                       )
+       ,A.VRF_CD = '4'
+    WHERE A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}  	
+  </update>    
+  
+  
+    <insert id="checkDup" parameterType="map">
+  	<include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSql"/>
+  	--검증쿼리 : 요청서내 중복(SOW01)
+    AND EXISTS (SELECT 1
+	              FROM WAQ_SUBJ_OWNER D
+	             WHERE A.RQST_NO = D.RQST_NO
+	               AND A.RQST_SNO != D.RQST_SNO 
+	               AND A.SUBJ_ID = D.SUBJ_ID
+	               AND A.USER_ID = D.USER_ID
+	               AND A.SUBJ_BIZ_DCD = D.SUBJ_BIZ_DCD
+	            )
+  </insert> 
+   
+  <insert id="checkSubjExists" parameterType="map">
+  	<include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSql"/>
+  	--검증쿼리 : 미존재 주제영역 (SOW01)
+    AND SUBJ_ID IS NULL
+  </insert>  
+  <insert id="checkUserExists" parameterType="map">
+  	<include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSql"/>
+  	--검증쿼리 : 미존재 사용자 (SOW02)
+    AND NOT EXISTS (SELECT 1
+                      FROM WAA_USER B
+                     WHERE B.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+					   AND B.REG_TYP_CD IN ('C', 'U')
+					   AND A.USER_ID = B.USER_ID
+					   AND UPPER(A.USER_NM) = UPPER(B.USER_NM)
+					) 
+  </insert>  
+  
+  <insert id="checkOwnerYn" parameterType="map">
+  	<include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSql"/>
+  	--검증쿼리 : 사전, PDM, DDL 모든권한이 'N' 경우 (SOW04)
+    AND A.STND_OWNER_YN = 'N'
+    AND A.PDM_OWNER_YN= 'N'
+    AND A.DDL_OWNER_YN= 'N'
+  </insert>  
+  
+  <insert id="checkSubjLvlByDic" parameterType="map">
+  	<include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSql"/>
+  	--검증쿼리 : 표준사전일 경우 주제영역은 1레벨만 사용 가능(SOW05)
+    AND A.SUBJ_BIZ_DCD = 'DIC'
+    AND A.SUBJ_ID IS NOT NULL
+    AND NOT EXISTS (SELECT 1
+                      FROM WAA_SUBJ S
+                     WHERE A.SUBJ_ID = S.SUBJ_ID
+                       AND S.SUBJ_LVL = 1 
+                       AND S.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+                       AND S.REG_TYP_CD IN ('C','U') ) 
+  </insert>  
+  
+  <insert id="checkSubjLvlByModel" parameterType="map">
+  	<include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSql"/>
+  	--검증쿼리 : R9연계물리모델, DDL생성 일경우 주제영역은 2레벨만 사용 가능(SOW06)
+    AND A.SUBJ_BIZ_DCD IN ('R9P','DDL')
+    AND A.SUBJ_ID IS NOT NULL
+    AND NOT EXISTS (SELECT 1
+                      FROM WAA_SUBJ S
+                     WHERE A.SUBJ_ID = S.SUBJ_ID
+                       AND S.SUBJ_LVL = 2 
+                       AND S.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+                       AND S.REG_TYP_CD IN ('C','U') )     
+  </insert>  
+  
+  <insert id="checkSubjOwnerExist" parameterType="map">
+  	<include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSql"/>
+  	--검증쿼리 : 삭제시 존재여부 체크(SOW07)
+  	AND REG_TYP_CD  = 'D'
+    AND NOT EXISTS (SELECT 1
+	                  FROM WAM_SUBJ_OWNER B 
+	                 WHERE B.SUBJ_ID = A.SUBJ_ID
+		               AND B.USER_ID = A.USER_ID
+	                   AND NVL(B.SUBJ_BIZ_DCD,'_') = NVL(A.SUBJ_BIZ_DCD,'_')
+	                  ) 
+  </insert> 
+  
+  <insert id="checkNotChgData" parameterType="map">
+  	<include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSql"/>
+  	--검증쿼리 : 변경데이터 없음 사용자 (SOW00)
+  	AND REG_TYP_CD IN ('C','U')
+    AND EXISTS (SELECT 1
+                  FROM WAM_SUBJ_OWNER B 
+                 WHERE B.SUBJ_ID = A.SUBJ_ID
+	               AND B.USER_ID = A.USER_ID
+                   AND NVL(B.SUBJ_BIZ_DCD,'_') = NVL(A.SUBJ_BIZ_DCD,'_')
+                  ) 
+  </insert>  
+  
+  <!-- 승인/반려 업데이트 -->
+  <update id="updatervwStsCd" parameterType="kr.wise.meta.subjarea.service.WaaSubj" >
+  	UPDATE WAQ_SUBJ_OWNER
+  	<set>
+  	    RVW_STS_CD 	= #{rvwStsCd} , 
+  		RVW_CONTS 	= #{rvwConts} , 
+  		APRV_DTM	= SYSDATE ,
+  		APRV_USER_ID = #{aprvUserId} ,
+  	</set>
+    WHERE RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      AND RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+      AND VRF_CD = '1'
+      AND NVL(RVW_STS_CD, '_') != '2'
+  </update> 
+    
+ 
+ <insert id="insertWAA" parameterType="string">
+   INSERT INTO WAM_SUBJ_OWNER (
+         SUBJ_OWNER_ID
+		,SUBJ_ID         
+		,USER_ID         
+		,EXP_DTM         
+		,STR_DTM         
+		,OBJ_DESCN       
+		,OBJ_VERS        
+		,REG_TYP_CD      
+		,RQST_NO         
+		,RQST_SNO        
+		,FRS_RQST_DTM    
+		,FRS_RQST_USER_ID
+		,RQST_DTM        
+		,RQST_USER_ID    
+		,APRV_DTM        
+		,APRV_USER_ID   
+<!-- 		,STND_OWNER_YN -->
+<!--         ,PDM_OWNER_YN -->
+<!--         ,DDL_OWNER_YN   -->
+   ) 
+	SELECT   SUBJ_OWNER_ID
+	        ,SUBJ_ID         
+			,USER_ID         
+			,TO_DATE('9999-12-31', 'YYYY-MM-DD')         
+			,SYSDATE         
+			,OBJ_DESCN       
+			,OBJ_VERS        
+			,REG_TYP_CD      
+			,RQST_NO         
+			,RQST_SNO        
+			,FRS_RQST_DTM    
+			,FRS_RQST_USER_ID
+			,RQST_DTM        
+			,RQST_USER_ID    
+			,APRV_DTM        
+			,APRV_USER_ID 
+<!-- 			,STND_OWNER_YN -->
+<!-- 			,PDM_OWNER_YN -->
+<!-- 			,DDL_OWNER_YN   -->
+	  FROM WAQ_SUBJ_OWNER 
+	 WHERE RQST_NO = #{rqstNo}
+	   AND RVW_STS_CD = '1'
+	   AND REG_TYP_CD IN ('C', 'U')
+  </insert>  
+  
+  <select id="selectWaqC" parameterType="map" resultMap="BaseResultMap">
+ 	SELECT * FROM WAQ_SUBJ_OWNER
+ 	WHERE RQST_NO = #{rqstNo}
+ 	  AND RVW_STS_CD = '1'  --승인
+ 	  AND REG_TYP_CD = 'C'
+ </select>
+ 
+    <update id="updateidByKey" parameterType="kr.wise.meta.subjarea.service.WaaSubj" >
+  	UPDATE WAQ_SUBJ_OWNER 
+  	   SET SUBJ_OWNER_ID = #{subjOwnerId,jdbcType=VARCHAR}
+  	 WHERE RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+       AND RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+  </update>
+  
+<update id="updateWaqCUD" parameterType="map">
+   	--WAQ ID, VERS 등을 업데이트...
+	UPDATE WAQ_SUBJ_OWNER A
+	SET (SUBJ_OWNER_ID, OBJ_VERS, FRS_RQST_DTM, FRS_RQST_USER_ID) = (
+	    SELECT 
+	          B.SUBJ_OWNER_ID AS SUBJ_OWNER_ID
+	        , NVL(B.OBJ_VERS, 0) + 1 AS OBJ_VERS
+	        , B.FRS_RQST_DTM
+	        , B.FRS_RQST_USER_ID
+	    FROM WAM_SUBJ_OWNER B
+	    WHERE B.SUBJ_ID = A.SUBJ_ID
+	      AND B.USER_ID = A.USER_ID
+	      -- AND B.SUBJ_BIZ_DCD = A.SUBJ_BIZ_DCD -- hoon, 2019.02.12
+	)
+	WHERE A.RQST_NO = #{rqstNo}
+	--AND A.VRF_CD = '1' 		--등록가능
+	AND A.RVW_STS_CD = '1'  --승인
+	AND EXISTS (
+		SELECT 1
+		  FROM WAM_SUBJ_OWNER B
+		 WHERE B.SUBJ_ID = A.SUBJ_ID
+	      AND B.USER_ID = A.USER_ID
+	      -- AND B.SUBJ_BIZ_DCD = A.SUBJ_BIZ_DCD -- hoon, 2019.02.12
+	)
+   </update>  
+   
+   <sql id="wam_subj_owner_col">
+    ,SUBJ_ID             
+    ,USER_ID   
+    ,SUBJ_BIZ_DCD      
+<!--     ,STND_OWNER_YN        -->
+<!--     ,PDM_OWNER_YN         -->
+<!--     ,DDL_OWNER_YN         -->
+    ,OBJ_DESCN           
+    ,OBJ_VERS            
+    ,REG_TYP_CD          
+    ,RQST_NO             
+    ,RQST_SNO            
+    ,FRS_RQST_DTM        
+    ,FRS_RQST_USER_ID    
+    ,RQST_DTM            
+    ,RQST_USER_ID        
+    ,APRV_DTM            
+    ,APRV_USER_ID  
+   
+   </sql>
+  
+   
+   <delete id="deleteWAM" parameterType="map">
+    --WAM 삭제 
+	DELETE FROM WAM_SUBJ_OWNER A
+	WHERE EXISTS (
+	    SELECT 1 FROM WAQ_SUBJ_OWNER B
+	     WHERE B.RQST_NO = #{rqstNo}
+	       AND B.RVW_STS_CD = '1'
+	       AND B.SUBJ_ID = A.SUBJ_ID
+	       AND B.USER_ID = A.USER_ID
+	       -- AND B.SUBJ_BIZ_DCD = A.SUBJ_BIZ_DCD -- hoon, 2019.02.12
+	)
+   </delete>
+   
+   <insert id="insertWAM" parameterType="map">
+   	--WAM 추가 
+	INSERT INTO WAM_SUBJ_OWNER(
+	SUBJ_OWNER_ID  
+	<include refid="wam_subj_owner_col"/>
+	) 
+	SELECT 
+    SUBJ_OWNER_ID  
+	<include refid="wam_subj_owner_col"/>
+	FROM WAQ_SUBJ_OWNER A
+	WHERE A.RQST_NO = #{rqstNo}
+	AND A.RVW_STS_CD = '1'
+	AND A.REG_TYP_CD IN ('C', 'U')
+   </insert> 
+   
+<update id="updateWAH"  parameterType="map">
+   	--WAH 이력 만료...
+	UPDATE WAH_SUBJ_OWNER A
+	SET EXP_DTM = SYSDATE
+	WHERE EXISTS (
+	    SELECT 1 FROM WAQ_SUBJ_OWNER B
+	    WHERE B.RQST_NO = #{rqstNo}
+	    AND B.RVW_STS_CD = '1'
+	    AND B.SUBJ_ID = A.SUBJ_ID
+	    AND B.USER_ID = A.USER_ID
+	    -- AND B.SUBJ_BIZ_DCD = A.SUBJ_BIZ_DCD -- hoon, 2019.02.12
+	    )
+	AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+   </update>
+   
+   <insert id="insertWAH"  parameterType="map">
+   	--WAH이력 적재...
+	INSERT INTO WAH_SUBJ_OWNER( 
+	      SUBJ_OWNER_ID  
+	    , EXP_DTM
+	    , STR_DTM 
+	<include refid="wam_subj_owner_col"/>)
+	SELECT
+	      SUBJ_OWNER_ID  
+	    , TO_DATE( '9999-12-31', 'YYYY-MM-DD') AS EXP_DTM
+	    , SYSDATE AS STR_DTM 
+	<include refid="wam_subj_owner_col"/>
+	FROM WAQ_SUBJ_OWNER A
+	WHERE A.RQST_NO = #{rqstNo}
+	AND A.RVW_STS_CD = '1'
+   </insert>     
+ 
+ <select id="selectSubjOnwerlist" parameterType="kr.wise.meta.subjarea.service.WaaSubj" resultMap="BaseResultMap">
+  	SELECT SU.SUBJ_OWNER_ID
+      	 , SB.SUBJ_ID
+<!--       	 , SB.SUBJ_LNM -->
+         , SB.FULL_PATH AS SUBJ_LNM
+      	 , SB.SUBJ_PNM
+      	 , SB.SUBJ_LVL
+      	 , A.USER_ID
+      	 , A.USER_NM
+      	 , C.DEPT_NM
+<!--     	 , SU.STND_OWNER_YN -->
+<!--     	 , SU.PDM_OWNER_YN -->
+<!--     	 , SU.DDL_OWNER_YN -->
+    	 , SU.RQST_NO
+    	 , SU.RQST_SNO
+    	 , SU.RQST_DTM
+    	 , SU.RQST_USER_ID
+    	 , U.USER_NM AS RQST_USER_NM
+    	 , SU.SUBJ_BIZ_DCD
+    	 , C.DEPT_NM
+    FROM WAM_SUBJ_OWNER SU 
+		 INNER JOIN WAA_USER A 
+		    ON A.USER_ID = SU.USER_ID
+		   AND A.REG_TYP_CD IN ('C', 'U')
+		   AND A.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+		 INNER JOIN V_WAA_SUBJ SB
+		   ON SU.SUBJ_ID = SB.SUBJ_ID
+<!-- 		  AND SB.SUBJ_LVL IN ('1','2') -->
+		 LEFT JOIN WAA_DEPT C
+		   ON A.DEPT_ID = C.DEPT_ID
+		  AND C.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+		  AND C.REG_TYP_CD IN ('C', 'U')
+	     LEFT JOIN WAA_USER U
+	       ON SU.RQST_USER_ID = U.USER_ID
+		  AND U.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+		  AND U.REG_TYP_CD IN ('C', 'U')
+   WHERE 1 = 1
+       	<if test="subjId != null" >
+       	AND (SB.SUBJ_ID = #{subjId,jdbcType=VARCHAR} 
+	           OR SB.UPP_SUBJ_ID = #{subjId,jdbcType=VARCHAR}  
+	           OR SB.UPP_UPP_SUBJ_ID = #{subjId,jdbcType=VARCHAR}  )
+       	</if>
+		<if test="userNm != null" >
+			AND (A.USER_NM LIKE '%' || #{userNm,jdbcType=VARCHAR} || '%' OR A.USER_ID LIKE '%' || #{userNm,jdbcType=VARCHAR} || '%'  )
+		</if>
+      	<if test="deptNm != null" >
+      		AND C.DEPT_NM LIKE '%' || #{deptNm,jdbcType=VARCHAR} || '%'
+      	</if>	
+      	
+      	<if test="subjBizDcd != null" >
+      		AND SU.SUBJ_BIZ_DCD  =  #{subjBizDcd,jdbcType=VARCHAR}
+      	</if>
+      	<if test = "subjLnm != null">
+      		AND SB.FULL_PATH LIKE '%' || #{subjLnm, jdbcType=VARCHAR} || '%'
+      	</if>
+      	
+<!--       		ORDER BY SU.SUBJ_BIZ_DCD, SB.SUBJ_PNM, A.USER_NM -->
+            ORDER BY SB.FULL_PATH,A.USER_NM
+    </select> 
+   <select id="selectSubjOnwerDetList" parameterType="kr.wise.meta.subjarea.service.WaaSubj" resultMap="BaseResultMap">
+   /*** kr.wise.meta.subjarea.service.WaaSubjMapper.selectSubjOnwerDetList ***/
+  	SELECT SU.SUBJ_OWNER_ID
+      	 , SB.SUBJ_ID
+<!--       	 , SB.SUBJ_LNM -->
+         , SB.FULL_PATH AS SUBJ_LNM
+      	 , SB.SUBJ_PNM
+      	 , SB.SUBJ_LVL
+      	 , A.USER_ID
+      	 , A.USER_NM
+      	 , C.DEPT_NM
+<!--     	 , SU.STND_OWNER_YN -->
+<!--     	 , SU.PDM_OWNER_YN -->
+<!--     	 , SU.DDL_OWNER_YN -->
+    	 , SU.RQST_NO
+    	 , SU.RQST_SNO
+    	 , SU.RQST_DTM
+    	 , SU.RQST_USER_ID
+    	 , U.USER_NM AS RQST_USER_NM
+    	 , SU.SUBJ_BIZ_DCD
+    	 -- , C.DEPT_NM
+    	 , NVL(SU.OWNER_YN,'N') OWNER_YN
+      FROM WAM_SUBJ_OWNER SU 
+		   INNER JOIN WAA_USER A 
+		      ON A.USER_ID = SU.USER_ID
+		     AND A.REG_TYP_CD IN ('C', 'U')
+		     AND A.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+		   INNER JOIN V_WAA_SUBJ SB
+		      ON SU.SUBJ_ID = SB.SUBJ_ID
+		     AND SB.SUBJ_LVL IN ('1','2','3')
+		    LEFT OUTER JOIN WAA_DEPT C
+		     ON A.DEPT_ID = C.DEPT_ID
+		     AND C.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+		     AND C.REG_TYP_CD IN ('C', 'U')
+	        LEFT OUTER JOIN WAA_USER U
+	          ON SU.RQST_USER_ID = U.USER_ID
+		     AND U.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+		     AND U.REG_TYP_CD IN ('C', 'U')
+ 	WHERE 1 = 1
+       	<if test="subjId != null" >
+       	AND (SB.SUBJ_ID = #{subjId,jdbcType=VARCHAR} 
+	           OR SB.UPP_SUBJ_ID = #{subjId,jdbcType=VARCHAR}  
+	           OR SB.UPP_UPP_SUBJ_ID = #{subjId,jdbcType=VARCHAR}  )
+       	</if>
+		<if test="ownerYn != null" >
+			AND (NVL(SU.OWNER_YN,'N') = #{ownerYn,jdbcType=VARCHAR})
+		</if>       	
+		<if test="userNm != null" >
+			AND (A.USER_NM LIKE '%' || #{userNm,jdbcType=VARCHAR} || '%' OR A.USER_ID LIKE '%' || #{userNm,jdbcType=VARCHAR} || '%'  )
+		</if>
+      	<if test="deptNm != null" >
+      		AND C.DEPT_NM LIKE '%' || #{deptNm,jdbcType=VARCHAR} || '%'
+      	</if>	
+      	
+      	<if test="subjBizDcd != null" >
+      		AND SU.SUBJ_BIZ_DCD  =  #{subjBizDcd,jdbcType=VARCHAR}
+      	</if>	
+      	
+<!--       		ORDER BY SU.SUBJ_BIZ_DCD, SB.SUBJ_PNM, A.USER_NM -->
+          ORDER BY SB.FULL_PATH,A.USER_NM
+    </select> 	      
+    
+     <select id="selectSubjOnwer" resultMap="BaseResultMap" parameterType="kr.wise.meta.subjarea.service.WaaSubj" >
+  	 SELECT  SUBJ_OWNER_ID
+  	        ,OBJ_VERS
+  	        ,FRS_RQST_DTM
+  	        ,FRS_RQST_USER_ID 
+       FROM WAM_SUBJ_OWNER
+      WHERE SUBJ_ID = #{subjId,jdbcType=VARCHAR}
+        AND USER_ID = #{userId,jdbcType=VARCHAR}
+  </select>
+  
+    <update id="deleteWAMbyADMIN" parameterType="kr.wise.meta.subjarea.service.WaaSubj">
+    DELETE WAM_SUBJ_OWNER
+     WHERE SUBJ_OWNER_ID = #{subjOwnerId,jdbcType=VARCHAR}
+    </update>
+    
+    <update id="updateWAHbyADMIN" parameterType="kr.wise.meta.subjarea.service.WaaSubj">
+    UPDATE WAH_SUBJ_OWNER A
+	   SET EXP_DTM = SYSDATE
+  	 WHERE SUBJ_OWNER_ID = #{subjOwnerId,jdbcType=VARCHAR}
+       AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+    </update>
+  
+
+  <insert id="insertWAMbyADMIN" parameterType="kr.wise.meta.subjarea.service.WaaSubj">
+  /*** kr.wise.meta.subjarea.service.WaaSubjMapper.insertWAMbyADMIN ***/
+  INSERT INTO WAM_SUBJ_OWNER (
+      SUBJ_OWNER_ID
+  	, SUBJ_ID
+  	, USER_ID
+<!--   	, STND_OWNER_YN -->
+<!--     , PDM_OWNER_YN -->
+<!--     , DDL_OWNER_YN -->
+  	, OBJ_VERS
+  	, REG_TYP_CD
+  	, RQST_DTM
+  	, RQST_USER_ID
+  	, FRS_RQST_DTM 
+  	, FRS_RQST_USER_ID 
+  	, SUBJ_BIZ_DCD
+  	, OWNER_YN
+  ) VALUES (
+      #{subjOwnerId,jdbcType=VARCHAR}
+    , #{subjId,jdbcType=VARCHAR}
+    , #{userId,jdbcType=VARCHAR}
+<!--     , #{stndOwnerYn,jdbcType=VARCHAR} -->
+<!--     , #{pdmOwnerYn,jdbcType=VARCHAR} -->
+<!--     , #{ddlOwnerYn,jdbcType=VARCHAR} -->
+    , NVL(#{objVers,jdbcType=DECIMAL}, 1)
+    , #{regTypCd,jdbcType=VARCHAR}
+    , SYSDATE
+    , #{writUserId,jdbcType=VARCHAR}
+    , CASE WHEN #{regTypCd,jdbcType=VARCHAR} =  'C' THEN SYSDATE ELSE #{frsRqstDtm,jdbcType=TIMESTAMP}  END
+    , CASE WHEN #{regTypCd,jdbcType=VARCHAR} =  'C' THEN #{writUserId,jdbcType=VARCHAR} ELSE #{frsRqstUserId,jdbcType=VARCHAR} END 
+	, #{subjBizDcd,jdbcType=VARCHAR}
+	, #{ownerYn,jdbcType=VARCHAR}
+	
+  )
+  </insert> 
+  
+    
+  <insert id="insertWAHbyADMIN" parameterType="kr.wise.meta.subjarea.service.WaaSubj">
+  INSERT INTO WAH_SUBJ_OWNER (
+      SUBJ_OWNER_ID
+    , EXP_DTM
+    , STR_DTM
+  	, SUBJ_ID
+  	, USER_ID
+<!--   	, STND_OWNER_YN -->
+<!--     , PDM_OWNER_YN -->
+<!--     , DDL_OWNER_YN -->
+  	, OBJ_VERS
+  	, REG_TYP_CD
+  	, RQST_DTM
+  	, RQST_USER_ID
+  	, FRS_RQST_DTM 
+  	, FRS_RQST_USER_ID 
+  	, SUBJ_BIZ_DCD
+  ) VALUES (
+      #{subjOwnerId,jdbcType=VARCHAR}
+    , TO_DATE('99991231','YYYYMMDD')
+    , SYSDATE
+    , #{subjId,jdbcType=VARCHAR}
+    , #{userId,jdbcType=VARCHAR}
+<!--     , #{stndOwnerYn,jdbcType=VARCHAR} -->
+<!--     , #{pdmOwnerYn,jdbcType=VARCHAR} -->
+<!--     , #{ddlOwnerYn,jdbcType=VARCHAR} -->
+    , NVL(#{objVers,jdbcType=DECIMAL}, 1)
+    , #{regTypCd,jdbcType=VARCHAR}
+    , SYSDATE
+    , #{writUserId,jdbcType=VARCHAR}
+    , CASE WHEN #{regTypCd,jdbcType=VARCHAR} =  'C' THEN SYSDATE ELSE #{frsRqstDtm,jdbcType=TIMESTAMP}  END
+    , CASE WHEN #{regTypCd,jdbcType=VARCHAR} =  'C' THEN #{writUserId,jdbcType=VARCHAR} ELSE #{frsRqstUserId,jdbcType=VARCHAR} END
+    , #{subjBizDcd,jdbcType=VARCHAR}
+  )  
+  </insert>
+  
+<!--   주제영역권한 등록요청 끝 -->
+
+<!-- 관심주제영역권한 조회 -->
+ <select id="selectSubjFavoritelist" parameterType="kr.wise.meta.subjarea.service.WaaSubj" resultMap="BaseResultMap">
+ 	/** kr.wise.meta.subjarea.service.WaaSubjMapper.selectSubjFavoritelist **/
+  	SELECT SU.SUBJ_OWNER_ID
+      	 , SB.SUBJ_ID
+         , SB.FULL_PATH AS SUBJ_LNM
+      	 , SB.SUBJ_PNM
+      	 , SB.SUBJ_LVL
+      	 , A.USER_ID
+      	 , A.USER_NM
+      	 , A.EMAIL_ADDR AS USER_EMAIL_ADDR
+    	 , SU.RQST_NO
+    	 , SU.RQST_SNO
+    	 , SU.RQST_DTM
+    	 , SU.RQST_USER_ID
+    	 , A.USER_NM AS RQST_USER_NM
+    	 , SU.SUBJ_BIZ_DCD
+    	 , A.DEPT_NM
+    FROM WAM_SUBJ_FAVORITE SU 
+		 INNER JOIN WAA_USER A 
+		    ON A.USER_ID = SU.USER_ID
+		   AND A.REG_TYP_CD IN ('C', 'U')
+		   AND A.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+		 INNER JOIN V_WAA_SUBJ SB
+		   ON SU.SUBJ_ID = SB.SUBJ_ID
+		  AND SB.SUBJ_LVL IN ('1','2')
+   WHERE 1 = 1
+       	<if test="subjId != null" >
+       	AND (SB.SUBJ_ID = #{subjId,jdbcType=VARCHAR} 
+	           OR SB.UPP_SUBJ_ID = #{subjId,jdbcType=VARCHAR}  
+	           OR SB.UPP_UPP_SUBJ_ID = #{subjId,jdbcType=VARCHAR}  )
+       	</if>
+		<if test="userNm != null" >
+			AND (A.USER_NM LIKE '%' || #{userNm,jdbcType=VARCHAR} || '%' OR A.USER_ID LIKE '%' || #{userNm,jdbcType=VARCHAR} || '%'  )
+		</if>
+		<if test="userId != null" >
+			AND (A.USER_ID = #{userId,jdbcType=VARCHAR})
+		</if>		
+      	<if test="deptNm != null" >
+      		AND C.DEPT_NM LIKE '%' || #{deptNm,jdbcType=VARCHAR} || '%'
+      	</if>	
+      	
+      	<if test="subjBizDcd != null" >
+      		AND SU.SUBJ_BIZ_DCD  =  #{subjBizDcd,jdbcType=VARCHAR}
+      	</if>
+      	<if test = "subjLnm != null">
+      		AND SB.FULL_PATH LIKE '%' || #{subjLnm, jdbcType=VARCHAR} || '%'
+      	</if>
+      	
+<!--       		ORDER BY SU.SUBJ_BIZ_DCD, SB.SUBJ_PNM, A.USER_NM -->
+            ORDER BY SB.FULL_PATH,A.USER_NM
+    </select> 
+    
+  <insert id="insertWAMSF" parameterType="kr.wise.meta.subjarea.service.WaaSubj">
+  INSERT INTO WAM_SUBJ_FAVORITE (  
+         SUBJ_OWNER_ID
+		,SUBJ_ID         
+		,USER_ID         
+		,SUBJ_BIZ_DCD
+		,REG_TYP_CD
+		
+		,RQST_DTM        
+		,RQST_USER_ID
+  ) VALUES (
+      #{subjOwnerId,jdbcType=VARCHAR}
+    , #{subjId,jdbcType=VARCHAR}    
+	, #{userId,jdbcType=VARCHAR}
+    , #{subjBizDcd,jdbcType=VARCHAR}
+    , #{regTypCd,jdbcType=VARCHAR}
+        	
+    , SYSDATE
+	, #{userId,jdbcType=VARCHAR}
+  )  
+  </insert>
+  
+    <update id="deleteWAMSF" parameterType="kr.wise.meta.subjarea.service.WaaSubj">
+    DELETE WAM_SUBJ_FAVORITE
+     WHERE SUBJ_OWNER_ID = #{subjOwnerId,jdbcType=VARCHAR}
+    </update>      
+    
+	<select id="selectFavoriteCntBySubjId" resultType="int" parameterType="kr.wise.meta.subjarea.service.WaaSubj" >
+		/** kr.wise.meta.subjarea.service.WaaSubjMapper.selectFavoriteCntBySubjId **/
+	  	SELECT COUNT(*)
+	    FROM WAM_SUBJ_FAVORITE SU 
+			 INNER JOIN WAA_USER A 
+			    ON A.USER_ID = SU.USER_ID
+			   AND A.REG_TYP_CD IN ('C', 'U')
+			   AND A.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+			 INNER JOIN V_WAA_SUBJ SB
+			   ON SU.SUBJ_ID = SB.SUBJ_ID
+			  AND SB.SUBJ_LVL IN ('1','2')
+			 LEFT JOIN WAA_DEPT C
+			   ON A.DEPT_ID = C.DEPT_ID
+			  AND C.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+			  AND C.REG_TYP_CD IN ('C', 'U')
+		     LEFT JOIN WAA_USER U
+		       ON SU.RQST_USER_ID = U.USER_ID
+			  AND U.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+			  AND U.REG_TYP_CD IN ('C', 'U')
+	   WHERE 1 = 1
+       	AND SB.SUBJ_ID = #{subjId,jdbcType=VARCHAR} 
+		AND A.USER_ID = #{userId,jdbcType=VARCHAR}
+  	</select>    
+  	
+  	<select id="selectDbmsTypCd" resultType="String" parameterType="kr.wise.meta.subjarea.service.WaaSubj" >
+		SELECT DBMS_TYP_CD 
+		  FROM WAA_SUBJ
+		 WHERE 1=1
+		   AND FULL_PATH LIKE #{subjLnm,jdbcType=VARCHAR} 
+		   AND EXP_DTM = TO_DATE('9999-12-31','YYYY-MM-DD') 
+		   AND REG_TYP_CD IN ('C','U')
+  	</select>
+</mapper>

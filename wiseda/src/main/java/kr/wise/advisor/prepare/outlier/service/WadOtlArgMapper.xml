@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.wise.advisor.prepare.outlier.service.WadOtlArgMapper">
+  <resultMap id="BaseResultMap" type="kr.wise.advisor.prepare.outlier.service.WadOtlArg">
+    <id column="OTL_DTC_ID" jdbcType="VARCHAR" property="otlDtcId" />
+    <id column="ALG_ARG_ID" jdbcType="VARCHAR" property="algArgId" />
+    <result column="ARG_VAL" jdbcType="VARCHAR" property="argVal" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    OTL_DTC_ID, ALG_ARG_ID, ARG_VAL, OBJ_DESCN, OBJ_VERS, REG_TYP_CD, WRIT_DTM, WRIT_USER_ID
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="map" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from WAD_OTL_ARG
+    where OTL_DTC_ID = #{otlDtcId,jdbcType=VARCHAR}
+      and ALG_ARG_ID = #{algArgId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="map">
+    delete from WAD_OTL_ARG
+    where OTL_DTC_ID = #{otlDtcId,jdbcType=VARCHAR}
+      and ALG_ARG_ID = #{algArgId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByotlDtcId" parameterType="kr.wise.advisor.prepare.outlier.service.WadOtlDtc">
+  --이상값 탐지 알고리즘 파라미터 삭제 by 탐지ID
+    delete from WAD_OTL_ARG
+    where OTL_DTC_ID = #{otlDtcId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="kr.wise.advisor.prepare.outlier.service.WadOtlArg">
+    insert into WAD_OTL_ARG (OTL_DTC_ID, ALG_ARG_ID, ARG_VAL, 
+      OBJ_DESCN, OBJ_VERS, REG_TYP_CD, 
+      WRIT_DTM, WRIT_USER_ID)
+    values (#{otlDtcId,jdbcType=VARCHAR}, #{algArgId,jdbcType=VARCHAR}, #{argVal,jdbcType=VARCHAR}, 
+      #{objDescn,jdbcType=VARCHAR}, 1, 'C', SYSDATE,
+      #{writUserId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="kr.wise.advisor.prepare.outlier.service.WadOtlArg">
+    insert into WAD_OTL_ARG
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="otlDtcId != null">
+        OTL_DTC_ID,
+      </if>
+      <if test="algArgId != null">
+        ALG_ARG_ID,
+      </if>
+      <if test="argVal != null">
+        ARG_VAL,
+      </if>
+      <if test="objDescn != null">
+        OBJ_DESCN,
+      </if>
+      <if test="objVers != null">
+        OBJ_VERS,
+      </if>
+      <if test="regTypCd != null">
+        REG_TYP_CD,
+      </if>
+      <if test="writDtm != null">
+        WRIT_DTM,
+      </if>
+      <if test="writUserId != null">
+        WRIT_USER_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="otlDtcId != null">
+        #{otlDtcId,jdbcType=VARCHAR},
+      </if>
+      <if test="algArgId != null">
+        #{algArgId,jdbcType=VARCHAR},
+      </if>
+      <if test="argVal != null">
+        #{argVal,jdbcType=VARCHAR},
+      </if>
+      <if test="objDescn != null">
+        #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null">
+        #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null">
+        #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="writDtm != null">
+        #{writDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="writUserId != null">
+        #{writUserId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.advisor.prepare.outlier.service.WadOtlArg">
+    update WAD_OTL_ARG
+    <set>
+      <if test="argVal != null">
+        ARG_VAL = #{argVal,jdbcType=VARCHAR},
+      </if>
+      <if test="objDescn != null">
+        OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null">
+        OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null">
+        REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="writDtm != null">
+        WRIT_DTM = #{writDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="writUserId != null">
+        WRIT_USER_ID = #{writUserId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where OTL_DTC_ID = #{otlDtcId,jdbcType=VARCHAR}
+      and ALG_ARG_ID = #{algArgId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="kr.wise.advisor.prepare.outlier.service.WadOtlArg">
+    update WAD_OTL_ARG
+    set ARG_VAL = #{argVal,jdbcType=VARCHAR},
+      OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      OBJ_VERS = NVL(OBJ_VERS, 0) + 1,
+      REG_TYP_CD = 'U',
+      WRIT_DTM = SYSDATE,
+      WRIT_USER_ID = #{writUserId,jdbcType=VARCHAR}
+    where OTL_DTC_ID = #{otlDtcId,jdbcType=VARCHAR}
+      and ALG_ARG_ID = #{algArgId,jdbcType=VARCHAR}
+  </update>
+</mapper>

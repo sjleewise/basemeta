@@ -1,0 +1,428 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.commons.sysmgmt.menu.service.MenuManageMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.commons.sysmgmt.menu.service.MenuManageVO" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap" >
+    <id 	column="MENU_ID" 		property="menuId" 		jdbcType="VARCHAR" />
+<!--     <result column="EXP_DTM" 		property="expDtm" 		jdbcType="DATE" /> -->
+<!--     <result column="STR_DTM" 		property="strDtm" 		jdbcType="DATE" /> -->
+    <result column="MENU_NM" 		property="menuNm" 		jdbcType="VARCHAR" />
+    <result column="UPP_MENU_ID" 	property="uppMenuId"	jdbcType="VARCHAR" />
+    <result column="UPP_MENU_NM" 	property="uppMenuNm"	jdbcType="VARCHAR" />
+    <result column="MENU_LVL" 		property="menuLvl" 		jdbcType="DECIMAL" />
+    <result column="MENU_LVL" 		property="Level" 		jdbcType="DECIMAL" />
+    <result column="FILE_PATH" 		property="filePath"		jdbcType="VARCHAR" />
+    <result column="FILE_NM" 		property="fileNm" 		jdbcType="VARCHAR" />
+    <result column="DISP_YN" 		property="dispYn" 		jdbcType="VARCHAR" />
+    <result column="DISP_ORD" 		property="dispOrd" 		jdbcType="DECIMAL" />
+    <result column="MNGR_MENU_YN"	property="mngrMenuYn"	jdbcType="VARCHAR" />
+    <result column="IMG_PATH"	property="imgPath"	jdbcType="VARCHAR" />
+    <result column="MENU_DCD"	property="menuDcd"	jdbcType="VARCHAR" />
+    <result column="HELP_ID"	property="helpId"	jdbcType="VARCHAR" />
+<!--     <result column="OBJ_DESCN" 		property="objDescn" 	jdbcType="VARCHAR" />  -->
+<!--     <result column="OBJ_VERS" 		property="objVers" 		jdbcType="DECIMAL" /> -->
+<!--     <result column="REG_TYP_CD"	 	property="regTypCd"		jdbcType="VARCHAR" /> -->
+<!--     <result column="WRIT_DTM"	 	property="writDtm"	 	jdbcType="DATE" /> -->
+<!--     <result column="WRIT_USER_ID" 	property="writUserId" 	jdbcType="VARCHAR" /> -->
+  </resultMap>
+  <sql id="Base_Column_List" >
+    MENU_ID, EXP_DTM, STR_DTM, MENU_NM, UPP_MENU_ID, MENU_LVL, FILE_PATH, FILE_NM, DISP_YN, DISP_ORD,
+     MNGR_MENU_YN, OBJ_DESCN, OBJ_VERS, REG_TYP_CD, WRIT_DTM, WRIT_USER_ID
+  </sql>
+  
+  <sql id="SelectSql" >
+    SELECT MENU_ID     
+			, EXP_DTM     
+			, STR_DTM     
+			, MENU_NM     
+			, UPP_MENU_ID 
+			, MENU_LVL
+			, FILE_PATH
+			, FILE_NM   
+			, DISP_YN
+			, DISP_ORD
+			, MNGR_MENU_YN
+			, IMG_PATH
+			, MENU_DCD
+			, OBJ_DESCN   
+			, OBJ_VERS    
+			, REG_TYP_CD  
+			, WRIT_DTM    
+			, WRIT_USER_ID
+			, FULL_PATH
+            , UPP_MENU_ID||MENU_ID AS ORDER_COLUMN
+   FROM WAA_PRGM_MENU
+  WHERE MENU_LVL = #{item}
+    AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+    AND REG_TYP_CD  IN ('C','U')
+  </sql>
+  
+  
+  <select id="selectMenuList" parameterType="kr.wise.commons.sysmgmt.menu.service.MenuManageVO" resultMap="BaseResultMap" >
+	SELECT  A.MENU_ID     
+		, A.EXP_DTM     
+		, A.STR_DTM     
+		, A.MENU_NM
+		, A.UPP_MENU_ID 
+		, A.MENU_LVL
+		, A.FILE_PATH
+		, A.FILE_NM
+		, A.DISP_YN
+		, A.DISP_ORD
+		, A.MNGR_MENU_YN
+		, A.IMG_PATH
+		, A.MENU_DCD
+		, A.OBJ_DESCN   
+		, A.OBJ_VERS    
+		, A.REG_TYP_CD  
+		, A.WRIT_DTM    
+		, A.WRIT_USER_ID
+		, A.FULL_PATH
+		, B.MENU_NM AS UPP_MENU_NM
+	    , GET_USER_NM(A.WRIT_USER_ID) AS WRIT_USER_NM
+	  FROM V_WAA_PRGM_MENU A
+<!-- 	  		collection = 전달받은 인자값 -->
+<!-- 	  		item   = 전달받은 인자값을 다른이름으로 대체  -->
+<!-- 	  		open 해당 구문이 시작할떄  -->
+<!-- 	  		lose 해당구문이 끝날떄 -->
+<!-- 			separator  한번 이상 반복할때 반복되는 사이에  해당 문을 넣어줌 -->
+<!-- 	  		<foreach collection="lvlList" item="item" index="index" open="" separator="UNION ALL" close=""> -->
+<!-- 				<include refid="SelectSql" />	       -->
+<!-- 			</foreach> -->
+	       LEFT OUTER JOIN WAA_PRGM_MENU B
+	         ON A.UPP_MENU_ID = B.MENU_ID
+	        AND B.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	        AND B.REG_TYP_CD IN ('C','U')
+
+  	<where>
+		AND A.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')
+  		AND A.REG_TYP_CD IN ('C', 'U')
+		
+		<if test="menuNm != null" >
+			AND UPPER(A.MENU_NM) LIKE '%' || UPPER(#{menuNm,jdbcType=VARCHAR}) || '%'
+		</if>
+	</where>
+	ORDER BY A.MENU_DCD DESC
+	       , A.FULL_ID
+	       , A.MENU_LVL
+           , A.DISP_ORD
+           , A.UPP_MENU_ID DESC
+  </select>
+
+  <update id="updateFullPath" parameterType="kr.wise.commons.sysmgmt.menu.service.MenuManageVO" >
+    
+    UPDATE WAA_PRGM_MENU A
+	SET FULL_PATH = (SELECT FULL_PATH 
+                                FROM V_WAA_PRGM_MENU B
+<!--                                 FROM (<include refid="selfJoinSql"/> ) B -->
+                               WHERE A.MENU_ID = B.MENU_ID
+                                 AND A.REG_TYP_CD IN ('C', 'U')
+         						 AND A.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD') )
+  </update>
+  
+  <select id="selectMenuDetail" resultMap="BaseResultMap"  parameterType="kr.wise.commons.sysmgmt.menu.service.MenuManageVO" >
+    SELECT A.*
+    	  ,B.MENU_NM AS UPP_MENU_NM
+    FROM WAA_PRGM_MENU A
+    LEFT OUTER JOIN WAA_PRGM_MENU B
+      ON A.UPP_MENU_ID = B.MENU_ID
+     AND B.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+     AND B.REG_TYP_CD IN ('C', 'U')
+    WHERE 1=1
+      AND A.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')
+	  AND A.REG_TYP_CD IN ('C', 'U')  
+    AND A.MENU_ID = #{menuId,jdbcType=VARCHAR}
+  </select>
+
+  
+    <update id="updateExpDtm" parameterType="kr.wise.commons.sysmgmt.menu.service.MenuManageVO">
+  	UPDATE WAA_PRGM_MENU SET
+  		EXP_DTM = NOW()
+  	WHERE MENU_ID = #{menuId}
+  	  AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+  </update>
+  
+  <delete id="deleteByPrimaryKey" parameterType="kr.wise.commons.sysmgmt.menu.service.MenuManageVO" >
+    delete from COMTNMENUINFO
+    where MENU_NO = #{menuNo,jdbcType=DECIMAL}
+  </delete>
+  
+  <insert id="insertMenu" parameterType="kr.wise.commons.sysmgmt.menu.service.MenuManageVO" >
+    INSERT INTO 
+    WAA_PRGM_MENU(
+                 MENU_ID            
+                 ,EXP_DTM           
+                 ,STR_DTM           
+                       ,MENU_NM     
+                 ,UPP_MENU_ID       
+                 ,MENU_LVL          
+                 ,FILE_PATH         
+                 ,FILE_NM           
+                 ,DISP_YN           
+                 ,DISP_ORD          
+                 ,MNGR_MENU_YN      
+                 ,OBJ_DESCN         
+                 ,OBJ_VERS          
+                 ,REG_TYP_CD        
+                 ,WRIT_DTM          
+                 ,WRIT_USER_ID      
+                 ,IMG_PATH          
+                 ,MENU_DCD          
+                 ,FULL_PATH         
+                 ,HELP_ID           
+<!--                  ,MENU_NM_EN         -->
+<!--                  ,FULL_PATH_EN       -->
+    
+    )
+    VALUES (
+    #{menuId,jdbcType=VARCHAR},
+     TO_DATE( '9999-12-31', 'YYYY-MM-DD'),
+     NOW(),
+    #{menuNm,jdbcType=VARCHAR},
+    #{uppMenuId,jdbcType=VARCHAR},
+    #{menuLvl,jdbcType=DECIMAL},
+    #{filePath,jdbcType=VARCHAR},
+    #{fileNm,jdbcType=VARCHAR},
+    #{dispYn,jdbcType=VARCHAR},
+    #{dispOrd,jdbcType=DECIMAL},
+    #{mngrMenuYn,jdbcType=VARCHAR},
+    #{objDescn,jdbcType=VARCHAR},
+    #{objVers,jdbcType=DECIMAL},
+    #{regTypCd,jdbcType=VARCHAR},
+    NOW(),
+    #{writUserId,jdbcType=VARCHAR},
+    #{imgPath,jdbcType=VARCHAR},
+    #{menuDcd,jdbcType=VARCHAR},
+    #{fullPath,jdbcType=VARCHAR},
+    #{helpId,jdbcType=VARCHAR}
+    )
+  </insert>
+  
+  
+  <insert id="insertSelective" parameterType="kr.wise.commons.sysmgmt.menu.service.MenuManageVO" >
+    insert into COMTNMENUINFO
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="menuNo != null" >
+        MENU_NO,
+      </if>
+      <if test="menuNm != null" >
+        MENU_NM,
+      </if>
+      <if test="progrmFileNm != null" >
+        PROGRM_FILE_NM,
+      </if>
+      <if test="upperMenuNo != null" >
+        UPPER_MENU_NO,
+      </if>
+      <if test="menuOrdr != null" >
+        MENU_ORDR,
+      </if>
+      <if test="menuDc != null" >
+        MENU_DC,
+      </if>
+      <if test="relateImagePath != null" >
+        RELATE_IMAGE_PATH,
+      </if>
+      <if test="relateImageNm != null" >
+        RELATE_IMAGE_NM,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="menuNo != null" >
+        #{menuNo,jdbcType=DECIMAL},
+      </if>
+      <if test="menuNm != null" >
+        #{menuNm,jdbcType=VARCHAR},
+      </if>
+      <if test="progrmFileNm != null" >
+        #{progrmFileNm,jdbcType=VARCHAR},
+      </if>
+      <if test="upperMenuNo != null" >
+        #{upperMenuNo,jdbcType=DECIMAL},
+      </if>
+      <if test="menuOrdr != null" >
+        #{menuOrdr,jdbcType=DECIMAL},
+      </if>
+      <if test="menuDc != null" >
+        #{menuDc,jdbcType=VARCHAR},
+      </if>
+      <if test="relateImagePath != null" >
+        #{relateImagePath,jdbcType=VARCHAR},
+      </if>
+      <if test="relateImageNm != null" >
+        #{relateImageNm,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.commons.sysmgmt.menu.service.MenuManageVO" >
+    UPDATE WAA_PRGM_MENU
+    <set >
+    MENU_NM = #{menuNm,jdbcType=VARCHAR},
+    UPP_MENU_ID = #{uppMenuId,jdbcType=VARCHAR},
+    MENU_LVL = #{menuLvl,jdbcType=DECIMAL},
+    FILE_PATH = #{filePath,jdbcType=VARCHAR},
+    FILE_NM = #{fileNm,jdbcType=VARCHAR},
+    DISP_YN = #{dispYn,jdbcType=VARCHAR},
+    DISP_ORD = #{dispOrd,jdbcType=DECIMAL},
+    MNGR_MENU_YN = #{mngrMenuYn,jdbcType=VARCHAR},
+    OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+    OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+    REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR}
+    </set>
+    where MENU_ID = #{menuId,jdbcType=VARCHAR}
+  </update>
+  
+  <update id="updateMenu" parameterType="kr.wise.commons.sysmgmt.menu.service.MenuManageVO" >
+    UPDATE COMTNMENUINFO
+    SET MENU_NM = #{menuNm,jdbcType=VARCHAR},
+      PROGRM_FILE_NM = #{progrmFileNm,jdbcType=VARCHAR},
+      UPPER_MENU_NO = #{upperMenuNo,jdbcType=DECIMAL},
+      MENU_ORDR = #{menuOrdr,jdbcType=DECIMAL},
+      MENU_DC = #{menuDc,jdbcType=VARCHAR},
+      RELATE_IMAGE_PATH = #{relateImagePath,jdbcType=VARCHAR},
+      RELATE_IMAGE_NM = #{relateImageNm,jdbcType=VARCHAR}
+    WHERE MENU_NO = #{menuNo,jdbcType=DECIMAL}
+  </update>
+  
+  <select id="selectMenuStatTot" parameterType="kr.wise.commons.sysmgmt.menu.service.MenuStatVO"
+  		  resultType="kr.wise.commons.sysmgmt.menu.service.MenuStatVO">
+  --메뉴접속통계
+	SELECT 
+		    <!-- 기간검색(일) -->
+		    <if test='pdKind == "D" ' >
+		      SUBSTR(A.OCCRRNC_DE, 1) AS statsDate
+		    </if>
+		    <!-- 기간검색(월) -->
+		    <if test='pdKind == "M" ' >
+		      SUBSTR(A.OCCRRNC_DE, 1, 6) AS statsDate
+		    </if>
+		    <!-- 기간검색(년) -->
+		    <if test='pdKind == "Y" ' >
+		      SUBSTR(A.OCCRRNC_DE, 1, 4) AS statsDate
+		    </if>	
+	    , B.MENU_NO         AS menuNo
+	    , B.MENUPATH        AS menuPath
+	    , B.PROGRM_FILE_NM  AS progrmFileNm
+	    , COALESCE(COUNT(A.OCCRRNC_DE),0) AS statsCo 
+	FROM COMTNWEBLOG A
+	INNER JOIN (
+	                SELECT A.FILE_NM AS PROGRM_FILE_NM
+					     , B.URL
+					     , A.FULL_PATH AS MENUPATH
+					     , A.MENU_ID AS MENU_NO
+					  FROM WAA_PRGM_MENU A
+					  
+					 INNER JOIN COMTNPROGRMLIST B
+					    ON A.FILE_NM = B.PROGRM_FILE_NM
+					 WHERE A.REG_TYP_CD IN ('C', 'U')
+					   AND A.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+					 ORDER BY A.DISP_ORD, MENU_NM
+	) B
+	ON A.URL LIKE '%'||B.URL||'%'
+	WHERE 1=1
+	<if test="searchBgnDe != null and searchEndDe != null and searchBgnDe != '' and searchEndDe != '' " >
+		AND A.OCCRRNC_DE BETWEEN #{searchBgnDe} AND #{searchEndDe}
+    </if>
+    
+        <!-- 기간검색(일) -->
+	<if test='pdKind == "D" ' >
+	GROUP BY SUBSTR(OCCRRNC_DE, 1)
+	        , B.MENU_NO
+	        , B.MENUPATH
+	        , B.PROGRM_FILE_NM
+	ORDER BY SUBSTR(OCCRRNC_DE, 1) DESC, B.MENU_NO
+	</if>
+     	 <!-- 기간검색(월) -->
+	<if test='pdKind == "M" ' >
+	GROUP BY SUBSTR(OCCRRNC_DE, 1, 6)
+	        , B.MENU_NO
+	        , B.MENUPATH
+	        , B.PROGRM_FILE_NM
+	ORDER BY SUBSTR(OCCRRNC_DE, 1, 6) DESC, B.MENU_NO
+	</if>
+     	 <!-- 기간검색(년) -->
+	<if test='pdKind == "Y" ' >
+	GROUP BY SUBSTR(OCCRRNC_DE, 1, 4)
+	        , B.MENU_NO
+	        , B.MENUPATH
+	        , B.PROGRM_FILE_NM
+	ORDER BY SUBSTR(OCCRRNC_DE, 1, 4) DESC, B.MENU_NO
+	</if>
+
+  </select>
+
+  <select id="selectMenuStat" parameterType="kr.wise.commons.sysmgmt.menu.service.MenuStatVO"
+  		  resultType="kr.wise.commons.sysmgmt.menu.service.MenuStatVO">
+ 	<![CDATA[ --사용자별 메뉴접속통계	]]>
+	SELECT 
+		    <!-- 기간검색(일) -->
+		    <if test='pdKind == "D" ' >
+		      SUBSTR(A.OCCRRNC_DE, 1) AS statsDate
+		    </if>
+		    <!-- 기간검색(월) -->
+		    <if test='pdKind == "M" ' >
+		      SUBSTR(A.OCCRRNC_DE, 1, 6) AS statsDate
+		    </if>
+		    <!-- 기간검색(년) -->
+		    <if test='pdKind == "Y" ' >
+		      SUBSTR(A.OCCRRNC_DE, 1, 4) AS statsDate
+		    </if>	
+	    , B.MENU_NO         AS menuNo
+	    , B.MENUPATH        AS menuPath
+	    , B.PROGRM_FILE_NM  AS progrmFileNm
+	    , A.RQESTER_ID      AS loginId
+        , C.USER_NM        AS loginNm
+	    , COALESCE(COUNT(A.OCCRRNC_DE),0) AS statsCo 
+	FROM COMTNWEBLOG A
+	INNER JOIN (
+	                SELECT A.FILE_NM AS PROGRM_FILE_NM
+					     , B.URL
+					     , A.FULL_PATH AS MENUPATH
+					     , A.MENU_ID AS MENU_NO
+					  FROM WAA_PRGM_MENU A
+					  
+					 INNER JOIN COMTNPROGRMLIST B
+					    ON A.FILE_NM = B.PROGRM_FILE_NM
+					 WHERE A.REG_TYP_CD IN ('C', 'U')
+					   AND A.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+					 ORDER BY A.DISP_ORD, MENU_NM
+	) B
+	ON A.URL LIKE '%'||B.URL||'%'
+	LEFT OUTER JOIN WAA_USER C
+	ON A.RQESTER_ID = C.USER_ID
+	AND C.EXP_DTM  = TO_DATE('99991231', 'yyyymmdd')
+	WHERE 1=1
+	<if test="searchBgnDe != null and searchEndDe != null and searchBgnDe != '' and searchEndDe != '' " >
+		AND A.OCCRRNC_DE BETWEEN #{searchBgnDe} AND #{searchEndDe}
+    </if>
+    
+        <!-- 기간검색(일) -->
+	<if test='pdKind == "D" ' >
+	GROUP BY SUBSTR(OCCRRNC_DE, 1)
+	        , B.MENU_NO , B.MENUPATH , B.PROGRM_FILE_NM , A.RQESTER_ID , C.USER_NM
+	ORDER BY SUBSTR(OCCRRNC_DE, 1) DESC, B.MENU_NO
+	</if>
+     	 <!-- 기간검색(월) -->
+	<if test='pdKind == "M" ' >
+	GROUP BY SUBSTR(OCCRRNC_DE, 1, 6)
+	        , B.MENU_NO , B.MENUPATH , B.PROGRM_FILE_NM , A.RQESTER_ID , C.USER_NM
+	ORDER BY SUBSTR(OCCRRNC_DE, 1, 6) DESC, B.MENU_NO
+	</if>
+     	 <!-- 기간검색(년) -->
+	<if test='pdKind == "Y" ' >
+	GROUP BY SUBSTR(OCCRRNC_DE, 1, 4)
+	        , B.MENU_NO , B.MENUPATH , B.PROGRM_FILE_NM , A.RQESTER_ID , C.USER_NM
+	ORDER BY SUBSTR(OCCRRNC_DE, 1, 4) DESC, B.MENU_NO
+	</if>
+
+  </select>
+  
+  	<update id="deleteMenu" parameterType="java.lang.String">
+		UPDATE WAA_PRGM_MENU
+		   SET REG_TYP_CD = 'D'
+		WHERE MENU_ID = #{menuId,jdbcType=VARCHAR}
+	</update>
+  
+
+    
+  
+</mapper>

@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.commons.damgmt.subjsch.service.WaaSubjDbSchMapMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.commons.damgmt.subjsch.service.WaaSubjDbSchMap" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+    <id column="DB_SCH_ID" property="dbSchId" jdbcType="VARCHAR" />
+    <id column="SUBJ_ID" property="subjId" jdbcType="VARCHAR" />
+<!--     <id column="EXP_DTM" property="expDtm" jdbcType="TIMESTAMP" /> -->
+<!--     <result column="STR_DTM" property="strDtm" jdbcType="TIMESTAMP" /> -->
+<!--     <result column="OBJ_DESCN" property="objDescn" jdbcType="VARCHAR" /> -->
+<!--     <result column="OBJ_VERS" property="objVers" jdbcType="DECIMAL" /> -->
+<!--     <result column="REG_TYP_CD" property="regTypCd" jdbcType="VARCHAR" /> -->
+<!--     <result column="WRIT_DTM" property="writDtm" jdbcType="TIMESTAMP" /> -->
+<!--     <result column="WRIT_USER_ID" property="writUserId" jdbcType="VARCHAR" /> -->
+    
+    <result column="SUBJ_LNM" property="subjLnm" jdbcType="VARCHAR" />
+    <result column="STD_APL_YN" property="stdAplYn" jdbcType="VARCHAR" />
+    <result column="DB_SCH_LNM" property="dbSchLnm" jdbcType="VARCHAR" />
+    <result column="DDL_TRG_YN" property="ddlTrgYn" jdbcType="VARCHAR" />
+    <result column="CLT_XCL_YN" property="cltXclYn" jdbcType="VARCHAR" />
+    <result column="DDL_TRG_DCD" property="ddlTrgDcd" jdbcType="VARCHAR" />
+    
+    
+  </resultMap>
+  <sql id="Base_Column_List" >
+    DB_SCH_ID, SUBJ_ID, EXP_DTM, STR_DTM, OBJ_DESCN, OBJ_VERS, REG_TYP_CD, WRIT_DTM, 
+    WRIT_USER_ID
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="map" >
+    select 
+    <include refid="Base_Column_List" />
+    from WAA_SUBJ_DB_SCH_MAP
+    where DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+      and SUBJ_ID = #{subjId,jdbcType=VARCHAR}
+      and EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+      AND REG_TYP_CD IN ('C', 'U')
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="map" >
+    delete from WAA_SUBJ_DB_SCH_MAP
+    where DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+      and SUBJ_ID = #{subjId,jdbcType=VARCHAR}
+      and EXP_DTM = #{expDtm,jdbcType=TIMESTAMP}
+  </delete>
+  <insert id="insert" parameterType="kr.wise.commons.damgmt.subjsch.service.WaaSubjDbSchMap" >
+    insert into WAA_SUBJ_DB_SCH_MAP (DB_SCH_ID, SUBJ_ID, EXP_DTM, 
+      STR_DTM, OBJ_DESCN, OBJ_VERS, 
+      REG_TYP_CD, WRIT_DTM, WRIT_USER_ID
+      )
+    values (#{dbSchId,jdbcType=VARCHAR}, #{subjId,jdbcType=VARCHAR}, #{expDtm,jdbcType=TIMESTAMP}, 
+      #{strDtm,jdbcType=TIMESTAMP}, #{objDescn,jdbcType=VARCHAR}, #{objVers,jdbcType=DECIMAL}, 
+      #{regTypCd,jdbcType=VARCHAR}, #{writDtm,jdbcType=TIMESTAMP}, #{writUserId,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="kr.wise.commons.damgmt.subjsch.service.WaaSubjDbSchMap" >
+    insert into WAA_SUBJ_DB_SCH_MAP
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="dbSchId != null" >
+        DB_SCH_ID,
+      </if>
+      <if test="subjId != null" >
+        SUBJ_ID,
+      </if>
+        EXP_DTM,
+        STR_DTM,
+      <if test="objDescn != null" >
+        OBJ_DESCN,
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS,
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD,
+      </if>
+        WRIT_DTM,
+      <if test="writUserId != null" >
+        WRIT_USER_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="dbSchId != null" >
+        #{dbSchId,jdbcType=VARCHAR},
+      </if>
+      <if test="subjId != null" >
+        #{subjId,jdbcType=VARCHAR},
+      </if>
+      	TO_DATE('9999-12-31', 'YYYY-MM-DD'),
+      	SYSDATE,
+      <if test="objDescn != null" >
+        #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null" >
+        #{regTypCd,jdbcType=VARCHAR},
+      </if>
+	    SYSDATE,
+      <if test="writUserId != null" >
+        #{writUserId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.commons.damgmt.subjsch.service.WaaSubjDbSchMap" >
+    update WAA_SUBJ_DB_SCH_MAP
+    <set >
+      <if test="strDtm != null" >
+        STR_DTM = #{strDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="writDtm != null" >
+        WRIT_DTM = #{writDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="writUserId != null" >
+        WRIT_USER_ID = #{writUserId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+      and SUBJ_ID = #{subjId,jdbcType=VARCHAR}
+      and EXP_DTM = #{expDtm,jdbcType=TIMESTAMP}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="kr.wise.commons.damgmt.subjsch.service.WaaSubjDbSchMap" >
+    update WAA_SUBJ_DB_SCH_MAP
+    set STR_DTM = #{strDtm,jdbcType=TIMESTAMP},
+      OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      WRIT_DTM = #{writDtm,jdbcType=TIMESTAMP},
+      WRIT_USER_ID = #{writUserId,jdbcType=VARCHAR}
+    where DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+      and SUBJ_ID = #{subjId,jdbcType=VARCHAR}
+      and EXP_DTM = #{expDtm,jdbcType=TIMESTAMP}
+  </update>
+  
+  <update id="updateExpDtm" parameterType="kr.wise.commons.damgmt.subjsch.service.WaaSubjDbSchMap">
+  	UPDATE WAA_SUBJ_DB_SCH_MAP SET
+  		EXP_DTM = SYSDATE
+  	WHERE SUBJ_ID = #{subjId}
+  	  AND DB_SCH_ID = #{dbSchId}
+  	  AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+  </update>
+  
+  <select id="selectList" parameterType="kr.wise.commons.damgmt.subjsch.service.WaaSubjDbSchMap" resultMap="BaseResultMap">
+  	SELECT 
+    	 	A.*, 
+            B.SUBJ_LNM, 
+            B.STD_APL_YN, 
+            C.DB_SCH_LNM, 
+            C.DDL_TRG_YN, 
+            C.CLT_XCL_YN, 
+            C.DDL_TRG_DCD,
+            GET_USER_NM(A.WRIT_USER_ID) AS WRIT_USER_NM
+    FROM WAA_SUBJ_DB_SCH_MAP A 
+         INNER JOIN WAA_SUBJ B
+            ON B.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+           AND B.REG_TYP_CD IN ('C', 'U')           
+           AND B.SUBJ_ID = A.SUBJ_ID       
+         INNER JOIN WAA_DB_SCH C  	
+            ON C.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+           AND C.REG_TYP_CD IN ('C', 'U')
+           AND C.DB_SCH_ID = A.DB_SCH_ID   
+   	<where>
+     AND A.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD') 
+     AND A.REG_TYP_CD IN ('C', 'U')
+<!--      AND B.SUBJ_LVL = 1 -->
+	 <if test="dbSchId != null" >
+       AND A.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+     </if>
+     <if test="subjId != null" >
+       AND A.SUBJ_ID = #{subjId,jdbcType=VARCHAR},
+   	  </if>
+   	</where>
+   </select>
+</mapper>

@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.wise.sysinf.codeSync.service.CodeSyncTgtMapper">
+  <resultMap id="SimpleCdBaseResultMap" type="kr.wise.commons.code.service.SimpleCodeVo">
+   <result column="SMPL_LCCD" 	jdbcType="VARCHAR" property="smplLccd" />
+   <result column="SMPL_MCCD" 	jdbcType="VARCHAR" property="smplMccd" />
+   <result column="SMPL_SCCD" 	jdbcType="VARCHAR" property="smplSccd" />
+   <result column="SMPL_LCCD_NM" 	jdbcType="VARCHAR" property="smplLccdNm" />
+   <result column="SMPL_MCCD_NM" 	jdbcType="VARCHAR" property="smplMccdNm" />    
+   <result column="SMPL_SCCD_NM" 	jdbcType="VARCHAR" property="smplSccdNm" />    
+   <result column="SMPL_CD_STS_YN" 	jdbcType="VARCHAR" property="smplCdStsYn" />    
+   <result column="ETC_CD1" 	jdbcType="VARCHAR" property="etcCd1" />    
+   <result column="ETC_CD2" 	jdbcType="VARCHAR" property="etcCd2" />    
+   <result column="ETC_CD3" 	jdbcType="VARCHAR" property="etcCd3" />    
+   <result column="ETC_CD4" 	jdbcType="VARCHAR" property="etcCd4" />    
+   <result column="ETC_CD5" 	jdbcType="VARCHAR" property="etcCd5" />    
+   <result column="ETC_CD_NM1" 	jdbcType="VARCHAR" property="etcCdNm1" />    
+   <result column="ETC_CD_NM2" 	jdbcType="VARCHAR" property="etcCdNm2" />    
+   <result column="ETC_CD_NM3" 	jdbcType="VARCHAR" property="etcCdNm3" />    
+   <result column="ETC_CD_NM4" 	jdbcType="VARCHAR" property="etcCdNm4" />    
+   <result column="ETC_CD_NM5" 	jdbcType="VARCHAR" property="etcCdNm5" />    
+   <result column="CD_OUTL_CNTN1" 	jdbcType="VARCHAR" property="cdOutlCntn1" />    
+   <result column="CD_OUTL_CNTN2" 	jdbcType="VARCHAR" property="cdOutlCntn2" />    
+   <result column="ARY_SQNC_NO" 	jdbcType="VARCHAR" property="arySqncNo" />    
+   <result column="RMRK_CNTN" 	jdbcType="VARCHAR" property="rmrkCntn" />    
+  </resultMap>
+  <resultMap id="ComplexCdBaseResultMap" type="kr.wise.commons.code.service.ComplexCodeVo">
+     <result column="COEX_DTL_CD" 	jdbcType="VARCHAR" property="coexDtlCd" />
+     <result column="COEX_UPRN_CD" 	jdbcType="VARCHAR" property="coexUprnCd" />
+     <result column="COEX_LVL_NO" 	jdbcType="VARCHAR" property="coexLvlNo" />       
+     <result column="COEX_CD_NM" 	jdbcType="VARCHAR" property="coexCdNm" />
+     <result column="COEX_CD_STS_YN" 	jdbcType="VARCHAR" property="coexCdStsYn" />
+     <result column="ETC_CD1" 	jdbcType="VARCHAR" property="etcCd1" />
+     <result column="ETC_CD2" 	jdbcType="VARCHAR" property="etcCd2" />
+     <result column="ETC_CD3" 	jdbcType="VARCHAR" property="etcCd3" />
+     <result column="ETC_CD4" 	jdbcType="VARCHAR" property="etcCd4" />
+     <result column="ETC_CD5" 	jdbcType="VARCHAR" property="etcCd5" />
+     <result column="ETC_CD_NM1" 	jdbcType="VARCHAR" property="etcCdNm1" />
+     <result column="ETC_CD_NM2" 	jdbcType="VARCHAR" property="etcCdNm2" />
+     <result column="ETC_CD_NM3" 	jdbcType="VARCHAR" property="etcCdNm3" />
+     <result column="ETC_CD_NM4" 	jdbcType="VARCHAR" property="etcCdNm4" />
+     <result column="ETC_CD_NM5" 	jdbcType="VARCHAR" property="etcCdNm5" />
+     <result column="CD_OUTL_CNTN1" 	jdbcType="VARCHAR" property="cdOutlCntn1" />
+     <result column="CD_OUTL_CNTN2" 	jdbcType="VARCHAR" property="cdOutlCntn2" />
+     <result column="ARY_SQNC_NO" 	jdbcType="VARCHAR" property="arySqncNo" />
+     <result column="RMRK_CNTN" 	jdbcType="VARCHAR" property="rmrkCntn" />
+  </resultMap>
+  
+  <select id="getTgtSimpleCodeList" resultMap="SimpleCdBaseResultMap">
+  	SELECT * FROM TBCSMPLCODEC
+  </select>
+   <select id="getTgtComplexCodeList" resultMap="ComplexCdBaseResultMap">
+  	SELECT * FROM TBCCOEXCODEC
+  </select>
+
+        <delete id ="deleteSimpleCode" parameterType = "kr.wise.commons.code.service.SimpleCodeVo">
+         DELETE FROM TBCSMPLCODEC
+         WHERE NVL(SMPL_LCCD,'-') = NVL(#{smplLccd   ,jdbcType = VARCHAR},'-')
+         AND   NVL(SMPL_MCCD,'-') = NVL(#{smplMccd   ,jdbcType = VARCHAR},'-')  
+         AND   NVL(SMPL_SCCD,'-') = NVL(#{smplSccd   ,jdbcType = VARCHAR},'-')  
+      </delete>
+    <insert id="insertSimpleCode" parameterType = "kr.wise.commons.code.service.SimpleCodeVo">
+  	INSERT INTO TBCSMPLCODEC(SMPL_LCCD, SMPL_MCCD, SMPL_SCCD, SMPL_LCCD_NM, SMPL_MCCD_NM, SMPL_SCCD_NM, 
+  	       SMPL_CD_STS_YN, ETC_CD1, ETC_CD2, ETC_CD3, ETC_CD4, ETC_CD5, ETC_CD_NM1, 
+  	       ETC_CD_NM2, ETC_CD_NM3, ETC_CD_NM4, ETC_CD_NM5, CD_OUTL_CNTN1, CD_OUTL_CNTN2, ARY_SQNC_NO, RMRK_CNTN
+  	       ,SYS_REG_DTTM,SYS_RGSR_EMNO,SYS_REG_BRCD,SYS_CHG_DTTM,SYS_EDIR_EMNO,SYS_CHG_BRCD
+  	       )
+  	  VALUES( 
+  	     #{smplLccd   ,jdbcType = VARCHAR}
+        ,#{smplMccd   ,jdbcType = VARCHAR}  
+        ,#{smplSccd   ,jdbcType = VARCHAR}  
+        ,#{smplLccdNm ,jdbcType = VARCHAR}  
+        ,#{smplMccdNm ,jdbcType = VARCHAR}  
+        ,#{smplSccdNm ,jdbcType = VARCHAR}  
+        ,#{smplCdStsYn,jdbcType = VARCHAR}  
+        ,#{etcCd1     ,jdbcType = VARCHAR}  
+        ,#{etcCd2     ,jdbcType = VARCHAR}  
+        ,#{etcCd3     ,jdbcType = VARCHAR}  
+        ,#{etcCd4     ,jdbcType = VARCHAR}  
+        ,#{etcCd5     ,jdbcType = VARCHAR}  
+        ,#{etcCdNm1   ,jdbcType = VARCHAR}  
+        ,#{etcCdNm2   ,jdbcType = VARCHAR}  
+        ,#{etcCdNm3   ,jdbcType = VARCHAR}  
+        ,#{etcCdNm4   ,jdbcType = VARCHAR}  
+        ,#{etcCdNm5   ,jdbcType = VARCHAR}  
+        ,#{cdOutlCntn1,jdbcType = VARCHAR}  
+        ,#{cdOutlCntn2,jdbcType = VARCHAR}  
+        ,#{arySqncNo  ,jdbcType = VARCHAR}  
+        ,#{rmrkCntn   ,jdbcType = VARCHAR}  
+        ,SYSDATETIME
+        ,'2dev15'
+        ,'000'
+        ,SYSDATETIME
+        ,'2dev15'
+        ,'000'
+  	  )
+  	  </insert>
+  	  <update id ="updateSimpleCode" parameterType = "kr.wise.commons.code.service.SimpleCodeVo">
+         UPDATE TBCSMPLCODEC
+         SET SMPL_CD_STS_YN = #{smplCdStsYn,jdbcType = VARCHAR}        
+        ,ETC_CD1        = #{etcCd1     ,jdbcType = VARCHAR}        
+        ,ETC_CD2        = #{etcCd2     ,jdbcType = VARCHAR}        
+        ,ETC_CD3        = #{etcCd3     ,jdbcType = VARCHAR}        
+        ,ETC_CD4        = #{etcCd4     ,jdbcType = VARCHAR}        
+        ,ETC_CD5        = #{etcCd5     ,jdbcType = VARCHAR}        
+        ,ETC_CD_NM1     = #{etcCdNm1   ,jdbcType = VARCHAR}        
+        ,ETC_CD_NM2     = #{etcCdNm2   ,jdbcType = VARCHAR}        
+        ,ETC_CD_NM3     = #{etcCdNm3   ,jdbcType = VARCHAR}        
+        ,ETC_CD_NM4     = #{etcCdNm4   ,jdbcType = VARCHAR}        
+        ,ETC_CD_NM5     = #{etcCdNm5   ,jdbcType = VARCHAR}        
+        ,CD_OUTL_CNTN1  = #{cdOutlCntn1,jdbcType = VARCHAR}        
+        ,CD_OUTL_CNTN2  = #{cdOutlCntn2,jdbcType = VARCHAR}        
+        ,ARY_SQNC_NO    = #{arySqncNo  ,jdbcType = VARCHAR}        
+        ,RMRK_CNTN      = #{rmrkCntn   ,jdbcType = VARCHAR}        
+         WHERE NVL(SMPL_LCCD,'-') = NVL(#{smplLccd   ,jdbcType = VARCHAR},'-')
+         AND   NVL(SMPL_MCCD,'-') = NVL(#{smplMccd   ,jdbcType = VARCHAR},'-')  
+         AND   NVL(SMPL_SCCD,'-') = NVL(#{smplSccd   ,jdbcType = VARCHAR},'-')  
+      </update>
+      
+              <delete id ="deleteComplexCode" parameterType = "kr.wise.commons.code.service.ComplexCodeVo">
+         DELETE FROM TBCCOEXCODEC
+         WHERE NVL(COEX_DTL_CD,'-') = NVL(#{coexDtlCd   ,jdbcType = VARCHAR},'-')
+         AND   NVL(COEX_UPRN_CD,'-') = NVL(#{coexUprnCd   ,jdbcType = VARCHAR},'-')    
+      </delete>
+    <insert id="insertComplexCode" parameterType = "kr.wise.commons.code.service.ComplexCodeVo">
+  	INSERT INTO TBCCOEXCODEC(COEX_DTL_CD,COEX_UPRN_CD,COEX_LVL_NO,COEX_CD_NM,COEX_CD_STS_YN,ETC_CD1,ETC_CD2,ETC_CD3
+                            ,ETC_CD4,ETC_CD5,ETC_CD_NM1,ETC_CD_NM2,ETC_CD_NM3,ETC_CD_NM4,ETC_CD_NM5,CD_OUTL_CNTN1,CD_OUTL_CNTN2
+                            ,ARY_SQNC_NO,RMRK_CNTN
+  	                        ,SYS_REG_DTTM,SYS_RGSR_EMNO,SYS_REG_BRCD,SYS_CHG_DTTM,SYS_EDIR_EMNO,SYS_CHG_BRCD
+  	       )
+  	  VALUES( 
+        #{coexDtlCd     ,jdbcType = VARCHAR}
+        ,#{coexUprnCd    ,jdbcType = VARCHAR}
+        ,#{coexLvlNo     ,jdbcType = VARCHAR}
+        ,#{coexCdNm      ,jdbcType = VARCHAR}
+        ,#{coexCdStsYn   ,jdbcType = VARCHAR}
+        ,#{etcCd1        ,jdbcType = VARCHAR}
+        ,#{etcCd2        ,jdbcType = VARCHAR}
+        ,#{etcCd3        ,jdbcType = VARCHAR}
+        ,#{etcCd4        ,jdbcType = VARCHAR}
+        ,#{etcCd5        ,jdbcType = VARCHAR}
+        ,#{etcCdNm1      ,jdbcType = VARCHAR}
+        ,#{etcCdNm2      ,jdbcType = VARCHAR}
+        ,#{etcCdNm3      ,jdbcType = VARCHAR}
+        ,#{etcCdNm4      ,jdbcType = VARCHAR}
+        ,#{etcCdNm5      ,jdbcType = VARCHAR}
+        ,#{cdOutlCntn1   ,jdbcType = VARCHAR}
+        ,#{cdOutlCntn2   ,jdbcType = VARCHAR}
+        ,#{arySqncNo     ,jdbcType = VARCHAR}
+        ,#{rmrkCntn      ,jdbcType = VARCHAR}  
+        ,SYSDATETIME
+         ,'2dev15'
+        ,'000'
+        ,SYSDATETIME
+        ,'2dev15'
+        ,'000'
+  	  )
+  	  </insert>
+  	  <update id ="updateComplexCode" parameterType = "kr.wise.commons.code.service.ComplexCodeVo">
+         UPDATE TBCCOEXCODEC
+         SET  COEX_LVL_NO   =#{coexLvlNo     ,jdbcType = VARCHAR}
+         ,COEX_CD_NM    =#{coexCdNm      ,jdbcType = VARCHAR}
+         ,COEX_CD_STS_YN=#{coexCdStsYn   ,jdbcType = VARCHAR}
+         ,ETC_CD1       =#{etcCd1        ,jdbcType = VARCHAR}
+         ,ETC_CD2       =#{etcCd2        ,jdbcType = VARCHAR}
+         ,ETC_CD3       =#{etcCd3        ,jdbcType = VARCHAR}
+         ,ETC_CD4       =#{etcCd4        ,jdbcType = VARCHAR}
+         ,ETC_CD5       =#{etcCd5        ,jdbcType = VARCHAR}
+         ,ETC_CD_NM1    =#{etcCdNm1      ,jdbcType = VARCHAR}
+         ,ETC_CD_NM2    =#{etcCdNm2      ,jdbcType = VARCHAR}
+         ,ETC_CD_NM3    =#{etcCdNm3      ,jdbcType = VARCHAR}
+         ,ETC_CD_NM4    =#{etcCdNm4      ,jdbcType = VARCHAR}
+         ,ETC_CD_NM5    =#{etcCdNm5      ,jdbcType = VARCHAR}
+         ,CD_OUTL_CNTN1 =#{cdOutlCntn1   ,jdbcType = VARCHAR}
+         ,CD_OUTL_CNTN2 =#{cdOutlCntn2   ,jdbcType = VARCHAR}
+         ,ARY_SQNC_NO   =#{arySqncNo     ,jdbcType = VARCHAR}
+         ,RMRK_CNTN     =#{rmrkCntn      ,jdbcType = VARCHAR}
+         WHERE NVL(COEX_DTL_CD,'-') = NVL(#{coexDtlCd   ,jdbcType = VARCHAR},'-')
+         AND   NVL(COEX_UPRN_CD, '-') = NVL(#{coexUprnCd   ,jdbcType = VARCHAR},'-')    
+      </update>
+</mapper>
+
+
+
+

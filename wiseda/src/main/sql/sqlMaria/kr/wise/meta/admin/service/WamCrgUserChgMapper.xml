@@ -1,0 +1,823 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.wise.meta.admin.service.WamCrgUserChgMapper">
+
+	<resultMap id="BaseResultMap" type="kr.wise.meta.admin.service.WamCrgUserChg" >
+	
+    	<id column="USER_ID" property="userId" jdbcType="VARCHAR" />
+    	<id column="AF_USER_ID" property="afUserId" jdbcType="VARCHAR" />
+    	<id column="OBJ_ID" property="objId" jdbcType="VARCHAR" />
+    
+	    <result column="OBJ_ID" jdbcType="VARCHAR" property="objId" />
+	    <result column="NAT_NM" jdbcType="VARCHAR" property="natNm" />
+	    <result column="STND_ASRT" jdbcType="VARCHAR" property="stndAsrt" />
+	    <result column="OBJ_DCD_NM" jdbcType="VARCHAR" property="objDcdNm" />
+	    <result column="OBJ_NM" jdbcType="VARCHAR" property="objNm" />
+	    <result column="CRG_USER_ID" jdbcType="VARCHAR" property="crgUserId" />
+	    <result column="CRG_USER_NM" jdbcType="VARCHAR" property="crgUserNm" />
+	    <result column="TBL_NM" jdbcType="VARCHAR" property="tblNm" />
+    
+	</resultMap>
+	
+	<select id="selectCrgUserObjList" parameterType="kr.wise.meta.admin.service.WamCrgUserChg" resultMap="BaseResultMap" >
+	
+		<choose>
+			<when test='objDstc eq "ALL" '>
+			
+				SELECT /* WamCrgUserChgMapper.selectCrgUserObjList (objDstc == 'ALL') */
+					   OBJ_ID
+					 , STND_ASRT
+					 , NAT_NM
+					 , OBJ_DCD_NM    
+					 , OBJ_NM
+					 , CRG_USER_ID
+					 , CRG_USER_NM
+					 , TBL_NM
+				  FROM (
+				  
+					SELECT DMN_ID AS OBJ_ID
+						 , STND_ASRT
+					     , GET_CMCD_DTL_NM('STND_ASRT', STND_ASRT) AS NAT_NM
+					     , CASE 
+					     	WHEN SUB_CD_YN = 'Y' THEN '화면별코드'
+				            ELSE '도메인'
+					       END AS OBJ_DCD_NM
+					     , DMN_LNM AS OBJ_NM
+					     , CRG_USER_ID
+					     , GET_USER_NM(CRG_USER_ID) AS CRG_USER_NM
+					     , 'WAM_DMN' AS TBL_NM
+					  FROM WAM_DMN
+					 WHERE 1 = 1
+					   AND CRG_USER_ID = #{crgUserId,jdbcType=VARCHAR}
+					   
+					 UNION ALL
+					 
+					 SELECT PDM_TBL_ID AS OBJ_ID
+					 	 , STND_ASRT
+					     , GET_CMCD_DTL_NM('STND_ASRT', STND_ASRT) AS NAT_NM
+					     , '테이블' AS OBJ_DCD_NM    
+					     , CONCAT(PDM_TBL_PNM,'(',PDM_TBL_LNM,')') AS OBJ_NM
+					     , CRG_USER_ID
+					     , GET_USER_NM(CRG_USER_ID) AS CRG_USER_NM
+					     , 'WAM_PDM_TBL' AS TBL_NM
+					  FROM WAM_PDM_TBL
+					 WHERE CRG_USER_ID = #{crgUserId,jdbcType=VARCHAR}
+					   
+					 UNION ALL
+					 
+					 SELECT STD_ERR_CD_ID AS OBJ_ID
+					 	 , STND_ASRT
+					     , GET_CMCD_DTL_NM('STND_ASRT', STND_ASRT) AS NAT_NM
+					     , '표준오류코드' AS OBJ_DCD_NM    
+					     , CONCAT(STD_ERR_CD,'(',LEFT(ISD_ERR_CAS_CTS,20),')') AS OBJ_NM
+					     , CRG_USER_ID
+					     , GET_USER_NM(CRG_USER_ID) AS CRG_USER_NM
+					     , 'WAM_STD_ERR_CD' AS TBL_NM
+					  FROM WAM_STD_ERR_CD
+					 WHERE CRG_USER_ID = #{crgUserId,jdbcType=VARCHAR}
+					 
+					 UNION ALL
+					 
+					 SELECT BIZ_ERR_CD_ID AS OBJ_ID
+					 	 , STND_ASRT
+					     , GET_CMCD_DTL_NM('STND_ASRT', STND_ASRT) AS NAT_NM
+					     , '업무오류코드'    AS OBJ_DCD_NM    
+					     , BIZ_ERR_CD     AS OBJ_NM
+					     , CRG_USER_ID
+					     , GET_USER_NM(CRG_USER_ID) AS CRG_USER_NM
+					     , 'WAM_BIZ_ERR_CD' AS TBL_NM
+					  FROM WAM_BIZ_ERR_CD A
+					 WHERE CRG_USER_ID = #{crgUserId,jdbcType=VARCHAR}
+					 
+					  UNION ALL
+					  
+					 SELECT CHNL_ERR_CD_ID AS OBJ_ID
+					 	 , STND_ASRT
+					     , GET_CMCD_DTL_NM('STND_ASRT', STND_ASRT) AS NAT_NM
+					     , '채널오류코드'    AS OBJ_DCD_NM    
+					     , CONCAT(STD_ERR_CD_ID,'(',LEFT(ADT_MSG,20),')') AS OBJ_NM
+					     , CRG_USER_ID
+					     , GET_USER_NM(CRG_USER_ID) AS CRG_USER_NM
+					     , 'WAM_CHNL_ERR_CD' AS TBL_NM
+					  FROM WAM_CHNL_ERR_CD A
+					 WHERE CRG_USER_ID = #{crgUserId,jdbcType=VARCHAR}
+					 
+					 UNION ALL
+					 
+					 SELECT DDL_TBL_ID AS OBJ_ID
+					 	 , STND_ASRT
+					     , GET_CMCD_DTL_NM('STND_ASRT', STND_ASRT) AS NAT_NM
+					     , 'DDL' AS OBJ_DCD_NM    
+					     , CONCAT(DDL_TBL_PNM,'(',DDL_TBL_LNM,')') AS OBJ_NM
+					     , CRG_USER_ID
+					     , GET_USER_NM(CRG_USER_ID) AS CRG_USER_NM
+					     , 'WAM_DDL_TBL' AS TBL_NM
+					  FROM WAM_DDL_TBL
+					 WHERE CRG_USER_ID = #{crgUserId,jdbcType=VARCHAR}
+					 
+					  UNION ALL
+					  
+					 SELECT DDL_ETC_ID AS OBJ_ID
+					 	 , STND_ASRT
+					     , GET_CMCD_DTL_NM('STND_ASRT', STND_ASRT) AS NAT_NM
+					     , 'DDL기타오브젝트' AS OBJ_DCD_NM    
+					     , CONCAT(DDL_ETC_PNM,'(',DDL_ETC_LNM,')') AS OBJ_NM
+					     , CRG_USER_ID
+					     , GET_USER_NM(CRG_USER_ID) AS CRG_USER_NM
+					     , 'WAM_DDL_ETC' AS TBL_NM
+					  FROM WAM_DDL_ETC
+					 WHERE CRG_USER_ID = #{crgUserId,jdbcType=VARCHAR}
+					 
+					 UNION ALL
+					 
+					 SELECT DDL_SEQ_ID AS OBJ_ID
+					 	 , STND_ASRT
+					     , GET_CMCD_DTL_NM('STND_ASRT', STND_ASRT) AS NAT_NM
+					     , 'DDL시퀀스' AS OBJ_DCD_NM    
+					     , CONCAT(DDL_SEQ_PNM,'(',DDL_SEQ_LNM,')') AS OBJ_NM
+					     , CRG_USER_ID
+					     , GET_USER_NM(CRG_USER_ID) AS CRG_USER_NM
+					     , 'WAM_DDL_SEQ' AS TBL_NM
+					  FROM WAM_DDL_SEQ
+					 WHERE CRG_USER_ID = #{crgUserId,jdbcType=VARCHAR}
+					 
+				 ) A
+				WHERE 1=1
+				<if test="objNm != null">
+				  AND OBJ_NM LIKE '%' #{objNm,jdbcType=VARCHAR} '%'
+				</if>
+				 
+			</when>
+			<otherwise>
+			
+				<choose>
+					<when test='objDstc eq "WAM_DMN" '>
+					
+						SELECT /* WamCrgUserChgMapper.selectCrgUserObjList (objDstc == 'WAM_DMN') */
+							   OBJ_ID
+							 , STND_ASRT
+							 , NAT_NM
+							 , OBJ_DCD_NM    
+							 , OBJ_NM
+							 , CRG_USER_ID
+							 , CRG_USER_NM
+							 , TBL_NM
+						  FROM (
+							SELECT DMN_ID AS OBJ_ID
+								 , STND_ASRT
+							     , GET_CMCD_DTL_NM('STND_ASRT', STND_ASRT) AS NAT_NM
+							     , CASE 
+							     	WHEN SUB_CD_YN = 'Y' THEN '화면별코드'
+						            ELSE '도메인'
+							       END AS OBJ_DCD_NM
+							     , DMN_LNM AS OBJ_NM
+							     , CRG_USER_ID
+							     , GET_USER_NM(CRG_USER_ID) AS CRG_USER_NM
+							     , 'WAM_DMN' AS TBL_NM
+							  FROM WAM_DMN
+							 WHERE 1 = 1
+							   AND CRG_USER_ID = #{crgUserId,jdbcType=VARCHAR}
+							   AND SUB_CD_YN != 'Y'
+						   ) A
+						 WHERE 1=1
+						   <if test="objNm != null">
+						   AND OBJ_NM LIKE '%' #{objNm,jdbcType=VARCHAR} '%'
+						   </if>
+					   
+					</when>
+					<when test='objDstc eq "WAM_DMN_SUB" '>
+					
+						SELECT /* WamCrgUserChgMapper.selectCrgUserObjList (objDstc == 'WAM_DMN_SUB') */
+							   OBJ_ID
+							 , STND_ASRT
+							 , NAT_NM
+							 , OBJ_DCD_NM    
+							 , OBJ_NM
+							 , CRG_USER_ID
+							 , CRG_USER_NM
+							 , TBL_NM
+						  FROM (
+							SELECT DMN_ID AS OBJ_ID
+								 , STND_ASRT
+							     , GET_CMCD_DTL_NM('STND_ASRT', STND_ASRT) AS NAT_NM
+							     , CASE 
+							     	WHEN SUB_CD_YN = 'Y' THEN '화면별코드'
+						            ELSE '도메인'
+							       END AS OBJ_DCD_NM
+							     , DMN_LNM AS OBJ_NM
+							     , CRG_USER_ID
+							     , GET_USER_NM(CRG_USER_ID) AS CRG_USER_NM
+							     , 'WAM_DMN' AS TBL_NM
+							  FROM WAM_DMN
+							 WHERE 1 = 1
+							   AND CRG_USER_ID = #{crgUserId,jdbcType=VARCHAR}
+							   AND SUB_CD_YN = 'Y'
+						   ) A
+						 WHERE 1=1
+						   <if test="objNm != null">
+						   AND OBJ_NM LIKE '%' #{objNm,jdbcType=VARCHAR} '%'
+						   </if>
+						   
+					</when>
+					<when test='objDstc eq "WAM_PDM_TBL" '>
+					
+						SELECT /* WamCrgUserChgMapper.selectCrgUserObjList (objDstc == 'WAM_PDM_TBL') */
+							   OBJ_ID
+							 , STND_ASRT
+							 , NAT_NM
+							 , OBJ_DCD_NM    
+							 , OBJ_NM
+							 , CRG_USER_ID
+							 , CRG_USER_NM
+							 , TBL_NM
+						  FROM (
+							 SELECT PDM_TBL_ID AS OBJ_ID
+							 	 , STND_ASRT
+							     , GET_CMCD_DTL_NM('STND_ASRT', STND_ASRT) AS NAT_NM
+							     , '테이블' AS OBJ_DCD_NM    
+							     , CONCAT(PDM_TBL_PNM,'(',PDM_TBL_LNM,')') AS OBJ_NM
+							     , CRG_USER_ID
+							     , GET_USER_NM(CRG_USER_ID) AS CRG_USER_NM
+							     , 'WAM_PDM_TBL' AS TBL_NM
+							  FROM WAM_PDM_TBL
+							 WHERE CRG_USER_ID = #{crgUserId,jdbcType=VARCHAR}
+						   ) A
+						 WHERE 1=1
+						   <if test="objNm != null">
+						   AND OBJ_NM LIKE '%' #{objNm,jdbcType=VARCHAR} '%'
+						   </if>
+						   
+					</when>
+					<when test='objDstc eq "WAM_STD_ERR_CD" '>
+					
+						SELECT /* WamCrgUserChgMapper.selectCrgUserObjList (objDstc == 'WAM_STD_ERR_CD') */
+							   OBJ_ID
+							 , STND_ASRT
+							 , NAT_NM
+							 , OBJ_DCD_NM    
+							 , OBJ_NM
+							 , CRG_USER_ID
+							 , CRG_USER_NM
+							 , TBL_NM
+						  FROM (
+							 SELECT STD_ERR_CD_ID AS OBJ_ID
+							 	 , STND_ASRT
+							     , GET_CMCD_DTL_NM('STND_ASRT', STND_ASRT) AS NAT_NM
+							     , '표준오류코드' AS OBJ_DCD_NM    
+							     , CONCAT(STD_ERR_CD,'(',LEFT(ISD_ERR_CAS_CTS,20),')') AS OBJ_NM
+							     , CRG_USER_ID
+							     , GET_USER_NM(CRG_USER_ID) AS CRG_USER_NM
+							     , 'WAM_STD_ERR_CD' AS TBL_NM
+							  FROM WAM_STD_ERR_CD
+							 WHERE CRG_USER_ID = #{crgUserId,jdbcType=VARCHAR}
+						   ) A
+						 WHERE 1=1
+						   <if test="objNm != null">
+						   AND OBJ_NM LIKE '%' #{objNm,jdbcType=VARCHAR} '%'
+						   </if>
+						   
+					</when>
+					<when test='objDstc eq "WAM_BIZ_ERR_CD" '>
+					
+						SELECT /* WamCrgUserChgMapper.selectCrgUserObjList (objDstc == 'WAM_BIZ_ERR_CD') */
+							   OBJ_ID
+							 , STND_ASRT
+							 , NAT_NM
+							 , OBJ_DCD_NM    
+							 , OBJ_NM
+							 , CRG_USER_ID
+							 , CRG_USER_NM
+							 , TBL_NM
+						  FROM (
+							 SELECT BIZ_ERR_CD_ID AS OBJ_ID
+							 	 , STND_ASRT
+							     , GET_CMCD_DTL_NM('STND_ASRT', STND_ASRT) AS NAT_NM
+							     , '업무오류코드'    AS OBJ_DCD_NM    
+							     , BIZ_ERR_CD     AS OBJ_NM
+							     , CRG_USER_ID
+							     , GET_USER_NM(CRG_USER_ID) AS CRG_USER_NM
+							     , 'WAM_BIZ_ERR_CD' AS TBL_NM
+							  FROM WAM_BIZ_ERR_CD A
+							 WHERE CRG_USER_ID = #{crgUserId,jdbcType=VARCHAR}
+						   ) A
+						 WHERE 1=1
+						   <if test="objNm != null">
+						   AND OBJ_NM LIKE '%' #{objNm,jdbcType=VARCHAR} '%'
+						   </if>
+						   
+					</when>
+					<when test='objDstc eq "WAM_CHNL_ERR_CD" '>
+					
+						SELECT /* WamCrgUserChgMapper.selectCrgUserObjList (objDstc == 'WAM_CHNL_ERR_CD') */
+							   OBJ_ID
+							 , STND_ASRT
+							 , NAT_NM
+							 , OBJ_DCD_NM    
+							 , OBJ_NM
+							 , CRG_USER_ID
+							 , CRG_USER_NM
+							 , TBL_NM
+						  FROM (
+							 SELECT CHNL_ERR_CD_ID AS OBJ_ID
+							 	 , STND_ASRT
+							     , GET_CMCD_DTL_NM('STND_ASRT', STND_ASRT) AS NAT_NM
+							     , '채널오류코드'    AS OBJ_DCD_NM    
+							     , CONCAT(STD_ERR_CD_ID,'(',LEFT(ADT_MSG,20),')') AS OBJ_NM
+							     , CRG_USER_ID
+							     , GET_USER_NM(CRG_USER_ID) AS CRG_USER_NM
+							     , 'WAM_CHNL_ERR_CD' AS TBL_NM
+							  FROM WAM_CHNL_ERR_CD A
+							 WHERE CRG_USER_ID = #{crgUserId,jdbcType=VARCHAR}
+						   ) A
+						 WHERE 1=1
+						   <if test="objNm != null">
+						   AND OBJ_NM LIKE '%' #{objNm,jdbcType=VARCHAR} '%'
+						   </if>
+						   
+					</when>
+					<when test='objDstc eq "WAM_DDL_TBL" '>
+					
+						SELECT /* WamCrgUserChgMapper.selectCrgUserObjList (objDstc == 'WAM_DDL_TBL') */
+							   OBJ_ID
+							 , STND_ASRT
+							 , NAT_NM
+							 , OBJ_DCD_NM    
+							 , OBJ_NM
+							 , CRG_USER_ID
+							 , CRG_USER_NM
+							 , TBL_NM
+						  FROM (
+							 SELECT DDL_TBL_ID AS OBJ_ID
+							 	 , STND_ASRT
+							     , GET_CMCD_DTL_NM('STND_ASRT', STND_ASRT) AS NAT_NM
+							     , 'DDL' AS OBJ_DCD_NM    
+							     , CONCAT(DDL_TBL_PNM,'(',DDL_TBL_LNM,')') AS OBJ_NM
+							     , CRG_USER_ID
+							     , GET_USER_NM(CRG_USER_ID) AS CRG_USER_NM
+							     , 'WAM_DDL_TBL' AS TBL_NM
+							  FROM WAM_DDL_TBL
+							 WHERE CRG_USER_ID = #{crgUserId,jdbcType=VARCHAR}
+						   ) A
+						 WHERE 1=1
+						   <if test="objNm != null">
+						   AND OBJ_NM LIKE '%' #{objNm,jdbcType=VARCHAR} '%'
+						   </if>
+						   
+					</when>
+					<when test='objDstc eq "WAM_DDL_ETC" '>
+					
+						SELECT /* WamCrgUserChgMapper.selectCrgUserObjList (objDstc == 'WAM_DDL_ETC') */
+							   OBJ_ID
+							 , STND_ASRT
+							 , NAT_NM
+							 , OBJ_DCD_NM    
+							 , OBJ_NM
+							 , CRG_USER_ID
+							 , CRG_USER_NM
+							 , TBL_NM
+						  FROM (
+							 SELECT DDL_ETC_ID AS OBJ_ID
+							 	 , STND_ASRT
+							     , GET_CMCD_DTL_NM('STND_ASRT', STND_ASRT) AS NAT_NM
+							     , 'DDL기타오브젝트' AS OBJ_DCD_NM    
+							     , CONCAT(DDL_ETC_PNM,'(',DDL_ETC_LNM,')') AS OBJ_NM
+							     , CRG_USER_ID
+							     , GET_USER_NM(CRG_USER_ID) AS CRG_USER_NM
+							     , 'WAM_DDL_ETC' AS TBL_NM
+							  FROM WAM_DDL_ETC
+							 WHERE CRG_USER_ID = #{crgUserId,jdbcType=VARCHAR}
+						   ) A
+						 WHERE 1=1
+						   <if test="objNm != null">
+						   AND OBJ_NM LIKE '%' #{objNm,jdbcType=VARCHAR} '%'
+						   </if>
+						   
+					</when>
+					<when test='objDstc eq "WAM_DDL_SEQ" '>
+					
+						SELECT /* WamCrgUserChgMapper.selectCrgUserObjList (objDstc == 'WAM_DDL_SEQ') */
+							   OBJ_ID
+							 , STND_ASRT
+							 , NAT_NM
+							 , OBJ_DCD_NM    
+							 , OBJ_NM
+							 , CRG_USER_ID
+							 , CRG_USER_NM
+							 , TBL_NM
+						  FROM (
+							 SELECT DDL_SEQ_ID AS OBJ_ID
+							 	 , STND_ASRT
+							     , GET_CMCD_DTL_NM('STND_ASRT', STND_ASRT) AS NAT_NM
+							     , 'DDL시퀀스' AS OBJ_DCD_NM    
+							     , CONCAT(DDL_SEQ_PNM,'(',DDL_SEQ_LNM,')') AS OBJ_NM
+							     , CRG_USER_ID
+							     , GET_USER_NM(CRG_USER_ID) AS CRG_USER_NM
+							     , 'WAM_DDL_SEQ' AS TBL_NM
+							  FROM WAM_DDL_SEQ
+							 WHERE CRG_USER_ID = #{crgUserId,jdbcType=VARCHAR}
+						   ) A
+						 WHERE 1=1
+						   <if test="objNm != null">
+						   AND OBJ_NM LIKE '%' #{objNm,jdbcType=VARCHAR} '%'
+						   </if>
+						   
+					</when>
+					<otherwise>
+						SELECT '' as OBJ_ID
+						     , '' as STND_ASRT 
+							 , '' as NAT_NM
+							 , '' as OBJ_DCD_NM    
+							 , '' as OBJ_NM
+							 , '' as CRG_USER_ID
+							 , '' as CRG_USER_NM
+					</otherwise>
+				</choose>
+			
+			</otherwise>
+		</choose>
+	
+ 
+	</select>
+	
+	<update id="updateCrgUserChgWamDmn" parameterType="kr.wise.meta.admin.service.WamCrgUserChg">
+	
+		UPDATE 	/* WamCrgUserChgMapper.updateCrgUserChgWamDmn */
+				WAM_DMN
+		   SET CRG_USER_ID = #{afUserId,jdbcType=VARCHAR}
+		      ,OBJ_VERS = IFNULL(OBJ_VERS, 0) + 1
+		      ,REG_TYP_CD = 'U'
+		 WHERE 1 = 1
+		   AND STND_ASRT	   = #{stndAsrt,jdbcType=VARCHAR}
+		   AND DMN_ID      = #{objId,jdbcType=VARCHAR}
+		   AND CRG_USER_ID = #{crgUserId,jdbcType=VARCHAR}
+	</update>
+	
+	<update id="updateCrgUserChgWamPdmTbl" parameterType="kr.wise.meta.admin.service.WamCrgUserChg">
+	
+		UPDATE 	/* WamCrgUserChgMapper.updateCrgUserChgWamPdmTbl */
+				WAM_PDM_TBL
+		   SET CRG_USER_ID = #{afUserId,jdbcType=VARCHAR}
+		      ,OBJ_VERS = IFNULL(OBJ_VERS, 0) + 1
+		      ,REG_TYP_CD = 'U'
+		 WHERE 1 = 1
+		   AND STND_ASRT	   = #{stndAsrt,jdbcType=VARCHAR}
+		   AND PDM_TBL_ID  = #{objId,jdbcType=VARCHAR}
+		   AND CRG_USER_ID = #{crgUserId,jdbcType=VARCHAR}
+	</update>
+	
+	<update id="updateCrgUserChgWamStdErrCd" parameterType="kr.wise.meta.admin.service.WamCrgUserChg">
+	
+		UPDATE 	/* WamCrgUserChgMapper.updateCrgUserChgWamStdErrCd */
+				WAM_STD_ERR_CD
+		   SET CRG_USER_ID = #{afUserId,jdbcType=VARCHAR}
+		   	  ,OBJ_VERS = IFNULL(OBJ_VERS, 0) + 1
+		   	  ,REG_TYP_CD = 'U'
+		 WHERE 1 = 1
+		   AND STND_ASRT	   = #{stndAsrt,jdbcType=VARCHAR}
+		   AND STD_ERR_CD_ID = #{objId,jdbcType=VARCHAR}
+		   AND CRG_USER_ID   = #{crgUserId,jdbcType=VARCHAR}
+	</update>
+	
+	<update id="updateCrgUserChgWamBizErrCd" parameterType="kr.wise.meta.admin.service.WamCrgUserChg">
+	
+		UPDATE 	/* WamCrgUserChgMapper.updateCrgUserChgWamBizErrCd */
+				WAM_BIZ_ERR_CD
+		   SET CRG_USER_ID = #{afUserId,jdbcType=VARCHAR}
+		   	  ,OBJ_VERS = IFNULL(OBJ_VERS, 0) + 1
+		   	  ,REG_TYP_CD = 'U'
+		 WHERE 1 = 1
+		   AND STND_ASRT	   = #{stndAsrt,jdbcType=VARCHAR}
+		   AND BIZ_ERR_CD_ID = #{objId,jdbcType=VARCHAR}
+		   AND CRG_USER_ID   = #{crgUserId,jdbcType=VARCHAR}
+	</update>
+	
+	<update id="updateCrgUserChgWamChnlErrCd" parameterType="kr.wise.meta.admin.service.WamCrgUserChg">
+	
+		UPDATE 	/* WamCrgUserChgMapper.updateCrgUserChgWamChnlErrCd */
+				WAM_CHNL_ERR_CD
+		   SET CRG_USER_ID = #{afUserId,jdbcType=VARCHAR}
+		   	  ,OBJ_VERS = IFNULL(OBJ_VERS, 0) + 1
+		   	  ,REG_TYP_CD = 'U'
+		 WHERE 1 = 1
+		   AND STND_ASRT	   = #{stndAsrt,jdbcType=VARCHAR}
+		   AND CHNL_ERR_CD_ID = #{objId,jdbcType=VARCHAR}
+		   AND CRG_USER_ID   = #{crgUserId,jdbcType=VARCHAR}
+	</update>
+	
+	<update id="updateCrgUserChgWamDdlTbl" parameterType="kr.wise.meta.admin.service.WamCrgUserChg">
+	
+		UPDATE 	/* WamCrgUserChgMapper.updateCrgUserChgWamDdlTbl */
+				WAM_DDL_TBL
+		   SET CRG_USER_ID = #{afUserId,jdbcType=VARCHAR}
+		   	  ,OBJ_VERS = IFNULL(OBJ_VERS, 0) + 1
+		   	  ,REG_TYP_CD = 'U'
+		 WHERE 1 = 1
+		   AND STND_ASRT	   = #{stndAsrt,jdbcType=VARCHAR}
+		   AND DDL_TBL_ID  = #{objId,jdbcType=VARCHAR}
+		   AND CRG_USER_ID = #{crgUserId,jdbcType=VARCHAR}
+	</update>
+	
+	<update id="updateCrgUserChgWamDdlEtc" parameterType="kr.wise.meta.admin.service.WamCrgUserChg">
+	
+		UPDATE 	/* WamCrgUserChgMapper.updateCrgUserChgWamDdlEtc */
+				WAM_DDL_ETC
+		   SET CRG_USER_ID = #{afUserId,jdbcType=VARCHAR}
+		   	  ,OBJ_VERS = IFNULL(OBJ_VERS, 0) + 1
+		   	  ,REG_TYP_CD = 'U'
+		 WHERE 1 = 1
+		   AND STND_ASRT	   = #{stndAsrt,jdbcType=VARCHAR}
+		   AND DDL_ETC_ID  = #{objId,jdbcType=VARCHAR}
+		   AND CRG_USER_ID = #{crgUserId,jdbcType=VARCHAR}
+	</update>
+	
+	<update id="updateCrgUserChgWamDdlSeq" parameterType="kr.wise.meta.admin.service.WamCrgUserChg">
+	
+		UPDATE 	/* WamCrgUserChgMapper.updateCrgUserChgWamDdlSeq */
+				WAM_DDL_SEQ
+		   SET CRG_USER_ID = #{afUserId,jdbcType=VARCHAR}
+		   	  ,OBJ_VERS = IFNULL(OBJ_VERS, 0) + 1
+		   	  ,REG_TYP_CD = 'U'
+		 WHERE 1 = 1
+		   AND STND_ASRT	   = #{stndAsrt,jdbcType=VARCHAR}
+		   AND DDL_SEQ_ID  = #{objId,jdbcType=VARCHAR}
+		   AND CRG_USER_ID = #{crgUserId,jdbcType=VARCHAR}
+	</update>
+	
+<!-- 200618	wah 이력 만료  -->
+<update id="updateCrgUserChgWahDmn" parameterType="kr.wise.meta.admin.service.WamCrgUserChg">
+	
+		UPDATE 	/* WamCrgUserChgMapper.updateCrgUserChgWahDmn */
+				WAH_DMN
+		   SET EXP_DTM = NOW()
+		 WHERE 1 = 1
+		   AND STND_ASRT	   = #{stndAsrt,jdbcType=VARCHAR}
+		   AND DMN_ID      = #{objId,jdbcType=VARCHAR}
+<!-- 		   AND CRG_USER_ID = #{crgUserId,jdbcType=VARCHAR} -->
+		   AND EXP_DTM = STR_TO_DATE('9999-12-31','%Y-%m-%d')
+		   AND REG_TYP_CD IN ('C', 'U')
+	</update>
+	
+	<update id="updateCrgUserChgWahPdmTbl" parameterType="kr.wise.meta.admin.service.WamCrgUserChg">
+	
+		UPDATE 	/* WamCrgUserChgMapper.updateCrgUserChgWahPdmTbl */
+				WAH_PDM_TBL
+		   SET EXP_DTM = NOW()
+		 WHERE 1 = 1
+		   AND STND_ASRT	   = #{stndAsrt,jdbcType=VARCHAR}
+		   AND PDM_TBL_ID  = #{objId,jdbcType=VARCHAR}
+<!-- 		   AND CRG_USER_ID = #{crgUserId,jdbcType=VARCHAR} -->
+		   AND EXP_DTM = STR_TO_DATE('9999-12-31','%Y-%m-%d')
+		   AND REG_TYP_CD IN ('C', 'U')
+	</update>
+	
+	<update id="updateCrgUserChgWahStdErrCd" parameterType="kr.wise.meta.admin.service.WamCrgUserChg">
+	
+		UPDATE 	/* WamCrgUserChgMapper.updateCrgUserChgWahStdErrCd */
+				WAH_STD_ERR_CD
+		   SET EXP_DTM = NOW()
+		 WHERE 1 = 1
+		   AND STND_ASRT	   = #{stndAsrt,jdbcType=VARCHAR}
+		   AND STD_ERR_CD_ID = #{objId,jdbcType=VARCHAR}
+<!-- 		   AND CRG_USER_ID   = #{crgUserId,jdbcType=VARCHAR} -->
+		   AND EXP_DTM = STR_TO_DATE('9999-12-31','%Y-%m-%d')
+		   AND REG_TYP_CD IN ('C', 'U')
+	</update>
+	
+	<update id="updateCrgUserChgWahBizErrCd" parameterType="kr.wise.meta.admin.service.WamCrgUserChg">
+	
+		UPDATE 	/* WamCrgUserChgMapper.updateCrgUserChgWahBizErrCd */
+				WAH_BIZ_ERR_CD
+		   SET EXP_DTM = NOW()
+		 WHERE 1 = 1
+		   AND STND_ASRT	   = #{stndAsrt,jdbcType=VARCHAR}
+		   AND BIZ_ERR_CD_ID = #{objId,jdbcType=VARCHAR}
+<!-- 		   AND CRG_USER_ID   = #{crgUserId,jdbcType=VARCHAR} -->
+		   AND EXP_DTM = STR_TO_DATE('9999-12-31','%Y-%m-%d')
+		   AND REG_TYP_CD IN ('C', 'U')
+	</update>
+	
+	<update id="updateCrgUserChgWahChnlErrCd" parameterType="kr.wise.meta.admin.service.WamCrgUserChg">
+	
+		UPDATE 	/* WamCrgUserChgMapper.updateCrgUserChgWahChnlErrCd */
+				WAH_CHNL_ERR_CD
+		   SET EXP_DTM = NOW()
+		 WHERE 1 = 1
+		   AND STND_ASRT	   = #{stndAsrt,jdbcType=VARCHAR}
+		   AND CHNL_ERR_CD_ID = #{objId,jdbcType=VARCHAR}
+<!-- 		   AND CRG_USER_ID   = #{crgUserId,jdbcType=VARCHAR} -->
+		   AND EXP_DTM = STR_TO_DATE('9999-12-31','%Y-%m-%d')
+		   AND REG_TYP_CD IN ('C', 'U')
+	</update>
+	
+	<update id="updateCrgUserChgWahDdlTbl" parameterType="kr.wise.meta.admin.service.WamCrgUserChg">
+	
+		UPDATE 	/* WamCrgUserChgMapper.updateCrgUserChgWahDdlTbl */
+				WAH_DDL_TBL
+		   SET EXP_DTM = NOW()
+		 WHERE 1 = 1
+		   AND STND_ASRT	   = #{stndAsrt,jdbcType=VARCHAR}
+		   AND DDL_TBL_ID  = #{objId,jdbcType=VARCHAR}
+<!-- 		   AND CRG_USER_ID = #{crgUserId,jdbcType=VARCHAR} -->
+		   AND EXP_DTM = STR_TO_DATE('9999-12-31','%Y-%m-%d')
+		   AND REG_TYP_CD IN ('C', 'U')
+	</update>
+	
+	<update id="updateCrgUserChgWahDdlEtc" parameterType="kr.wise.meta.admin.service.WamCrgUserChg">
+	
+		UPDATE 	/* WamCrgUserChgMapper.updateCrgUserChgWahDdlEtc */
+				WAH_DDL_ETC
+		   SET EXP_DTM = NOW()
+		 WHERE 1 = 1
+		   AND STND_ASRT	   = #{stndAsrt,jdbcType=VARCHAR}
+		   AND DDL_ETC_ID  = #{objId,jdbcType=VARCHAR}
+<!-- 		   AND CRG_USER_ID = #{crgUserId,jdbcType=VARCHAR} -->
+		   AND EXP_DTM = STR_TO_DATE('9999-12-31','%Y-%m-%d')
+		   AND REG_TYP_CD IN ('C', 'U')
+	</update>
+	
+	<update id="updateCrgUserChgWahDdlSeq" parameterType="kr.wise.meta.admin.service.WamCrgUserChg">
+	
+		UPDATE 	/* WamCrgUserChgMapper.updateCrgUserChgWahDdlSeq */
+				WAH_DDL_SEQ
+		   SET EXP_DTM = NOW()
+		 WHERE 1 = 1
+		   AND STND_ASRT	   = #{stndAsrt,jdbcType=VARCHAR}
+		   AND DDL_SEQ_ID  = #{objId,jdbcType=VARCHAR}
+<!-- 		   AND CRG_USER_ID = #{crgUserId,jdbcType=VARCHAR} -->
+		   AND EXP_DTM = STR_TO_DATE('9999-12-31','%Y-%m-%d')
+		   AND REG_TYP_CD IN ('C', 'U')
+	</update>
+	
+	
+<!-- 200618	wah이력 인서트 -->
+	<insert id="insertCrgUserChgWahDmn" parameterType="kr.wise.meta.admin.service.WamCrgUserChg">
+	INSERT 	/* WamCrgUserChgMapper.insertCrgUserChgWahDmn */
+			INTO WAH_DMN
+	(
+	    DMN_ID
+	  , EXP_DTM
+	  , STR_DTM 	
+	  <include refid="kr.wise.meta.stnd.service.WaqDmnMapper.wam_col"/>   
+	)
+	SELECT A.DMN_ID AS DMN_ID
+	     , STR_TO_DATE('9999-12-31', '%Y-%m-%d') AS EXP_DTM
+	     , NOW() AS STR_DTM 	
+	     <include refid="kr.wise.meta.stnd.service.WaqDmnMapper.wam_col"/>   
+	 FROM WAM_DMN A
+	WHERE A.STND_ASRT	   = #{stndAsrt,jdbcType=VARCHAR}
+      AND A.DMN_ID      = #{objId,jdbcType=VARCHAR}
+	</insert>
+	
+	<insert id="insertCrgUserChgWahPdmTbl" parameterType="kr.wise.meta.admin.service.WamCrgUserChg">
+		-- WAH이력 적재...
+	INSERT		/* WamCrgUserChgMapper.insertCrgUserChgWahPdmTbl */
+			INTO WAH_PDM_TBL
+	(
+	    PDM_TBL_ID
+	   , EXP_DTM
+	   , STR_DTM 	
+	   <include refid="kr.wise.meta.model.service.WaqPdmTblMapper.wam_col"/>   
+	)
+	SELECT A.PDM_TBL_ID AS PDM_TBL_ID
+	     , STR_TO_DATE('9999-12-31', '%Y-%m-%d') AS EXP_DTM
+	     , NOW() AS STR_DTM 	
+	     <include refid="kr.wise.meta.model.service.WaqPdmTblMapper.wam_col"/>   
+	 FROM WAM_PDM_TBL A
+     WHERE A.STND_ASRT	    = #{stndAsrt,jdbcType=VARCHAR}
+       AND A.PDM_TBL_ID = #{objId,jdbcType=VARCHAR}
+	</insert>
+	
+	<insert id="insertCrgUserChgWahStdErrCd" parameterType="kr.wise.meta.admin.service.WamCrgUserChg">
+		-- WAH이력 적재...
+	INSERT		/* WamCrgUserChgMapper.insertCrgUserChgWahStdErrCd */
+			INTO WAH_STD_ERR_CD
+	(
+	    STD_ERR_CD_ID
+	   , EXP_DTM
+	   , STR_DTM 	
+	   ,
+	   <include refid="kr.wise.meta.app.service.WaqStndErrCdMapper.wam_col"/>
+	   , CRG_USER_ID   
+	)
+	SELECT A.STD_ERR_CD_ID AS STD_ERR_CD_ID
+	     , STR_TO_DATE('9999-12-31', '%Y-%m-%d') AS EXP_DTM
+	     , NOW() AS STR_DTM 
+	     ,	
+	     <include refid="kr.wise.meta.app.service.WaqStndErrCdMapper.wam_col"/>   
+	     , A.CRG_USER_ID
+	 FROM WAM_STD_ERR_CD A
+     WHERE A.STND_ASRT	    = #{stndAsrt,jdbcType=VARCHAR}
+       AND A.STD_ERR_CD_ID = #{objId,jdbcType=VARCHAR}
+		
+	</insert>
+	
+	<insert id="insertCrgUserChgWahBizErrCd" parameterType="kr.wise.meta.admin.service.WamCrgUserChg">
+		-- WAH이력 적재...
+	INSERT		/* WamCrgUserChgMapper.insertCrgUserChgWahBizErrCd */
+			INTO WAH_BIZ_ERR_CD
+	(
+	    BIZ_ERR_CD_ID
+	   , EXP_DTM
+	   , STR_DTM
+	   , 	
+	   <include refid="kr.wise.meta.app.service.WaqBizErrCdMapper.wam_col"/>   
+	)
+	SELECT A.BIZ_ERR_CD_ID AS BIZ_ERR_CD_ID
+	     , STR_TO_DATE('9999-12-31', '%Y-%m-%d') AS EXP_DTM
+	     , NOW() AS STR_DTM 	
+	     ,
+	     <include refid="kr.wise.meta.app.service.WaqBizErrCdMapper.wam_col"/>   
+	 FROM WAM_BIZ_ERR_CD A
+     WHERE A.STND_ASRT	    = #{stndAsrt,jdbcType=VARCHAR}
+       AND A.BIZ_ERR_CD_ID = #{objId,jdbcType=VARCHAR}
+		
+	</insert>
+	
+	<insert id="insertCrgUserChgWahChnlErrCd" parameterType="kr.wise.meta.admin.service.WamCrgUserChg">
+		-- WAH이력 적재...
+	INSERT		/* WamCrgUserChgMapper.insertCrgUserChgWahChnlErrCd */
+			INTO WAH_CHNL_ERR_CD
+	(
+	    CHNL_ERR_CD_ID
+	   , EXP_DTM
+	   , STR_DTM
+	   , 	
+	   <include refid="kr.wise.meta.app.service.WaqChnlErrCdMapper.wam_col"/>   
+	)
+	SELECT A.CHNL_ERR_CD_ID AS CHNL_ERR_CD_ID
+	     , STR_TO_DATE('9999-12-31', '%Y-%m-%d') AS EXP_DTM
+	     , NOW() AS STR_DTM
+	     , 	
+	     <include refid="kr.wise.meta.app.service.WaqChnlErrCdMapper.wam_col"/>   
+	 FROM WAM_CHNL_ERR_CD A
+     WHERE A.STND_ASRT	    = #{stndAsrt,jdbcType=VARCHAR}
+       AND A.CHNL_ERR_CD_ID = #{objId,jdbcType=VARCHAR}
+		
+	</insert>
+	
+	<insert id="insertCrgUserChgWahDdlTbl" parameterType="kr.wise.meta.admin.service.WamCrgUserChg">
+		-- WAH이력 적재...
+	INSERT		/* WamCrgUserChgMapper.insertCrgUserChgWahDdlTbl */
+			INTO WAH_DDL_TBL
+	(
+	    DDL_TBL_ID
+	   , EXP_DTM
+	   , STR_DTM 	
+	   <include refid="kr.wise.meta.ddl.service.WaqDdlTblMapper.wam_col"/>   
+	)
+	SELECT A.DDL_TBL_ID AS DDL_TBL_ID
+	     , STR_TO_DATE('9999-12-31', '%Y-%m-%d') AS EXP_DTM
+	     , NOW() AS STR_DTM 	
+	     <include refid="kr.wise.meta.ddl.service.WaqDdlTblMapper.wam_col"/>   
+	 FROM WAM_DDL_TBL A
+     WHERE A.STND_ASRT	    = #{stndAsrt,jdbcType=VARCHAR}
+       AND A.DDL_TBL_ID = #{objId,jdbcType=VARCHAR}
+		
+	</insert>
+	
+	<insert id="insertCrgUserChgWahDdlEtc" parameterType="kr.wise.meta.admin.service.WamCrgUserChg">
+		-- WAH이력 적재...
+	INSERT		/* WamCrgUserChgMapper.insertCrgUserChgWahDdlEtc */
+			INTO WAH_DDL_ETC
+	(
+	    DDL_ETC_ID
+	   , EXP_DTM
+	   , STR_DTM 	
+	   <include refid="kr.wise.meta.ddletc.service.WaqDdlEtcMapper.wam_col"/>   
+	)
+	SELECT A.DDL_ETC_ID AS DDL_ETC_ID
+	     , STR_TO_DATE('9999-12-31', '%Y-%m-%d') AS EXP_DTM
+	     , NOW() AS STR_DTM 	
+	     <include refid="kr.wise.meta.ddletc.service.WaqDdlEtcMapper.wam_col"/>   
+	 FROM WAM_DDL_ETC A
+     WHERE A.STND_ASRT	    = #{stndAsrt,jdbcType=VARCHAR}
+       AND A.DDL_ETC_ID = #{objId,jdbcType=VARCHAR}
+		
+	</insert>
+	
+	<insert id="insertCrgUserChgWahDdlSeq" parameterType="kr.wise.meta.admin.service.WamCrgUserChg">
+		-- WAH이력 적재...
+	INSERT		/* WamCrgUserChgMapper.insertCrgUserChgWahDdlSeq */
+			INTO WAH_DDL_SEQ
+	(
+	    DDL_SEQ_ID
+	   , EXP_DTM
+	   , STR_DTM 	
+	   <include refid="kr.wise.meta.ddl.service.WaqDdlSeqMapper.wam_col"/>   
+	)
+	SELECT A.DDL_SEQ_ID AS DDL_SEQ_ID
+	     , STR_TO_DATE('9999-12-31', '%Y-%m-%d') AS EXP_DTM
+	     , NOW() AS STR_DTM 	
+	     <include refid="kr.wise.meta.ddl.service.WaqDdlSeqMapper.wam_col"/>   
+	 FROM WAM_DDL_SEQ A
+     WHERE A.STND_ASRT	    = #{stndAsrt,jdbcType=VARCHAR}
+       AND A.DDL_SEQ_ID = #{objId,jdbcType=VARCHAR}
+		
+	</insert>
+	
+	
+	
+	
+  
+</mapper>

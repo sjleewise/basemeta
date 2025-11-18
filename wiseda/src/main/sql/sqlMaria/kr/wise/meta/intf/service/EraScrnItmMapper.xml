@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.meta.intf.service.EraScrnItmMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.meta.intf.service.EraScrnItm" >
+    <result column="VCB_ID" property="vcbId" jdbcType="VARCHAR" />
+    <result column="VCB" property="vcb" jdbcType="VARCHAR" />
+    <result column="LANG_CODE" property="langCode" jdbcType="VARCHAR" />
+    <result column="VCB_LANG" property="vcbLang" jdbcType="VARCHAR" />
+    <result column="OBJ_DESCN" property="objDescn" jdbcType="VARCHAR" />
+    <result column="USE_YN" property="useYn" jdbcType="VARCHAR" />
+    <result column="BIZ_DIV_CD" property="bizDivCd" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <select id="selectEraScrnItmOne" parameterType="map" resultMap="BaseResultMap" >
+	 SELECT /* EraScrnItmMapper.selectEraScrnItmOne */
+	 	   VCB
+	      ,LANG_CODE
+	      ,VCB_LANG
+	      ,OBJ_DESCN
+	      ,USE_YN
+	      ,BIZ_DIV_CD
+	      ,VCB_ID
+	  FROM (
+	        SELECT A.SCRN_ITM_LNM AS VCB
+	              ,'en' AS LANG_CODE 
+	              ,A.SCRN_ITM_PNM AS VCB_LANG
+	              ,A.OBJ_DESCN
+	              ,A.USE_YN
+	              ,A.BIZ_DIV_CD
+	              ,A.SCRN_ITM_ID AS VCB_ID
+	          FROM WAM_SCRN_ITM A
+	
+	        UNION ALL
+	
+	        SELECT A.SCRN_ITM_LNM AS VCB
+	              ,MLNG_DCD AS LANG_CODE
+	              ,B.MLNG_LNM AS VCB_LANG
+	              ,B.OBJ_DESCN
+	              ,B.USE_YN
+	              ,A.BIZ_DIV_CD
+	              ,A.SCRN_ITM_ID AS VCB_ID
+	          FROM WAM_SCRN_ITM A
+	         INNER JOIN WAM_SCRN_ITM_MLNG B
+	            ON A.SCRN_ITM_ID = B.SCRN_ITM_ID
+	)
+	WHERE 1=1 
+	AND VCB = #{vcb}
+	AND UPPER(LANG_CODE) = UPPER(#{langCode})
+		
+  </select>
+  <select id="selectEraScrnItm" parameterType="map" resultMap="BaseResultMap" >
+  	
+  	SELECT /* EraScrnItmMapper.selectEraScrnItm */
+  		   VCB
+	      ,LANG_CODE
+	      ,VCB_LANG
+	      ,OBJ_DESCN
+	      ,USE_YN
+	      ,BIZ_DIV_CD
+	      ,VCB_ID
+	  FROM (
+	        SELECT A.SCRN_ITM_LNM AS VCB
+	              ,'en' AS LANG_CODE 
+	              ,A.SCRN_ITM_PNM AS VCB_LANG
+	              ,A.OBJ_DESCN
+	              ,A.USE_YN
+	              ,A.BIZ_DIV_CD
+	              ,A.SCRN_ITM_ID AS VCB_ID
+	          FROM WAM_SCRN_ITM A
+	
+	        UNION ALL
+	
+	        SELECT A.SCRN_ITM_LNM AS VCB
+	              ,MLNG_DCD AS LANG_CODE
+	              ,B.MLNG_LNM AS VCB_LANG
+	              ,B.OBJ_DESCN
+	              ,B.USE_YN
+	              ,A.BIZ_DIV_CD
+	              ,A.SCRN_ITM_ID AS VCB_ID
+	          FROM WAM_SCRN_ITM A
+	         INNER JOIN WAM_SCRN_ITM_MLNG B
+	            ON A.SCRN_ITM_ID = B.SCRN_ITM_ID
+	)
+	WHERE 1=1 
+	   AND VCB = #{vcb} 
+	   AND VCB_ID = #{vcbId} 
+	   AND UPPER(LANG_CODE) = UPPER(#{langCode})
+  	
+  </select>
+  
+</mapper>

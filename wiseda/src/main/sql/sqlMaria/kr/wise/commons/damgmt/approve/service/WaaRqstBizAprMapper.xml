@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.commons.damgmt.approve.service.WaaRqstBizAprMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.commons.damgmt.approve.service.WaaRqstBizApr" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap" >
+    <id column="BIZ_DCD" property="bizDcd" jdbcType="VARCHAR" />
+    <id column="APR_LVL" property="aprLvl" jdbcType="DECIMAL" />
+    <id column="SYS_DCD" property="sysDcd" jdbcType="VARCHAR" />
+    <result column="APRG_ID" property="aprgId" jdbcType="VARCHAR" />
+    <result column="APR_FRML_CD" property="aprFrmlCd" jdbcType="VARCHAR" />
+       
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    BIZ_DCD, APR_LVL, SYS_DCD, EXP_DTM, STR_DTM, APRG_ID, APR_FRML_CD, OBJ_DESCN, OBJ_VERS, 
+    REG_TYP_CD, WRIT_DTM, WRIT_USER_ID
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="map" >
+    select 
+    <include refid="Base_Column_List" />
+    from WAA_RQST_BIZ_APR
+    where BIZ_DCD = #{bizDcd,jdbcType=VARCHAR}
+      and APR_LVL = #{aprLvl,jdbcType=DECIMAL}
+<!--       and IFNULL(SYS_DCD,'_') = IFNULL(#{sysDcd,jdbcType=VARCHAR},'_') -->
+  </select>
+  
+  <select id="selectAprvLineList" parameterType="kr.wise.commons.damgmt.approve.service.WaaRqstBizApr" resultMap="BaseResultMap">
+  
+  	/* WaaRqstBizAprMapper.selectAprvLineList */
+  
+  	SELECT A.*
+  		  ,GET_USER_NM(A.WRIT_USER_ID) AS WRIT_USER_NM
+  	FROM WAA_RQST_BIZ_APR A
+  	<where>
+  	   AND A.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+  	   AND A.REG_TYP_CD IN ('C', 'U')
+  	  <if test="aprgId != null" >
+       AND A.APRG_ID = #{aprgId,jdbcType=VARCHAR}
+      </if>
+      <if test="aprFrmlCd != null" >
+       AND A.APR_FRML_CD = #{aprFrmlCd,jdbcType=VARCHAR}
+      </if>
+  	   <if test="sysDcd != null" >
+       AND A.SYS_DCD = #{sysDcd,jdbcType=VARCHAR}
+      </if>
+      <if test="bizDcd != null" >
+       AND A.BIZ_DCD = #{bizDcd,jdbcType=VARCHAR}
+      </if>
+  	</where>
+  	ORDER BY A.SYS_DCD, A.BIZ_DCD, A.APR_LVL, A.APR_FRML_CD
+
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="map" >
+  
+  	/* WaaRqstBizAprMapper.deleteByPrimaryKey */
+  	
+    delete from WAA_RQST_BIZ_APR
+    where BIZ_DCD = #{bizDcd,jdbcType=VARCHAR}
+      and APR_LVL = #{aprLvl,jdbcType=DECIMAL}
+      
+<!--       and IFNULL(SYS_DCD,'_') = IFNULL(#{sysDcd,jdbcType=VARCHAR},'_') -->
+
+  </delete>
+  
+  <insert id="insert" parameterType="kr.wise.commons.damgmt.approve.service.WaaRqstBizApr" >
+  
+  	/* WaaRqstBizAprMapper.insert */
+  	
+    insert into WAA_RQST_BIZ_APR (BIZ_DCD, APR_LVL, SYS_DCD, 
+      EXP_DTM, STR_DTM, APRG_ID, 
+      APR_FRML_CD, OBJ_DESCN, OBJ_VERS, 
+      REG_TYP_CD, WRIT_DTM, WRIT_USER_ID
+      )
+    values (#{bizDcd,jdbcType=VARCHAR}, #{aprLvl,jdbcType=DECIMAL}, #{sysDcd,jdbcType=VARCHAR}, 
+      #{expDtm,jdbcType=TIMESTAMP}, #{strDtm,jdbcType=TIMESTAMP}, #{aprgId,jdbcType=VARCHAR}, 
+      #{aprFrmlCd,jdbcType=VARCHAR}, #{objDescn,jdbcType=VARCHAR}, #{objVers,jdbcType=DECIMAL}, 
+      #{regTypCd,jdbcType=VARCHAR}, #{writDtm,jdbcType=TIMESTAMP}, #{writUserId,jdbcType=VARCHAR}
+      )
+      
+  </insert>
+  
+  <insert id="insertApproveLine" parameterType="kr.wise.commons.damgmt.approve.service.WaaRqstBizApr" >
+  
+  	/* WaaRqstBizAprMapper.insertApproveLine */
+  	
+    insert into WAA_RQST_BIZ_APR
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="bizDcd != null" >
+        BIZ_DCD,
+      </if>
+      <if test="aprLvl != null" >
+        APR_LVL,
+      </if>
+      <if test="sysDcd != null" >
+        SYS_DCD,
+      </if>
+      <if test="aprgId != null" >
+        APRG_ID,
+      </if>
+      <if test="aprFrmlCd != null" >
+        APR_FRML_CD,
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN,
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS,
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD,
+      </if>
+      <if test="writUserId != null" >
+        WRIT_USER_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="bizDcd != null" >
+        #{bizDcd,jdbcType=VARCHAR},
+      </if>
+      <if test="aprLvl != null" >
+        #{aprLvl,jdbcType=DECIMAL},
+      </if>
+      <if test="sysDcd != null" >
+        #{sysDcd,jdbcType=VARCHAR},
+      </if>
+      <if test="aprgId != null" >
+        #{aprgId,jdbcType=VARCHAR},
+      </if>
+      <if test="aprFrmlCd != null" >
+        #{aprFrmlCd,jdbcType=VARCHAR},
+      </if>
+      <if test="objDescn != null" >
+        #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null" >
+        #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="writUserId != null" >
+        #{writUserId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+    
+  </insert>
+  
+  <update id="updateApproveLine" parameterType="kr.wise.commons.damgmt.approve.service.WaaRqstBizApr" >
+  
+  	/* WaaRqstBizAprMapper.updateApproveLine */
+  	
+    update WAA_RQST_BIZ_APR
+    <set >
+      <if test="aprgId != null" >
+        APRG_ID = #{aprgId,jdbcType=VARCHAR},
+      </if>
+      <if test="aprFrmlCd != null" >
+        APR_FRML_CD = #{aprFrmlCd,jdbcType=VARCHAR},
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="writUserId != null" >
+        WRIT_USER_ID = #{writUserId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where BIZ_DCD = #{bizDcd,jdbcType=VARCHAR}
+      and APR_LVL = #{aprLvl,jdbcType=DECIMAL}
+<!--       and IFNULL(SYS_DCD,'_') = IFNULL(#{sysDcd,jdbcType=VARCHAR},'_') -->
+
+  </update>
+  
+  <update id="updateApproveLineAs" parameterType="kr.wise.commons.damgmt.approve.service.WaaRqstBizApr" >
+    update WAA_RQST_APRP
+    <set >
+      <if test="bizDcd != null" >
+        BIZ_DCD = #{bizDcd,jdbcType=VARCHAR},
+      </if>
+      <if test="aprLvl != null" >
+        APR_LVL = #{aprLvl,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="writUserId != null" >
+        WRIT_USER_ID = #{writUserId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where BIZ_DCD = #{bizOldDcd,jdbcType=VARCHAR}
+<!--       and APR_LVL = #{aprLvl,jdbcType=DECIMAL} -->
+      AND APR_LVL = #{aprOldLvl,jdbcType=DECIMAL}
+<!--       and NVL(SYS_DCD,'_') = NVL(#{sysDcd,jdbcType=VARCHAR},'_') -->
+  </update>  
+  
+  <update id="deleteApproveLineoff" parameterType="kr.wise.commons.damgmt.approve.service.WaaRqstBizApr" >
+  
+  	/* WaaRqstBizAprMapper.deleteApproveLineoff */
+  	
+    UPDATE WAA_RQST_BIZ_APR
+    SET EXP_DTM = NOW(),
+      REG_TYP_CD = 'D',
+      WRIT_DTM = NOW(),
+      WRIT_USER_ID = #{writUserId,jdbcType=VARCHAR}
+    WHERE BIZ_DCD = #{bizDcd,jdbcType=VARCHAR}
+      AND APR_LVL = #{aprLvl,jdbcType=DECIMAL}
+<!--       and IFNULL(SYS_DCD,'_') = IFNULL(#{sysDcd,jdbcType=VARCHAR},'_') -->
+
+  </update>
+
+  <delete id="deleteApproveLine" parameterType="kr.wise.commons.damgmt.approve.service.WaaRqstBizApr" >
+  
+  	/* WaaRqstBizAprMapper.deleteApproveLine */
+  	
+    DELETE FROM WAA_RQST_BIZ_APR
+   
+    WHERE BIZ_DCD = #{bizDcd,jdbcType=VARCHAR}
+      AND APR_LVL = #{aprLvl,jdbcType=DECIMAL}
+<!--       and IFNULL(SYS_DCD,'_') = IFNULL(#{sysDcd,jdbcType=VARCHAR},'_') -->
+
+  </delete>
+
+  <update id="updateByPrimaryKey" parameterType="kr.wise.commons.damgmt.approve.service.WaaRqstBizApr" >
+  
+  	/* WaaRqstBizAprMapper.updateByPrimaryKey */
+  	
+    update WAA_RQST_BIZ_APR
+    set EXP_DTM = #{expDtm,jdbcType=TIMESTAMP},
+      STR_DTM = #{strDtm,jdbcType=TIMESTAMP},
+      APRG_ID = #{aprgId,jdbcType=VARCHAR},
+      APR_FRML_CD = #{aprFrmlCd,jdbcType=VARCHAR},
+      OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      WRIT_DTM = #{writDtm,jdbcType=TIMESTAMP},
+      WRIT_USER_ID = #{writUserId,jdbcType=VARCHAR}
+    where BIZ_DCD = #{bizDcd,jdbcType=VARCHAR}
+      and APR_LVL = #{aprLvl,jdbcType=DECIMAL}
+<!--       and IFNULL(SYS_DCD,'_') = IFNULL(#{sysDcd,jdbcType=VARCHAR},'_') -->
+
+  </update>
+  
+</mapper>

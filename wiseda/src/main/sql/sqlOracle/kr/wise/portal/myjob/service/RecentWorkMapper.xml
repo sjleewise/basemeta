@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.portal.myjob.service.RecentWorkMapper" >
+
+  <resultMap id="BaseResultMap" type="kr.wise.portal.myjob.service.RecentWorkVO" >
+    <result column="TOTAL_CNT" property="totalCnt" />
+    <result column="REQ_ID" property="reqId" />
+    <result column="US_DEP" property="usDep"  />
+    <result column="US_ID" property="usId"  />
+    <result column="REQ_DATE" property="reqDate" />
+    <result column="REQ_SUBJ" property="reqSubj" />
+    <result column="REQ_DESC" property="reqDesc" />    
+    <result column="REQ_DESIRED_DATE" property="reqDesiredDate" />
+    <result column="IS_TEMP" property="isTemp"  />
+    <result column="PRJ_ID" property="prjId" />
+    <result column="TARGET_ID" property="targetId" />
+    <result column="FORM_ID" property="formId" />
+    <result column="STATUS_NOW_STRING" property="statusNow" />
+<!--     <result column="STATUS_NOW" property="statusNow" /> -->
+    <result column="US_NAME" property="usName" />
+    <result column="DEP_NAME" property="depName" />
+    <result column="PR_NAME" property="prName" />
+    <result column="SEARCH_DATE_START" property="searchDateStart" />    
+    <result column="SEARCH_DATE_END" property="searchDateEnd" />
+    <result column="PAGENUM" property="pageNum" />
+    <result column="PERPAGE" property="perPage" />
+<!--     <result column="PROJECT_ID" property="projectId" /> -->
+<!--     <result column="TITLE" property="title" /> -->
+<!--     <result column="WRITER_US_DEP" property="writerUsDep" /> -->
+    <result column="FORM_NAME" property="formName" />
+  </resultMap>
+  
+	<select id="selectRecentWork" statementType="CALLABLE"  parameterType="java.util.Map" resultMap="BaseResultMap">
+		{call  EDCM2_NEXT_COMMON.dbo.procRecentWork(#{projectId,jdbcType=VARCHAR},#{formId, jdbcType=VARCHAR},#{statusNow, jdbcType=VARCHAR},#{title, jdbcType=VARCHAR},#{svnUserId, jdbcType=VARCHAR},#{writerUsDep, jdbcType=VARCHAR},#{ntceBgnde, jdbcType=VARCHAR},#{ntceEndde, jdbcType=VARCHAR},#{pageNum, jdbcType=VARCHAR},#{perPage, jdbcType=VARCHAR})}
+	</select>
+    	
+	<select id="selectUserId"  resultMap="BaseResultMap" parameterType="java.util.Map">
+    		SELECT US_ID FROM EDCM2_NEXT_COMMON.dbo.VIEWUSERINFO WHERE US_NICK = #{usId}	
+    </select>
+	<select id="selectsvnUserId"  resultType="String" parameterType="java.util.Map">
+    		SELECT US_ID FROM EDCM2_NEXT_COMMON.dbo.VIEWUSERINFO WHERE US_NICK = #{usId}	
+    </select>
+    
+  </mapper>

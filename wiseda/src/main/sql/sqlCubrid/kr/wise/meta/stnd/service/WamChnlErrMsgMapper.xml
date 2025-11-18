@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.meta.stnd.service.WamChnlErrMsgMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.meta.stnd.service.WamChnlErrMsg" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+    <id column="CHNL_MSG_ID" property="chnlMsgId" jdbcType="VARCHAR" />
+    <result column="CHNL_MSG_LNM" property="chnlMsgLnm" jdbcType="VARCHAR" />
+    <result column="CHNL_MSG_PNM" property="chnlMsgPnm" jdbcType="VARCHAR" />
+    <result column="STD_ERR_MSG_ID" property="stdErrMsgId" jdbcType="VARCHAR" />
+    <result column="ERR_CD" property="errCd" jdbcType="VARCHAR" />
+    <result column="ERR_TLG_LAN_DSCD" property="errTlgLanDscd" jdbcType="VARCHAR" />
+    <result column="ERR_TP_CD" property="errTpCd" jdbcType="VARCHAR" />
+    <result column="CHNL_TP_CD" property="chnlTpCd" jdbcType="VARCHAR" />
+    <result column="ERR_CD_US_YN" property="errCdUsYn" jdbcType="VARCHAR" />
+    <result column="CHNL_ERR_CD" property="chnlErrCd" jdbcType="VARCHAR" />
+    <result column="CHNL_ERR_MSG_CTS" property="chnlErrMsgCts" jdbcType="VARCHAR" />
+    <result column="ERR_CD_APL_DT" property="errCdAplDt" jdbcType="VARCHAR" />
+    <result column="ACTN_CD" property="actnCd" jdbcType="VARCHAR" />
+    <result column="CHNL_DTLS_CLCD" property="chnlDtlsClcd" jdbcType="VARCHAR" />
+    <result column="CHNL_GRP_CD" property="chnlGrpCd" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    CHNL_MSG_ID, CHNL_MSG_LNM, CHNL_MSG_PNM, RQST_NO, RQST_SNO, OBJ_DESCN, OBJ_VERS, 
+    REG_TYP_CD, FRS_RQST_DTM, FRS_RQST_USER_ID, RQST_DTM, RQST_USER_ID, APRV_DTM, APRV_USER_ID, 
+    STD_ERR_MSG_ID, ERR_CD, ERR_TLG_LAN_DSCD, ERR_TP_CD, CHNL_TP_CD, ERR_CD_US_YN, CHNL_ERR_CD, 
+    CHNL_ERR_MSG_CTS, ERR_CD_APL_DT, ACTN_CD, CHNL_DTLS_CLCD, CHNL_GRP_CD
+  </sql>
+    <select id="selectList" parameterType="kr.wise.meta.stnd.service.WamChnlErrMsg" resultMap="BaseResultMap">
+    SELECT A.*
+	  FROM WAM_CHNL_ERR_MSG A
+	  <where>
+		  <if test="errTlgLanDscd != null" >
+	        AND ERR_TLG_LAN_DSCD LIKE '%'||#{errTlgLanDscd,jdbcType=VARCHAR}||'%'
+	      </if>
+	      <if test="errTpCd != null" >
+	        AND ERR_TP_CD LIKE '%'||#{errTpCd,jdbcType=VARCHAR}||'%'
+	      </if>
+	      <if test="actnCd != null" >
+	        AND ACTN_CD LIKE '%'||#{actnCd,jdbcType=VARCHAR}||'%'
+	      </if>
+	      <if test="errCd != null" >
+	        AND ERR_CD LIKE '%'||#{errCd,jdbcType=VARCHAR}||'%'
+	      </if>
+	      <if test="stdErrMsgId != null" >
+	        AND STD_ERR_MSG_ID LIKE '%'||#{stdErrMsgId,jdbcType=VARCHAR}||'%'
+	      </if>
+	      <if test="chnlTpCd != null" >
+	        AND CHNL_TP_CD LIKE '%'||#{chnlTpCd,jdbcType=VARCHAR}||'%'
+	      </if>
+	      <if test="errCdUsYn != null" >
+	        AND ERR_CD_US_YN LIKE '%'||#{errCdUsYn,jdbcType=VARCHAR}||'%'
+	      </if>
+	      <if test="chnlErrCd != null" >
+	        AND CHNL_ERR_CD LIKE '%'||#{chnlErrCd,jdbcType=VARCHAR}||'%'
+	      </if>
+	      <if test="chnlErrMsgCts != null" >
+	        AND CHNL_ERR_MSG_CTS LIKE '%'||#{chnlErrMsgCts,jdbcType=VARCHAR}||'%'
+	      </if>
+	      <if test="chnlGrpCd != null" >
+	        AND CHNL_GRP_CD LIKE '%'||#{chnlGrpCd,jdbcType=VARCHAR}||'%'
+	      </if>
+	      <if test="chnlDtlsClcd != null" >
+	        AND CHNL_DTLS_CLCD LIKE '%'||#{chnlDtlsClcd,jdbcType=VARCHAR}||'%'
+	      </if>
+	      <if test="errCdAplDt != null" >
+	        AND ERR_CD_APL_DT LIKE '%'||#{errCdAplDt,jdbcType=VARCHAR}||'%'
+	      </if>
+	      <if test="frsRqstUserId != null" >
+	        AND FRS_RQST_USER_ID = (SELECT USER_ID FROM WAA_USER WHERE USER_NM = #{frsRqstUserId,jdbcType=VARCHAR} OR USER_ID = #{frsRqstUserId,jdbcType=VARCHAR})
+	      </if>
+	   </where> 
+  </select>
+  
+   <select id="selectMessageDtl" parameterType="java.lang.String" resultMap="BaseResultMap">
+    SELECT A.*
+    	   ,(SELECT USER_NM FROM WAA_USER WHERE USER_ID = A.FRS_RQST_USER_ID AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD') AND REG_TYP_CD IN ('C','U')) AS FRS_RQST_USER_NM
+    	   ,(SELECT USER_NM FROM WAA_USER WHERE USER_ID = A.RQST_USER_ID AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD') AND REG_TYP_CD IN ('C','U')) AS RQST_USER_NM
+    	   ,(SELECT USER_NM FROM WAA_USER WHERE USER_ID = A.APRV_USER_ID AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD') AND REG_TYP_CD IN ('C','U')) AS APRV_USER_NM
+	  FROM WAM_CHNL_ERR_MSG A
+	  <where>
+	   CHNL_MSG_ID = #{chnlMsgId,jdbcType=VARCHAR}  
+	   </where> 
+  </select>
+   <select id="selectChangeList" parameterType="java.lang.String" resultMap="BaseResultMap">
+    SELECT A.*
+	  FROM WAH_CHNL_ERR_MSG A
+	  <where>
+	   CHNL_MSG_ID = #{chnlMsgId,jdbcType=VARCHAR}  
+	   </where> 
+	ORDER BY OBJ_VERS DESC
+  </select>
+</mapper>

@@ -1,0 +1,487 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.commons.autocom.service.AutoComMapper" >
+
+	<select id="selectStndWordList" parameterType="map" resultType="string">
+		<![CDATA[
+		--AutoComplete 단어 리스트 조회 10개만 가져온다....
+		SELECT * FROM (
+				SELECT STWD_LNM FROM WAM_STWD
+				 WHERE UPPER(STWD_LNM) LIKE '%' || #{searchTerm} || '%'
+				    OR UPPER(STWD_PNM) LIKE '%' || #{searchTerm} || '%'
+				 ORDER BY STWD_LNM
+		) WHERE ROWNUM <= #{maxRows}
+		]]>
+	</select>
+	<select id="selectStndDmnList" parameterType="map" resultType="string">
+		<![CDATA[
+		--AutoComplete 단어 리스트 조회 10개만 가져온다....
+		SELECT * FROM (
+				SELECT DMN_LNM FROM WAM_DMN
+				 WHERE UPPER(DMN_LNM) LIKE '%' || #{searchTerm} || '%'
+				    OR UPPER(DMN_PNM) LIKE '%' || #{searchTerm} || '%'
+				 ORDER BY DMN_LNM
+		) WHERE ROWNUM <= #{maxRows}
+		]]>
+	</select>
+	<select id="selectStndSditmList" parameterType="map" resultType="string">
+		<![CDATA[
+		--AutoComplete 단어 리스트 조회 10개만 가져온다....
+		SELECT * FROM (
+				SELECT SDITM_LNM FROM WAM_SDITM
+				 WHERE UPPER(SDITM_LNM) LIKE '%' || #{searchTerm} || '%'
+				    OR UPPER(SDITM_PNM) LIKE '%' || #{searchTerm} || '%'
+				 ORDER BY SDITM_LNM
+		) WHERE ROWNUM <= #{maxRows}
+		]]>
+	</select>
+	<select id="selectSymnList" parameterType="map" resultType="string">
+		<![CDATA[
+		--AutoComplete 단어 리스트 조회 10개만 가져온다....
+		SELECT * FROM (
+				SELECT SYMN_LNM FROM WAM_SYMN
+				 WHERE UPPER(SYMN_LNM) LIKE '%' || #{searchTerm} || '%'
+				    OR UPPER(SYMN_PNM) LIKE '%' || #{searchTerm} || '%'
+				 ORDER BY SYMN_LNM
+		) WHERE ROWNUM <= #{maxRows}
+		]]>
+	</select>
+	<select id="selectSymnSbswdList" parameterType="map" resultType="string">
+		<![CDATA[
+		--AutoComplete 단어 리스트 조회 10개만 가져온다....
+		SELECT * FROM (
+				SELECT SBSWD_LNM FROM WAM_SYMN
+				 WHERE UPPER(SBSWD_LNM) LIKE '%' || #{searchTerm} || '%'
+				    OR UPPER(SBSWD_PNM) LIKE '%' || #{searchTerm} || '%'
+				 ORDER BY SBSWD_LNM
+		) WHERE ROWNUM <= #{maxRows}
+		]]>
+	</select>
+	<select id="selectSubjList" parameterType="map" resultType="string">
+		<![CDATA[
+		--AutoComplete 단어 리스트 조회 10개만 가져온다....
+		SELECT * FROM (
+				SELECT SUBJ_LNM FROM WAA_SUBJ
+				 WHERE (UPPER(SUBJ_LNM) LIKE '%' || #{searchTerm} || '%'
+				   	   OR UPPER(SUBJ_PNM) LIKE '%' || #{searchTerm} || '%')
+				   AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+				   AND REG_TYP_CD IN ('C', 'U')
+				 ORDER BY SUBJ_LNM
+		) WHERE ROWNUM <= #{maxRows}
+		]]>
+	</select>
+	<select id="selectPdmTblList" parameterType="map" resultType="string">
+		<![CDATA[
+		--AutoComplete 단어 리스트 조회 10개만 가져온다....
+		SELECT * FROM (
+				SELECT PDM_TBL_LNM FROM WAM_PDM_TBL
+				 WHERE UPPER(PDM_TBL_LNM) LIKE '%' || #{searchTerm} || '%'
+				    OR UPPER(PDM_TBL_PNM) LIKE '%' || #{searchTerm} || '%'
+				 GROUP BY PDM_TBL_LNM
+				 ORDER BY PDM_TBL_LNM
+		) WHERE ROWNUM <= #{maxRows}
+		]]>
+	</select>
+	<select id="selectAsisPdmTblList" parameterType="map" resultType="string">
+		<![CDATA[
+		--AutoComplete 단어 리스트 조회 10개만 가져온다....
+		SELECT * FROM (
+				SELECT PDM_TBL_LNM FROM WAM_ASIS_PDM_TBL
+				 WHERE UPPER(PDM_TBL_LNM) LIKE '%' || #{searchTerm} || '%'
+				    OR UPPER(PDM_TBL_PNM) LIKE '%' || #{searchTerm} || '%'
+				 GROUP BY PDM_TBL_LNM
+				 ORDER BY PDM_TBL_LNM
+		) WHERE ROWNUM <= #{maxRows}
+		]]>
+	</select>
+	<select id="selectPdmColList" parameterType="map" resultType="string">
+		<![CDATA[
+		--AutoComplete 단어 리스트 조회 10개만 가져온다....
+		SELECT * FROM (
+				SELECT PDM_COL_LNM FROM WAM_PDM_COL
+				 WHERE UPPER(PDM_COL_LNM) LIKE '%' || #{searchTerm} || '%'
+				    OR UPPER(PDM_COL_PNM) LIKE '%' || #{searchTerm} || '%'
+				 GROUP BY PDM_COL_LNM
+				 ORDER BY PDM_COL_LNM
+		) WHERE ROWNUM <= #{maxRows}
+		]]>
+	</select>
+	<select id="selectAsisPdmColList" parameterType="map" resultType="string">
+		<![CDATA[
+		--AutoComplete 단어 리스트 조회 10개만 가져온다....
+		SELECT * FROM (
+				SELECT PDM_COL_LNM FROM WAM_ASIS_PDM_COL
+				 WHERE UPPER(PDM_COL_LNM) LIKE '%' || #{searchTerm} || '%'
+				    OR UPPER(PDM_COL_PNM) LIKE '%' || #{searchTerm} || '%'
+				 GROUP BY PDM_COL_LNM
+				 ORDER BY PDM_COL_LNM
+		) WHERE ROWNUM <= #{maxRows}
+		]]>
+	</select>
+	<select id="selectDdlTblList" parameterType="map" resultType="string">
+		<![CDATA[
+		--AutoComplete 단어 리스트 조회 10개만 가져온다....
+		SELECT * FROM (
+				SELECT DDL_TBL_LNM FROM WAM_DDL_TBL
+				 WHERE UPPER(DDL_TBL_LNM) LIKE '%' || #{searchTerm} || '%'
+				    OR UPPER(DDL_TBL_PNM) LIKE '%' || #{searchTerm} || '%'
+				 GROUP BY DDL_TBL_LNM
+				UNION ALL
+				SELECT DDL_TBL_PNM AS DDL_TBL_LNM FROM WAM_DDL_TBL
+				 WHERE UPPER(DDL_TBL_LNM) LIKE '%' || #{searchTerm} || '%'
+				    OR UPPER(DDL_TBL_PNM) LIKE '%' || #{searchTerm} || '%'
+				 GROUP BY DDL_TBL_PNM
+				 ORDER BY DDL_TBL_LNM
+		) WHERE ROWNUM <= #{maxRows}
+		]]>
+	</select>
+	<select id="selectDbcTblList" parameterType="map" resultType="string">
+		<![CDATA[
+		--AutoComplete 단어 리스트 조회 10개만 가져온다....
+		SELECT * FROM (
+				SELECT DBC_TBL_NM FROM WAT_DBC_TBL
+				 WHERE UPPER(DBC_TBL_NM) LIKE '%' || #{searchTerm} || '%'
+				GROUP BY DBC_TBL_NM
+				UNION ALL
+				SELECT DBC_TBL_KOR_NM AS DBC_TBL_NM FROM WAT_DBC_TBL
+				 WHERE UPPER(DBC_TBL_KOR_NM) LIKE '%' || #{searchTerm} || '%'
+				 GROUP BY DBC_TBL_KOR_NM
+				 ORDER BY DBC_TBL_NM
+		) WHERE ROWNUM <= #{maxRows}
+		]]>
+	</select>
+	<select id="selectBizLnmList" parameterType="map" resultType="string">
+		<![CDATA[
+		--AutoComplete 단어 리스트 조회 10개만 가져온다....
+		SELECT * FROM (
+				SELECT BIZ_AREA_LNM FROM WAM_BIZ_AREA
+				 WHERE UPPER(BIZ_AREA_LNM) LIKE '%' || #{searchTerm} || '%'
+				UNION ALL
+				SELECT BIZ_AREA_PNM AS BIZ_AREA_LNM FROM WAM_BIZ_AREA
+				 WHERE UPPER(BIZ_AREA_PNM) LIKE '%' || #{searchTerm} || '%'
+				 ORDER BY BIZ_AREA_LNM
+		) WHERE ROWNUM <= #{maxRows}
+		]]>
+	</select>
+	<select id="selectDqiLnmList" parameterType="map" resultType="string">
+		<![CDATA[
+		--AutoComplete 단어 리스트 조회 10개만 가져온다....
+		SELECT * FROM (
+				SELECT DQI_LNM FROM WAM_DQI
+				 WHERE UPPER(DQI_LNM) LIKE '%' || #{searchTerm} || '%'
+				UNION ALL
+				SELECT DQI_PNM AS DQI_LNM FROM WAM_DQI
+				 WHERE UPPER(DQI_PNM) LIKE '%' || #{searchTerm} || '%'
+				 ORDER BY DQI_LNM
+		) WHERE ROWNUM <= #{maxRows}
+		]]>
+	</select>
+	<select id="selectCtqLnmList" parameterType="map" resultType="string">
+		<![CDATA[
+		--AutoComplete 단어 리스트 조회 10개만 가져온다....
+		SELECT * FROM (
+				SELECT CTQ_LNM FROM WAM_CTQ
+				 WHERE UPPER(CTQ_LNM) LIKE '%' || #{searchTerm} || '%'
+				UNION ALL
+				SELECT CTQ_PNM AS CTQ_LNM FROM WAM_CTQ
+				 WHERE UPPER(CTQ_PNM) LIKE '%' || #{searchTerm} || '%'
+				 ORDER BY CTQ_LNM
+		) WHERE ROWNUM <= #{maxRows}
+		]]>
+	</select>
+	<select id="selectDbSchList" parameterType="map" resultType="string">
+		<![CDATA[
+		--AutoComplete 단어 리스트 조회 10개만 가져온다....
+		SELECT * FROM (
+				SELECT DB_SCH_LNM FROM WAA_DB_SCH
+				 WHERE UPPER(DB_SCH_LNM) LIKE '%' || #{searchTerm} || '%'
+				 AND EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+         		 AND REG_TYP_CD IN ('C','U')
+				UNION ALL
+				SELECT DB_SCH_PNM AS DB_SCH_LNM FROM WAA_DB_SCH
+				 WHERE UPPER(DB_SCH_PNM) LIKE '%' || #{searchTerm} || '%'
+				 AND EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+         		 AND REG_TYP_CD IN ('C','U')
+				 ORDER BY DB_SCH_LNM
+		) WHERE ROWNUM <= #{maxRows}
+		]]>
+	</select>
+	<select id="selectDbcColList" parameterType="map" resultType="string">
+		<![CDATA[
+		--AutoComplete 단어 리스트 조회 10개만 가져온다....
+		SELECT * FROM (
+				SELECT DBC_COL_NM FROM WAT_DBC_COL
+				 WHERE UPPER(DBC_COL_NM) LIKE '%' || #{searchTerm} || '%'
+				 GROUP BY DBC_COL_NM
+				UNION ALL
+				SELECT DBC_COL_KOR_NM AS DBC_COL_NM FROM WAT_DBC_COL
+				 WHERE UPPER(DBC_COL_KOR_NM) LIKE '%' || #{searchTerm} || '%'
+				 GROUP BY DBC_COL_KOR_NM
+				 ORDER BY DBC_COL_NM
+		) WHERE ROWNUM <= #{maxRows}
+		]]>
+	</select>
+	<select id="selectBrNmList" parameterType="map" resultType="string">
+		<![CDATA[
+		--AutoComplete 단어 리스트 조회 10개만 가져온다....
+		SELECT * FROM (
+				SELECT BR_NM FROM WAM_BR_MSTR
+				 WHERE UPPER(BR_NM) LIKE '%' || #{searchTerm} || '%'
+				 ORDER BY BR_NM
+		) WHERE ROWNUM <= #{maxRows}
+		]]>
+	</select>
+	<select id="selectShdLnmList" parameterType="map" resultType="string">
+		<![CDATA[
+		--AutoComplete 단어 리스트 조회 10개만 가져온다....
+		SELECT * FROM (
+				SELECT SHD_LNM FROM WAM_SHD_MSTR
+				 WHERE UPPER(SHD_LNM) LIKE '%' || #{searchTerm} || '%'
+				UNION ALL
+				SELECT SHD_PNM AS SHD_LNM FROM WAM_SHD_MSTR
+				 WHERE UPPER(SHD_PNM) LIKE '%' || #{searchTerm} || '%'
+				 ORDER BY SHD_LNM
+		) WHERE ROWNUM <= #{maxRows}
+		]]>
+	</select>
+	<select id="selectUserNmList" parameterType="map" resultType="string">
+		<![CDATA[
+		--AutoComplete 단어 리스트 조회 10개만 가져온다....
+		SELECT * FROM (
+				SELECT USER_NM FROM WAA_USER
+				 WHERE UPPER(USER_NM) LIKE '%' || #{searchTerm} || '%'
+				 AND REG_TYP_CD IN ('C', 'U')
+				 AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+				 ORDER BY USER_NM
+		) WHERE ROWNUM <= #{maxRows}
+		]]>
+	</select>
+	<select id="selectObjNmList" parameterType="map" resultType="string">
+		<![CDATA[
+		--AutoComplete 단어 리스트 조회 10개만 가져온다....
+		-- 작업명
+		SELECT * FROM (
+				SELECT BR_NM AS OBJ_NM FROM WAM_BR_MSTR 
+				 WHERE UPPER(BR_NM) LIKE '%' || #{searchTerm} || '%'
+				 AND REG_TYP_CD IN ('C','U')
+			UNION ALL
+				SELECT '[스키마수집]'||DB_CONN_TRG_PNM AS OBJ_NM FROM WAA_DB_CONN_TRG
+				 WHERE UPPER(DB_CONN_TRG_PNM) LIKE '%' || #{searchTerm} || '%'
+				 OR '[스키마수집]' LIKE '%' || #{searchTerm} || '%'
+				 AND EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD') 
+				 AND REG_TYP_CD IN ('C','U')
+			UNION ALL
+				SELECT '['||C.COMM_DTL_CD_NM||']'||A.DBC_TBL_NM||'.'||A.OBJ_NM AS OBJ_NM
+					FROM WAM_PRF_MSTR A
+					        LEFT OUTER JOIN WAA_COMM_DTL_CD C
+							        ON C.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+							        AND C.REG_TYP_CD IN ('C','U')
+							        AND A.PRF_KND_CD = C.COMM_DTL_CD
+							        AND COMM_DCD_ID = 'OBJ_00000000342' 
+					WHERE A.PRF_KND_CD LIKE '%'||'PC'||'%'
+				 	AND UPPER(C.COMM_DTL_CD_NM) LIKE '%' || #{searchTerm} || '%'
+				 	OR UPPER(A.DBC_TBL_NM) LIKE '%' || #{searchTerm} || '%'
+				 	OR UPPER(A.OBJ_NM) LIKE '%' || #{searchTerm} || '%'
+			UNION ALL
+				SELECT '['||C.COMM_DTL_CD_NM||']'||A.OBJ_NM AS OBJ_NM
+					FROM WAM_PRF_MSTR A
+					        LEFT OUTER JOIN WAA_COMM_DTL_CD C
+							        ON C.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+							        AND C.REG_TYP_CD IN ('C','U')
+							        AND A.PRF_KND_CD = C.COMM_DTL_CD
+							        AND COMM_DCD_ID = 'OBJ_00000000342' 
+					WHERE A.PRF_KND_CD LIKE '%'||'PT'||'%'
+				 	AND UPPER(C.COMM_DTL_CD_NM) LIKE '%' || #{searchTerm} || '%'
+				 	OR UPPER(A.OBJ_NM) LIKE '%' || #{searchTerm} || '%'
+			UNION ALL
+				SELECT ETC_JOB_NM FROM WAM_SHD_JOB 
+				 WHERE UPPER(ETC_JOB_NM) LIKE '%' || #{searchTerm} || '%'
+				 AND REG_TYP_CD IN ('C','U')
+		ORDER BY OBJ_NM
+		) WHERE ROWNUM <= #{maxRows}
+		]]>
+	</select>
+   
+   <select id="selectDbmsList" parameterType="map" resultType="string">
+		<![CDATA[
+		--AutoComplete 단어 리스트 조회 10개만 가져온다....
+		SELECT * FROM (
+				SELECT DB_CONN_TRG_LNM FROM WAA_DB_CONN_TRG
+				 WHERE UPPER(DB_CONN_TRG_LNM) LIKE '%' || #{searchTerm} || '%'
+				 AND EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+         		 AND REG_TYP_CD IN ('C','U')
+				UNION ALL
+				SELECT DB_CONN_TRG_PNM AS DB_CONN_TRG_LNM FROM WAA_DB_CONN_TRG
+				 WHERE UPPER(DB_CONN_TRG_PNM) LIKE '%' || #{searchTerm} || '%'
+				 AND EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+         		 AND REG_TYP_CD IN ('C','U')
+				 ORDER BY DB_CONN_TRG_LNM
+		) WHERE ROWNUM <= #{maxRows}
+		]]>
+	</select>
+   
+   <select id="selectDeptList" parameterType="map" resultType="string">
+		<![CDATA[
+		--AutoComplete 단어 리스트 조회 10개만 가져온다....
+		SELECT * FROM (
+				SELECT DEPT_NM FROM WAA_DEPT
+				 WHERE UPPER(DEPT_NM) LIKE '%' || #{searchTerm} || '%'
+				 AND EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+         		 AND REG_TYP_CD IN ('C','U')
+				 ORDER BY DEPT_NM
+		) WHERE ROWNUM <= #{maxRows}
+		]]>
+	</select>
+   <select id="selectDmngList" parameterType="map" resultType="string">
+		<![CDATA[
+		--AutoComplete 단어 리스트 조회 10개만 가져온다....
+		SELECT * FROM (
+				SELECT DMNG_LNM FROM WAA_DMNG
+				 WHERE UPPER(DMNG_LNM) LIKE '%' || #{searchTerm} || '%'
+				 AND EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+         		 AND REG_TYP_CD IN ('C','U')
+				UNION ALL
+				SELECT DMNG_PNM AS DMNG_LNM FROM WAA_DMNG
+				 WHERE UPPER(DMNG_PNM) LIKE '%' || #{searchTerm} || '%'
+				 AND EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+         		 AND REG_TYP_CD IN ('C','U')
+				 ORDER BY DMNG_LNM
+		) WHERE ROWNUM <= #{maxRows}
+		]]>
+	</select>
+	
+	<select id="selectMenuList" parameterType="map" resultType="string">
+		<![CDATA[
+		--AutoComplete 단어 리스트 조회 10개만 가져온다....
+		SELECT * FROM (
+				SELECT MENU_NM FROM WAA_PRGM_MENU
+				 WHERE UPPER(MENU_NM) LIKE '%' || #{searchTerm} || '%'
+				 AND EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+         		 AND REG_TYP_CD IN ('C','U')
+				 ORDER BY MENU_NM
+		) WHERE ROWNUM <= #{maxRows}
+		]]>
+	</select>
+	
+	<select id="selectDdlTsfTblList" parameterType="map" resultType="string">
+		<![CDATA[
+		--AutoComplete 단어 리스트 조회 10개만 가져온다....
+		SELECT * FROM (
+				SELECT DDL_TBL_LNM FROM WAM_DDL_TSF_TBL
+				 WHERE UPPER(DDL_TBL_LNM) LIKE '%' || #{searchTerm} || '%'
+				    OR UPPER(DDL_TBL_PNM) LIKE '%' || #{searchTerm} || '%'
+				 GROUP BY DDL_TBL_LNM
+				UNION ALL
+				SELECT DDL_TBL_PNM AS DDL_TBL_LNM FROM WAM_DDL_TSF_TBL
+				 WHERE UPPER(DDL_TBL_LNM) LIKE '%' || #{searchTerm} || '%'
+				    OR UPPER(DDL_TBL_PNM) LIKE '%' || #{searchTerm} || '%'
+				 GROUP BY DDL_TBL_PNM
+				 ORDER BY DDL_TBL_LNM
+		) WHERE ROWNUM <= #{maxRows}
+		]]>
+	</select>
+
+	<select id="selectSlcItemList" parameterType="map" resultType="string">
+		<![CDATA[
+		--AutoComplete 매립지공사 기술용어 리스트 조회 10개만 가져온다....
+		SELECT * FROM (
+				SELECT SLC_GLOSSARY_NM FROM SLC_GLOSSARY_M
+				 WHERE UPPER(SLC_GLOSSARY_NM ) LIKE '%' || #{searchTerm} || '%'
+				    OR UPPER(SLC_GLOSSARY_ENG_NM ) LIKE '%' || #{searchTerm} || '%'
+				 GROUP BY SLC_GLOSSARY_NM
+				UNION ALL
+				SELECT SLC_GLOSSARY_ENG_NM AS DDL_TBL_LNM FROM SLC_GLOSSARY_M
+				 WHERE UPPER(SLC_GLOSSARY_NM) LIKE '%' || #{searchTerm} || '%'
+				    OR UPPER(SLC_GLOSSARY_ENG_NM ) LIKE '%' || #{searchTerm} || '%'
+				 GROUP BY SLC_GLOSSARY_ENG_NM
+				 --ORDER BY SLC_GLOSSARY_NM
+		) WHERE ROWNUM <= #{maxRows}
+		]]>
+	</select>
+	
+	<select id="selectAppStwdList" parameterType="map" resultType="string">
+		<![CDATA[
+		--AutoComplete APP단어 리스트 조회 10개만 가져온다....
+		SELECT * FROM (
+				SELECT APP_STWD_LNM FROM WAM_APP_STWD
+				 WHERE UPPER(APP_STWD_LNM ) LIKE '%' || #{searchTerm} || '%'
+				    OR UPPER(APP_STWD_PNM ) LIKE '%' || #{searchTerm} || '%'
+				 GROUP BY APP_STWD_LNM
+		) WHERE ROWNUM <= #{maxRows}
+		]]>
+	</select>
+	
+	<select id="selectAppSditmList" parameterType="map" resultType="string">
+		<![CDATA[
+		--AutoComplete APP항목 리스트 조회 10개만 가져온다....
+		SELECT * FROM (
+				SELECT APP_SDITM_LNM FROM WAM_APP_SDITM
+				 WHERE UPPER(APP_SDITM_LNM ) LIKE '%' || #{searchTerm} || '%'
+				    OR UPPER(APP_SDITM_PNM ) LIKE '%' || #{searchTerm} || '%'
+				 GROUP BY APP_SDITM_LNM
+		) WHERE ROWNUM <= #{maxRows}
+		]]>
+	</select>
+	<select id="selectTblMapList" parameterType="map" resultType="string">
+		<![CDATA[
+		--AutoComplete APP항목 리스트 조회 10개만 가져온다....
+		SELECT * FROM (
+				SELECT TGT_TBL_PNM FROM WAM_TBL_MAP
+				 WHERE UPPER(TGT_TBL_PNM ) LIKE '%' || #{searchTerm} || '%'
+				    OR UPPER(TGT_TBL_PNM ) LIKE '%' || #{searchTerm} || '%'
+				 GROUP BY TGT_TBL_PNM
+		) WHERE ROWNUM <= #{maxRows}
+		]]>
+	</select>
+	<select id="selectColMapList" parameterType="map" resultType="string">
+		<![CDATA[
+		--AutoComplete APP항목 리스트 조회 10개만 가져온다....
+		SELECT * FROM (
+				SELECT TGT_TBL_PNM FROM WAM_COL_MAP
+				 WHERE UPPER(TGT_TBL_PNM ) LIKE '%' || #{searchTerm} || '%'
+				    OR UPPER(TGT_TBL_PNM ) LIKE '%' || #{searchTerm} || '%'
+				 GROUP BY TGT_TBL_PNM
+		) WHERE ROWNUM <= #{maxRows}
+		]]>
+	</select>
+	<select id="selectCodMapList" parameterType="map" resultType="string">
+		<![CDATA[
+		--AutoComplete APP항목 리스트 조회 10개만 가져온다....
+		SELECT * FROM (
+				SELECT TGT_TBL_PNM FROM WAM_COD_MAP
+				 WHERE UPPER(TGT_TBL_PNM ) LIKE '%' || #{searchTerm} || '%'
+				    OR UPPER(TGT_TBL_PNM ) LIKE '%' || #{searchTerm} || '%'
+				 GROUP BY TGT_TBL_PNM
+		) WHERE ROWNUM <= #{maxRows}
+		]]>
+	</select>
+	
+	<select id="selectDDLSEQList" parameterType="map" resultType="string">
+		<![CDATA[
+		--AutoComplete 단어 리스트 조회 10개만 가져온다....
+		SELECT * FROM (
+				SELECT DDL_SEQ_PNM 
+				  FROM WAM_DDL_SEQ
+				 WHERE UPPER(DDL_SEQ_PNM) LIKE '%' || #{searchTerm} || '%'
+				 GROUP BY DDL_SEQ_PNM
+		) WHERE ROWNUM <= #{maxRows}
+		]]>
+	</select>
+	
+   <select id="selectDBCSEQList" parameterType="map" resultType="string">
+		<![CDATA[
+		--AutoComplete 단어 리스트 조회 10개만 가져온다....
+		SELECT * FROM (
+				SELECT DBC_SEQ_NM 
+				  FROM WAT_DBC_SEQ
+				 WHERE UPPER(DBC_SEQ_NM) LIKE '%' || #{searchTerm} || '%'
+				 GROUP BY DBC_SEQ_NM
+		) WHERE ROWNUM <= #{maxRows}
+		]]>
+	</select>
+</mapper>
+
+
+
+
+

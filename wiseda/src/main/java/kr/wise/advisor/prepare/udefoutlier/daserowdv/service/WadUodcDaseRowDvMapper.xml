@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.wise.advisor.prepare.udefoutlier.daserowdv.service.WadUodcDaseRowDvMapper">
+  <resultMap id="BaseResultMap" type="kr.wise.advisor.prepare.udefoutlier.daserowdv.service.WadUodcDaseRowDv" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap" >
+    <id column="UDF_OTL_DTC_ID"      jdbcType="VARCHAR"   property="udfOtlDtcId" />
+    <id column="CRE_COMP_ID"         jdbcType="VARCHAR"   property="creCompId" />
+    <result column="ANA_DASE_ID"     jdbcType="VARCHAR"   property="anaDaseId" />
+    <result column="ANA_DASE_NM"     jdbcType="VARCHAR"   property="anaDaseNm" />
+    <result column="SCT_STR_VAL"     jdbcType="VARCHAR"   property="sctStrVal" />
+    <result column="SCT_END_VAL"     jdbcType="VARCHAR"   property="sctEndVal" />    
+    <result column="ROW_SLT_TYP_CD"  jdbcType="VARCHAR"   property="rowSltTypCd" />
+    <result column="DRT_DSG_VAL"     jdbcType="VARCHAR"   property="drtDsgVal" />
+    <result column="SRC_ANA_DASE_ID" jdbcType="VARCHAR"   property="srcAnaDaseId" />
+    <result column="SRC_ANA_DASE_NM" jdbcType="VARCHAR"   property="srcAnaDaseNm" />    
+        
+    <result column="RDM_SMPL_TYP_CD" jdbcType="VARCHAR"   property="rdmSmplTypCd" />
+    <result column="RDM_SMPL_CNT"    jdbcType="VARCHAR"   property="rdmSmplCnt" />
+    <result column="RDM_SMPL_RATE"   jdbcType="VARCHAR"   property="rdmSmplRate" />
+    <result column="RDM_VAL_FIX"     jdbcType="VARCHAR"   property="rdmValFix" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+      UDF_OTL_DTC_ID, CRE_COMP_ID, ANA_DASE_ID
+    , SCT_STR_VAL, SCT_END_VAL, ROW_SLT_TYP_CD 
+    , DRT_DSG_VAL, SRC_ANA_DASE_ID
+    , RDM_SMPL_TYP_CD
+    , RDM_SMPL_CNT
+    , RDM_SMPL_RATE
+    , RDM_VAL_FIX
+    , OBJ_DESCN, OBJ_VERS, REG_TYP_CD, WRIT_USER_ID, WRIT_DTM
+  </sql>
+  
+  <select id="selectByPrimaryKey" parameterType="map" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from WAD_UODC_DASE_ROW_DV
+    where UDF_OTL_DTC_ID = #{udfOtlDtcId,jdbcType=VARCHAR}
+      and CRE_COMP_ID = #{creCompId,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="selectDetailInfo" parameterType="map" resultMap="BaseResultMap">
+   SELECT A.UDF_OTL_DTC_ID
+        , A.CRE_COMP_ID
+        , A.ANA_DASE_ID
+        , A.SCT_STR_VAL
+        , A.SCT_END_VAL
+        , A.ROW_SLT_TYP_CD 
+        , A.DRT_DSG_VAL
+        , A.SRC_ANA_DASE_ID
+        , A.OBJ_DESCN
+        , A.OBJ_VERS
+        , A.REG_TYP_CD
+        , A.WRIT_USER_ID
+        , A.WRIT_DTM  
+        , B.ANA_DASE_NM
+        , C.ANA_DASE_NM AS SRC_ANA_DASE_NM   
+        , A.RDM_SMPL_TYP_CD
+        , A.RDM_SMPL_CNT
+        , A.RDM_SMPL_RATE
+        , A.RDM_VAL_FIX
+     FROM WAD_UODC_DASE_ROW_DV A
+          LEFT JOIN WAD_UODC_ANA_DASE B
+            ON B.ANA_DASE_ID = A.ANA_DASE_ID
+          LEFT JOIN WAD_UODC_ANA_DASE C
+            ON C.ANA_DASE_ID = A.SRC_ANA_DASE_ID  
+    WHERE A.UDF_OTL_DTC_ID = #{udfOtlDtcId,jdbcType=VARCHAR}
+      AND A.CRE_COMP_ID    = #{creCompId,jdbcType=VARCHAR}
+  </select>   
+  
+  <delete id="deleteByPrimaryKey" parameterType="map">
+    delete from WAD_UODC_DASE_ROW_DV
+    where UDF_OTL_DTC_ID = #{udfOtlDtcId,jdbcType=VARCHAR}
+      and CRE_COMP_ID = #{creCompId,jdbcType=VARCHAR}
+  </delete>
+  
+  <delete id="deleteByUdfOtlDtcId" parameterType="map">
+    delete from WAD_UODC_DASE_ROW_DV
+    where UDF_OTL_DTC_ID = #{udfOtlDtcId,jdbcType=VARCHAR}
+  </delete>
+  
+  <insert id="insert" parameterType="kr.wise.advisor.prepare.udefoutlier.daserowdv.service.WadUodcDaseRowDv">
+    insert into WAD_UODC_DASE_ROW_DV (UDF_OTL_DTC_ID, CRE_COMP_ID, ANA_DASE_ID, 
+      SCT_STR_VAL, SCT_END_VAL, ROW_SLT_TYP_CD, 
+      DRT_DSG_VAL, SRC_ANA_DASE_ID, OBJ_DESCN, 
+      OBJ_VERS, REG_TYP_CD, WRIT_USER_ID, 
+      WRIT_DTM)
+    values (#{udfOtlDtcId,jdbcType=VARCHAR}, #{creCompId,jdbcType=VARCHAR}, #{anaDaseId,jdbcType=VARCHAR}, 
+      #{sctStrVal,jdbcType=VARCHAR}, #{sctEndVal,jdbcType=VARCHAR}, #{rowSltTypCd,jdbcType=VARCHAR}, 
+      #{drtDsgVal,jdbcType=VARCHAR}, #{srcAnaDaseId,jdbcType=VARCHAR}, #{objDescn,jdbcType=VARCHAR}, 
+      #{objVers,jdbcType=DECIMAL}, #{regTypCd,jdbcType=VARCHAR}, #{writUserId,jdbcType=VARCHAR}, 
+      #{writDtm,jdbcType=TIMESTAMP})
+  </insert>
+  
+  <insert id="insertSelective" parameterType="kr.wise.advisor.prepare.udefoutlier.daserowdv.service.WadUodcDaseRowDv">
+    insert into WAD_UODC_DASE_ROW_DV
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="udfOtlDtcId != null">
+        UDF_OTL_DTC_ID,
+      </if>
+      <if test="creCompId != null">
+        CRE_COMP_ID,
+      </if>
+      <if test="anaDaseId != null">
+        ANA_DASE_ID,
+      </if>
+      <if test="sctStrVal != null">
+        SCT_STR_VAL,
+      </if>
+      <if test="sctEndVal != null">
+        SCT_END_VAL,
+      </if>
+      <if test="rowSltTypCd != null">
+        ROW_SLT_TYP_CD,
+      </if>
+      <if test="drtDsgVal != null">
+        DRT_DSG_VAL,
+      </if>
+      <if test="srcAnaDaseId != null">
+        SRC_ANA_DASE_ID,
+      </if>
+      <if test="rdmSmplTypCd != null">
+        RDM_SMPL_TYP_CD,
+      </if>  
+      <if test="rdmSmplCnt != null">
+        RDM_SMPL_CNT,
+      </if>
+      <if test="rdmSmplRate != null">
+        RDM_SMPL_RATE,
+      </if>
+      <if test="rdmValFix != null">
+        RDM_VAL_FIX,
+      </if>
+      <if test="objDescn != null">
+        OBJ_DESCN,
+      </if>      
+        OBJ_VERS,      
+        REG_TYP_CD,      
+        WRIT_USER_ID,    
+        WRIT_DTM 
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="udfOtlDtcId != null">
+        #{udfOtlDtcId,jdbcType=VARCHAR},
+      </if>
+      <if test="creCompId != null">
+        #{creCompId,jdbcType=VARCHAR},
+      </if>
+      <if test="anaDaseId != null">
+        #{anaDaseId,jdbcType=VARCHAR},
+      </if>
+      <if test="sctStrVal != null">
+        #{sctStrVal,jdbcType=VARCHAR},
+      </if>
+      <if test="sctEndVal != null">
+        #{sctEndVal,jdbcType=VARCHAR},
+      </if>
+      <if test="rowSltTypCd != null">
+        #{rowSltTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="drtDsgVal != null">
+        #{drtDsgVal,jdbcType=VARCHAR},
+      </if>
+      <if test="srcAnaDaseId != null">
+        #{srcAnaDaseId,jdbcType=VARCHAR},
+      </if>
+      <if test="rdmSmplTypCd != null">
+        #{rdmSmplTypCd,jdbcType=VARCHAR},
+      </if> 
+      <if test="rdmSmplCnt != null">
+        #{rdmSmplCnt,jdbcType=VARCHAR},
+      </if>
+      <if test="rdmSmplRate != null">
+        #{rdmSmplRate,jdbcType=VARCHAR},
+      </if>
+      <if test="rdmValFix != null">
+        #{rdmValFix,jdbcType=VARCHAR},
+      </if>
+      <if test="objDescn != null">
+        #{objDescn,jdbcType=VARCHAR},
+      </if>      
+        '1',      
+        'C',      
+        #{writUserId,jdbcType=VARCHAR},      
+        SYSDATE
+    </trim>
+  </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.advisor.prepare.udefoutlier.daserowdv.service.WadUodcDaseRowDv">
+    UPDATE WAD_UODC_DASE_ROW_DV
+    <set>
+      <if test="anaDaseId != null">
+        ANA_DASE_ID = #{anaDaseId,jdbcType=VARCHAR},
+      </if>
+      
+      <choose>
+      	<when test='rowSltTypCd eq "S" '> 
+	        ROW_SLT_TYP_CD  = #{rowSltTypCd,jdbcType=VARCHAR},
+	        RDM_SMPL_TYP_CD = #{rdmSmplTypCd,jdbcType=VARCHAR},
+	        RDM_SMPL_CNT    = #{rdmSmplCnt,jdbcType=VARCHAR},
+	        RDM_SMPL_RATE   = #{rdmSmplRate,jdbcType=VARCHAR},
+	        RDM_VAL_FIX     = #{rdmValFix,jdbcType=VARCHAR},
+	        SCT_STR_VAL     = '',
+	        SCT_END_VAL     = '',
+	        DRT_DSG_VAL     = '',
+	    </when>
+	    <otherwise>
+	    	ROW_SLT_TYP_CD  = #{rowSltTypCd,jdbcType=VARCHAR},
+	    	RDM_SMPL_TYP_CD = #{rdmSmplTypCd,jdbcType=VARCHAR},
+	    	RDM_SMPL_CNT    = '',
+	        RDM_SMPL_RATE   = '',
+	        RDM_VAL_FIX     = '',
+	        SCT_STR_VAL     = #{sctStrVal,jdbcType=VARCHAR},
+	        SCT_END_VAL     = #{sctEndVal,jdbcType=VARCHAR},
+	        DRT_DSG_VAL     = #{drtDsgVal,jdbcType=VARCHAR},
+	    </otherwise>
+      </choose>
+            
+      <if test="srcAnaDaseId != null">
+        SRC_ANA_DASE_ID = #{srcAnaDaseId,jdbcType=VARCHAR},
+      </if>
+      <if test="objDescn != null">
+        OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null">
+        OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null">
+        REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      </if>      
+        WRIT_USER_ID = #{writUserId,jdbcType=VARCHAR},      
+        WRIT_DTM = SYSDATE
+    </set>
+    where UDF_OTL_DTC_ID = #{udfOtlDtcId,jdbcType=VARCHAR}
+      and CRE_COMP_ID = #{creCompId,jdbcType=VARCHAR}
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="kr.wise.advisor.prepare.udefoutlier.daserowdv.service.WadUodcDaseRowDv">
+    update WAD_UODC_DASE_ROW_DV
+    set ANA_DASE_ID = #{anaDaseId,jdbcType=VARCHAR},
+      SCT_STR_VAL = #{sctStrVal,jdbcType=VARCHAR},
+      SCT_END_VAL = #{sctEndVal,jdbcType=VARCHAR},
+      ROW_SLT_TYP_CD = #{rowSltTypCd,jdbcType=VARCHAR},
+      DRT_DSG_VAL = #{drtDsgVal,jdbcType=VARCHAR},
+      SRC_ANA_DASE_ID = #{srcAnaDaseId,jdbcType=VARCHAR},
+      OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      WRIT_USER_ID = #{writUserId,jdbcType=VARCHAR},
+      WRIT_DTM = #{writDtm,jdbcType=TIMESTAMP}
+    where UDF_OTL_DTC_ID = #{udfOtlDtcId,jdbcType=VARCHAR}
+      and CRE_COMP_ID = #{creCompId,jdbcType=VARCHAR}
+  </update>
+  
+  <update id="updateDaseRowDvAnaDaseId" parameterType="kr.wise.advisor.prepare.udefoutlier.daserowdv.service.WadUodcDaseRowDv" >
+  	<![CDATA[ 
+  	UPDATE WAD_UODC_DASE_ROW_DV A
+  	   SET ANA_DASE_ID = (SELECT ANA_DASE_ID
+	                        FROM WAD_UODC_ANA_DASE X 
+	                       WHERE X.UDF_OTL_DTC_ID = A.UDF_OTL_DTC_ID
+	                         AND X.CRE_COMP_ID    = A.CRE_COMP_ID 
+	                         AND ROWNUM <= 1
+	                     )   
+	 WHERE A.UDF_OTL_DTC_ID = #{udfOtlDtcId,jdbcType=VARCHAR}
+	   AND A.CRE_COMP_ID    = #{creCompId,jdbcType=VARCHAR}
+	 ]]>   
+  </update>
+  
+</mapper>

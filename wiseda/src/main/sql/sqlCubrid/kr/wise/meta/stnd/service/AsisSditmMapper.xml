@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.meta.stnd.service.AsisSditmMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.meta.stnd.service.AsisSditm" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+    <id column="SDITM_ID" property="sditmId" jdbcType="VARCHAR" />
+    <result column="SDITM_LNM" property="sditmLnm" jdbcType="VARCHAR" />
+    <result column="SDITM_PNM" property="sditmPnm" jdbcType="VARCHAR" />
+    <result column="DATA_TYPE" property="dataType" jdbcType="VARCHAR" />
+    <result column="DATA_LEN" property="dataLen" jdbcType="VARCHAR" />
+    <result column="DATA_SCAL" property="dataScal" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    SDITM_ID, SDITM_LNM, SDITM_PNM, DATA_TYPE,DATA_LEN,DATA_SCAL
+  </sql>
+
+  <select id="selectAsisSditmList" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    SELECT
+    SDITM_ID, SDITM_LNM, SDITM_PNM, DATA_TYPE,DATA_LEN,DATA_SCAL
+    FROM WAA_ASIS_SDITM
+    WHERE 1=1
+    <if test="sditmLnm != null" >
+       AND SDITM_LNM LIKE '%' || #{sditmLnm,jdbcType=VARCHAR} || '%'
+      </if>
+      <if test="sditmPnm != null" >
+       AND SDITM_PNM LIKE '%' || #{sditmPnm,jdbcType=VARCHAR} || '%'
+      </if>
+  </select>
+  
+</mapper>

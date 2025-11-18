@@ -1,0 +1,2737 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.meta.ddl.script.service.DdlScriptMapper" >
+
+	<resultMap id="TblResultMap" type="kr.wise.meta.ddl.script.model.Table"  extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+<!-- 		<id     column="TBL_ID" property="id" jdbcType="VARCHAR"/> -->
+		<id column="TBL_NM" 	property="name" 		jdbcType="VARCHAR" />
+		<id column="SCHEMA" 	property="schema" 		jdbcType="VARCHAR" />
+		<id column="DBMS" 		property="catalog" 		jdbcType="VARCHAR" />
+		<result column="TBL_DESC" 	property="description" 	jdbcType="VARCHAR" />
+		<result column="TBL_SPACE" 	property="tblSpacPnm" 	jdbcType="VARCHAR" />
+		<result column="IDX_SPACE" 	property="idxSpacPnm" 	jdbcType="VARCHAR" />
+	    <result column="RQST_USER_NM" property="rqstUserNm" jdbcType="VARCHAR" />
+	    <result column="DBMS_TYPE"   	property="type" 		jdbcType="VARCHAR" />
+		<result column="DBMS_TYPE_NM" 	property="dbmsTypeNm" 		jdbcType="VARCHAR" />
+		    
+		<association property="ddltbl" javaType="kr.wise.meta.ddl.service.WaqDdlTbl" >
+			<id column="RQST_NO" property="rqstNo" jdbcType="VARCHAR" />
+		    <id column="RQST_SNO" property="rqstSno" jdbcType="DECIMAL" />
+		    <result column="TBL_NM" property="ddlTblPnm" jdbcType="VARCHAR" />
+		    <result column="DDL_TBL_LNM" property="ddlTblLnm" jdbcType="VARCHAR" />
+		    <result column="TBL_CHG_TYP_CD" property="tblChgTypCd" jdbcType="VARCHAR" />
+		</association>
+		<!--  물리모델 정보 -->
+		<association property="pdmTbl" javaType="kr.wise.meta.model.service.WamPdmTbl" >
+		    <result column="PART_TBL_YN" property="partTblYn" jdbcType="VARCHAR" />
+		</association>
+		<!--  grant -->
+		<association property="dbPrivilege" javaType="kr.wise.commons.damgmt.db.service.WaaDbPrivilege" >
+		    <result column="SRC_DB_SCH_PNM" property="srcDbSchPnm" jdbcType="VARCHAR" />
+		    <result column="TGT_ROLE_PNM" property="tgtRolePnm" jdbcType="VARCHAR" />
+		    <result column="SELECT_YN" property="selectYn" jdbcType="VARCHAR" />
+		    <result column="INSERT_YN" property="insertYn" jdbcType="VARCHAR" />
+		    <result column="UPDATE_YN" property="updateYn" jdbcType="VARCHAR" />
+		    <result column="DELETE_YN" property="deleteYn" jdbcType="VARCHAR" />
+		</association>
+		
+		<collection property="columns" resultMap="ColResultMap" javaType="java.util.ArrayList"  ofType="kr.wise.meta.ddl.script.model.Column" ></collection>
+		 
+	</resultMap>
+
+	<resultMap id="TblResultMap2" type="kr.wise.meta.ddl.script.model.Table"  extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+<!-- 		<id     column="TBL_ID" property="id" jdbcType="VARCHAR"/> -->
+		<id column="TBL_NM" 	property="name" 		jdbcType="VARCHAR" />
+		<id column="SCHEMA" 	property="schema" 		jdbcType="VARCHAR" />
+		<id column="DBMS" 		property="catalog" 		jdbcType="VARCHAR" />
+		<result column="TBL_DESC" 	     property="description"  jdbcType="VARCHAR" />
+		<result column="TBL_SPACE" 	     property="tblSpacPnm" 	 jdbcType="VARCHAR" />
+		<result column="IDX_SPACE" 	     property="idxSpacPnm" 	 jdbcType="VARCHAR" />
+	    <result column="RQST_USER_NM"    property="rqstUserNm"   jdbcType="VARCHAR" />
+	    <result column="DBMS_TYPE"   	 property="type" 		 jdbcType="VARCHAR" />
+		<result column="DBMS_TYPE_NM" 	 property="dbmsTypeNm"   jdbcType="VARCHAR" />		 	
+		    
+		<association property="ddltbl" javaType="kr.wise.meta.ddl.service.WaqDdlTbl" >
+			<id column="RQST_NO"             property="rqstNo"    	 jdbcType="VARCHAR" />
+		    <id column="RQST_SNO"            property="rqstSno"   	 jdbcType="DECIMAL" />
+		    <result column="TBL_NM"          property="ddlTblPnm" 	 jdbcType="VARCHAR" />
+		    <result column="DDL_TBL_LNM"     property="ddlTblLnm" 	 jdbcType="VARCHAR" />
+		    <result column="DDL_TBL_ID"      property="ddlTblId"  	 jdbcType="VARCHAR" />
+		    <result column="TBL_CHG_TYP_CD"  property="tblChgTypCd"  jdbcType="VARCHAR" />
+		    <result column="TBL_CMMT_UPD_YN" property="tblCmmtUpdYn" jdbcType="VARCHAR" /> 	
+		</association>
+		
+		<!--  물리모델 정보 -->
+		<association property="pdmTbl" javaType="kr.wise.meta.model.service.WamPdmTbl" >
+		    <result column="PART_TBL_YN" property="partTblYn" jdbcType="VARCHAR" />
+		</association>
+		<!--  grant -->
+<!-- 		<association property="dbPrivilege" javaType="kr.wise.commons.damgmt.db.service.WaaDbPrivilege" >
+		    <result column="SRC_DB_SCH_PNM" property="srcDbSchPnm" jdbcType="VARCHAR" />
+		    <result column="TGT_ROLE_PNM" property="tgtRolePnm" jdbcType="VARCHAR" />
+		    <result column="SELECT_YN" property="selectYn" jdbcType="VARCHAR" />
+		    <result column="INSERT_YN" property="insertYn" jdbcType="VARCHAR" />
+		    <result column="UPDATE_YN" property="updateYn" jdbcType="VARCHAR" />
+		    <result column="DELETE_YN" property="deleteYn" jdbcType="VARCHAR" />
+		</association> -->
+		
+		<collection property="dbroles" javaType="java.util.ArrayList" ofType="kr.wise.commons.damgmt.db.service.WaaDbPrivilege">
+		    <result column="SRC_DB_SCH_PNM" property="srcDbSchPnm" jdbcType="VARCHAR" />
+		    <result column="TGT_ROLE_PNM" property="tgtRolePnm" jdbcType="VARCHAR" />
+		    <result column="SELECT_YN" property="selectYn" jdbcType="VARCHAR" />
+		    <result column="INSERT_YN" property="insertYn" jdbcType="VARCHAR" />
+		    <result column="UPDATE_YN" property="updateYn" jdbcType="VARCHAR" />
+		    <result column="DELETE_YN" property="deleteYn" jdbcType="VARCHAR" />
+		</collection>
+	      
+		<collection property="columns" resultMap="ColResultMap" javaType="java.util.ArrayList"  ofType="kr.wise.meta.ddl.script.model.Column" ></collection>
+		 
+	</resultMap>
+
+  <resultMap id="ColResultMap" type="kr.wise.meta.ddl.script.model.Column" >
+    <result column="COL_NM" 	property="name" 		jdbcType="VARCHAR" />
+    <result column="COL_DESC" 	property="description" 	jdbcType="VARCHAR" />
+    <result column="DATA_TYPE" 	property="type" 		jdbcType="VARCHAR" />
+    <result column="DATA_LEN" 	property="dataLen" 		jdbcType="DECIMAL" />
+    <result column="DATA_SCAL" 	property="dataScal" 	jdbcType="DECIMAL" />
+    <result column="DEFLT_VAL" 	property="defaultValue" jdbcType="VARCHAR" />
+    <result column="NONUL_YN" 	property="required" 	jdbcType="VARCHAR"
+    		typeHandler="kr.wise.commons.handler.mybatis.YNBooleanTypeHandler" />
+    <result column="PK_YN" 		property="primaryKey" 	jdbcType="VARCHAR"
+    		typeHandler="kr.wise.commons.handler.mybatis.YNBooleanTypeHandler" />
+    <result column="COL_REG_CD" property="regTypCd" 	jdbcType="VARCHAR" />
+    <result column="COL_UPD_YN" property="colUpdYn" 	jdbcType="VARCHAR" />
+    <result column="DATA_TYPE_UPD_YN" property="dataTypeUpdYn" 	jdbcType="VARCHAR" />
+    <result column="NONUL_UPD_YN" 	  property="nonulUpdYn" 	jdbcType="VARCHAR" />
+    <result column="DEFLT_VAL_UPD_YN" property="defltValUpdYn" 	jdbcType="VARCHAR" />
+    <result column="COL_VRF_CD" property="vrfCd" 	jdbcType="VARCHAR" />
+  </resultMap>
+  
+  
+	<resultMap id="IdxResultMap" type="kr.wise.meta.ddl.script.model.Table"  extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+  		<id column="TBL_NM" 	property="name" 		jdbcType="VARCHAR" />
+		<id column="SCHEMA" 	property="schema" 		jdbcType="VARCHAR" />
+		<id column="DBMS" 		property="catalog" 		jdbcType="VARCHAR" />
+		<id column="IDX_NM" 	property="idxname"   	jdbcType="VARCHAR" />
+		<result column="IDX_DESC" 	  property="description" jdbcType="VARCHAR" />
+		<result column="IDX_SPACE"    property="idxSpacPnm"  jdbcType="VARCHAR" />
+		<result column="IDX_TYP"      property="idxtype" 	 jdbcType="VARCHAR" />
+		<result column="RQST_USER_NM" property="rqstUserNm"  jdbcType="VARCHAR" />
+	    <result column="DBMS_TYPE"    property="type" 		 jdbcType="VARCHAR" />
+		<result column="DBMS_TYPE_NM" property="dbmsTypeNm"  jdbcType="VARCHAR" />
+		
+		<collection property="columns" resultMap="IdxColResultMap" javaType="java.util.ArrayList"  ofType="kr.wise.meta.ddl.script.model.Column" ></collection>
+		
+	</resultMap>
+
+	  <resultMap id="IdxColResultMap" type="kr.wise.meta.ddl.script.model.Column" >
+	    <result column="DDL_IDX_COL_PNM" 	property="name" 		jdbcType="VARCHAR" />
+	    <result column="SORT_TYP" 	property="type" 		jdbcType="VARCHAR" />
+	  </resultMap>
+  
+  <resultMap id="SeqResultMap" type="kr.wise.meta.ddl.script.model.Sequence"  extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+  		
+  		<id column="DDL_SEQ_PNM" 	property="name" 		jdbcType="VARCHAR" />
+		<id column="DB_SCH_PNM" 	property="schema" 		jdbcType="VARCHAR" />
+		<id column="DB_CONN_TRG_PNM" 		property="catalog" 		jdbcType="VARCHAR" />
+	    <result column="DDL_SEQ_ID" property="ddlSeqId" jdbcType="VARCHAR" />
+	    
+	    <result column="DDL_SEQ_LNM" property="ddlSeqLnm" jdbcType="VARCHAR" />
+	    <result column="DB_SCH_ID" property="dbSchId" jdbcType="VARCHAR" />
+	    <result column="INCBY" property="incby" jdbcType="VARCHAR" />
+	    <result column="STRTWT" property="strtwt" jdbcType="VARCHAR" />
+	    <result column="MAXVAL" property="maxval" jdbcType="VARCHAR" />
+	    <result column="MINVAL" property="minval" jdbcType="VARCHAR" />
+	    <result column="CYC_YN" property="cycYn" jdbcType="VARCHAR" />
+	    <result column="CACHE_SZ" property="cacheSz" jdbcType="VARCHAR" />
+	    <result column="ORD_YN" property="ordYn" jdbcType="VARCHAR" />
+	    <result column="NM_RL_TYP_CD" property="nmRlTypCd" jdbcType="VARCHAR" />
+	    <result column="US_TYP_CD" property="usTypCd" jdbcType="VARCHAR" />
+	    <result column="NM_RL_TYP_NM" property="nmRlTypNm" jdbcType="VARCHAR" />
+	    <result column="US_TYP_NM" property="usTypNm" jdbcType="VARCHAR" />
+	    <result column="PDM_TBL_PNM" property="pdmTblPnm" jdbcType="VARCHAR" />
+	    <result column="PDM_COL_PNM" property="pdmColPnm" jdbcType="VARCHAR" />
+	    <result column="L1CD_PNM" property="l1cdPnm" jdbcType="VARCHAR" />
+	    <result column="L3CD_PNM" property="l3cdPnm" jdbcType="VARCHAR" />
+	    <result column="GRT_LST" property="grtLst" jdbcType="VARCHAR" />
+	    
+	    <result column="DBMS_TYPE"   	property="type" 		jdbcType="VARCHAR" />
+		<result column="DBMS_TYPE_NM" 	property="typeNm" 		jdbcType="VARCHAR" />
+	    <result column="DBMS_VERS" 	property="version" 		jdbcType="VARCHAR" />
+	    <result column="APRV_DTM2" 	property="aprvDtm2" 		jdbcType="VARCHAR" />
+        <result column="RQST_DTM2" 	property="rqstDtm2" 		jdbcType="VARCHAR" />
+		
+	</resultMap>
+	
+	<resultMap id="TblResultMap3" type="kr.wise.meta.ddl.script.model.Table" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+		<id column="TBL_NM" 	property="name" 		jdbcType="VARCHAR" />
+		<id column="SCHEMA" 	property="schema" 		jdbcType="VARCHAR" />
+		<id column="DBMS" 		property="catalog" 		jdbcType="VARCHAR" />
+				
+	    <result column="L3CD_PNM" property="l3CdPnm" jdbcType="VARCHAR" />	
+	    <result column="DDL_TBL_LNM" 	property="ddlTblLnm" 	jdbcType="VARCHAR" />
+		
+		<result column="TBL_DESC" 	property="description" 	jdbcType="VARCHAR" />
+		<result column="TBL_SPACE" 	property="tblSpacPnm" 	jdbcType="VARCHAR" />
+		<result column="TBL_SPACE_ADD_SCRT" 	property="tblSpacAddScrt" 	jdbcType="VARCHAR" />
+		<result column="IDX_SPACE" 	property="idxSpacPnm" 	jdbcType="VARCHAR" />
+	    <result column="RQST_USER_NM" property="rqstUserNm" jdbcType="VARCHAR" />
+	    <result column="DBMS_TYPE"   	property="type" 		jdbcType="VARCHAR" />
+		<result column="DBMS_TYPE_NM" 	property="dbmsTypeNm" 		jdbcType="VARCHAR" />
+		<result column="CUD_YN" 	property="cudYn" 		jdbcType="VARCHAR" />
+		    
+		<association property="ddltbl" javaType="kr.wise.meta.ddl.service.WaqDdlTbl" >
+			<id column="RQST_NO" property="rqstNo" jdbcType="VARCHAR" />
+		    <id column="RQST_SNO" property="rqstSno" jdbcType="DECIMAL" />
+		    <result column="DDL_TBL_ID" property="ddlTblId" jdbcType="VARCHAR" />
+		    <result column="TBL_NM" property="ddlTblPnm" jdbcType="VARCHAR" />
+		    <result column="DDL_TBL_LNM" property="ddlTblLnm" jdbcType="VARCHAR" />
+		    <result column="TBL_CHG_TYP_CD" property="tblChgTypCd" jdbcType="VARCHAR" />
+		</association>
+		<!--  물리모델 정보 -->
+		<association property="pdmTbl" javaType="kr.wise.meta.model.service.WamPdmTbl" >
+		    <result column="PART_TBL_YN" property="partTblYn" jdbcType="VARCHAR" />
+		</association>
+		<!-- 파티션 정보 -->
+		<association property="partition" resultMap="PartResultMap" javaType="kr.wise.meta.ddl.script.model.Partition" >
+		</association>
+		
+<!-- 		<collection property="columns" resultMap="ColResultMap" javaType="java.util.ArrayList"  ofType="kr.wise.meta.ddl.script.model.Column" ></collection> -->
+	</resultMap>
+	
+	<resultMap id="PartResultMap"  type="kr.wise.meta.ddl.script.model.Partition">
+	    <result column="DBMS" property="dbConnTrgPnm" jdbcType="VARCHAR" />
+	    <result column="SCHEMA" property="dbSchPnm" jdbcType="VARCHAR" />
+	    <result column="TBL_NM" property="ddlTblPnm" jdbcType="VARCHAR" />
+	    <result column="TBL_SPACE" property="tblSpacPnm" jdbcType="VARCHAR" />
+	    <result column="IDX_SPACE" 	property="idxSpacPnm" 	jdbcType="VARCHAR" />
+	    <result column="DDL_TBL_ID" property="ddlTblId" jdbcType="VARCHAR" />
+    
+		<result column="PART_TYP_CD" property="partTypCd" jdbcType="VARCHAR" />
+    	<result column="PART_KEY" property="partKey" jdbcType="VARCHAR" />
+    	<result column="SUB_PART_TYP_CD" property="subPartTypCd" jdbcType="VARCHAR" />
+    	<result column="SUB_PART_KEY" property="subPartKey" jdbcType="VARCHAR" />
+    			
+		<collection property="partMainList" ofType="kr.wise.meta.ddl.script.model.DdlPartMainVo" javaType="java.util.ArrayList">
+			<result column="MAIN_REG_TYP_CD" property="mainRegTypCd" jdbcType="VARCHAR" />
+			<result column="DDL_PART_PNM" property="ddlPartPnm" jdbcType="VARCHAR" />
+		    <result column="DDL_PART_VAL" property="ddlPartVal" jdbcType="VARCHAR" />
+		    <result column="PM_TBL_SPAC_PNM" property="tblSpacPnm" jdbcType="VARCHAR" />
+		</collection>
+	    <collection property="partSubList" ofType="kr.wise.meta.ddl.service.WaqDdlPartSub" javaType="java.util.ArrayList">
+			<result column="SUB_REG_TYP_CD" property="subRegTypCd" jdbcType="VARCHAR" />
+		    <result column="DDL_PART_SUB_PNM" property="ddlPartSubPnm" jdbcType="VARCHAR" />
+		    <result column="DDL_PART_SUB_VAL" property="ddlPartSubVal" jdbcType="VARCHAR" />
+		    <result column="PS_TBL_SPAC_PNM" property="tblSpacPnm" jdbcType="VARCHAR" />
+	    </collection>
+	</resultMap>
+	
+	<resultMap id="PartResultMap_OLD"  type="kr.wise.meta.ddl.script.model.Partition">
+	    <result column="DBMS" property="dbConnTrgPnm" jdbcType="VARCHAR" />
+	    <result column="SCHEMA" property="dbSchPnm" jdbcType="VARCHAR" />
+	    <result column="TBL_NM" property="ddlTblPnm" jdbcType="VARCHAR" />
+	    <result column="TBL_SPACE" property="tblSpacPnm" jdbcType="VARCHAR" />
+	    <result column="IDX_SPACE" 	property="idxSpacPnm" 	jdbcType="VARCHAR" />
+	    <result column="DDL_TBL_ID" property="ddlTblId" jdbcType="VARCHAR" />
+    
+		<result column="PART_TYP_CD" property="partTypCd" jdbcType="VARCHAR" />
+    	<result column="PART_KEY" property="partKey" jdbcType="VARCHAR" />
+    	<result column="SUB_PART_TYP_CD" property="subPartTypCd" jdbcType="VARCHAR" />
+    	<result column="SUB_PART_KEY" property="subPartKey" jdbcType="VARCHAR" />
+    			
+		<collection property="partMainList" ofType="kr.wise.meta.ddl.script.model.DdlPartMainVo" javaType="java.util.ArrayList">
+			<result column="MAIN_REG_TYP_CD" property="regTypCd" jdbcType="VARCHAR" />
+			<result column="DDL_PART_PNM" property="ddlPartPnm" jdbcType="VARCHAR" />
+		    <result column="DDL_PART_VAL" property="ddlPartVal" jdbcType="VARCHAR" />
+		    <result column="PM_TBL_SPAC_PNM" property="tblSpacPnm" jdbcType="VARCHAR" />
+		    <collection property="partSubList" ofType="kr.wise.meta.ddl.service.WaqDdlPartSub" javaType="java.util.ArrayList">
+			    <result column="DDL_PART_SUB_PNM" property="ddlPartSubPnm" jdbcType="VARCHAR" />
+			    <result column="DDL_PART_SUB_VAL" property="ddlPartSubVal" jdbcType="VARCHAR" />
+			    <result column="PS_TBL_SPAC_PNM" property="tblSpacPnm" jdbcType="VARCHAR" />
+		    </collection>
+		</collection>
+	</resultMap>
+	
+	
+	<sql id="Data_Type_Map">
+	SELECT A.DATA_TYPE_MAPRU_ID
+		, A.MAPRU_NM
+		, A.LGC_DATA_TYPE
+		, IFNULL(A.MIN_VAL, -1) AS MIN_VAL
+		, CASE WHEN A.CND_CD = 'U' THEN 4000 ELSE CAST(IFNULL(A.MAX_VAL, -1) AS UNSIGNED) END AS MAX_VAL
+		, A.CND_CD
+		, B.DATA_TYPE_NM
+		, B.DBMS_TYP_CD 
+	  FROM WAA_DATA_TYPE_MAPRU A 
+	  JOIN WAA_DBMS_DATA_TYPE B
+	    ON A.DBMS_DATA_TYPE_ID = B.DBMS_DATA_TYPE_ID
+	   AND B.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	   AND B.REG_TYP_CD IN ('C', 'U')
+	 WHERE A.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	   AND A.REG_TYP_CD IN ('C', 'U')
+  </sql>
+	
+	
+  <select id="testboolean"	resultMap="ColResultMap">
+  
+	SELECT	/* DdlScriptMapper.testboolean */
+		NULL AS NONUL_YN
+  		,  'n' AS PK_YN
+	FROM DUAL
+  	 
+  </select>
+
+   <select id="selectTableOne" parameterType="string" resultMap="TblResultMap2">
+  	<!-- WAM_DDL_TBL에서 테이블 컬럼 정보를 가져온다.... -->
+  	SELECT /* DdlScriptMapper.selectTableOne */
+		  A.DDL_TBL_ID AS TBL_ID
+	    , A.DDL_TBL_PNM AS TBL_NM
+		, CASE WHEN A.DDL_TBL_LNM IS NULL THEN A.OBJ_DESCN ELSE A.DDL_TBL_LNM END AS TBL_DESC
+<!-- 		, A.OBJ_DESCN  AS TBL_DESC -->
+		, B.DB_SCH_PNM       AS "SCHEMA"
+		, C.DB_CONN_TRG_PNM  AS DBMS
+	    , C.DBMS_TYP_CD 	 AS DBMS_TYPE
+	    , CD.COMM_DTL_CD_NM  AS DBMS_TYPE_NM
+		, C.DBMS_VERS_CD	 AS DBMS_VERS
+		, D.DB_TBL_SPAC_PNM  AS TBL_SPACE
+		, D2.DB_TBL_SPAC_PNM AS IDX_SPACE
+		, E.DDL_COL_ID		 AS COL_ID
+		, E.DDL_COL_PNM      AS COL_NM
+		, CASE WHEN E.DDL_COL_LNM IS NULL THEN E.OBJ_DESCN ELSE E.DDL_COL_LNM END AS COL_DESC
+		, E.COL_ORD
+<!-- 		,E.DATA_TYPE -->
+		, IFNULL(F.DATA_TYPE_NM,E.DATA_TYPE) AS DATA_TYPE<!-- DBMS데이터타입매핑한 테이블 가져다 쓰기위함 -->
+		, E.DATA_LEN
+		, E.DATA_SCAL
+		, E.PK_YN
+		, E.PK_ORD
+		, E.NONUL_YN
+		, E.DEFLT_VAL
+<!-- 		, E.OBJ_DESCN AS COL_DESCN	 -->
+		, U.USER_NM AS RQST_USER_NM
+	    , IFNULL(P.PART_TBL_YN, 'N') AS  PART_TBL_YN
+	    , G.SRC_DB_SCH_PNM
+	    , G.TGT_ROLE_PNM
+	    , G.SELECT_YN
+	    , G.INSERT_YN
+	    , G.UPDATE_YN
+	    , G.DELETE_YN 
+<!-- 	    , G.DB_PRIVILEGE  -->
+  	  FROM WAH_DDL_TBL A 
+  	  JOIN WAA_DB_SCH B
+  	    ON A.DB_SCH_ID = B.DB_SCH_ID
+  	   AND A.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+  	   AND B.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+  	   AND B.REG_TYP_CD IN ('C', 'U')
+  	  JOIN WAA_DB_CONN_TRG C
+  	    ON C.DB_CONN_TRG_ID = B.DB_CONN_TRG_ID
+  	   AND C.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+  	   AND C.REG_TYP_CD IN ('C', 'U')
+  	  LEFT OUTER JOIN WAA_TBL_SPAC D
+  	    ON A.TBL_SPAC_ID = D.DB_TBL_SPAC_ID
+  	   AND D.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+  	   AND D.REG_TYP_CD IN ('C', 'U')
+  	   AND D.TBL_SPAC_TYP_CD IN ('A', 'T')
+  	   LEFT OUTER JOIN WAA_TBL_SPAC D2
+  	    ON B.DB_IDX_SPAC_ID = D2.DB_TBL_SPAC_ID
+  	   AND D2.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+  	   AND D2.REG_TYP_CD IN ('C', 'U')
+  	   AND D2.TBL_SPAC_TYP_CD IN ('I')
+  	  JOIN WAH_DDL_COL E
+  	    ON A.DDL_TBL_ID = E.DDL_TBL_ID
+  	    AND E.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	  	 LEFT OUTER JOIN WAM_PDM_TBL P
+	  	  ON A.PDM_TBL_ID = P.PDM_TBL_ID
+	  	 AND P.REG_TYP_CD IN ('C', 'U')
+        LEFT OUTER JOIN (SELECT B.COMM_DTL_CD
+                                , B.COMM_DTL_CD_NM 
+                           FROM WAA_COMM_DCD A
+                                INNER JOIN WAA_COMM_DTL_CD B
+                                   ON A.COMM_DCD_ID = B.COMM_DCD_ID
+                                  AND B.EXP_DTM  =  STR_TO_DATE('9999-12-31', '%Y-%m-%d')  
+                                  AND B.REG_TYP_CD IN ('C','U')
+                          WHERE A.COMM_DCD = 'DBMS_TYP_CD'
+                            AND A.EXP_DTM  =  STR_TO_DATE('9999-12-31', '%Y-%m-%d')  
+                            AND A.REG_TYP_CD IN ('C','U') ) CD
+          ON C.DBMS_TYP_CD = CD.COMM_DTL_CD	  	 
+	  	LEFT OUTER JOIN (SELECT A.PRIVILEGE_ID 
+	  									,A.DB_CONN_TRG_ID AS SRC_DB_CONN_TRG_ID
+								        ,GET_DB_SCH_PNM(A.DB_SCH_ID) AS SRC_DB_SCH_PNM
+								        ,B.ROLE_PNM AS TGT_ROLE_PNM
+								        ,A.SELECT_YN 
+								        ,A.INSERT_YN
+								        ,A.UPDATE_YN
+								        ,A.DELETE_YN
+								   FROM WAA_DB_PRIVILEGE A
+								        INNER JOIN WAA_DB_ROLE B
+								           ON A.ROLE_ID = B.ROLE_ID
+								          AND B.EXP_DTM = STR_TO_DATE('99991231','%Y%m%d')
+								          AND B.REG_TYP_CD IN ('C','U')
+								 WHERE A.EXP_DTM = STR_TO_DATE('99991231','%Y%m%d')
+								   AND A.REG_TYP_CD IN ('C','U') ) G								   
+	  	  ON C.DB_CONN_TRG_ID = G.SRC_DB_CONN_TRG_ID  
+	  	  AND B.DB_SCH_PNM = G.SRC_DB_SCH_PNM
+  	     LEFT OUTER JOIN WAA_USER U
+  	       ON A.RQST_USER_ID = U.USER_ID	 
+          AND U.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')  
+  	      AND U.REG_TYP_CD IN ('C', 'U')	
+  	     LEFT OUTER JOIN (
+	        		<include refid="Data_Type_Map"/>
+	        ) F
+	          ON C.DBMS_TYP_CD = F.DBMS_TYP_CD
+	         AND E.DATA_TYPE   = F.LGC_DATA_TYPE
+	         <!-- AND IFNULL(E.DATA_LEN, -1) BETWEEN F.MIN_VAL AND F.MAX_VAL  --><!-- 필요없을것같음 -->   	    
+  	 WHERE A.DDL_TBL_ID = #{value}
+  	 ORDER BY E.COL_ORD
+  </select>
+  
+  
+  <select id="selectTableIdxList" parameterType="kr.wise.meta.ddl.service.WaqDdlIdx"  resultMap="IdxResultMap">
+	  <!-- WAQ_DDL_IDX 에서 인덱스, 인덱스컬럼 정보를 가져온다...(등록가능 여부가 가능한것만 가져오기...) -->
+      SELECT /* DdlScriptMapper.selectTableIdxList */
+      		 A.DDL_IDX_ID
+           , A.DDL_TBL_ID
+           , G.DDL_TBL_PNM AS TBL_NM
+	       , A.DDL_IDX_PNM AS IDX_NM
+	       , A.DDL_IDX_LNM
+	       , CASE WHEN A.PK_IDX_YN = 'Y' THEN 'PK'
+	                WHEN A.UK_IDX_YN = 'Y' THEN 'UK'
+	                ELSE ''
+	                END AS IDX_TYP 
+	       , A.PK_IDX_YN
+	       , A.UK_IDX_YN
+	       , A.REG_TYP_CD
+	       , A.OBJ_DESCN         AS IDX_DESC
+	       , F.DB_TBL_SPAC_PNM   AS IDX_SPACE
+	       , B.DB_SCH_PNM        AS "SCHEMA"
+	       , C.DB_CONN_TRG_PNM   AS DBMS
+	       , C.DBMS_TYP_CD 	     AS DBMS_TYPE
+	       , GET_CMCD_DTL_NM('DBMS_TYP_CD',C.DBMS_TYP_CD)     AS DBMS_TYPE_NM
+	       , C.DBMS_VERS_CD	 	                              AS DBMS_VERS
+	       , GET_USER_NM(A.RQST_USER_ID)                      AS RQST_USER_NM
+	       , E.DDL_IDX_COL_PNM                                AS DDL_IDX_COL_PNM
+	       , GET_CMCD_DTL_NM('IDX_COL_SRT_ORD_CD',E.SORT_TYP) AS SORT_TYP
+	  FROM WAH_DDL_IDX A
+           INNER JOIN WAA_DB_SCH B
+              ON B.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+             AND A.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+             AND B.REG_TYP_CD IN ('C', 'U')  
+             AND B.DB_SCH_ID = A.DB_SCH_ID
+	       INNER JOIN WAA_DB_CONN_TRG C
+	          ON C.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	         AND C.REG_TYP_CD IN ('C', 'U') 
+             AND C.DB_CONN_TRG_ID = B.DB_CONN_TRG_ID
+	       INNER JOIN WAH_DDL_IDX_COL E 
+	          ON E.DDL_IDX_ID = A.DDL_IDX_ID
+	          AND E.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+           LEFT JOIN WAA_TBL_SPAC F
+             ON F.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	        AND F.REG_TYP_CD IN ('C', 'U') 
+            AND F.DB_TBL_SPAC_ID = A.IDX_SPAC_ID
+            AND F.TBL_SPAC_TYP_CD = 'I'
+           INNER JOIN WAH_DDL_TBL G
+              ON G.DDL_TBL_ID = A.DDL_TBL_ID
+              AND G.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	 WHERE A.DDL_TBL_ID = #{value}
+	 ORDER BY A.DDL_IDX_PNM
+	        , E.DDL_IDX_COL_ORD
+  </select>
+  
+  
+  <select id="selectTableIdxOne" parameterType="kr.wise.meta.ddl.service.WaqDdlIdx"  resultMap="IdxResultMap">
+	  <!-- WAQ_DDL_IDX 에서 인덱스, 인덱스컬럼 정보를 가져온다...(등록가능 여부가 가능한것만 가져오기...) -->
+      SELECT /* DdlScriptMapper.selectTableIdxOne */
+      		 A.DDL_IDX_ID
+           , A.DDL_TBL_ID
+           , G.DDL_TBL_PNM AS TBL_NM
+	       , A.DDL_IDX_PNM AS IDX_NM
+	       , A.DDL_IDX_LNM
+	       , CASE WHEN A.PK_IDX_YN = 'Y' THEN 'PK'
+	                WHEN A.UK_IDX_YN = 'Y' THEN 'UK'
+	                ELSE ''
+	                END AS IDX_TYP 
+	       , A.PK_IDX_YN
+	       , A.UK_IDX_YN
+	       , A.REG_TYP_CD
+	       , A.OBJ_DESCN         AS IDX_DESC
+	       , F.DB_TBL_SPAC_PNM   AS IDX_SPACE
+	       , B.DB_SCH_PNM        AS "SCHEMA"
+	       , C.DB_CONN_TRG_PNM   AS DBMS
+	       , C.DBMS_TYP_CD 	     AS DBMS_TYPE
+	       , GET_CMCD_DTL_NM('DBMS_TYP_CD',C.DBMS_TYP_CD)     AS DBMS_TYPE_NM
+	       , C.DBMS_VERS_CD	 	                              AS DBMS_VERS
+	       , GET_USER_NM(A.RQST_USER_ID)                      AS RQST_USER_NM
+	       , E.DDL_IDX_COL_PNM                                AS DDL_IDX_COL_PNM
+	       , GET_CMCD_DTL_NM('IDX_COL_SRT_ORD_CD',E.SORT_TYP) AS SORT_TYP
+	  FROM WAH_DDL_IDX A
+           INNER JOIN WAA_DB_SCH B
+              ON B.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+             AND A.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+             AND B.REG_TYP_CD IN ('C', 'U')  
+             AND B.DB_SCH_ID = A.DB_SCH_ID
+	       INNER JOIN WAA_DB_CONN_TRG C
+	          ON C.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	         AND C.REG_TYP_CD IN ('C', 'U') 
+             AND C.DB_CONN_TRG_ID = B.DB_CONN_TRG_ID
+	       INNER JOIN WAH_DDL_IDX_COL E 
+	          ON E.DDL_IDX_ID = A.DDL_IDX_ID
+	          AND E.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+           LEFT JOIN WAA_TBL_SPAC F
+             ON F.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	        AND F.REG_TYP_CD IN ('C', 'U') 
+            AND F.DB_TBL_SPAC_ID = A.IDX_SPAC_ID
+            AND F.TBL_SPAC_TYP_CD = 'I'
+           INNER JOIN WAH_DDL_TBL G
+              ON G.DDL_TBL_ID = A.DDL_TBL_ID
+              AND G.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	 WHERE A.DDL_IDX_ID = #{value}
+	 ORDER BY A.DDL_IDX_PNM
+	        , E.DDL_IDX_COL_ORD
+  </select>
+  
+  <select id="selectWaqCreTableIdxList" parameterType="kr.wise.meta.ddl.service.WaqDdlIdx"  resultMap="IdxResultMap">
+	  <!-- WAQ_DDL_IDX 에서 인덱스, 인덱스컬럼 정보를 가져온다...(등록가능 여부가 가능한것만 가져오기...) -->
+      SELECT /* DdlScriptMapper.selectWaqCreTableIdxList */
+      		 A.DDL_IDX_ID
+           , A.DDL_TBL_ID
+           , A.DDL_TBL_PNM AS TBL_NM
+	       , A.DDL_IDX_PNM AS IDX_NM
+	       , A.DDL_IDX_LNM
+	       , CASE WHEN A.PK_IDX_YN = 'Y' THEN 'PK'
+	                WHEN A.UK_IDX_YN = 'Y' THEN 'UK'
+	                ELSE ''
+	                END AS IDX_TYP 
+	       , A.PK_IDX_YN
+	       , A.UK_IDX_YN
+	       , A.REG_TYP_CD
+	       , A.OBJ_DESCN         AS IDX_DESC
+	       , F.DB_TBL_SPAC_PNM   AS IDX_SPACE
+	       , B.DB_SCH_PNM        AS "SCHEMA"
+	       , C.DB_CONN_TRG_PNM   AS DBMS
+	       , C.DBMS_TYP_CD 	     AS DBMS_TYPE
+	       , GET_CMCD_DTL_NM('DBMS_TYP_CD',C.DBMS_TYP_CD)     AS DBMS_TYPE_NM
+	       , C.DBMS_VERS_CD	 	                              AS DBMS_VERS
+	       , GET_USER_NM(A.RQST_USER_ID)                      AS RQST_USER_NM
+	       , E.DDL_IDX_COL_PNM                                AS DDL_IDX_COL_PNM
+	       , GET_CMCD_DTL_NM('IDX_COL_SRT_ORD_CD',E.SORT_TYP) AS SORT_TYP
+	  FROM WAQ_DDL_IDX A
+           INNER JOIN WAA_DB_SCH B
+              ON B.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+             AND B.REG_TYP_CD IN ('C', 'U')  
+             AND B.DB_SCH_ID = A.DB_SCH_ID  
+	       INNER JOIN WAA_DB_CONN_TRG C
+	          ON C.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	         AND C.REG_TYP_CD IN ('C', 'U') 
+             AND C.DB_CONN_TRG_ID = B.DB_CONN_TRG_ID
+	       INNER JOIN WAQ_DDL_IDX_COL E 
+	          ON E.RQST_NO      = A.RQST_NO
+	         AND E.RQST_SNO     = A.RQST_SNO
+	         AND E.RQST_DTL_SNO = A.RQST_DTL_SNO    
+           LEFT JOIN WAA_TBL_SPAC F
+             ON F.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	        AND F.REG_TYP_CD IN ('C', 'U') 
+            AND F.DB_TBL_SPAC_ID = A.IDX_SPAC_ID
+            AND F.TBL_SPAC_TYP_CD = 'I'           
+	 WHERE A.RQST_DCD = 'CU' 	 
+	   AND A.RQST_NO  = #{rqstNo, jdbcType=VARCHAR}
+	   AND A.RQST_SNO = #{rqstSno, jdbcType=DECIMAL}
+	 ORDER BY A.DDL_IDX_PNM
+	        , E.DDL_IDX_COL_ORD
+  </select>
+  
+  
+  <select id="selectWaqCreTableIdxListTSf" parameterType="kr.wise.meta.ddl.service.WaqDdlIdx"  resultMap="IdxResultMap">
+	  <!-- WAQ_DDL_IDX 에서 인덱스, 인덱스컬럼 정보를 가져온다...(등록가능 여부가 가능한것만 가져오기...) -->
+      SELECT /* DdlScriptMapper.selectWaqCreTableIdxList */
+      		 A.DDL_IDX_ID
+           , A.DDL_TBL_ID
+           , A.DDL_TBL_PNM AS TBL_NM
+	       , A.DDL_IDX_PNM AS IDX_NM
+	       , A.DDL_IDX_LNM
+	       , CASE WHEN A.PK_IDX_YN = 'Y' THEN 'PK'
+	                WHEN A.UK_IDX_YN = 'Y' THEN 'UK'
+	                ELSE ''
+	                END AS IDX_TYP 
+	       , A.PK_IDX_YN
+	       , A.UK_IDX_YN
+	       , A.REG_TYP_CD
+	       , A.OBJ_DESCN         AS IDX_DESC
+	       , F.DB_TBL_SPAC_PNM   AS IDX_SPACE
+	       , B.DB_SCH_PNM        AS DB_SCHEMA
+	       , C.DB_CONN_TRG_PNM   AS DBMS
+	       , C.DBMS_TYP_CD 	     AS DBMS_TYPE
+	       , GET_CMCD_DTL_NM('DBMS_TYP_CD',C.DBMS_TYP_CD)     AS DBMS_TYPE_NM
+	       , C.DBMS_VERS_CD	 	                              AS DBMS_VERS
+	       , GET_USER_NM(A.RQST_USER_ID)                      AS RQST_USER_NM
+	       , E.DDL_IDX_COL_PNM                                AS DDL_IDX_COL_PNM
+	       , GET_CMCD_DTL_NM('IDX_COL_SRT_ORD_CD',E.SORT_TYP) AS SORT_TYP
+	       , A.DBA_DDL_STMT AS DBA_DDL_STMT_IDX
+	  FROM WAQ_DDL_IDX A
+           INNER JOIN WAA_DB_SCH B
+              ON B.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+             AND B.REG_TYP_CD IN ('C', 'U')  
+             AND B.DB_SCH_ID = A.DB_SCH_ID  
+	       INNER JOIN WAA_DB_CONN_TRG C
+	          ON C.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	         AND C.REG_TYP_CD IN ('C', 'U') 
+             AND C.DB_CONN_TRG_ID = B.DB_CONN_TRG_ID
+	       INNER JOIN WAQ_DDL_IDX_COL E 
+	          ON E.RQST_NO      = A.RQST_NO
+	         AND E.RQST_SNO     = A.RQST_SNO
+	         AND E.RQST_DTL_SNO = A.RQST_DTL_SNO    
+           LEFT JOIN WAA_TBL_SPAC F
+             ON F.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	        AND F.REG_TYP_CD IN ('C', 'U') 
+            AND F.DB_TBL_SPAC_ID = A.IDX_SPAC_ID
+            AND F.TBL_SPAC_TYP_CD = '2'           
+	 WHERE A.RQST_DCD = 'CU' 	 
+	   AND A.RQST_NO  = #{rqstNo, jdbcType=VARCHAR}
+	   AND A.DB_SCH_ID = #{dbSchId, jdbcType=VARCHAR}
+	   AND A.DDL_TBL_PNM = #{ddlTblPnm, jdbcType=VARCHAR}
+	 ORDER BY A.DDL_IDX_PNM
+	        , E.DDL_IDX_COL_ORD
+  </select>
+  <select id="selectWaqUpdTableIdxList" parameterType="kr.wise.meta.ddl.service.WaqDdlIdx"  resultMap="IdxResultMap">
+	  <!-- WAQ_DDL_IDX 에서 인덱스, 인덱스컬럼 정보를 가져온다...(등록가능 여부가 가능한것만 가져오기...) -->
+      SELECT /* DdlScriptMapper.selectWaqUpdTableIdxList */
+      		 A.DDL_IDX_ID
+           , A.DDL_TBL_ID
+           , A.DDL_TBL_PNM AS TBL_NM
+	       , A.DDL_IDX_PNM AS IDX_NM
+	       , A.DDL_IDX_LNM
+	       , CASE WHEN A.PK_IDX_YN = 'Y' THEN 'PK'
+	                WHEN A.UK_IDX_YN = 'Y' THEN 'UK'
+	                ELSE ''
+	                END AS IDX_TYP 
+	       , A.PK_IDX_YN
+	       , A.UK_IDX_YN
+	       , A.REG_TYP_CD
+	       , A.OBJ_DESCN         AS IDX_DESC
+	       , A.IDX_SPAC_PNM      AS IDX_SPACE
+	       , B.DB_SCH_PNM        AS "SCHEMA"
+	       , C.DB_CONN_TRG_PNM   AS DBMS
+	       , C.DBMS_TYP_CD 	     AS DBMS_TYPE
+	       , GET_CMCD_DTL_NM('DBMS_TYP_CD',C.DBMS_TYP_CD)     AS DBMS_TYPE_NM
+	       , C.DBMS_VERS_CD	 	                              AS DBMS_VERS
+	       , GET_USER_NM(A.RQST_USER_ID)                      AS RQST_USER_NM
+	       , E.DDL_IDX_COL_PNM                                AS DDL_IDX_COL_PNM
+	       , GET_CMCD_DTL_NM('IDX_COL_SRT_ORD_CD',E.SORT_TYP) AS SORT_TYP
+	  FROM WAQ_DDL_IDX A
+           INNER JOIN WAA_DB_SCH B
+              ON B.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+             AND B.REG_TYP_CD IN ('C', 'U')  
+             AND B.DB_SCH_ID = A.DB_SCH_ID
+	       INNER JOIN WAA_DB_CONN_TRG C
+	          ON C.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	         AND C.REG_TYP_CD IN ('C', 'U') 
+             AND C.DB_CONN_TRG_ID = B.DB_CONN_TRG_ID
+	       INNER JOIN WAQ_DDL_IDX_COL E 
+	          ON E.RQST_NO      = A.RQST_NO
+	         AND E.RQST_SNO     = A.RQST_SNO
+	         AND E.RQST_DTL_SNO = A.RQST_DTL_SNO    
+           LEFT JOIN WAA_TBL_SPAC F
+             ON F.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	        AND F.REG_TYP_CD IN ('C', 'U') 
+            AND F.DB_TBL_SPAC_ID = A.IDX_SPAC_ID
+            AND F.TBL_SPAC_TYP_CD = 'I'           
+	 WHERE A.RQST_NO  = #{rqstNo, jdbcType=VARCHAR}
+	   AND A.RQST_SNO = #{rqstSno, jdbcType=DECIMAL}
+	   AND A.VRF_CD = '1'	  
+	  <if test="rqstDcd != null" >
+        AND A.RQST_DCD = #{rqstDcd,jdbcType=VARCHAR}
+      </if>
+	   
+	 ORDER BY A.DDL_IDX_PNM
+	        , E.DDL_IDX_COL_ORD
+  </select>
+  
+  
+  <select id="selectDdlTableListWaq" parameterType="string" resultMap="TblResultMap2">
+	  <!-- WAQ_DDL_TBL에서 테이블 컬럼 정보를 가져온다...(등록가능 여부가 가능한것만 가져오기...) -->
+	  SELECT /* DdlScriptMapper.selectDdlTableListWaq */
+	  	    A.RQST_NO
+	  	  , A.RQST_SNO
+	  	  , A.DDL_TBL_PNM AS TBL_NM
+	  	  , A.DDL_TBL_LNM
+	  	  , A.TBL_CHG_TYP_CD
+	  	  , A.REG_TYP_CD
+		  , CASE WHEN A.DDL_TBL_LNM IS NULL THEN A.OBJ_DESCN ELSE A.DDL_TBL_LNM END AS TBL_DESC
+<!-- 		  , A.OBJ_DESCN  AS TBL_DESC -->
+		  , A.TBL_SPAC_PNM AS TBL_SPACE
+		  , TS.DB_TBL_SPAC_PNM AS IDX_SPACE
+<!-- 		  , (SELECT MIN(TSP.DB_TBL_SPAC_PNM)    -->
+<!-- 		       FROM WAA_TBL_SPAC TSP  -->
+<!-- 		      WHERE C.DB_CONN_TRG_ID = TSP.DB_CONN_TRG_ID -->
+<!-- 		        AND TSP.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d') -->
+<!--   	            AND TSP.REG_TYP_CD IN ('C', 'U') -->
+<!-- 		        AND TSP.TBL_SPAC_TYP_CD IN ('A', 'T') -->
+<!-- 		        AND TSP.DEFAULT_USAGE = 'Y' -->
+<!-- 		      GROUP BY TSP.DB_CONN_TRG_ID -->
+<!-- 		   ) AS IDX_SPACE -->
+	      , A.DB_SCH_PNM       AS "SCHEMA"
+	      , C.DB_CONN_TRG_PNM   AS DBMS
+	      , C.DBMS_TYP_CD 	    AS DBMS_TYPE
+	      , CD.COMM_DTL_CD_NM AS DBMS_TYPE_NM
+	      , C.DBMS_VERS_CD	 	AS DBMS_VERS
+	      , E.DDL_COL_ID		AS COL_ID
+	      , E.DDL_COL_PNM       AS COL_NM
+	      , CASE WHEN E.DDL_COL_LNM IS NULL THEN E.OBJ_DESCN ELSE E.DDL_COL_LNM END AS COL_DESC
+<!-- 	      , E.OBJ_DESCN AS COL_DESC -->
+	      , E.COL_ORD
+	      , E.DATA_TYPE
+	      , E.DATA_LEN
+	      , E.DATA_SCAL
+	      , E.PK_YN
+	      , E.PK_ORD
+<!-- 	      , CASE WHEN R.CH_ATTR_PNM IS NOT NULL THEN 'Y' END AS FK_YN -->
+<!-- 	      , R.PA_ENTY_PNM -->
+<!-- 	      , R.PA_ATTR_PNM -->
+	      , E.NONUL_YN
+	      , E.DEFLT_VAL
+	      , E.COL_UPD_YN
+	      , E.DATA_TYPE_UPD_YN
+	      , E.NONUL_UPD_YN
+	      , E.DEFLT_VAL_UPD_YN
+	      , E.REG_TYP_CD AS COL_REG_CD
+	      , E.VRF_CD AS COL_VRF_CD	
+	      , U.USER_NM AS RQST_USER_NM
+	      , IFNULL(P.PART_TBL_YN, 'N') AS  PART_TBL_YN
+	      , G.SRC_DB_SCH_PNM
+	      , G.TGT_ROLE_PNM
+	      , G.SELECT_YN
+	      , G.INSERT_YN
+	      , G.UPDATE_YN
+	      , G.DELETE_YN
+<!-- 	      , G.DB_PRIVILEGE -->
+	  	FROM WAQ_DDL_TBL A
+	  	JOIN WAA_DB_CONN_TRG C
+  	      ON C.DB_CONN_TRG_PNM = A.DB_CONN_TRG_PNM
+  	     AND C.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+  	     AND C.REG_TYP_CD IN ('C', 'U')
+	  	JOIN WAQ_DDL_COL E
+	  	  ON A.RQST_NO = E.RQST_NO
+	  	 AND A.RQST_SNO = E.RQST_SNO
+<!-- 	  	 관계정보 -->
+<!--          LEFT OUTER JOIN WAQ_PDM_REL R -->
+<!-- 	  	  ON A.RQST_NO = R.RQST_NO -->
+<!-- 	  	 AND A.RQST_SNO = R.RQST_SNO -->
+<!-- 	  	 AND E.PDM_COL_PNM = R.CH_ATTR_PNM -->
+<!-- 	  	 물리모델 정보 -->
+        
+        <!-- 인덱스 테이블 스페이스 정보 -->          
+	  	 LEFT OUTER JOIN WAM_PDM_TBL P
+	  	  ON A.PDM_TBL_ID = P.PDM_TBL_ID
+	  	 AND P.REG_TYP_CD IN ('C', 'U')
+<!-- 	  	 접속대상 종류 -->
+        LEFT OUTER JOIN (SELECT B.COMM_DTL_CD
+                                , B.COMM_DTL_CD_NM 
+                           FROM WAA_COMM_DCD A
+                                INNER JOIN WAA_COMM_DTL_CD B
+                                   ON A.COMM_DCD_ID = B.COMM_DCD_ID
+                                  AND B.EXP_DTM  =  STR_TO_DATE('9999-12-31', '%Y-%m-%d')  
+                                  AND B.REG_TYP_CD IN ('C','U')
+                          WHERE A.COMM_DCD = 'DBMS_TYP_CD'
+                            AND A.EXP_DTM  =  STR_TO_DATE('9999-12-31', '%Y-%m-%d')  
+                            AND A.REG_TYP_CD IN ('C','U') ) CD
+          ON C.DBMS_TYP_CD = CD.COMM_DTL_CD
+<!--           SELECT, INSERT, UPDATE, DELETE 권한	  	  -->
+	  	LEFT OUTER JOIN (SELECT A.PRIVILEGE_ID
+	  									,A.DB_CONN_TRG_ID AS SRC_DB_CONN_TRG_ID
+								        ,GET_DB_SCH_PNM(A.DB_SCH_ID) AS SRC_DB_SCH_PNM
+								        ,B.ROLE_PNM AS TGT_ROLE_PNM
+								        ,A.SELECT_YN 
+								        ,A.INSERT_YN
+								        ,A.UPDATE_YN
+								        ,A.DELETE_YN
+								   FROM WAA_DB_PRIVILEGE A
+								        INNER JOIN WAA_DB_ROLE B
+								           on B.ROLE_ID = A.ROLE_ID
+								          AND B.EXP_DTM = STR_TO_DATE('99991231','%Y%m%d')
+								          AND B.REG_TYP_CD IN ('C','U')
+								 WHERE A.EXP_DTM = STR_TO_DATE('99991231','%Y%m%d')
+								   AND A.REG_TYP_CD IN ('C','U') ) G								   
+	  	  ON C.DB_CONN_TRG_ID = G.SRC_DB_CONN_TRG_ID  
+	  	  AND A.DB_SCH_ID = G.SRC_DB_SCH_PNM
+  	     LEFT OUTER JOIN WAA_USER U
+  	       ON A.RQST_USER_ID = U.USER_ID	 
+          AND U.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+  	      AND U.REG_TYP_CD IN ('C', 'U')	
+  	     LEFT OUTER JOIN WAA_DB_SCH SCH
+  	       ON A.DB_SCH_ID = SCH.DB_SCH_ID
+  	      AND SCH.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+  	      AND SCH.REG_TYP_CD IN ('C', 'U')
+  	     LEFT OUTER JOIN WAA_TBL_SPAC TS
+  	       ON SCH.DB_IDX_SPAC_ID = TS.DB_TBL_SPAC_ID
+  	      AND TS.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+  	      AND TS.REG_TYP_CD IN ('C', 'U')
+  	      AND TS.TBL_SPAC_TYP_CD IN ('I')  
+	   WHERE A.RQST_NO =  #{rqstNo}
+	     AND A.VRF_CD = '1'
+	     AND A.TBL_CHG_TYP_CD = 'DRP'
+         AND E.REG_TYP_CD IN ('C', 'U') 
+      UNION ALL
+	  SELECT 
+	  	    A.RQST_NO
+	  	  , A.RQST_SNO
+	  	  , A.DDL_TBL_PNM AS TBL_NM
+	  	  , A.DDL_TBL_LNM
+	  	  , A.TBL_CHG_TYP_CD
+	  	  , A.REG_TYP_CD
+		  , CASE WHEN A.DDL_TBL_LNM IS NULL THEN A.OBJ_DESCN ELSE A.DDL_TBL_LNM END AS TBL_DESC
+<!-- 		  , A.OBJ_DESCN  AS TBL_DESC -->
+		  , A.TBL_SPAC_PNM AS TBL_SPACE
+		  , TS.DB_TBL_SPAC_PNM AS IDX_SPACE
+<!-- 		  , (SELECT MIN(TSP.DB_TBL_SPAC_PNM)    -->
+<!-- 		       FROM WAA_TBL_SPAC TSP  -->
+<!-- 		      WHERE C.DB_CONN_TRG_ID = TSP.DB_CONN_TRG_ID -->
+<!-- 		        AND TSP.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d') -->
+<!--   	            AND TSP.REG_TYP_CD IN ('C', 'U') -->
+<!-- 		        AND TSP.TBL_SPAC_TYP_CD IN ('A', 'T') -->
+<!-- 		        AND TSP.DEFAULT_USAGE = 'Y' -->
+<!-- 		      GROUP BY TSP.DB_CONN_TRG_ID -->
+<!-- 		   ) AS IDX_SPACE -->
+	      , A.DB_SCH_PNM       AS "SCHEMA"
+	      , C.DB_CONN_TRG_PNM   AS DBMS
+	      , C.DBMS_TYP_CD 	    AS DBMS_TYPE 
+	      , CD.COMM_DTL_CD_NM AS DBMS_TYPE_NM
+	      , C.DBMS_VERS_CD	 	AS DBMS_VERS
+	      , E.DDL_COL_ID		AS COL_ID
+	      , E.DDL_COL_PNM       AS COL_NM
+	      , CASE WHEN E.DDL_COL_LNM IS NULL THEN E.OBJ_DESCN ELSE E.DDL_COL_LNM END AS COL_DESC
+<!-- 	      , E.OBJ_DESCN AS COL_DESC -->
+	      , E.COL_ORD
+	      , E.DATA_TYPE
+	      , E.DATA_LEN
+	      , E.DATA_SCAL
+	      , E.PK_YN
+	      , E.PK_ORD
+<!-- 	      , CASE WHEN R.CH_ATTR_PNM IS NOT NULL THEN 'Y' END AS FK_YN -->
+<!-- 	      , R.PA_ENTY_PNM -->
+<!-- 	      , R.PA_ATTR_PNM -->
+	      , E.NONUL_YN
+	      , E.DEFLT_VAL
+	      , E.COL_UPD_YN
+	      , E.DATA_TYPE_UPD_YN
+	      , E.NONUL_UPD_YN
+	      , E.DEFLT_VAL_UPD_YN
+	      , E.REG_TYP_CD AS COL_REG_CD
+	      , E.VRF_CD AS COL_VRF_CD	
+	      , U.USER_NM AS RQST_USER_NM
+	      , IFNULL(P.PART_TBL_YN, 'N') AS  PART_TBL_YN
+	      , G.SRC_DB_SCH_PNM
+	      , G.TGT_ROLE_PNM
+	      , G.SELECT_YN
+	      , G.INSERT_YN
+	      , G.UPDATE_YN
+	      , G.DELETE_YN
+<!-- 	      , G.DB_PRIVILEGE -->
+	  	FROM WAQ_DDL_TBL A
+	  	JOIN WAA_DB_CONN_TRG C
+  	      ON C.DB_CONN_TRG_PNM = A.DB_CONN_TRG_PNM
+  	     AND C.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+  	     AND C.REG_TYP_CD IN ('C', 'U')
+	  	JOIN WAQ_DDL_COL E
+	  	  ON A.RQST_NO = E.RQST_NO
+	  	 AND A.RQST_SNO = E.RQST_SNO
+<!-- 	  	 관계정보 -->
+<!--          LEFT OUTER JOIN WAQ_PDM_REL R -->
+<!-- 	  	  ON A.RQST_NO = R.RQST_NO -->
+<!-- 	  	 AND A.RQST_SNO = R.RQST_SNO -->
+<!-- 	  	 AND E.PDM_COL_PNM = R.CH_ATTR_PNM -->
+<!-- 	  	 물리모델 정보 -->
+              
+	  	 LEFT OUTER JOIN WAM_PDM_TBL P 
+	  	  ON A.PDM_TBL_ID = P.PDM_TBL_ID
+	  	 AND P.REG_TYP_CD IN ('C', 'U')
+<!-- 	  	 접속대상 종류 -->
+        LEFT OUTER JOIN (SELECT B.COMM_DTL_CD
+                                , B.COMM_DTL_CD_NM 
+                           FROM WAA_COMM_DCD A
+                                INNER JOIN WAA_COMM_DTL_CD B
+                                   ON A.COMM_DCD_ID = B.COMM_DCD_ID
+                                  AND B.EXP_DTM  =  STR_TO_DATE('9999-12-31', '%Y-%m-%d')  
+                                  AND B.REG_TYP_CD IN ('C','U')
+                          WHERE A.COMM_DCD = 'DBMS_TYP_CD'
+                            AND A.EXP_DTM  =  STR_TO_DATE('9999-12-31', '%Y-%m-%d')  
+                            AND A.REG_TYP_CD IN ('C','U') ) CD
+          ON C.DBMS_TYP_CD = CD.COMM_DTL_CD
+<!--           SELECT, INSERT, UPDATE, DELETE 권한	  	  -->
+	  	LEFT OUTER JOIN (SELECT A.PRIVILEGE_ID
+	  									,A.DB_CONN_TRG_ID AS SRC_DB_CONN_TRG_ID
+								        ,GET_DB_SCH_PNM(A.DB_SCH_ID) AS SRC_DB_SCH_PNM
+								        ,B.ROLE_PNM AS TGT_ROLE_PNM
+								        ,A.SELECT_YN 
+								        ,A.INSERT_YN
+								        ,A.UPDATE_YN
+								        ,A.DELETE_YN
+								   FROM WAA_DB_PRIVILEGE A
+								        INNER JOIN WAA_DB_ROLE B
+								           ON B.ROLE_ID = A.ROLE_ID
+								          AND B.EXP_DTM = STR_TO_DATE('99991231','%Y%m%d')
+								          AND B.REG_TYP_CD IN ('C','U')
+								 WHERE A.EXP_DTM = STR_TO_DATE('99991231','%Y%m%d')
+								   AND A.REG_TYP_CD IN ('C','U') ) G								   
+	  	   ON C.DB_CONN_TRG_ID = G.SRC_DB_CONN_TRG_ID  
+	  	  AND A.DB_SCH_PNM = G.SRC_DB_SCH_PNM
+  	     LEFT OUTER JOIN WAA_USER U
+  	       ON A.RQST_USER_ID = U.USER_ID	 
+          AND U.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+  	      AND U.REG_TYP_CD IN ('C', 'U')	  
+  	     LEFT OUTER JOIN WAA_DB_SCH SCH
+  	       ON A.DB_SCH_ID = SCH.DB_SCH_ID
+  	      AND SCH.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+  	      AND SCH.REG_TYP_CD IN ('C', 'U')
+  	     LEFT OUTER JOIN WAA_TBL_SPAC TS
+  	       ON SCH.DB_IDX_SPAC_ID = TS.DB_TBL_SPAC_ID
+  	      AND TS.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+  	      AND TS.REG_TYP_CD IN ('C', 'U')
+  	      AND TS.TBL_SPAC_TYP_CD IN ('I')
+	   WHERE A.RQST_NO =  #{rqstNo}
+	     AND A.VRF_CD = '1'
+	      AND IFNULL(A.TBL_CHG_TYP_CD, '_') != 'DRP'
+<!--          AND E.REG_TYP_CD IN ('C', 'U')  -->
+       ORDER BY RQST_SNO, COL_ORD
+  </select>
+  
+  
+  <select id="selectDdlTableListWaqRqstSno" parameterType="kr.wise.meta.ddl.service.WaqDdlTbl" resultMap="TblResultMap2">
+	  <!-- WAQ_DDL_TBL에서 테이블 컬럼 정보를 가져온다...(등록가능 여부가 가능한것만 가져오기...) -->
+	  SELECT /* DdlScriptMapper.selectDdlTableListWaqRqstSno */
+	  		A.RQST_NO
+	  	  , A.RQST_SNO
+	  	  , A.DDL_TBL_PNM AS TBL_NM
+	  	  , A.DDL_TBL_LNM
+	  	  , A.DDL_TBL_ID
+	  	  , A.TBL_CHG_TYP_CD
+	  	  , A.REG_TYP_CD
+	  	  , A.TBL_CMMT_UPD_YN   
+		  , CASE WHEN A.DDL_TBL_LNM IS NULL THEN A.OBJ_DESCN ELSE A.DDL_TBL_LNM END AS TBL_DESC 
+		  , A.TBL_SPAC_PNM      AS TBL_SPACE		  
+		  , TS.DB_TBL_SPAC_PNM  AS IDX_SPACE
+	      , A.DB_SCH_PNM        AS "SCHEMA"
+	      , C.DB_CONN_TRG_PNM   AS DBMS
+	      , C.DBMS_TYP_CD 	    AS DBMS_TYPE
+	      , GET_CMCD_DTL_NM('DBMS_TYP_CD', C.DBMS_TYP_CD) AS DBMS_TYPE_NM
+	      , C.DBMS_VERS_CD	 	AS DBMS_VERS
+	      , E.DDL_COL_ID		AS COL_ID
+	      , E.DDL_COL_PNM       AS COL_NM
+	      , E.DDL_COL_LNM       AS COL_DESC 
+	      , E.COL_ORD
+	      <!-- , E.DATA_TYPE -->
+	      , IFNULL(F.DATA_TYPE_NM,E.DATA_TYPE) AS DATA_TYPE
+	      , E.DATA_LEN
+	      , E.DATA_SCAL
+	      , E.PK_YN
+	      , E.PK_ORD
+	      , IFNULL(E.NONUL_YN,'N') AS NONUL_YN 
+	      , E.DEFLT_VAL
+	      , E.COL_UPD_YN
+	      , E.DATA_TYPE_UPD_YN
+	      , E.NONUL_UPD_YN
+	      , E.DEFLT_VAL_UPD_YN
+	      , E.REG_TYP_CD AS COL_REG_CD
+	      , E.VRF_CD     AS COL_VRF_CD	
+	      , GET_USER_NM(A.RQST_USER_ID)  AS RQST_USER_NM
+	      , IFNULL(P.PART_TBL_YN, 'N') AS  PART_TBL_YN	      
+	      , G.SELECT_YN
+          , G.INSERT_YN
+          , G.UPDATE_YN
+          , G.DELETE_YN
+          , G.TGT_ROLE_PNM
+          , G.SRC_DB_SCH_PNM 
+	  	FROM WAQ_DDL_TBL A
+	         INNER JOIN WAA_DB_CONN_TRG C
+  	           ON C.DB_CONN_TRG_PNM = A.DB_CONN_TRG_PNM
+  	          AND C.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+  	          AND C.REG_TYP_CD IN ('C', 'U')
+  	         INNER JOIN WAA_DB_SCH D 
+  	            ON D.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+  	           AND D.REG_TYP_CD IN ('C', 'U')
+  	           AND D.DB_SCH_ID = A.DB_SCH_ID
+  	         LEFT JOIN WAA_TBL_SPAC TS 
+  	            ON TS.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+  	           AND TS.REG_TYP_CD IN ('C', 'U')
+  	           AND TS.DB_TBL_SPAC_ID = D.DB_IDX_SPAC_ID
+	         INNER JOIN WAQ_DDL_COL E
+	           ON E.RQST_NO  = A.RQST_NO
+	          AND E.RQST_SNO = A.RQST_SNO
+	  	     LEFT JOIN WAM_PDM_TBL P
+	  	       ON A.PDM_TBL_ID = P.PDM_TBL_ID
+	  	      AND P.REG_TYP_CD IN ('C', 'U')
+		  	LEFT JOIN 
+		  	(SELECT A.PRIVILEGE_ID 
+		  		  , A.DB_CONN_TRG_ID AS SRC_DB_CONN_TRG_ID
+			      , GET_DB_SCH_PNM(A.DB_SCH_ID) AS SRC_DB_SCH_PNM
+			      , A.DB_SCH_ID
+			      , B.ROLE_PNM AS TGT_ROLE_PNM
+			      , A.SELECT_YN 
+			      , A.INSERT_YN
+			      , A.UPDATE_YN
+			      , A.DELETE_YN
+			   FROM WAA_DB_PRIVILEGE A
+			        INNER JOIN WAA_DB_ROLE B
+			          on B.ROLE_ID = A.ROLE_ID
+			          AND B.EXP_DTM = STR_TO_DATE('99991231','%Y%m%d')
+			          AND B.REG_TYP_CD IN ('C','U')
+			 WHERE A.EXP_DTM = STR_TO_DATE('99991231','%Y%m%d')
+			   AND A.REG_TYP_CD IN ('C','U') 
+			 ) G								   
+		  	ON C.DB_CONN_TRG_ID = G.SRC_DB_CONN_TRG_ID   
+            AND D.DB_SCH_ID      = G.DB_SCH_ID
+            LEFT OUTER JOIN (
+	        		<include refid="Data_Type_Map"/>
+	        ) F
+	          ON C.DBMS_TYP_CD = F.DBMS_TYP_CD
+	         AND E.DATA_TYPE   = F.LGC_DATA_TYPE
+	         <!-- AND IFNULL(E.DATA_LEN, -1) BETWEEN F.MIN_VAL AND F.MAX_VAL -->
+            
+	   WHERE A.RQST_NO  =  #{rqstNo, jdbcType=VARCHAR}
+	     AND A.RQST_SNO =  #{rqstSno, jdbcType=VARCHAR}
+	     AND A.VRF_CD = '1'
+	     
+	     <choose>
+	     	<when test="tblChgTypCd == null or tblChgTypCd == ''  ">
+	     		
+	     		AND (      (IFNULL(A.TBL_CHG_TYP_CD,'DRP') = 'DRP'  AND E.RQST_DCD = 'CU'  ) 
+	                    OR (IFNULL(A.TBL_CHG_TYP_CD,'DRP') != 'DRP' AND E.REG_TYP_CD IN ('C','U','D') )
+	                    OR (IFNULL(A.TBL_CHG_TYP_CD,'DRP') = 'DRP' AND E.RQST_DCD = 'DD' )
+	                 )      
+	     	</when>	     	
+	     	<otherwise>	  
+	     	     AND E.RQST_DCD = 'CU'	 
+	             
+	     	</otherwise> 
+	     </choose> 
+	     	   
+       ORDER BY RQST_SNO
+              , COL_ORD
+  </select>
+  
+  
+		
+  <select id="selectDdlIndexListWaq" parameterType="string" resultMap="IdxResultMap">
+	  <!-- WAQ_DDL_IDX 에서 인덱스, 인덱스컬럼 정보를 가져온다...(등록가능 여부가 가능한것만 가져오기...) -->
+	  SELECT /* DdlScriptMapper.selectDdlIndexListWaq */
+	  	 A.RQST_NO
+       , A.RQST_SNO
+       , A.RQST_DTL_SNO
+       , A.DDL_TBL_PNM AS TBL_NM
+       , A.DDL_IDX_PNM AS IDX_NM
+       , A.DDL_IDX_LNM
+       , CASE WHEN A.PK_IDX_YN = 'Y' THEN 'PK'
+                WHEN A.UK_IDX_YN = 'Y' THEN 'UK'
+                ELSE ''
+                END AS IDX_TYP 
+       , A.PK_IDX_YN
+       , A.UK_IDX_YN
+       , A.REG_TYP_CD
+       , A.OBJ_DESCN  AS IDX_DESC
+       , A.IDX_SPAC_PNM AS IDX_SPACE
+       , A.DB_SCH_PNM       AS "SCHEMA"
+       , C.DB_CONN_TRG_PNM   AS DBMS
+       , C.DBMS_TYP_CD 	    AS DBMS_TYPE
+       , CD.COMM_DTL_CD_NM AS DBMS_TYPE_NM
+       , C.DBMS_VERS_CD	 	AS DBMS_VERS
+       , U.USER_NM AS RQST_USER_NM
+       , E.DDL_IDX_COL_PNM AS DDL_IDX_COL_PNM
+       , CD2.COMM_DTL_CD_NM AS SORT_TYP
+  FROM WAQ_DDL_IDX A
+       INNER JOIN WAA_DB_CONN_TRG C
+          ON C.DB_CONN_TRG_PNM = A.DB_CONN_TRG_PNM
+         AND C.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+         AND C.REG_TYP_CD IN ('C', 'U') 
+        INNER JOIN WAQ_DDL_IDX_COL E 
+          ON A.RQST_NO = E.RQST_NO
+         AND A.RQST_SNO = E.RQST_SNO
+        LEFT OUTER JOIN (SELECT B.COMM_DTL_CD
+                                , B.COMM_DTL_CD_NM 
+                           FROM WAA_COMM_DCD A
+                                INNER JOIN WAA_COMM_DTL_CD B
+                                   ON A.COMM_DCD_ID = B.COMM_DCD_ID
+                                  AND B.EXP_DTM  =  STR_TO_DATE('9999-12-31', '%Y-%m-%d')  
+                                  AND B.REG_TYP_CD IN ('C','U')
+                          WHERE A.COMM_DCD = 'DBMS_TYP_CD'
+                            AND A.EXP_DTM  =  STR_TO_DATE('9999-12-31', '%Y-%m-%d')  
+                            AND A.REG_TYP_CD IN ('C','U') ) CD
+          ON C.DBMS_TYP_CD = CD.COMM_DTL_CD
+        LEFT OUTER JOIN (SELECT B.COMM_DTL_CD
+                                , B.COMM_DTL_CD_NM 
+                           FROM WAA_COMM_DCD A
+                                INNER JOIN WAA_COMM_DTL_CD B
+                                   ON A.COMM_DCD_ID = B.COMM_DCD_ID
+                                  AND B.EXP_DTM  =  STR_TO_DATE('9999-12-31', '%Y-%m-%d')  
+                                  AND B.REG_TYP_CD IN ('C','U')
+                          WHERE A.COMM_DCD = 'IDX_COL_SRT_ORD_CD'
+                            AND A.EXP_DTM  =  STR_TO_DATE('9999-12-31', '%Y-%m-%d')  
+                            AND A.REG_TYP_CD IN ('C','U') ) CD2
+          ON E.SORT_TYP = CD2.COMM_DTL_CD	  
+  	     LEFT OUTER JOIN WAA_USER U
+  	       ON A.RQST_USER_ID = U.USER_ID	 
+          AND U.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+  	      AND U.REG_TYP_CD IN ('C', 'U')	   	    
+ WHERE A.RQST_NO = #{rqstNo}
+   AND A.VRF_CD = '1'
+ ORDER BY A.RQST_SNO, E.DDL_IDX_COL_ORD
+  </select>
+  
+  
+  <select id="selectDdlIndexListWaqRqstSno" parameterType="kr.wise.meta.ddl.service.WaqDdlIdx"  resultMap="IdxResultMap">
+	  <!-- WAQ_DDL_IDX 에서 인덱스, 인덱스컬럼 정보를 가져온다...(등록가능 여부가 가능한것만 가져오기...) -->
+      SELECT /* DdlScriptMapper.selectDdlIndexListWaqRqstSno */
+      		 A.RQST_NO
+	       , A.RQST_SNO
+	       , A.DDL_TBL_PNM AS TBL_NM
+	       , A.DDL_IDX_PNM AS IDX_NM
+	       , A.DDL_IDX_LNM
+	       , CASE WHEN A.PK_IDX_YN = 'Y' THEN 'PK'
+	                WHEN A.UK_IDX_YN = 'Y' THEN 'UK'
+	                ELSE ''
+	                END AS IDX_TYP 
+	       , A.PK_IDX_YN
+	       , A.UK_IDX_YN
+	       , A.REG_TYP_CD
+	       , A.OBJ_DESCN         AS IDX_DESC
+	       , A.IDX_SPAC_PNM      AS IDX_SPACE
+	       , A.DB_SCH_PNM        AS "SCHEMA"
+	       , C.DB_CONN_TRG_PNM   AS DBMS
+	       , C.DBMS_TYP_CD 	     AS DBMS_TYPE
+	       , GET_CMCD_DTL_NM('DBMS_TYP_CD',C.DBMS_TYP_CD)     AS DBMS_TYPE_NM
+	       , C.DBMS_VERS_CD	 	                              AS DBMS_VERS
+	       , GET_USER_NM(A.RQST_USER_ID)                      AS RQST_USER_NM
+	       , E.DDL_IDX_COL_PNM                                AS DDL_IDX_COL_PNM
+	       , GET_CMCD_DTL_NM('IDX_COL_SRT_ORD_CD',E.SORT_TYP) AS SORT_TYP
+	  FROM WAQ_DDL_IDX A
+	       INNER JOIN WAA_DB_CONN_TRG C
+	          ON C.DB_CONN_TRG_PNM = A.DB_CONN_TRG_PNM
+	         AND C.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	         AND C.REG_TYP_CD IN ('C', 'U') 
+	        LEFT JOIN WAQ_DDL_IDX_COL E 
+	          ON E.RQST_NO      = A.RQST_NO
+	         AND E.RQST_SNO     = A.RQST_SNO                 	   
+	         AND E.RQST_DTL_SNO = A.RQST_DTL_SNO
+	         AND E.RQST_DCD = 'CU'
+	 WHERE A.RQST_NO      = #{rqstNo}
+	   AND A.RQST_SNO     = #{rqstSno}
+	   AND A.RQST_DTL_SNO = #{rqstDtlSno}  
+	   AND A.VRF_CD = '1'	   
+	 ORDER BY A.RQST_SNO, E.DDL_IDX_COL_ORD
+  </select>
+  
+    <select id="selectDdlIndex" parameterType="kr.wise.meta.ddl.service.WaqDdlIdx"  resultMap="IdxResultMap">
+	  <!--WAM_DDL_IDX에서 가져옴 -->
+      SELECT A.RQST_NO
+	       , A.RQST_SNO
+	       , TBL.DDL_TBL_PNM AS TBL_NM
+	       , A.DDL_IDX_PNM AS IDX_NM
+	       , A.DDL_IDX_LNM
+	       , CASE WHEN A.PK_IDX_YN = 'Y' THEN 'PK'
+	                WHEN A.UK_IDX_YN = 'Y' THEN 'UK'
+	                ELSE ''
+	                END AS IDX_TYP 
+	       , A.PK_IDX_YN
+	       , A.UK_IDX_YN
+	       , A.REG_TYP_CD
+	       , A.OBJ_DESCN         AS IDX_DESC
+	       , SPAC.DB_TBL_SPAC_PNM      AS IDX_SPACE
+	       , SCH.DB_SCH_PNM        AS "SCHEMA"
+	       , C.DB_CONN_TRG_PNM   AS DBMS
+	       , C.DBMS_TYP_CD 	     AS DBMS_TYPE
+	       , GET_CMCD_DTL_NM('DBMS_TYP_CD',C.DBMS_TYP_CD)     AS DBMS_TYPE_NM
+	       , C.DBMS_VERS_CD	 	                              AS DBMS_VERS
+	       , GET_USER_NM(A.RQST_USER_ID)                      AS RQST_USER_NM
+	       , E.DDL_IDX_COL_PNM                                AS DDL_IDX_COL_PNM
+	       , GET_CMCD_DTL_NM('IDX_COL_SRT_ORD_CD',E.SORT_TYP) AS SORT_TYP
+	  FROM WAH_DDL_IDX A
+	       INNER JOIN WAA_DB_CONN_TRG C
+	          ON C.DB_CONN_TRG_ID = A.DB_CONN_TRG_ID
+	         AND A.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	         AND C.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	         AND C.REG_TYP_CD IN ('C', 'U') 
+	        LEFT JOIN WAQ_DDL_IDX_COL E 
+	          ON E.RQST_NO      = A.RQST_NO
+	         AND E.RQST_SNO     = A.RQST_SNO                 	   
+	         AND E.RQST_DTL_SNO = A.RQST_DTL_SNO
+	         AND E.RQST_DCD = 'CU'
+	        LEFT JOIN WAH_DDL_TBL TBL
+	          ON A.DDL_TBL_ID = TBL.DDL_TBL_ID
+	          AND TBL.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	        LEFT JOIN WAA_DB_SCH SCH
+	         ON SCH.DB_SCH_ID = A.DB_SCH_ID
+	        AND SCH.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	        AND SCH.REG_TYP_CD IN ('C', 'U') 
+	        LEFT JOIN WAA_TBL_SPAC SPAC
+	         ON SPAC.DB_TBL_SPAC_ID = A.IDX_SPAC_ID
+	        AND SPAC.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	        AND SPAC.REG_TYP_CD IN ('C', 'U') 
+	 WHERE A.DDL_IDX_ID = #{ddlIdxId}   
+	 ORDER BY E.DDL_IDX_COL_ORD
+  </select>
+  
+  <select id="getScrtInfo" parameterType="java.lang.String" resultType="java.lang.String">
+  SELECT /* DdlScriptMapper.getScrtInfo */
+  		 SCRT_INFO
+    FROM WAH_DDL_TBL
+   WHERE DDL_TBL_ID = #{ddlTblId}
+   AND EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+  </select>
+  
+  
+  <select id="selectDdlSeqListWaq" parameterType="string" resultMap="SeqResultMap">
+	  <!-- WAQ_DDL_SEQ 에서 시퀀스 정보를 가져온다...(등록가능 여부가 가능한것만 가져오기...) -->
+	  SELECT      /* DdlScriptMapper.selectDdlSeqListWaq */
+	  			  A.RQST_NO
+                , A.RQST_SNO
+                , A.DDL_SEQ_PNM
+		        ,A.DDL_SEQ_LNM     
+				,A.NM_RL_TYP_CD    
+				,A.US_TYP_CD   
+				,CD2.COMM_DTL_CD_NM AS NM_RL_TYP_NM    
+				,CD3.COMM_DTL_CD_NM AS US_TYP_NM     
+				,A.PDM_TBL_PNM     
+				,A.PDM_COL_PNM     
+				,A.L1CD_PNM        
+				,A.L3CD_PNM        
+				,A.GRT_LST         
+				,A.INCBY           
+				,A.STRTWT          
+				,A.MINVAL          
+				,A.MAXVAL          
+				,A.CYC_YN          
+				,A.ORD_YN          
+				,A.CACHE_SZ        
+		
+		       , A.REG_TYP_CD
+		       , A.OBJ_DESCN
+		       , A.DB_SCH_PNM
+		       , C.DB_CONN_TRG_PNM   AS DB_CONN_TRG_PNM
+		       , C.DBMS_TYP_CD 	    AS DBMS_TYPE		       
+		       , GET_CMCD_DTL_NM('DBMS_TYP_CD', C.DBMS_TYP_CD) AS DBMS_TYPE_NM
+		       , C.DBMS_VERS_CD	 	AS DBMS_VERS
+		       , U.USER_NM AS RQST_USER_NM
+		       , DATE_FORMAT(A.RQST_DTM, '%Y-%m-%d') AS RQST_DTM2
+		       , DATE_FORMAT(A.APRV_DTM, '%Y-%m-%d') AS APRV_DTM2
+  FROM WAQ_DDL_SEQ A
+       INNER JOIN WAA_DB_CONN_TRG C
+          ON C.DB_CONN_TRG_PNM = A.DB_CONN_TRG_PNM
+         AND C.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+         AND C.REG_TYP_CD IN ('C', 'U') 
+        <!-- LEFT OUTER JOIN (SELECT B.COMM_DTL_CD
+                                , B.COMM_DTL_CD_NM 
+                           FROM WAA_COMM_DCD A
+                                INNER JOIN WAA_COMM_DTL_CD B
+                                   ON A.COMM_DCD_ID = B.COMM_DCD_ID
+                                  AND B.EXP_DTM  =  STR_TO_DATE('9999-12-31', '%Y-%m-%d')  
+                                  AND B.REG_TYP_CD IN ('C','U')
+                          WHERE A.COMM_DCD = 'DBMS_TYP_CD'
+                            AND A.EXP_DTM  =  STR_TO_DATE('9999-12-31', '%Y-%m-%d')  
+                            AND A.REG_TYP_CD IN ('C','U') ) CD
+          ON C.DBMS_TYP_CD = CD.COMM_DTL_CD -->
+  	     LEFT OUTER JOIN WAA_USER U
+  	       ON A.RQST_USER_ID = U.USER_ID	 
+          AND U.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+  	      AND U.REG_TYP_CD IN ('C', 'U') 
+  	     LEFT OUTER JOIN (SELECT B.COMM_DTL_CD
+                                , B.COMM_DTL_CD_NM 
+                           FROM WAA_COMM_DCD A
+                                INNER JOIN WAA_COMM_DTL_CD B
+                                   ON A.COMM_DCD_ID = B.COMM_DCD_ID
+                                  AND B.EXP_DTM  =  STR_TO_DATE('9999-12-31', '%Y-%m-%d')  
+                                  AND B.REG_TYP_CD IN ('C','U')
+                          WHERE A.COMM_DCD = 'NM_RL_TYP_CD'
+                            AND A.EXP_DTM  =  STR_TO_DATE('9999-12-31', '%Y-%m-%d')  
+                            AND A.REG_TYP_CD IN ('C','U') ) CD2
+          ON A.NM_RL_TYP_CD = CD2.COMM_DTL_CD	
+         LEFT OUTER JOIN (SELECT B.COMM_DTL_CD
+                                , B.COMM_DTL_CD_NM 
+                           FROM WAA_COMM_DCD A
+                                INNER JOIN WAA_COMM_DTL_CD B
+                                   ON A.COMM_DCD_ID = B.COMM_DCD_ID
+                                  AND B.EXP_DTM  =  STR_TO_DATE('9999-12-31', '%Y-%m-%d')  
+                                  AND B.REG_TYP_CD IN ('C','U')
+                          WHERE A.COMM_DCD = 'US_TYP_CD'
+                            AND A.EXP_DTM  =  STR_TO_DATE('9999-12-31', '%Y-%m-%d')  
+                            AND A.REG_TYP_CD IN ('C','U') ) CD3
+          ON A.US_TYP_CD = CD3.COMM_DTL_CD    
+ WHERE A.RQST_NO = #{rqstNo}
+   AND A.VRF_CD = '1'
+ ORDER BY A.RQST_SNO
+  </select>
+  
+  <select id="selectDdlSeq" parameterType="string" resultMap="SeqResultMap">
+	  <!--WAM_DDL_SEQ 에서 시퀀스 정보를 가져온다...-->
+	  SELECT     A.RQST_NO
+                , A.RQST_SNO
+                , A.DDL_SEQ_PNM
+		        ,A.DDL_SEQ_LNM      
+				,A.US_TYP_CD   
+				,A.PDM_TBL_PNM     
+				,A.PDM_COL_PNM          
+				,A.GRT_LST         
+				,A.INCBY           
+				,A.STRTWT          
+				,A.MINVAL          
+				,A.MAXVAL          
+				,A.CYC_YN          
+				,A.ORD_YN          
+				,A.CACHE_SZ        
+		       , A.REG_TYP_CD
+		       , A.OBJ_DESCN
+		       , SCH.DB_SCH_PNM
+		       , C.DB_CONN_TRG_PNM   AS DB_CONN_TRG_PNM
+		       , C.DBMS_TYP_CD 	    AS DBMS_TYPE		       
+		       , GET_CMCD_DTL_NM('DBMS_TYP_CD', C.DBMS_TYP_CD) AS DBMS_TYPE_NM
+		       , C.DBMS_VERS_CD	 	AS DBMS_VERS
+		       , U.USER_NM AS RQST_USER_NM
+		       , DATE_FORMAT(A.RQST_DTM, '%Y-%m-%d') AS RQST_DTM2
+		       , DATE_FORMAT(A.APRV_DTM, '%Y-%m-%d') AS APRV_DTM2
+  FROM WAH_DDL_SEQ A
+  	   INNER JOIN WAA_DB_SCH SCH
+  	      ON A.DB_SCH_ID = SCH.DB_SCH_ID
+  	     AND A.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')  
+  	     AND SCH.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')  
+         AND SCH.REG_TYP_CD IN ('C', 'U') 
+       INNER JOIN WAA_DB_CONN_TRG C
+          ON C.DB_CONN_TRG_ID = SCH.DB_CONN_TRG_ID
+         AND C.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')  
+         AND C.REG_TYP_CD IN ('C', 'U') 
+  	     LEFT OUTER JOIN WAA_USER U
+  	       ON A.RQST_USER_ID = U.USER_ID	 
+          AND U.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')  
+  	      AND U.REG_TYP_CD IN ('C', 'U')   
+ WHERE A.DDL_SEQ_ID = #{ddlSeqId}
+ ORDER BY A.DDL_SEQ_PNM
+  </select>
+  
+    <select id="getScrtInfoSeq" parameterType="java.lang.String" resultType="java.lang.String">
+  SELECT SCRT_INFO
+    FROM WAH_DDL_SEQ
+   WHERE DDL_SEQ_ID = #{ddlSeqId}
+     AND EXP_DTM = STR_TO_DATE('99991231', '%Y%m%d')
+  </select>
+  <select id="getScrtInfoSeqByWaq" parameterType="kr.wise.meta.ddl.service.WaqDdlSeq"  resultType="java.lang.String">
+  SELECT /* DdlScriptMapper.getScrtInfoSeqByWaq */
+  		 SCRT_INFO
+    FROM WAQ_DDL_SEQ
+   WHERE RQST_NO = #{rqstNo}
+     AND RQST_SNO = #{rqstSno}
+     AND VRF_CD = 1
+  </select>
+  
+   <select id="selectPartitionbyTblid" parameterType="string" resultMap="TblResultMap3">
+  <!--WAM 기준 파티션 정보 조회...-->
+  	SELECT A.RQST_NO
+         , A.RQST_SNO
+         , A.DDL_TBL_PNM AS TBL_NM
+         , A.DDL_TBL_ID
+         , A.DDL_PART_ID
+         , T1.DDL_TBL_LNM
+         , A.REG_TYP_CD
+         , A.PART_TYP_CD, A.PART_KEY, A.SUB_PART_TYP_CD, A.SUB_PART_KEY 
+	     , '' AS TBL_SPACE
+         , '' AS TBL_SPACE_ADD_SCRT
+	     , '' AS IDX_SPACE
+         , DS.DB_SCH_PNM       AS "SCHEMA"
+         , C.DB_CONN_TRG_PNM   AS DBMS
+         , C.DBMS_TYP_CD 	    AS DBMS_TYPE
+         , GET_CMCD_DTL_NM('DBMS_TYP_CD', C.DBMS_TYP_CD) AS DBMS_TYPE_NM
+         , C.DBMS_VERS_CD	 	AS DBMS_VERS
+         , '' AS ACC_DBMS_YN        
+         <!-- 주파티션 정보 -->
+         , E.REG_TYP_CD AS MAIN_REG_TYP_CD
+         , E.DDL_PART_PNM
+         , E.DDL_PART_VAL
+         , '' AS PM_TBL_SPAC_PNM
+         <!-- 서브파티션 정보 -->
+		 , NULL AS PS_TBL_SPAC_PNM
+         , NULL AS DDL_PART_SUB_PNM
+         , NULL AS DDL_PART_SUB_VAL          
+         , U.USER_NM AS RQST_USER_NM
+         , DATE_FORMAT(A.RQST_DTM, '%Y-%m-%d') AS RQST_DTM2
+         , DATE_FORMAT(A.APRV_DTM, '%Y-%m-%d') AS APRV_DTM2
+	  FROM WAH_DDL_PART A
+	   INNER JOIN WAH_DDL_TBL T1
+	    ON A.DDL_TBL_ID = T1.DDL_TBL_ID 
+	    AND A.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	    AND T1.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+       INNER JOIN WAA_DB_CONN_TRG C
+          ON C.DB_CONN_TRG_ID = A.DB_CONN_TRG_ID 
+         AND C.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+         AND C.REG_TYP_CD IN ('C', 'U') 
+       INNER JOIN WAA_DB_SCH  DS
+         ON A.DB_SCH_ID = DS.DB_SCH_ID 
+        AND DS.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+        AND DS.REG_TYP_CD IN ('C', 'U') 
+        INNER JOIN WAH_DDL_PART_MAIN E 
+          ON A.DDL_PART_ID  = E.DDL_PART_ID 
+          AND E.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+<!--         LEFT OUTER JOIN WAM_DDL_PART_SUB PS  -->
+<!--           ON E.DDL_PART_ID  = PS.DDL_PART_ID -->
+<!--            AND E.DDL_MAIN_PART_ID  = PS.DDL_MAIN_PART_ID   -->
+  	     LEFT OUTER JOIN WAA_USER U
+  	       ON A.RQST_USER_ID = U.USER_ID	 
+          AND U.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+  	      AND U.REG_TYP_CD IN ('C', 'U')
+ WHERE A.DDL_TBL_ID = #{value}
+   AND IFNULL(A.SUB_PART_TYP_CD,'RANGE') = 'RANGE'
+UNION ALL
+  	SELECT A.RQST_NO
+         , A.RQST_SNO
+         , A.DDL_TBL_PNM AS TBL_NM
+         , A.DDL_TBL_ID
+         , A.DDL_PART_ID
+         , T1.DDL_TBL_LNM
+         , A.REG_TYP_CD
+         , A.PART_TYP_CD, A.PART_KEY, A.SUB_PART_TYP_CD, A.SUB_PART_KEY 
+	     , ''  AS TBL_SPACE
+         , '' AS TBL_SPACE_ADD_SCRT
+	     , ''  AS IDX_SPACE
+         , DS.DB_SCH_PNM       AS "SCHEMA"
+         , C.DB_CONN_TRG_PNM   AS DBMS
+         , C.DBMS_TYP_CD 	   AS DBMS_TYPE
+         , GET_CMCD_DTL_NM('DBMS_TYP_CD', C.DBMS_TYP_CD) AS DBMS_TYPE_NM
+         , C.DBMS_VERS_CD	   AS DBMS_VERS
+         , '' AS ACC_DBMS_YN
+       
+         <!-- 주파티션 정보 -->
+         , E.REG_TYP_CD AS MAIN_REG_TYP_CD
+         , E.DDL_PART_PNM
+         , E.DDL_PART_VAL
+         , '' AS PM_TBL_SPAC_PNM
+         <!-- 서브파티션 정보 -->
+		 , NULL AS PS_TBL_SPAC_PNM
+         , NULL AS DDL_PART_SUB_PNM
+         , NULL AS DDL_PART_SUB_VAL 
+         , U.USER_NM AS RQST_USER_NM
+         , DATE_FORMAT(A.RQST_DTM, '%Y-%m-%d') AS RQST_DTM2
+         , DATE_FORMAT(A.APRV_DTM, '%Y-%m-%d') AS APRV_DTM2
+	  FROM WAH_DDL_PART A
+	  JOIN WAH_DDL_TBL T1
+	    ON A.DDL_TBL_ID = T1.DDL_TBL_ID 
+	    AND A.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	    AND T1.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+       INNER JOIN WAA_DB_CONN_TRG C
+          ON C.DB_CONN_TRG_ID = A.DB_CONN_TRG_ID 
+         AND C.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+         AND C.REG_TYP_CD IN ('C', 'U') 
+       INNER JOIN WAA_DB_SCH  DS
+         ON A.DB_SCH_ID = DS.DB_SCH_ID 
+        AND DS.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+        AND DS.REG_TYP_CD IN ('C', 'U') 
+        INNER JOIN WAH_DDL_PART_MAIN E 
+          ON A.DDL_PART_ID  = E.DDL_PART_ID 
+          AND E.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+<!--         LEFT OUTER JOIN WAM_DDL_PART_SUB PS  -->
+<!--           ON E.DDL_PART_ID  = PS.DDL_PART_ID -->
+  	     LEFT OUTER JOIN WAA_USER U
+  	       ON A.RQST_USER_ID = U.USER_ID	 
+          AND U.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+  	      AND U.REG_TYP_CD IN ('C', 'U')
+ WHERE A.DDL_TBL_ID = #{value}
+   AND A.SUB_PART_TYP_CD IN ('HASH','LIST')
+UNION ALL
+  	SELECT A.RQST_NO
+         , A.RQST_SNO
+         , A.DDL_TBL_PNM AS TBL_NM
+         , A.DDL_TBL_ID
+         , A.DDL_PART_ID
+         , T1.DDL_TBL_LNM
+         , A.REG_TYP_CD
+         , A.PART_TYP_CD, A.PART_KEY, A.SUB_PART_TYP_CD, A.SUB_PART_KEY 
+	     , ''  AS TBL_SPACE
+         , ''  AS TBL_SPACE_ADD_SCRT
+	     , ''  AS IDX_SPACE
+         , DS.DB_SCH_PNM       AS "SCHEMA"
+         , C.DB_CONN_TRG_PNM   AS DBMS
+         , C.DBMS_TYP_CD 	    AS DBMS_TYPE
+         , GET_CMCD_DTL_NM('DBMS_TYP_CD', C.DBMS_TYP_CD) AS DBMS_TYPE_NM
+         , C.DBMS_VERS_CD	 	AS DBMS_VERS
+         , '' AS ACC_DBMS_YN
+         <!-- 주파티션 정보 -->
+         , NULL AS MAIN_REG_TYP_CD
+         , NULL AS DDL_PART_PNM
+         , NULL AS DDL_PART_VAL
+         , NULL AS PM_TBL_SPAC_PNM
+        <!-- 서브파티션정보 -->
+       
+         , ''  AS PS_TBL_SPAC_PNM
+         , PS.DDL_PART_SUB_PNM
+         , PS.DDL_PART_SUB_VAL
+         
+       , U.USER_NM AS RQST_USER_NM
+       , DATE_FORMAT(A.RQST_DTM, '%Y-%m-%d') AS RQST_DTM2
+       , DATE_FORMAT(A.APRV_DTM, '%Y-%m-%d') AS APRV_DTM2
+	  FROM WAH_DDL_PART A
+	  JOIN WAH_DDL_TBL T1
+	    ON A.DDL_TBL_ID = T1.DDL_TBL_ID 
+	    AND A.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	    AND T1.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+       INNER JOIN WAA_DB_CONN_TRG C
+          ON C.DB_CONN_TRG_ID = A.DB_CONN_TRG_ID 
+         AND C.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+         AND C.REG_TYP_CD IN ('C', 'U') 
+       INNER JOIN WAA_DB_SCH  DS
+         ON A.DB_SCH_ID = DS.DB_SCH_ID 
+        AND DS.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+        AND DS.REG_TYP_CD IN ('C', 'U') 
+<!--         INNER JOIN WAM_DDL_PART_MAIN E  -->
+<!--           ON A.DDL_PART_ID  = E.DDL_PART_ID  -->
+        LEFT OUTER JOIN WAH_DDL_PART_SUB PS 
+          ON A.DDL_PART_ID  = PS.DDL_PART_ID
+          AND PS.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+  	     LEFT OUTER JOIN WAA_USER U
+  	       ON A.RQST_USER_ID = U.USER_ID	 
+          AND U.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+  	      AND U.REG_TYP_CD IN ('C', 'U')
+ WHERE A.DDL_TBL_ID = #{value}
+   AND A.SUB_PART_TYP_CD IN ('HASH','LIST')
+ 
+ ORDER BY DDL_PART_PNM , DDL_PART_SUB_PNM 
+  </select>
+  
+  <select id="selectPartitionbyPartid" parameterType="string" resultMap="TblResultMap3">
+  <!--WAH 기준 파티션 정보 조회...-->
+  	SELECT A.RQST_NO
+         , A.RQST_SNO
+         , A.DDL_TBL_PNM AS TBL_NM
+         , A.DDL_TBL_ID
+         , A.DDL_PART_ID
+         , T1.DDL_TBL_LNM
+         , A.REG_TYP_CD
+         , A.PART_TYP_CD, A.PART_KEY, A.SUB_PART_TYP_CD, A.SUB_PART_KEY 
+		 , '' AS TBL_SPACE
+         , '' AS TBL_SPACE_ADD_SCRT
+		 , '' AS IDX_SPACE
+         , DS.DB_SCH_PNM        AS "SCHEMA"
+         , C.DB_CONN_TRG_PNM    AS DBMS
+         , C.DBMS_TYP_CD 	    AS DBMS_TYPE      
+         , GET_CMCD_DTL_NM('DBMS_TYP_CD', C.DBMS_TYP_CD) AS DBMS_TYPE_NM
+         , C.DBMS_VERS_CD	 	AS DBMS_VERS
+         , '' AS ACC_DBMS_YN
+         <!--주파티션정보-->
+         , E.REG_TYP_CD AS MAIN_REG_TYP_CD
+         , E.DDL_PART_PNM
+         , E.DDL_PART_VAL
+         , ''  AS PM_TBL_SPAC_PNM
+         <!-- 서브파티션정보 -->
+         
+         , NULL AS PS_TBL_SPAC_PNM
+         , NULL AS DDL_PART_SUB_PNM
+         , NULL AS DDL_PART_SUB_VAL
+         
+         , U.USER_NM AS RQST_USER_NM
+         , DATE_FORMAT(A.RQST_DTM, '%Y-%m-%d') AS RQST_DTM2
+         , DATE_FORMAT(A.APRV_DTM, '%Y-%m-%d') AS APRV_DTM2
+         <!--, T1.CUD_YN -->
+	  FROM WAH_DDL_PART A
+	       INNER JOIN WAH_DDL_TBL T1
+	          ON T1.DDL_TBL_ID = A.DDL_TBL_ID 
+	         AND T1.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')	        
+           INNER JOIN WAA_DB_CONN_TRG C
+              ON C.DB_CONN_TRG_ID = A.DB_CONN_TRG_ID 
+             AND C.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+             AND C.REG_TYP_CD IN ('C', 'U') 
+           INNER JOIN WAA_DB_SCH  DS
+             ON DS.DB_SCH_ID = A.DB_SCH_ID  
+            AND DS.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+            AND DS.REG_TYP_CD IN ('C', 'U') 
+           LEFT JOIN WAH_DDL_PART_MAIN E 
+             ON E.DDL_PART_ID = A.DDL_PART_ID  
+            AND E.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+            AND E.REG_TYP_CD IN ('C', 'U')
+<!--            LEFT JOIN WAH_DDL_PART_SUB PS  -->
+<!--              ON A.DDL_PART_ID  = PS.DDL_PART_ID -->
+<!--             AND E.DDL_MAIN_PART_ID  = PS.DDL_MAIN_PART_ID -->
+<!--             AND PS.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d') -->
+<!--             AND PS.REG_TYP_CD IN ('C', 'U')         -->
+  	       LEFT JOIN WAA_USER U
+  	         ON A.RQST_USER_ID = U.USER_ID	 
+            AND U.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+  	        AND U.REG_TYP_CD IN ('C', 'U')
+     WHERE A.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+       AND IFNULL(A.SUB_PART_TYP_CD,'RANGE') = 'RANGE'
+       AND A.DDL_PART_ID = #{value}
+     UNION ALL
+  	SELECT A.RQST_NO
+         , A.RQST_SNO
+         , A.DDL_TBL_PNM AS TBL_NM
+         , A.DDL_TBL_ID
+         , A.DDL_PART_ID
+         , T1.DDL_TBL_LNM
+         , A.REG_TYP_CD
+         , A.PART_TYP_CD, A.PART_KEY, A.SUB_PART_TYP_CD, A.SUB_PART_KEY 
+		 , '' AS TBL_SPACE
+         , '' AS TBL_SPACE_ADD_SCRT
+		 , '' AS IDX_SPACE
+         , DS.DB_SCH_PNM        AS "SCHEMA"
+         , C.DB_CONN_TRG_PNM    AS DBMS
+         , C.DBMS_TYP_CD 	    AS DBMS_TYPE      
+         , GET_CMCD_DTL_NM('DBMS_TYP_CD', C.DBMS_TYP_CD) AS DBMS_TYPE_NM
+         , C.DBMS_VERS_CD	 	AS DBMS_VERS
+         , '' AS ACC_DBMS_YN
+         <!--주파티션정보-->
+         , E.REG_TYP_CD AS MAIN_REG_TYP_CD
+         , E.DDL_PART_PNM
+         , E.DDL_PART_VAL
+         , '' AS PM_TBL_SPAC_PNM
+         <!-- 서브파티션정보         -->
+         , NULL AS PS_TBL_SPAC_PNM
+         , NULL AS DDL_PART_SUB_PNM
+         , NULL AS DDL_PART_SUB_VAL          
+         , U.USER_NM AS RQST_USER_NM
+         , DATE_FORMAT(A.RQST_DTM, '%Y-%m-%d') AS RQST_DTM2
+         , DATE_FORMAT(A.APRV_DTM, '%Y-%m-%d') AS APRV_DTM2
+        <!-- , T1.CUD_YN        -->
+	  FROM WAH_DDL_PART A
+	       INNER JOIN WAH_DDL_TBL T1
+	          ON T1.DDL_TBL_ID = A.DDL_TBL_ID 
+	         AND T1.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')	        
+           INNER JOIN WAA_DB_CONN_TRG C
+              ON C.DB_CONN_TRG_ID = A.DB_CONN_TRG_ID 
+             AND C.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+             AND C.REG_TYP_CD IN ('C', 'U') 
+           INNER JOIN WAA_DB_SCH  DS
+             ON DS.DB_SCH_ID = A.DB_SCH_ID  
+            AND DS.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+            AND DS.REG_TYP_CD IN ('C', 'U') 
+           LEFT JOIN WAH_DDL_PART_MAIN E 
+             ON E.DDL_PART_ID = A.DDL_PART_ID  
+            AND E.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+            AND E.REG_TYP_CD IN ('C', 'U')
+<!--            LEFT JOIN WAH_DDL_PART_SUB PS  -->
+<!--              ON PS.DDL_PART_ID = E.DDL_PART_ID    -->
+<!--             AND PS.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d') -->
+<!--             AND PS.REG_TYP_CD IN ('C', 'U')         -->
+  	       LEFT JOIN WAA_USER U
+  	         ON A.RQST_USER_ID = U.USER_ID	 
+            AND U.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+  	        AND U.REG_TYP_CD IN ('C', 'U')
+     WHERE A.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+       AND A.SUB_PART_TYP_CD IN ('HASH','LIST')
+       AND A.DDL_PART_ID = #{value}
+     UNION ALL
+  	SELECT A.RQST_NO
+         , A.RQST_SNO
+         , A.DDL_TBL_PNM AS TBL_NM
+         , A.DDL_TBL_ID
+         , A.DDL_PART_ID
+         , T1.DDL_TBL_LNM
+         , A.REG_TYP_CD
+         , A.PART_TYP_CD, A.PART_KEY, A.SUB_PART_TYP_CD, A.SUB_PART_KEY 
+		 , '' AS TBL_SPACE
+         , '' AS TBL_SPACE_ADD_SCRT
+		 , '' AS IDX_SPACE
+         , DS.DB_SCH_PNM        AS "SCHEMA"
+         , C.DB_CONN_TRG_PNM    AS DBMS
+         , C.DBMS_TYP_CD 	    AS DBMS_TYPE      
+         , GET_CMCD_DTL_NM('DBMS_TYP_CD', C.DBMS_TYP_CD) AS DBMS_TYPE_NM
+         , C.DBMS_VERS_CD	 	AS DBMS_VERS
+         , '' AS ACC_DBMS_YN
+         <!--주파티션정보-->
+         , NULL AS MAIN_REG_TYP_CD
+         , NULL AS DDL_PART_PNM
+         , NULL AS DDL_PART_VAL
+         , NULL AS PM_TBL_SPAC_PNM
+         
+         <!--  서브파티션정보 --> 
+         , ''  AS PS_TBL_SPAC_PNM
+         , PS.DDL_PART_SUB_PNM
+         , PS.DDL_PART_SUB_VAL
+         
+         , U.USER_NM AS RQST_USER_NM
+         , DATE_FORMAT(A.RQST_DTM, '%Y-%m-%d') AS RQST_DTM2
+         , DATE_FORMAT(A.APRV_DTM, '%Y-%m-%d') AS APRV_DTM2
+         <!-- , T1.CUD_YN -->        
+	  FROM WAH_DDL_PART A
+	       INNER JOIN WAH_DDL_TBL T1
+	          ON T1.DDL_TBL_ID = A.DDL_TBL_ID 
+	         AND T1.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')	        
+           INNER JOIN WAA_DB_CONN_TRG C
+              ON C.DB_CONN_TRG_ID = A.DB_CONN_TRG_ID 
+             AND C.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+             AND C.REG_TYP_CD IN ('C', 'U') 
+           INNER JOIN WAA_DB_SCH  DS
+             ON DS.DB_SCH_ID = A.DB_SCH_ID  
+            AND DS.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+            AND DS.REG_TYP_CD IN ('C', 'U') 
+<!--            LEFT JOIN WAH_DDL_PART_MAIN E  -->
+<!--              ON E.DDL_PART_ID = A.DDL_PART_ID   -->
+<!--             AND E.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d') -->
+<!--             AND E.REG_TYP_CD IN ('C', 'U') -->
+           LEFT JOIN WAH_DDL_PART_SUB PS 
+             ON A.DDL_PART_ID = PS.DDL_PART_ID   
+            AND PS.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+            AND PS.REG_TYP_CD IN ('C', 'U')        
+  	       LEFT JOIN WAA_USER U
+  	         ON A.RQST_USER_ID = U.USER_ID	 
+            AND U.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+  	        AND U.REG_TYP_CD IN ('C', 'U')
+     WHERE A.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+       AND A.SUB_PART_TYP_CD IN ('HASH','LIST')
+       AND A.DDL_PART_ID = #{value}
+     ORDER BY DDL_PART_PNM , DDL_PART_SUB_PNM 
+  </select>
+  
+  <select id="selectPartitionbyPartidByWaq" parameterType="kr.wise.meta.ddl.service.WaqDdlPartMain" resultMap="TblResultMap3">
+  <!-- WAQ 기준 파티션 정보 조회... -->
+  	SELECT A.RQST_NO
+         , A.RQST_SNO
+         , A.DDL_TBL_PNM AS TBL_NM
+         , A.DDL_TBL_ID
+         , A.DDL_PART_ID
+         , T1.DDL_TBL_LNM
+         , A.REG_TYP_CD
+         , A.PART_TYP_CD, A.PART_KEY, A.SUB_PART_TYP_CD, A.SUB_PART_KEY 
+		 , ''  AS TBL_SPACE
+         , ''  AS TBL_SPACE_ADD_SCRT
+		 , ''  AS IDX_SPACE
+         , DS.DB_SCH_PNM        AS "SCHEMA"
+         , C.DB_CONN_TRG_PNM    AS DBMS
+         , C.DBMS_TYP_CD 	    AS DBMS_TYPE      
+         , GET_CMCD_DTL_NM('DBMS_TYP_CD', C.DBMS_TYP_CD) AS DBMS_TYPE_NM
+         , C.DBMS_VERS_CD	 	AS DBMS_VERS
+         , '' AS ACC_DBMS_YN
+         <!--  주파티션 정보 -->
+         , E.REG_TYP_CD AS MAIN_REG_TYP_CD
+         , E.DDL_PART_PNM
+         , E.DDL_PART_VAL
+         , '' AS PM_TBL_SPAC_PNM
+         <!--  서브파티션 정보 -->        
+		 , NULL AS PS_TBL_SPAC_PNM
+         , NULL AS DDL_PART_SUB_PNM
+         , NULL AS DDL_PART_SUB_VAL        
+         , U.USER_NM AS RQST_USER_NM
+         , DATE_FORMAT(A.RQST_DTM, '%Y-%m-%d') AS RQST_DTM2
+         , DATE_FORMAT(A.APRV_DTM, '%Y-%m-%d') AS APRV_DTM2
+         <!--  , T1.CUD_YN -->
+	  FROM WAQ_DDL_PART A
+		  JOIN WAH_DDL_TBL T1
+		    ON A.DDL_TBL_ID = T1.DDL_TBL_ID
+		   AND T1.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	       INNER JOIN WAA_DB_CONN_TRG C
+	          ON C.DB_CONN_TRG_ID = A.DB_CONN_TRG_ID 
+	         AND C.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	         AND C.REG_TYP_CD IN ('C', 'U') 
+	       INNER JOIN WAA_DB_SCH  DS
+	         ON A.DB_SCH_ID = DS.DB_SCH_ID 
+	        AND DS.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	         AND DS.REG_TYP_CD IN ('C', 'U') 
+	        LEFT OUTER JOIN WAQ_DDL_PART_MAIN E 
+	          ON A.RQST_NO  = E.RQST_NO
+	         AND A.RQST_SNO = E.RQST_SNO
+	         AND E.VRF_CD IN ('1','5')
+<!-- 	         서브파티션 RANGE 선택할 수 없음 -->
+<!-- 	        LEFT OUTER JOIN WAQ_DDL_PART_SUB PS  -->
+<!-- 	          ON A.RQST_NO  = PS.RQST_NO -->
+<!-- 	         AND A.RQST_SNO = PS.RQST_SNO -->
+<!-- 	         AND PS.VRF_CD IN ('1','5') -->
+	  	     LEFT OUTER JOIN WAA_USER U
+	  	       ON A.RQST_USER_ID = U.USER_ID	 
+	          AND U.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	  	      AND U.REG_TYP_CD IN ('C', 'U')
+ WHERE A.RQST_NO = #{rqstNo}
+   AND A.RQST_SNO = #{rqstSno}
+   AND A.VRF_CD IN ('1','5')
+   AND IFNULL(A.SUB_PART_TYP_CD,'RANGE') = 'RANGE'   
+UNION ALL
+     SELECT A.RQST_NO
+         , A.RQST_SNO
+         , A.DDL_TBL_PNM AS TBL_NM
+         , A.DDL_TBL_ID
+         , A.DDL_PART_ID
+         , T1.DDL_TBL_LNM
+         , A.REG_TYP_CD
+         , A.PART_TYP_CD, A.PART_KEY, A.SUB_PART_TYP_CD, A.SUB_PART_KEY 
+		 , '' AS TBL_SPACE
+         , '' AS TBL_SPACE_ADD_SCRT
+		 , '' AS IDX_SPACE
+         , DS.DB_SCH_PNM        AS "SCHEMA"
+         , C.DB_CONN_TRG_PNM    AS DBMS
+         , C.DBMS_TYP_CD 	    AS DBMS_TYPE      
+         , GET_CMCD_DTL_NM('DBMS_TYP_CD', C.DBMS_TYP_CD) AS DBMS_TYPE_NM
+         , C.DBMS_VERS_CD	 	AS DBMS_VERS
+         , '' AS ACC_DBMS_YN
+         <!--  주파티션 정보 -->
+         , E.REG_TYP_CD AS MAIN_REG_TYP_CD
+         , E.DDL_PART_PNM
+         , E.DDL_PART_VAL
+         , ''  AS PM_TBL_SPAC_PNM
+        <!--  서브파티션정보 -->
+         , NULL AS PS_TBL_SPAC_PNM
+         , NULL AS DDL_PART_SUB_PNM
+         , NULL AS DDL_PART_SUB_VAL        
+         , U.USER_NM AS RQST_USER_NM
+         , DATE_FORMAT(A.RQST_DTM, '%Y-%m-%d') AS RQST_DTM2
+         , DATE_FORMAT(A.APRV_DTM, '%Y-%m-%d') AS APRV_DTM2
+         <!--  , T1.CUD_YN -->         
+	  FROM WAQ_DDL_PART A
+	       INNER JOIN WAH_DDL_TBL T1
+	          ON T1.DDL_TBL_ID = A.DDL_TBL_ID 
+	         AND T1.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')	        
+           INNER JOIN WAA_DB_CONN_TRG C
+              ON C.DB_CONN_TRG_ID = A.DB_CONN_TRG_ID 
+             AND C.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+             AND C.REG_TYP_CD IN ('C', 'U') 
+           INNER JOIN WAA_DB_SCH  DS
+             ON DS.DB_SCH_ID = A.DB_SCH_ID  
+            AND DS.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+            AND DS.REG_TYP_CD IN ('C', 'U')
+	        LEFT OUTER JOIN WAQ_DDL_PART_MAIN E 
+	          ON A.RQST_NO  = E.RQST_NO
+	         AND A.RQST_SNO = E.RQST_SNO
+	         AND E.VRF_CD IN ('1','5')
+<!-- 	        LEFT OUTER JOIN WAQ_DDL_PART_SUB PS  -->
+<!-- 	          ON A.RQST_NO  = PS.RQST_NO -->
+<!-- 	         AND A.RQST_SNO = PS.RQST_SNO -->
+<!-- 	         AND PS.VRF_CD IN ('1','5') -->
+  	       LEFT JOIN WAA_USER U
+  	         ON A.RQST_USER_ID = U.USER_ID	 
+            AND U.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+  	        AND U.REG_TYP_CD IN ('C', 'U')
+ WHERE A.RQST_NO = #{rqstNo}
+   AND A.RQST_SNO = #{rqstSno}
+   AND A.VRF_CD IN ('1','5')
+   AND A.SUB_PART_TYP_CD IN ('HASH','LIST')
+UNION ALL
+     SELECT A.RQST_NO
+         , A.RQST_SNO
+         , A.DDL_TBL_PNM AS TBL_NM
+         , A.DDL_TBL_ID
+         , A.DDL_PART_ID
+         , T1.DDL_TBL_LNM
+         , A.REG_TYP_CD
+         , A.PART_TYP_CD, A.PART_KEY, A.SUB_PART_TYP_CD, A.SUB_PART_KEY 
+		 , '' AS TBL_SPACE
+         , '' AS TBL_SPACE_ADD_SCRT
+		 , '' AS IDX_SPACE
+         , DS.DB_SCH_PNM        AS "SCHEMA"
+         , C.DB_CONN_TRG_PNM    AS DBMS
+         , C.DBMS_TYP_CD 	    AS DBMS_TYPE      
+         , GET_CMCD_DTL_NM('DBMS_TYP_CD', C.DBMS_TYP_CD) AS DBMS_TYPE_NM
+         , C.DBMS_VERS_CD	 	AS DBMS_VERS
+         , '' AS ACC_DBMS_YN
+         <!--  주파티션 정보 -->
+         
+         , NULL AS MAIN_REG_TYP_CD
+         , NULL AS DDL_PART_PNM
+         , NULL AS DDL_PART_VAL
+         , NULL AS PM_TBL_SPAC_PNM
+        <!-- 서브파티션정보 -->        
+         , '' AS PS_TBL_SPAC_PNM
+         , PS.DDL_PART_SUB_PNM
+         , PS.DDL_PART_SUB_VAL
+         , U.USER_NM AS RQST_USER_NM
+         , DATE_FORMAT(A.RQST_DTM, '%Y-%m-%d') AS RQST_DTM2
+         , DATE_FORMAT(A.APRV_DTM, '%Y-%m-%d') AS APRV_DTM2
+        <!--  , T1.CUD_YN -->         
+	  FROM WAQ_DDL_PART A
+	       INNER JOIN WAH_DDL_TBL T1
+	          ON T1.DDL_TBL_ID = A.DDL_TBL_ID 
+	         AND T1.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')	        
+           INNER JOIN WAA_DB_CONN_TRG C
+              ON C.DB_CONN_TRG_ID = A.DB_CONN_TRG_ID 
+             AND C.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+             AND C.REG_TYP_CD IN ('C', 'U') 
+           INNER JOIN WAA_DB_SCH  DS
+             ON DS.DB_SCH_ID = A.DB_SCH_ID  
+            AND DS.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+            AND DS.REG_TYP_CD IN ('C', 'U')
+<!-- 	        LEFT OUTER JOIN WAQ_DDL_PART_MAIN E  -->
+<!-- 	          ON A.RQST_NO  = E.RQST_NO -->
+<!-- 	         AND A.RQST_SNO = E.RQST_SNO -->
+<!-- 	         AND E.VRF_CD IN ('1','5') -->
+	        LEFT OUTER JOIN WAQ_DDL_PART_SUB PS 
+	          ON A.RQST_NO  = PS.RQST_NO
+	         AND A.RQST_SNO = PS.RQST_SNO
+	         AND PS.VRF_CD IN ('1','5')
+  	       LEFT JOIN WAA_USER U
+  	         ON A.RQST_USER_ID = U.USER_ID	 
+            AND U.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+  	        AND U.REG_TYP_CD IN ('C', 'U')
+ WHERE A.RQST_NO = #{rqstNo}
+   AND A.RQST_SNO = #{rqstSno}
+   AND A.VRF_CD IN ('1','5')
+   AND A.SUB_PART_TYP_CD IN ('HASH','LIST')   
+          
+ ORDER BY DDL_PART_PNM , DDL_PART_SUB_PNM 
+  </select>
+  
+  <select id="selectPartitionForAlter" parameterType="string" resultMap="TblResultMap3">
+  <!-- WAH 기준 파티션 정보 조회... : alter 용 파티션.... -->
+  	SELECT A.RQST_NO
+         , A.RQST_SNO
+         , A.DDL_TBL_PNM AS TBL_NM
+         , A.DDL_TBL_ID
+         , A.DDL_PART_ID
+         , T1.DDL_TBL_LNM
+         , A.REG_TYP_CD
+         , A.PART_TYP_CD, A.PART_KEY, A.SUB_PART_TYP_CD, A.SUB_PART_KEY  
+		 , ''  AS TBL_SPACE
+         , ''  AS TBL_SPACE_ADD_SCRT
+		 , ''  AS IDX_SPACE 		        
+         , DS.DB_SCH_PNM       AS "SCHEMA"
+         , C.DB_CONN_TRG_PNM   AS DBMS
+         , C.DBMS_TYP_CD 	    AS DBMS_TYPE
+         , GET_CMCD_DTL_NM('DBMS_TYP_CD', C.DBMS_TYP_CD) AS DBMS_TYPE_NM
+         , C.DBMS_VERS_CD	 	AS DBMS_VERS
+         , '' AS ACC_DBMS_YN
+         
+         <!-- 주파티션 정보 -->
+         , E.REG_TYP_CD AS MAIN_REG_TYP_CD
+         , E.DDL_PART_PNM
+         , E.DDL_PART_VAL
+         , '' AS PM_TBL_SPAC_PNM
+         <!--  서브파티션 정보 -->        
+		 , NULL AS SUB_REG_TYP_CD
+		 , NULL AS PS_TBL_SPAC_PNM
+         , NULL AS DDL_PART_SUB_PNM
+         , NULL AS DDL_PART_SUB_VAL 
+         , U.USER_NM AS RQST_USER_NM
+         , DATE_FORMAT(A.RQST_DTM, '%Y-%m-%d') AS RQST_DTM2
+         , DATE_FORMAT(A.APRV_DTM, '%Y-%m-%d') AS APRV_DTM2
+	  FROM WAH_DDL_PART A
+	       INNER JOIN WAH_DDL_TBL T1
+	          ON T1.DDL_TBL_ID = A.DDL_TBL_ID 
+	         AND T1.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')	   
+           INNER JOIN WAA_DB_CONN_TRG C
+              ON C.DB_CONN_TRG_ID = A.DB_CONN_TRG_ID 
+             AND C.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+             AND C.REG_TYP_CD IN ('C', 'U') 
+           INNER JOIN WAA_DB_SCH  DS
+             ON DS.DB_SCH_ID = A.DB_SCH_ID  
+            AND DS.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+            AND DS.REG_TYP_CD IN ('C', 'U') 
+           INNER JOIN WAH_DDL_PART_MAIN E 
+             ON E.DDL_PART_ID = A.DDL_PART_ID  
+            AND E.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+            AND E.RQST_NO = A.RQST_NO
+            AND E.RQST_SNO = A.RQST_SNO
+<!--            LEFT JOIN WAH_DDL_PART_SUB PS  -->
+<!--              ON PS.DDL_PART_ID = A.DDL_PART_ID   -->
+<!--             AND PS.DDL_MAIN_PART_ID = E.DDL_MAIN_PART_ID  -->
+<!--             AND PS.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d') -->
+<!--             AND PS.REG_TYP_CD IN ('C', 'U')         -->
+  	        LEFT OUTER JOIN WAA_USER U
+  	          ON U.USER_ID	= A.RQST_USER_ID  
+             AND U.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+  	         AND U.REG_TYP_CD IN ('C', 'U')
+	 WHERE A.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	   AND IFNULL(A.SUB_PART_TYP_CD,'RANGE') = 'RANGE'
+	   AND A.DDL_PART_ID = #{value}
+	UNION ALL
+  	SELECT A.RQST_NO
+         , A.RQST_SNO
+         , A.DDL_TBL_PNM AS TBL_NM
+         , A.DDL_TBL_ID
+         , A.DDL_PART_ID
+         , T1.DDL_TBL_LNM
+         , A.REG_TYP_CD
+         , A.PART_TYP_CD, A.PART_KEY, A.SUB_PART_TYP_CD, A.SUB_PART_KEY  
+		 , ''  AS TBL_SPACE
+         , ''  AS TBL_SPACE_ADD_SCRT
+		 , ''  AS IDX_SPACE 		        
+         , DS.DB_SCH_PNM       AS "SCHEMA"
+         , C.DB_CONN_TRG_PNM   AS DBMS
+         , C.DBMS_TYP_CD 	    AS DBMS_TYPE
+         , GET_CMCD_DTL_NM('DBMS_TYP_CD', C.DBMS_TYP_CD) AS DBMS_TYPE_NM
+         , C.DBMS_VERS_CD	 	AS DBMS_VERS
+         , '' AS ACC_DBMS_YN
+         
+         <!--  주파티션 정보 -->
+         , E.REG_TYP_CD AS MAIN_REG_TYP_CD
+         , E.DDL_PART_PNM
+         , E.DDL_PART_VAL
+         , ''  AS PM_TBL_SPAC_PNM
+         <!--  서브파티션 정보 -->        
+		 , NULL AS SUB_REG_TYP_CD
+		 , NULL AS PS_TBL_SPAC_PNM
+         , NULL AS DDL_PART_SUB_PNM
+         , NULL AS DDL_PART_SUB_VAL
+
+         , U.USER_NM AS RQST_USER_NM
+         , DATE_FORMAT(A.RQST_DTM, '%Y-%m-%d') AS RQST_DTM2
+         , DATE_FORMAT(A.APRV_DTM, '%Y-%m-%d') AS APRV_DTM2
+	  FROM WAH_DDL_PART A
+	       INNER JOIN WAH_DDL_TBL T1
+	          ON T1.DDL_TBL_ID = A.DDL_TBL_ID 
+	         AND T1.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')	   
+           INNER JOIN WAA_DB_CONN_TRG C
+              ON C.DB_CONN_TRG_ID = A.DB_CONN_TRG_ID 
+             AND C.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+             AND C.REG_TYP_CD IN ('C', 'U') 
+           INNER JOIN WAA_DB_SCH  DS
+             ON DS.DB_SCH_ID = A.DB_SCH_ID  
+            AND DS.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+            AND DS.REG_TYP_CD IN ('C', 'U') 
+           INNER JOIN WAH_DDL_PART_MAIN E 
+             ON E.DDL_PART_ID = A.DDL_PART_ID  
+            AND E.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+            AND E.RQST_NO = A.RQST_NO
+            AND E.RQST_SNO = A.RQST_SNO
+<!--            LEFT JOIN WAH_DDL_PART_SUB PS  -->
+<!--              ON PS.DDL_PART_ID = A.DDL_PART_ID   -->
+<!--             AND PS.DDL_MAIN_PART_ID = E.DDL_MAIN_PART_ID  -->
+<!--             AND PS.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d') -->
+<!--             AND PS.REG_TYP_CD IN ('C', 'U')         -->
+  	        LEFT OUTER JOIN WAA_USER U
+  	          ON U.USER_ID	= A.RQST_USER_ID  
+             AND U.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+  	         AND U.REG_TYP_CD IN ('C', 'U')
+	 WHERE A.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	   AND A.SUB_PART_TYP_CD IN ('HASH','LIST')
+	   AND A.DDL_PART_ID = #{value}
+	UNION ALL
+  	SELECT A.RQST_NO
+         , A.RQST_SNO
+         , A.DDL_TBL_PNM AS TBL_NM
+         , A.DDL_TBL_ID
+         , A.DDL_PART_ID
+         , T1.DDL_TBL_LNM
+         , A.REG_TYP_CD
+         , A.PART_TYP_CD, A.PART_KEY, A.SUB_PART_TYP_CD, A.SUB_PART_KEY 
+
+		 , '' AS TBL_SPACE
+         , '' AS TBL_SPACE_ADD_SCRT
+		 , '' AS IDX_SPACE 		        
+         , DS.DB_SCH_PNM       AS "SCHEMA"
+         , C.DB_CONN_TRG_PNM   AS DBMS
+         , C.DBMS_TYP_CD 	    AS DBMS_TYPE
+         , GET_CMCD_DTL_NM('DBMS_TYP_CD', C.DBMS_TYP_CD) AS DBMS_TYPE_NM
+         , C.DBMS_VERS_CD	 	AS DBMS_VERS
+         , '' AS ACC_DBMS_YN
+         
+         <!--  주파티션 정보 -->
+         , NULL AS MAIN_REG_TYP_CD
+         , NULL AS DDL_PART_PNM
+         , NULL AS DDL_PART_VAL
+         , NULL AS PM_TBL_SPAC_PNM
+        <!--  서브파티션정보 -->
+         , PS.REG_TYP_CD AS SUB_REG_TYP_CD
+         , ''  AS PS_TBL_SPAC_PNM
+         , PS.DDL_PART_SUB_PNM
+         , PS.DDL_PART_SUB_VAL
+
+         , U.USER_NM AS RQST_USER_NM
+         , DATE_FORMAT(A.RQST_DTM, '%Y-%m-%d') AS RQST_DTM2
+         , DATE_FORMAT(A.APRV_DTM, '%Y-%m-%d') AS APRV_DTM2
+	  FROM WAH_DDL_PART A
+	       INNER JOIN WAH_DDL_TBL T1
+	          ON T1.DDL_TBL_ID = A.DDL_TBL_ID 
+	         AND T1.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')	   
+           INNER JOIN WAA_DB_CONN_TRG C
+              ON C.DB_CONN_TRG_ID = A.DB_CONN_TRG_ID 
+             AND C.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+             AND C.REG_TYP_CD IN ('C', 'U') 
+           INNER JOIN WAA_DB_SCH  DS
+             ON DS.DB_SCH_ID = A.DB_SCH_ID  
+            AND DS.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+            AND DS.REG_TYP_CD IN ('C', 'U') 
+<!--            INNER JOIN WAH_DDL_PART_MAIN E  -->
+<!--              ON E.DDL_PART_ID = A.DDL_PART_ID   -->
+<!--             AND E.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d') -->
+           INNER JOIN WAH_DDL_PART_SUB PS 
+             ON PS.DDL_PART_ID = A.DDL_PART_ID  
+            AND PS.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+            AND PS.RQST_NO = A.RQST_NO
+            AND PS.RQST_SNO = A.RQST_SNO
+  	        LEFT OUTER JOIN WAA_USER U
+  	          ON U.USER_ID	= A.RQST_USER_ID  
+             AND U.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+  	         AND U.REG_TYP_CD IN ('C', 'U')
+	 WHERE A.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	   AND A.SUB_PART_TYP_CD IN ('HASH','LIST')
+	   AND A.DDL_PART_ID = #{value}
+	   
+	 ORDER BY DDL_PART_PNM , DDL_PART_SUB_PNM 
+  </select>
+  
+  <select id="selectPartitionForAlterByWaq" parameterType="kr.wise.meta.ddl.service.WaqDdlPartMain" resultMap="TblResultMap3">
+  <!-- WAQ 기준 파티션 정보 조회... : alter 용 파티션.... -->
+  	SELECT A.RQST_NO
+         , A.RQST_SNO
+         , A.DDL_TBL_PNM AS TBL_NM
+         , A.DDL_TBL_ID
+         , A.DDL_PART_ID
+         , T1.DDL_TBL_LNM
+         , A.REG_TYP_CD
+         , A.PART_TYP_CD, A.PART_KEY, A.SUB_PART_TYP_CD, A.SUB_PART_KEY 
+		 , ''  AS TBL_SPACE
+         , ''  AS TBL_SPACE_ADD_SCRT
+		 , ''  AS IDX_SPACE
+         , DS.DB_SCH_PNM        AS "SCHEMA"
+         , C.DB_CONN_TRG_PNM    AS DBMS
+         , C.DBMS_TYP_CD 	    AS DBMS_TYPE      
+         , GET_CMCD_DTL_NM('DBMS_TYP_CD', C.DBMS_TYP_CD) AS DBMS_TYPE_NM
+         , C.DBMS_VERS_CD	 	AS DBMS_VERS
+         , '' AS ACC_DBMS_YN
+         <!--  주파티션 정보 -->
+         , E.REG_TYP_CD AS MAIN_REG_TYP_CD
+         , E.DDL_PART_PNM
+         , E.DDL_PART_VAL
+         , ''  AS PM_TBL_SPAC_PNM
+         <!--  서브파티션 정보 -->    
+         , NULL AS SUB_REG_TYP_CD    
+		 , NULL AS PS_TBL_SPAC_PNM
+         , NULL AS DDL_PART_SUB_PNM
+         , NULL AS DDL_PART_SUB_VAL
+         , U.USER_NM AS RQST_USER_NM
+         , DATE_FORMAT(A.RQST_DTM, '%Y-%m-%d') AS RQST_DTM2
+         , DATE_FORMAT(A.APRV_DTM, '%Y-%m-%d') AS APRV_DTM2
+         <!--  , T1.CUD_YN -->
+	  FROM WAQ_DDL_PART A
+		  JOIN WAH_DDL_TBL T1
+		    ON A.DDL_TBL_ID = T1.DDL_TBL_ID
+		   AND T1.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	       INNER JOIN WAA_DB_CONN_TRG C
+	          ON C.DB_CONN_TRG_ID = A.DB_CONN_TRG_ID 
+	         AND C.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	         AND C.REG_TYP_CD IN ('C', 'U') 
+	       INNER JOIN WAA_DB_SCH  DS
+	         ON A.DB_SCH_ID = DS.DB_SCH_ID 
+	        AND DS.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	         AND DS.REG_TYP_CD IN ('C', 'U') 
+	        LEFT OUTER JOIN WAQ_DDL_PART_MAIN E 
+	          ON A.RQST_NO  = E.RQST_NO
+	         AND A.RQST_SNO = E.RQST_SNO
+	         AND E.VRF_CD IN ('1','5')
+<!-- 	         서브파티션 RANGE 선택할 수 없음 -->
+<!-- 	        LEFT OUTER JOIN WAQ_DDL_PART_SUB PS  -->
+<!-- 	          ON A.RQST_NO  = PS.RQST_NO -->
+<!-- 	         AND A.RQST_SNO = PS.RQST_SNO -->
+<!-- 	         AND PS.VRF_CD IN ('1','5') -->
+	  	     LEFT OUTER JOIN WAA_USER U
+	  	       ON A.RQST_USER_ID = U.USER_ID	 
+	          AND U.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	  	      AND U.REG_TYP_CD IN ('C', 'U')
+ WHERE A.RQST_NO = #{rqstNo}
+   AND A.RQST_SNO = #{rqstSno}
+   AND A.VRF_CD IN ('1','5')
+   AND IFNULL(A.SUB_PART_TYP_CD,'RANGE') = 'RANGE'
+   AND A.REG_TYP_CD IS NOT NULL   
+UNION ALL
+     SELECT A.RQST_NO
+         , A.RQST_SNO
+         , A.DDL_TBL_PNM AS TBL_NM
+         , A.DDL_TBL_ID
+         , A.DDL_PART_ID
+         , T1.DDL_TBL_LNM
+         , A.REG_TYP_CD
+         , A.PART_TYP_CD, A.PART_KEY, A.SUB_PART_TYP_CD, A.SUB_PART_KEY 
+		 , ''  AS TBL_SPACE
+         , ''  AS TBL_SPACE_ADD_SCRT
+		 , ''  AS IDX_SPACE
+         , DS.DB_SCH_PNM        AS "SCHEMA"
+         , C.DB_CONN_TRG_PNM    AS DBMS
+         , C.DBMS_TYP_CD 	    AS DBMS_TYPE      
+         , GET_CMCD_DTL_NM('DBMS_TYP_CD', C.DBMS_TYP_CD) AS DBMS_TYPE_NM
+         , C.DBMS_VERS_CD	 	AS DBMS_VERS
+         , '' AS ACC_DBMS_YN
+         <!--  주파티션 정보 -->
+         , E.REG_TYP_CD AS MAIN_REG_TYP_CD
+         , E.DDL_PART_PNM
+         , E.DDL_PART_VAL
+         , ''  AS PM_TBL_SPAC_PNM
+        <!--  서브파티션정보 -->
+         , NULL AS SUB_REG_TYP_CD
+         , NULL AS PS_TBL_SPAC_PNM
+         , NULL AS DDL_PART_SUB_PNM
+         , NULL AS DDL_PART_SUB_VAL
+         , U.USER_NM AS RQST_USER_NM
+         , DATE_FORMAT(A.RQST_DTM, '%Y-%m-%d') AS RQST_DTM2
+         , DATE_FORMAT(A.APRV_DTM, '%Y-%m-%d') AS APRV_DTM2
+        <!--  , T1.CUD_YN -->         
+	  FROM WAQ_DDL_PART A
+	       INNER JOIN WAH_DDL_TBL T1
+	          ON T1.DDL_TBL_ID = A.DDL_TBL_ID 
+	         AND T1.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')	        
+           INNER JOIN WAA_DB_CONN_TRG C
+              ON C.DB_CONN_TRG_ID = A.DB_CONN_TRG_ID 
+             AND C.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+             AND C.REG_TYP_CD IN ('C', 'U') 
+           INNER JOIN WAA_DB_SCH  DS
+             ON DS.DB_SCH_ID = A.DB_SCH_ID  
+            AND DS.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+            AND DS.REG_TYP_CD IN ('C', 'U')
+	        LEFT OUTER JOIN WAQ_DDL_PART_MAIN E 
+	          ON A.RQST_NO  = E.RQST_NO
+	         AND A.RQST_SNO = E.RQST_SNO
+	         AND E.VRF_CD IN ('1','5')
+<!-- 	        LEFT OUTER JOIN WAQ_DDL_PART_SUB PS  -->
+<!-- 	          ON A.RQST_NO  = PS.RQST_NO -->
+<!-- 	         AND A.RQST_SNO = PS.RQST_SNO -->
+<!-- 	         AND PS.VRF_CD IN ('1','5') -->
+  	       LEFT JOIN WAA_USER U
+  	         ON A.RQST_USER_ID = U.USER_ID	 
+            AND U.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+  	        AND U.REG_TYP_CD IN ('C', 'U')
+ WHERE A.RQST_NO = #{rqstNo}
+   AND A.RQST_SNO = #{rqstSno}
+   AND A.VRF_CD IN ('1','5')
+   AND A.SUB_PART_TYP_CD IN ('HASH','LIST')
+   AND E.REG_TYP_CD IS NOT NULL
+UNION ALL
+     SELECT A.RQST_NO
+         , A.RQST_SNO
+         , A.DDL_TBL_PNM AS TBL_NM
+         , A.DDL_TBL_ID
+         , A.DDL_PART_ID
+         , T1.DDL_TBL_LNM
+         , A.REG_TYP_CD
+         , A.PART_TYP_CD, A.PART_KEY, A.SUB_PART_TYP_CD, A.SUB_PART_KEY 
+		 , ''  AS TBL_SPACE
+         , ''  AS TBL_SPACE_ADD_SCRT
+		 , ''  AS IDX_SPACE
+         , DS.DB_SCH_PNM        AS "SCHEMA"
+         , C.DB_CONN_TRG_PNM    AS DBMS
+         , C.DBMS_TYP_CD 	    AS DBMS_TYPE      
+         , GET_CMCD_DTL_NM('DBMS_TYP_CD', C.DBMS_TYP_CD) AS DBMS_TYPE_NM
+         , C.DBMS_VERS_CD	 	AS DBMS_VERS
+         , '' AS ACC_DBMS_YN
+         <!--  주파티션 정보 -->
+         , NULL AS MAIN_REG_TYP_CD
+         , NULL AS DDL_PART_PNM
+         , NULL AS DDL_PART_VAL
+         , NULL AS PM_TBL_SPAC_PNM
+        <!--  서브파티션정보 -->
+         , PS.REG_TYP_CD AS SUB_REG_TYP_CD
+         , ''  AS PS_TBL_SPAC_PNM
+         , PS.DDL_PART_SUB_PNM
+         , PS.DDL_PART_SUB_VAL
+         , U.USER_NM AS RQST_USER_NM
+         , DATE_FORMAT(A.RQST_DTM, '%Y-%m-%d') AS RQST_DTM2
+         , DATE_FORMAT(A.APRV_DTM, '%Y-%m-%d') AS APRV_DTM2
+        <!--  , T1.CUD_YN -->         
+	  FROM WAQ_DDL_PART A
+	       INNER JOIN WAH_DDL_TBL T1
+	          ON T1.DDL_TBL_ID = A.DDL_TBL_ID 
+	         AND T1.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')	        
+           INNER JOIN WAA_DB_CONN_TRG C
+              ON C.DB_CONN_TRG_ID = A.DB_CONN_TRG_ID 
+             AND C.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+             AND C.REG_TYP_CD IN ('C', 'U') 
+           INNER JOIN WAA_DB_SCH  DS
+             ON DS.DB_SCH_ID = A.DB_SCH_ID  
+            AND DS.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+            AND DS.REG_TYP_CD IN ('C', 'U')
+<!-- 	        LEFT OUTER JOIN WAQ_DDL_PART_MAIN E  -->
+<!-- 	          ON A.RQST_NO  = E.RQST_NO -->
+<!-- 	         AND A.RQST_SNO = E.RQST_SNO -->
+<!-- 	         AND E.VRF_CD IN ('1','5') -->
+	        LEFT OUTER JOIN WAQ_DDL_PART_SUB PS 
+	          ON A.RQST_NO  = PS.RQST_NO
+	         AND A.RQST_SNO = PS.RQST_SNO
+	         AND PS.VRF_CD IN ('1','5')
+  	       LEFT JOIN WAA_USER U
+  	         ON A.RQST_USER_ID = U.USER_ID	 
+            AND U.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+  	        AND U.REG_TYP_CD IN ('C', 'U')
+ WHERE A.RQST_NO = #{rqstNo}
+   AND A.RQST_SNO = #{rqstSno}
+   AND A.VRF_CD IN ('1','5')
+   AND A.SUB_PART_TYP_CD IN ('HASH','LIST')   
+   AND PS.REG_TYP_CD IS NOT NULL       
+ ORDER BY DDL_PART_PNM , DDL_PART_SUB_PNM  
+  </select>
+  
+  <select id="selectDdlPartbyRqstNo" parameterType="string" resultMap="TblResultMap3">
+	  <!-- WAQ_DDL_PART 에서 파티션 정보를 가져온다...(등록가능 여부가 가능한것만 가져오기...) -->
+	  <!--  요청서 파티션 DDL UPDATE에서 사용 필요 없음 -->
+	SELECT A.RQST_NO
+	     , A.RQST_SNO
+	     , A.DDL_TBL_PNM AS TBL_NM
+	     , A.DDL_TBL_ID
+	     , A.DDL_PART_ID
+	     , T1.DDL_TBL_LNM
+	     , A.REG_TYP_CD
+	     , A.PART_TYP_CD, A.PART_KEY, A.SUB_PART_TYP_CD, A.SUB_PART_KEY  
+		 , ''  AS TBL_SPACE
+	     , ''  AS TBL_SPACE_ADD_SCRT
+		 , ''  AS IDX_SPACE 
+	     , A.DB_SCH_PNM       AS "SCHEMA"
+	     , C.DB_CONN_TRG_PNM  AS DBMS
+	     , C.DBMS_TYP_CD 	    AS DBMS_TYPE
+	     , GET_CMCD_DTL_NM('DBMS_TYP_CD', C.DBMS_TYP_CD) AS DBMS_TYPE_NM
+	     , C.DBMS_VERS_CD	 	AS DBMS_VERS
+	     , '' AS ACC_DBMS_YN
+	       
+         <!--  주파티션 정보 -->
+         , E.REG_TYP_CD AS MAIN_REG_TYP_CD
+         , E.DDL_PART_PNM
+         , E.DDL_PART_VAL
+         , ''  AS PM_TBL_SPAC_PNM
+         <!-- 서브파티션 정보 -->        
+		 , NULL AS PS_TBL_SPAC_PNM
+         , NULL AS DDL_PART_SUB_PNM
+         , NULL AS DDL_PART_SUB_VAL         
+	     , U.USER_NM AS RQST_USER_NM
+	     , DATE_FORMAT(A.RQST_DTM, '%Y-%m-%d') AS RQST_DTM2
+	     , DATE_FORMAT(A.APRV_DTM, '%Y-%m-%d') AS APRV_DTM2
+	  FROM WAQ_DDL_PART A
+	       INNER JOIN WAH_DDL_TBL T1
+	          ON A.DDL_TBL_ID = T1.DDL_TBL_ID
+	          AND T1.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	       INNER JOIN WAA_DB_SCH DS
+	          ON T1.DB_SCH_ID = DS.DB_SCH_ID
+	         AND DS.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	         AND DS.REG_TYP_CD IN ('C', 'U') 	          
+	       INNER JOIN WAA_DB_CONN_TRG C
+	          ON C.DB_CONN_TRG_ID = DS.DB_CONN_TRG_ID
+	         AND C.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	         AND C.REG_TYP_CD IN ('C', 'U') 
+	        INNER JOIN WAQ_DDL_PART_MAIN E 
+	          ON A.RQST_NO = E.RQST_NO
+	         AND A.RQST_SNO = E.RQST_SNO
+<!-- 	        LEFT OUTER JOIN WAQ_DDL_PART_SUB PS  -->
+<!-- 	          ON E.RQST_NO      = PS.RQST_NO -->
+<!-- 	         AND E.RQST_SNO     = PS.RQST_SNO -->
+	  	     LEFT OUTER JOIN WAA_USER U
+	  	       ON A.RQST_USER_ID = U.USER_ID	 
+	          AND U.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	  	      AND U.REG_TYP_CD IN ('C', 'U')  	    
+	 WHERE A.RQST_NO = #{rqstNo}
+	   AND IFNULL(A.SUB_PART_TYP_CD,'RANGE') = 'RANGE'
+	   AND A.VRF_CD = '1'
+	 UNION ALL
+	 SELECT A.RQST_NO
+	       , A.RQST_SNO
+	       , A.DDL_TBL_PNM AS TBL_NM
+	       , A.DDL_TBL_ID
+	       , A.DDL_PART_ID
+	       , T1.DDL_TBL_LNM
+	       , A.REG_TYP_CD
+	       , A.PART_TYP_CD, A.PART_KEY, A.SUB_PART_TYP_CD, A.SUB_PART_KEY  	       
+		   , ''  AS TBL_SPACE
+	       , ''  AS TBL_SPACE_ADD_SCRT
+		   , ''  AS IDX_SPACE 		        
+	       , A.DB_SCH_PNM       AS "SCHEMA"
+	       , C.DB_CONN_TRG_PNM   AS DBMS
+	       , C.DBMS_TYP_CD 	    AS DBMS_TYPE
+	       , GET_CMCD_DTL_NM('DBMS_TYP_CD', C.DBMS_TYP_CD) AS DBMS_TYPE_NM
+	       , C.DBMS_VERS_CD	 	AS DBMS_VERS
+	       , '' AS ACC_DBMS_YN
+	       
+	       <!--  주파티션 정보 -->
+	       , E.REG_TYP_CD AS MAIN_REG_TYP_CD
+	       , E.DDL_PART_PNM
+	       , E.DDL_PART_VAL
+	       , ''  AS PM_TBL_SPAC_PNM
+	       <!--  서브파티션정보 -->
+	       , NULL AS PS_TBL_SPAC_PNM
+	       , NULL AS DDL_PART_SUB_PNM
+	       , NULL AS DDL_PART_SUB_VAL	        
+	       , U.USER_NM AS RQST_USER_NM
+	       , DATE_FORMAT(A.RQST_DTM, '%Y-%m-%d') AS RQST_DTM2
+	       , DATE_FORMAT(A.APRV_DTM, '%Y-%m-%d') AS APRV_DTM2
+	  FROM WAQ_DDL_PART A
+	       INNER JOIN WAH_DDL_TBL T1
+	          ON A.DDL_TBL_ID = T1.DDL_TBL_ID  
+	          AND T1.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	       INNER JOIN WAA_DB_SCH DS
+	          ON T1.DB_SCH_ID = DS.DB_SCH_ID
+	         AND DS.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	         AND DS.REG_TYP_CD IN ('C', 'U') 	          
+	       INNER JOIN WAA_DB_CONN_TRG C
+	          ON C.DB_CONN_TRG_ID = DS.DB_CONN_TRG_ID
+	         AND C.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	         AND C.REG_TYP_CD IN ('C', 'U') 
+	        INNER JOIN WAQ_DDL_PART_MAIN E 
+	          ON A.RQST_NO = E.RQST_NO
+	         AND A.RQST_SNO = E.RQST_SNO
+<!-- 	        LEFT OUTER JOIN WAQ_DDL_PART_SUB PS  -->
+<!-- 	          ON E.RQST_NO      = PS.RQST_NO -->
+<!-- 	         AND E.RQST_SNO     = PS.RQST_SNO -->
+<!-- 	         AND E.RQST_DTL_SNO = 1              -->
+	  	     LEFT OUTER JOIN WAA_USER U
+	  	       ON A.RQST_USER_ID = U.USER_ID	 
+	          AND U.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	  	      AND U.REG_TYP_CD IN ('C', 'U')
+	 WHERE A.RQST_NO = #{rqstNo}
+	   AND A.SUB_PART_TYP_CD IN ('HASH','LIST') 
+	   AND A.VRF_CD = '1'  
+	 UNION ALL
+	 SELECT A.RQST_NO
+	       , A.RQST_SNO
+	       , A.DDL_TBL_PNM AS TBL_NM
+	       , A.DDL_TBL_ID
+	       , A.DDL_PART_ID
+	       , T1.DDL_TBL_LNM
+	       , A.REG_TYP_CD
+	       , A.PART_TYP_CD, A.PART_KEY, A.SUB_PART_TYP_CD, A.SUB_PART_KEY  	       
+		   , '' AS TBL_SPACE
+	       , '' AS TBL_SPACE_ADD_SCRT
+		   , '' AS IDX_SPACE 		        
+	       , A.DB_SCH_PNM       AS "SCHEMA"
+	       , C.DB_CONN_TRG_PNM   AS DBMS
+	       , C.DBMS_TYP_CD 	    AS DBMS_TYPE
+	       , GET_CMCD_DTL_NM('DBMS_TYP_CD', C.DBMS_TYP_CD) AS DBMS_TYPE_NM
+	       , C.DBMS_VERS_CD	 	AS DBMS_VERS
+	       , '' AS ACC_DBMS_YN
+	       
+         <!--  주파티션 정보 -->        
+         , NULL AS MAIN_REG_TYP_CD
+         , NULL AS DDL_PART_PNM
+         , NULL AS DDL_PART_VAL
+         , NULL AS PM_TBL_SPAC_PNM
+        <!--  서브파티션정보 -->
+       
+         , '' AS PS_TBL_SPAC_PNM
+         , PS.DDL_PART_SUB_PNM
+         , PS.DDL_PART_SUB_VAL
+	       
+	     , U.USER_NM AS RQST_USER_NM
+	     , DATE_FORMAT(A.RQST_DTM, '%Y-%m-%d') AS RQST_DTM2
+	     , DATE_FORMAT(A.APRV_DTM, '%Y-%m-%d') AS APRV_DTM2
+	  FROM WAQ_DDL_PART A
+	       INNER JOIN WAH_DDL_TBL T1
+	          ON A.DDL_TBL_ID = T1.DDL_TBL_ID 
+	          AND T1.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d') 
+	       INNER JOIN WAA_DB_SCH DS
+	          ON T1.DB_SCH_ID = DS.DB_SCH_ID
+	         AND DS.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	         AND DS.REG_TYP_CD IN ('C', 'U') 	          
+	       INNER JOIN WAA_DB_CONN_TRG C
+	          ON C.DB_CONN_TRG_ID = DS.DB_CONN_TRG_ID
+	         AND C.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	         AND C.REG_TYP_CD IN ('C', 'U') 
+<!-- 	        INNER JOIN WAQ_DDL_PART_MAIN E  -->
+<!-- 	          ON A.RQST_NO = E.RQST_NO -->
+<!-- 	         AND A.RQST_SNO = E.RQST_SNO -->
+	        LEFT OUTER JOIN WAQ_DDL_PART_SUB PS 
+	          ON A.RQST_NO      = PS.RQST_NO
+	         AND A.RQST_SNO     = PS.RQST_SNO
+	  	     LEFT OUTER JOIN WAA_USER U
+	  	       ON A.RQST_USER_ID = U.USER_ID	 
+	          AND U.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	  	      AND U.REG_TYP_CD IN ('C', 'U')
+	 WHERE A.RQST_NO = #{rqstNo}
+	   AND A.SUB_PART_TYP_CD IN ('HASH','LIST') 
+	   AND A.VRF_CD = '1'  
+	 ORDER BY RQST_SNO, DDL_PART_PNM , DDL_PART_SUB_PNM 
+  </select>
+  
+	<select id="selectDdlPartbyWaqDdlTblRqstNo" parameterType="string" resultMap="TblResultMap3">
+	  <!-- WAQ_DDL_PART 에서 파티션 정보를 가져온다...(등록가능 여부가 가능한것만 가져오기...) -->
+	  <!--  요청서 파티션 DDL UPDATE에서 사용 필요 없음 -->
+	SELECT A.RQST_NO
+       , A.RQST_SNO
+       , A.DDL_TBL_PNM AS TBL_NM
+       , A.DDL_TBL_ID
+       , A.DDL_PART_ID
+       , T1.DDL_TBL_LNM
+       , A.REG_TYP_CD
+       , A.PART_TYP_CD, A.PART_KEY, A.SUB_PART_TYP_CD, A.SUB_PART_KEY 
+	   , ''  AS TBL_SPACE
+	   , ''  AS IDX_SPACE
+       , A.DB_SCH_PNM       AS "SCHEMA"
+       , C.DB_CONN_TRG_PNM   AS DBMS
+       , C.DBMS_TYP_CD 	    AS DBMS_TYPE
+       , GET_CMCD_DTL_NM('DBMS_TYP_CD', C.DBMS_TYP_CD) AS DBMS_TYPE_NM
+       , C.DBMS_VERS_CD	 	AS DBMS_VERS
+       , '' AS ACC_DBMS_YN
+       
+       <!-- 주파티션 정보 -->
+       , E.REG_TYP_CD AS MAIN_REG_TYP_CD
+       , E.DDL_PART_PNM
+       , E.DDL_PART_VAL
+       , ''  AS PM_TBL_SPAC_PNM
+	   
+	   <!-- 서브파티션 정보 -->
+	   , ''  AS PS_TBL_SPAC_PNM
+       , PS.DDL_PART_SUB_PNM
+       , PS.DDL_PART_SUB_VAL
+       , U.USER_NM AS RQST_USER_NM
+       , DATE_FORMAT(A.RQST_DTM, '%Y-%m-%d') AS RQST_DTM2
+       , DATE_FORMAT(A.APRV_DTM, '%Y-%m-%d') AS APRV_DTM2
+  FROM WAQ_DDL_PART A
+  <!-- 이관테이블 존재하지 않을경우 WAQ_DDL_TBL 조회 -->
+       INNER JOIN WAQ_DDL_TBL T1
+          ON A.RQST_NO = T1.RQST_NO
+         AND A.DB_CONN_TRG_PNM = T1.DB_CONN_TRG_PNM
+         AND A.DB_SCH_PNM = T1.DB_USER_PNM
+         AND A.DDL_TBL_PNM = T1.DDL_TBL_PNM 
+       <!-- INNER JOIN WAQ_DDL_COL T2
+          ON T1.RQST_NO = T2.RQST_NO
+         AND T1.RQST_SNO = T2.RQST_SNO -->
+       INNER JOIN WAA_DB_SCH DS
+          ON T1.DB_SCH_ID = DS.DB_SCH_ID
+         AND DS.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+         AND DS.REG_TYP_CD IN ('C', 'U') 	          
+       INNER JOIN WAA_DB_CONN_TRG C
+          ON C.DB_CONN_TRG_ID = DS.DB_CONN_TRG_ID
+         AND C.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+         AND C.REG_TYP_CD IN ('C', 'U') 
+        INNER JOIN WAQ_DDL_PART_MAIN E 
+          ON A.RQST_NO = E.RQST_NO
+         AND A.RQST_SNO = E.RQST_SNO
+        LEFT OUTER JOIN WAQ_DDL_PART_SUB PS 
+          ON A.RQST_NO = PS.RQST_NO
+         AND A.RQST_SNO = PS.RQST_SNO
+         <!-- AND E.DDL_PART_PNM = PS.DDL_PART_PNM --> 
+  	     LEFT OUTER JOIN WAA_USER U
+  	       ON A.RQST_USER_ID = U.USER_ID	 
+          AND U.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+  	      AND U.REG_TYP_CD IN ('C', 'U')
+ WHERE A.RQST_NO = #{rqstNo}
+   AND A.VRF_CD = '1'
+ ORDER BY A.RQST_SNO, E.DDL_PART_PNM , PS.DDL_PART_SUB_PNM 
+  </select>
+  
+  <select id="selectTableOneByPart" parameterType="string" resultMap="TblResultMap2">
+  	<!-- WAM_DDL_TBL에서 테이블 컬럼 정보를 가져온다.... by 파티션 -->
+  	SELECT A.DDL_TBL_ID AS TBL_ID
+	     , A.DDL_TBL_PNM AS TBL_NM
+	     , A.DDL_TBL_LNM
+		 , CASE WHEN A.DDL_TBL_LNM IS NULL THEN A.OBJ_DESCN ELSE A.DDL_TBL_LNM END AS TBL_DESC
+		 , B.DB_SCH_PNM       AS "SCHEMA"
+		 , C.DB_CONN_TRG_PNM  AS DBMS
+	     , C.DBMS_TYP_CD 	    AS DBMS_TYPE
+	     , GET_CMCD_DTL_NM('DBMS_TYP_CD', C.DBMS_TYP_CD) AS DBMS_TYPE_NM
+		 , C.DBMS_VERS_CD	 AS DBMS_VERS
+		 , '' AS TBL_SPACE
+		 , '' AS TBL_SPACE_ADD_SCRT
+		 , '' AS IDX_SPACE
+         , '' AS IDX_SPACE_ADD_SCRT	
+		 , E.DDL_COL_ID		 AS COL_ID
+		 , E.DDL_COL_PNM      AS COL_NM
+		 , CASE WHEN E.DDL_COL_LNM IS NULL THEN E.OBJ_DESCN ELSE E.DDL_COL_LNM END AS COL_DESC
+		 , E.COL_ORD
+		 , E.DATA_TYPE
+		 , E.DATA_LEN
+		 , E.DATA_SCAL
+		 , E.PK_YN
+		 , E.PK_ORD
+		 , IFNULL(E.NONUL_YN,'N') AS NONUL_YN
+		 , E.DEFLT_VAL 
+	     <!-- , IFNULL(A.PART_TBL_YN, 'N') AS  PART_TBL_YN -->
+	     , 'Y' AS  PART_TBL_YN
+	     , G.SRC_DB_SCH_PNM
+	     , G.TGT_ROLE_PNM
+	     , G.SELECT_YN
+	     , G.INSERT_YN
+	     , G.UPDATE_YN
+	     , G.DELETE_YN 
+	     , U.USER_NM AS RQST_USER_NM
+	     , DATE_FORMAT(P.RQST_DTM, '%Y-%m-%d') AS RQST_DTM2
+         , DATE_FORMAT(P.APRV_DTM, '%Y-%m-%d') AS APRV_DTM2
+         , P.RQST_USER_ID
+         , IFNULL(A.ENC_YN,'N') ENC_YN
+         , IFNULL((SELECT ENC_YN FROM WAH_DDL_TBL H WHERE H.DDL_TBL_ID = A.DDL_TBL_ID AND (A.OBJ_VERS-1) = H.OBJ_VERS),'N') PRE_ENC_YN
+         , A.REG_TYP_CD
+         , '' AS PCI_YN
+         , '' AS ACC_DBMS_YN 
+	     , H.FULL_PATH 	   
+  	  FROM WAH_DDL_TBL A
+  	       INNER JOIN WAH_DDL_PART P <!--  파티션 테이블에서 요청정보 조회 -->
+  	          ON A.DDL_TBL_ID = P.DDL_TBL_ID
+  	         AND P.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	       JOIN WAA_DB_SCH B
+	         ON A.DB_SCH_ID = B.DB_SCH_ID
+	        AND A.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d') 
+	        AND B.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	        AND B.REG_TYP_CD IN ('C', 'U')
+	       JOIN WAA_DB_CONN_TRG C
+	         ON C.DB_CONN_TRG_ID = B.DB_CONN_TRG_ID
+	        AND C.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	        AND C.REG_TYP_CD IN ('C', 'U')
+	       LEFT JOIN WAH_DDL_COL E
+	         ON A.DDL_TBL_ID = E.DDL_TBL_ID
+	        AND E.EXP_DTM = STR_TO_DATE('9999-12-31','%Y-%m-%d')
+	        AND E.REG_TYP_CD IN ('C', 'U')
+	       LEFT OUTER JOIN WAH_PDM_TBL H
+	         ON A.PDM_TBL_ID = H.PDM_TBL_ID
+	        AND H.REG_TYP_CD IN ('C', 'U')
+	        AND H.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	       LEFT JOIN (SELECT A.DB_CONN_TRG_ID AS SRC_DB_CONN_TRG_ID
+	  							        ,GET_DB_SCH_PNM(A.DB_SCH_ID) AS SRC_DB_SCH_PNM
+	  							        ,B.ROLE_PNM AS TGT_ROLE_PNM
+	  							        ,A.SELECT_YN 
+	  							        ,A.INSERT_YN
+	  							        ,A.UPDATE_YN
+	  							        ,A.DELETE_YN
+	  							        ,A.DB_SCH_ID
+	  							   FROM WAA_DB_PRIVILEGE A
+	  							        INNER JOIN WAA_DB_ROLE B
+	  							           ON A.ROLE_ID = B.ROLE_ID
+	  							          AND B.EXP_DTM = STR_TO_DATE('99991231','%Y%m%d')
+	  							          AND B.REG_TYP_CD IN ('C','U')
+	  							 WHERE A.EXP_DTM = STR_TO_DATE('99991231','%Y%m%d')
+	  							   AND A.REG_TYP_CD IN ('C','U') ) G								   
+	    	  ON C.DB_CONN_TRG_ID = G.SRC_DB_CONN_TRG_ID  
+	    	 AND B.DB_SCH_ID = G.DB_SCH_ID 
+  	       LEFT JOIN WAA_USER U
+  	         ON P.RQST_USER_ID = U.USER_ID	 
+            AND U.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+  	        AND U.REG_TYP_CD IN ('C', 'U')   	    
+  	 WHERE A.DDL_TBL_ID = #{value}
+  	 ORDER BY E.COL_ORD
+  </select>
+  
+  <select id="selectTableOneByPartByWaq" parameterType="kr.wise.meta.ddl.service.WaqDdlPartMain" resultMap="TblResultMap2">
+ 	SELECT 
+		  A.DDL_TBL_ID AS TBL_ID
+	    , A.DDL_TBL_PNM AS TBL_NM
+	    , A.DDL_TBL_LNM
+		, CASE WHEN A.DDL_TBL_LNM IS NULL THEN A.OBJ_DESCN ELSE A.DDL_TBL_LNM END AS TBL_DESC
+		, B.DB_SCH_PNM       AS "SCHEMA"
+		, C.DB_CONN_TRG_PNM  AS DBMS
+	    , C.DBMS_TYP_CD 	    AS DBMS_TYPE
+	    , GET_CMCD_DTL_NM('DBMS_TYP_CD', C.DBMS_TYP_CD) AS DBMS_TYPE_NM
+		, C.DBMS_VERS_CD	 AS DBMS_VERS
+		, '' AS TBL_SPACE
+		, '' AS TBL_SPACE_ADD_SCRT
+		, '' AS IDX_SPACE
+        , '' AS IDX_SPACE_ADD_SCRT	
+		, E.DDL_COL_ID		 AS COL_ID
+		, E.DDL_COL_PNM      AS COL_NM
+		, CASE WHEN E.DDL_COL_LNM IS NULL THEN E.OBJ_DESCN ELSE E.DDL_COL_LNM END AS COL_DESC
+		, E.COL_ORD
+		, E.DATA_TYPE
+		, E.DATA_LEN
+		, E.DATA_SCAL
+		, E.PK_YN
+		, E.PK_ORD
+		, IFNULL(E.NONUL_YN,'N') AS NONUL_YN
+		, E.DEFLT_VAL 
+	    , IFNULL(A.PART_TBL_YN, 'N') AS  PART_TBL_YN
+	    , G.SRC_DB_SCH_PNM
+	    , G.TGT_ROLE_PNM
+	    , G.SELECT_YN
+	    , G.INSERT_YN
+	    , G.UPDATE_YN
+	    , G.DELETE_YN 
+	    , U.USER_NM AS RQST_USER_NM
+	    , DATE_FORMAT(P.RQST_DTM, '%Y-%m-%d') AS RQST_DTM2
+        , DATE_FORMAT(P.APRV_DTM, '%Y-%m-%d') AS APRV_DTM2
+        , P.RQST_USER_ID
+        , IFNULL(A.ENC_YN,'N') ENC_YN
+        , IFNULL((SELECT ENC_YN FROM WAH_DDL_TBL H WHERE H.DDL_TBL_ID = A.DDL_TBL_ID AND (A.OBJ_VERS-1) = H.OBJ_VERS),'N') PRE_ENC_YN
+        , A.REG_TYP_CD
+        , IFNULL(A.PCI_YN,'N') PCI_YN
+        , '' AS ACC_DBMS_YN
+	    , '' AS L3CD_PNM
+	    , P.FULL_PATH 	   
+  	  FROM WAH_DDL_TBL A
+  	       INNER JOIN WAQ_DDL_PART P <!--  파티션 테이블에서 요청정보 조회 -->
+  	          ON A.DDL_TBL_ID = P.DDL_TBL_ID
+  	         AND P.RQST_NO = #{rqstNo}
+  	         AND P.RQST_SNO = #{rqstSno}
+	  	  JOIN WAA_DB_SCH B
+	  	    ON A.DB_SCH_ID = B.DB_SCH_ID
+	  	   AND A.EXP_DTM = STR_TO_DATE('99991231', '%Y%m%d') 
+	  	   AND B.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	  	   AND B.REG_TYP_CD IN ('C', 'U')
+	  	  JOIN WAA_DB_CONN_TRG C
+	  	    ON C.DB_CONN_TRG_ID = B.DB_CONN_TRG_ID
+	  	   AND C.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	  	   AND C.REG_TYP_CD IN ('C', 'U')
+	  	  LEFT JOIN WAH_DDL_COL E
+	  	    ON A.DDL_TBL_ID = E.DDL_TBL_ID
+	  	   AND E.EXP_DTM = STR_TO_DATE('99991231','%Y%m%d')
+	  	   AND E.REG_TYP_CD IN ('C', 'U')
+	  	 LEFT OUTER JOIN WAH_PDM_TBL P
+	  	  ON A.PDM_TBL_ID = P.PDM_TBL_ID
+	  	 AND P.EXP_DTM = STR_TO_DATE('99991231', '%Y%m%d')
+	  	LEFT OUTER JOIN (SELECT A.DB_CONN_TRG_ID AS SRC_DB_CONN_TRG_ID
+								        ,GET_DB_SCH_PNM(A.DB_SCH_ID) AS SRC_DB_SCH_PNM
+								        ,B.ROLE_PNM AS TGT_ROLE_PNM
+								        ,A.SELECT_YN 
+								        ,A.INSERT_YN
+								        ,A.UPDATE_YN
+								        ,A.DELETE_YN
+								        ,A.DB_SCH_ID
+								   FROM WAA_DB_PRIVILEGE A
+								        INNER JOIN WAA_DB_ROLE B
+								           ON A.ROLE_ID = B.ROLE_ID
+								          AND B.EXP_DTM = STR_TO_DATE('9999-12-31','%Y-%m-%d')
+								          AND B.REG_TYP_CD IN ('C','U')
+								 WHERE A.EXP_DTM = STR_TO_DATE('99991231','%Y%m%d')
+								   AND A.REG_TYP_CD IN ('C','U') ) G								   
+	  	  ON C.DB_CONN_TRG_ID = G.SRC_DB_CONN_TRG_ID  
+	  	 AND B.DB_SCH_ID = G.DB_SCH_ID 
+  	     LEFT OUTER JOIN WAA_USER U
+  	       ON P.RQST_USER_ID = U.USER_ID	 
+          AND U.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+  	      AND U.REG_TYP_CD IN ('C', 'U')	   	    
+  	 WHERE P.RQST_NO = #{rqstNo}
+  	   AND P.RQST_SNO = #{rqstSno}
+  	   AND P.VRF_CD IN ('1','5')
+  	 ORDER BY E.COL_ORD
+  </select>
+  
+  <select id="selectWahIndices" parameterType="string" resultMap="IdxResultMap">
+	  <!-- 한 테이블에 속한 WAH_DDL_IDX 에서 인덱스, 인덱스컬럼 정보를 가져온다...(등록가능 여부가 가능한것만 가져오기...) -->
+	  SELECT A.RQST_NO
+	       , A.RQST_SNO
+	       , TBL.DDL_TBL_PNM AS TBL_NM
+	       , A.DDL_TBL_ID
+	       , A.DDL_IDX_PNM AS IDX_NM
+	       , A.DDL_IDX_LNM
+	       , CASE WHEN A.PK_IDX_YN = 'Y' THEN 'PK'
+	                WHEN A.IDX_TYP_CD = 'U' THEN 'UNIQUE'
+	                WHEN A.IDX_TYP_CD = 'N' THEN 'NON-UNIQUE'
+	                ELSE '-'
+	                END AS IDX_TYP 
+	       , A.PK_IDX_YN
+	       , A.UK_IDX_YN
+	       , A.REG_TYP_CD
+	       , A.OBJ_DESCN  AS IDX_DESC
+			<!--  계정계일경우 계정계테이블스페이스관리 테이블스페이스명 뒤져 없으면 DEFAULT 테이블스페이스 사용 -->
+		   , '' AS IDX_SPACE
+	       , '' AS IDX_SPACE_ADD_SCRT	
+	       , Z.DB_SCH_PNM       AS "SCHEMA"
+	       , C.DB_CONN_TRG_PNM   AS DBMS
+	       , C.DBMS_TYP_CD 	    AS DBMS_TYPE
+	       , GET_CMCD_DTL_NM('DBMS_TYP_CD', C.DBMS_TYP_CD) AS DBMS_TYPE_NM
+	       , C.DBMS_VERS_CD	 	AS DBMS_VERS
+	       , U.USER_NM AS RQST_USER_NM
+	       , E.DDL_IDX_COL_PNM AS DDL_IDX_COL_PNM
+	       , CD2.COMM_DTL_CD_NM AS SORT_TYP
+	       , DATE_FORMAT(A.RQST_DTM, '%Y-%m-%d') AS RQST_DTM2
+	       , DATE_FORMAT(A.APRV_DTM, '%Y-%m-%d') AS APRV_DTM2
+	       , TBL.DDL_TBL_LNM
+	       , '' PCI_YN       
+	       , '' AS IDX_KND_CD
+	  FROM WAH_DDL_IDX A
+	       INNER JOIN WAA_DB_SCH Z 
+	          ON A.DB_SCH_ID  = Z.DB_SCH_ID
+	         AND Z.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	         AND Z.REG_TYP_CD IN ('C', 'U')
+	       INNER JOIN WAA_DB_CONN_TRG C
+	          ON Z.DB_CONN_TRG_ID = C.DB_CONN_TRG_ID
+	         AND C.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	         AND C.REG_TYP_CD IN ('C', 'U')
+	         AND A.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	        INNER JOIN WAH_DDL_IDX_COL E 
+	          ON A.DDL_IDX_ID = E.DDL_IDX_ID
+	         AND E.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	         AND E.REG_TYP_CD IN ('C', 'U')
+	        LEFT OUTER JOIN WAH_DDL_TBL TBL
+	         ON A.DDL_TBL_ID = TBL.DDL_TBL_ID
+	        AND TBL.EXP_DTM = STR_TO_DATE('99991231', '%Y%m%d')
+	        LEFT OUTER JOIN (SELECT B.COMM_DTL_CD
+	                                , B.COMM_DTL_CD_NM 
+	                           FROM WAA_COMM_DCD A
+	                                INNER JOIN WAA_COMM_DTL_CD B
+	                                   ON A.COMM_DCD_ID = B.COMM_DCD_ID
+	                                  AND B.EXP_DTM  =  STR_TO_DATE('9999-12-31', '%Y-%m-%d')  
+	                                  AND B.REG_TYP_CD IN ('C','U')
+	                          WHERE A.COMM_DCD = 'IDX_COL_SRT_ORD_CD'
+	                            AND A.EXP_DTM  = STR_TO_DATE('9999-12-31', '%Y-%m-%d')  
+	                            AND A.REG_TYP_CD IN ('C','U') ) CD2
+	          ON E.SORT_TYP = CD2.COMM_DTL_CD	  
+	  	     LEFT OUTER JOIN WAA_USER U
+	  	       ON A.RQST_USER_ID = U.USER_ID	 
+	          AND U.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	  	      AND U.REG_TYP_CD IN ('C', 'U')  	    
+	 WHERE A.DDL_TBL_ID = #{ddlTblId }
+	   AND A.REG_TYP_CD IN ('C', 'U')
+	   AND TBL.REG_TYP_CD IN ('C', 'U')
+	 ORDER BY A.RQST_SNO, E.DDL_IDX_COL_ORD
+  </select>
+  
+   <select id="selectDdlEtcByObjId" parameterType="java.lang.String" resultType="java.lang.String">
+	  SELECT SCRT_INFO
+	  FROM WAH_DDL_ETC
+	  WHERE DDL_ETC_ID = #{objId }
+	  AND EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+  </select>
+</mapper>

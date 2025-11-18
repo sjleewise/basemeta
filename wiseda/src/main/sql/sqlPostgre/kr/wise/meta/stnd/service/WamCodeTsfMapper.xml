@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.meta.stnd.service.WamCodeTsfMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.meta.stnd.service.WamCdValTsf" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap" >
+    <id column="CD_VAL_ID" property="cdValId" jdbcType="VARCHAR" />
+    <result column="CD_VAL" property="cdVal" jdbcType="VARCHAR" />
+    <result column="CD_VAL_NM" property="cdValNm" jdbcType="VARCHAR" />
+    <result column="DMN_ID" property="dmnId" jdbcType="VARCHAR" />
+    <result column="UPP_CD_VAL_ID" property="uppCdValId" jdbcType="VARCHAR" />
+    <result column="RQST_NO" property="rqstNo" jdbcType="VARCHAR" />
+    <result column="RQST_SNO" property="rqstSno" jdbcType="DECIMAL" />
+    <result column="RQST_DTL_SNO" property="rqstDtlSno" jdbcType="DECIMAL" />
+    <result column="OBJ_DESCN" property="objDescn" jdbcType="VARCHAR" />
+    <result column="OBJ_VERS" property="objVers" jdbcType="DECIMAL" />
+    <result column="REG_TYP_CD" property="regTypCd" jdbcType="VARCHAR" />
+    <result column="FRS_RQST_DTM" property="frsRqstDtm" jdbcType="TIMESTAMP" />
+    <result column="FRS_RQST_USER_ID" property="frsRqstUserId" jdbcType="VARCHAR" />
+    <result column="RQST_DTM" property="rqstDtm" jdbcType="TIMESTAMP" />
+    <result column="RQST_USER_ID" property="rqstUserId" jdbcType="VARCHAR" />
+    <result column="APRV_DTM" property="aprvDtm" jdbcType="TIMESTAMP" />
+    <result column="APRV_USER_ID" property="aprvUserId" jdbcType="VARCHAR" />
+    <result column="DISP_ORD" property="dispOrd" jdbcType="DECIMAL" />
+    <result column="APL_STR_DT" property="aplStrDt" jdbcType="VARCHAR" />
+    <result column="APL_END_DT" property="aplEndDt" jdbcType="VARCHAR" />
+    <result column="EXP_DTM" property="expDtm" jdbcType="DATE" />
+    <result column="STR_DTM" property="strDtm" jdbcType="DATE" />
+    <result column="UPP_CD_VAL" property="uppCdVal" 	jdbcType="VARCHAR" />
+    <result column="VV_NOTE1" property="vvNote1" 	jdbcType="VARCHAR" />
+    <result column="VV_NOTE2" property="vvNote2" 	jdbcType="VARCHAR" />
+    <result column="VV_NOTE3" property="vvNote3" 	jdbcType="VARCHAR" />
+    <result column="VV_NOTE4" property="vvNote4" 	jdbcType="VARCHAR" />
+    <result column="VV_NOTE5" property="vvNote5" 	jdbcType="VARCHAR" />
+    <result column="VV_NOTE_NM1" property="vvNoteNm1" 	jdbcType="VARCHAR" />
+    <result column="VV_NOTE_NM2" property="vvNoteNm2" 	jdbcType="VARCHAR" />
+    <result column="VV_NOTE_NM3" property="vvNoteNm3" 	jdbcType="VARCHAR" />
+    <result column="VV_NOTE_NM4" property="vvNoteNm4" 	jdbcType="VARCHAR" />
+    <result column="VV_NOTE_NM5" property="vvNoteNm5" 	jdbcType="VARCHAR" />
+    <result column="OUTL_CNTN1" property="outlCntn1" 	jdbcType="VARCHAR" />
+    <result column="OUTL_CNTN2" property="outlCntn2" 	jdbcType="VARCHAR" />
+    <result column="USE_YN" property="useYn" 	jdbcType="VARCHAR" />
+    <result column="DMN_LNM"      property="dmnLnm"        jdbcType="VARCHAR" />  
+    <result column="DMN_PNM"      property="dmnPnm"        jdbcType="VARCHAR" />  
+    <result column="DMN_DSCD"      property="dmnDscd"        jdbcType="VARCHAR" />
+    <result column="CD_VAL_TYP_CD"      property="cdValTypCd"        jdbcType="VARCHAR" />
+    <result column="TGT_DB_CONN_TRG_ID" property="tgtDbConnTrgId" 	jdbcType="VARCHAR" />
+    <result column="TGT_DB_CONN_TRG_PNM" property="tgtDbConnTrgPnm" 	jdbcType="VARCHAR" />
+    <result column="TGT_DB_SCH_ID" property="tgtDbSchId" 	jdbcType="VARCHAR" />
+    <result column="TGT_DB_SCH_PNM" property="tgtDbSchPnm" 	jdbcType="VARCHAR" />
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    CD_VAL_ID, CD_VAL, CD_VAL_NM,TGT_DB_CONN_TRG_ID,TGT_DB_SCH_ID, DMN_ID, UPP_CD_VAL_ID, 
+    VV_NOTE1, VV_NOTE2, VV_NOTE3, VV_NOTE4, VV_NOTE5, VV_NOTE_NM1, VV_NOTE_NM2, VV_NOTE_NM3, 
+    VV_NOTE_NM4, VV_NOTE_NM5, OUTL_CNTN1, OUTL_CNTN2, USE_YN,DMN_DSCD, CD_VAL_TYP_CD, 
+    RQST_NO, RQST_SNO, RQST_DTL_SNO, 
+    OBJ_DESCN, OBJ_VERS, REG_TYP_CD, FRS_RQST_DTM, FRS_RQST_USER_ID, RQST_DTM, RQST_USER_ID, 
+    APRV_DTM, APRV_USER_ID, DISP_ORD, APL_STR_DT, APL_END_DT, 
+
+  </sql>
+   <select id="selectWamDmnValueList" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    
+    SELECT A.*
+      ,GET_CD_VAL_NM(A.UPP_CD_VAL_ID) AS UPP_CD_VAL
+      ,B.DMN_LNM
+      ,B.DMN_PNM
+      ,B.DMN_DSCD
+      ,B.CD_VAL_TYP_CD
+      FROM WAM_CD_VAL A 
+     INNER JOIN WAM_DMN B
+        ON A.DMN_ID = B.DMN_ID
+       AND B.REG_TYP_CD IN ('C', 'U')
+      <where>
+       AND (B.DMN_PNM LIKE '%'|| #{dmnLnm,jdbcType=VARCHAR}||'%' OR B.DMN_LNM LIKE '%'||#{dmnLnm,jdbcType=VARCHAR}||'%')
+      </where>
+      
+  </select>
+  
+     <select id="selectWamDmnListTsf" resultMap="BaseResultMap" parameterType="kr.wise.meta.stnd.service.WamCdValTsf" >
+    SELECT 
+       B.DMN_ID
+      ,B.DMN_LNM
+      ,B.DMN_PNM
+      ,B.DMN_DSCD
+      ,B.CD_VAL_TYP_CD
+     FROM WAM_DMN B
+     WHERE B.REG_TYP_CD IN ('C', 'U')
+       AND (B.DMN_PNM LIKE '%'|| #{dmnLnm,jdbcType=VARCHAR}||'%' OR B.DMN_LNM LIKE '%'||#{dmnLnm,jdbcType=VARCHAR}||'%')
+       AND B.DMN_DSCD LIKE '%'|| #{dmnDscd,jdbcType=VARCHAR}||'%'
+       AND EXISTS (SELECT 1 FROM WAM_CD_VAL C WHERE B.DMN_ID = C.DMN_ID)
+       <if test="cdValTypCd !=null">
+       AND CD_VAL_TYP_CD = #{cdValTypCd,jdbcType=VARCHAR}
+       </if>
+       <if test="useYn !=null">
+       AND USE_YN = #{useYn,jdbcType=VARCHAR}
+       </if>
+  </select>
+  
+    <select id="selectCdTsfWamList" resultMap="BaseResultMap" parameterType="kr.wise.meta.stnd.service.WamCdValTsf" >
+SELECT 
+       B.TGT_DB_CONN_TRG_ID
+      ,C.DB_CONN_TRG_PNM AS TGT_DB_CONN_TRG_PNM
+      ,B.TGT_DB_SCH_ID
+      ,D.DB_SCH_PNM AS TGT_DB_SCH_PNM
+      ,B.CD_VAL_ID
+      ,B.CD_VAL
+      ,B.CD_VAL_NM
+      ,B.UPP_CD_VAL_ID
+      ,(SELECT CD_VAL 
+        FROM WAM_CD_VAL_TSF
+        WHERE CD_VAL_ID = B.UPP_CD_VAL_ID 
+          AND TGT_DB_CONN_TRG_ID = B.TGT_DB_CONN_TRG_ID 
+          AND TGT_DB_SCH_ID = B.TGT_DB_SCH_ID) AS UPP_CD_VAL
+      ,B.DMN_ID
+      ,A.DMN_LNM
+      ,A.DMN_PNM
+      ,B.DMN_DSCD
+      ,B.CD_VAL_TYP_CD
+      ,B.VV_NOTE1 
+      ,B.VV_NOTE2 
+      ,B.VV_NOTE3 
+      ,B.VV_NOTE4 
+      ,B.VV_NOTE5 
+      ,B.VV_NOTE_NM1 
+      ,B.VV_NOTE_NM2 
+      ,B.VV_NOTE_NM3 
+      ,B.VV_NOTE_NM4 
+      ,B.VV_NOTE_NM5 
+      ,B.OUTL_CNTN1 
+      ,B.OUTL_CNTN2 
+      ,B.USE_YN 
+      ,B.DISP_ORD 
+      ,B.OBJ_DESCN
+     FROM WAM_CD_VAL_TSF B
+     INNER JOIN WAA_DB_CONN_TRG C
+     ON B.TGT_DB_CONN_TRG_ID = C.DB_CONN_TRG_ID
+     AND C.REG_TYP_CD IN ('C' ,'U')
+     AND C.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+     INNER JOIN WAA_DB_SCH D
+     ON B.TGT_DB_SCH_ID = D.DB_SCH_ID
+     AND D.REG_TYP_CD IN ('C' ,'U')
+     AND D.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+     LEFT OUTER JOIN WAM_DMN A
+     ON A.DMN_ID = B.DMN_ID
+     WHERE B.REG_TYP_CD IN ('C', 'U')
+       AND (A.DMN_PNM LIKE '%'|| #{dmnLnm,jdbcType=VARCHAR}||'%' OR A.DMN_LNM LIKE '%'||#{dmnLnm,jdbcType=VARCHAR}||'%')
+       AND B.DMN_DSCD LIKE '%'|| #{dmnDscd,jdbcType=VARCHAR}||'%'
+       <if test="cdValTypCd !=null">
+       AND B.CD_VAL_TYP_CD = #{cdValTypCd,jdbcType=VARCHAR}
+       </if>
+       <if test="tgtDbConnTrgId !=null">
+       AND B.TGT_DB_CONN_TRG_ID = #{tgtDbConnTrgId,jdbcType=VARCHAR}
+       </if>
+       <if test="tgtDbSchId !=null">
+       AND B.TGT_DB_SCH_ID = #{tgtDbSchId,jdbcType=VARCHAR}
+       </if>
+       <if test="useYn !=null">
+       AND B.USE_YN = #{useYn,jdbcType=VARCHAR}
+       </if>
+       <if test="cdVal !=null">
+       AND (B.CD_VAL LIKE '%'||#{cdVal,jdbcType=VARCHAR}||'%' OR B.CD_VAL_NM LIKE '%'||#{cdVal,jdbcType=VARCHAR}||'%')
+       </if>
+       <if test="searchBgnDe !=null and searchBgnDe !=''">
+		<![CDATA[ AND TO_CHAR(B.APRV_DTM, 'YYYY-MM-DD') >= #{searchBgnDe} ]]>
+	  </if>
+	  <if test="searchEndDe !=null and searchEndDe !=''">
+		<![CDATA[ AND TO_CHAR(B.APRV_DTM, 'YYYY-MM-DD') <= #{searchEndDe} ]]>
+	  </if>
+       ORDER BY  B.TGT_DB_CONN_TRG_ID,B.TGT_DB_SCH_ID, B.DMN_ID ,B.DISP_ORD
+  </select>
+
+    <select id="selectCdTsfWamDetail" resultMap="BaseResultMap" parameterType="kr.wise.meta.stnd.service.WamCdValTsf" >
+     SELECT 
+       B.TGT_DB_CONN_TRG_ID
+      ,C.DB_CONN_TRG_PNM AS TGT_DB_CONN_TRG_PNM
+      ,B.TGT_DB_SCH_ID
+      ,D.DB_SCH_PNM AS TGT_DB_SCH_PNM
+      ,B.CD_VAL_ID
+      ,B.CD_VAL
+      ,B.CD_VAL_NM
+      ,B.UPP_CD_VAL_ID
+      ,(SELECT CD_VAL 
+        FROM WAM_CD_VAL_TSF
+        WHERE CD_VAL_ID = B.UPP_CD_VAL_ID 
+          AND TGT_DB_CONN_TRG_ID = B.TGT_DB_CONN_TRG_ID 
+          AND TGT_DB_SCH_ID = B.TGT_DB_SCH_ID) AS UPP_CD_VAL
+      ,B.DMN_ID
+      ,A.DMN_LNM
+      ,A.DMN_PNM
+      ,B.DMN_DSCD
+      ,B.CD_VAL_TYP_CD
+      ,B.VV_NOTE1 
+      ,B.VV_NOTE2 
+      ,B.VV_NOTE3 
+      ,B.VV_NOTE4 
+      ,B.VV_NOTE5 
+      ,B.VV_NOTE_NM1 
+      ,B.VV_NOTE_NM2 
+      ,B.VV_NOTE_NM3 
+      ,B.VV_NOTE_NM4 
+      ,B.VV_NOTE_NM5 
+      ,B.OUTL_CNTN1 
+      ,B.OUTL_CNTN2 
+      ,B.USE_YN 
+      ,B.DISP_ORD 
+      ,B.OBJ_DESCN 
+      ,B.OBJ_VERS 
+      ,B.REG_TYP_CD 
+      ,B.FRS_RQST_DTM 
+      ,B.FRS_RQST_USER_ID
+      ,GET_USER_NM(B.FRS_RQST_USER_ID) AS  FRS_RQST_USER_NM
+      ,B.RQST_DTM 
+      ,B.RQST_USER_ID 
+      ,GET_USER_NM(B.RQST_USER_ID) AS  RQST_USER_NM
+      ,B.APRV_DTM 
+      ,B.APRV_USER_ID 
+      ,GET_USER_NM(B.APRV_USER_ID) AS  APRV_USER_NM
+     FROM WAM_CD_VAL_TSF B
+     INNER JOIN WAA_DB_CONN_TRG C
+     ON B.TGT_DB_CONN_TRG_ID = C.DB_CONN_TRG_ID
+     AND C.REG_TYP_CD IN ('C' ,'U')
+     AND C.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+     INNER JOIN WAA_DB_SCH D
+     ON B.TGT_DB_SCH_ID = D.DB_SCH_ID
+     AND D.REG_TYP_CD IN ('C' ,'U')
+     AND D.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+     LEFT OUTER JOIN WAM_DMN A
+     ON A.DMN_ID = B.DMN_ID
+     WHERE B.REG_TYP_CD IN ('C', 'U')
+      AND B.CD_VAL_ID = #{cdValId, jdbcType=VARCHAR}
+       AND B.TGT_DB_CONN_TRG_ID = #{tgtDbConnTrgId, jdbcType=VARCHAR}
+       AND B.TGT_DB_SCH_ID =#{tgtDbSchId, jdbcType=VARCHAR}
+       ORDER BY  B.TGT_DB_CONN_TRG_ID,B.TGT_DB_SCH_ID, B.DMN_ID ,B.DISP_ORD
+  </select>
+  <select id="selectCdTsfWamChg" resultMap="BaseResultMap" parameterType="kr.wise.meta.stnd.service.WamCdValTsf" >
+     SELECT 
+       B.TGT_DB_CONN_TRG_ID
+      ,C.DB_CONN_TRG_PNM AS TGT_DB_CONN_TRG_PNM
+      ,B.TGT_DB_SCH_ID
+      ,D.DB_SCH_PNM AS TGT_DB_SCH_PNM
+      ,B.CD_VAL_ID
+      ,B.CD_VAL
+      ,B.CD_VAL_NM
+      ,B.UPP_CD_VAL_ID
+      ,(SELECT CD_VAL 
+        FROM WAM_CD_VAL_TSF
+        WHERE CD_VAL_ID = B.UPP_CD_VAL_ID 
+          AND TGT_DB_CONN_TRG_ID = B.TGT_DB_CONN_TRG_ID 
+          AND TGT_DB_SCH_ID = B.TGT_DB_SCH_ID) AS UPP_CD_VAL
+      ,B.DMN_ID
+      ,A.DMN_LNM
+      ,A.DMN_PNM
+      ,B.DMN_DSCD
+      ,B.CD_VAL_TYP_CD
+      ,B.VV_NOTE1 
+      ,B.VV_NOTE2 
+      ,B.VV_NOTE3 
+      ,B.VV_NOTE4 
+      ,B.VV_NOTE5 
+      ,B.VV_NOTE_NM1 
+      ,B.VV_NOTE_NM2 
+      ,B.VV_NOTE_NM3 
+      ,B.VV_NOTE_NM4 
+      ,B.VV_NOTE_NM5 
+      ,B.OUTL_CNTN1 
+      ,B.OUTL_CNTN2 
+      ,B.USE_YN 
+      ,B.DISP_ORD 
+      ,B.OBJ_DESCN 
+      ,B.OBJ_VERS 
+      ,B.REG_TYP_CD 
+      ,B.FRS_RQST_DTM 
+      ,B.FRS_RQST_USER_ID
+      ,GET_USER_NM(B.FRS_RQST_USER_ID) AS  FRS_RQST_USER_NM
+      ,B.RQST_DTM 
+      ,B.RQST_USER_ID 
+      ,GET_USER_NM(B.RQST_USER_ID) AS  RQST_USER_NM
+      ,B.APRV_DTM 
+      ,B.APRV_USER_ID 
+      ,GET_USER_NM(B.APRV_USER_ID) AS  APRV_USER_NM
+      ,B.EXP_DTM
+      ,B.STR_DTM
+     FROM WAH_CD_VAL_TSF B
+     INNER JOIN WAA_DB_CONN_TRG C
+     ON B.TGT_DB_CONN_TRG_ID = C.DB_CONN_TRG_ID
+     AND C.REG_TYP_CD IN ('C' ,'U')
+     AND C.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+     INNER JOIN WAA_DB_SCH D
+     ON B.TGT_DB_SCH_ID = D.DB_SCH_ID
+     AND D.REG_TYP_CD IN ('C' ,'U')
+     AND D.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+     LEFT OUTER JOIN WAM_DMN A
+     ON A.DMN_ID = B.DMN_ID
+     WHERE 1=1 --B.REG_TYP_CD IN ('C', 'U')
+      AND B.CD_VAL_ID = #{cdValId, jdbcType=VARCHAR}
+       AND B.TGT_DB_CONN_TRG_ID = #{tgtDbConnTrgId, jdbcType=VARCHAR}
+       AND B.TGT_DB_SCH_ID =#{tgtDbSchId, jdbcType=VARCHAR}
+       ORDER BY B.EXP_DTM DESC,B.OBJ_VERS DESC,B.TGT_DB_CONN_TRG_ID,B.TGT_DB_SCH_ID, B.DMN_ID ,B.DISP_ORD
+  </select>
+
+  
+  
+</mapper>

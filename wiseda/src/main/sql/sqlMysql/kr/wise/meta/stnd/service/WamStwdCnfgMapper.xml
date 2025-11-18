@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.meta.stnd.service.WamStwdCnfgMapper">
+
+	<resultMap id="BaseResultMap" type="kr.wise.meta.stnd.service.WamStwdCnfg" >
+		<id column="OBJ_ID" property="objId" jdbcType="VARCHAR" />
+		<id column="WD_SNO" property="wdSno" jdbcType="DECIMAL" />
+		<result column="STWD_ID" property="stwdId" jdbcType="VARCHAR" />
+		<result column="RQST_NO" property="rqstNo" jdbcType="VARCHAR" />
+		<result column="RQST_SNO" property="rqstSno" jdbcType="DECIMAL" />
+		<result column="BIZ_DTL_CD" property="bizDtlCd" jdbcType="VARCHAR" />
+		<result column="STWD_LNM" property="stwdLnm" jdbcType="VARCHAR" />
+		<result column="STWD_PNM" property="stwdPnm" jdbcType="VARCHAR" />
+		<result column="ENG_MEAN" property="engMean" jdbcType="VARCHAR" />
+		<result column="OBJ_DESCN" property="objDescn" jdbcType="VARCHAR" />
+		<result column="STND_ASRT" property="stndAsrt" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="Base_Column_List" >
+		OBJ_ID, WD_SNO, STWD_ID, RQST_NO, RQST_SNO
+	</sql>
+  
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="map" >
+	
+    	SELECT /* WamStwdCnfgMapper.selectByPrimaryKey */
+    		<include refid="Base_Column_List" />
+    	FROM
+    		WAM_STWD_CNFG
+    	WHERE OBJ_ID = #{objId,jdbcType=VARCHAR}
+      		AND WD_SNO = #{wdSno,jdbcType=DECIMAL}
+      		
+	</select>
+
+	<delete id="deleteByPrimaryKey" parameterType="map" >
+	
+		DELETE /* WamStwdCnfgMapper.deleteByPrimaryKey */
+		FROM
+			WAM_STWD_CNFG
+		WHERE OBJ_ID = #{objId,jdbcType=VARCHAR}
+			AND WD_SNO = #{wdSno,jdbcType=DECIMAL}
+      
+	</delete>
+	
+	<insert id="insert" parameterType="kr.wise.meta.stnd.service.WamStwdCnfg" >
+	
+		INSERT /* WamStwdCnfgMapper.insert */
+		INTO WAM_STWD_CNFG (
+			OBJ_ID, WD_SNO, STWD_ID,
+			RQST_NO, RQST_SNO
+		) VALUES (
+			#{objId,jdbcType=VARCHAR}, #{wdSno,jdbcType=DECIMAL}, #{stwdId,jdbcType=VARCHAR}, 
+      		#{rqstNo,jdbcType=VARCHAR}, #{rqstSno,jdbcType=DECIMAL})
+
+	</insert>
+
+	<insert id="insertSelective" parameterType="kr.wise.meta.stnd.service.WamStwdCnfg" >
+	
+		INSERT /* WamStwdCnfgMapper.insertSelective */
+		INTO WAM_STWD_CNFG
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="objId != null" >
+			OBJ_ID,
+			</if>
+			<if test="wdSno != null" >
+			WD_SNO,
+			</if>
+			<if test="stwdId != null" >
+			STWD_ID,
+			</if>
+			<if test="rqstNo != null" >
+			RQST_NO,
+			</if>
+			<if test="rqstSno != null" >
+			RQST_SNO,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="objId != null" >
+			#{objId,jdbcType=VARCHAR},
+			</if>
+			<if test="wdSno != null" >
+			#{wdSno,jdbcType=DECIMAL},
+			</if>
+			<if test="stwdId != null" >
+			#{stwdId,jdbcType=VARCHAR},
+			</if>
+			<if test="rqstNo != null" >
+			#{rqstNo,jdbcType=VARCHAR},
+			</if>
+			<if test="rqstSno != null" >
+			#{rqstSno,jdbcType=DECIMAL},
+			</if>
+		</trim>
+		
+	</insert>
+	
+	<update id="updateByPrimaryKeySelective" parameterType="kr.wise.meta.stnd.service.WamStwdCnfg" >
+	
+		UPDATE /* WamStwdCnfgMapper.updateByPrimaryKeySelective */
+			WAM_STWD_CNFG
+		<set>
+			<if test="stwdId != null" >
+			STWD_ID = #{stwdId,jdbcType=VARCHAR},
+			</if>
+			<if test="rqstNo != null" >
+			RQST_NO = #{rqstNo,jdbcType=VARCHAR},
+			</if>
+			<if test="rqstSno != null" >
+			RQST_SNO = #{rqstSno,jdbcType=DECIMAL},
+			</if>
+		</set>
+		WHERE OBJ_ID = #{objId,jdbcType=VARCHAR}
+			AND WD_SNO = #{wdSno,jdbcType=DECIMAL}
+
+	</update>
+	
+	<update id="updateByPrimaryKey" parameterType="kr.wise.meta.stnd.service.WamStwdCnfg" >
+	
+		UPDATE /* WamStwdCnfgMapper.updateByPrimaryKey */
+			WAM_STWD_CNFG
+		SET
+			STWD_ID = #{stwdId,jdbcType=VARCHAR},
+			RQST_NO = #{rqstNo,jdbcType=VARCHAR},
+			RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+		WHERE OBJ_ID = #{objId,jdbcType=VARCHAR}
+			AND WD_SNO = #{wdSno,jdbcType=DECIMAL}
+
+	</update>
+
+	<select id="selectDmnInitList" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    
+		SELECT /* WamStwdCnfgMapper.selectDmnInitList */
+			A.*
+			,'STWD' AS BIZ_DTL_CD 
+			,C.STWD_LNM
+			,C.STWD_PNM
+			,C.ENG_MEAN
+			,C.OBJ_DESCN
+		FROM
+			WAM_STWD_CNFG A
+			INNER JOIN WAM_DMN B
+				ON A.OBJ_ID = B.DMN_ID
+				AND B.REG_TYP_CD IN ('C', 'U')
+			INNER JOIN WAM_STWD C
+				ON A.STWD_ID = C.STWD_ID
+				AND C.REG_TYP_CD IN ('C', 'U')
+		<where>
+			AND OBJ_ID = #{dmnId,jdbcType=VARCHAR}
+		</where>
+      
+	</select>
+
+	<select id="selectSditmInitList" resultMap="BaseResultMap" parameterType="java.lang.String" >
+	
+		SELECT /* WamStwdCnfgMapper.selectSditmInitList */
+			 A.OBJ_ID
+			,A.WD_SNO
+			,A.STWD_ID
+			,A.RQST_NO
+			,A.RQST_SNO
+			,'STWD' AS BIZ_DTL_CD
+			,C.STWD_LNM
+			,C.STWD_PNM
+			,C.ENG_MEAN
+			,C.OBJ_DESCN
+			,B.STND_ASRT
+		FROM
+			WAM_STWD_CNFG A 
+			INNER JOIN WAM_SDITM B
+				ON A.OBJ_ID = B.SDITM_ID
+			INNER JOIN WAM_STWD C
+				ON A.STWD_ID = C.STWD_ID
+		WHERE SDITM_ID = #{sditmId,jdbcType=VARCHAR}
+
+		UNION ALL
+
+		SELECT
+			A.DMN_ID AS OBJ_ID
+			,9999 AS WD_SNO
+			,A.DMN_ID AS STWD_ID
+			,A.RQST_NO AS RQST_NO
+			,A.RQST_SNO AS RQST_SNO
+			,'DMN' AS BIZ_DTL_CD
+			,A.DMN_LNM AS STWD_LNM
+			,A.DMN_PNM AS STWD_PNM
+			,'' AS ENG_MEAN
+			,A.OBJ_DESCN AS OBJ_DESCN
+			,B.STND_ASRT
+		FROM
+			WAM_DMN A 
+			INNER JOIN WAM_SDITM B
+		        ON A.DMN_ID = B.DMN_ID
+		        AND A.DMNG_ID = B.DMNG_ID
+		WHERE 1=1
+			AND B.SDITM_ID = #{sditmId,jdbcType=VARCHAR}
+			
+	</select>
+  
+</mapper>

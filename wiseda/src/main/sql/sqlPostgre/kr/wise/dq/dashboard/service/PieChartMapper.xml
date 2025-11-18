@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.dq.dashboard.service.PieChartMapper" >
+
+    
+    <resultMap id="PieChartMap" type="kr.wise.dq.dashboard.service.PieChartVO" >
+        <result column="RULE_CNT" property="ruleCnt"  />
+        <result column="NOTPRC_CNT" property="notprcCnt"  />
+        <result column="NOTPRC_PST" property="notprcPst"  />
+    	<result column="FIN_CNT"  property="finCnt"  />
+    	<result column="FIN_PST"  property="finPst"  />
+    	<result column="PRC_CNT"  property="prcCnt"  />
+    	<result column="PRC_PST"  property="prcPst"  />
+    </resultMap>
+
+    <select id="selectPieChart" parameterType="kr.wise.dq.dashboard.service.PieChartVO" resultMap="PieChartMap">
+
+		SELECT TOT.RULE_CNT AS RULE_CNT                                                                             
+		      ,TOT.NOTPRC_CNT AS NOTPRC_CNT
+              ,CASE WHEN TOT.NOTPRC_CNT = 0 THEN 0 ELSE TOT.NOTPRC_CNT / TOT.RULE_CNT END AS NOTPRC_PST
+		      ,TOT.FIN_CNT AS FIN_CNT 
+              ,CASE WHEN TOT.FIN_CNT = 0 THEN 0 ELSE TOT.FIN_CNT / TOT.RULE_CNT END AS FIN_PST
+		      ,TOT.PRC_CNT AS PRC_CNT                                                              
+              ,CASE WHEN TOT.PRC_CNT = 0 THEN 0 ELSE TOT.PRC_CNT / TOT.RULE_CNT END AS PRC_PST                                                                           
+		FROM (SELECT COUNT(*) AS  RULE_CNT                                                                                 
+		            ,COALESCE(SUM(CASE WHEN B.IM_ACT_STR_DTM IS NULL THEN 1 ELSE 0 END), 0) AS NOTPRC_CNT                                
+		            ,COALESCE(SUM(CASE WHEN B.IM_ACT_END_DTM IS NOT NULL THEN 1 ELSE 0 END), 0) AS FIN_CNT                                      
+		            ,COALESCE(SUM(CASE WHEN B.IM_ACT_STR_DTM IS NOT NULL AND B.IM_ACT_END_DTM IS NULL THEN 1 ELSE 0 END), 0) AS PRC_CNT         
+		      FROM (SELECT A.BR_ID                                                                         
+		            FROM WAM_BR_MSTR A INNER JOIN WAM_BR_RESULT C                                                                         
+		                                     ON A.BR_ID = C.BR_ID 
+                                             
+		                                     
+		                                     <if test="exeNum != null and exeNum != ''" >
+                                               <![CDATA[ AND C.ANA_DGR = #{exeNum}]]>
+                                             </if>
+                                             <if test="exeNum == null or exeNum == ''" >
+                                               <![CDATA[ AND C.ANA_DGR = (SELECT MIN(ANA_DGR) 
+		                                                                      FROM WAM_BR_RESULT X 
+		                                                                      WHERE C.BR_ID = X.BR_ID
+		                                                                     )
+		                                       ]]>
+                                             </if>
+		                                     
+		            WHERE 1=1
+		            
+		            <if test="dbmsID != null and dbmsID != ''" >
+                       <![CDATA[ AND A.DB_CONN_TRG_ID  = #{dbmsID}]]> 
+                    </if>
+                    
+                    )AA LEFT OUTER JOIN WAM_IM_ACT_MSTR B                                                                              
+		                          ON AA.BR_ID = B.ANA_JOB_ID                                                                                     
+		     )TOT          
+		
+    </select>
+        
+
+</mapper>

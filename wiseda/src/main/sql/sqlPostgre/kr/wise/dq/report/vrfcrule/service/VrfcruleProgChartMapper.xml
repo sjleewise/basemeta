@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.dq.report.vrfcrule.service.VrfcruleProgChartMapper" >
+<resultMap id="BaseResultMap" type="kr.wise.dq.profile.anares.service.WamPrfResultVO"  extends="kr.wise.dq.profile.mstr.service.WamPrfMstrMapper.BaseResultMap" >
+    <id column="ANA_STR_DTM" property="anaStrDtm" jdbcType="TIMESTAMP" />
+    <result column="ANA_END_DTM" property="anaEndDtm" jdbcType="TIMESTAMP" />
+    <result column="ANA_DGR" property="anaDgr" jdbcType="DECIMAL" />
+    <result column="ANA_CNT" property="anaCnt" jdbcType="DECIMAL" />
+    <result column="ESN_ER_CNT" property="esnErCnt" jdbcType="DECIMAL" />
+    <result column="ANA_LOG_ID" property="anaLogId" jdbcType="VARCHAR" />
+    <result column="ANA_USER_ID" property="anaUserId" jdbcType="VARCHAR" />
+    <result column="ANA_USER_NM" property="anaUserNm" jdbcType="VARCHAR" />
+    <result column="ESN_ER_RATE" property="esnErRate" jdbcType="VARCHAR" />
+    
+    <result column="SCH_ANA_STR_DTM" property="schAnaStrDtm" jdbcType="VARCHAR" />
+    <result column="NULL_CNT" property="nullCnt" jdbcType="DECIMAL" />
+    <result column="SPACE_CNT" property="spaceCnt" jdbcType="DECIMAL" />
+    <result column="MIN_VAL1" property="minVal1" jdbcType="VARCHAR" />
+    <result column="MIN_VAL2" property="minVal2" jdbcType="VARCHAR" />
+    <result column="MIN_VAL3" property="minVal3" jdbcType="VARCHAR" />
+    <result column="MAX_VAL1" property="maxVal1" jdbcType="VARCHAR" />
+    <result column="MAX_VAL2" property="maxVal2" jdbcType="VARCHAR" />
+    <result column="MAX_VAL3" property="maxVal3" jdbcType="VARCHAR" />
+    <result column="MIN_LEN" property="minLen" jdbcType="DECIMAL" />
+    <result column="MAX_LEN" property="maxLen" jdbcType="DECIMAL" />
+    
+     <result column="STDDEV_VAL" property="stddevVal" jdbcType="INTEGER" />
+    <result column="VARIANCE_VAL" property="varianceVal" jdbcType="INTEGER" />
+    <result column="AVG_VAL" property="avgVal" jdbcType="INTEGER" />
+    <result column="UNQ_CNT" property="unqCnt" jdbcType="INTEGER" />
+    <result column="MIN_CNT_VAL" property="minCntVal" jdbcType="INTEGER" />
+    <result column="MAX_CNT_VAL" property="maxCntVal" jdbcType="INTEGER" />
+    
+    <!-- 품질추이 -->
+    <result column="DB_CONN_TRG_LNM" property="dbConnTrgLnm" jdbcType="VARCHAR" />
+    <result column="ANA_DGR_DISP" property="anaDgrDisp" jdbcType="VARCHAR" />
+    <result column="DPMO" property="dpmo" jdbcType="VARCHAR" />
+    <result column="SIGMA" property="sigma" jdbcType="VARCHAR" />
+    <result column="ER_RATE" property="erRate" jdbcType="VARCHAR" />
+	<!-- 검증룰 -->
+    <result column="VRFC_TYP" property="vrfcTyp" jdbcType="VARCHAR" />
+  </resultMap>
+ 
+   <select id="selectVrfcruleProgQuality" resultMap="BaseResultMap" parameterType="kr.wise.dq.profile.mstr.service.WamPrfMstrCommonVO">
+SELECT A.*
+<!--       ,TO_CHAR(ROUND(WDQ_FC_DPMO(A.ESN_ER_CNT, A.ANA_CNT ), 2)) AS DPMO  -->
+      ,TO_CHAR(COALESCE(ROUND(WDQ_FC_SIGMA(WDQ_FC_DPMO(A.ESN_ER_CNT, A.ANA_CNT )),2),0)) AS SIGMA  
+      ,DECODE(A.ANA_CNT,0,0,DECODE(A.ESN_ER_CNT,0,100,ROUND(((A.ANA_CNT-A.ESN_ER_CNT)/A.ANA_CNT*100),2))) ER_RATE
+  FROM (
+        SELECT D.DB_CONN_TRG_ID
+        ,D.DB_CONN_TRG_LNM
+		, A.ANA_DGR AS ANA_DGR
+		, A.ANA_DGR || ' 차' AS ANA_DGR_DISP
+		 , COALESCE(E.VRFC_TYP, 'CD') AS VRFC_TYP 
+	     ,MAX(A.ANA_STR_DTM) AS ANA_STR_DTM
+          ,SUM(COALESCE(A.ANA_CNT,0)) AS ANA_CNT
+          ,SUM(COALESCE(A.ESN_ER_CNT,0)) AS ESN_ER_CNT
+	  FROM (SELECT PRF_ID, MAX(ANA_STR_DTM) AS ANA_STR_DTM, ANA_DGR, ANA_CNT, ESN_ER_CNT
+                                  FROM WAM_PRF_RESULT
+                                GROUP BY PRF_ID, ANA_DGR, ANA_CNT, ESN_ER_CNT ) A
+	       INNER JOIN WAA_COL_RULE_REL B
+	          ON B.RULE_REL_ID = A.PRF_ID
+	       INNER JOIN WAA_DB_SCH C
+	          ON C.EXP_DTM = TO_DATE('9999-12-31','YYYY-MM-DD')
+	         AND C.DB_SCH_ID = B.DB_SCH_ID 
+	       INNER JOIN WAA_DB_CONN_TRG D
+	          ON D.EXP_DTM = TO_DATE('9999-12-31','YYYY-MM-DD')
+	         AND D.DB_CONN_TRG_ID = C.DB_CONN_TRG_ID   
+	       LEFT JOIN WAA_VRFC_RULE E
+	          ON E.EXP_DTM = TO_DATE('9999-12-31','YYYY-MM-DD')
+	         AND E.VRFC_ID = B.VRFC_ID 
+		LEFT JOIN WAA_CD_RULE V
+			ON V.CD_RULE_ID = B.VRFC_ID
+	       LEFT OUTER JOIN WAT_DBC_COL F
+	       	  ON B.DB_SCH_ID = F.DB_SCH_ID
+	       	 AND B.DBC_TBL_NM = F.DBC_TBL_NM
+	       	 AND B.DBC_COL_NM = F.DBC_COL_NM
+          LEFT JOIN WAA_EXP_TBL EX          
+			  ON EX.DB_SCH_ID  = B.DB_SCH_ID  
+			 AND EX.DBC_TBL_NM = B.DBC_TBL_NM
+	 WHERE  1 = 1  
+	 --분석 차수가 있는 데이터만 나오게
+	   AND A.ANA_DGR IS NOT NULL
+	   AND COALESCE(EX.EXP_YN,'N')='N' 
+	   AND NOT exists (SELECT 1
+	   			         FROM WAA_EXP_TBL_RULE EXR
+	   			   		WHERE EXR.REG_TYP IN ('C', 'U')
+	   			    	  AND EXR.DB_SCH_ID = B.DB_SCH_ID
+        				  AND EXR.DB_CONN_TRG_ID = C.DB_CONN_TRG_ID 
+        				  AND B.DBC_TBL_NM LIKE (CASE WHEN (EXR.RELATION = 'F') THEN EXR.EXC_STND_RULE || '_' || '%' 
+													 WHEN (EXR.RELATION = 'B') THEN  '%' || '_' || EXR.EXC_STND_RULE END) 
+		)     
+	   
+	    <if test="dbConnTrgId != null">
+         AND D.DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR}
+         </if>
+         <if test="dbSchId != null">
+         AND C.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+         </if>
+         <if test="dbcTblNm != null">
+         AND (B.DBC_TBL_NM LIKE '%' || #{dbcTblNm,jdbcType=VARCHAR} || '%'
+         	OR B.DBC_TBL_NM LIKE '%' || UPPER(#{dbcTblNm,jdbcType=VARCHAR}) || '%')
+         </if>
+         <if test="dbcColNm != null">
+         AND (B.DBC_COL_NM LIKE '%' || #{dbcColNm,jdbcType=VARCHAR} || '%'
+         	OR B.DBC_COL_NM LIKE '%' || UPPER(#{dbcColNm,jdbcType=VARCHAR}) || '%')
+         </if>
+         <if test="anaDgr != null">
+         AND A.ANA_DGR = #{anaDgr,jdbcType=VARCHAR}
+         </if>
+           GROUP BY A.ANA_DGR, V.CD_RULE_ID, E.VRFC_TYP, D.DB_CONN_TRG_ID, D.DB_CONN_TRG_LNM
+          
+          ) A
+         WHERE 1=1
+         <if test="vrfcTyp != null and vrfcTyp != ''" >
+         AND VRFC_TYP = #{vrfcTyp,jdbcType=VARCHAR}
+         </if>
+         ORDER BY DB_CONN_TRG_LNM, VRFC_TYP, ANA_DGR 
+  </select>
+  
+
+    
+</mapper>

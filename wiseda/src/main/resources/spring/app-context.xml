@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/aop 
+	                    http://www.springframework.org/schema/aop/spring-aop-3.1.xsd
+		                http://www.springframework.org/schema/beans 
+		                http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+		                http://www.springframework.org/schema/util 
+		                http://www.springframework.org/schema/util/spring-util-3.1.xsd
+		                http://www.springframework.org/schema/tx 
+		                http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
+		                http://www.springframework.org/schema/context 
+		                http://www.springframework.org/schema/context/spring-context-3.1.xsd">
+	
+	
+	<!-- * Imports user-defined myBatis3 mapper beans that process client requests 
+	     * 파일추가참조 
+	     200918 mybatis 버전 3.2.3 ->  3.4.6 으로 변경 시 mapper-context.xml mapper bean 설정이 서비스보다 앞에와야 제대로 기동됩니다.
+	 -->
+ 	<import resource="mapper-context.xml" /> 
+ 	
+	<!-- * Root Context: defines shared resources visible to all other web components 
+	     * 파일추가참조 
+	 -->
+	<import resource="service-context.xml" /> 
+
+
+	<!-- 배치 스케줄 설정... -->
+<!--   	<import resource="schedule-context.xml" />    -->
+
+	<!-- datasource 설정 부분 profile 적용함... -->
+	<import resource="datasource-context.xml"/>
+		
+	<import resource="idgen-context.xml" />
+	<!-- * enable autowire 
+	     * 어노테이션 사용을 위해설정(@Required(setter메서드사용), @Autowired(의존관계 자동설정 - type으로연결),
+	     *                            @Resource(의존관계 자동설정 - name으로연결))  
+	  -->
+	<context:annotation-config />
+		
+	<!-- * DataSource/Transaction 
+	     * 어노테이션 @Transactional 사용을 위해서 설정 
+	 -->
+<!-- 	<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"  /> -->
+<!-- 	<tx:annotation-driven transaction-manager="dqtransactionManager" proxy-target-class="true" /> -->
+<!-- 	<tx:annotation-driven transaction-manager="transactionManager" /> -->
+	
+	<!-- * aop(관점지향)는 핵심비지니스로직에 영향을 미치지 않고 
+	     *                 공통모듈을 만든 후 코드밖에서 비지니스로직에 끼워 넣는 개발방법이다
+	     ** 모든패키지와 클래스 중에서 Service로 시작하는 메서드를 선택하겠다
+    <aop:aspectj-autoproxy proxy-target-class="true" />
+	  -->
+	  
+	<aop:config>
+	  <aop:pointcut id="txPointcut" expression="execution(* kr.wise..*Service.*(..))" />
+	  <aop:advisor advice-ref="txAdvice" pointcut-ref="txPointcut" />
+	</aop:config>
+	
+	<!-- ERMART7 연계 -->
+<!-- 	<aop:config> -->
+<!-- 	  <aop:pointcut id="modelmartPointcut" expression="execution(* kr.wise..getErMart7RelLst(..))" /> -->
+<!-- 	  <aop:advisor advice-ref="modelmarttxAdvice" pointcut-ref="modelmartPointcut" /> -->
+<!-- 	</aop:config> -->
+	
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+	  <tx:attributes>
+<!-- 	  mysql은 아래 권한 때문에 자동분할이 안됌 3개 readonly false 로 변경-->
+	    <tx:method name="get*" propagation="REQUIRED" read-only="false"/>
+	    <tx:method name="find*" propagation="REQUIRED" read-only="false"/>
+        <tx:method name="select*" propagation="REQUIRED" read-only="false"/>
+<!--         <tx:method name="load*" propagation="REQUIRES_NEW" isolation="SERIALIZABLE"/>         -->
+<!--         <tx:method name="approve*" propagation="REQUIRES_NEW" isolation="SERIALIZABLE"/>         -->
+		<tx:method name="startLog" propagation="REQUIRES_NEW" />
+		<tx:method name="endLog" propagation="REQUIRES_NEW" />
+		<tx:method name="errorLog" propagation="REQUIRES_NEW" />
+        <tx:method name="*" propagation="REQUIRED" />
+	  </tx:attributes>
+	</tx:advice>
+	
+	<!-- * Transaction은 2개 이상의 쿼리를 하나의 커넥션으로 묶어 DB에 전송하고 
+	     * 이 과정에서 문제가 생긴경우 자동으로 모든 과정을 원래 상태로 돌려놓는다
+         ** 선언적 Transaction방식으로 transactionManager를 AOP방식으로 특정 bean의 메서드에반영하도록 설정
+	     ** dataSource(Connection)의 설정으로 commit이나 rollback 등의 Transaction처리를 한다
+	     *** defaultAutoCommit은 기본적으로 false로 되어있다
+	  -->	
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />		
+    </bean>
+	<bean id="modelmarttransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="modelmartdataSource" />		
+    </bean>
+<!--     <bean id="codetransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager"> -->
+<!-- 		<property name="dataSource" ref="codedataSource" />		 -->
+<!--     </bean> -->
+    
+    <!-- * 외부설정 프로퍼티
+         ** PropertyPlaceholderConfigurer 클래스를 bean으로 등록하면 외부의 프로퍼티 파일에 
+         ** 저장된 정보를 스프링 설정 파일에서 사용가능
+         ** BasicDataSource 클래스와 연결되어 DB접속 가능하게 한다 
+     -->   
+	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+        	<list>
+        		<value>classpath:/properties/database.properties</value>
+        	</list>
+        </property>
+    </bean>
+    
+    <!-- * dataSource bean에서 사용할 수 있는 configure 빈 등록
+         * (.properties 외에도 .xml 도 사용할 수 있다)
+         * dataSource bean에서 사용할 때는 #{configure['upload.dir']} 같이 쓴다
+     -->
+    <util:properties id="configure" location="classpath:/properties/configure.properties"/>
+    
+    	<!-- * messageSource bean 객체 생성(메세지를 사용할 수 있도록 함)  
+	     * 컬렉션 타입 프로퍼티설정 <list> 사용(java.util.List)
+	 -->
+	<bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+		<property name="basenames">
+			<list>
+				<value>classpath:/messages/message</value>				
+				<value>classpath:/properties/idgnr</value>				
+				<value>classpath:/properties/configure</value>				
+			</list>
+		</property>
+		<property name="cacheSeconds" value="0" />
+	</bean>
+	
+	
+	<!-- * log4j.xml을 이용해서 쿼리를 가독성있게 출력-->
+    <!-- JDK 1.7 사용시 서버구동 불가... margin부분 주석처리하고 사용할것(정상작동함). 
+    	 margin이 어떤기능인지는 아직 파악 못함.(yeonho) -->
+    <bean id="dataSource" class="net.sf.log4jdbc.Log4jdbcProxyDataSource">
+    	<constructor-arg ref="dataSourceSpied" />
+    	<property name="logFormatter"> 
+	      <bean class="kr.wise.commons.util.Log4JdbcCustomFormatter2"> 
+	        <property name="loggingType" value="MULTI_LINE" /> 
+<!-- 	        <property name="margin" value="12" />  -->
+	        <property name="sqlPrefix" value="SQL:::" /> 
+	      </bean> 
+	    </property> 
+  	</bean>
+  	
+    <bean id="modelmartdataSource" class="net.sf.log4jdbc.Log4jdbcProxyDataSource">
+    	<constructor-arg ref="modelmartdataSourceSpied" />
+    	<property name="logFormatter"> 
+	      <bean class="kr.wise.commons.util.Log4JdbcCustomFormatter2"> 
+	        <property name="loggingType" value="MULTI_LINE" /> 
+<!-- 	        <property name="margin" value="12" />  -->
+	        <property name="sqlPrefix" value="SQL:::" /> 
+	      </bean> 
+	    </property> 
+  	</bean>
+	
+    
+<!--       <bean id="codedataSource" class="net.sf.log4jdbc.Log4jdbcProxyDataSource"> -->
+<!--     	<constructor-arg ref="codedataSourceSpied" /> -->
+<!--     	<property name="logFormatter">  -->
+<!-- 	      <bean class="kr.wise.commons.util.Log4JdbcCustomFormatter2">  -->
+<!-- 	        <property name="loggingType" value="MULTI_LINE" />  -->
+<!-- 	        <property name="margin" value="12" />  -->
+<!-- 	        <property name="sqlPrefix" value="SQL:::" />  -->
+<!-- 	      </bean>  -->
+<!-- 	    </property>  -->
+<!--   	</bean> -->
+   
+
+	<!-- 스프링 프로파일 설정 
+		적용방법 1. WAS 실행시 -Dspring.profiles.active=dev
+		적용방법 2. web.xml에 변수 설정 : 
+		<context-param>
+			<param-name>spring.profiles.active</param-name>
+			<param-value>product</param-value>
+		</context-param>
+	-->	
+
+    
+    <!-- * define the SqlSessionFactory, notice that configLocation is not needed when you use MapperScannerConfigurer 
+         * dataSource 빈을 mybatis에 주입시킴
+         ** mybatis의 SqlSessionFactory객체를 스프링의 팩토리 빈을 활용하여 생성시켜준다
+         ** 팩토리 빈이란 다이나믹 프록시를 스프링에서 쉽게 구현할 수 있도록 한것이다
+         *** 다이나믹 프록시란 
+    -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean" >
+    	<property name="dataSource" ref="dataSource"/>
+<!--     	<property name="typeHandlersPackage" value="kr.wise.test" /> -->
+<!--         <property name="typeAliasesPackage" value="kr.wise.*"/> -->
+<!-- 		<property name="configLocation" value="classpath:/mybatis-config.xml" /> -->
+<!--             사용 시 xml파일 bean생성하면서 검증이 들어가기 때문에 xml오타가 있거나 문법틀린경우 서버가 안뜸. db유형별로 xml선택은 build path 변경 방식으로 사용하도록함 -->
+<!--     	<property name="mapperLocations"> -->
+<!--     		<list> -->
+<!--     		200915 오라클 사용인경우 -->
+<!--     		    			<value>classpath:/sqlOracle/**/*.xml</value> -->
+<!--     		200915 마리아 사용인경우 -->    		    			
+<!--     		    			<value>classpath:/sqlMaria/**/*.xml</value> -->
+<!--     		</list> -->
+<!--     	</property>    	 -->
+    </bean>
+ 
+     <bean id="modelmartsqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean" >
+    	<property name="dataSource" ref="modelmartdataSource"/>
+<!--     	<property name="typeHandlersPackage" value="kr.wise.test" /> -->
+<!-- 		<property name="configLocation" value="classpath:/kr/wise/mybatis-config.xml" /> -->
+<!--     	<property name="mapperLocations"> -->
+<!--     		<list> -->
+<!--     			<value>classpath:/kr/wise/CommonMapper.xml</value> -->
+<!--     			<value>classpath:/kr/wise/commons/test/Service/TestMapper.xml</value> -->
+<!--     		</list> -->
+<!--     	</property>    	 -->
+    </bean>
+<!--        <bean id="codesqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean" > -->
+<!--     	<property name="dataSource" ref="codedataSource"/> -->
+<!--     	<property name="typeHandlersPackage" value="kr.wise.test" /> -->
+<!-- 		<property name="configLocation" value="classpath:/kr/wise/mybatis-config.xml" /> -->
+<!--     	<property name="mapperLocations"> -->
+<!--     		<list> -->
+<!--     			<value>classpath:/kr/wise/CommonMapper.xml</value> -->
+<!--     			<value>classpath:/kr/wise/commons/test/Service/TestMapper.xml</value> -->
+<!--     		</list> -->
+<!--     	</property>    	 -->
+<!--     </bean> -->
+       
+       
+	<!-- JDBC addBatch 형태로 작업을 처리할 경우 사용한다. -->
+<!--     <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+    	<constructor-arg index="0" ref="sqlSessionFactory" />
+    	<constructor-arg index="1" value="BATCH" />
+    </bean>
+    <bean id="dqsqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+    	<constructor-arg index="0" ref="dqsqlSessionFactory" />
+    	<constructor-arg index="1" value="BATCH" />
+    </bean> -->
+    
+	 <!-- 공통코드 초기화 빈 -->
+<!-- 	 <bean id="codeInit" class="" init-method="init"></bean> -->
+
+
+	<!-- 메일 인증-->
+	<bean id="mailSender"	class="org.springframework.mail.javamail.JavaMailSenderImpl">
+		<property name="host" value="smtp.gmail.com" />
+		<property name="port" value="587" /><!-- 465 or 25 -->
+		<property name="username" value="dq@wise.co.kr" />	<!-- ID수정 -->
+		<property name="password" value="wise1012!" />				<!-- PW수정 -->
+		<property name="defaultEncoding" value="utf-8" />
+		<property name="javaMailProperties">
+			<props>
+				<prop key="mail.smtp.socketFactory.class">javax.net.ssl.SSLSocketFactory</prop>
+				<prop key="mail.transport.protocol">smtp</prop>
+				<prop key="mail.smtp.auth">true</prop>
+				<prop key="mail.smtp.starttls.enable">true</prop>
+				<prop key="mail.debug">true</prop>
+			</props>
+		</property>
+	</bean>
+	
+		
+</beans>

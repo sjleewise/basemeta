@@ -1,0 +1,896 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.dq.criinfo.anatrg.service.AnaTrgMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.dq.criinfo.anatrg.service.AnaTrgTblVO" >
+    <id column="DB_CONN_TRG_ID" property="dbConnTrgId" jdbcType="VARCHAR" />
+    <result column="DB_CONN_TRG_LNM" property="dbConnTrgLnm" jdbcType="VARCHAR" />
+    <result column="DB_CONN_TRG_PNM" property="dbConnTrgPnm" jdbcType="VARCHAR" />
+    <result column="DB_SCH_PNM"      property="dbSchPnm" jdbcType="VARCHAR" />
+    <result column="DB_SCH_LNM"      property="dbSchLnm" jdbcType="VARCHAR" />
+    <result column="DBC_TBL_NM"      property="dbcTblNm" jdbcType="VARCHAR" />
+    <result column="DBC_TBL_KOR_NM"  property="dbcTblKorNm" jdbcType="VARCHAR" />
+    <result column="SUBJ_ID"         property="subjId"      jdbcType="VARCHAR" />
+    <result column="SUBJ_LNM"        property="subjLnm"     jdbcType="VARCHAR" />
+    <result column="SUBJ_PNM"        property="subjPnm"     jdbcType="VARCHAR" />
+    <result column="UPP_SUBJ_LNM"    property="uppSubjLnm"  jdbcType="VARCHAR" />
+    <result column="SYS_AREA_LNM"    property="sysAreaLnm"  jdbcType="VARCHAR" />
+    <result column="SYS_AREA_PNM"    property="sysAreaPnm"  jdbcType="VARCHAR" />
+    <result column="DB_SCH_ID"       property="dbSchId"     jdbcType="VARCHAR" />
+    <result column="DBC_COL_NM"      property="dbcColNm"    jdbcType="VARCHAR" />
+    <result column="OBJ_NM"          property="objNm"       jdbcType="VARCHAR" />
+    <result column="DBC_COL_KOR_NM"  property="dbcColKorNm" jdbcType="VARCHAR" />
+    <result column="DATA_TYPE"       property="dataType"    jdbcType="VARCHAR" />
+    <result column="DATA_LEN"        property="dataLen"     jdbcType="VARCHAR" />
+    <result column="DATA_PNT"        property="dataPnt"     jdbcType="VARCHAR" />
+    <result column="NULL_YN"         property="nullYn"      jdbcType="VARCHAR" />
+    <result column="DEFLT_VAL"       property="defltVal"    jdbcType="VARCHAR" />
+    <result column="PK_YN"           property="pkYn"        jdbcType="VARCHAR" />
+    <result column="ORD"             property="ord"         jdbcType="VARCHAR" />
+    <result column="PK_ORD"          property="pkOrd"       jdbcType="VARCHAR" />
+    <result column="META_ASSC_ANLY"  property="metaAsscAnly"  jdbcType="VARCHAR" />
+    <result column="DMN_MIN_VAL"     property="dmnMinVal"     jdbcType="VARCHAR" />
+    <result column="DMN_MAX_VAL"     property="dmnMaxVal"     jdbcType="VARCHAR" />
+    <result column="DMN_LNM"         property="dmnLnm"        jdbcType="VARCHAR" />
+    <result column="INFOTP_LNM"      property="infotpLnm"     jdbcType="VARCHAR" />
+    
+    <result column="PRF_ID"         property="prfId"      jdbcType="VARCHAR" />
+    <result column="ANA_STR_DTM" property="anaStrDtm" jdbcType="TIMESTAMP" />
+    
+    <result column="SHD_KND_CD" property="shdKndCd" jdbcType="VARCHAR" />
+    <result column="SHD_JOB_ID" property="shdJobId" jdbcType="VARCHAR" />
+    <result column="ETC_JOB_NM" property="etcJobNm" jdbcType="VARCHAR" />       
+  </resultMap>
+  
+  <resultMap id="ReacResultMap" type="kr.wise.dq.criinfo.anatrg.service.AnaTrgTblVO" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+    <id column="DB_CONN_TRG_ID" property="dbConnTrgId" jdbcType="VARCHAR" />
+    <result column="DB_CONN_TRG_LNM" property="dbConnTrgLnm" jdbcType="VARCHAR" />
+    <result column="DB_CONN_TRG_PNM" property="dbConnTrgPnm" jdbcType="VARCHAR" />
+    <result column="DB_SCH_PNM"      property="dbSchPnm" jdbcType="VARCHAR" />
+    <result column="DB_SCH_LNM"      property="dbSchLnm" jdbcType="VARCHAR" />
+    <result column="DBC_TBL_NM"      property="dbcTblNm" jdbcType="VARCHAR" />
+    <result column="DBC_TBL_KOR_NM"  property="dbcTblKorNm" jdbcType="VARCHAR" />
+    <result column="SUBJ_ID"         property="subjId"      jdbcType="VARCHAR" />
+    <result column="SUBJ_LNM"        property="subjLnm"     jdbcType="VARCHAR" />
+    <result column="SUBJ_PNM"        property="subjPnm"     jdbcType="VARCHAR" />
+    <result column="UPP_SUBJ_LNM"    property="uppSubjLnm"  jdbcType="VARCHAR" />
+    <result column="SYS_AREA_LNM"    property="sysAreaLnm"  jdbcType="VARCHAR" />
+    <result column="SYS_AREA_PNM"    property="sysAreaPnm"  jdbcType="VARCHAR" />
+    <result column="DB_SCH_ID"       property="dbSchId"     jdbcType="VARCHAR" />
+    <result column="DBC_COL_NM"      property="dbcColNm"    jdbcType="VARCHAR" />
+    <result column="OBJ_NM"          property="objNm"       jdbcType="VARCHAR" />
+    <result column="DBC_COL_KOR_NM"  property="dbcColKorNm" jdbcType="VARCHAR" />
+    <result column="DATA_TYPE"       property="dataType"    jdbcType="VARCHAR" />
+    <result column="DATA_LEN"        property="dataLen"     jdbcType="VARCHAR" />
+    <result column="DATA_PNT"        property="dataPnt"     jdbcType="VARCHAR" />
+    <result column="NULL_YN"         property="nullYn"      jdbcType="VARCHAR" />
+    <result column="DEFLT_VAL"       property="defltVal"    jdbcType="VARCHAR" />
+    <result column="PK_YN"           property="pkYn"        jdbcType="VARCHAR" />
+    <result column="ORD"             property="ord"         jdbcType="VARCHAR" />
+    <result column="PK_ORD"          property="pkOrd"       jdbcType="VARCHAR" />
+    <result column="META_ASSC_ANLY"  property="metaAsscAnly"  jdbcType="VARCHAR" />
+    <result column="DMN_MIN_VAL"     property="dmnMinVal"     jdbcType="VARCHAR" />
+    <result column="DMN_MAX_VAL"     property="dmnMaxVal"     jdbcType="VARCHAR" />
+    <result column="DMN_LNM"         property="dmnLnm"        jdbcType="VARCHAR" />
+    <result column="INFOTP_LNM"      property="infotpLnm"     jdbcType="VARCHAR" />
+    <result column="PRF_ID"          property="prfId"       jdbcType="VARCHAR" />
+    <result column="ANA_STR_DTM" property="anaStrDtm" jdbcType="TIMESTAMP" />
+  </resultMap>
+    
+  
+  <sql id="Base_Column_List" >
+   	TABLE_NAME, COLUMN_NAME
+  </sql>
+   <sql id="AnaTrg_Table_List" >
+   			   DB.DB_CONN_TRG_ID 
+               ,DB.DB_CONN_TRG_PNM
+		       ,DB.DB_CONN_TRG_LNM
+		       ,S.DB_SCH_ID
+		       ,S.DB_SCH_PNM
+		       ,S.DB_SCH_LNM
+		       ,T.DBC_TBL_NM
+		       ,T.DBC_TBL_KOR_NM
+		       ,T.SUBJ_ID
+  </sql>
+  
+   <sql id="AnaTrg_Column_List" >
+   			   DB.DB_CONN_TRG_ID 
+               ,DB.DB_CONN_TRG_PNM
+		       ,DB.DB_CONN_TRG_LNM
+		       ,S.DB_SCH_ID
+		       ,S.DB_SCH_PNM
+		       ,S.DB_SCH_LNM
+		       ,T.DBC_TBL_NM
+		       ,T.DBC_TBL_KOR_NM
+		       ,T.SUBJ_ID
+		       ,C.DBC_COL_NM
+		       ,C.DBC_COL_NM AS OBJ_NM
+		       ,C.DBC_COL_KOR_NM
+               ,CASE WHEN C.DATA_LEN IS NULL 
+                     THEN C.DATA_TYPE
+                     ELSE (CASE WHEN DATA_PNT IS NOT NULL
+                                THEN C.DATA_TYPE || '(' || C.DATA_LEN ||', '|| C.DATA_PNT ||')' 
+                                ELSE C.DATA_TYPE || '(' || C.DATA_LEN ||')'
+                                 END )
+                     END AS DATA_TYPE
+		       ,C.DATA_LEN
+		       ,C.DATA_PNT
+		       ,C.NULL_YN
+		       ,C.DEFLT_VAL
+		       ,C.PK_YN
+		       ,C.ORD 
+		       ,C.PK_ORD
+  </sql>
+
+
+<sql id="AnaTrgCol" >
+		 DBC.DB_CONN_TRG_PNM
+		,DBC.DB_CONN_TRG_LNM
+		,DBC.DB_SCH_PNM
+		,DBC.DB_SCH_LNM
+<!-- 		,DBC.DBC_TBL_NM -->
+		,DBC.DBC_TBL_KOR_NM
+		,DBC.SUBJ_ID
+<!-- 		,DBC.DBC_COL_NM -->
+		,DBC.DBC_COL_KOR_NM 
+		,CASE WHEN DBC.DATA_LEN IS NULL 
+		       THEN DBC.DATA_TYPE
+		       ELSE (CASE WHEN DATA_PNT IS NOT NULL
+		                  THEN DBC.DATA_TYPE || '(' || DBC.DATA_LEN ||', '|| DBC.DATA_PNT ||')' 
+		                  ELSE DBC.DATA_TYPE || '(' || DBC.DATA_LEN ||')'
+		                   END )
+		       END AS DATA_TYPE
+		,DBC.DATA_LEN
+		,DBC.DATA_PNT
+		,DBC.NULL_YN
+		,DBC.DEFLT_VAL
+		,DBC.PK_YN
+		,DBC.ORD 
+		,DBC.PK_ORD
+ </sql>
+ 
+<sql id="AnaTrg" >
+                        SELECT  DB.DB_CONN_TRG_PNM
+                               ,DB.DB_CONN_TRG_LNM
+                               ,DB.DB_CONN_TRG_ID
+                               ,S.DB_SCH_PNM
+                               ,S.DB_SCH_LNM
+                               ,S.DB_SCH_ID
+                               ,T.DBC_TBL_NM
+                               ,T.DBC_TBL_KOR_NM
+                               ,T.SUBJ_ID
+                               ,C.DBC_COL_NM
+                               ,C.DBC_COL_KOR_NM
+                               ,C.DATA_TYPE  
+                               ,C.DATA_LEN   
+                               ,C.DATA_PNUM  
+                               ,C.DATA_PNT   
+                               ,C.NULL_YN    
+                               ,C.DEFLT_LEN  
+                               ,C.DEFLT_VAL  
+                               ,C.PK_YN      
+                               ,C.ORD        
+                               ,C.PK_ORD     
+                               ,C.COL_DESCN  
+                          FROM WAA_DB_CONN_TRG DB
+                               INNER JOIN WAA_DB_SCH S
+                                  ON DB.DB_CONN_TRG_ID = S.DB_CONN_TRG_ID
+                                 AND S.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+                                 AND S.REG_TYP_CD IN ('C','U')
+                               INNER JOIN WAT_DBC_TBL T
+                                  ON T.DB_CONN_TRG_ID = S.DB_CONN_TRG_ID
+                                 AND T.DB_SCH_ID = S.DB_SCH_ID
+<!--                                  AND NVL(T.REG_TYP, 'C') IN ('C','U') -->
+                               INNER JOIN WAT_DBC_COL C
+                                  ON T.DB_SCH_ID = C.DB_SCH_ID
+                                 AND T.DBC_TBL_NM = C.DBC_TBL_NM
+<!--                                  AND NVL(C.REG_TYP, 'C')  IN ('C','U') -->
+                         WHERE DB.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+                           AND DB.REG_TYP_CD IN ('C','U') 
+</sql>
+
+<!-- 최근실행일자 -->
+  <sql id="getPrfResultMaxAnaStrDtm" >
+      SELECT R.*
+       FROM WAM_PRF_RESULT R
+                INNER JOIN (SELECT PRF_ID, MAX(ANA_STR_DTM) AS ANA_STR_DTM
+                                  FROM WAM_PRF_RESULT
+                                <if test="anaDgr != null and anaDgr != ''  " >
+                                 WHERE ANA_DGR =#{anaDgr,jdbcType=DECIMAL}
+                                </if>
+                                GROUP BY PRF_ID ) R2
+                    ON R.PRF_ID = R2.PRF_ID
+                   AND R.ANA_STR_DTM = R2.ANA_STR_DTM
+  </sql>
+
+                             
+<select id="selectPrfTblLst" resultMap="BaseResultMap" parameterType="kr.wise.dq.criinfo.anatrg.service.AnaTrgTblVO">		
+ SELECT
+         DB.DB_CONN_TRG_ID
+       , DB.DB_CONN_TRG_PNM
+       , DB.DB_CONN_TRG_LNM
+       , S.DB_SCH_ID
+       , S.DB_SCH_PNM
+       , S.DB_SCH_LNM
+       , T.DBC_TBL_NM
+       , T.DBC_TBL_KOR_NM
+       , T.SUBJ_ID
+       , #{metaAsscAnly, jdbcType=VARCHAR} AS META_ASSC_ANLY
+       , (CASE WHEN M.DBC_TBL_NM IS NULL THEN NULL
+                ELSE (CASE WHEN M.PRF_RESULT_ID IS NULL THEN  '#24A6BD'
+                               ELSE '#FF0000'
+                               END  )
+                END  ) AS FontColor
+  FROM WAA_DB_CONN_TRG DB
+       INNER JOIN WAA_DB_SCH S
+          ON DB.DB_CONN_TRG_ID = S.DB_CONN_TRG_ID
+         AND S.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+         AND S.REG_TYP_CD IN ('C','U')
+       INNER JOIN WAT_DBC_TBL T
+          ON DB.DB_CONN_TRG_ID = T.DB_CONN_TRG_ID
+         AND S.DB_SCH_ID = T.DB_SCH_ID        
+       INNER  JOIN 
+       (SELECT DB_SCH_ID, DBC_TBL_NM
+          FROM WAT_DBC_COL
+         WHERE (DBC_COL_NM LIKE '%'||#{schDbcColNm, jdbcType=VARCHAR}||'%' OR  DBC_COL_KOR_NM LIKE '%'||#{schDbcColNm, jdbcType=VARCHAR}||'%' )
+         <choose>
+	     	<when test='metaAsscAnly == "C" '>
+	     		AND RTRIM(DBC_COL_NM,'_0123456789') IN 
+	     		                  (SELECT SDITM_PNM
+	     		                     FROM WAM_SDITM A
+	     		                          INNER JOIN WAM_DMN B
+	     		                             ON B.DMN_ID = A.DMN_ID
+	     		                          INNER JOIN V_WAA_DMNG C
+	     		                             ON C.DMNG_ID = B.DMNG_ID  
+                                          INNER JOIN WAM_CD_VAL D
+		     		                         ON D.DMN_ID = B.DMN_ID   
+	     		                    WHERE C.DMNG_LNM = '코드'       
+	     		                   )
+	     	</when>
+	     	<when test='metaAsscAnly == "R" '>
+	     		AND RTRIM(DBC_COL_NM,'_0123456789') IN 
+	     		                  (SELECT SDITM_PNM
+	     		                     FROM WAM_SDITM A
+	     		                          INNER JOIN WAM_DMN B
+	     		                             ON B.DMN_ID = A.DMN_ID 	     		                          
+	     		                    WHERE B.DMN_MIN_VAL IS NOT NULL
+	     		                   )
+	     	</when>
+	     	<when test='metaAsscAnly == "D" '>
+	     		AND RTRIM(DBC_COL_NM,'_0123456789') IN 
+	     		                  (SELECT SDITM_PNM
+	     		                     FROM WAM_SDITM A
+	     		                          INNER JOIN WAM_DMN B
+	     		                             ON B.DMN_ID = A.DMN_ID
+	     		                          INNER JOIN WAA_INFO_TYPE C
+	     		                             ON C.EXP_DTM = TO_DATE('9999-12-31','YYYY-MM-DD')
+	     		                            AND C.INFOTP_ID = A.INFOTP_ID    
+	     		                    WHERE C.INFOTP_LNM IN ('날짜V4','날짜V6','날짜V8','날짜V14')       
+	     		                   )
+	     	</when>
+	     </choose>             
+         GROUP BY DB_SCH_ID, DBC_TBL_NM
+        ) C
+         ON S.DB_SCH_ID  = C.DB_SCH_ID
+        AND T.DBC_TBL_NM = C.DBC_TBL_NM        
+        LEFT JOIN 
+        ( SELECT  DB_CONN_TRG_ID,  DB_SCH_ID, DBC_TBL_NM
+                , MAX(R.PRF_ID) AS PRF_RESULT_ID
+             FROM WAM_PRF_MSTR M
+                      LEFT OUTER JOIN ( <include refid="kr.wise.dq.profile.anares.service.WamPrfResultMapper.getPrfResultMaxAnaStrDtm"/> ) R
+                       ON M.PRF_ID = R.PRF_ID
+           WHERE M.REG_TYP_CD IN ('C','U')
+           <if test="tblColGb != null  and tblColGb != ''  " >
+	       AND M.PRF_KND_CD LIKE #{tblColGb}||'%'
+	       </if>
+          GROUP BY M.DB_CONN_TRG_ID,  M.DB_SCH_ID, M.DBC_TBL_NM 
+         ) M
+         ON T.DB_CONN_TRG_ID = M.DB_CONN_TRG_ID
+        AND T.DB_SCH_ID  = M.DB_SCH_ID
+        AND T.DBC_TBL_NM = M.DBC_TBL_NM
+  WHERE DB.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+    AND DB.REG_TYP_CD IN ('C','U')
+    <if test="schDbConnTrgId != null and schDbConnTrgId != ''">
+    AND DB.DB_CONN_TRG_ID = #{schDbConnTrgId, jdbcType=VARCHAR}
+    </if>
+    <if test="schDbSchId != null and schDbSchId != '' ">
+    AND S.DB_SCH_ID = #{schDbSchId, jdbcType=VARCHAR}
+    </if>
+    <if test="schDbSchNm != null and schDbSchNm != '' ">
+    AND (S.DB_SCH_PNM LIKE '%'||#{schDbSchNm, jdbcType=VARCHAR}||'%' OR  S.DB_SCH_LNM  LIKE '%'||#{schDbSchNm, jdbcType=VARCHAR}||'%' )
+    </if>
+    <if test="schDbcTblNm != null and schDbcTblNm != '' ">
+    AND (T.DBC_TBL_NM LIKE '%'|| UPPER(#{schDbcTblNm, jdbcType=VARCHAR}) ||'%' OR  T.DBC_TBL_KOR_NM LIKE '%'||#{schDbcTblNm, jdbcType=VARCHAR}||'%' )
+    </if>
+    <if test='schRegYn == "Y" '>
+    AND M.DBC_TBL_NM IS NOT NULL
+    </if>
+    <if test='schRegYn == "N" '>
+    AND M.DBC_TBL_NM IS  NULL
+    </if>
+    <if test='metaAsscAnly == "Y" '>
+    AND T.DBC_TBL_NM IN (SELECT CH_TBL_PNM
+                           FROM WAM_PDM_REL_MST    
+                         )
+    </if>
+    
+            
+  ORDER BY DB.DB_CONN_TRG_ID, S.DB_SCH_ID, T.DBC_TBL_NM
+  </select>
+  
+  <select id="selectPrfColLst" resultMap="BaseResultMap" parameterType="kr.wise.dq.criinfo.anatrg.service.AnaTrgColVO">
+	SELECT <include refid="AnaTrg_Column_List" />
+	         ,(CASE WHEN M.OBJ_NM IS NULL THEN NULL
+                      ELSE (CASE WHEN M.PRF_RESULT_ID IS NULL THEN  '#24A6BD'
+                                     ELSE '#FF0000'
+                                     END  )
+                       END  ) AS FontColor
+<!--              , DM.DMN_MIN_VAL -->
+<!--              , DM.DMN_MAX_VAL -->
+             , #{metaAsscAnly, jdbcType=VARCHAR} AS META_ASSC_ANLY
+		  FROM WAA_DB_CONN_TRG DB
+		       INNER JOIN WAA_DB_SCH S
+		          ON DB.DB_CONN_TRG_ID = S.DB_CONN_TRG_ID
+		         AND S.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+		         AND S.REG_TYP_CD IN ('C','U')
+		       INNER JOIN WAT_DBC_TBL T
+		          ON DB.DB_CONN_TRG_ID = T.DB_CONN_TRG_ID
+		         AND S.DB_SCH_ID = T.DB_SCH_ID
+		       INNER JOIN WAT_DBC_COL C
+		          ON S.DB_SCH_ID = C.DB_SCH_ID
+		         AND T.DBC_TBL_NM = C.DBC_TBL_NM
+               LEFT OUTER JOIN ( SELECT  DB_CONN_TRG_ID,  DB_SCH_ID, DBC_TBL_NM, M.OBJ_NM
+			                                        ,MAX(R.PRF_ID) AS PRF_RESULT_ID
+			                               FROM WAM_PRF_MSTR M
+			                                        LEFT OUTER JOIN ( <include refid="kr.wise.dq.profile.anares.service.WamPrfResultMapper.getPrfResultMaxAnaStrDtm"/> ) R
+			                                         ON M.PRF_ID = R.PRF_ID
+			                             WHERE M.REG_TYP_CD IN ('C','U')
+			                              <if test="tblColGb != null  and tblColGb != ''  " >
+							                AND M.PRF_KND_CD LIKE #{tblColGb}||'%'
+							              </if>
+			                            GROUP BY M.DB_CONN_TRG_ID,  M.DB_SCH_ID, M.DBC_TBL_NM, M.OBJ_NM ) M
+			      ON T.DB_CONN_TRG_ID = M.DB_CONN_TRG_ID
+			     AND C.DB_SCH_ID = M.DB_SCH_ID
+			     AND C.DBC_TBL_NM = M.DBC_TBL_NM
+                 AND C.DBC_COL_NM = M.OBJ_NM
+<!--               LEFT JOIN WAM_SDITM SD -->
+<!--                 ON SD.SDITM_PNM = RTRIM(C.DBC_COL_NM,'0123456789') -->
+<!--               LEFT JOIN WAM_DMN DM -->
+<!--                 ON DM.DMN_ID = SD.DMN_ID -->
+		 WHERE DB.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+		    AND DB.REG_TYP_CD IN ('C','U')
+		    <if test="schDbConnTrgId != null and schDbConnTrgId != '' ">
+		    AND DB.DB_CONN_TRG_ID = #{schDbConnTrgId, jdbcType=VARCHAR}
+		    </if>
+		    <if test="schDbConnTrgLdm != null and schDbConnTrgLdm != '' ">
+		    AND (DB.DB_CONN_TRG_LNM LIKE '%'||#{schDbConnTrgLdm, jdbcType=VARCHAR}||'%' OR DB.DB_CONN_TRG_PNM LIKE '%'||#{schDbConnTrgLdm, jdbcType=VARCHAR}||'%' )
+		    </if>
+		    <if test="schDbSchId != null and schDbSchId != '' ">
+		    AND S.DB_SCH_ID = #{schDbSchId, jdbcType=VARCHAR}
+		    </if>
+		    <if test="schDbSchNm != null and schDbSchNm != '' ">
+		    AND (S.DB_SCH_PNM LIKE '%'||#{schDbSchNm, jdbcType=VARCHAR}||'%' OR S.DB_SCH_LNM LIKE '%'||#{schDbSchNm, jdbcType=VARCHAR}||'%' )
+		    </if>
+		    AND (T.DBC_TBL_NM  = #{schDbcTblNm, jdbcType=VARCHAR} OR T.DBC_TBL_KOR_NM  = #{schDbcTblNm, jdbcType=VARCHAR})
+		    <if test="schDbcColNm != null and schDbcColNm != '' ">
+		    AND (C.DBC_COL_NM LIKE '%'||#{schDbcColNm, jdbcType=VARCHAR}||'%' OR  C.DBC_COL_KOR_NM LIKE '%'||#{schDbcColNm, jdbcType=VARCHAR}||'%' )
+		    </if>
+		    <if test='schRegYn == "Y" '>
+		    AND M.OBJ_NM IS NOT NULL
+		    </if>
+		    <if test='schRegYn == "N" '>
+		    AND M.OBJ_NM IS  NULL
+		    </if>
+		    
+		    <choose>
+		     	<when test='metaAsscAnly == "C" '>
+		     		AND RTRIM(C.DBC_COL_NM,'_0123456789') IN 
+		     		                  (SELECT SDITM_PNM
+		     		                     FROM WAM_SDITM A
+		     		                          INNER JOIN WAM_DMN B
+		     		                             ON B.DMN_ID = A.DMN_ID
+		     		                          INNER JOIN V_WAA_DMNG C
+		     		                             ON C.DMNG_ID = B.DMNG_ID    
+		     		                          INNER JOIN WAM_CD_VAL D
+		     		                             ON D.DMN_ID = B.DMN_ID   
+		     		                    WHERE C.DMNG_LNM = '코드'       
+		     		                   )
+		     	</when>
+		     	<when test='metaAsscAnly == "R" '>
+		     		AND RTRIM(C.DBC_COL_NM,'_0123456789') IN 
+		     		                  (SELECT SDITM_PNM
+		     		                     FROM WAM_SDITM A
+		     		                          INNER JOIN WAM_DMN B
+		     		                             ON B.DMN_ID = A.DMN_ID 	     		                          
+		     		                    WHERE B.DMN_MIN_VAL IS NOT NULL
+		     		                   )
+		     	</when>
+		     	<when test='metaAsscAnly == "D" '>
+		     		AND RTRIM(C.DBC_COL_NM,'_0123456789') IN 
+		     		                  (SELECT SDITM_PNM
+		     		                     FROM WAM_SDITM A
+		     		                          INNER JOIN WAM_DMN B
+		     		                             ON B.DMN_ID = A.DMN_ID
+		     		                          INNER JOIN WAA_INFO_TYPE C
+		     		                             ON C.EXP_DTM = TO_DATE('9999-12-31','YYYY-MM-DD')
+		     		                            AND C.INFOTP_ID = A.INFOTP_ID    
+		     		                    WHERE C.INFOTP_LNM IN ('날짜V4','날짜V6','날짜V8','날짜V14')       
+		     		                   )
+		     	</when>
+	        </choose>  
+		 ORDER BY C.ORD
+	</select>
+	
+	<select id="selectAnaTrgTblDtl" resultMap="BaseResultMap" parameterType="kr.wise.dq.criinfo.anatrg.service.AnaTrgTblVO">
+	--첫번째조회
+	SELECT <include refid="AnaTrg_Table_List" />
+		  FROM WAA_DB_CONN_TRG DB
+		       INNER JOIN WAA_DB_SCH S
+		          ON DB.DB_CONN_TRG_ID = S.DB_CONN_TRG_ID
+		         AND S.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+		         AND S.REG_TYP_CD IN ('C','U')
+		        LEFT OUTER JOIN WAT_DBC_TBL T
+		          ON DB.DB_CONN_TRG_ID = T.DB_CONN_TRG_ID
+		         AND S.DB_SCH_ID = T.DB_SCH_ID
+		        <if test="schRegYn != null and schRegYn != '' ">
+		        LEFT OUTER JOIN (SELECT  DB_CONN_TRG_ID,  DB_SCH_ID, DBC_TBL_NM,  MAX(PRF_ID) AS PRF_ID
+		                                FROM WAM_PRF_MSTR
+		                               WHERE REG_TYP_CD IN ('C','U')
+		                              GROUP BY DB_CONN_TRG_ID,  DB_SCH_ID, DBC_TBL_NM )M
+		         ON DB.DB_CONN_TRG_ID = M.DB_CONN_TRG_ID
+		        AND S.DB_SCH_ID = M.DB_SCH_ID
+		        AND T.DBC_TBL_NM = M.DBC_TBL_NM
+		        </if>
+		 WHERE DB.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+		   AND DB.REG_TYP_CD IN ('C','U')
+		   AND DB.DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR}
+		   AND S.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+		   AND T.DBC_TBL_NM = #{dbcTblNm,jdbcType=VARCHAR}
+		    <if test='schRegYn == "Y" '>
+		    AND M.PRF_ID IS NOT NULL
+		    </if>
+		    <if test='schRegYn == "N" '>
+		    AND M.PRF_ID IS  NULL
+		    </if>
+	</select>
+	
+	<select id="selectAnaTrgColDtl" resultMap="BaseResultMap" parameterType="kr.wise.dq.criinfo.anatrg.service.AnaTrgTblVO">
+	--컬럼분석 프로파일 상세조회
+	    SELECT <include refid="AnaTrg_Column_List" />
+<!-- 	         , DM.DMN_MIN_VAL -->
+<!--              , DM.DMN_MAX_VAL -->
+<!--              , DM.DMN_LNM  -->
+<!--              , IF.INFOTP_LNM             -->
+             , #{metaAsscAnly, jdbcType=VARCHAR} AS META_ASSC_ANLY
+		  FROM WAA_DB_CONN_TRG DB
+		       INNER JOIN WAA_DB_SCH S
+		          ON DB.DB_CONN_TRG_ID = S.DB_CONN_TRG_ID
+		         AND S.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+		         AND S.REG_TYP_CD IN ('C','U')
+		        LEFT OUTER JOIN WAT_DBC_TBL T
+		          ON DB.DB_CONN_TRG_ID = T.DB_CONN_TRG_ID
+		         AND S.DB_SCH_ID = T.DB_SCH_ID
+		        LEFT OUTER JOIN WAT_DBC_COL C
+		          ON S.DB_SCH_ID = C.DB_SCH_ID
+		         AND T.DBC_TBL_NM = C.DBC_TBL_NM
+		        <if test="schRegYn != null and schRegYn != '' ">
+		        LEFT OUTER JOIN (SELECT  DB_CONN_TRG_ID,  DB_SCH_ID, DBC_TBL_NM, OBJ_NM, MAX(PRF_ID) AS PRF_ID
+		                                FROM WAM_PRF_MSTR
+		                               WHERE REG_TYP_CD IN ('C','U')
+		                              GROUP BY DB_CONN_TRG_ID,  DB_SCH_ID, DBC_TBL_NM, OBJ_NM )M
+		         ON DB.DB_CONN_TRG_ID = M.DB_CONN_TRG_ID
+		        AND S.DB_SCH_ID = M.DB_SCH_ID
+		        AND T.DBC_TBL_NM = M.DBC_TBL_NM
+		        AND C.DBC_COL_NM = M.OBJ_NM
+		        </if>
+<!-- 		        LEFT JOIN WAM_SDITM SD -->
+<!--                   ON SD.SDITM_PNM = RTRIM(C.DBC_COL_NM,'0123456789') -->
+<!--                 LEFT JOIN WAM_DMN DM -->
+<!--                   ON DM.DMN_ID = SD.DMN_ID      -->
+<!--                 LEFT JOIN WAA_INFO_TYPE IF -->
+<!--                   ON IF.EXP_DTM = TO_DATE('99991231','YYYYMMDD')                  -->
+<!--                  AND IF.INFOTP_ID = SD.INFOTP_ID                  -->
+		 WHERE DB.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+		   AND DB.REG_TYP_CD IN ('C','U')
+		   AND DB.DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR}
+		   AND S.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+		   AND T.DBC_TBL_NM = #{dbcTblNm,jdbcType=VARCHAR}
+		   AND C.DBC_COL_NM = #{dbcColNm,jdbcType=VARCHAR}
+		    <if test='schRegYn == "Y" '>
+		    AND M.PRF_ID IS NOT NULL
+		    </if>
+		    <if test='schRegYn == "N" '>
+		    AND M.PRF_ID IS  NULL
+		    </if>
+	</select>
+	
+	<select id="selectAnaTrgTblLst" resultMap="BaseResultMap" parameterType="kr.wise.dq.criinfo.anatrg.service.AnaTrgTblVO">		
+	 SELECT
+	        DB.DB_CONN_TRG_ID
+	       ,DB.DB_CONN_TRG_PNM
+	       ,DB.DB_CONN_TRG_LNM
+	       ,S.DB_SCH_ID
+	       ,S.DB_SCH_PNM
+	       ,S.DB_SCH_LNM
+	       ,T.DBC_TBL_NM
+	       ,T.DBC_TBL_KOR_NM
+	       ,T.SUBJ_ID
+	  FROM WAA_DB_CONN_TRG DB
+	       INNER JOIN WAA_DB_SCH S
+	          ON DB.DB_CONN_TRG_ID = S.DB_CONN_TRG_ID
+	         AND S.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+	         AND S.REG_TYP_CD IN ('C','U')
+	       INNER JOIN WAT_DBC_TBL T
+	          ON DB.DB_CONN_TRG_ID = T.DB_CONN_TRG_ID
+	         AND S.DB_SCH_ID = T.DB_SCH_ID
+	        <if test="schDbcColNm != null and schDbcColNm != '' ">
+	       INNER  JOIN (SELECT DB_SCH_ID, DBC_TBL_NM
+	                                 FROM WAT_DBC_COL
+	                                WHERE (DBC_COL_NM = #{schDbcColNm, jdbcType=VARCHAR} OR  DBC_COL_KOR_NM = #{schDbcColNm, jdbcType=VARCHAR} )
+<!-- 	                                WHERE (DBC_COL_NM LIKE '%'||#{schDbcColNm, jdbcType=VARCHAR}||'%' OR  DBC_COL_KOR_NM LIKE '%'||#{schDbcColNm, jdbcType=VARCHAR}||'%' ) -->
+	                                GROUP BY DB_SCH_ID, DBC_TBL_NM) C
+	         ON S.DB_SCH_ID = C.DB_SCH_ID
+	        AND T.DBC_TBL_NM = C.DBC_TBL_NM
+	        </if>
+	 WHERE DB.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+	    AND DB.REG_TYP_CD IN ('C','U')
+	    <if test="schDbConnTrgId != null and schDbConnTrgId != ''">
+	    AND DB.DB_CONN_TRG_ID = #{schDbConnTrgId, jdbcType=VARCHAR}
+	    </if>
+	    <if test="schDbSchId != null and schDbSchId != '' ">
+	    AND S.DB_SCH_ID = #{schDbSchId, jdbcType=VARCHAR}
+	    </if>
+	    <if test="schDbSchNm != null and schDbSchNm != '' ">
+	    AND (S.DB_SCH_PNM = #{schDbSchNm, jdbcType=VARCHAR} OR  S.DB_SCH_LNM  = #{schDbSchNm, jdbcType=VARCHAR} )
+<!-- 	    AND (S.DB_SCH_PNM LIKE '%'||#{schDbSchNm, jdbcType=VARCHAR}||'%' OR  S.DB_SCH_LNM  LIKE '%'||#{schDbSchNm, jdbcType=VARCHAR}||'%' ) -->
+	    </if>
+	    <if test="schDbcTblNm != null and schDbcTblNm != '' ">
+	    AND (T.DBC_TBL_NM = #{schDbcTblNm, jdbcType=VARCHAR}  OR  T.DBC_TBL_KOR_NM = #{schDbcTblNm, jdbcType=VARCHAR} )
+<!-- 	    AND (T.DBC_TBL_NM LIKE '%'||#{schDbcTblNm, jdbcType=VARCHAR}||'%' OR  T.DBC_TBL_KOR_NM LIKE '%'||#{schDbcTblNm, jdbcType=VARCHAR}||'%' ) -->
+	    </if>
+	  ORDER BY T.DBC_TBL_NM
+  </select>
+  
+  <select id="selectAnaTrgColLst" resultMap="BaseResultMap" parameterType="kr.wise.dq.criinfo.anatrg.service.AnaTrgColVO">
+	SELECT <include refid="AnaTrg_Column_List" />
+		  FROM WAA_DB_CONN_TRG DB
+		       INNER JOIN WAA_DB_SCH S
+		          ON DB.DB_CONN_TRG_ID = S.DB_CONN_TRG_ID
+		         AND S.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+		         AND S.REG_TYP_CD IN ('C','U')
+		       INNER JOIN WAT_DBC_TBL T
+		          ON DB.DB_CONN_TRG_ID = T.DB_CONN_TRG_ID
+		         AND S.DB_SCH_ID = T.DB_SCH_ID
+		       INNER JOIN WAT_DBC_COL C
+		          ON S.DB_SCH_ID = C.DB_SCH_ID
+		         AND T.DBC_TBL_NM = C.DBC_TBL_NM
+		 WHERE DB.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+		    AND DB.REG_TYP_CD IN ('C','U')
+		    <if test="schDbConnTrgId != null and schDbConnTrgId != '' ">
+		    AND DB.DB_CONN_TRG_ID = #{schDbConnTrgId, jdbcType=VARCHAR}
+		    </if>
+		    <if test="schDbConnTrgLdm != null and schDbConnTrgLdm != '' ">
+		    AND (DB.DB_CONN_TRG_LNM LIKE '%'||#{schDbConnTrgLdm, jdbcType=VARCHAR}||'%' OR DB.DB_CONN_TRG_PNM LIKE '%'||#{schDbConnTrgLdm, jdbcType=VARCHAR}||'%' )
+		    </if>
+		    <if test="schDbSchId != null and schDbSchId != '' ">
+		    AND S.DB_SCH_ID = #{schDbSchId, jdbcType=VARCHAR}
+		    </if>
+		    <if test="schDbSchNm != null and schDbSchNm != '' ">
+		    AND (S.DB_SCH_PNM LIKE '%'||#{schDbSchNm, jdbcType=VARCHAR}||'%' OR S.DB_SCH_LNM LIKE '%'||#{schDbSchNm, jdbcType=VARCHAR}||'%' )
+		    </if>
+		    <if test="schDbcTblNm != null and schDbcTblNm != '' ">
+		    AND (T.DBC_TBL_NM = #{schDbcTblNm, jdbcType=VARCHAR}  OR T.DBC_TBL_KOR_NM = #{schDbcTblNm, jdbcType=VARCHAR} )
+<!-- 		    AND (T.DBC_TBL_NM LIKE '%'||#{schDbcTblNm, jdbcType=VARCHAR}||'%' OR T.DBC_TBL_KOR_NM LIKE '%'||#{schDbcTblNm, jdbcType=VARCHAR}||'%') -->
+		    </if>
+		    <if test="schDbcColNm != null and schDbcColNm != '' ">
+		    AND (C.DBC_COL_NM = #{schDbcColNm, jdbcType=VARCHAR} OR  C.DBC_COL_KOR_NM = #{schDbcColNm, jdbcType=VARCHAR} )
+<!-- 		    AND (C.DBC_COL_NM LIKE '%'||#{schDbcColNm, jdbcType=VARCHAR}||'%' OR  C.DBC_COL_KOR_NM LIKE '%'||#{schDbcColNm, jdbcType=VARCHAR}||'%' ) -->
+		    </if>
+		 ORDER BY C.ORD
+	</select>
+	
+	<select id="selectPrfTblLstNotRedline" resultMap="BaseResultMap" parameterType="kr.wise.dq.criinfo.anatrg.service.AnaTrgTblVO">		
+ SELECT
+        DB.DB_CONN_TRG_ID
+       ,DB.DB_CONN_TRG_PNM
+       ,DB.DB_CONN_TRG_LNM
+       ,S.DB_SCH_ID
+       ,S.DB_SCH_PNM
+       ,S.DB_SCH_LNM
+       ,T.DBC_TBL_NM
+       ,T.DBC_TBL_KOR_NM
+       ,T.SUBJ_ID
+  FROM WAA_DB_CONN_TRG DB
+       INNER JOIN WAA_DB_SCH S
+          ON DB.DB_CONN_TRG_ID = S.DB_CONN_TRG_ID
+         AND S.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+         AND S.REG_TYP_CD IN ('C','U')
+       INNER JOIN WAT_DBC_TBL T
+          ON DB.DB_CONN_TRG_ID = T.DB_CONN_TRG_ID
+         AND S.DB_SCH_ID = T.DB_SCH_ID
+        <if test="schDbcColNm != null and schDbcColNm != '' ">
+       INNER  JOIN (SELECT DB_SCH_ID, DBC_TBL_NM
+                                 FROM WAT_DBC_COL
+                                WHERE (DBC_COL_NM LIKE '%'||#{schDbcColNm, jdbcType=VARCHAR}||'%' OR  DBC_COL_KOR_NM LIKE '%'||#{schDbcColNm, jdbcType=VARCHAR}||'%' )
+                                GROUP BY DB_SCH_ID, DBC_TBL_NM) C
+         ON S.DB_SCH_ID = C.DB_SCH_ID
+        AND T.DBC_TBL_NM = C.DBC_TBL_NM
+        </if>
+        LEFT OUTER JOIN ( SELECT  DB_CONN_TRG_ID,  DB_SCH_ID, DBC_TBL_NM
+                                          ,MAX(R.PRF_ID) AS PRF_RESULT_ID
+                                 FROM WAM_PRF_MSTR M
+                                          LEFT OUTER JOIN ( <include refid="kr.wise.dq.profile.anares.service.WamPrfResultMapper.getPrfResultMaxAnaStrDtm"/> ) R
+                                           ON M.PRF_ID = R.PRF_ID
+                               WHERE M.REG_TYP_CD IN ('C','U')
+                                <if test="tblColGb != null  and tblColGb != ''  " >
+						         AND M.PRF_KND_CD LIKE #{tblColGb}||'%'
+						         </if>
+                              GROUP BY M.DB_CONN_TRG_ID,  M.DB_SCH_ID, M.DBC_TBL_NM ) M
+         ON T.DB_CONN_TRG_ID = M.DB_CONN_TRG_ID
+        AND T.DB_SCH_ID = M.DB_SCH_ID
+        AND T.DBC_TBL_NM = M.DBC_TBL_NM
+ WHERE DB.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+    AND DB.REG_TYP_CD IN ('C','U')
+    <if test="schDbConnTrgId != null and schDbConnTrgId != ''">
+    AND DB.DB_CONN_TRG_ID = #{schDbConnTrgId, jdbcType=VARCHAR}
+    </if>
+    <if test="schDbSchId != null and schDbSchId != '' ">
+    AND S.DB_SCH_ID = #{schDbSchId, jdbcType=VARCHAR}
+    </if>
+    <if test="schDbSchNm != null and schDbSchNm != '' ">
+    AND (S.DB_SCH_PNM LIKE '%'||#{schDbSchNm, jdbcType=VARCHAR}||'%' OR  S.DB_SCH_LNM  LIKE '%'||#{schDbSchNm, jdbcType=VARCHAR}||'%' )
+    </if>
+    <if test="schDbcTblNm != null and schDbcTblNm != '' ">
+    AND (T.DBC_TBL_NM LIKE '%'||#{schDbcTblNm, jdbcType=VARCHAR}||'%' OR  T.DBC_TBL_KOR_NM LIKE '%'||#{schDbcTblNm, jdbcType=VARCHAR}||'%' )
+    </if>
+    <if test='schRegYn == "Y" '>
+    AND M.DBC_TBL_NM IS NOT NULL
+    </if>
+    <if test='schRegYn == "N" '>
+    AND M.DBC_TBL_NM IS  NULL
+    </if>
+  ORDER BY T.DBC_TBL_NM
+  </select>
+  
+  <select id="selectPrfColLstNotRedline" resultMap="BaseResultMap" parameterType="kr.wise.dq.criinfo.anatrg.service.AnaTrgColVO">
+	SELECT <include refid="AnaTrg_Column_List" />
+		  FROM WAA_DB_CONN_TRG DB
+		       INNER JOIN WAA_DB_SCH S
+		          ON DB.DB_CONN_TRG_ID = S.DB_CONN_TRG_ID
+		         AND S.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+		         AND S.REG_TYP_CD IN ('C','U')
+		       INNER JOIN WAT_DBC_TBL T
+		          ON DB.DB_CONN_TRG_ID = T.DB_CONN_TRG_ID
+		         AND S.DB_SCH_ID = T.DB_SCH_ID
+		       INNER JOIN WAT_DBC_COL C
+		          ON S.DB_SCH_ID = C.DB_SCH_ID
+		         AND T.DBC_TBL_NM = C.DBC_TBL_NM
+               LEFT OUTER JOIN ( SELECT  DB_CONN_TRG_ID,  DB_SCH_ID, DBC_TBL_NM, M.OBJ_NM
+			                                        ,MAX(R.PRF_ID) AS PRF_RESULT_ID
+			                               FROM WAM_PRF_MSTR M
+			                                        LEFT OUTER JOIN ( <include refid="kr.wise.dq.profile.anares.service.WamPrfResultMapper.getPrfResultMaxAnaStrDtm"/> ) R
+			                                         ON M.PRF_ID = R.PRF_ID
+			                             WHERE M.REG_TYP_CD IN ('C','U')
+			                              <if test="tblColGb != null  and tblColGb != ''  " >
+							                AND M.PRF_KND_CD LIKE #{tblColGb}||'%'
+							              </if>
+			                            GROUP BY M.DB_CONN_TRG_ID,  M.DB_SCH_ID, M.DBC_TBL_NM, M.OBJ_NM ) M
+			      ON T.DB_CONN_TRG_ID = M.DB_CONN_TRG_ID
+			     AND C.DB_SCH_ID = M.DB_SCH_ID
+			     AND C.DBC_TBL_NM = M.DBC_TBL_NM
+                 AND C.DBC_COL_NM = M.OBJ_NM
+		 WHERE DB.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+		    AND DB.REG_TYP_CD IN ('C','U')
+		    <if test="schDbConnTrgId != null and schDbConnTrgId != '' ">
+		    AND DB.DB_CONN_TRG_ID = #{schDbConnTrgId, jdbcType=VARCHAR}
+		    </if>
+		    <if test="schDbConnTrgLdm != null and schDbConnTrgLdm != '' ">
+		    AND (DB.DB_CONN_TRG_LNM LIKE '%'||#{schDbConnTrgLdm, jdbcType=VARCHAR}||'%' OR DB.DB_CONN_TRG_PNM LIKE '%'||#{schDbConnTrgLdm, jdbcType=VARCHAR}||'%' )
+		    </if>
+		    <if test="schDbSchId != null and schDbSchId != '' ">
+		    AND S.DB_SCH_ID = #{schDbSchId, jdbcType=VARCHAR}
+		    </if>
+		    <if test="schDbSchNm != null and schDbSchNm != '' ">
+		    AND (S.DB_SCH_PNM LIKE '%'||#{schDbSchNm, jdbcType=VARCHAR}||'%' OR S.DB_SCH_LNM LIKE '%'||#{schDbSchNm, jdbcType=VARCHAR}||'%' )
+		    </if>
+		    AND (T.DBC_TBL_NM  = #{schDbcTblNm, jdbcType=VARCHAR} OR T.DBC_TBL_KOR_NM  = #{schDbcTblNm, jdbcType=VARCHAR})
+		    <if test="schDbcColNm != null and schDbcColNm != '' ">
+		    AND (C.DBC_COL_NM LIKE '%'||#{schDbcColNm, jdbcType=VARCHAR}||'%' OR  C.DBC_COL_KOR_NM LIKE '%'||#{schDbcColNm, jdbcType=VARCHAR}||'%' )
+		    </if>
+		    <if test='schRegYn == "Y" '>
+		    AND M.OBJ_NM IS NOT NULL
+		    </if>
+		    <if test='schRegYn == "N" '>
+		    AND M.OBJ_NM IS  NULL
+		    </if>
+		 ORDER BY C.ORD
+	</select>
+	
+<select id="selectAnaTrgTblReacDtl" resultMap="ReacResultMap" parameterType="kr.wise.dq.criinfo.anatrg.service.AnaTrgTblVO">
+	-- 첫번째조회
+	SELECT <include refid="AnaTrg_Table_List" />, M.PRF_ID
+		  FROM WAA_DB_CONN_TRG DB
+		       INNER JOIN WAA_DB_SCH S
+		          ON DB.DB_CONN_TRG_ID = S.DB_CONN_TRG_ID
+		         AND S.EXP_DTM = TO_DATE( '99991231', 'YYYYMMDD')
+		         AND S.REG_TYP_CD IN ('C','U')
+		        LEFT OUTER JOIN WAT_DBC_TBL T
+		          ON DB.DB_CONN_TRG_ID = T.DB_CONN_TRG_ID
+		         AND S.DB_SCH_ID = T.DB_SCH_ID
+		        LEFT OUTER JOIN (SELECT  DB_CONN_TRG_ID,  DB_SCH_ID, DBC_TBL_NM,  MAX(PRF_ID) AS PRF_ID
+		                                FROM WAM_PRF_MSTR
+		                               WHERE REG_TYP_CD IN ('C','U')
+		                              GROUP BY DB_CONN_TRG_ID,  DB_SCH_ID, DBC_TBL_NM )M
+		         ON DB.DB_CONN_TRG_ID = M.DB_CONN_TRG_ID
+		        AND S.DB_SCH_ID = M.DB_SCH_ID
+		        AND T.DBC_TBL_NM = M.DBC_TBL_NM
+		 WHERE DB.EXP_DTM = TO_DATE( '99991231', 'YYYYMMDD')
+		   AND DB.REG_TYP_CD IN ('C','U')
+		   AND DB.DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR}
+		   AND S.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+		   AND T.DBC_TBL_NM = #{dbcTblNm,jdbcType=VARCHAR}
+		    <if test='schRegYn == "Y" '>
+		    AND M.PRF_ID IS NOT NULL
+		    </if>
+		    <if test='schRegYn == "N" '>
+		    AND M.PRF_ID IS  NULL
+		    </if>
+	</select>
+	
+		<select id="selectPrfColLstCheck" resultMap="BaseResultMap" parameterType="kr.wise.dq.criinfo.anatrg.service.AnaTrgColVO">
+	SELECT <include refid="AnaTrg_Column_List" />
+	         ,(CASE WHEN M.OBJ_NM IS NULL THEN NULL
+                      ELSE (CASE WHEN M.PRF_RESULT_ID IS NULL THEN  '#24A6BD'
+                                     -- ELSE '#FF0000'
+                                     ELSE '#0066FF'
+                                     END  )
+                       END  ) AS FontColor
+             , PM.PRF_ID
+             , R.ANA_STR_DTM
+		  FROM WAA_DB_CONN_TRG DB
+		       INNER JOIN WAA_DB_SCH S
+		          ON DB.DB_CONN_TRG_ID = S.DB_CONN_TRG_ID
+		         AND S.EXP_DTM = TO_DATE( '99991231', 'YYYYMMDD')
+		         AND S.REG_TYP_CD IN ('C','U')
+		       INNER JOIN WAT_DBC_TBL T
+		          ON DB.DB_CONN_TRG_ID = T.DB_CONN_TRG_ID
+		         AND S.DB_SCH_ID = T.DB_SCH_ID
+		       INNER JOIN WAT_DBC_COL C
+		          ON S.DB_SCH_ID = C.DB_SCH_ID
+		         AND T.DBC_TBL_NM = C.DBC_TBL_NM
+               LEFT OUTER JOIN ( SELECT  M.DB_CONN_TRG_ID,  M.DB_SCH_ID, M.DBC_TBL_NM, M.OBJ_NM
+			                                        ,MAX(R.PRF_ID) AS PRF_RESULT_ID
+			                               FROM WAM_PRF_MSTR M
+			                                        LEFT OUTER JOIN ( <include refid="kr.wise.dq.profile.anares.service.WamPrfResultMapper.getPrfResultMaxAnaStrDtm"/> ) R
+			                                         ON M.PRF_ID = R.PRF_ID
+			                             WHERE M.REG_TYP_CD IN ('C','U')
+							               AND M.PRF_KND_CD LIKE CONCAT('PC01','%')
+			                            GROUP BY M.DB_CONN_TRG_ID,  M.DB_SCH_ID, M.DBC_TBL_NM, M.OBJ_NM ) M
+			      ON T.DB_CONN_TRG_ID = M.DB_CONN_TRG_ID
+			     AND C.DB_SCH_ID = M.DB_SCH_ID
+			     AND C.DBC_TBL_NM = M.DBC_TBL_NM
+                 AND C.DBC_COL_NM = M.OBJ_NM
+              LEFT OUTER JOIN (SELECT M.DB_CONN_TRG_ID, M.DB_SCH_ID, M.DBC_TBL_NM, M.OBJ_NM, M.PRF_ID
+              				     FROM WAM_PRF_MSTR M
+              				    INNER JOIN WAM_PRF_COL_ANA C
+              				       ON C.PRF_ID = M.PRF_ID
+              				      AND C.REG_TYP_CD IN ('C','U')
+              				    WHERE M.REG_TYP_CD IN ('C','U')
+              				      AND M.PRF_KND_CD LIKE CONCAT('PC01','%')) PM
+                ON T.DB_CONN_TRG_ID = PM.DB_CONN_TRG_ID
+			   AND C.DB_SCH_ID = PM.DB_SCH_ID
+			   AND C.DBC_TBL_NM = PM.DBC_TBL_NM
+               AND C.DBC_COL_NM = PM.OBJ_NM
+            LEFT OUTER JOIN (<include refid="getPrfResultMaxAnaStrDtm"/> ) R
+		      ON R.PRF_ID = PM.PRF_ID
+		 WHERE DB.EXP_DTM = TO_DATE( '99991231', 'YYYYMMDD')
+		    AND DB.REG_TYP_CD IN ('C','U')
+		    <if test="schDbConnTrgId != null and schDbConnTrgId != '' ">
+		    AND DB.DB_CONN_TRG_ID = #{schDbConnTrgId, jdbcType=VARCHAR}
+		    </if>
+		    <if test="schDbConnTrgLdm != null and schDbConnTrgLdm != '' ">
+		    AND (DB.DB_CONN_TRG_LNM LIKE '%'||#{schDbConnTrgLdm, jdbcType=VARCHAR}||'%' OR DB.DB_CONN_TRG_PNM LIKE '%'||#{schDbConnTrgLdm, jdbcType=VARCHAR}||'%' )
+		    </if>
+		    <if test="schDbSchId != null and schDbSchId != '' ">
+		    AND S.DB_SCH_ID = #{schDbSchId, jdbcType=VARCHAR}
+		    </if>
+		    <if test="schDbSchNm != null and schDbSchNm != '' ">
+		    AND (S.DB_SCH_PNM LIKE '%'||#{schDbSchNm, jdbcType=VARCHAR}||'%' OR S.DB_SCH_LNM LIKE '%'||#{schDbSchNm, jdbcType=VARCHAR}||'%' )
+		    </if>
+		    AND (T.DBC_TBL_NM  = #{schDbcTblNm, jdbcType=VARCHAR} OR T.DBC_TBL_KOR_NM  = #{schDbcTblNm, jdbcType=VARCHAR})
+		    <if test="schDbcColNm != null and schDbcColNm != '' ">
+		    AND (C.DBC_COL_NM LIKE '%'||#{schDbcColNm, jdbcType=VARCHAR}||'%' OR  C.DBC_COL_KOR_NM LIKE '%'||#{schDbcColNm, jdbcType=VARCHAR}||'%' )
+		    </if>
+		    <if test='schRegYn == "Y" '>
+		    AND M.OBJ_NM IS NOT NULL
+		    </if>
+		    <if test='schRegYn == "N" '>
+		    AND M.OBJ_NM IS  NULL
+		    </if>
+		 ORDER BY C.ORD
+	</select>
+	
+<select id="selectPrfTblLstAna" resultMap="BaseResultMap" parameterType="kr.wise.dq.criinfo.anatrg.service.AnaTrgTblVO">		
+ SELECT  DB.DB_CONN_TRG_ID
+       , DB.DB_CONN_TRG_PNM
+       , DB.DB_CONN_TRG_LNM
+       , S.DB_SCH_ID
+       , S.DB_SCH_PNM
+       , S.DB_SCH_LNM
+       , T.DBC_TBL_NM
+       , T.DBC_TBL_KOR_NM
+       , T.SUBJ_ID       
+       , #{metaAsscAnly, jdbcType=VARCHAR} AS META_ASSC_ANLY
+       , (CASE WHEN M.DBC_TBL_NM IS NULL THEN NULL
+                ELSE (CASE WHEN M.PRF_RESULT_ID IS NULL THEN  '#24A6BD'
+                                ELSE '#0066FF'
+                               END  )
+                END  ) AS FontColor
+      , 'QP'      AS SHD_KND_CD
+      , M.PRF_ID  AS SHD_JOB_ID          
+      , CONCAT('[참조무결성] ', S.DB_SCH_PNM,'.',T.DBC_TBL_NM)  AS ETC_JOB_NM
+  FROM WAA_DB_CONN_TRG DB
+       INNER JOIN WAA_DB_SCH S
+          ON DB.DB_CONN_TRG_ID = S.DB_CONN_TRG_ID
+         AND S.EXP_DTM = TO_DATE( '99991231', 'YYYYMMDD')
+         AND S.REG_TYP_CD IN ('C','U')
+         AND NVL(S.CLT_XCL_YN,'N') = 'N'
+       INNER JOIN WAT_DBC_TBL T
+          ON DB.DB_CONN_TRG_ID = T.DB_CONN_TRG_ID
+         AND S.DB_SCH_ID = T.DB_SCH_ID        
+       INNER  JOIN 
+       (SELECT DB_SCH_ID, DBC_TBL_NM
+          FROM WAT_DBC_COL
+          WHERE 1=1
+          <if test="schDbcColNm != null and schDbcColNm != ''">
+         AND (DBC_COL_NM LIKE '%'||#{schDbcColNm, jdbcType=VARCHAR}||'%' OR  DBC_COL_KOR_NM LIKE '%'||#{schDbcColNm, jdbcType=VARCHAR}||'%') 
+         </if>
+         GROUP BY DB_SCH_ID, DBC_TBL_NM
+        ) C
+         ON S.DB_SCH_ID  = C.DB_SCH_ID
+        AND T.DBC_TBL_NM = C.DBC_TBL_NM        
+        LEFT JOIN 
+        ( SELECT  DB_CONN_TRG_ID,  DB_SCH_ID, DBC_TBL_NM
+                , MAX(R.PRF_ID) AS PRF_RESULT_ID
+                , MAX(M.PRF_NM) AS PRF_NM
+                , MAX(M.PRF_ID) AS PRF_ID
+             FROM WAM_PRF_MSTR M
+                      LEFT OUTER JOIN ( <include refid="kr.wise.dq.profile.anares.service.WamPrfResultMapper.getPrfResultMaxAnaStrDtm"/> ) R
+                       ON M.PRF_ID = R.PRF_ID
+           WHERE M.REG_TYP_CD IN ('C','U')
+           <if test="tblColGb != null  and tblColGb != ''  " >
+	       AND M.PRF_KND_CD LIKE CONCAT(#{tblColGb},'%')
+	       </if>
+          GROUP BY M.DB_CONN_TRG_ID,  M.DB_SCH_ID, M.DBC_TBL_NM 
+         ) M
+         ON T.DB_CONN_TRG_ID = M.DB_CONN_TRG_ID
+        AND T.DB_SCH_ID  = M.DB_SCH_ID
+        AND T.DBC_TBL_NM = M.DBC_TBL_NM
+        LEFT JOIN WAA_EXP_TBL EX          
+			  ON EX.DB_SCH_ID  = T.DB_SCH_ID  
+			 AND EX.DBC_TBL_NM = T.DBC_TBL_NM
+  WHERE DB.EXP_DTM = TO_DATE( '99991231', 'YYYYMMDD')
+    AND DB.REG_TYP_CD IN ('C','U')
+    AND NVL(EX.EXP_YN,'N')='N' 
+    <if test="schDbConnTrgId != null and schDbConnTrgId != ''">
+    AND DB.DB_CONN_TRG_ID = #{schDbConnTrgId, jdbcType=VARCHAR}
+    </if>
+    <if test="schDbSchId != null and schDbSchId != '' ">
+    AND S.DB_SCH_ID = #{schDbSchId, jdbcType=VARCHAR}
+    </if>
+    <if test="schDbSchNm != null and schDbSchNm != '' ">
+    AND (S.DB_SCH_PNM LIKE '%'||#{schDbSchNm, jdbcType=VARCHAR}||'%' OR  S.DB_SCH_LNM  LIKE '%'||#{schDbSchNm, jdbcType=VARCHAR}||'%' )
+    </if>
+    <if test="schDbcTblNm != null and schDbcTblNm != '' ">
+    AND (T.DBC_TBL_NM LIKE '%'|| UPPER(#{schDbcTblNm, jdbcType=VARCHAR}) ||'%' OR  T.DBC_TBL_KOR_NM LIKE '%'||#{schDbcTblNm, jdbcType=VARCHAR}||'%' )
+    </if>
+    <if test='schRegYn == "Y" '>
+    AND M.DBC_TBL_NM IS NOT NULL
+    </if>
+    <if test='schRegYn == "N" '>
+    AND M.DBC_TBL_NM IS  NULL
+    </if>
+   
+  ORDER BY DB.DB_CONN_TRG_ID, S.DB_SCH_ID, T.DBC_TBL_NM
+  </select>	
+  
+</mapper>

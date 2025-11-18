@@ -1,0 +1,677 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.dq.profile.mstr.service.WaqPrfDqiMapMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.dq.profile.mstr.service.WaqPrfDqiMap"  extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+    <result column="DQI_LNM" property="dqiLnm" jdbcType="VARCHAR" />
+    <result column="DQI_ID" property="dqiId" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    RQST_NO, RQST_SNO, PRF_ID, DQI_LNM, DQI_ID, VRF_CD, VRF_RMK, RVW_STS_CD, RVW_CONTS, 
+    OBJ_DESCN, OBJ_VERS, REG_TYP_CD, FRS_RQST_DTM, FRS_RQST_USER_ID, RQST_DTM, RQST_USER_ID, 
+    APRV_DTM, APRV_USER_ID, RQST_DCD
+  </sql>
+  
+    <sql id="wam_col">
+   		, OBJ_DESCN , OBJ_VERS , RQST_NO , RQST_SNO ,  REG_TYP_CD 
+		, FRS_RQST_DTM , FRS_RQST_USER_ID , RQST_DTM , RQST_USER_ID , APRV_DTM
+		, APRV_USER_ID  
+   </sql>
+  
+  
+
+<insert id="insertSelective" parameterType="kr.wise.dq.profile.mstr.service.WaqPrfMstrVO" >
+    insert into WAQ_PRF_DQI_MAP
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+        RQST_NO,
+        RQST_SNO,
+        RQST_DTL_SNO,
+        PRF_NM,
+      <if test="prfId != null" >
+        PRF_ID,
+      </if>
+        DQI_ID,
+        DQI_LNM,
+      <if test="vrfCd != null" >
+        VRF_CD,
+      </if>
+      <if test="vrfRmk != null" >
+        VRF_RMK,
+      </if>
+      <if test="rvwStsCd != null" >
+        RVW_STS_CD,
+      </if>
+      <if test="rvwConts != null" >
+        RVW_CONTS,
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN,
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS,
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD,
+      </if>
+      <if test="frsRqstDtm != null" >
+        FRS_RQST_DTM,
+      </if>
+      <if test="frsRqstUserId != null" >
+        FRS_RQST_USER_ID,
+      </if>
+      <if test="rqstDtm != null" >
+        RQST_DTM,
+      </if>
+      <if test="rqstUserId != null" >
+        RQST_USER_ID,
+      </if>
+      <if test="aprvDtm != null" >
+        APRV_DTM,
+      </if>
+      <if test="aprvUserId != null" >
+        APRV_USER_ID,
+      </if>
+      <if test="rqstDcd != null" >
+        RQST_DCD,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      #{rqstNo,jdbcType=VARCHAR},
+      <if test="rqstSno == null" >
+        (SELECT MAX(RQST_SNO) FROM WAQ_PRF_MSTR WHERE RQST_NO = #{rqstNo} AND PRF_NM = #{prfNm} ) ,
+      </if>
+      <if test="rqstSno != null" >
+      	#{rqstSno, jdbcType=VARCHAR},
+      </if>
+      
+      <if test="rqstDtlSno == null" >
+        (SELECT COALESCE(MAX(RQST_DTL_SNO),0)+1 FROM WAQ_PRF_DQI_MAP WHERE RQST_NO = #{rqstNo} AND PRF_NM = #{prfNm} ) ,
+      </if>
+      <if test="rqstDtlSno != null" >
+      	#{rqstDtlSno, jdbcType=VARCHAR},
+      </if>
+      
+        #{prfNm,jdbcType=VARCHAR},
+      <if test="prfId != null" >
+        #{prfId,jdbcType=VARCHAR},
+      </if>
+        (SELECT DQI_ID FROM WAM_DQI WHERE DQI_LNM LIKE '%' || replace(replace(RTRIM(LTRIM(#{dqiLnm,jdbcType=VARCHAR})),chr(10),''),chr(13),'') || '%' LIMIT 1),
+        COALESCE((SELECT DQI_LNM FROM WAM_DQI WHERE DQI_LNM LIKE '%' || replace(replace(RTRIM(LTRIM(#{dqiLnm,jdbcType=VARCHAR})),chr(10),''),chr(13),'') || '%' LIMIT 1),#{dqiLnm,jdbcType=VARCHAR}),
+      <if test="vrfCd != null" >
+        #{vrfCd,jdbcType=VARCHAR},
+      </if>
+      <if test="vrfRmk != null" >
+        #{vrfRmk,jdbcType=VARCHAR},
+      </if>
+      <if test="rvwStsCd != null" >
+        #{rvwStsCd,jdbcType=VARCHAR},
+      </if>
+      <if test="rvwConts != null" >
+        #{rvwConts,jdbcType=VARCHAR},
+      </if>
+      <if test="objDescn != null" >
+        #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null" >
+        #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="frsRqstDtm != null" >
+        #{frsRqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="frsRqstUserId != null" >
+        #{frsRqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDtm != null" >
+        #{rqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rqstUserId != null" >
+        #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDtm != null" >
+        #{aprvDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aprvUserId != null" >
+        #{aprvUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDcd != null" >
+        #{rqstDcd,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+    <delete id="deletePrfDqiByPrfNm" parameterType="map">
+	DELETE FROM WAQ_PRF_DQI_MAP A
+	WHERE RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+<!-- 	  AND PRF_NM = #{prfNm,jdbcType=VARCHAR} -->
+<!-- 	  <if test="prfKndCd == 'PT01' or prfKndCd == 'PT02'" > -->
+	  AND RQST_SNO = #{rqstSno,jdbcType=VARCHAR}
+<!-- 	  </if> -->
+   </delete>
+   
+  <delete id="deleteWAHByPrfId" parameterType="java.lang.String">
+	DELETE FROM WAH_PRF_DQI_MAP
+	WHERE PRF_ID = #{prfId,jdbcType=VARCHAR}
+   </delete>
+   
+   <select id="selectPrfDqiByPrfNm" resultType="String" parameterType="map">
+		SELECT A.RQST_SNO
+		FROM WAQ_PRF_DQI_MAP A
+		WHERE A.PRF_NM = #{prfNm,jdbcType=VARCHAR}
+			AND A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+		<if test="prfKndCd == 'PT01'" >
+			AND A.RQST_SNO =
+		  (SELECT M.RQST_SNO AS RQST_SNO
+		  FROM WAQ_PRF_MSTR M
+		           INNER JOIN WAQ_PRF_REL_TBL T
+		               ON M.RQST_NO = T.RQST_NO
+		             	AND M.RQST_SNO = T.RQST_SNO
+		           INNER JOIN WAQ_PRF_REL_COL C
+		             	ON M.RQST_NO = C.RQST_NO
+		            	AND M.RQST_SNO = C.RQST_SNO
+		           WHERE 1=1
+					  AND M.DBC_TBL_NM = #{dbcTblNm,jdbcType=VARCHAR}
+					  AND C.CH_TBL_DBC_COL_NM = #{chTblDbcColNm,jdbcType=VARCHAR}
+					  AND T.PA_TBL_DB_CONN_TRG_NM = #{paTblDbConnTrgNm,jdbcType=VARCHAR}
+					  AND T.PA_TBL_DBC_SCH_NM = #{paTblDbcSchNm,jdbcType=VARCHAR}
+					  AND T.PA_TBL_DBC_TBL_NM = #{paTblDbcTblNm,jdbcType=VARCHAR}
+					  AND C.PA_TBL_DBC_COL_NM = #{paTblDbcColNm,jdbcType=VARCHAR}
+					  AND M.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+					  AND M.RQST_SNO = #{rqstSno,jdbcType=VARCHAR}
+					  )
+					  LIMIT 1
+		</if>
+		<if test="prfKndCd == 'PT02'" >
+			AND A.RQST_SNO =
+		  (SELECT M.RQST_SNO AS RQST_SNO
+		  FROM WAQ_PRF_MSTR M
+		           INNER JOIN WAQ_PRF_UNQ_COL C
+		             	ON M.RQST_NO = C.RQST_NO
+		            	AND M.RQST_SNO = C.RQST_SNO
+		            WHERE 1=1
+		            	AND M.DBC_TBL_NM = #{dbcTblNm,jdbcType=VARCHAR}
+		            	AND M.OBJ_NM = #{objNm,jdbcType=VARCHAR}
+		            	AND C.DBC_COL_NM = #{dbcColNm,jdbcType=VARCHAR}
+		            	AND M.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+		            	AND M.RQST_SNO = #{rqstSno,jdbcType=VARCHAR}
+		   			)
+		   			LIMIT 1
+		</if>		
+   </select>
+  
+  
+  
+  <select id="selectDqiExists" resultMap="BaseResultMap" parameterType="map">
+  	SELECT DQI_LNM
+  	  FROM WAQ_PRF_DQI_MAP
+  	 WHERE RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+<!--   	   AND RQST_SNO = #{rqstSno,jdbcType=VARCHAR} -->
+  	   AND upper(replace(replace(RTRIM(LTRIM(DQI_LNM)),chr(10),''),chr(13),'')) = upper(replace(replace(RTRIM(LTRIM(#{dqiLnm,jdbcType=VARCHAR})),chr(10),''),chr(13),''))
+  </select>
+  
+  
+  <update id="updateDqiId" parameterType="java.lang.String">
+    update WAQ_PRF_DQI_MAP A
+       set DQI_ID = (select B.DQI_ID   
+                         from WAM_DQI B
+                        where 1=1
+                          and B.REG_TYP_CD in ('C','U')
+                          and upper(replace(replace(RTRIM(LTRIM(A.DQI_LNM)),chr(10),''),chr(13),'')) = upper(replace(replace(RTRIM(LTRIM(B.DQI_LNM)),chr(10),''),chr(13),''))
+                          )
+     where A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+  </update>  
+  
+ 
+ <insert id="checkNotExistDqi" parameterType="map" >
+	INSERT INTO WAQ_RQST_VRF_DTLS
+	(
+	    BIZ_DTL_CD
+      , RQST_NO
+	  , RQST_SNO
+	  , VRF_SNO
+	  , RQST_DTL_SNO
+	  , VRF_DTL_CD
+	  , VRF_DTLS
+	)
+	SELECT DISTINCT
+	       #{bizDtlCd} AS BIZ_DTL_CD
+           ,A.RQST_NO
+	       ,A.RQST_SNO
+	       ,COALESCE(C.VRF_SNO,0) + 1 AS VRF_SNO
+	       ,0 AS RQST_DTL_SNO
+	       ,#{vrfDtlCd} AS VRF_DTL_CD
+	       ,NULL AS VRF_DTLS
+	FROM ${tblnm} A
+	INNER JOIN WAQ_PRF_MSTR B
+	ON A.RQST_NO = B.RQST_NO
+	AND A.RQST_SNO = B.RQST_SNO
+	LEFT OUTER JOIN (SELECT MAX(VRF_SNO) AS VRF_SNO
+	                       ,RQST_NO
+	                       ,RQST_SNO
+	                 FROM WAQ_RQST_VRF_DTLS A
+	                 WHERE A.BIZ_DTL_CD = #{bizDtlCd}
+	                   AND A.RQST_NO = #{rqstNo}
+	                 GROUP BY RQST_NO, RQST_SNO) C
+	   ON A.RQST_NO = C.RQST_NO
+	  AND A.RQST_SNO = C.RQST_SNO
+	  WHERE A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+--검증쿼리
+      and B.RQST_DCD = 'CU'
+      and A.DQI_ID IS NULL
+  </insert> 
+  
+  <insert id="insertWahSelective" parameterType="kr.wise.dq.profile.mstr.service.WaqPrfMstrVO" >
+    insert into WAH_PRF_DQI_MAP
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+        PRF_ID,
+        DQI_ID,
+        EXP_DTM,
+        STR_DTM,
+      <if test="objDescn != null" >
+        OBJ_DESCN,
+      </if>
+        OBJ_VERS,
+       <if test="rqstNo != null" >
+        RQST_NO,
+      </if>
+      <if test="rqstSno != null" >
+        RQST_SNO,
+      </if>
+        REG_TYP_CD,
+      <if test="frsRqstDtm != null" >
+        FRS_RQST_DTM,
+      </if>
+      <if test="frsRqstUserId != null" >
+        FRS_RQST_USER_ID,
+      </if>
+      <if test="rqstDtm != null" >
+        RQST_DTM,
+      </if>
+      <if test="rqstUserId != null" >
+        RQST_USER_ID,
+      </if>
+      <if test="aprvDtm != null" >
+        APRV_DTM,
+      </if>
+      <if test="aprvUserId != null" >
+        APRV_USER_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+        #{prfId,jdbcType=VARCHAR},
+        #{dqiId,jdbcType=VARCHAR},
+        to_date('99991231','YYYYMMDD'),
+        NOW(),  
+      <if test="objDescn != null" >
+        #{objDescn,jdbcType=VARCHAR},
+      </if>
+		(SELECT COALESCE(MAX(OBJ_VERS), 0) + 1 FROM  WAM_PRF_DQI_MAP WHERE PRF_ID = #{prfId,jdbcType=VARCHAR} AND DQI_ID = #{dqiId,jdbcType=VARCHAR} ),
+       <if test="rqstNo != null" >
+        #{rqstNo,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstSno != null" >
+        #{rqstSno,jdbcType=VARCHAR},
+      </if>        
+        #{regTypCd,jdbcType=VARCHAR},
+      <if test="frsRqstDtm != null" >
+        #{frsRqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="frsRqstUserId != null" >
+        #{frsRqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDtm != null" >
+        #{rqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rqstUserId != null" >
+        #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDtm != null" >
+        #{aprvDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aprvUserId != null" >
+        #{aprvUserId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <insert id="insertWamSelective" parameterType="kr.wise.dq.profile.mstr.service.WaqPrfMstrVO" >
+    insert into WAM_PRF_DQI_MAP
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+        PRF_ID,
+        DQI_ID,
+      <if test="objDescn != null" >
+        OBJ_DESCN,
+      </if>
+        OBJ_VERS,
+       <if test="rqstNo != null" >
+        RQST_NO,
+      </if>
+      <if test="rqstSno != null" >
+        RQST_SNO,
+      </if>
+        REG_TYP_CD,
+      <if test="frsRqstDtm != null" >
+        FRS_RQST_DTM,
+      </if>
+      <if test="frsRqstUserId != null" >
+        FRS_RQST_USER_ID,
+      </if>
+      <if test="rqstDtm != null" >
+        RQST_DTM,
+      </if>
+      <if test="rqstUserId != null" >
+        RQST_USER_ID,
+      </if>
+      <if test="aprvDtm != null" >
+        APRV_DTM,
+      </if>
+      <if test="aprvUserId != null" >
+        APRV_USER_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+        #{prfId,jdbcType=VARCHAR},
+        #{dqiId,jdbcType=VARCHAR},
+      <if test="objDescn != null" >
+        #{objDescn,jdbcType=VARCHAR},
+      </if>
+		(SELECT COALESCE(MAX(OBJ_VERS), 0) + 1 FROM  WAM_PRF_DQI_MAP WHERE PRF_ID = #{prfId,jdbcType=VARCHAR} AND DQI_ID = #{dqiId,jdbcType=VARCHAR} ),
+       <if test="rqstNo != null" >
+        #{rqstNo,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstSno != null" >
+        #{rqstSno,jdbcType=VARCHAR},
+      </if>        
+        #{regTypCd,jdbcType=VARCHAR},
+      <if test="frsRqstDtm != null" >
+        #{frsRqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="frsRqstUserId != null" >
+        #{frsRqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDtm != null" >
+        #{rqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rqstUserId != null" >
+        #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDtm != null" >
+        #{aprvDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aprvUserId != null" >
+        #{aprvUserId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  
+  
+  <update id="updatervwStsCd" parameterType="kr.wise.dq.profile.mstr.service.WaqPrfMstrVO" >
+  	UPDATE WAQ_PRF_DQI_MAP
+  	<set>
+  	    RVW_STS_CD 	= #{rvwStsCd} , 
+  		RVW_CONTS 	= #{rvwConts} , 
+  		APRV_DTM	= NOW() ,
+  		APRV_USER_ID = #{aprvUserId} ,
+  	</set>
+    WHERE RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      AND RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+      AND VRF_CD = '1'
+      AND COALESCE(RVW_STS_CD, '_') != '2'
+  </update>
+  
+  <update id="updateidByKey" parameterType="kr.wise.dq.profile.mstr.service.WaqPrfMstrVO" >
+  	UPDATE WAQ_PRF_DQI_MAP SET PRF_ID = #{prfId,jdbcType=VARCHAR}
+  	 WHERE PRF_ID = #{prfId, jdbcType=VARCHAR}
+  	   AND RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+       AND RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+  </update>
+  
+  <update id="updateWaqCUD" parameterType="map">
+   	--WAQ ID, VERS 등을 업데이트...
+	UPDATE WAQ_PRF_DQI_MAP A
+	SET (PRF_ID, OBJ_VERS, FRS_RQST_DTM, FRS_RQST_USER_ID) = (
+	    SELECT 
+	          B.PRF_ID AS PRF_ID
+	        , COALESCE(B.OBJ_VERS, 0) + 1 AS OBJ_VERS
+	        , B.FRS_RQST_DTM
+	        , B.FRS_RQST_USER_ID
+	    FROM WAM_PRF_DQI_MAP B
+	    WHERE B.PRF_ID = A.PRF_ID
+	    AND B.DQI_ID = A.DQI_ID
+	)
+	WHERE A.PRF_ID = #{prfId, jdbcType=VARCHAR}
+	
+	AND EXISTS (
+		SELECT 1
+		  FROM WAM_PRF_DQI_MAP B
+		 WHERE B.PRF_ID = A.PRF_ID
+		   AND B.DQI_ID = A.DQI_ID
+	        
+	)
+   </update>
+  
+  <delete id="deleteWAM" parameterType="map">
+    --WAM 삭제 (등록유형코드가REG_TYP_CD 변경, 삭제일 경우)
+	DELETE FROM WAM_PRF_DQI_MAP A
+	WHERE EXISTS (
+<!-- 	    SELECT 1 FROM WAQ_PRF_DQI_MAP B -->
+<!-- 	    WHERE B.RQST_NO = #{rqstNo, jdbcType=VARCHAR} -->
+<!-- 	    AND B.RVW_STS_CD = '1' -->
+<!-- 	    AND B.PRF_ID = A.PRF_ID -->
+            SELECT 1
+              FROM WAQ_PRF_MSTR M
+             INNER JOIN WAQ_PRF_DQI_MAP B
+                ON B.RQST_NO = M.RQST_NO
+               AND B.RQST_SNO = M.RQST_SNO
+             WHERE B.RQST_NO = #{rqstNo, jdbcType=VARCHAR}
+               AND B.PRF_ID = A.PRF_ID
+               AND M.RVW_STS_CD = '1'
+               AND M.VRF_CD = '1'
+	)
+   </delete>
+   
+   <delete id="deleteWAMByPrfId" parameterType="map">
+    --WAM 삭제 (등록유형코드가REG_TYP_CD 변경, 삭제일 경우)
+	DELETE FROM WAM_PRF_DQI_MAP A
+	WHERE EXISTS (
+	    SELECT 1 FROM WAQ_PRF_DQI_MAP B
+	    WHERE B.PRF_ID = #{prfId}
+	    AND B.PRF_ID = A.PRF_ID
+	    --AND B.DQI_ID = A.DQI_ID
+	)
+   </delete>
+   
+   <insert id="insertWAM" parameterType="map">
+   	--WAM 추가 (WAQ 내용을 추가, REG_TYP_CD 가 신규,변경일 경우)
+	INSERT INTO WAM_PRF_DQI_MAP
+	SELECT 
+		PRF_ID , DQI_ID
+	
+	<include refid="wam_col"/>
+	
+	FROM WAQ_PRF_DQI_MAP A
+	WHERE EXISTS ( SELECT 1 
+					     FROM WAQ_PRF_MSTR M
+					             INNER JOIN WAQ_PRF_DQI_MAP B
+					                 ON M.RQST_NO = B.RQST_NO
+					                AND M.RQST_SNO = B.RQST_SNO
+					                AND B.VRF_CD = '1'
+					    WHERE M.RQST_NO = #{rqstNo}
+					      AND M.RVW_STS_CD = '1'
+					      AND M.VRF_CD = '1'
+					      AND M.RQST_NO = A.RQST_NO
+					      AND M.RQST_SNO = A.RQST_SNO
+					   )
+    AND A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+	AND A.REG_TYP_CD IN ('C', 'U')
+   </insert>
+  
+  <update id="updateWAH"  parameterType="map">
+   	--WAH 이력 만료...
+	UPDATE WAH_PRF_DQI_MAP A
+	SET EXP_DTM = NOW()
+	WHERE EXISTS (
+	    SELECT 1 FROM WAQ_PRF_DQI_MAP B
+	    WHERE B.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+	    AND B.PRF_ID = A.PRF_ID
+	    AND B.DQI_ID = A.DQI_ID
+	    )
+	AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+   </update>
+  
+  <insert id="insertWAH"  parameterType="map">
+   	--WAH이력 적재...
+	INSERT INTO WAH_PRF_DQI_MAP
+	SELECT
+	    A.PRF_ID AS PRF_ID
+	    , A.DQI_ID AS DQI_ID
+	    , TO_DATE( '9999-12-31', 'YYYY-MM-DD') AS EXP_DTM
+	    , NOW() AS STR_DTM 
+	
+	<include refid="wam_col"/>
+   
+	FROM WAQ_PRF_DQI_MAP A
+	WHERE A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+	  AND EXISTS ( SELECT 1 
+				     FROM WAQ_PRF_MSTR M
+				             INNER JOIN WAQ_PRF_DQI_MAP B
+				                 ON M.RQST_NO = B.RQST_NO
+				                AND M.RQST_SNO = B.RQST_SNO
+				                AND B.VRF_CD = '1'
+				    WHERE M.RQST_NO = #{rqstNo}
+				      AND M.RVW_STS_CD = '1'
+				      AND M.VRF_CD = '1'
+				      AND M.RQST_NO = A.RQST_NO
+				      AND M.RQST_SNO = A.RQST_SNO
+				   )
+   </insert>
+  
+  <update id="updateDelId" parameterType="java.lang.String">
+    update WAQ_PRF_DQI_MAP A
+       set (PRF_ID, OBJ_VERS) =
+                          
+             (select D.PRF_ID, D.OBJ_VERS
+                            
+             from WAQ_PRF_MSTR B 
+             JOIN WAM_PRF_MSTR C 
+               ON B.PRF_NM  = C.PRF_NM   
+             INNER JOIN WAM_PRF_DQI_MAP D
+               ON C.PRF_ID = D.PRF_ID 
+             where 1=1 
+             AND B.RQST_NO = A.RQST_NO
+             AND B.RQST_SNO = A.RQST_SNO
+                               )
+	 where PRF_ID = #{prfId, jdbcType=VARCHAR}
+
+     
+  </update>
+  
+   <!--  OBJ_ID, OBJ_VERS UPDATE  -->
+  <update id="updatePrfDqiInfo" parameterType="java.lang.String">
+    update WAQ_PRF_DQI_MAP A
+       set (REG_TYP_CD, PRF_ID) = 
+             (SELECT case when max(A.RQST_DCD) = 'DD' then 'D' 
+                          else case when MAX(B.PRF_ID) IS NULL then 'C'
+                                    else 'U' end
+                     end AS REG_TYP_CD
+                     ,B.PRF_ID
+                 FROM WAQ_PRF_MSTR B
+                WHERE B.REG_TYP_CD in ('C','U')
+                  AND A.RQST_NO = B.RQST_NO
+                  AND B.RQST_NO = #{rqstNo, jdbcType=VARCHAR}
+                GROUP BY B.PRF_ID )
+      WHERE A.RQST_NO = #{rqstNo, jdbcType=VARCHAR}
+  </update>
+  
+  <select id="selectRqstNo" parameterType="java.lang.String">
+  	SELECT RQST_NO
+  	FROM   WAM_PRF_MSTR
+  	WHERE  PRF_ID = #{prfId, jdbcType=VARCHAR}
+  </select>
+  
+   <insert id="insertWAMbyByPrfId" parameterType="map">
+   	--WAM 추가 (WAQ 내용을 추가, REG_TYP_CD 가 신규,변경일 경우)
+	INSERT INTO WAM_PRF_DQI_MAP
+	SELECT 
+		PRF_ID , DQI_ID
+	<include refid="wam_col"/>
+	  FROM WAQ_PRF_DQI_MAP A
+	 WHERE A.PRF_ID = #{prfId, jdbcType=VARCHAR}
+ 	   AND A.REG_TYP_CD IN ('C', 'U')
+<!--  	   AND A.EXP_DTM = TO_DATE('99991231','YYYYMMDD') -->
+   </insert>
+   
+	<delete id="deleteByDqiNmGroup" parameterType="java.lang.String">
+	<![CDATA[ 
+	DELETE FROM WAQ_PRF_DQI_MAP A
+	 WHERE EXISTS (SELECT 1
+	                 FROM ( SELECT B.RQST_NO, B.PRF_NM, MAX(B.RQST_SNO) RQST_SNO
+	                            FROM WAQ_PRF_DQI_MAP B
+	                           WHERE B.RQST_NO = #{rqstNo}
+	                              AND B.VRF_CD = '1'
+	                          GROUP BY B.RQST_NO, B.PRF_NM ) B
+	                WHERE A.RQST_NO = B.RQST_NO
+	                  AND A.PRF_NM = B.PRF_NM
+	                  AND A.RQST_SNO <> B.RQST_SNO )
+	   AND A.RQST_NO = #{rqstNo}
+	  ]]>   
+	</delete>
+   
+   <select id="selectPrfDqiCnt" parameterType="String" resultType="int">
+    SELECT COUNT(1)
+      FROM WAQ_PRF_DQI_MAP
+     WHERE 1=1
+       AND RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+   </select>
+   
+  <insert id="insertWaqRejected" parameterType="map">
+   INSERT INTO WAQ_PRF_DQI_MAP(   RQST_NO
+								, RQST_SNO
+								, RQST_DTL_SNO
+								, PRF_NM
+								, PRF_ID
+								, DQI_LNM
+								, DQI_ID
+								, VRF_CD
+								, VRF_RMK
+								, RVW_STS_CD
+								, RVW_CONTS
+								, OBJ_DESCN
+								, OBJ_VERS
+								, REG_TYP_CD
+								, FRS_RQST_DTM
+								, FRS_RQST_USER_ID
+								, RQST_DTM
+								, RQST_USER_ID
+								, APRV_DTM
+								, APRV_USER_ID
+								, RQST_DCD)
+   SELECT #{reqmst.rqstNo,jdbcType=VARCHAR}            
+		, RQST_SNO
+		, RQST_DTL_SNO
+		, PRF_NM
+		, PRF_ID
+		, DQI_LNM
+		, DQI_ID
+		, NULL
+		, NULL
+		, NULL
+		, NULL
+		, OBJ_DESCN
+		, OBJ_VERS
+		, REG_TYP_CD
+		, FRS_RQST_DTM
+		, FRS_RQST_USER_ID
+		, RQST_DTM
+		, RQST_USER_ID
+		, NULL
+		, NULL
+		, RQST_DCD
+   	 FROM WAQ_PRF_DQI_MAP
+   	WHERE RQST_NO = #{oldRqstNo,jdbcType=VARCHAR}
+<!--   	  AND RVW_STS_CD = '2' -->
+  </insert>
+</mapper>

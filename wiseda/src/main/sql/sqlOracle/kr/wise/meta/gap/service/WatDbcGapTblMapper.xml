@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.meta.gap.service.WatDbcGapTblMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.meta.gap.service.WatDbcGapTbl" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap" >
+    <result column="SRC_DB_SCH_ID" property="srcDbSchId" jdbcType="VARCHAR" />
+    <result column="SRC_TBL_PNM" property="srcTblPnm" jdbcType="VARCHAR" />
+    <result column="SRC_TBL_LNM" property="srcTblLnm" jdbcType="VARCHAR" />
+    <result column="SRC_DBMS_TYPE" property="srcDbmsType" jdbcType="VARCHAR" />
+    <result column="SRC_CONN_TRG_ID" property="srcConnTrgId" jdbcType="VARCHAR" />
+    <result column="TGT_DB_SCH_ID" property="tgtDbSchId" jdbcType="VARCHAR" />
+    <result column="TGT_TBL_PNM" property="tgtTblPnm" jdbcType="VARCHAR" />
+    <result column="TGT_TBL_LNM" property="tgtTblLnm" jdbcType="VARCHAR" />
+    <result column="TGT_DBMS_TYPE" property="tgtDbmsType" jdbcType="VARCHAR" />
+    <result column="TGT_CONN_TRG_ID" property="tgtConnTrgId" jdbcType="VARCHAR" />
+    <result column="SRC_TBL_EXTNC_EXS" property="srcTblExtncExs" jdbcType="VARCHAR" />
+    <result column="TGT_TBL_EXTNC_EXS" property="tgtTblExtncExs" jdbcType="VARCHAR" />
+    <result column="TBL_ERR_EXS" property="tblErrExs" jdbcType="VARCHAR" />
+    <result column="TBL_ERR_DESCN" property="tblErrDescn" jdbcType="VARCHAR" />
+    <result column="IDX_ERR_EXS" property="idxErrExs" jdbcType="VARCHAR" />
+    <result column="IDX_ERR_DESCN" property="idxErrDescn" jdbcType="VARCHAR" />
+    <result column="COL_ERR_EXS" property="colErrExs" jdbcType="VARCHAR" />
+    <result column="COL_ERR_DESCN" property="colErrDescn" jdbcType="VARCHAR" />
+    <result column="GAP_STATUS" property="gapStatus" jdbcType="VARCHAR" />
+  </resultMap>
+ 
+  
+  <select id="getDbGapList" parameterType="kr.wise.meta.gap.service.WatDbcGapTbl" resultMap="BaseResultMap">
+  	SELECT A.*
+  		 , CASE WHEN GAP_STATUS = 'GAP' THEN '#FF0000' END AS FontColor
+  	  FROM (
+		  	SELECT  A.SRC_DB_SCH_ID    
+						,A.SRC_TBL_PNM      
+						,A.SRC_TBL_LNM      
+						,A.SRC_TBL_SPAC_NM  
+						,A.SRC_DBMS_TYPE    
+						,A.SRC_CONN_TRG_ID  
+						,A.SRC_DDL_TBL_ID   
+						,A.SRC_PDM_TBL_ID   
+						,A.TGT_DB_SCH_ID    
+						,A.TGT_TBL_PNM      
+						,A.TGT_TBL_LNM      
+						,A.TGT_TBL_SPAC_NM  
+						,A.TGT_DBMS_TYPE    
+						,A.TGT_CONN_TRG_ID  
+						,A.TGT_DDL_TBL_ID   
+						,A.TGT_PDM_TBL_ID   
+						,NVL(A.SRC_TBL_EXTNC_EXS, 'Y') AS SRC_TBL_EXTNC_EXS
+						,NVL(A.TGT_TBL_EXTNC_EXS, 'Y') AS TGT_TBL_EXTNC_EXS
+						,NVL(A.TBL_ERR_EXS, 'N') AS TBL_ERR_EXS
+						,A.TBL_ERR_DESCN    
+						,NVL(A.IDX_ERR_EXS, 'N') AS IDX_ERR_EXS
+						,A.IDX_ERR_DESCN    
+						,NVL(A.COL_ERR_EXS, 'N') AS COL_ERR_EXS
+						,A.COL_ERR_DESCN    
+						,A.DESCN            
+						,A.VERS             
+						,A.REG_TYP_CD       
+						,A.WRIT_DTM         
+					    , C.DB_CONN_TRG_ID AS SRC_DB_CONN_TRG_ID
+					    , E.DB_CONN_TRG_ID AS TGT_DB_CONN_TRG_ID
+					    , CASE WHEN A.TBL_ERR_EXS = 'Y' THEN 'GAP'
+					       ELSE CASE WHEN A.COL_ERR_EXS = 'Y' THEN 'GAP'
+					       ELSE 'NML' END END AS GAP_STATUS
+			  FROM WAT_DBC_GAP_TBL A
+					 INNER JOIN WAA_DB_SCH B
+					    ON A.SRC_DB_SCH_ID = B.DB_SCH_ID
+					   AND B.REG_TYP_CD IN ('C', 'U')
+					   AND B.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+					 INNER JOIN WAA_DB_CONN_TRG C
+					    ON B.DB_CONN_TRG_ID = C.DB_CONN_TRG_ID
+					   AND C.REG_TYP_CD IN ('C', 'U')
+					   AND C.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+					 INNER JOIN WAA_DB_SCH D
+					    ON A.TGT_DB_SCH_ID = D.DB_SCH_ID
+					   AND D.REG_TYP_CD IN ('C', 'U')
+					   AND D.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+					 INNER JOIN WAA_DB_CONN_TRG E
+					    ON D.DB_CONN_TRG_ID = E.DB_CONN_TRG_ID
+					   AND E.REG_TYP_CD IN ('C', 'U')
+					   AND E.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+			) A
+	 <where>
+	 <if test="srcDbSchId != null">
+	   AND A.SRC_DB_SCH_ID = #{srcDbSchId,jdbcType=VARCHAR}
+	 </if>
+	 <if test="tgtDbSchId != null">
+	   AND A.TGT_DB_SCH_ID = #{tgtDbSchId,jdbcType=VARCHAR}
+	 </if>
+	 <if test="gapStatus != null">
+	   AND A.GAP_STATUS = #{gapStatus,jdbcType=VARCHAR}
+	 </if>
+	 <if test="tgtTblPnm != null">
+	   AND (A.SRC_TBL_PNM LIKE '%' || #{tgtTblPnm,jdbcType=VARCHAR} || '%'
+	   		OR A.TGT_TBL_PNM LIKE '%' || UPPER(#{tgtTblPnm,jdbcType=VARCHAR}) || '%'
+	   		OR A.SRC_TBL_LNM LIKE '%' || #{tgtTblPnm,jdbcType=VARCHAR} || '%'
+	   		OR A.TGT_TBL_LNM LIKE '%' || UPPER(#{tgtTblPnm,jdbcType=VARCHAR}) || '%' )
+	 </if>
+	 </where>
+	 ORDER BY A.GAP_STATUS, A.SRC_DB_SCH_ID  ,A.SRC_TBL_PNM ,A.TGT_DB_SCH_ID  ,A.TGT_TBL_PNM 
+  </select>
+</mapper>

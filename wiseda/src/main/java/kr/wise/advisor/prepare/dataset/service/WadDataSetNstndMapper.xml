@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.wise.advisor.prepare.dataset.service.WadDataSetNstndMapper">
+  <resultMap id="BaseResultMap" type="kr.wise.advisor.prepare.dataset.service.WadDataSetNstnd" extends="kr.wise.dq.criinfo.anatrg.service.AnaTrgMapper.BaseResultMap">
+    <id column="DASE_ID" jdbcType="VARCHAR" property="daseId" />
+    <result column="RQST_NO"   jdbcType="VARCHAR" property="rqstNo" />
+    <result column="DASE_LNM"  jdbcType="VARCHAR" property="daseLnm" />
+    <result column="DASE_PNM"  jdbcType="VARCHAR" property="dasePnm" />
+    <result column="DB_SCH_ID" jdbcType="VARCHAR" property="dbSchId" />
+    <result column="DB_TBL_NM" jdbcType="VARCHAR" property="dbTblNm" />
+    <result column="SUM_YN"    jdbcType="VARCHAR" property="summaryYn" />
+    <result column="PRF_ID"    jdbcType="VARCHAR" property="prfId"     />
+<!--     <result column="OBJ_DESCN" jdbcType="VARCHAR" property="objDescn" /> -->
+<!--     <result column="OBJ_VERS" jdbcType="DECIMAL" property="objVers" /> -->
+<!--     <result column="REG_TYP_CD" jdbcType="VARCHAR" property="regTypCd" /> -->
+<!--     <result column="WRIT_DTM" jdbcType="TIMESTAMP" property="writDtm" /> -->
+<!--     <result column="WRIT_USER_ID" jdbcType="VARCHAR" property="writUserId" /> -->
+  </resultMap>
+  <sql id="Base_Column_List">
+    DASE_ID, RQST_NO, DASE_LNM, DASE_PNM, DB_SCH_ID, DB_TBL_NM, OBJ_DESCN, OBJ_VERS, 
+    REG_TYP_CD, WRIT_DTM, WRIT_USER_ID
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from WAD_DATA_SET_NSTND
+    where DASE_ID = #{daseId,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="selectDataSetNstnd" parameterType="kr.wise.dq.criinfo.anatrg.service.AnaTrgTblVO" resultMap="BaseResultMap">
+  --데이터셋 조회 by 스키마id|테이블명
+  SELECT 
+    <include refid="Base_Column_List" />
+    FROM WAD_DATA_SET_NSTND
+    WHERE DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+      AND DB_TBL_NM = #{dbcTblNm,jdbcType=VARCHAR} 
+  </select>
+  
+  <select id="selectDataSetNstndList" parameterType="kr.wise.advisor.prepare.dataset.service.WadDataSetNstnd" resultMap="BaseResultMap">
+  --데이터셋 조회 : wadDataSet
+  SELECT
+         DB.DB_CONN_TRG_ID
+       , DB.DB_CONN_TRG_PNM
+       , DB.DB_CONN_TRG_LNM
+       , S.DB_SCH_ID
+       , S.DB_SCH_PNM
+       , S.DB_SCH_LNM
+       , T.DBC_TBL_NM
+       , T.DBC_TBL_KOR_NM
+       , T.SUBJ_ID
+       , DS.DASE_ID
+       , DS.RQST_NO
+       , DS.DASE_LNM
+       , DS.DASE_PNM
+       , PF.PRF_ID
+       , CASE WHEN VS.DASE_ID IS NOT NULL THEN 'Y' ELSE 'N' END AS SUM_YN
+       , CASE WHEN DP.DASE_ID IS NOT NULL THEN '#0000FF' 
+       		  WHEN VS.DASE_ID IS NOT NULL THEN '#FF0000'
+       		  ELSE NULL
+       		  END AS FontColor
+  FROM WAA_DB_CONN_TRG DB
+       INNER JOIN WAA_DB_SCH S
+          ON DB.DB_CONN_TRG_ID = S.DB_CONN_TRG_ID
+         AND S.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+         AND S.REG_TYP_CD IN ('C','U')
+       INNER JOIN WAT_DBC_TBL T
+          ON DB.DB_CONN_TRG_ID = T.DB_CONN_TRG_ID
+         AND S.DB_SCH_ID = T.DB_SCH_ID
+        LEFT OUTER JOIN WAD_DATA_SET_NSTND DS
+          ON DS.DB_SCH_ID = T.DB_SCH_ID
+         AND DS.DB_TBL_NM = T.DBC_TBL_NM
+        LEFT OUTER JOIN (
+        	SELECT DASE_ID, COUNT(*) AS CNT 
+      		  FROM WAD_ANA_VAR_NSTND A
+        	  JOIN WAD_DMN_PDT B
+        	    ON A.ANL_VAR_ID = B.ANL_VAR_ID
+        	 GROUP BY DASE_ID
+        ) DP 
+          ON DP.DASE_ID = DS.DASE_ID         
+        LEFT OUTER JOIN (
+        	SELECT DASE_ID, COUNT(*) AS CNT 
+      		  FROM WAD_ANA_VAR_NSTND A
+        	  JOIN WAD_VAR_SUM B
+        	    ON A.ANL_VAR_ID = B.ANL_VAR_ID
+        	 GROUP BY DASE_ID
+        ) VS 
+         ON VS.DASE_ID = DS.DASE_ID         
+        LEFT JOIN
+        (SELECT A.DB_SCH_ID
+              , A.DBC_TBL_NM
+              , MIN(B.PRF_ID) AS PRF_ID 
+           FROM WAM_PRF_MSTR A
+                INNER JOIN WAM_PRF_RESULT B
+                   ON B.PRF_ID = A.PRF_ID
+                INNER JOIN
+                (SELECT PRF_ID, MAX(ANA_STR_DTM) AS ANA_STR_DTM
+                   FROM WAM_PRF_RESULT
+                  GROUP BY PRF_ID
+                ) C
+                ON C.PRF_ID = B.PRF_ID  
+          WHERE A.PRF_KND_CD = 'PC01'    
+          GROUP BY A.DB_SCH_ID
+                 , A.DBC_TBL_NM            
+         ) PF
+         ON PF.DB_SCH_ID  = S.DB_SCH_ID
+        AND PF.DBC_TBL_NM = T.DBC_TBL_NM
+  WHERE DB.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+    AND DB.REG_TYP_CD IN ('C','U')
+    <if test="schDbConnTrgId != null and schDbConnTrgId != ''">
+    AND DB.DB_CONN_TRG_ID = #{schDbConnTrgId, jdbcType=VARCHAR}
+    </if>
+    <if test="schDbSchId != null and schDbSchId != '' ">
+    AND S.DB_SCH_ID = #{schDbSchId, jdbcType=VARCHAR}
+    </if>
+    <if test="schDbSchNm != null and schDbSchNm != '' ">
+    AND (S.DB_SCH_PNM LIKE '%'||#{schDbSchNm, jdbcType=VARCHAR}||'%' OR  S.DB_SCH_LNM  LIKE '%'||#{schDbSchNm, jdbcType=VARCHAR}||'%' )
+    </if>
+    <if test="schDbcTblNm != null and schDbcTblNm != '' ">
+    AND (T.DBC_TBL_NM LIKE '%'|| UPPER(#{schDbcTblNm, jdbcType=VARCHAR}) ||'%' OR  T.DBC_TBL_KOR_NM LIKE '%'||#{schDbcTblNm, jdbcType=VARCHAR}||'%' )
+    </if>
+    <if test="rqstNo != null and rqstNo != '' ">
+    AND DS.RQST_NO = #{rqstNo, jdbcType=VARCHAR}
+    </if>
+            
+  ORDER BY DB.DB_CONN_TRG_ID, S.DB_SCH_ID, T.DBC_TBL_NM
+  </select>
+  
+  <select id="selectDataSetNstndListbyrqstNo" parameterType="string" resultMap="kr.wise.commons.damgmt.db.service.WaaDbConnTrgMapper.BaseResultMap">
+  --타겟DBMS 조회 by rqstNo : dbms, 스키마 
+  SELECT
+         DB.DB_CONN_TRG_PNM
+       , DB.DB_CONN_TRG_LNM
+       , DB.DBMS_TYP_CD
+       , DB.DBMS_VERS_CD
+       , DB.CONN_TRG_DB_LNK_CHRW
+       , DB.CONN_TRG_LNK_URL
+       , DB.CONN_TRG_DRVR_NM
+       , DB.DB_CONN_AC_ID
+       , DB.DB_CONN_AC_PWD 
+       , S.DB_SCH_ID
+       , S.DB_SCH_PNM
+       , S.DB_SCH_LNM
+       , #{rqstNo, jdbcType=VARCHAR} AS RQST_NO
+  FROM WAA_DB_CONN_TRG DB
+       INNER JOIN WAA_DB_SCH S
+          ON DB.DB_CONN_TRG_ID = S.DB_CONN_TRG_ID
+         AND S.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+         AND S.REG_TYP_CD IN ('C','U')
+  WHERE DB.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+    AND DB.REG_TYP_CD IN ('C','U')
+    AND S.DB_SCH_ID IN (SELECT DB_SCH_ID FROM WAD_DATA_SET WHERE RQST_NO = #{rqstNo, jdbcType=VARCHAR} GROUP BY DB_SCH_ID)
+  ORDER BY DB.DB_CONN_TRG_ID, S.DB_SCH_ID
+  </select>
+
+  <select id="selectTgtDbmsbyDs" parameterType="kr.wise.advisor.prepare.dataset.service.WadDataSetNstnd" resultMap="kr.wise.commons.damgmt.db.service.WaaDbConnTrgMapper.BaseResultMap">
+  --타겟 DBMS 조회 by dataset 
+  SELECT
+         DB.DB_CONN_TRG_PNM
+       , DB.DB_CONN_TRG_LNM
+       , DB.DBMS_TYP_CD
+       , DB.DBMS_VERS_CD
+       , DB.CONN_TRG_DB_LNK_CHRW
+       , DB.CONN_TRG_LNK_URL
+       , DB.CONN_TRG_DRVR_NM
+       , DB.DB_CONN_AC_ID
+       , DB.DB_CONN_AC_PWD 
+       , S.DB_SCH_ID
+       , S.DB_SCH_PNM
+       , S.DB_SCH_LNM
+  FROM WAA_DB_CONN_TRG DB
+       INNER JOIN WAA_DB_SCH S
+          ON DB.DB_CONN_TRG_ID = S.DB_CONN_TRG_ID
+         AND S.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+         AND S.REG_TYP_CD IN ('C','U')
+  WHERE DB.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+    AND DB.REG_TYP_CD IN ('C','U')
+    AND S.DB_SCH_ID = #{schDbSchId,jdbcType=VARCHAR}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from WAD_DATA_SET_NSTND
+    where DASE_ID = #{daseId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="kr.wise.advisor.prepare.dataset.service.WadDataSetNstnd">
+    insert into WAD_DATA_SET_NSTND (DASE_ID, RQST_NO, DASE_LNM, 
+      DASE_PNM, DB_SCH_ID, DB_TBL_NM, 
+      OBJ_DESCN, OBJ_VERS, REG_TYP_CD, 
+      WRIT_DTM, WRIT_USER_ID)
+    values (#{daseId,jdbcType=VARCHAR}, #{rqstNo,jdbcType=VARCHAR}, #{daseLnm,jdbcType=VARCHAR}, 
+      #{dasePnm,jdbcType=VARCHAR}, #{dbSchId,jdbcType=VARCHAR}, #{dbTblNm,jdbcType=VARCHAR}, 
+      #{objDescn,jdbcType=VARCHAR}, #{objVers,jdbcType=DECIMAL}, #{regTypCd,jdbcType=VARCHAR}, 
+      #{writDtm,jdbcType=TIMESTAMP}, #{writUserId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="kr.wise.advisor.prepare.dataset.service.WadDataSetNstnd">
+    insert into WAD_DATA_SET_NSTND
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="daseId != null">
+        DASE_ID,
+      </if>
+      <if test="rqstNo != null">
+        RQST_NO,
+      </if>
+      <if test="daseLnm != null">
+        DASE_LNM,
+      </if>
+      <if test="dasePnm != null">
+        DASE_PNM,
+      </if>
+      <if test="dbSchId != null">
+        DB_SCH_ID,
+      </if>
+      <if test="dbTblNm != null">
+        DB_TBL_NM,
+      </if>
+      <if test="objDescn != null">
+        OBJ_DESCN,
+      </if>
+        OBJ_VERS,
+        REG_TYP_CD,
+        WRIT_DTM,
+        WRIT_USER_ID,
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="daseId != null">
+        #{daseId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstNo != null">
+        #{rqstNo,jdbcType=VARCHAR},
+      </if>
+      <if test="daseLnm != null">
+        #{daseLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="dasePnm != null">
+        #{dasePnm,jdbcType=VARCHAR},
+      </if>
+      <if test="dbSchId != null">
+        #{dbSchId,jdbcType=VARCHAR},
+      </if>
+      <if test="dbTblNm != null">
+        #{dbTblNm,jdbcType=VARCHAR},
+      </if>
+      <if test="objDescn != null">
+        #{objDescn,jdbcType=VARCHAR},
+      </if>
+        1,
+        'C',
+        SYSDATE,
+        #{writUserId,jdbcType=VARCHAR},
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.advisor.prepare.dataset.service.WadDataSetNstnd">
+    update WAD_DATA_SET_NSTND
+    <set>
+      <if test="rqstNo != null">
+        RQST_NO = #{rqstNo,jdbcType=VARCHAR},
+      </if>
+      <if test="daseLnm != null">
+        DASE_LNM = #{daseLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="dasePnm != null">
+        DASE_PNM = #{dasePnm,jdbcType=VARCHAR},
+      </if>
+      <if test="dbSchId != null">
+        DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR},
+      </if>
+      <if test="dbTblNm != null">
+        DB_TBL_NM = #{dbTblNm,jdbcType=VARCHAR},
+      </if>
+      <if test="objDescn != null">
+        OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      </if>
+        OBJ_VERS = NVL(OBJ_VERS, 0) + 1,
+      <if test="regTypCd != null">
+        REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      </if>
+        WRIT_DTM = SYSDATE,
+      <if test="writUserId != null">
+        WRIT_USER_ID = #{writUserId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where DASE_ID = #{daseId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="kr.wise.advisor.prepare.dataset.service.WadDataSetNstnd">
+    update WAD_DATA_SET_NSTND
+    set RQST_NO = #{rqstNo,jdbcType=VARCHAR},
+      DASE_LNM = #{daseLnm,jdbcType=VARCHAR},
+      DASE_PNM = #{dasePnm,jdbcType=VARCHAR},
+      DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR},
+      DB_TBL_NM = #{dbTblNm,jdbcType=VARCHAR},
+      OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      WRIT_DTM = #{writDtm,jdbcType=TIMESTAMP},
+      WRIT_USER_ID = #{writUserId,jdbcType=VARCHAR}
+    where DASE_ID = #{daseId,jdbcType=VARCHAR}
+  </update>
+</mapper>

@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.meta.admin.service.WaaOrgMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.meta.admin.service.WaaOrg" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+    <id     column="ORG_LVL" 	   property="orgLvl"         jdbcType="VARCHAR"/>
+    <result column="ORG_LVL"       property="Level"          jdbcType="DECIMAL" />
+	<result column="ORG_CD"		   property="orgCd"          jdbcType="VARCHAR"/>
+	<result column="ORG_NM"		   property="orgNm"          jdbcType="VARCHAR"/>
+	<result column="UPP_ORG_CD"    property="uppOrgCd"       jdbcType="VARCHAR"/>
+	<result column="UPP_ORG_NM"    property="uppOrgNm"       jdbcType="VARCHAR"/>
+	<result column="REG_TYP_CD"    property="regTypCd"       jdbcType="VARCHAR"/>
+	<result column="EXP_DTM"       property="expDtm"         jdbcType="VARCHAR"/>
+	<result column="FULL_PATH"     property="fullPath"       jdbcType="VARCHAR"/>
+	<result column="STR_DTM"       property="strDtm"         jdbcType="VARCHAR"/>
+	<result column="WRIT_DTM"      property="writDtm"        jdbcType="VARCHAR"/>
+	<result column="OBJ_DESCN"     property="objDescn"       jdbcType="VARCHAR"/>
+	<result column="OBJ_VERS"      property="objVers"        jdbcType="VARCHAR"/>
+	<result column="WRIT_USER_ID"  property="writUserId"     jdbcType="VARCHAR"/>
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    ORG_LVL
+	,ORG_CD
+	,ORG_NM
+	,UPP_ORG_CD
+	,UPP_ORG_NM
+	,REG_TYP_CD
+	,EXP_DTM
+	,FULL_PATH
+	,STR_DTM
+	,WRIT_DTM
+	,OBJ_DESCN
+	,OBJ_VERS
+	,WRIT_USER_ID
+  </sql>
+  
+  <select id="selectListOrderSys" resultMap="BaseResultMap" parameterType="kr.wise.meta.admin.service.WaaOrg" >
+  	 SELECT  A.ORG_LVL
+			,A.ORG_CD
+			,A.ORG_NM
+			,A.UPP_ORG_CD
+			,A.UPP_ORG_NM
+			,A.REG_TYP_CD
+			,A.EXP_DTM
+			,A.FULL_PATH
+			,A.STR_DTM
+			,A.WRIT_DTM
+			,A.OBJ_DESCN
+			,A.OBJ_VERS
+			,A.WRIT_USER_ID
+	    	,GET_USER_NM(A.WRIT_USER_ID) AS WRIT_USER_NM
+	       FROM WAA_ORG A
+  	<where>
+		AND A.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')
+  		AND A.REG_TYP_CD IN ('C', 'U')
+      <if test="orgNm != null" >
+        AND A.ORG_NM LIKE '%' || #{orgNm,jdbcType=VARCHAR} || '%'
+      </if>
+      <if test="uppOrgCd != null" >
+        AND A.UPP_ORG_CD = #{uppOrgCd,jdbcType=VARCHAR}
+      </if>
+      <if test="orgLvl != null" >
+        AND A.ORG_LVL = #{orgLvl,jdbcType=DECIMAL}
+      </if>
+  	</where>
+	
+	 ORDER BY A.FULL_PATH
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from WAA_ORG
+    where ORG_CD = #{orgCd,jdbcType=VARCHAR}
+    AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+    AND REG_TYP_CD IN ('C', 'U')
+  </select>
+  
+  <update id="updateExpDtm" parameterType="kr.wise.meta.admin.service.WaaOrg">
+  UPDATE WAA_ORG
+  SET EXP_DTM = SYSDATE
+  WHERE ORG_CD = #{orgCd,jdbcType=VARCHAR}
+  AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+  </update>
+  
+  <insert id="insertSelective" parameterType="kr.wise.meta.admin.service.WaaOrg" >
+
+    insert into WAA_ORG
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+    <if test="orgLvl != null" >  
+      ORG_LVL,
+	</if>
+    <if test="orgCd != null" >  
+      ORG_CD,
+	</if>
+    <if test="orgNm != null" >  
+      ORG_NM,
+	</if>
+    <if test="uppOrgCd != null" >  
+      UPP_ORG_CD,
+	</if>
+    <if test="uppOrgNm != null" >  
+      UPP_ORG_NM,
+	</if>
+    <if test="regTypCd != null" >  
+      REG_TYP_CD,
+	</if>
+      EXP_DTM,
+    <if test="fullPath != null" >  
+      FULL_PATH,
+	</if>
+      STR_DTM,
+    <if test="writDtm != null" >  
+      WRIT_DTM,
+	</if>
+    <if test="objDescn != null" >  
+      OBJ_DESCN,
+	</if>
+    <if test="objVers != null" >  
+      OBJ_VERS,
+	</if>
+    <if test="writUserId != null" >  
+      WRIT_USER_ID,
+	</if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="orgLvl != null" >  
+        #{orgLvl,jdbcType=VARCHAR},
+	  </if>
+      <if test="orgCd != null" >  
+        #{orgCd,jdbcType=VARCHAR},
+	  </if>
+      <if test="orgNm != null" >  
+        #{orgNm,jdbcType=VARCHAR},
+	  </if>
+      <if test="uppOrgCd != null" >  
+        #{uppOrgCd,jdbcType=VARCHAR},
+	  </if>
+      <if test="uppOrgNm != null" >  
+        #{uppOrgNm,jdbcType=VARCHAR},
+	  </if>
+      <if test="regTypCd != null" >  
+        #{regTypCd,jdbcType=VARCHAR},
+	  </if>
+        TO_DATE('9999-12-31', 'YYYY-MM-DD'),
+      <if test="fullPath != null" >  
+        #{fullPath,jdbcType=VARCHAR},
+	  </if>
+        SYSDATE,
+      <if test="writDtm != null" >   
+        SYSDATE,
+      </if>
+      <if test="objDescn != null" >  
+        #{objDescn,jdbcType=VARCHAR},
+	  </if>
+      <if test="objVers != null" >  
+        #{objVers,jdbcType=VARCHAR},
+	  </if>
+      <if test="writUserId != null" >  
+        #{writUserId,jdbcType=VARCHAR},
+	  </if>
+    </trim>
+  </insert>
+  
+  <select id="selectUppOrgByOrgNm" resultMap="BaseResultMap" parameterType="kr.wise.meta.admin.service.WaaOrg" >
+  --상위주제영역 find by 상위주제영역명 and 레벨
+  	SELECT * FROM WAA_ORG
+	 WHERE EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')    
+	   AND REG_TYP_CD IN ('C', 'U')
+	   AND UPP_ORG_NM = #{uppOrgNm,jdbcType=VARCHAR}
+   	   AND ORG_LVL = #{orgLvl, jdbcType=DECIMAL} - 1
+  </select>
+  
+  <update id="updateAllOrgNm" parameterType="kr.wise.meta.admin.service.WaaOrg" >
+  UPDATE WAA_ORG T
+	 SET FULL_PATH = (
+                     SELECT A.FULL_PATH AS FULL_PATH
+                       FROM (  
+                              SELECT A.ORG_CD
+                                   , SUBSTR(SYS_CONNECT_BY_PATH(ORG_NM, '>'), 2) AS FULL_PATH
+                                FROM 
+                                  (SELECT A.*
+                                    FROM WAA_ORG A
+                                   WHERE A.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')
+                                     AND A.REG_TYP_CD IN ('C', 'U')
+                                  ) A         
+                              CONNECT BY PRIOR A.ORG_CD = A.UPP_ORG_CD   
+                                  AND A.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')
+                                  AND A.REG_TYP_CD IN ('C', 'U')                           
+                                START WITH UPP_ORG_CD IS NULL 
+                             ) A
+                        WHERE A.ORG_CD = T.ORG_CD       
+                       )  
+   WHERE T.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')
+     AND T.REG_TYP_CD IN ('C', 'U') 	
+	
+  </update>
+  
+</mapper>

@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.meta.codecfcsys.service.WamCodeCfcSysMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.meta.codecfcsys.service.WamCodeCfcSys" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap" >
+    <id column="CODE_CFC_SYS_ID" property="codeCfcSysId" jdbcType="VARCHAR" />
+    <result column="CODE_CFC_SYS_LNM" property="codeCfcSysLnm" jdbcType="VARCHAR" />
+    <result column="CODE_CFC_SYS_PNM" property="codeCfcSysPnm" jdbcType="VARCHAR" />
+    <result column="CODE_CFC_SYS_CD" property="codeCfcSysCd" jdbcType="VARCHAR" />
+    <result column="CODE_CFC_SYS_FRM" property="codeCfcSysFrm" jdbcType="VARCHAR" />
+    <result column="CRG_USER_ID" property="crgUserId" jdbcType="VARCHAR" />
+    <result column="CRG_USER_NM" property="crgUserNm" jdbcType="VARCHAR" />
+<!--     <result column="RQST_NO" property="rqstNo" jdbcType="VARCHAR" /> -->
+<!--     <result column="RQST_SNO" property="rqstSno" jdbcType="DECIMAL" /> -->
+<!--     <result column="OBJ_DESCN" property="objDescn" jdbcType="VARCHAR" /> -->
+<!--     <result column="OBJ_VERS" property="objVers" jdbcType="DECIMAL" /> -->
+<!--     <result column="REG_TYP_CD" property="regTypCd" jdbcType="VARCHAR" /> -->
+<!--     <result column="FRS_RQST_DTM" property="frsRqstDtm" jdbcType="TIMESTAMP" /> -->
+<!--     <result column="FRS_RQST_USER_ID" property="frsRqstUserId" jdbcType="VARCHAR" /> -->
+<!--     <result column="RQST_DTM" property="rqstDtm" jdbcType="TIMESTAMP" /> -->
+<!--     <result column="RQST_USER_ID" property="rqstUserId" jdbcType="VARCHAR" /> -->
+<!--     <result column="APRV_DTM" property="aprvDtm" jdbcType="TIMESTAMP" /> -->
+<!--     <result column="APRV_USER_ID" property="aprvUserId" jdbcType="VARCHAR" /> -->
+  </resultMap>
+  <sql id="Base_Column_List" >
+    CODE_CFC_SYS_ID, CODE_CFC_SYS_LNM, CODE_CFC_SYS_PNM, CODE_CFC_SYS_CD, CODE_CFC_SYS_FRM, 
+    CRG_USER_ID, RQST_NO, RQST_SNO, OBJ_DESCN, OBJ_VERS, REG_TYP_CD, FRS_RQST_DTM, FRS_RQST_USER_ID, 
+    RQST_DTM, RQST_USER_ID, APRV_DTM, APRV_USER_ID
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    SELECT 
+	       A.CODE_CFC_SYS_ID
+	     , A.CODE_CFC_SYS_LNM
+	     , A.CODE_CFC_SYS_PNM
+	     , A.CODE_CFC_SYS_CD
+	     , A.CODE_CFC_SYS_FRM
+	     , A.CRG_USER_ID
+	     , A.RQST_NO
+	     , A.RQST_SNO
+	     , A.OBJ_DESCN
+	     , A.OBJ_VERS
+	     , A.REG_TYP_CD
+	     , U.USER_NM AS CRG_USER_NM
+	     
+      FROM WAM_CODE_CFC_SYS A
+      LEFT OUTER JOIN WAA_USER U
+        ON A.CRG_USER_ID = U.USER_ID
+       AND U.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+       AND U.REG_TYP_CD IN ('C', 'U')
+     WHERE A.CODE_CFC_SYS_ID = #{codeCfcSysId,jdbcType=VARCHAR}
+       AND A.REG_TYP_CD IN ('C', 'U')
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from WAM_CODE_CFC_SYS
+    where CODE_CFC_SYS_ID = #{codeCfcSysId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="kr.wise.meta.codecfcsys.service.WamCodeCfcSys" >
+    insert into WAM_CODE_CFC_SYS (CODE_CFC_SYS_ID, CODE_CFC_SYS_LNM, CODE_CFC_SYS_PNM, 
+      CODE_CFC_SYS_CD, CODE_CFC_SYS_FRM, CRG_USER_ID, 
+      RQST_NO, RQST_SNO, OBJ_DESCN, 
+      OBJ_VERS, REG_TYP_CD, FRS_RQST_DTM, 
+      FRS_RQST_USER_ID, RQST_DTM, RQST_USER_ID, 
+      APRV_DTM, APRV_USER_ID)
+    values (#{codeCfcSysId,jdbcType=VARCHAR}, #{codeCfcSysLnm,jdbcType=VARCHAR}, #{codeCfcSysPnm,jdbcType=VARCHAR}, 
+      #{codeCfcSysCd,jdbcType=VARCHAR}, #{codeCfcSysFrm,jdbcType=VARCHAR}, #{crgUserId,jdbcType=VARCHAR}, 
+      #{rqstNo,jdbcType=VARCHAR}, #{rqstSno,jdbcType=DECIMAL}, #{objDescn,jdbcType=VARCHAR}, 
+      #{objVers,jdbcType=DECIMAL}, #{regTypCd,jdbcType=VARCHAR}, #{frsRqstDtm,jdbcType=TIMESTAMP}, 
+      #{frsRqstUserId,jdbcType=VARCHAR}, #{rqstDtm,jdbcType=TIMESTAMP}, #{rqstUserId,jdbcType=VARCHAR}, 
+      #{aprvDtm,jdbcType=TIMESTAMP}, #{aprvUserId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="kr.wise.meta.codecfcsys.service.WamCodeCfcSys" >
+    insert into WAM_CODE_CFC_SYS
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="codeCfcSysId != null" >
+        CODE_CFC_SYS_ID,
+      </if>
+      <if test="codeCfcSysLnm != null" >
+        CODE_CFC_SYS_LNM,
+      </if>
+      <if test="codeCfcSysPnm != null" >
+        CODE_CFC_SYS_PNM,
+      </if>
+      <if test="codeCfcSysCd != null" >
+        CODE_CFC_SYS_CD,
+      </if>
+      <if test="codeCfcSysFrm != null" >
+        CODE_CFC_SYS_FRM,
+      </if>
+      <if test="crgUserId != null" >
+        CRG_USER_ID,
+      </if>
+      <if test="rqstNo != null" >
+        RQST_NO,
+      </if>
+      <if test="rqstSno != null" >
+        RQST_SNO,
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN,
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS,
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD,
+      </if>
+      <if test="frsRqstDtm != null" >
+        FRS_RQST_DTM,
+      </if>
+      <if test="frsRqstUserId != null" >
+        FRS_RQST_USER_ID,
+      </if>
+      <if test="rqstDtm != null" >
+        RQST_DTM,
+      </if>
+      <if test="rqstUserId != null" >
+        RQST_USER_ID,
+      </if>
+      <if test="aprvDtm != null" >
+        APRV_DTM,
+      </if>
+      <if test="aprvUserId != null" >
+        APRV_USER_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="codeCfcSysId != null" >
+        #{codeCfcSysId,jdbcType=VARCHAR},
+      </if>
+      <if test="codeCfcSysLnm != null" >
+        #{codeCfcSysLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="codeCfcSysPnm != null" >
+        #{codeCfcSysPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="codeCfcSysCd != null" >
+        #{codeCfcSysCd,jdbcType=VARCHAR},
+      </if>
+      <if test="codeCfcSysFrm != null" >
+        #{codeCfcSysFrm,jdbcType=VARCHAR},
+      </if>
+      <if test="crgUserId != null" >
+        #{crgUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstNo != null" >
+        #{rqstNo,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstSno != null" >
+        #{rqstSno,jdbcType=DECIMAL},
+      </if>
+      <if test="objDescn != null" >
+        #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null" >
+        #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="frsRqstDtm != null" >
+        #{frsRqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="frsRqstUserId != null" >
+        #{frsRqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDtm != null" >
+        #{rqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rqstUserId != null" >
+        #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDtm != null" >
+        #{aprvDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aprvUserId != null" >
+        #{aprvUserId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.meta.codecfcsys.service.WamCodeCfcSys" >
+    update WAM_CODE_CFC_SYS
+    <set >
+      <if test="codeCfcSysLnm != null" >
+        CODE_CFC_SYS_LNM = #{codeCfcSysLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="codeCfcSysPnm != null" >
+        CODE_CFC_SYS_PNM = #{codeCfcSysPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="codeCfcSysCd != null" >
+        CODE_CFC_SYS_CD = #{codeCfcSysCd,jdbcType=VARCHAR},
+      </if>
+      <if test="codeCfcSysFrm != null" >
+        CODE_CFC_SYS_FRM = #{codeCfcSysFrm,jdbcType=VARCHAR},
+      </if>
+      <if test="crgUserId != null" >
+        CRG_USER_ID = #{crgUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstNo != null" >
+        RQST_NO = #{rqstNo,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstSno != null" >
+        RQST_SNO = #{rqstSno,jdbcType=DECIMAL},
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="frsRqstDtm != null" >
+        FRS_RQST_DTM = #{frsRqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="frsRqstUserId != null" >
+        FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDtm != null" >
+        RQST_DTM = #{rqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rqstUserId != null" >
+        RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDtm != null" >
+        APRV_DTM = #{aprvDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aprvUserId != null" >
+        APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where CODE_CFC_SYS_ID = #{codeCfcSysId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="kr.wise.meta.codecfcsys.service.WamCodeCfcSys" >
+    update WAM_CODE_CFC_SYS
+    set CODE_CFC_SYS_LNM = #{codeCfcSysLnm,jdbcType=VARCHAR},
+      CODE_CFC_SYS_PNM = #{codeCfcSysPnm,jdbcType=VARCHAR},
+      CODE_CFC_SYS_CD = #{codeCfcSysCd,jdbcType=VARCHAR},
+      CODE_CFC_SYS_FRM = #{codeCfcSysFrm,jdbcType=VARCHAR},
+      CRG_USER_ID = #{crgUserId,jdbcType=VARCHAR},
+      RQST_NO = #{rqstNo,jdbcType=VARCHAR},
+      RQST_SNO = #{rqstSno,jdbcType=DECIMAL},
+      OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      FRS_RQST_DTM = #{frsRqstDtm,jdbcType=TIMESTAMP},
+      FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR},
+      RQST_DTM = #{rqstDtm,jdbcType=TIMESTAMP},
+      RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      APRV_DTM = #{aprvDtm,jdbcType=TIMESTAMP},
+      APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR}
+    where CODE_CFC_SYS_ID = #{codeCfcSysId,jdbcType=VARCHAR}
+  </update>
+  <select id="selectList" resultMap="BaseResultMap" parameterType="kr.wise.meta.codecfcsys.service.WamCodeCfcSys">
+    SELECT A.* 
+	     , U.USER_NM AS CRG_USER_NM
+	     , P.USER_NM AS APRV_USER_NM
+	     , R.USER_NM AS RQST_USER_NM
+	  FROM WAM_CODE_CFC_SYS A
+	  
+	  LEFT OUTER JOIN WAA_USER U
+	    ON A.CRG_USER_ID = U.USER_ID
+	   AND U.REG_TYP_CD IN ('C', 'U')
+	   AND U.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	  LEFT OUTER JOIN WAA_USER P
+	    ON A.APRV_USER_ID = P.USER_ID
+	   AND P.REG_TYP_CD IN ('C', 'U')
+	   AND P.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	  LEFT OUTER JOIN WAA_USER R
+	    ON A.RQST_USER_ID = R.USER_ID
+	   AND R.REG_TYP_CD IN ('C', 'U')
+	   AND R.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	 <where> 
+	 AND A.REG_TYP_CD IN ('C', 'U')
+	 <if test="codeCfcSysLnm != null">
+	 AND A.CODE_CFC_SYS_LNM LIKE '%' || #{codeCfcSysLnm,jdbcType=VARCHAR} || '%'
+	 </if>
+	 <if test="codeCfcSysCd != null">
+	 AND A.CODE_CFC_SYS_CD = #{codeCfcSysCd,jdbcType=VARCHAR}
+	 </if>
+	 <if test="codeCfcSysFrm != null">
+	 AND A.CODE_CFC_SYS_FRM LIKE '%' || #{codeCfcSysFrm,jdbcType=VARCHAR} || '%'
+	 </if>
+	 <if test="crgUserNm != null">
+	 AND U.USER_NM LIKE '%' || #{crgUserNm,jdbcType=VARCHAR} || '%'
+	 </if>
+  	</where>
+  </select>
+  
+  <select id="selectHistList" parameterType="kr.wise.meta.codecfcsys.service.WamCodeCfcSys" resultMap="BaseResultMap">
+  SELECT A.*
+    	 , CASE WHEN A.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD') AND A.REG_TYP_CD IN ('C', 'U') THEN '#0000FF'
+    	   ELSE NULL END AS FontColor
+      FROM WAH_CODE_CFC_SYS A
+     WHERE CODE_CFC_SYS_ID = #{codeCfcSysId,jdbcType=VARCHAR}
+     ORDER BY EXP_DTM DESC, STR_DTM DESC
+  
+  </select>
+</mapper>

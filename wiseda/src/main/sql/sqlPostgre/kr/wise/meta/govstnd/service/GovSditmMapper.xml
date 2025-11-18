@@ -1,0 +1,515 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.wise.meta.govstnd.service.GovSditmMapper">
+  <resultMap id="BaseResultMap" type="kr.wise.meta.govstnd.service.GovSditm" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+    <id column="SDITM_ID" property="sditmId" jdbcType="VARCHAR" />
+    <result column="SDITM_LNM" property="sditmLnm" jdbcType="VARCHAR" />
+    <result column="SDITM_PNM" property="sditmPnm" jdbcType="VARCHAR" />
+    <result column="DB_CONN_TRG_ID" property="dbConnTrgId" jdbcType="VARCHAR" />
+    <result column="DB_CONN_TRG_PNM" property="dbConnTrgPnm" jdbcType="VARCHAR" />
+    <result column="DB_SCH_ID" property="dbSchId" jdbcType="VARCHAR" />
+    <result column="DB_SCH_PNM" property="dbSchPnm" jdbcType="VARCHAR" />
+    <result column="DMN_ID" property="dmnId" jdbcType="VARCHAR" />
+    <result column="DMN_NM" property="dmnNm" jdbcType="VARCHAR" />
+    <result column="OBJ_DESCN" property="objDescn" jdbcType="VARCHAR" />
+    <result column="RQST_DCD" property="rqstDcd" jdbcType="VARCHAR" />
+    <result column="VRF_RMK" property="vrfRmk" jdbcType="VARCHAR" />
+    <result column="DATA_TYPE" property="dataType" jdbcType="VARCHAR" /> 
+    <result column="DATA_LEN" property="dataLen" jdbcType="VARCHAR" /> 
+    <result column="DATA_SCAL" property="dataScal" jdbcType="VARCHAR" /> 
+    <result column="DIC_ORGN" property="dicOrgn" jdbcType="VARCHAR" />
+    <result column="REG_DTM" property="regDtm" jdbcType="VARCHAR" />
+    <result column="REG_USER_ID" property="regUserId" jdbcType="VARCHAR" />
+    <result column="EXC_YN" property="excYn" jdbcType="VARCHAR" />
+	
+	<result column="INFO_SYS_CD" property="infoSysCd" jdbcType="VARCHAR" />
+	<result column="DB_CONN_TRG_ID" property="dbConnTrgId" jdbcType="VARCHAR" />
+	<result column="DB_SCH_ID" property="dbSchId" jdbcType="VARCHAR" />
+	<result column="SYS_AREA_ID" property="sysAreaId" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <select id="selectdiagSditmList" parameterType="kr.wise.meta.govstnd.service.GovSditm" resultMap="BaseResultMap">  	
+	
+	SELECT X.SDITM_ID
+	  , X.DB_CONN_TRG_PNM
+	  , X.DB_SCH_PNM
+	  , X.SDITM_LNM
+	  , X.SDITM_PNM
+	  , X.DMN_NM
+--	  , X.OBJ_DESCN
+--	  , X.RQST_DCD
+	  , (
+			NVL2(X.VRF_RMK_LNM,X.VRF_RMK_LNM || ' ','') 
+			|| NVL2(X.VRF_RMK_PNM,X.VRF_RMK_PNM || ' ','') 
+			|| COALESCE(X.VRF_RMK_DMN,'')
+	    )AS VRF_RMK 
+	  , X.DATA_TYPE
+	  , X.DATA_LEN
+	  , X.DATA_SCAL
+	  , X.REG_DTM
+	  , X.REG_USER_ID
+	  , (
+	  		CASE 
+	  			WHEN VRF_RMK_LNM IS NOT NULL THEN '#FF0000' 
+	  			WHEN VRF_RMK_PNM IS NOT NULL THEN '#FF0000'
+	  			WHEN VRF_RMK_DMN IS NOT NULL THEN '#FF0000'
+	  			ELSE '#000000'
+	  			END
+	  	) AS FontColor    
+  	FROM (	  	
+		SELECT GS.SDITM_ID
+	  		 , GS.DB_CONN_TRG_ID
+	  		 , WDCT.DB_CONN_TRG_PNM
+	  		 , GS.DB_SCH_ID
+	  		 , WDS.DB_SCH_PNM
+	  		 , GS.SDITM_LNM
+	  		 , GS.SDITM_PNM
+	  		 , GS.DMN_ID
+	  		 , D.DMN_NM
+--	  		 , GS.RQST_DCD
+	  		 , (CASE WHEN L.SDITM_LNM = GS.SDITM_LNM THEN '표준용어논리명중복' END) AS VRF_RMK_LNM
+		  	 , (CASE WHEN P.SDITM_PNM = GS.SDITM_PNM THEN '표준용어물리명중복' END) AS VRF_RMK_PNM
+		  	 , (CASE WHEN D.DMN_ID IS NULL THEN '도메인미존재' END) AS VRF_RMK_DMN
+	  		 , GS.DATA_TYPE
+	  		 , GS.DATA_LEN
+	  		 , GS.DATA_SCAL
+	  		 , GS.REG_DTM
+	  		 , GS.REG_USER_ID
+	  		 , '#000000' AS FontColor
+	  		 , GS.REG_TYP_CD 
+	  	  FROM GOV_SDITM GS
+	  	  LEFT OUTER JOIN GOV_DMN D
+		    ON GS.DMN_ID = D.DMN_ID 
+		   AND D.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	  	  LEFT OUTER JOIN WAA_DB_CONN_TRG WDCT
+	  	    ON GS.DB_CONN_TRG_ID = WDCT.DB_CONN_TRG_ID
+	  	   AND WDCT.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	  	  LEFT OUTER JOIN WAA_DB_SCH WDS 
+	  	    ON GS.DB_SCH_ID = WDS.DB_SCH_ID 
+	  	   AND WDS.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	  	  LEFT OUTER JOIN (
+			SELECT B.DB_SCH_ID, B.SDITM_LNM, COUNT(*) 
+			  FROM GOV_SDITM B  
+			 WHERE B.REG_TYP_CD IN ('C','U')
+			   AND B.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+			  GROUP BY B.DB_SCH_ID, B.SDITM_LNM 
+			  HAVING COUNT(*) > 1
+			) L
+			ON GS.DB_SCH_ID = L.DB_SCH_ID
+			 AND GS.SDITM_LNM = L.SDITM_LNM
+		  LEFT OUTER JOIN (
+			SELECT E.DB_SCH_ID, E.SDITM_PNM, COUNT(*) 
+			  FROM GOV_SDITM E  
+			 WHERE E.REG_TYP_CD IN ('C','U')
+			   AND E.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+			  GROUP BY E.DB_SCH_ID, E.SDITM_PNM HAVING COUNT(*) > 1
+			) P
+			ON GS.DB_SCH_ID = P.DB_SCH_ID
+			  AND GS.SDITM_PNM = P.SDITM_PNM
+	  	  
+	  <where>
+	   		GS.REG_TYP_CD IN('C','U')
+	   		AND GS.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+	   	<if test="vrfRmk != null">
+	   		AND GS.VRF_RMK = #{vrfRmk,jdbcType=VARCHAR}
+	   	</if>
+	   	<if test="sditmLnm != null">
+	   		AND (GS.SDITM_LNM LIKE '%' || #{sditmLnm,jdbcType=VARCHAR} || '%'
+	      	 OR GS.SDITM_PNM LIKE '%' || #{sditmLnm,jdbcType=VARCHAR} || '%')
+	   	</if>
+	   	<if test="dmnNm != null">
+	   		AND GS.DMN_NM = #{dmnNm,jdbcType=VARCHAR}
+	   	</if>
+	   	<if test="dataType != null">
+	   		AND GS.DATA_TYPE = #{dataType,jdbcType=VARCHAR}
+	   	</if>
+	   	<if test="dbConnTrgId != null">
+	   		AND WDCT.DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR}
+	   	</if>
+	   	<if test="dbSchId != null">
+	   		AND WDS.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+	   	</if>
+	  </where> 
+		) X
+
+  </select>
+  
+  <delete id="deleteDiagSditmList" parameterType="kr.wise.meta.govstnd.service.GovSditm">
+  	UPDATE GOV_SDITM A
+	SET A.EXP_DTM = NOW(), A.REG_TYP_CD = 'D'
+       WHERE A.REG_TYP_CD IN ('C', 'U')
+         AND A.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+         AND A.SDITM_ID = #{sditmId,jdbcType=VARCHAR}
+  </delete>
+  
+  <insert id="insertDiagSditmList" parameterType="kr.wise.meta.govstnd.service.GovSditm">
+
+  	INSERT INTO GOV_SDITM
+  	<trim prefix="(" suffix=")" suffixOverrides="," >
+  		<if test="sditmId != null">
+  			SDITM_ID,
+  		</if>		
+  		<if test="dbConnTrgId != null">
+  			DB_CONN_TRG_ID,
+  		</if>
+  		<if test="dbConnTrgPnm != null">
+  			DB_CONN_TRG_PNM,
+  		</if>
+  		<if test="dbSchId != null">
+  			DB_SCH_ID,
+  		</if>
+  		<if test="dbSchPnm != null">
+  			DB_SCH_PNM,
+  		</if>
+  		<if test="sditmLnm != null">
+  			SDITM_LNM,
+  		</if>
+  		<if test="sditmPnm != null">
+  			SDITM_PNM,
+  		</if>
+  		<if test="dmnId != null">
+  			DMN_ID,
+  		</if>
+  		<if test="dmnNm != null">
+  			DMN_NM,
+  		</if>
+  		<if test="objDescn != null">
+  			OBJ_DESCN,
+  		</if>
+  		<if test="rqstDcd != null">
+  			RQST_DCD,
+  		</if>
+  		<if test="vrfRmk != null">
+  			VRF_RMK,
+  		</if>
+  		<if test="dataType != null">
+  			DATA_TYPE,
+  		</if>
+  		<if test="dataLen != null">
+  			DATA_LEN,
+  		</if>
+  		<if test="dataScal != null">	
+  			DATA_SCAL,
+  		</if>
+  		<if test="dicOrgn != null">
+  			DIC_ORGN,
+  		</if>
+  		<if test="regDtm != null">
+  			REG_DTM,
+  		</if>
+  		<if test="regUserId != null">
+  			REG_USER_ID,
+  		</if>
+  		<if test="excYn != null">
+  			EXC_YN,
+  		</if>
+  		<if test="sysAreaId != null" >
+        	SYS_AREA_ID,
+      	</if>     	
+        	EXP_DTM,    	
+	    <if test="regTypCd != null" >
+	        REG_TYP_CD,
+	    </if>
+	    
+  	</trim>
+  	<trim prefix="values (" suffix=")" suffixOverrides="," >
+   		<if test="sditmId != null">
+  			#{sditmId,jdbcType=VARCHAR},
+  		</if>
+  		<if test="dbConnTrgId != null">
+  			#{dbConnTrgId,jdbcType=VARCHAR},
+  		</if>
+  		<if test="dbConnTrgPnm != null">
+  			#{dbConnTrgPnm,jdbcType=VARCHAR},
+  		</if> 	
+  		<if test="dbSchId != null">
+  			#{dbSchId,jdbcType=VARCHAR},
+  		</if>	
+  		<if test="dbSchPnm != null">
+  			#{dbSchPnm,jdbcType=VARCHAR},
+  		</if>
+  		<if test="sditmLnm != null">
+  			#{sditmLnm,jdbcType=VARCHAR},
+  		</if>
+  		<if test="sditmPnm != null">
+  			#{sditmPnm,jdbcType=VARCHAR},
+  		</if>
+  		<if test="dmnId != null">
+  			#{dmnId,jdbcType=VARCHAR},
+  		</if>
+  		<if test="dmnNm != null">
+  			#{dmnNm,jdbcType=VARCHAR},
+  		</if>
+  		<if test="objDescn != null">
+  			#{objDescn,jdbcType=VARCHAR},
+  		</if>
+  		<if test="rqstDcd != null">
+  			#{rqstDcd,jdbcType=VARCHAR},
+  		</if>
+  		<if test="vrfRmk != null">
+  			#{vrfRmk,jdbcType=VARCHAR},
+  		</if>
+  		<if test="dataType != null">
+  			#{dataType,jdbcType=VARCHAR},
+  		</if>
+  		<if test="dataLen != null">
+  			#{dataLen,jdbcType=VARCHAR},
+  		</if>
+  		<if test="dataScal != null">
+  			#{dataScal,jdbcType=VARCHAR},
+  		</if>
+  		<if test="dicOrgn != null">
+  			#{dicOrgn,jdbcType=VARCHAR},
+  		</if>
+  		<if test="regDtm != null">
+  			NOW(),
+  		</if>
+  		<if test="regUserId != null">
+  			#{regUserId,jdbcType=VARCHAR},
+  		</if>
+  		<if test="excYn != null">
+  			#{excYn,jdbcType=VARCHAR},
+  		</if>
+  		<if test="sysAreaId != null" >
+        	#{sysAreaId,jdbcType=VARCHAR},
+      	</if>
+      		TO_DATE('99991231','YYYYMMDD'),    		
+      	<if test="regTypCd != null" >
+	        #{regTypCd,jdbcType=VARCHAR},
+	    </if> 
+  	</trim>
+  </insert>
+  
+  <update id="updateDiagSditmList" parameterType="kr.wise.meta.govstnd.service.GovSditm">
+	
+  	UPDATE GOV_SDITM
+    <set>
+     <if test="sysAreaId != null" >
+        SYS_AREA_ID = #{sysAreaId,jdbcType=VARCHAR},
+      </if>
+  		<if test="dbConnTrgId != null">
+  			DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR},
+  		</if>
+  		<if test="dbConnTrgPnm != null">
+  			DB_CONN_TRG_PNM = #{dbConnTrgPnm,jdbcType=VARCHAR},
+  		</if>
+  		<if test="dbSchId != null">
+  			DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR},
+  		</if>
+  		<if test="dbSchPnm != null">
+  			DB_SCH_PNM = #{dbSchPnm,jdbcType=VARCHAR},
+  		</if>
+  		<if test="sditmLnm != null">
+  			SDITM_LNM = #{sditmLnm,jdbcType=VARCHAR},
+  		</if>
+  		<if test="sditmPnm != null">
+  			SDITM_PNM = #{sditmPnm,jdbcType=VARCHAR},
+  		</if>
+  		<if test="dmnId != null">
+  			DMN_ID = #{dmnId,jdbcType=VARCHAR},
+  		</if>
+  		<if test="dmnNm != null">
+  			DMN_NM = #{dmnNm,jdbcType=VARCHAR},
+  		</if>
+  		<if test="vrfRmk != null">
+  			VRF_RMK = #{vrfRmk,jdbcType=VARCHAR},
+  		</if>
+  		<if test="dataType != null">
+  			DATA_TYPE = #{dataType,jdbcType=VARCHAR},
+  		</if>
+  		<if test="dataLen != null">
+  			DATA_LEN = #{dataLen,jdbcType=VARCHAR},
+  		</if>
+  		<if test="dataScal != null">
+  			DATA_SCAL = #{dataScal,jdbcType=VARCHAR},
+  		</if>
+  		<if test="dicOrgn != null">
+  			DIC_ORGN = #{dicOrgn,jdbcType=VARCHAR},
+  		</if>
+  		<if test="excYn != null">
+  			EXC_YN = #{excYn,jdbcType=VARCHAR},
+  		</if>
+  		<if test="regTypCd != null">
+  			REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+  		</if>
+
+    </set>
+    WHERE SDITM_ID = #{sditmId, jdbcType=VARCHAR}
+  </update>
+  
+  <select id="selectInfoSys" resultType="java.util.HashMap">
+  	SELECT A.INFO_SYS_CD  
+         , A.INFO_SYS_NM 
+         , B.ORG_CD       AS UPCODE_CD
+      FROM WAA_INFO_SYS A
+     INNER JOIN WAA_ORG B
+        ON B.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+       AND B.ORG_CD = A.ORG_CD   
+     WHERE A.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')	   
+	 ORDER BY A.INFO_SYS_NM 
+  </select>
+  
+  <update id="checkVrfRmk" parameterType="kr.wise.meta.govstnd.service.GovSditm">
+  	UPDATE GOV_SDITM 
+  	   SET VRF_RMK = NULL
+   <where>
+   	   VRF_RMK IS NOT NULL
+   	<if test="sditmId != null">
+   	   AND SDITM_ID = #{sditmId, jdbcType=VARCHAR}
+   	</if>
+   </where>    
+  </update>
+  
+  <update id="checkDupGovSditm" parameterType="kr.wise.meta.govstnd.service.GovSditm">
+   MERGE INTO GOV_SDITM A
+  	     USING (SELECT B.SDITM_LNM AS sditmLnm FROM GOV_SDITM B WHERE SDITM_ID = #{sditmId, jdbcType=VARCHAR} GROUP BY B.SDITM_LNM HAVING COUNT(*)>1)
+  	        ON (A.SDITM_LNM = sditmLnm)     
+ 	WHEN MATCHED THEN UPDATE SET VRF_RMK = '표준용어 중복'
+  </update>
+  
+  <update id="checkGovDmn" parameterType="kr.wise.meta.govstnd.service.GovSditm">
+    UPDATE GOV_SDITM GS
+	   SET GS.DMN_ID = (SELECT B.DMN_ID 
+	   					 FROM GOV_DMN B, GOV_SDITM A  					    			
+	   					WHERE A.DMN_NM = B.DMN_NM
+					      AND A.SYS_AREA_ID = B.SYS_AREA_ID
+				  	      AND A.DB_CONN_TRG_PNM = B.DB_CONN_TRG_PNM
+					      AND A.DB_SCH_PNM = B.DB_SCH_PNM
+					      AND A.DATA_TYPE = B.DATA_TYPE
+					      AND A.DATA_LEN = B.DATA_LEN
+					      AND A.DATA_SCAL = B.DATA_SCAL
+					      AND B.REG_TYP_CD IN ('C','U')
+					      AND B.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+					      AND A.SDITM_ID = #{sditmId, jdbcType=VARCHAR}
+						)
+	 WHERE GS.REG_TYP_CD IN ('C','U')
+	   AND EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+	   AND GS.SDITM_ID = #{sditmId, jdbcType=VARCHAR}
+  </update>
+  
+  <update id="updateNotDmn" parameterType="kr.wise.meta.govstnd.service.GovSditm">
+    UPDATE GOV_SDITM
+       SET VRF_RMK = '도메인 미존재'
+    <where>
+    	DMN_ID IS NULL
+	   	<if test="sditmId != null">
+	      AND SDITM_ID = #{sditmId, jdbcType=VARCHAR}
+	   	</if>
+   </where> 
+  </update>
+  
+  <update id="updateVrfRmk" parameterType="kr.wise.meta.govstnd.service.GovSditm">
+  	UPDATE GOV_SDITM
+  	   SET VRF_RMK = '정상'
+   <where>
+     VRF_RMK IS NULL
+	 <if test="sditmId != null">
+       AND SDITM_ID = #{sditmId, jdbcType=VARCHAR}
+	 </if>
+  </where> 
+  </update>
+  
+  <delete id="deleteAutoCreGovSditm" parameterType="map" >
+ 	DELETE FROM GOV_SDITM A
+ 	WHERE A.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR} 
+ 		AND A.DIC_ORGN = 'Y'
+ 		AND A.EXP_DTM = TO_DATE('9999-12-31','YYYY-MM-DD')
+  </delete>
+  
+  <insert id="insertAutoCreGovSditm" parameterType="map">
+	
+	INSERT INTO GOV_SDITM(
+		SDITM_ID,
+		DB_CONN_TRG_ID,
+		DB_SCH_ID,
+		SDITM_PNM,
+		SDITM_LNM,
+		DATA_TYPE,
+		DATA_LEN,
+		REG_TYP_CD,
+		DIC_ORGN,
+		REG_DTM,
+		REG_USER_ID,
+		EXP_DTM,
+		DMN_NM
+	)
+	SELECT 'GOV_' || LPAD(GOVSTND_ID.NEXTVAL,11,'0')
+		, TT.DB_CONN_TRG_ID, TT.DB_SCH_ID, TT.DBC_COL_NM, TT.DBC_COL_KOR_NM, TT.DATA_TYPE, TT.DATA_LEN
+		,'C', 'Y', NOW(), #{userId,jdbcType=VARCHAR}  , TO_DATE('9999-12-31','YYYY-MM-DD')
+		, NVL2(COALESCE(WOLDM.MID_DMNG_NM, WODTM.MID_DMNG_RP_NM) 
+				, COALESCE(WOLDM.MID_DMNG_NM, WODTM.MID_DMNG_RP_NM) || '_', '') 
+		  	|| WODTM.DATA_TYPE_ABB_NM || NVL2(TT.DATA_LEN, '_' || TT.DATA_LEN, '') AS DMN_NM
+	FROM
+	(
+		SELECT T.DB_CONN_TRG_ID
+				,T.DB_SCH_ID
+				,T.DBC_COL_NM, T.DBC_COL_KOR_NM, T.DATA_TYPE, T.DATA_LEN
+				,(SUBSTR(T.DBC_COL_NM, INSTR(T.DBC_COL_NM, '_', -1 ) + 1, LENGTH(T.DBC_COL_NM))) || '' || UPPER(T.DATA_TYPE)|| T.DATA_LEN AS MAP_STR
+				,SUBSTR(T.DBC_COL_NM, INSTR(T.DBC_COL_NM, '_', -1 ) + 1, LENGTH(T.DBC_COL_NM)) AS SUBSTR_VAL
+		FROM
+			(SELECT ROW_NUMBER() OVER(PARTITION BY AAA.DBC_COL_NM ORDER BY AAA.DATA_LEN DESC) AS RNUM
+					,ROW_NUMBER() OVER(PARTITION BY AAA.DBC_COL_KOR_NM ORDER BY AAA.DATA_LEN DESC) AS RKNUM
+					, AAA.*
+			FROM (
+					SELECT WDT.DB_CONN_TRG_ID, WDC.DB_SCH_ID, WDC.DBC_COL_NM, WDC.DATA_TYPE, COALESCE(WDC.DATA_LEN, WDC.DATA_PNUM) AS DATA_LEN , COUNT(*) AS CNT
+							, MAX(WDC.DBC_COL_KOR_NM) AS DBC_COL_KOR_NM
+					FROM WAT_DBC_COL WDC
+					 LEFT OUTER JOIN  WAT_DBC_TBL WDT 
+					  ON WDC.DB_SCH_ID = WDT.DB_SCH_ID 
+					 AND WDC.DBC_TBL_NM = WDT.DBC_TBL_NM	
+					 WHERE WDC.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR} 
+					  AND WDC.DBC_COL_KOR_NM IS NOT NULL
+					 GROUP BY WDT.DB_CONN_TRG_ID, WDC.DB_SCH_ID, WDC.DBC_COL_NM , WDC.DATA_TYPE, COALESCE(WDC.DATA_LEN, WDC.DATA_PNUM)
+			) AAA
+			INNER JOIN 
+			(
+				SELECT DB_CONN_TRG_ID, DB_SCH_ID, DBC_COL_NM, MAX(CNT) AS MCNT
+				FROM
+				(
+					SELECT WDT.DB_CONN_TRG_ID, WDC.DB_SCH_ID, WDC.DBC_COL_NM, WDC.DATA_TYPE, COALESCE(WDC.DATA_LEN, WDC.DATA_PNUM) AS DATA_LEN, COUNT(*) AS CNT
+					FROM WAT_DBC_COL WDC
+					 LEFT OUTER JOIN  WAT_DBC_TBL WDT 
+					  ON WDC.DB_SCH_ID = WDT.DB_SCH_ID 
+					 AND WDC.DBC_TBL_NM = WDT.DBC_TBL_NM	
+					 WHERE WDC.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR} 
+					  AND WDC.DBC_COL_KOR_NM IS NOT NULL
+					 GROUP BY WDT.DB_CONN_TRG_ID, WDC.DB_SCH_ID, WDC.DBC_COL_NM , WDC.DATA_TYPE, COALESCE(WDC.DATA_LEN, WDC.DATA_PNUM) 
+				) 
+				GROUP BY DB_CONN_TRG_ID, DB_SCH_ID, DBC_COL_NM 
+			) BBB
+			ON AAA.DB_CONN_TRG_ID = BBB.DB_CONN_TRG_ID
+			 AND AAA.DB_SCH_ID = BBB.DB_SCH_ID
+			 AND AAA.DBC_COL_NM = BBB.DBC_COL_NM
+			 AND AAA.CNT = BBB.MCNT
+		) T 
+		 WHERE T.RNUM = 1 AND T.RKNUM = 1
+	) TT
+
+	LEFT OUTER JOIN WAA_ORM_LW_DMNG_MAP WOLDM 
+		ON TT.SUBSTR_VAL = WOLDM.COL_LAST_WD				
+	LEFT OUTER JOIN WAA_ORM_DMNG_MAP WODM 
+		ON WOLDM.MID_DMNG_NM = WODM.MID_DMNG_NM				
+	LEFT OUTER JOIN WAA_ORM_DATA_TYPE_MAP WODTM 
+		ON TT.DATA_TYPE = WODTM.DATA_TYPE_FULL_NM	
+								
+  </insert>
+  
+  <update id="updateSditmDmnId" parameterType="string">
+  
+  	UPDATE GOV_SDITM A
+    SET (A.DMN_ID) = 
+                       (SELECT B.DMN_ID     
+                          FROM GOV_DMN B
+                         WHERE B.EXP_DTM = TO_DATE('9999-12-31','YYYY-MM-DD')
+					  		AND B.DIC_ORGN = 'Y'
+                           	AND A.DMN_NM = B.DMN_NM
+                           	AND A.DB_SCH_ID = B.DB_SCH_ID
+                       )
+	WHERE A.EXP_DTM = TO_DATE('9999-12-31','YYYY-MM-DD')
+	  AND DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR} 
+	  AND A.DIC_ORGN = 'Y'
+	  
+   
+  </update>
+  
+</mapper>

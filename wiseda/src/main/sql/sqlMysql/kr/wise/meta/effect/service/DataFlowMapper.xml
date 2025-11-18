@@ -1,0 +1,394 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.meta.effect.service.DataFlowMapper" >
+<resultMap id="BaseResultMap" type="kr.wise.meta.effect.service.DataFlowTblVO" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+	<id column="DDL_TBL_ID"   		property="ddlTblId" 	jdbcType="VARCHAR" />
+    <result column="DDL_TBL_PNM" 	property="ddlTblPnm" 	jdbcType="VARCHAR" />
+    <result column="DDL_TBL_LNM" 	property="ddlTblLnm" 	jdbcType="VARCHAR" />
+    <result column="DB_SCH_ID" 		property="dbSchId" 		jdbcType="VARCHAR" />
+    <result column="DB_SCH_PNM" 	property="dbSchPnm" 	jdbcType="VARCHAR" />
+    <result column="DB_CONN_TRG_ID" property="dbConnTrgId"	jdbcType="VARCHAR"  />
+    <result column="DB_CONN_TRG_PNM" property="dbConnTrgPnm" jdbcType="VARCHAR"  />
+<!--     <result column="DDL_COL_PNM" 	property="ddlColPnm" 	jdbcType="VARCHAR"  /> -->
+</resultMap>
+
+<resultMap id="EdgeResultMap" type="kr.wise.meta.effect.service.DataFlowEdge" >
+	<result column="SRC_TBL_ID"   		property="data.source" 	jdbcType="VARCHAR" />
+	<result column="TGT_TBL_ID"   		property="data.target" 	jdbcType="VARCHAR" />
+</resultMap>
+
+<resultMap id="NodeResultMap" type="kr.wise.meta.effect.service.DataFlowNode" >
+	<result column="DDL_TBL_ID"   		property="data.id" 	jdbcType="VARCHAR" />
+	<result column="FULL_TBL_NM"   		property="data.name" 	jdbcType="VARCHAR" />
+</resultMap>
+
+
+<resultMap id="DataFlowColResultMap" type="kr.wise.meta.effect.service.DataFlowColMapVO" >
+    <result column="SRC_DB_PNM" 	property="srcDbPnm" 	jdbcType="VARCHAR" /> 
+    <result column="SRC_DB_SCH" 	property="srcDbSch" 	jdbcType="VARCHAR" /> 
+    <result column="SRC_TBL_PNM" 	property="srcTblPnm" 	jdbcType="VARCHAR" /> 
+    <result column="SRC_COL_PNM" 	property="srcColPnm" 	jdbcType="VARCHAR" /> 
+    <result column="SRC_DATA_TYPE" 	property="srcDataYype" 	jdbcType="VARCHAR" /> 
+    <result column="DB_PNM" 		property="dbPnm" 		jdbcType="VARCHAR" /> 
+    <result column="DB_SCH" 		property="dbSch" 		jdbcType="VARCHAR" /> 
+    <result column="TBL_PNM" 		property="tblPnm" 		jdbcType="VARCHAR" /> 
+    <result column="COL_PNM" 		property="colPnm" 		jdbcType="VARCHAR" /> 
+    <result column="DATA_TYPE" 		property="dataType" 	jdbcType="VARCHAR" /> 
+    <result column="TGT_DB_PNM" 	property="tgtDbPnm" 	jdbcType="VARCHAR" /> 
+    <result column="TGT_DB_SCH" 	property="tgtDbSch" 	jdbcType="VARCHAR" /> 
+    <result column="TGT_TBL_PNM" 	property="tgtTblPnm" 	jdbcType="VARCHAR" /> 
+    <result column="TGT_COL_PNM" 	property="tgtColPnm" 	jdbcType="VARCHAR" /> 
+    <result column="TGT_DATA_TYPE" 	property="tgtDataType" 	jdbcType="VARCHAR" />
+    
+    <result column="TGT_TBL_ID" 	property="tgtTblId" 	jdbcType="VARCHAR" />
+    <result column="TGT_COL_ID" 	property="tgtColId" 	jdbcType="VARCHAR" />
+    <result column="SRC_TBL_ID" 	property="srcTblId" 	jdbcType="VARCHAR" />
+    <result column="SRC_COL_ID" 	property="srcColId" 	jdbcType="VARCHAR" />
+    <result column="DFW_COL_ID" 	property="dfwColId" 	jdbcType="VARCHAR" />    
+</resultMap>
+
+	<select id="selectDataFlowTblList" parameterType="kr.wise.meta.effect.service.DataFlowTblVO" resultMap="BaseResultMap">
+		SELECT 	/* DataFlowMapper.selectDataFlowTblList */
+				D.DB_CONN_TRG_PNM
+		    , D.DB_CONN_TRG_ID
+		    , C.DB_SCH_PNM
+		    , C.DB_SCH_ID
+		    , B.DDL_TBL_ID
+		    , B.DDL_TBL_PNM
+		    , B.DDL_TBL_LNM
+--	  FROM WAM_DFW_TBL_INFO A	--INFO가 의미가 없는듯 하여 WAM_DFW_COL_MAP 을 UNION ALL로 하여 사용
+	  FROM (
+	  		SELECT SRC_TBL_ID AS DDL_TBL_ID
+			  FROM WAM_DFW_COL_MAP
+			UNION 
+			SELECT TGT_TBL_ID AS DDL_TBL_ID
+			  FROM WAM_DFW_COL_MAP
+	  	   ) A 
+	  JOIN WAM_DDL_TBL B
+	    ON A.DDL_TBL_ID = B.DDL_TBL_ID
+	  JOIN WAA_DB_SCH C
+	    ON B.DB_SCH_ID = C.DB_SCH_ID
+	   AND C.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')   
+	   AND C.REG_TYP_CD IN ('C', 'U')
+	  JOIN WAA_DB_CONN_TRG D
+	    ON C.DB_CONN_TRG_ID = D.DB_CONN_TRG_ID
+	   AND D.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')   
+	   AND D.REG_TYP_CD IN ('C', 'U')
+	 WHERE 1=1
+	 	<if test="dbConnTrgId != null">AND D.DB_CONN_TRG_ID = #{dbConnTrgId}</if>
+	 	<if test="dbSchId != null">AND C.DB_SCH_ID = #{dbSchId}</if>
+	 	<if test="ddlTblPnm != null">AND (B.DDL_TBL_PNM LIKE  '%'||#{ddlTblPnm}||'%' OR B.DDL_TBL_LNM = '%'||#{ddlTblPnm}||'%')</if>
+	 	<if test="ddlColPnm != null">
+	 		AND EXISTS (
+						SELECT 1 FROM WAM_DDL_COL  
+						 WHERE 1=1
+						   AND B.DDL_TBL_ID = DDL_TBL_ID
+						   AND (DDL_COL_PNM LIKE  '%'||#{ddlColPnm}||'%' OR DDL_COL_LNM = '%'||#{ddlColPnm}||'%')
+	 		)
+	 	</if>
+	 	
+	</select>
+	
+	<select id="selectDataFlowEdgeList" parameterType="kr.wise.meta.effect.service.DataFlowTblVO" resultMap="EdgeResultMap">
+--		SELECT 	/* DataFlowMapper.selectDataFlowEdgeList */
+				SRC_TBL_ID, TGT_TBL_ID  
+		FROM WAM_DFW_TBL_MAP		--TBL이 의미가 없는듯 하여 WAM_DFW_COL_MAP 을  사용
+			SELECT 
+				DISTINCT SRC_TBL_ID, TGT_TBL_ID
+			FROM WAM_DFW_COL_MAP
+			WHERE 1=1
+		  		AND (SRC_TBL_ID = #{ddlTblId} OR TGT_TBL_ID = #{ddlTblId}) 
+	</select>
+	
+	<select id="selectDataFlowNodeList" parameterType="kr.wise.meta.effect.service.DataFlowTblVO" resultMap="NodeResultMap">
+		SELECT 	/* DataFlowMapper.selectDataFlowNodeList */
+				A.DDL_TBL_ID
+		    	, CASE WHEN A.DDL_TBL_LNM IS NOT NULL 
+		        THEN A.DDL_TBL_PNM ||'['||A.DDL_TBL_LNM||']'
+		        ELSE A.DDL_TBL_PNM END AS TBL_NM
+		<![CDATA[
+			, D.DB_CONN_TRG_PNM||'.'||C.DB_SCH_PNM||'.'||A.DDL_TBL_PNM AS FULL_TBL_NM
+		]]>    
+		    --, A.*                    
+		    
+		FROM WAM_DDL_TBL A
+		  JOIN (
+		        SELECT DISTINCT TBL_ID FROM (
+		            --SELECT SRC_TBL_ID AS TBL_ID FROM WAM_DFW_TBL_MAP	--TBL이 의미가 없는듯 하여 WAM_DFW_COL_MAP 을  사용
+		            SELECT DISTINCT SRC_TBL_ID AS TBL_ID FROM WAM_DFW_COL_MAP
+		             WHERE (SRC_TBL_ID = #{ddlTblId} OR  TGT_TBL_ID = #{ddlTblId})
+		            UNION ALL
+		            --SELECT TGT_TBL_ID AS TBL_ID FROM WAM_DFW_TBL_MAP	--TBL이 의미가 없는듯 하여 WAM_DFW_COL_MAP 을  사용
+		            SELECT DISTINCT TGT_TBL_ID AS TBL_ID FROM WAM_DFW_COL_MAP
+		             WHERE (SRC_TBL_ID = #{ddlTblId} OR  TGT_TBL_ID = #{ddlTblId})
+		         )
+		   ) B
+		   ON A.DDL_TBL_ID = B.TBL_ID
+		 JOIN WAA_DB_SCH C
+		   ON A.DB_SCH_ID = C.DB_SCH_ID
+		  AND C.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')   
+		  AND C.REG_TYP_CD IN ('C', 'U')
+		 JOIN WAA_DB_CONN_TRG D
+		   ON C.DB_CONN_TRG_ID = D.DB_CONN_TRG_ID
+		  AND D.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')   
+		  AND D.REG_TYP_CD IN ('C', 'U')
+	</select>
+	
+	<select id="selectDataFlowComMapList" parameterType="kr.wise.meta.effect.service.DataFlowTblVO" resultMap="DataFlowColResultMap">
+	select /* DataFlowMapper.selectDataFlowComMapList */
+	      C.DB_CONN_TRG_PNM AS SRC_DB_PNM
+	    , C.DB_SCH_PNM      AS SRC_DB_SCH
+	    , C.DDL_TBL_PNM     AS SRC_TBL_PNM
+	    , C.DDL_COL_PNM     AS SRC_COL_PNM
+	    , C.DATA_TYPE       AS SRC_DATA_TYPE
+	    , A.DB_CONN_TRG_PNM AS DB_PNM
+	    , A.DB_SCH_PNM      AS DB_SCH
+	    , A.DDL_TBL_PNM     AS TBL_PNM
+	    , A.DDL_COL_PNM     AS COL_PNM
+	    , A.DATA_TYPE       AS DATA_TYPE
+	    , B.DB_CONN_TRG_PNM AS TGT_DB_PNM
+	    , B.DB_SCH_PNM      AS TGT_DB_SCH
+	    , B.DDL_TBL_PNM     AS TGT_TBL_PNM
+	    , B.DDL_COL_PNM     AS TGT_COL_PNM
+	    , B.DATA_TYPE       AS TGT_DATA_TYPE
+	  from (
+	    select    D.DB_CONN_TRG_PNM
+			    --, D.DB_CONN_TRG_ID
+			    , C.DB_SCH_PNM
+			    --, C.DB_SCH_ID
+	            , A.DDL_TBL_ID
+	            , A.DDL_TBL_PNM
+	            , B.DDL_COL_ID
+	            , B.DDL_COL_PNM, B.DDL_COL_LNM
+	            , CASE WHEN B.DATA_LEN IS NULL 
+	                   THEN B.DATA_TYPE
+	                   ELSE (CASE WHEN B.DATA_SCAL IS NOT NULL
+	                                THEN B.DATA_TYPE || '(' || B.DATA_LEN ||', '|| B.DATA_SCAL ||')' 
+	                                ELSE B.DATA_TYPE || '(' || B.DATA_LEN ||')'
+	                                 END )
+	                     END AS DATA_TYPE
+	             --B.DATA_TYPE, B.DATA_LEN, B.DATA_SCAL
+	      from wam_ddl_tbl a 
+	      join wam_ddl_col b 
+	        on a.ddl_tbl_id = b.ddl_tbl_id
+	      JOIN WAA_DB_SCH C
+		    ON A.DB_SCH_ID = C.DB_SCH_ID
+		   AND C.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')   
+		   AND C.REG_TYP_CD IN ('C', 'U')
+		  JOIN WAA_DB_CONN_TRG D
+		    ON C.DB_CONN_TRG_ID = D.DB_CONN_TRG_ID
+		   AND D.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')   
+		   AND D.REG_TYP_CD IN ('C', 'U')
+	      
+	    where a.ddl_tbl_id = #{ddlTblId}
+	) A
+	  LEFT OUTER JOIN (
+	                    SELECT  D.DB_CONN_TRG_PNM
+	                            --, D.DB_CONN_TRG_ID
+	                            , C.DB_SCH_PNM
+	                            --, C.DB_SCH_ID
+	                            , A.SRC_TBL_ID
+	                            , T.DDL_TBL_PNM
+	                            , A.SRC_COL_ID
+	                            , B.DDL_COL_PNM, B.DDL_COL_LNM
+	                            , CASE WHEN B.DATA_LEN IS NULL 
+	                                   THEN B.DATA_TYPE
+	                                   ELSE (CASE WHEN B.DATA_SCAL IS NOT NULL
+	                                                THEN B.DATA_TYPE || '(' || B.DATA_LEN ||', '|| B.DATA_SCAL ||')' 
+	                                                ELSE B.DATA_TYPE || '(' || B.DATA_LEN ||')'
+	                                                 END )
+	                                     END AS DATA_TYPE
+	                    FROM WAM_DFW_COL_MAP A 
+	                    JOIN WAM_DDL_COL B 
+	                      ON A.TGT_TBL_ID = B.DDL_TBL_ID 
+	                     AND A.TGT_COL_ID = B.DDL_COL_ID
+	                    JOIN WAM_DDL_TBL T
+	                      ON B.DDL_TBL_ID = T.DDL_TBL_ID
+	                    JOIN WAA_DB_SCH C
+	                      ON T.DB_SCH_ID = C.DB_SCH_ID
+	                      AND C.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')   
+	                       AND C.REG_TYP_CD IN ('C', 'U')
+	                      JOIN WAA_DB_CONN_TRG D
+	                        ON C.DB_CONN_TRG_ID = D.DB_CONN_TRG_ID
+	                       AND D.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')   
+	                       AND D.REG_TYP_CD IN ('C', 'U')
+	                    WHERE A.SRC_TBL_ID = #{ddlTblId}
+	  ) B
+	    ON A.DDL_TBL_ID = B.SRC_TBL_ID
+	   AND A.DDL_COL_ID = B.SRC_COL_ID
+	
+	  LEFT OUTER JOIN (
+	                    SELECT  D.DB_CONN_TRG_PNM
+	                            --, D.DB_CONN_TRG_ID
+	                            , C.DB_SCH_PNM
+	                            --, C.DB_SCH_ID
+	                            , A.TGT_TBL_ID
+	                            , T.DDL_TBL_PNM
+	                            , A.TGT_COL_ID
+	                            , B.DDL_COL_PNM, B.DDL_COL_LNM
+	                            , CASE WHEN B.DATA_LEN IS NULL 
+	                                   THEN B.DATA_TYPE
+	                                   ELSE (CASE WHEN B.DATA_SCAL IS NOT NULL
+	                                                THEN B.DATA_TYPE || '(' || B.DATA_LEN ||', '|| B.DATA_SCAL ||')' 
+	                                                ELSE B.DATA_TYPE || '(' || B.DATA_LEN ||')'
+	                                                 END )
+	                                     END AS DATA_TYPE
+	                    FROM WAM_DFW_COL_MAP A 
+	                    JOIN WAM_DDL_COL B 
+	                      ON A.SRC_TBL_ID = B.DDL_TBL_ID 
+	                     AND A.SRC_COL_ID = B.DDL_COL_ID
+	                    JOIN WAM_DDL_TBL T
+	                      ON B.DDL_TBL_ID = T.DDL_TBL_ID
+	                    JOIN WAA_DB_SCH C
+	                      ON T.DB_SCH_ID = C.DB_SCH_ID
+	                      AND C.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')   
+	                       AND C.REG_TYP_CD IN ('C', 'U')
+	                      JOIN WAA_DB_CONN_TRG D
+	                        ON C.DB_CONN_TRG_ID = D.DB_CONN_TRG_ID
+	                       AND D.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')   
+	                       AND D.REG_TYP_CD IN ('C', 'U')
+	                    WHERE A.TGT_TBL_ID = #{ddlTblId}  
+	  ) C
+	    ON A.DDL_TBL_ID = C.TGT_TBL_ID
+	   AND A.DDL_COL_ID = C.TGT_COL_ID
+	 ORDER BY B.DDL_TBL_PNM, A.DDL_TBL_PNM, C.DDL_TBL_PNM	
+	
+	</select>
+
+	<select id="selectDataFlowRqstList" parameterType="kr.wise.meta.effect.service.DataFlowColMapVO" resultMap="DataFlowColResultMap">
+	SELECT 	/* DataFlowMapper.selectDataFlowRqstList */
+			M.SRC_TBL_ID
+	      ,M.SRC_COL_ID
+	      ,M.TGT_TBL_ID
+	      ,M.TGT_COL_ID
+	      ,M.DFW_COL_ID
+	      ,SD.DB_CONN_TRG_PNM AS SRC_DB_PNM
+	      ,SS.DB_SCH_PNM AS SRC_DB_SCH
+	      ,ST.DDL_TBL_PNM AS SRC_TBL_PNM
+	      ,SC.DDL_COL_PNM AS SRC_COL_PNM
+	      
+	      ,TD.DB_CONN_TRG_PNM AS TGT_DB_PNM
+	      ,TS.DB_SCH_PNM AS TGT_DB_SCH
+	      ,TT.DDL_TBL_PNM AS TGT_TBL_PNM
+	      ,TC.DDL_COL_PNM AS TGT_COL_PNM
+	      
+	FROM WAM_DFW_COL_MAP M
+	
+	INNER JOIN WAM_DDL_TBL ST
+	ON M.SRC_TBL_ID = ST.DDL_TBL_ID
+	INNER JOIN WAA_DB_SCH SS
+	ON ST.DB_SCH_ID = SS.DB_SCH_ID
+	AND SS.EXP_DTM = STR_TO_DATE('9999-12-31','%Y-%m-%d')
+	AND SS.REG_TYP_CD IN ('C','U')
+	INNER JOIN WAA_DB_CONN_TRG SD
+	ON SS.DB_CONN_TRG_ID = SD.DB_CONN_TRG_ID
+	AND SD.EXP_DTM = STR_TO_DATE('9999-12-31','%Y-%m-%d')
+	AND SD.REG_TYP_CD IN ('C','U')
+	LEFT OUTER JOIN WAM_DDL_COL SC
+	ON M.SRC_TBL_ID = SC.DDL_TBL_ID
+	AND M.SRC_COL_ID = SC.DDL_COL_ID
+	
+	INNER JOIN WAM_DDL_TBL TT
+	ON M.TGT_TBL_ID = TT.DDL_TBL_ID
+	INNER JOIN WAA_DB_SCH TS
+	ON TT.DB_SCH_ID = TS.DB_SCH_ID
+	AND TS.EXP_DTM = STR_TO_DATE('9999-12-31','%Y-%m-%d')
+	AND TS.REG_TYP_CD IN ('C','U')
+	INNER JOIN WAA_DB_CONN_TRG TD
+	ON TS.DB_CONN_TRG_ID = TD.DB_CONN_TRG_ID
+	AND TD.EXP_DTM = STR_TO_DATE('9999-12-31','%Y-%m-%d')
+	AND TD.REG_TYP_CD IN ('C','U')
+	LEFT OUTER JOIN WAM_DDL_COL TC
+	ON M.TGT_TBL_ID = TC.DDL_TBL_ID
+	AND M.TGT_COL_ID = TC.DDL_COL_ID
+	
+	WHERE 1=1
+	<if test="tblPnm != null">AND (ST.DDL_TBL_PNM LIKE  '%'||#{tblPnm}||'%' OR TT.DDL_TBL_PNM = '%'||#{tblPnm}||'%')</if>
+	<if test="colPnm != null">AND (SC.DDL_COL_PNM LIKE  '%'||#{colPnm}||'%' OR TC.DDL_COL_PNM = '%'||#{colPnm}||'%')</if>
+	</select>
+	
+	<update id="deleteDfwColMap" parameterType="kr.wise.meta.effect.service.DataFlowColMapVO" >
+    DELETE 	/* DataFlowMapper.deleteDfwColMap */
+    		WAM_DFW_COL_MAP 
+    WHERE DFW_COL_ID = #{dfwColId,jdbcType=VARCHAR}
+   	
+    </update>
+    
+    <insert id="insertSelective" parameterType="kr.wise.meta.effect.service.DataFlowColMapVO" >
+  	insert 	/* DataFlowMapper.insertSelective */
+  			into WAM_DFW_COL_MAP
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+    	DFW_COL_ID,
+        SRC_TBL_ID,
+        TGT_TBL_ID,      
+        SRC_COL_ID,
+        TGT_COL_ID,
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+        #{dfwColId,jdbcType=VARCHAR},
+        #{srcTblId,jdbcType=VARCHAR},
+        #{tgtTblId,jdbcType=VARCHAR},
+        #{srcColId,jdbcType=VARCHAR},
+        #{tgtColId,jdbcType=VARCHAR},
+    </trim>
+  </insert>
+  
+  <select id="selectDataFlowSrcTgtId" resultMap="DataFlowColResultMap" parameterType="java.lang.String" >
+    SELECT 	/* DataFlowMapper.selectDataFlowSrcTgtId */
+    		MAX(SRC_TBL_ID) AS SRC_TBL_ID
+	      ,MAX(SRC_COL_ID) AS SRC_COL_ID
+	      ,MAX(TGT_TBL_ID) AS TGT_TBL_ID
+	      ,MAX(TGT_COL_ID) AS TGT_COL_ID
+	  FROM (
+	    SELECT ST.DDL_TBL_ID AS SRC_TBL_ID
+	          ,SC.DDL_COL_ID AS SRC_COL_ID
+	          ,'' AS TGT_TBL_ID
+	          ,'' AS TGT_COL_ID
+	    FROM WAM_DDL_TBL ST
+	        INNER JOIN WAA_DB_SCH SS
+	        ON ST.DB_SCH_ID = SS.DB_SCH_ID
+	        AND SS.EXP_DTM = STR_TO_DATE('9999-12-31','%Y-%m-%d')
+	        AND SS.REG_TYP_CD IN ('C','U')
+	        INNER JOIN WAA_DB_CONN_TRG SD
+	        ON SS.DB_CONN_TRG_ID = SD.DB_CONN_TRG_ID
+	        AND SD.EXP_DTM = STR_TO_DATE('9999-12-31','%Y-%m-%d')
+	        AND SD.REG_TYP_CD IN ('C','U')
+	        LEFT OUTER JOIN WAM_DDL_COL SC
+	        ON ST.DDL_TBL_ID = SC.DDL_TBL_ID
+	    WHERE ST.DDL_TBL_PNM = #{srcTblPnm,jdbcType=VARCHAR}
+	      AND SS.DB_SCH_PNM = #{srcDbSch,jdbcType=VARCHAR}
+	      AND SD.DB_CONN_TRG_PNM = #{srcDbPnm,jdbcType=VARCHAR}
+	      AND SC.DDL_COL_PNM = #{srcColPnm,jdbcType=VARCHAR}
+	    UNION ALL
+	    SELECT '' AS SRC_TBL_ID
+	          ,'' AS SRC_COL_ID
+	          ,ST.DDL_TBL_ID AS TGT_TBL_ID
+	          ,SC.DDL_COL_ID AS TGT_COL_ID
+	    FROM WAM_DDL_TBL ST
+	        INNER JOIN WAA_DB_SCH SS
+	        ON ST.DB_SCH_ID = SS.DB_SCH_ID
+	        AND SS.EXP_DTM = STR_TO_DATE('9999-12-31','%Y-%m-%d')
+	        AND SS.REG_TYP_CD IN ('C','U')
+	        INNER JOIN WAA_DB_CONN_TRG SD
+	        ON SS.DB_CONN_TRG_ID = SD.DB_CONN_TRG_ID
+	        AND SD.EXP_DTM = STR_TO_DATE('9999-12-31','%Y-%m-%d')
+	        AND SD.REG_TYP_CD IN ('C','U')
+	        LEFT OUTER JOIN WAM_DDL_COL SC
+	        ON ST.DDL_TBL_ID = SC.DDL_TBL_ID
+	    WHERE ST.DDL_TBL_PNM = #{tgtTblPnm,jdbcType=VARCHAR}
+	      AND SS.DB_SCH_PNM = #{tgtDbSch,jdbcType=VARCHAR}
+	      AND SD.DB_CONN_TRG_PNM = #{tgtDbPnm,jdbcType=VARCHAR}
+	      AND SC.DDL_COL_PNM = #{tgtColPnm,jdbcType=VARCHAR}
+	) FSQ
+  </select>
+  
+  <update id="updateByPrimaryKey" parameterType="kr.wise.meta.effect.service.DataFlowColMapVO" >
+    update 	/* DataFlowMapper.updateByPrimaryKey */
+    		WAM_DFW_COL_MAP
+    set SRC_TBL_ID = #{srcTblId,jdbcType=DATE},
+      SRC_COL_ID = #{srcColId,jdbcType=DATE},
+      TGT_TBL_ID = #{tgtTblId,jdbcType=VARCHAR},
+      TGT_COL_ID = #{tgtColId,jdbcType=VARCHAR}
+    where DFW_COL_ID = #{dfwColId,jdbcType=VARCHAR}
+  </update>
+</mapper>

@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.dq.dqrs.service.DqrsExpMapper" >
+	<resultMap id="TblResultMap" type="kr.wise.dq.dqrs.service.DqrsExpTbl" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap" >
+    	<id 	column="DB_CONN_TRG_ID" property="dbConnTrgId" jdbcType="VARCHAR" />
+		<result column="DB_CONN_TRG_PNM" property="dbConnTrgPnm" jdbcType="VARCHAR" />
+		<result	column="DB_SCH_ID"      property="dbSchId"      jdbcType="VARCHAR" 		/>
+		<result column="DB_SCH_PNM"      property="dbSchPnm" jdbcType="VARCHAR" />
+		<result column="DBC_TBL_NM" 	property="dbcTblNm" 	jdbcType="VARCHAR" 		/>
+		<result column="DBC_TBL_KOR_NM"  property="dbcTblKorNm" jdbcType="VARCHAR" />
+		<result column="EXP_YN" 		property="expYn"	 	jdbcType="VARCHAR" 		/>
+		<result column="EXP_RSN_CNTN"   property="expRsnCntn"   jdbcType="VARCHAR" 		/>
+		<result column="WRIT_DTM" 		property="writDtm" 		jdbcType="TIMESTAMP" 	/>
+		<result column="UPDT_DTM"       property="updtDtm"      jdbcType="TIMESTAMP" 	/>
+		<result column="ADD_CND" 		property="addCnd"	 	jdbcType="VARCHAR" 		/>
+		<result column="TBL_CNTN"     	property="tblCntn"  	jdbcType="VARCHAR" 		/>
+	</resultMap>
+  
+	<resultMap id="ColResultMap" type="kr.wise.dq.dqrs.service.DqrsExpCol" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap" >
+		<id column="DB_CONN_TRG_ID" property="dbConnTrgId" jdbcType="VARCHAR" />
+	    <result column="DB_CONN_TRG_LNM" property="dbConnTrgLnm" jdbcType="VARCHAR" />
+	    <result column="DB_CONN_TRG_PNM" property="dbConnTrgPnm" jdbcType="VARCHAR" />
+	    <result column="DB_SCH_ID"       property="dbSchId"     jdbcType="VARCHAR" />
+	    <result column="DB_SCH_PNM"      property="dbSchPnm" jdbcType="VARCHAR" />
+	    <result column="DB_SCH_LNM"      property="dbSchLnm" jdbcType="VARCHAR" />
+	    <result column="DBC_TBL_NM"      property="dbcTblNm" jdbcType="VARCHAR" />
+	    <result column="DBC_TBL_KOR_NM"  property="dbcTblKorNm" jdbcType="VARCHAR" />
+	    <result column="SUBJ_ID"         property="subjId"      jdbcType="VARCHAR" />
+	    <result column="OBJ_NM"          property="objNm"       jdbcType="VARCHAR" />
+	    <result column="DBC_COL_NM"      property="dbcColNm"    jdbcType="VARCHAR" />
+	    <result column="DBC_COL_KOR_NM"  property="dbcColKorNm" jdbcType="VARCHAR" />
+	    <result column="DATA_TYPE"       property="dataType"    jdbcType="VARCHAR" />
+	    <result column="DATA_LEN"        property="dataLen"     jdbcType="VARCHAR" />
+	    <result column="DATA_PNT"        property="dataPnt"     jdbcType="VARCHAR" />
+	    <result column="NULL_YN"         property="nullYn"      jdbcType="VARCHAR" />
+	    <result column="DEFLT_VAL"       property="defltVal"    jdbcType="VARCHAR" />
+	    <result column="PK_YN"           property="pkYn"        jdbcType="VARCHAR" />
+	    <result column="ORD"             property="ord"         jdbcType="VARCHAR" />
+	    <result column="PK_ORD"          property="pkOrd"       jdbcType="VARCHAR" />
+	    
+		<result	column="DB_SCH_ID"      property="dbSchId"      jdbcType="VARCHAR" 		/>
+		<result column="DBC_TBL_NM" 	property="dbcTblNm" 	jdbcType="VARCHAR" 		/>
+		<result column="DBC_COL_NM"     property="dbcColNm"     jdbcType="VARCHAR" 		/>
+		<result column="EXP_YN" 		property="expYn"	 	jdbcType="VARCHAR" 		/>
+		<result column="EXP_RSN_CNTN"   property="expRsnCntn"   jdbcType="VARCHAR" 		/>
+		<result column="WRIT_DTM" 		property="writDtm" 		jdbcType="TIMESTAMP" 	/>
+		<result column="UPDT_DTM"       property="updtDtm"      jdbcType="TIMESTAMP" 	/>
+		<result column="ADD_CND" 		property="addCnd"	 	jdbcType="VARCHAR" 		/>
+	</resultMap>
+	
+	
+	<!-- DQRS_EXP_COL -->
+	
+	<insert id="insertExpCol" parameterType="kr.wise.dq.dqrs.service.DqrsExpCol">
+  	INSERT INTO WAA_DQRS_EXP_COL
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="dbSchId != null">
+        DB_SCH_ID,
+      </if>     
+      <if test="dbcTblNm != null">
+        DBC_TBL_NM,
+      </if>
+      <if test="dbcTblNm != null">
+        DBC_COL_NM,
+      </if>    
+      <if test="expYn != null">
+        EXP_YN,
+      </if>      
+      <if test="addCnd != null">
+        ADD_CND,
+      </if>    
+      <if test="expRsnCntn != null">
+        EXP_RSN_CNTN,
+      </if>    
+      WRIT_DTM,  
+      UPDT_DTM,
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="dbSchId != null">
+        #{dbSchId,jdbcType=VARCHAR},
+      </if>
+      <if test="dbcTblNm != null">
+        #{dbcTblNm,jdbcType=VARCHAR},
+      </if>
+       <if test="dbcColNm != null">
+        #{dbcColNm,jdbcType=VARCHAR},
+      </if>  
+      <if test="expYn != null"> 
+        CASE WHEN #{expYn,jdbcType=VARCHAR} = 'Y' THEN 'Y' ELSE '' END,  
+      </if>   
+      <if test="addCnd != null">
+        #{addCnd,jdbcType=VARCHAR},
+      </if> 
+      <if test="expRsnCntn != null">
+        #{expRsnCntn,jdbcType=VARCHAR},
+      </if> 
+      SYSDATE ,    
+      SYSDATE ,
+    </trim>
+  </insert>
+  
+  <update id="updateExpCol" parameterType="kr.wise.dq.dqrs.service.DqrsExpCol" >
+    UPDATE WAA_DQRS_EXP_COL
+    <set >
+      <if test="expYn != null" >
+        EXP_YN = CASE WHEN #{expYn,jdbcType=VARCHAR} = 'Y' THEN 'Y' ELSE '' END,
+      </if>
+      <if test="expRsnCntn != null" >
+        EXP_RSN_CNTN = CASE WHEN #{expYn,jdbcType=VARCHAR} = 'Y' THEN #{expRsnCntn,jdbcType=VARCHAR} ELSE '' END ,
+      </if>
+      <if test="addCnd != null" >
+        ADD_CND = #{addCnd,jdbcType=VARCHAR},
+      </if>
+    </set>
+    WHERE DB_SCH_ID  = #{dbSchId,jdbcType=VARCHAR}
+      AND DBC_TBL_NM = #{dbcTblNm,jdbcType=VARCHAR}
+      AND DBC_COL_NM = #{dbcColNm,jdbcType=VARCHAR}
+  </update>
+  
+  
+  <delete id="deleteExpCol" parameterType="kr.wise.dq.dqrs.service.DqrsExpCol" >
+    DELETE FROM WAA_DQRS_EXP_COL
+    WHERE DB_SCH_ID  = #{dbSchId,jdbcType=VARCHAR}
+      AND DBC_TBL_NM = #{dbcTblNm,jdbcType=VARCHAR}
+      AND DBC_COL_NM = #{dbcColNm,jdbcType=VARCHAR}
+  </delete>  
+  
+  
+  <select id="selectExpCol" resultMap="ColResultMap" parameterType="kr.wise.dq.dqrs.service.DqrsExpCol">
+		SELECT    DB.DB_CONN_TRG_ID 
+                , DB.DB_CONN_TRG_PNM
+		        , DB.DB_CONN_TRG_LNM
+		        , S.DB_SCH_ID
+		        , S.DB_SCH_PNM
+		        , S.DB_SCH_LNM
+		        , T.DBC_TBL_NM
+		        , T.DBC_TBL_KOR_NM
+		        , T.SUBJ_ID
+		        , C.DBC_COL_NM
+		        , C.DBC_COL_NM AS OBJ_NM
+		        , C.DBC_COL_KOR_NM
+                , CASE WHEN C.DATA_LEN IS NULL 
+                     THEN C.DATA_TYPE
+                     ELSE (CASE WHEN DATA_PNT IS NOT NULL
+                                THEN (C.DATA_TYPE || '(' || C.DATA_LEN || ', ' || C.DATA_PNT || ')' )
+                                ELSE (C.DATA_TYPE || '(' || C.DATA_LEN || ')')
+                                 END )
+                     END AS DATA_TYPE
+		        , C.DATA_LEN
+		        , C.DATA_PNT
+		        , C.NULL_YN
+		        , C.DEFLT_VAL
+		        , C.PK_YN
+		        , C.ORD 
+		       	, C.PK_ORD
+				, NVL(EC.EXP_YN,'N') EXP_YN
+				, EC.EXP_RSN_CNTN EXP_RSN_CNTN
+		  FROM WAA_DB_CONN_TRG DB
+		       INNER JOIN WAA_DB_SCH S
+		          ON DB.DB_CONN_TRG_ID = S.DB_CONN_TRG_ID
+		         AND S.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+		         AND S.REG_TYP_CD IN ('C','U')
+		       INNER JOIN WAT_DBC_TBL T
+		          ON DB.DB_CONN_TRG_ID = T.DB_CONN_TRG_ID
+		         AND S.DB_SCH_ID = T.DB_SCH_ID
+		       LEFT JOIN WAA_DQRS_EXP_TBL EXP
+		       	  ON T.DB_SCH_ID = EXP.DB_SCH_ID
+		       	 AND T.DBC_TBL_NM = EXP.DBC_TBL_NM
+		       INNER JOIN WAT_DBC_COL C
+		          ON S.DB_SCH_ID = C.DB_SCH_ID
+		         AND T.DBC_TBL_NM = C.DBC_TBL_NM
+               LEFT JOIN WAA_DQRS_EXP_COL EC
+                  ON EC.DB_SCH_ID  = C.DB_SCH_ID
+                  AND EC.DBC_TBL_NM = C.DBC_TBL_NM   
+                  AND EC.DBC_COL_NM = C.DBC_COL_NM            		         		       
+		 WHERE DB.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')	 
+		    AND DB.REG_TYP_CD IN ('C','U')
+		    <if test="dbConnTrgId != null and dbConnTrgId != '' ">
+		    AND DB.DB_CONN_TRG_ID = #{dbConnTrgId, jdbcType=VARCHAR}
+		    </if>
+		    <if test="dbSchId != null and dbSchId != '' ">
+		    AND S.DB_SCH_ID = #{dbSchId, jdbcType=VARCHAR}
+		    </if>
+		    <if test="dbcTblNm != null and dbcTblNm != '' ">
+		    AND (UPPER(T.DBC_TBL_NM) LIKE ('%'|| UPPER(#{dbcTblNm, jdbcType=VARCHAR}) ||'%') OR  T.DBC_TBL_KOR_NM LIKE ('%'||#{dbcTblNm, jdbcType=VARCHAR}||'%') )
+		    </if>
+		    <if test="dbcColNm != null and dbcColNm != '' ">
+		    AND (UPPER(C.DBC_COL_NM) LIKE ('%'|| UPPER(#{dbcColNm, jdbcType=VARCHAR}) ||'%') OR  C.DBC_COL_KOR_NM LIKE ('%'||#{dbcColNm, jdbcType=VARCHAR}||'%') )
+		    </if>
+		    <if test="expYn != null and expYn != '' ">
+		    AND (NVL(EC.EXP_YN,'N') = #{expYn, jdbcType=VARCHAR})
+		    </if>
+		    AND NVL(EXP.EXP_YN,'N') = 'N'
+		 ORDER BY DB.DB_CONN_TRG_ID,S.DB_SCH_ID,T.DBC_TBL_NM,C.DBC_COL_NM , C.ORD
+	</select>
+	
+	
+	<!-- DQRS_EXP_TBL -->
+  
+   <insert id="insertExpTbl" parameterType="kr.wise.dq.dqrs.service.DqrsExpTbl">
+  	INSERT INTO WAA_DQRS_EXP_TBL
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="dbSchId != null">
+        DB_SCH_ID,
+      </if>     
+      <if test="dbcTblNm != null">
+        DBC_TBL_NM,
+      </if>    
+      <if test="expYn != null">
+        EXP_YN,
+      </if>      
+      <if test="addCnd != null and addCnd != ''">
+        ADD_CND,
+      </if>    
+      <if test="expRsnCntn != null">
+        EXP_RSN_CNTN,
+      </if> 
+      <if test="tblCntn != null and tblCntn != ''" >
+        TBL_CNTN,
+      </if>   
+      WRIT_DTM,  
+      UPDT_DTM,
+    </trim>
+    SELECT 
+      <if test="dbSchId != null">
+        #{dbSchId,jdbcType=VARCHAR},
+      </if>
+      <if test="dbcTblNm != null">
+        #{dbcTblNm,jdbcType=VARCHAR},
+      </if>  
+      <if test="expYn != null"> 
+        CASE WHEN #{expYn,jdbcType=VARCHAR} = '1' THEN 'Y' ELSE 'N' END,  
+      </if>   
+      <if test="addCnd != null and addCnd != ''">
+        #{addCnd,jdbcType=VARCHAR},
+      </if> 
+      <if test="expRsnCntn != null">
+        #{expRsnCntn,jdbcType=VARCHAR},
+      </if> 
+      <if test="tblCntn != null and tblCntn != ''" >
+        #{tblCntn,jdbcType=VARCHAR},
+      </if> 
+      SYSDATE ,    
+      SYSDATE
+      	FROM DUAL
+	      	WHERE EXISTS (
+			SELECT A.DBC_TBL_NM
+			FROM WAT_DBC_TBL A 
+				WHERE A.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+				AND A.DBC_TBL_NM = #{dbcTblNm,jdbcType=VARCHAR}
+			)
+  </insert>
+  
+  <update id="updateExpTbl" parameterType="kr.wise.dq.dqrs.service.DqrsExpTbl" >
+    UPDATE WAA_DQRS_EXP_TBL
+    <set >
+      <if test="expYn != null" >
+        EXP_YN = CASE WHEN #{expYn,jdbcType=VARCHAR} = '1' THEN 'Y' ELSE 'N' END,
+      </if>
+      <if test="expRsnCntn != null" >
+        EXP_RSN_CNTN = CASE WHEN #{expYn,jdbcType=VARCHAR} = '1' THEN #{expRsnCntn,jdbcType=VARCHAR} ELSE '' END ,
+      </if>
+      <if test="addCnd != null and addCnd != ''" >
+        ADD_CND = #{addCnd,jdbcType=VARCHAR},
+      </if>
+      <if test="tblCntn != null and tblCntn != ''" >
+        TBL_CNTN = #{tblCntn,jdbcType=VARCHAR},
+      </if>
+      <if test="addCnd == ''" >
+        ADD_CND = null,
+      </if>
+      <if test="tblCntn == ''" >
+        TBL_CNTN = null,
+      </if>
+    </set>
+    WHERE DB_SCH_ID  = #{dbSchId,jdbcType=VARCHAR} 
+      AND DBC_TBL_NM = #{dbcTblNm,jdbcType=VARCHAR}
+  </update>
+  
+   <select id="selectExpTbl" resultMap="TblResultMap" parameterType="kr.wise.dq.dqrs.service.DqrsExpTbl">
+		SELECT C.DB_CONN_TRG_PNM
+			 , C.DB_CONN_TRG_ID
+		     , B.DB_SCH_ID
+		     , B.DB_SCH_PNM
+		     , A.DBC_TBL_NM
+		     , A.DBC_TBL_KOR_NM
+		     , CASE WHEN D.EXP_YN = 'Y' THEN '1' ELSE '0' END AS EXP_YN
+		     , D.ADD_CND
+		     , D.EXP_RSN_CNTN
+		     , D.TBL_CNTN
+		  FROM WAT_DBC_TBL A
+		       INNER JOIN WAA_DB_SCH B
+		          ON B.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+		         AND B.DB_SCH_ID = A.DB_SCH_ID  
+		       INNER JOIN WAA_DB_CONN_TRG C
+		          ON C.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+		         AND C.DB_CONN_TRG_ID = B.DB_CONN_TRG_ID  
+		       LEFT JOIN WAA_DQRS_EXP_TBL D
+		         ON D.DB_SCH_ID  = A.DB_SCH_ID
+		        AND D.DBC_TBL_NM = A.DBC_TBL_NM   
+		 WHERE 1 = 1
+		   <if test='dbConnTrgId != null '>
+		   AND C.DB_CONN_TRG_ID = #{dbConnTrgId, jdbcType=VARCHAR}
+		   </if> 
+		   <if test='dbSchId != null '>
+		   AND B.DB_SCH_ID = #{dbSchId, jdbcType=VARCHAR}
+		   </if> 
+		   <if test='dbcTblNm != null '> 
+		   AND UPPER(A.DBC_TBL_NM) LIKE UPPER(('%' || #{dbcTblNm, jdbcType=VARCHAR} || '%'))
+		   </if> 
+		   <if test='expYn != null '> 
+		   AND NVL(D.EXP_YN,'N') = #{expYn, jdbcType=VARCHAR}
+		   </if>
+		   <if test = 'addCndYn == "Y"'>
+		   	AND NVL(D.EXP_YN,'N') = 'N'
+		   </if>
+		   <if test = 'addCnd != null'>
+		   	AND UPPER(D.ADD_CND) LIKE UPPER(('%' || #{addCnd, jdbcType=VARCHAR} || '%'))
+		   </if>
+    </select>
+    
+</mapper>

@@ -1,0 +1,448 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.meta.ddl.service.WaqDmlWrkMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.meta.ddl.service.WaqDmlWrk" >
+    <id column="RQST_NO" property="rqstNo" jdbcType="VARCHAR" />
+    <id column="RQST_SNO" property="rqstSno" jdbcType="DECIMAL" />
+    <result column="DML_WRK_ID" property="dmlWrkId" jdbcType="VARCHAR" />
+    <result column="RQST_DCD" property="rqstDcd" jdbcType="VARCHAR" />
+    <result column="RVW_STS_CD" property="rvwStsCd" jdbcType="VARCHAR" />
+    <result column="RVW_CONTS" property="rvwConts" jdbcType="VARCHAR" />
+    <result column="VRF_CD" property="vrfCd" jdbcType="VARCHAR" />
+    <result column="VRF_RMK" property="vrfRmk" jdbcType="VARCHAR" />
+    <result column="RQST_SUBJ" property="rqstSubj" jdbcType="VARCHAR" />
+    <result column="RQST_NM" property="rqstNm" jdbcType="VARCHAR" />
+    <result column="REQ_RSN_CD" property="reqRsnCd" jdbcType="VARCHAR" />
+    <result column="WORK_OBJT_CD" property="workObjtCd" jdbcType="VARCHAR" />
+    <result column="JOB_DVD_CD" property="jobDvdCd" jdbcType="VARCHAR" />
+    <result column="WORK_DVD_CD" property="workDvdCd" jdbcType="VARCHAR" />
+    <result column="DB_SCH_IDS" property="dbSchIds" jdbcType="VARCHAR" />
+    <result column="PRC_DT" property="prcDt" jdbcType="VARCHAR" />
+    <result column="PRC_DBA_ID" property="prcDbaId" jdbcType="VARCHAR" />
+    <result column="PRC_DBA_NM" property="prcDbaNm" jdbcType="VARCHAR" />
+    <result column="ATCH_FILE_ID" property="atchFileId" jdbcType="CHAR" />
+    <result column="OBJ_DESCN" property="objDescn" jdbcType="VARCHAR" />
+    <result column="OBJ_VERS" property="objVers" jdbcType="DECIMAL" />
+    <result column="REG_TYP_CD" property="regTypCd" jdbcType="VARCHAR" />
+    <result column="FRS_RQST_DTM" property="frsRqstDtm" jdbcType="TIMESTAMP" />
+    <result column="FRS_RQST_USER_ID" property="frsRqstUserId" jdbcType="VARCHAR" />
+    <result column="RQST_DTM" property="rqstDtm" jdbcType="TIMESTAMP" />
+    <result column="RQST_USER_ID" property="rqstUserId" jdbcType="VARCHAR" />
+    <result column="APRV_DTM" property="aprvDtm" jdbcType="TIMESTAMP" />
+    <result column="APRV_USER_ID" property="aprvUserId" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="kr.wise.meta.ddl.service.WaqDmlWrk" extends="BaseResultMap" >
+    <result column="RQST_DTL_NM" property="rqstDtlNm" jdbcType="CLOB" />
+    <result column="UI_CHK" property="uiChk" jdbcType="CLOB" />
+    <result column="DB_SCRT" property="dbScrt" jdbcType="CLOB" />
+    <result column="ETC_NM" property="etcNm" jdbcType="CLOB" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    RQST_NO, RQST_SNO, DML_WRK_ID, RQST_DCD, RVW_STS_CD, RVW_CONTS, VRF_CD, VRF_RMK, 
+    RQST_SUBJ, RQST_NM, REQ_RSN_CD, WORK_OBJT_CD, JOB_DVD_CD, WORK_DVD_CD, DB_SCH_IDS, 
+    PRC_DT, PRC_DBA_ID, PRC_DBA_NM, ATCH_FILE_ID, OBJ_DESCN, OBJ_VERS, REG_TYP_CD, FRS_RQST_DTM, 
+    FRS_RQST_USER_ID, RQST_DTM, RQST_USER_ID, APRV_DTM, APRV_USER_ID
+  </sql>
+  <sql id="Blob_Column_List" >
+    RQST_DTL_NM, UI_CHK, DB_SCRT, ETC_NM
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="map" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from WAQ_DML_WRK
+    where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      and RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="map" >
+    delete from WAQ_DML_WRK
+    where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      and RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+  </delete>
+  <insert id="insert" parameterType="kr.wise.meta.ddl.service.WaqDmlWrk" >
+    insert into WAQ_DML_WRK (RQST_NO, RQST_SNO, DML_WRK_ID, 
+      RQST_DCD, RVW_STS_CD, RVW_CONTS, 
+      VRF_CD, VRF_RMK, RQST_SUBJ, 
+      RQST_NM, REQ_RSN_CD, WORK_OBJT_CD, 
+      JOB_DVD_CD, WORK_DVD_CD, DB_SCH_IDS, 
+      PRC_DT, PRC_DBA_ID, PRC_DBA_NM, 
+      ATCH_FILE_ID, OBJ_DESCN, OBJ_VERS, 
+      REG_TYP_CD, FRS_RQST_DTM, FRS_RQST_USER_ID, 
+      RQST_DTM, RQST_USER_ID, APRV_DTM, 
+      APRV_USER_ID, RQST_DTL_NM, UI_CHK, 
+      DB_SCRT, ETC_NM)
+    values (#{rqstNo,jdbcType=VARCHAR}, #{rqstSno,jdbcType=DECIMAL}, #{dmlWrkId,jdbcType=VARCHAR}, 
+      #{rqstDcd,jdbcType=VARCHAR}, #{rvwStsCd,jdbcType=VARCHAR}, #{rvwConts,jdbcType=VARCHAR}, 
+      #{vrfCd,jdbcType=VARCHAR}, #{vrfRmk,jdbcType=VARCHAR}, #{rqstSubj,jdbcType=VARCHAR}, 
+      #{rqstNm,jdbcType=VARCHAR}, #{reqRsnCd,jdbcType=VARCHAR}, #{workObjtCd,jdbcType=VARCHAR}, 
+      #{jobDvdCd,jdbcType=VARCHAR}, #{workDvdCd,jdbcType=VARCHAR}, #{dbSchIds,jdbcType=VARCHAR}, 
+      #{prcDt,jdbcType=VARCHAR}, #{prcDbaId,jdbcType=VARCHAR}, #{prcDbaNm,jdbcType=VARCHAR}, 
+      #{atchFileId,jdbcType=CHAR}, #{objDescn,jdbcType=VARCHAR}, #{objVers,jdbcType=DECIMAL}, 
+      #{regTypCd,jdbcType=VARCHAR}, #{frsRqstDtm,jdbcType=TIMESTAMP}, #{frsRqstUserId,jdbcType=VARCHAR}, 
+      #{rqstDtm,jdbcType=TIMESTAMP}, #{rqstUserId,jdbcType=VARCHAR}, #{aprvDtm,jdbcType=TIMESTAMP}, 
+      #{aprvUserId,jdbcType=VARCHAR}, #{rqstDtlNm,jdbcType=CLOB}, #{uiChk,jdbcType=CLOB}, 
+      #{dbScrt,jdbcType=CLOB}, #{etcNm,jdbcType=CLOB})
+  </insert>
+  
+
+  
+  
+  <insert id="insertSelective" parameterType="kr.wise.meta.ddl.service.WaqDmlWrk" >
+  	<selectKey keyProperty="rqstSno" resultType="int" statementType="PREPARED" order="BEFORE">
+	<!--   		<include refid="kr.wise.commons.cmm.service.CommonMapper.getNextrqstSno"/> -->
+		SELECT NVL(MAX(RQST_SNO), 0) + 1 FROM WAQ_DML_WRK WHERE RQST_NO = #{rqstNo}
+  	</selectKey>
+    insert into WAQ_DML_WRK
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+        RQST_NO,
+        RQST_SNO,
+      <if test="dmlWrkId != null" >
+        DML_WRK_ID,
+      </if>
+      <if test="rqstDcd != null" >
+        RQST_DCD,
+      </if>
+      <if test="rvwStsCd != null" >
+        RVW_STS_CD,
+      </if>
+      <if test="rvwConts != null" >
+        RVW_CONTS,
+      </if>
+      <if test="vrfCd != null" >
+        VRF_CD,
+      </if>
+      <if test="vrfRmk != null" >
+        VRF_RMK,
+      </if>
+      <if test="rqstSubj != null" >
+        RQST_SUBJ,
+      </if>
+      <if test="rqstNm != null" >
+        RQST_NM,
+      </if>
+      <if test="reqRsnCd != null" >
+        REQ_RSN_CD,
+      </if>
+      <if test="workObjtCd != null" >
+        WORK_OBJT_CD,
+      </if>
+      <if test="jobDvdCd != null" >
+        JOB_DVD_CD,
+      </if>
+      <if test="workDvdCd != null" >
+        WORK_DVD_CD,
+      </if>
+      <if test="dbSchIds != null" >
+        DB_SCH_IDS,
+      </if>
+      <if test="prcDt != null" >
+        PRC_DT,
+      </if>
+      <if test="prcDbaId != null" >
+        PRC_DBA_ID,
+      </if>
+      <if test="prcDbaNm != null" >
+        PRC_DBA_NM,
+      </if>
+      <if test="atchFileId != null" >
+        ATCH_FILE_ID,
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN,
+      </if>
+        OBJ_VERS,
+      <if test="regTypCd != null" >
+        REG_TYP_CD,
+      </if>
+        FRS_RQST_DTM,
+      <if test="frsRqstUserId != null" >
+        FRS_RQST_USER_ID,
+      </if>
+        RQST_DTM,
+      <if test="rqstUserId != null" >
+        RQST_USER_ID,
+      </if>
+      <if test="aprvDtm != null" >
+        APRV_DTM,
+      </if>
+      <if test="aprvUserId != null" >
+        APRV_USER_ID,
+      </if>
+      <if test="rqstDtlNm != null" >
+        RQST_DTL_NM,
+      </if>
+      <if test="uiChk != null" >
+        UI_CHK,
+      </if>
+      <if test="dbScrt != null" >
+        DB_SCRT,
+      </if>
+      <if test="etcNm != null" >
+        ETC_NM,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+        #{rqstNo,jdbcType=VARCHAR},
+        #{rqstSno,jdbcType=DECIMAL},
+      <if test="dmlWrkId != null" >
+        #{dmlWrkId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDcd != null" >
+        #{rqstDcd,jdbcType=VARCHAR},
+      </if>
+      <if test="rvwStsCd != null" >
+        #{rvwStsCd,jdbcType=VARCHAR},
+      </if>
+      <if test="rvwConts != null" >
+        #{rvwConts,jdbcType=VARCHAR},
+      </if>
+      <if test="vrfCd != null" >
+        #{vrfCd,jdbcType=VARCHAR},
+      </if>
+      <if test="vrfRmk != null" >
+        #{vrfRmk,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstSubj != null" >
+        #{rqstSubj,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstNm != null" >
+        #{rqstNm,jdbcType=VARCHAR},
+      </if>
+      <if test="reqRsnCd != null" >
+        #{reqRsnCd,jdbcType=VARCHAR},
+      </if>
+      <if test="workObjtCd != null" >
+        #{workObjtCd,jdbcType=VARCHAR},
+      </if>
+      <if test="jobDvdCd != null" >
+        #{jobDvdCd,jdbcType=VARCHAR},
+      </if>
+      <if test="workDvdCd != null" >
+        #{workDvdCd,jdbcType=VARCHAR},
+      </if>
+      <if test="dbSchIds != null" >
+        #{dbSchIds,jdbcType=VARCHAR},
+      </if>
+      <if test="prcDt != null" >
+        #{prcDt,jdbcType=VARCHAR},
+      </if>
+      <if test="prcDbaId != null" >
+        #{prcDbaId,jdbcType=VARCHAR},
+      </if>
+      <if test="prcDbaNm != null" >
+        #{prcDbaNm,jdbcType=VARCHAR},
+      </if>
+      <if test="atchFileId != null" >
+        #{atchFileId,jdbcType=CHAR},
+      </if>
+      <if test="objDescn != null" >
+        #{objDescn,jdbcType=VARCHAR},
+      </if>
+      	1 , 
+      <if test="regTypCd != null" >
+        #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      	SYSDATETIME ,
+      <if test="frsRqstUserId != null" >
+        #{frsRqstUserId,jdbcType=VARCHAR},
+      </if>
+      	SYSDATETIME ,
+      <if test="rqstUserId != null" >
+        #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDtm != null" >
+        #{aprvDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aprvUserId != null" >
+        #{aprvUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDtlNm != null" >
+        #{rqstDtlNm,jdbcType=CLOB},
+      </if>
+      <if test="uiChk != null" >
+        #{uiChk,jdbcType=CLOB},
+      </if>
+      <if test="dbScrt != null" >
+        #{dbScrt,jdbcType=CLOB},
+      </if>
+      <if test="etcNm != null" >
+        #{etcNm,jdbcType=CLOB},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.meta.ddl.service.WaqDmlWrk" >
+    update WAQ_DML_WRK
+    <set >
+      <if test="dmlWrkId != null" >
+        DML_WRK_ID = #{dmlWrkId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDcd != null" >
+        RQST_DCD = #{rqstDcd,jdbcType=VARCHAR},
+      </if>
+      <if test="rvwStsCd != null" >
+        RVW_STS_CD = #{rvwStsCd,jdbcType=VARCHAR},
+      </if>
+      <if test="rvwConts != null" >
+        RVW_CONTS = #{rvwConts,jdbcType=VARCHAR},
+      </if>
+      <if test="vrfCd != null" >
+        VRF_CD = #{vrfCd,jdbcType=VARCHAR},
+      </if>
+      <if test="vrfRmk != null" >
+        VRF_RMK = #{vrfRmk,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstSubj != null" >
+        RQST_SUBJ = #{rqstSubj,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstNm != null" >
+        RQST_NM = #{rqstNm,jdbcType=VARCHAR},
+      </if>
+      <if test="reqRsnCd != null" >
+        REQ_RSN_CD = #{reqRsnCd,jdbcType=VARCHAR},
+      </if>
+      <if test="workObjtCd != null" >
+        WORK_OBJT_CD = #{workObjtCd,jdbcType=VARCHAR},
+      </if>
+      <if test="jobDvdCd != null" >
+        JOB_DVD_CD = #{jobDvdCd,jdbcType=VARCHAR},
+      </if>
+      <if test="workDvdCd != null" >
+        WORK_DVD_CD = #{workDvdCd,jdbcType=VARCHAR},
+      </if>
+      <if test="dbSchIds != null" >
+        DB_SCH_IDS = #{dbSchIds,jdbcType=VARCHAR},
+      </if>
+      <if test="prcDt != null" >
+        PRC_DT = #{prcDt,jdbcType=VARCHAR},
+      </if>
+      <if test="prcDbaId != null" >
+        PRC_DBA_ID = #{prcDbaId,jdbcType=VARCHAR},
+      </if>
+      <if test="prcDbaNm != null" >
+        PRC_DBA_NM = #{prcDbaNm,jdbcType=VARCHAR},
+      </if>
+      <if test="atchFileId != null" >
+        ATCH_FILE_ID = #{atchFileId,jdbcType=CHAR},
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="frsRqstDtm != null" >
+        FRS_RQST_DTM = #{frsRqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="frsRqstUserId != null" >
+        FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDtm != null" >
+        RQST_DTM = #{rqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rqstUserId != null" >
+        RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDtm != null" >
+        APRV_DTM = #{aprvDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aprvUserId != null" >
+        APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDtlNm != null" >
+        RQST_DTL_NM = #{rqstDtlNm,jdbcType=CLOB},
+      </if>
+      <if test="uiChk != null" >
+        UI_CHK = #{uiChk,jdbcType=CLOB},
+      </if>
+      <if test="dbScrt != null" >
+        DB_SCRT = #{dbScrt,jdbcType=CLOB},
+      </if>
+      <if test="etcNm != null" >
+        ETC_NM = #{etcNm,jdbcType=CLOB},
+      </if>
+    </set>
+    where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      and RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="kr.wise.meta.ddl.service.WaqDmlWrk" >
+    update WAQ_DML_WRK
+    set DML_WRK_ID = #{dmlWrkId,jdbcType=VARCHAR},
+      RQST_DCD = #{rqstDcd,jdbcType=VARCHAR},
+      RVW_STS_CD = #{rvwStsCd,jdbcType=VARCHAR},
+      RVW_CONTS = #{rvwConts,jdbcType=VARCHAR},
+      VRF_CD = #{vrfCd,jdbcType=VARCHAR},
+      VRF_RMK = #{vrfRmk,jdbcType=VARCHAR},
+      RQST_SUBJ = #{rqstSubj,jdbcType=VARCHAR},
+      RQST_NM = #{rqstNm,jdbcType=VARCHAR},
+      REQ_RSN_CD = #{reqRsnCd,jdbcType=VARCHAR},
+      WORK_OBJT_CD = #{workObjtCd,jdbcType=VARCHAR},
+      JOB_DVD_CD = #{jobDvdCd,jdbcType=VARCHAR},
+      WORK_DVD_CD = #{workDvdCd,jdbcType=VARCHAR},
+      DB_SCH_IDS = #{dbSchIds,jdbcType=VARCHAR},
+      PRC_DT = #{prcDt,jdbcType=VARCHAR},
+      PRC_DBA_ID = #{prcDbaId,jdbcType=VARCHAR},
+      PRC_DBA_NM = #{prcDbaNm,jdbcType=VARCHAR},
+      ATCH_FILE_ID = #{atchFileId,jdbcType=CHAR},
+      OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      FRS_RQST_DTM = #{frsRqstDtm,jdbcType=TIMESTAMP},
+      FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR},
+      RQST_DTM = #{rqstDtm,jdbcType=TIMESTAMP},
+      RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      APRV_DTM = #{aprvDtm,jdbcType=TIMESTAMP},
+      APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR},
+      RQST_DTL_NM = #{rqstDtlNm,jdbcType=CLOB},
+      UI_CHK = #{uiChk,jdbcType=CLOB},
+      DB_SCRT = #{dbScrt,jdbcType=CLOB},
+      ETC_NM = #{etcNm,jdbcType=CLOB}
+    where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      and RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="kr.wise.meta.ddl.service.WaqDmlWrk" >
+    update WAQ_DML_WRK
+    set DML_WRK_ID = #{dmlWrkId,jdbcType=VARCHAR},
+      RQST_DCD = #{rqstDcd,jdbcType=VARCHAR},
+      RVW_STS_CD = #{rvwStsCd,jdbcType=VARCHAR},
+      RVW_CONTS = #{rvwConts,jdbcType=VARCHAR},
+      VRF_CD = #{vrfCd,jdbcType=VARCHAR},
+      VRF_RMK = #{vrfRmk,jdbcType=VARCHAR},
+      RQST_SUBJ = #{rqstSubj,jdbcType=VARCHAR},
+      RQST_NM = #{rqstNm,jdbcType=VARCHAR},
+      REQ_RSN_CD = #{reqRsnCd,jdbcType=VARCHAR},
+      WORK_OBJT_CD = #{workObjtCd,jdbcType=VARCHAR},
+      JOB_DVD_CD = #{jobDvdCd,jdbcType=VARCHAR},
+      WORK_DVD_CD = #{workDvdCd,jdbcType=VARCHAR},
+      DB_SCH_IDS = #{dbSchIds,jdbcType=VARCHAR},
+      PRC_DT = #{prcDt,jdbcType=VARCHAR},
+      PRC_DBA_ID = #{prcDbaId,jdbcType=VARCHAR},
+      PRC_DBA_NM = #{prcDbaNm,jdbcType=VARCHAR},
+      ATCH_FILE_ID = #{atchFileId,jdbcType=CHAR},
+      OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      FRS_RQST_DTM = #{frsRqstDtm,jdbcType=TIMESTAMP},
+      FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR},
+      RQST_DTM = #{rqstDtm,jdbcType=TIMESTAMP},
+      RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      APRV_DTM = #{aprvDtm,jdbcType=TIMESTAMP},
+      APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR}
+    where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      and RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+  </update>
+  
+  
+  
+      <!-- 검증로직 시작 -->
+  <update id="updateCheckInit" parameterType="string">
+  	--요청구분 업데이트
+    UPDATE WAQ_DML_WRK A
+    SET (A.REG_TYP_CD = 'C'
+       ,A.VRF_CD = '4'
+    WHERE A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}  	
+  </update>
+</mapper>

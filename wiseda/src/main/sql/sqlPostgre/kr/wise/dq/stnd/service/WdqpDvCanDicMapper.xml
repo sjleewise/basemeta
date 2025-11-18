@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.dq.stnd.service.WdqpDvCanDicMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.dq.stnd.service.WdqpDvCanDic" >
+    <result column="DV_RQST_NO" property="dvRqstNo" jdbcType="VARCHAR" />
+    <result column="DIC_LNM" 	property="dicLnm" 	jdbcType="VARCHAR" />
+    <result column="DIC_PNM" 	property="dicPnm" 	jdbcType="VARCHAR" />
+    <result column="DIC_DS" 	property="dicDs" 	jdbcType="VARCHAR" />
+  </resultMap>
+  <insert id="insert" parameterType="kr.wise.dq.stnd.service.WdqpDvCanDic" >
+    insert into WAP_DV_CAN_DIC (DV_RQST_NO, DIC_LNM, DIC_PNM, 
+      DIC_DS)
+    values (#{dvRqstNo,jdbcType=VARCHAR}, #{dicLnm,jdbcType=VARCHAR}, #{dicPnm,jdbcType=VARCHAR}, 
+      #{dicDs,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="kr.wise.dq.stnd.service.WdqpDvCanDic" >
+    insert into WAP_DV_CAN_DIC
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="dvRqstNo != null" >
+        DV_RQST_NO,
+      </if>
+      <if test="dicLnm != null" >
+        DIC_LNM,
+      </if>
+      <if test="dicPnm != null" >
+        DIC_PNM,
+      </if>
+      <if test="dicDs != null" >
+        DIC_DS,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="dvRqstNo != null" >
+        #{dvRqstNo,jdbcType=VARCHAR},
+      </if>
+      <if test="dicLnm != null" >
+        #{dicLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="dicPnm != null" >
+        #{dicPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="dicDs != null" >
+        #{dicDs,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <insert id="insertStwd" parameterType="kr.wise.dq.stnd.service.WdqpDvCanDic" >
+<!--   <selectKey keyProperty="dvRqstNo" resultType="string" order="BEFORE" statementType="STATEMENT"> -->
+<!--     <include refid="kr.wise.commons.cmm.service.CommonMapper.getRequestId"/> -->
+<!--   </selectKey> -->
+    INSERT INTO WAP_DV_CAN_DIC (DV_RQST_NO, DIC_LNM, DIC_PNM, DIC_DS)
+    SELECT #{dvRqstNo,jdbcType=VARCHAR}, A.STWD_LNM, A.STWD_PNM, 'W'
+    FROM WDQM_STWD A
+    WHERE A.REG_TYP_CD IN ('C','U')
+      AND #{trgLnm,jdbcType=VARCHAR} LIKE '%' || A.STWD_LNM || '%'
+      AND NOT EXISTS (SELECT 1 FROM WDQQ_STWD B
+                      WHERE A.STWD_LNM = B.STWD_LNM
+                        AND A.STWD_PNM = B.STWD_PNM
+                        and B.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+                        and B.VRF_CD = '1')
+    UNION ALL
+    select #{dvRqstNo,jdbcType=VARCHAR}, A.STWD_LNM, A.STWD_PNM, 'W'
+    from WDQQ_STWD A
+    where A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      and A.VRF_CD = '1'
+      and A.RQST_DCD = 'CU'
+      and #{trgLnm,jdbcType=VARCHAR} like '%' || A.STWD_LNM || '%'
+  </insert>
+
+  <insert id="insertStwdAll" parameterType="kr.wise.dq.stnd.service.WdqpDvCanDic" >
+    insert into WAP_DV_CAN_DIC (DV_RQST_NO, DIC_LNM, DIC_PNM, DIC_DS)
+    select #{dvRqstNo,jdbcType=VARCHAR}, A.STWD_LNM, A.STWD_PNM, 'W'
+    from WDQM_STWD A
+    where A.REG_TYP_CD in ('C','U')
+      and not exists (select 1 from WDQQ_STWD B
+                      where A.STWD_LNM = B.STWD_LNM
+                        and A.STWD_PNM = B.STWD_PNM
+                        and B.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+                        and B.VRF_CD = '1')
+    UNION ALL
+    select #{dvRqstNo,jdbcType=VARCHAR}, A.STWD_LNM, A.STWD_PNM, 'W'
+    from WDQQ_STWD A
+    where A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      and A.VRF_CD = '1'
+      and A.RQST_DCD = 'CU'
+  </insert>
+  
+  <insert id="insertDmn" parameterType="kr.wise.dq.stnd.service.WdqpDvCanDic">
+  	INSERT INTO WAP_DV_CAN_DIC (DV_RQST_NO, DIC_LNM, DIC_PNM, DIC_DS)
+    SELECT #{dvRqstNo,jdbcType=VARCHAR}, A.DMN_LNM, A.DMN_PNM, 'D'
+    FROM WDQM_DMN A
+    WHERE A.REG_TYP_CD in ('C','U')
+      AND #{trgLnm,jdbcType=VARCHAR} like CONCAT( '%' , COALESCE(A.DMN_LNM,'') )
+      AND NOT EXISTS (SELECT 1 FROM WDQQ_DMN B
+                      WHERE A.DMN_LNM = B.DMN_LNM
+                        AND B.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+                        AND B.VRF_CD = '1')
+    UNION ALL
+    SELECT #{dvRqstNo,jdbcType=VARCHAR}, A.DMN_LNM, A.DMN_PNM, 'D'
+    FROM WDQQ_DMN A
+    WHERE A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      AND A.VRF_CD = '1'
+      AND A.RQST_DCD = 'CU'
+      AND #{trgLnm,jdbcType=VARCHAR} like CONCAT( '%' , COALESCE(A.DMN_LNM,'') )
+  </insert>  
+
+  <insert id="insertDmnAll" parameterType="kr.wise.dq.stnd.service.WdqpDvCanDic">
+  	INSERT INTO WAP_DV_CAN_DIC (DV_RQST_NO, DIC_LNM, DIC_PNM, DIC_DS)
+    SELECT #{dvRqstNo,jdbcType=VARCHAR}, A.DMN_LNM, A.DMN_PNM, 'D'
+    FROM WDQM_DMN A
+    WHERE A.REG_TYP_CD in ('C','U')
+      AND NOT EXISTS (SELECT 1 FROM WDQQ_DMN B
+                      WHERE A.DMN_LNM = B.DMN_LNM
+                        AND A.DMN_PNM = B.DMN_PNM
+                        AND B.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+                        AND B.VRF_CD = '1')
+    UNION ALL
+    SELECT #{dvRqstNo,jdbcType=VARCHAR}, A.DMN_LNM, A.DMN_PNM, 'D'
+    FROM WDQQ_DMN A
+    WHERE A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      AND A.VRF_CD = '1'
+      AND A.RQST_DCD = 'CU'
+  </insert>  
+  
+  <insert id="insertFirst" parameterType="kr.wise.dq.stnd.service.WdqpDvCanDic" >
+    insert into WAP_DV_CAN_ASM (DV_RQST_NO, DV_TRG_LNM, PRC_CD)
+    values (#{dvRqstNo,jdbcType=VARCHAR}, #{trgLnm,jdbcType=VARCHAR}, 'A')
+  </insert>
+  
+  <delete id="deleteDvCanDicByDvRqstNo" parameterType="java.lang.String" >
+	delete from WAP_DV_CAN_DIC where DV_RQST_NO = #{dvRqstNo,jdbcType=VARCHAR}
+  </delete>
+  
+  
+   <update id="checkDmnInfo" parameterType="java.lang.String" >
+    UPDATE WAP_DV_CAN_ASM 
+         SET DV_RQST_RES = CONCAT( DV_RQST_RES  , CHR(13) ,  '도메인미존재' )
+     WHERE DV_RQST_NO = #{dvRqstNo,jdbcType=VARCHAR}
+        AND DMN_LNM IS NULL
+  </update> 
+  
+  <update id="checkInpotpLnm" parameterType="java.lang.String" >
+    UPDATE WAP_DV_CAN_ASM A
+       SET DV_RQST_RES = CONCAT( DV_RQST_RES  ,  CHR(13) ,  '인포타입미존재' )
+     WHERE A.DV_RQST_NO = #{dvRqstNo,jdbcType=VARCHAR}
+       AND A.INFOTP_LNM IS NOT NULL
+       AND NOT EXISTS (SELECT 1
+                         FROM WAA_INFO_TYPE B
+                              INNER JOIN WAA_DMNG_INFOTP_MAP C
+                                 ON C.EXP_DTM = TO_DATE('9999-12-31','YYYY-MM-DD')
+                                AND C.INFOTP_ID = B.INFOTP_ID
+                              INNER JOIN V_WAA_DMNG D
+                                 ON D.DMNG_ID = C.DMNG_ID
+                              INNER JOIN WDQM_DMN E
+                                 ON E.DMNG_ID = D.DMNG_ID      
+                        WHERE B.EXP_DTM = TO_DATE('9999-12-31','YYYY-MM-DD')
+                          AND E.DMN_LNM    = A.DMN_LNM    
+                          AND B.INFOTP_LNM = A.INFOTP_LNM 
+                       )
+  </update> 
+  
+   <update id="checkSdwd" parameterType="java.lang.String" >
+    UPDATE WAP_DV_CAN_ASM 
+         SET DV_RQST_RES = CONCAT( DV_RQST_RES  ,  CHR(13) ,  '단어미존재' )
+     WHERE DV_RQST_NO = #{dvRqstNo,jdbcType=VARCHAR}
+        AND DIC_ASM_PNM LIKE '%[X]%' 
+  </update> 
+  
+  <update id="checkDupSditm" parameterType="java.lang.String" >
+    UPDATE WAP_DV_CAN_ASM A
+         SET A.DV_RQST_RES = CONCAT( A.DV_RQST_RES  ,  CHR(13)  ,  '기존재 항목' )
+     WHERE A.DV_RQST_NO = #{dvRqstNo,jdbcType=VARCHAR}
+        AND EXISTS (SELECT 1
+                           FROM WDQM_SDITM B
+                         WHERE A.DV_ORG_LNM = B.SDITM_LNM )
+  </update> 
+  
+  
+   
+  <!-- 도메인 분할 도메인그룹 ID UPDATE -->
+ <update id="updtDmngId" parameterType="java.lang.String" >
+    UPDATE WAP_DV_CAN_ASM A
+       SET A.DMNG_ID = (SELECT DMNG_ID
+			                         FROM V_WAA_DMNG B
+			                        WHERE A.DMNG_LNM = B.DMNG_LNM)
+			                          -- AND DMNG_LVL = 1)	
+     WHERE A.DV_RQST_NO = #{dvRqstNo,jdbcType=VARCHAR}
+  </update> 
+  <!-- 도메인 분할 인포타입 ID UPDATE -->
+ <update id="updtInfotpId" parameterType="java.lang.String" >
+    UPDATE WAP_DV_CAN_ASM A
+       SET A.INFOTP_ID = (SELECT INFOTP_ID
+                                 FROM WAA_INFO_TYPE B
+		                        WHERE A.INFOTP_LNM = B.INFOTP_LNM
+		                          AND B.EXP_DTM = TO_DATE('99991231','YYYYMMDD') )	
+     WHERE A.DV_RQST_NO = #{dvRqstNo,jdbcType=VARCHAR}
+  </update> 
+  
+  <!-- 도메인 분할 도메인그룹 미존재 -->
+ <update id="checkDmngId" parameterType="java.lang.String" >
+    UPDATE WAP_DV_CAN_ASM A
+       SET A.DV_RQST_RES = CONCAT( A.DV_RQST_RES  ,  CHR(13) ,  '도메인그룹논리명 미존재' )
+     WHERE A.DV_RQST_NO = #{dvRqstNo,jdbcType=VARCHAR}
+       AND DMNG_ID IS NULL
+  </update> 
+  <!-- 도메인 분할 인포타입 미존재 -->
+ <update id="checkInfotpId" parameterType="java.lang.String" >
+    UPDATE WAP_DV_CAN_ASM A
+       SET A.DV_RQST_RES = CONCAT( A.DV_RQST_RES  , CHR(13) , '인포타입논리명 미존재' )
+     WHERE A.DV_RQST_NO = #{dvRqstNo,jdbcType=VARCHAR}
+       AND INFOTP_ID IS NULL
+  </update> 
+  <!-- 도메인 분할 인포타입 미존재 -->
+ <update id="checkDmnDup" parameterType="java.lang.String" >
+    UPDATE WAP_DV_CAN_ASM A
+       SET A.DV_RQST_RES = CONCAT( A.DV_RQST_RES  , CHR(13) , '도메인논리명 기존재' )
+     WHERE A.DV_RQST_NO = #{dvRqstNo,jdbcType=VARCHAR}
+       AND EXISTS (SELECT 1
+                         FROM WDQM_DMN B
+                        WHERE A.DIC_ASM_LNM = B.DMN_LNM                           
+                          AND B.REG_TYP_CD IN ('C','U')
+                       )
+  </update> 
+  <!-- 도메인 분할 인포타입 미존재 -->
+ <update id="checkDmngInfotyp" parameterType="java.lang.String" >
+    UPDATE WAP_DV_CAN_ASM A
+       SET A.DV_RQST_RES = CONCAT( A.DV_RQST_RES  , CHR(13) , '도메인그룹 인포타입 매핑 상이' )
+     WHERE A.DV_RQST_NO = #{dvRqstNo,jdbcType=VARCHAR}
+       AND A.DMNG_ID IS NOT NULL
+       AND A.INFOTP_ID IS NOT NULL       
+       AND NOT EXISTS (SELECT 1
+	                         FROM WAA_DMNG_INFOTP_MAP B
+	                        WHERE A.DMNG_ID = B.DMNG_ID
+	                          AND A.INFOTP_ID = B.INFOTP_ID
+	                          AND B.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+                              )
+  </update> 
+  <!-- checkAsmDs  -->
+ <update id="checkAsmDs" parameterType="java.lang.String" >
+   UPDATE WAP_DV_CAN_ASM
+      SET DV_RQST_RES = CONCAT( DV_RQST_RES  , CHR(13) , '구성정보 오류'  )
+    WHERE DIC_ASM_DS_PNM LIKE '%[X]%'
+      AND  DV_RQST_NO = #{dvRqstNo,jdbcType=VARCHAR}
+  </update> 
+  
+ <update id="checkPnmMaxLen" parameterType="java.lang.String" >
+   UPDATE WAP_DV_CAN_ASM
+      SET DV_RQST_RES = CONCAT( DV_RQST_RES  , CHR(13) , '물리명길이 30자리 초과'  )
+    WHERE CHAR_LENGTH(SUBSTR(CONCAT( DIC_ASM_PNM , case when DMN_PNM is null then '' else CONCAT('_' , DMN_PNM) end ),2)) > 30
+      AND  DV_RQST_NO = #{dvRqstNo,jdbcType=VARCHAR}
+      AND DIC_ASM_DS_PNM NOT LIKE '%[X]%'
+  </update> 
+  
+ <update id="checkEndNum" parameterType="java.lang.String" >
+ <![CDATA[
+   UPDATE WAP_DV_CAN_ASM
+      SET DV_RQST_RES = CONCAT( DV_RQST_RES  ,  CHR(13)  ,  '물리명 끝자리 숫자 오류'  )
+   WHERE DV_RQST_NO = #{dvRqstNo,jdbcType=VARCHAR}
+      AND TRIM(TRAILING '1234567890' FROM DV_ORG_LNM) <> DV_ORG_LNM
+      ]]>
+  </update> 
+  
+  <insert id="insertAppStwd" parameterType="kr.wise.dq.stnd.service.WdqpDvCanDic" >
+<!--   <selectKey keyProperty="dvRqstNo" resultType="string" order="BEFORE" statementType="STATEMENT"> -->
+<!--     <include refid="kr.wise.commons.cmm.service.CommonMapper.getRequestId"/> -->
+<!--   </selectKey> -->
+    insert into WAP_DV_CAN_DIC (DV_RQST_NO, DIC_LNM, DIC_PNM, DIC_DS)
+    select #{dvRqstNo,jdbcType=VARCHAR}, A.APP_STWD_LNM, A.APP_STWD_PNM, 'P'
+    from WDQM_APP_STWD A
+    where A.REG_TYP_CD in ('C','U')
+      and #{trgLnm,jdbcType=VARCHAR} like '%' || A.APP_STWD_LNM || '%'
+      and not exists (select 1 from WAQ_APP_STWD B
+                      where A.APP_STWD_LNM = B.APP_STWD_LNM
+                        and A.APP_STWD_PNM = B.APP_STWD_PNM
+                        and B.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+                        and B.VRF_CD = '1')
+    UNION ALL
+    select #{dvRqstNo,jdbcType=VARCHAR}, A.APP_STWD_LNM, A.APP_STWD_PNM, 'W'
+    from WAQ_APP_STWD A
+    where A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      and A.VRF_CD = '1'
+      and A.RQST_DCD = 'CU'
+      and #{trgLnm,jdbcType=VARCHAR} like '%' || A.APP_STWD_LNM || '%'
+  </insert>
+  
+</mapper>

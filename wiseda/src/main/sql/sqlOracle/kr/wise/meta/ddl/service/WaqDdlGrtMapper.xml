@@ -1,0 +1,1371 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.meta.ddl.service.WaqDdlGrtMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.meta.ddl.service.WaqDdlGrt" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+    <result column="DDL_GRT_ID" property="ddlGrtId" jdbcType="VARCHAR" />
+    <result column="GRTOR_DB_ID" property="grtorDbId" jdbcType="VARCHAR" />
+	<result column="GRTOR_DB_PNM" property="grtorDbPnm" jdbcType="VARCHAR" />
+	<result column="GRTOR_SCH_ID" property="grtorSchId" jdbcType="VARCHAR" />
+	<result column="GRTOR_SCH_PNM" property="grtorSchPnm" jdbcType="VARCHAR" />
+	<result column="DDL_OBJ_ID" property="ddlObjId" jdbcType="VARCHAR" />
+	<result column="DDL_OBJ_PNM" property="ddlObjPnm" jdbcType="VARCHAR" />
+	<result column="DDL_OBJ_LNM" property="ddlObjLnm" jdbcType="VARCHAR" />
+	<result column="DDL_OBJ_TYP_CD" property="ddlObjTypCd" jdbcType="VARCHAR" />
+	<result column="GRTED_DB_ID" property="grtedDbId" jdbcType="VARCHAR" />
+	<result column="GRTED_DB_PNM" property="grtedDbPnm" jdbcType="VARCHAR" />
+	<result column="GRTED_SCH_ID" property="grtedSchId" jdbcType="VARCHAR" />
+	<result column="GRTED_SCH_PNM" property="grtedSchPnm" jdbcType="VARCHAR" />
+	<result column="SELECT_YN" property="selectYn" jdbcType="VARCHAR" />
+	<result column="INSERT_YN" property="insertYn" jdbcType="VARCHAR" />
+	<result column="UPDATE_YN" property="updateYn" jdbcType="VARCHAR" />
+	<result column="DELETE_YN" property="deleteYn" jdbcType="VARCHAR" />
+	<result column="EXECUTE_YN" property="executeYn" jdbcType="VARCHAR" />
+	<result column="SYNONYM_YN" property="synonymYn" jdbcType="VARCHAR" />
+	<result column="RQST_RESN" property="rqstResn" jdbcType="VARCHAR" />    
+    
+  </resultMap>
+  
+  <resultMap id="ResultMapWithBLOBs" type="kr.wise.meta.ddl.service.WaqDdlGrt" extends="BaseResultMap" >
+    <result column="SCRT_INFO" property="scrtInfo" jdbcType="CLOB" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+	  RQST_NO
+	, RQST_SNO
+	, DDL_GRT_ID
+	, RQST_DCD
+	, RVW_STS_CD
+	, RVW_CONTS
+	, VRF_CD
+	, VRF_RMK
+	, GRTOR_DB_ID
+	, GRTOR_DB_PNM
+	, GRTOR_SCH_ID
+	, GRTOR_SCH_PNM
+	, DDL_OBJ_ID
+	, DDL_OBJ_PNM
+	, DDL_OBJ_TYP_CD
+	, GRTED_DB_ID
+	, GRTED_DB_PNM
+	, GRTED_SCH_ID
+	, GRTED_SCH_PNM
+	, SELECT_YN
+	, INSERT_YN
+	, UPDATE_YN
+	, DELETE_YN
+	, EXECUTE_YN
+	, SYNONYM_YN
+	, SCRT_INFO
+	, OBJ_DESCN
+	, OBJ_VERS
+	, REG_TYP_CD
+	, FRS_RQST_DTM
+	, FRS_RQST_USER_ID
+	, RQST_DTM
+	, RQST_USER_ID
+	, APRV_DTM
+	, APRV_USER_ID
+	, RQST_RESN
+	, DDL_OBJ_LNM
+	, SELECT_WITH_GRT_YN
+	, INSERT_WITH_GRT_YN
+	, UPDATE_WITH_GRT_YN
+	, DELETE_WITH_GRT_YN
+	, EXECUTE_WITH_GRT_YN
+  </sql>
+    
+  <sql id="waq_Column_List" >
+    A.RQST_NO, A.RQST_SNO, A.DDL_GRT_ID, A.RQST_DCD, A.RVW_CONTS, 
+    A.VRF_CD, A.VRF_RMK, 
+    A.GRTOR_DB_ID, A.GRTOR_DB_PNM, A.GRTOR_SCH_ID, A.GRTOR_SCH_PNM, 
+    A.DDL_OBJ_ID, A.DDL_OBJ_PNM, A.DDL_OBJ_LNM, A.DDL_OBJ_TYP_CD, 
+    A.GRTED_DB_ID, A.GRTED_DB_PNM, A.GRTED_SCH_ID, A.GRTED_SCH_PNM,
+    A.SELECT_YN, A.INSERT_YN, A.UPDATE_YN, A.DELETE_YN, A.EXECUTE_YN, A.SYNONYM_YN,
+    A.OBJ_DESCN, A.OBJ_VERS, 
+    A.REG_TYP_CD, A.FRS_RQST_DTM, A.FRS_RQST_USER_ID, A.RQST_DTM, A.RQST_USER_ID, A.APRV_DTM, A.APRV_USER_ID, A.RQST_RESN
+  </sql>
+  
+  <sql id="Blob_Column_List" >
+    SCRT_INFO
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="map" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from WAQ_DDL_GRT
+    where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      and RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="map" >
+    delete from WAQ_DDL_GRT
+    where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      and RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+  </delete>
+  
+  <delete id="deleteByRqstNo" parameterType="map" >
+    delete from WAQ_DDL_GRT
+    where RQST_NO = #{rqstNo,jdbcType=VARCHAR}       
+  </delete>
+  
+  <delete id="deleteByRqstSno" parameterType="map">
+   DELETE FROM WAQ_DDL_GRT
+    WHERE RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      AND RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+  </delete>
+  
+  <insert id="insert" parameterType="kr.wise.meta.ddl.service.WaqDdlGrt" >
+    insert into WAQ_DDL_GRT (RQST_NO, RQST_SNO, DDL_GRT_ID, 
+      RQST_DCD, 
+      RVW_STS_CD, RVW_CONTS, VRF_CD, 
+      VRF_RMK 
+      GRTOR_DB_ID, GRTOR_DB_PNM, GRTOR_SCH_ID, GRTOR_SCH_PNM, 
+      DDL_OBJ_ID, DDL_OBJ_PNM, DDL_OBJ_LNM, DDL_OBJ_TYP_CD,
+      GRTED_DB_ID, GRTED_DB_PNM, GRTED_SCH_ID, GRTED_SCH_PNM, 
+      SELECT_YN, INSERT_YN, UPDATE_YN,
+      DELETE_YN, EXECUTE_YN, SYNONYM_YN, 
+      OBJ_DESCN, 
+      OBJ_VERS, REG_TYP_CD, FRS_RQST_DTM, 
+      FRS_RQST_USER_ID, RQST_DTM, RQST_USER_ID, 
+      APRV_DTM, APRV_USER_ID, RQST_RESN
+      )
+    values (#{rqstNo,jdbcType=VARCHAR}, #{rqstSno,jdbcType=DECIMAL}, #{ddlGrtId,jdbcType=VARCHAR}, 
+      #{rqstDcd,jdbcType=VARCHAR}, 
+      #{rvwStsCd,jdbcType=VARCHAR}, #{rvwConts,jdbcType=VARCHAR}, #{vrfCd,jdbcType=VARCHAR}, 
+      #{vrfRmk,jdbcType=VARCHAR}, 
+      #{grtorDbId,jdbcType=VARCHAR}, #{grtorDbPnm,jdbcType=VARCHAR}, #{grtorSchId,jdbcType=VARCHAR}, #{grtorSchPnm,jdbcType=VARCHAR},
+      #{ddlObjId,jdbcType=VARCHAR}, #{ddlObjPnm,jdbcType=VARCHAR}, #{ddlObjLnm,jdbcType=VARCHAR}, #{ddlObjTypCd,jdbcType=VARCHAR},
+      #{grtedDbId,jdbcType=VARCHAR}, #{grtedDbPnm,jdbcType=VARCHAR}, #{grtedSchId,jdbcType=VARCHAR}, #{grtedSchPnm,jdbcType=VARCHAR},
+      #{selectYn,jdbcType=VARCHAR}, #{insertYn,jdbcType=VARCHAR}, #{updateYn,jdbcType=VARCHAR},
+      #{deleteYn,jdbcType=VARCHAR}, #{executeYn,jdbcType=VARCHAR}, #{synonymYn,jdbcType=VARCHAR}, 
+      #{objDescn,jdbcType=VARCHAR}, 
+      #{objVers,jdbcType=DECIMAL}, #{regTypCd,jdbcType=VARCHAR}, #{frsRqstDtm,jdbcType=TIMESTAMP}, 
+      #{frsRqstUserId,jdbcType=VARCHAR}, #{rqstDtm,jdbcType=TIMESTAMP}, #{rqstUserId,jdbcType=VARCHAR}, 
+      #{aprvDtm,jdbcType=TIMESTAMP}, #{aprvUserId,jdbcType=VARCHAR}, #{rqstResn,jdbcType=VARCHAR}
+      )
+  </insert>
+  
+  <select id="selectMaxRqstSno" resultMap="BaseResultMap" parameterType="kr.wise.meta.ddl.service.WaqDdlGrt" >
+  	 SELECT NVL(MAX(RQST_SNO),0) + 1  AS RQST_SNO
+  	   FROM WAQ_DDL_GRT 
+  	  WHERE RQST_NO     = #{rqstNo, jdbcType=VARCHAR}   	    	  
+  </select>
+  
+  <insert id="insertSelective" parameterType="kr.wise.meta.ddl.service.WaqDdlGrt" >
+
+    insert into WAQ_DDL_GRT
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+        RQST_NO,
+        RQST_SNO,
+      <if test="ddlGrtId != null" >
+        DDL_GRT_ID,
+      </if>
+      <if test="rqstDcd != null" >
+        RQST_DCD,
+      </if>
+      <if test="rvwStsCd != null" >
+        RVW_STS_CD,
+      </if>
+      <if test="rvwConts != null" >
+        RVW_CONTS,
+      </if>
+      <if test="vrfCd != null" >
+        VRF_CD,
+      </if>
+      <if test="vrfRmk != null" >
+        VRF_RMK,
+      </if>
+      <if test="grtorDbId != null" >
+        GRTOR_DB_ID,
+      </if>
+      <if test="grtorDbPnm != null" >
+        GRTOR_DB_PNM,
+      </if>
+      <if test="grtorSchId != null" >
+        GRTOR_SCH_ID,
+      </if>
+      <if test="grtorSchPnm != null" >
+        GRTOR_SCH_PNM,
+      </if>
+      <if test="ddlObjId != null" >
+        DDL_OBJ_ID,
+      </if>
+      <if test="ddlObjPnm != null" >
+        DDL_OBJ_PNM,
+      </if>
+      <if test="ddlObjLnm != null" >
+        DDL_OBJ_LNM,
+      </if>
+      <if test="ddlObjTypCd != null" >
+        DDL_OBJ_TYP_CD,
+      </if>
+      <if test="grtedDbId != null" >
+        GRTED_DB_ID,
+      </if>
+      <if test="grtedDbPnm != null" >
+        GRTED_DB_PNM,
+      </if>
+      <if test="grtedSchId != null" >
+        GRTED_SCH_ID,
+      </if>
+      <if test="grtedSchPnm != null" >
+        GRTED_SCH_PNM,
+      </if>
+      <if test="selectYn != null" >
+        SELECT_YN,
+      </if>
+      <if test="insertYn != null" >
+        INSERT_YN,
+      </if>
+      <if test="updateYn != null" >
+        UPDATE_YN,
+      </if>
+      <if test="deleteYn != null" >
+        DELETE_YN,
+      </if>
+      <if test="executeYn != null" >
+        EXECUTE_YN,
+      </if>
+      <if test="synonymYn != null" >
+        SYNONYM_YN,
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN,
+      </if>
+        OBJ_VERS,
+      <if test="regTypCd != null" >
+        REG_TYP_CD,
+      </if>
+        FRS_RQST_DTM,
+        FRS_RQST_USER_ID,
+        RQST_DTM,
+      <if test="rqstUserId != null" >
+        RQST_USER_ID,
+      </if>
+      <if test="aprvDtm != null" >
+        APRV_DTM,
+      </if>
+      <if test="aprvUserId != null" >
+        APRV_USER_ID,
+      </if>
+      <if test="scrtInfo != null" >
+        SCRT_INFO,
+      </if>
+      <if test="rqstResn != null" >
+        RQST_RESN,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+        #{rqstNo,jdbcType=VARCHAR},
+        #{rqstSno,jdbcType=DECIMAL},
+      <if test="ddlGrtId != null" >
+        #{ddlGrtId,jdbcType=VARCHAR},
+      </if>
+      
+      <if test="rqstDcd != null" >
+        #{rqstDcd,jdbcType=VARCHAR},
+      </if>
+      <if test="rvwStsCd != null" >
+        #{rvwStsCd,jdbcType=VARCHAR},
+      </if>
+      <if test="rvwConts != null" >
+        #{rvwConts,jdbcType=VARCHAR},
+      </if>
+      <if test="vrfCd != null" >
+        #{vrfCd,jdbcType=VARCHAR},
+      </if>
+      <if test="vrfRmk != null" >
+        #{vrfRmk,jdbcType=VARCHAR},
+      </if>
+      
+      <if test="grtorDbId != null" >
+        #{grtorDbId,jdbcType=VARCHAR},
+      </if>
+      <if test="grtorDbPnm != null" >
+        #{grtorDbPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="grtorSchId != null" >
+        #{grtorSchId,jdbcType=VARCHAR},
+      </if>
+      <if test="grtorSchPnm != null" >
+        #{grtorSchPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="ddlObjId != null" >
+        #{ddlObjId,jdbcType=VARCHAR},
+      </if>
+      <if test="ddlObjPnm != null" >
+        #{ddlObjPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="ddlObjLnm != null" >
+        #{ddlObjLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="ddlObjTypCd != null" >
+        #{ddlObjTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="grtedDbId != null" >
+        #{grtedDbId,jdbcType=VARCHAR},
+      </if>
+      <if test="grtedDbPnm != null" >
+        #{grtedDbPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="grtedSchId != null" >
+        #{grtedSchId,jdbcType=VARCHAR},
+      </if>
+      <if test="grtedSchPnm != null" >
+        #{grtedSchPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="selectYn != null" >
+        #{selectYn,jdbcType=VARCHAR},
+      </if>
+      <if test="insertYn != null" >
+        #{insertYn,jdbcType=VARCHAR},
+      </if>
+      <if test="updateYn != null" >
+        #{updateYn,jdbcType=VARCHAR},
+      </if>
+      <if test="deleteYn != null" >
+        #{deleteYn,jdbcType=VARCHAR},
+      </if>
+      <if test="executeYn != null" >
+        #{executeYn,jdbcType=VARCHAR},
+      </if>
+      <if test="synonymYn != null" >
+        #{synonymYn,jdbcType=VARCHAR},
+      </if>
+      
+      <if test="objDescn != null" >
+        #{objDescn,jdbcType=VARCHAR},
+      </if>
+        1 ,
+      <if test="regTypCd != null" >
+        #{regTypCd,jdbcType=VARCHAR},
+      </if>
+        SYSDATE,
+        #{frsRqstUserId,jdbcType=VARCHAR},
+        SYSDATE,
+      <if test="rqstUserId != null" >
+        #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDtm != null" >
+        #{aprvDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aprvUserId != null" >
+        #{aprvUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="scrtInfo != null" >
+        #{scrtInfo,jdbcType=CLOB},
+      </if>
+      <if test="rqstResn != null" >
+        #{rqstResn,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.meta.ddl.service.WaqDdlGrt" >
+    update WAQ_DDL_GRT
+    <set >
+      <if test="ddlGrtId != null" >
+        DDL_GRT_ID = #{ddlGrtId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDcd != null" >
+        RQST_DCD = #{rqstDcd,jdbcType=VARCHAR},
+      </if>
+      <if test="rvwStsCd != null" >
+        RVW_STS_CD = #{rvwStsCd,jdbcType=VARCHAR},
+      </if>
+      <if test="rvwConts != null" >
+        RVW_CONTS = #{rvwConts,jdbcType=VARCHAR},
+      </if>
+      <if test="vrfCd != null" >
+        VRF_CD = #{vrfCd,jdbcType=VARCHAR},
+      </if>
+      <if test="vrfRmk != null" >
+        VRF_RMK = #{vrfRmk,jdbcType=VARCHAR},
+      </if>
+      <if test="grtorDbId != null" >
+        GRTOR_DB_ID = #{grtorDbId,jdbcType=VARCHAR},
+      </if>
+      <if test="grtorDbPnm != null" >
+        GRTOR_DB_PNM = #{grtorDbPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="grtorSchId != null" >
+        GRTOR_SCH_ID = #{grtorSchId,jdbcType=VARCHAR},
+      </if>
+      <if test="grtorSchPnm != null" >
+        GRTOR_SCH_PNM = #{grtorSchPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="ddlObjId != null" >
+        DDL_OBJ_ID = #{ddlObjId,jdbcType=VARCHAR},
+      </if>
+      <if test="ddlObjPnm != null" >
+        DDL_OBJ_PNM = #{ddlObjPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="ddlObjLnm != null" >
+        DDL_OBJ_LNM = #{ddlObjLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="ddlObjTypCd != null" >
+        DDL_OBJ_TYP_CD = #{ddlObjTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="grtedDbId != null" >
+        GRTED_DB_ID = #{grtedDbId,jdbcType=VARCHAR},
+      </if>
+      <if test="grtedDbPnm != null" >
+        GRTED_DB_PNM = #{grtedDbPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="grtedSchId != null" >
+        GRTED_SCH_ID = #{grtedSchId,jdbcType=VARCHAR},
+      </if>
+      <if test="grtedSchPnm != null" >
+        GRTED_SCH_PNM = #{grtedSchPnm,jdbcType=VARCHAR},
+      </if>
+       <if test="selectYn != null" >
+        SELECT_YN = #{selectYn,jdbcType=VARCHAR},
+      </if>
+      <if test="insertYn != null" >
+        INSERT_YN = #{insertYn,jdbcType=VARCHAR},
+      </if>
+      <if test="updateYn != null" >
+        UPDATE_YN = #{updateYn,jdbcType=VARCHAR},
+      </if>
+       <if test="deleteYn != null" >
+        DELETE_YN = #{deleteYn,jdbcType=VARCHAR},
+      </if>
+      <if test="executeYn != null" >
+        EXECUTE_YN = #{executeYn,jdbcType=VARCHAR},
+      </if>
+      <if test="synonymYn != null" >
+        SYNONYM_YN = #{synonymYn,jdbcType=VARCHAR},
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="frsRqstDtm != null" >
+        FRS_RQST_DTM = #{frsRqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="frsRqstUserId != null" >
+        FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDtm != null" >
+        RQST_DTM = #{rqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rqstUserId != null" >
+        RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDtm != null" >
+        APRV_DTM = #{aprvDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aprvUserId != null" >
+        APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstResn != null" >
+        RQST_RESN = #{rqstResn,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      and RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="kr.wise.meta.ddl.service.WaqDdlGrt" >
+    update WAQ_DDL_GRT
+    set DDL_GRT_ID = #{ddlGrtId,jdbcType=VARCHAR},
+      RQST_DCD = #{rqstDcd,jdbcType=VARCHAR},
+      RVW_STS_CD = #{rvwStsCd,jdbcType=VARCHAR},
+      RVW_CONTS = #{rvwConts,jdbcType=VARCHAR},
+      VRF_CD = #{vrfCd,jdbcType=VARCHAR},
+      VRF_RMK = #{vrfRmk,jdbcType=VARCHAR},
+      GRTOR_DB_ID = #{grtorDbId,jdbcType=VARCHAR},
+      GRTOR_DB_PNM = #{grtorDbPnm,jdbcType=VARCHAR},
+      GRTOR_SCH_ID = #{grtorSchId,jdbcType=VARCHAR},
+      GRTOR_SCH_PNM = #{grtorSchPnm,jdbcType=VARCHAR},
+      DDL_OBJ_ID = #{ddlObjId,jdbcType=VARCHAR},
+      DDL_OBJ_PNM = #{ddlObjPnm,jdbcType=VARCHAR},
+      DDL_OBJ_LNM = #{ddlObjLnm,jdbcType=VARCHAR},
+      DDL_OBJ_TYP_CD = #{ddlObjTypCd,jdbcType=VARCHAR},
+      GRTED_DB_ID = #{grtedDbId,jdbcType=VARCHAR},
+      GRTED_DB_PNM = #{grtedDbPnm,jdbcType=VARCHAR},
+      GRTED_SCH_ID = #{grtedSchId,jdbcType=VARCHAR},
+      GRTED_SCH_PNM = #{grtedSchPnm,jdbcType=VARCHAR},
+      SELECT_YN = #{selectYn,jdbcType=VARCHAR},
+      INSERT_YN = #{insertYn,jdbcType=VARCHAR},
+      UPDATE_YN = #{updateYn,jdbcType=VARCHAR},
+      DELETE_YN = #{deleteYn,jdbcType=VARCHAR},
+      EXECUTE_YN = #{executeYn,jdbcType=VARCHAR},
+      SYNONYM_YN = #{synonymYn,jdbcType=VARCHAR},
+      
+      OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      FRS_RQST_DTM = #{frsRqstDtm,jdbcType=TIMESTAMP},
+      FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR},
+      RQST_DTM = #{rqstDtm,jdbcType=TIMESTAMP},
+      RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      APRV_DTM = #{aprvDtm,jdbcType=TIMESTAMP},
+      APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR},
+      RQST_RESN = #{rqstResn,jdbcType=VARCHAR}
+    where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      and RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+  </update>
+  
+  
+    <select id="selectDdlGrtListbyMst" parameterType="kr.wise.commons.rqstmst.service.WaqMstr" resultMap="BaseResultMap">
+  	--DDL 오브젝트 요청서 리스트 조회
+  	SELECT 
+	       <include refid="waq_Column_List"/>
+	       <choose>
+	       		<when test='rqstStepCd == "Q" '>
+			     	, CASE WHEN A.RVW_STS_CD = '2' THEN '2' ELSE '0' END AS RVW_STS_CD
+			    </when>
+			    <otherwise>
+			    	, A.RVW_STS_CD
+			    </otherwise>
+	       </choose>	     
+	     --, CASE WHEN A.VRF_CD = '2' THEN '#FF0000' END AS FontColor
+	     , CASE WHEN A.VRF_CD = '2' THEN '#FF0000' ELSE CASE WHEN A.VRF_CD = '5' THEN '#0000FF'  END END AS FontColor 
+	     , GET_USER_NM(A.RQST_USER_ID) AS RQST_USER_NM
+  	  FROM WAQ_DDL_GRT A
+  	 WHERE A.RQST_NO = #{rqstNo}
+  	 
+  	 <if test='rqstStepCd == "Q" or rqstStepCd == "A" '>
+    	AND A.VRF_CD = '1'
+    </if>
+  	 ORDER BY RQST_SNO
+
+  	
+  </select>
+  
+    <select id="selectDdlGrtDetail" parameterType="kr.wise.meta.ddl.service.WaqDdlGrt" resultMap="ResultMapWithBLOBs">
+  	-- DDL 오브젝트 요청서 상세조회
+  	  SELECT A.*
+        FROM WAQ_DDL_GRT A 
+       WHERE A.RQST_NO  = #{rqstNo,jdbcType=VARCHAR}
+         AND A.RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+   
+  </select>
+  
+  <delete id="deleteByrqstSno" parameterType="kr.wise.meta.ddl.service.WaqDdlGrt">
+  	DELETE FROM WAQ_DDL_GRT
+  	 WHERE RQST_NO      = #{rqstNo}
+  	   AND RQST_SNO     = #{rqstSno}
+
+  </delete>
+  
+  <insert id="checkDupGrt" parameterType="map">
+  	<include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSql"/>
+  	--검증쿼리 : 요청서내 중복(DDG01)
+    AND EXISTS (SELECT 1
+	              FROM WAQ_DDL_GRT D
+	             WHERE A.RQST_NO = D.RQST_NO	               
+	               AND A.GRTOR_DB_PNM = D.GRTOR_DB_PNM
+	               AND A.GRTOR_SCH_PNM = D.GRTOR_SCH_PNM
+	               AND A.DDL_OBJ_PNM = D.DDL_OBJ_PNM     
+	               AND A.GRTED_DB_PNM = D.GRTED_DB_PNM
+	               AND A.GRTED_SCH_PNM = D.GRTED_SCH_PNM          
+	               AND A.RQST_SNO     != D.RQST_SNO
+	               
+	              )
+  </insert>
+  <insert id="checkNotExistGrt" parameterType="map">
+  	<include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSql"/>
+      --검증쿼리 : 삭제대상 오브젝트 미존재(DDG02)
+      AND A.RQST_DCD = 'DD'
+      AND NOT EXISTS (SELECT 1
+                  FROM WAM_DDL_GRT D
+                  WHERE A.GRTOR_DB_PNM = D.GRTOR_DB_PNM
+	                AND A.GRTOR_SCH_PNM = D.GRTOR_SCH_PNM
+	                AND A.DDL_OBJ_PNM = D.DDL_OBJ_PNM
+	                AND A.GRTED_DB_PNM = D.GRTED_DB_PNM
+	                AND A.GRTED_SCH_PNM = D.GRTED_SCH_PNM	               
+                    AND D.REG_TYP_CD IN ('C', 'U'))  
+  </insert>
+ 
+  <insert id="checkRequestGrt" parameterType="map">
+  	<include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSql"/>
+  	--검증쿼리 : 요청중인 오브젝트 (DDG03)
+    AND EXISTS (
+    		SELECT 1 FROM WAQ_MSTR E
+             INNER JOIN WAQ_DDL_GRT D
+             	ON E.RQST_NO = D.RQST_NO
+             WHERE E.RQST_NO != #{rqstNo}
+               AND E.RQST_STEP_CD = 'Q'
+               AND A.GRTOR_DB_PNM = D.GRTOR_DB_PNM
+               AND A.GRTOR_SCH_PNM = D.GRTOR_SCH_PNM
+               AND A.DDL_OBJ_PNM = D.DDL_OBJ_PNM
+               AND A.GRTED_DB_PNM = D.GRTED_DB_PNM
+               AND A.GRTED_SCH_PNM = D.GRTED_SCH_PNM               
+			   AND NVL(D.RVW_STS_CD, 0) != '2'
+               )
+  </insert>
+  
+  <insert id="checkNonDbConnTrg" parameterType="map">
+	  <include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSql"/>
+	  --검증쿼리 : DB접속정보 미존재(DDG04)
+	  AND A.RQST_DCD = 'CU'
+	  AND (A.GRTOR_DB_ID IS NULL OR A.GRTED_DB_ID IS NULL)
+  </insert>
+  
+  <insert id="checkNonDbSch" parameterType="map">
+	  <include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSql"/>
+	  --검증쿼리 : DB스키마 미존재(DDG05)
+	  AND A.RQST_DCD = 'CU'
+	  AND (A.GRTOR_SCH_ID IS NULL OR A.GRTED_SCH_ID IS NULL)
+  </insert>
+  
+  <insert id="checkNotChgData" parameterType="map">
+	  <include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.updateVrfNotChg"/> 
+	  --검증쿼리 : 변경일 때 변경된 데이터가 없을 경우 (DDG00)
+      AND A.REG_TYP_CD = 'U'
+      AND EXISTS (
+      		SELECT 1 
+      		  FROM WAM_DDL_GRT D
+      		 WHERE A.GRTOR_DB_PNM = D.GRTOR_DB_PNM
+      		   AND A.GRTOR_SCH_PNM = D.GRTOR_SCH_PNM
+      		   AND A.DDL_OBJ_PNM = D.DDL_OBJ_PNM
+      		   AND A.DDL_OBJ_TYP_CD = D.DDL_OBJ_TYP_CD
+      		   AND A.GRTED_DB_PNM = D.GRTED_DB_PNM
+      		   AND A.GRTED_SCH_PNM = D.GRTED_SCH_PNM
+      		   		         		      		          		            		  
+      		   AND NVL(A.SELECT_YN, '_') = NVL(D.SELECT_YN, '_')
+      		   AND NVL(A.INSERT_YN, '_') = NVL(D.INSERT_YN, '_')
+      		   AND NVL(A.UPDATE_YN, '_') = NVL(D.UPDATE_YN, '_')
+      		   AND NVL(A.DELETE_YN, '_') = NVL(D.DELETE_YN, '_')
+      		   --AND NVL(A.EXECUTE_YN, '_') = NVL(D.EXECUTE_YN, '_')
+      		   --AND NVL(A.SYNONYM_YN, '_') = NVL(D.SYNONYM_YN, '_')      		          		   
+      		   AND NVL(A.OBJ_DESCN, '_') = NVL(D.OBJ_DESCN, '_')
+      		   --AND NVL(A.DDL_OBJ_LNM, '_') = NVL(D.DDL_OBJ_LNM, '_')
+      		)
+  </insert>
+  
+    <update id="updateCheckInit" parameterType="string">
+  	--요청구분 업데이트
+    UPDATE WAQ_DDL_GRT A
+    SET (A.REG_TYP_CD, A.DDL_GRT_ID) = (
+    					SELECT CASE WHEN A.RQST_DCD = 'DD' THEN 'D' ELSE CASE WHEN MAX(B.DDL_GRT_ID ) IS NULL THEN 'C' ELSE 'U' END END     
+    					     , MAX(B.DDL_GRT_ID) AS DDL_GRT_ID     					     				  
+                          FROM WAM_DDL_GRT B
+                         WHERE B.GRTOR_DB_ID   = A.GRTOR_DB_ID
+                           AND B.GRTOR_SCH_ID = A.GRTOR_SCH_ID
+                           AND B.DDL_OBJ_PNM = A.DDL_OBJ_PNM
+                           AND B.GRTED_DB_ID = A.GRTED_DB_ID
+                           AND B.GRTED_SCH_ID = A.GRTED_SCH_ID                                                                                                                                         
+                       )
+       , A.VRF_CD = '4'
+    WHERE A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}  	
+  </update>
+    
+    <update id="updateGrtorKeyId" parameterType="string">
+  	-- 각종 ID 업데이트
+    UPDATE WAQ_DDL_GRT A
+       SET (A.GRTOR_DB_ID, A.GRTOR_SCH_ID ) = 
+                       (
+       					SELECT MAX(D.DB_CONN_TRG_ID), MAX(C.DB_SCH_ID)
+                          FROM WAA_DB_SCH C
+	   						   INNER JOIN WAA_DB_CONN_TRG D
+	   						      ON D.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	   						     AND D.REG_TYP_CD IN ('C', 'U')
+	   						     AND D.DB_CONN_TRG_ID = C.DB_CONN_TRG_ID
+                         WHERE 1 = 1
+                           AND D.DB_CONN_TRG_PNM = A.GRTOR_DB_PNM
+                           AND C.DB_SCH_PNM      = A.GRTOR_SCH_PNM  
+                           AND C.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	   					   AND C.REG_TYP_CD IN ('C', 'U')                                                                                
+                       )
+           , A.VRF_CD = '4'
+    WHERE A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}  	
+  </update>
+  
+  <update id="updateGrtedKeyId" parameterType="string">
+  	-- 각종 ID 업데이트, 권한 업데이트
+    UPDATE WAQ_DDL_GRT A
+<!--       SET (A.GRTED_DB_ID, A.GRTED_SCH_ID, A.SELECT_YN, A.INSERT_YN, A.UPDATE_YN, A.DELETE_YN, A.EXECUTE_YN ) =	-->
+			SET (A.GRTED_DB_ID, A.GRTED_SCH_ID) = 
+                       (
+       					SELECT MAX(D.DB_CONN_TRG_ID), MAX(C.ROLE_ID)
+<!--        						, MAX(C.SELECT_YN), MAX(C.INSERT_YN), MAX(C.UPDATE_YN), MAX(C.DELETE_YN), MAX(C.EXECUTE_YN)	 -->
+                          FROM WAA_DB_ROLE C
+	   						   INNER JOIN WAA_DB_CONN_TRG D
+	   						      ON D.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	   						     AND D.REG_TYP_CD IN ('C', 'U')
+	   						     AND D.DB_CONN_TRG_ID = C.DB_CONN_TRG_ID
+                         WHERE 1 = 1
+                           AND D.DB_CONN_TRG_PNM = A.GRTED_DB_PNM
+                           AND C.ROLE_PNM      = A.GRTED_SCH_PNM  
+                           AND C.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	   					   AND C.REG_TYP_CD IN ('C', 'U')                                                                                
+                       )
+           , A.VRF_CD = '4'
+    WHERE A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}  	
+  </update>
+  
+  <!-- 승인/반려 업데이트 -->
+  <update id="updatervwStsCd" parameterType="kr.wise.meta.ddl.service.WaqDdlGrt" >
+  	UPDATE WAQ_DDL_GRT
+  	<set>
+  	    RVW_STS_CD 	= #{rvwStsCd} , 
+  		RVW_CONTS 	= #{rvwConts} , 
+  		APRV_DTM	= SYSDATE ,
+  		APRV_USER_ID = #{aprvUserId} ,
+  	</set>
+    WHERE RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      AND RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+      AND VRF_CD = '1'
+      AND NVL(RVW_STS_CD, '_') != '2'
+  </update>
+  
+  <select id="selectWaqC" parameterType="map" resultMap="BaseResultMap">
+   	--신규 적재 대상 추출
+   	SELECT * FROM WAQ_DDL_GRT
+   	WHERE RQST_NO = #{rqstNo}
+   	  AND RVW_STS_CD = '1'  --승인
+   	  AND REG_TYP_CD = 'C'
+   </select>
+  
+  <update id="updateidByKey" parameterType="kr.wise.meta.ddl.service.WaqDdlGrt">
+     --신규 적재 대상 ID 업데이트
+    UPDATE WAQ_DDL_GRT 
+       SET DDL_GRT_ID = #{ddlGrtId,jdbcType=VARCHAR}
+  	 WHERE RQST_NO      = #{rqstNo,jdbcType=VARCHAR}
+       AND RQST_SNO     = #{rqstSno,jdbcType=DECIMAL}
+       
+   </update>
+
+	<update id="updateWaqCUD" parameterType="map">
+   	--WAQ ID, VERS 등을 업데이트...
+	UPDATE WAQ_DDL_GRT A
+	SET (DDL_GRT_ID, OBJ_VERS, FRS_RQST_DTM, FRS_RQST_USER_ID) = (
+	    SELECT 
+	          B.DDL_GRT_ID AS DDL_GRT_ID
+	        , NVL(B.OBJ_VERS, 0) + 1 AS OBJ_VERS
+	        , B.FRS_RQST_DTM
+	        , B.FRS_RQST_USER_ID
+	    FROM WAM_DDL_GRT B
+		   INNER JOIN WAA_DB_SCH S
+	          ON B.GRTOR_SCH_ID = S.DB_SCH_ID
+	         AND S.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	   	     AND S.REG_TYP_CD IN ('C', 'U')
+	   	   INNER JOIN WAA_DB_CONN_TRG D
+	          ON D.DB_CONN_TRG_ID = S.DB_CONN_TRG_ID
+	   	     AND D.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	   	     AND D.REG_TYP_CD IN ('C', 'U') 	       
+	   	   INNER JOIN WAA_DB_ROLE S2
+	          ON B.GRTED_SCH_ID = S2.ROLE_ID
+	         AND S2.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	   	     AND S2.REG_TYP_CD IN ('C', 'U')
+	   	   INNER JOIN WAA_DB_CONN_TRG D2
+	          ON D2.DB_CONN_TRG_ID = S2.DB_CONN_TRG_ID
+	   	     AND D2.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	   	     AND D2.REG_TYP_CD IN ('C', 'U') 	 
+	    WHERE B.DDL_OBJ_PNM     = A.DDL_OBJ_PNM
+          AND S.DB_SCH_PNM      = A.GRTOR_SCH_PNM 
+          AND D.DB_CONN_TRG_PNM = A.GRTOR_DB_PNM     
+          AND B.DDL_OBJ_TYP_CD		= A.DDL_OBJ_TYP_CD
+          AND S2.ROLE_PNM      = A.GRTED_SCH_PNM 
+          AND D2.DB_CONN_TRG_PNM = A.GRTED_DB_PNM    
+	)
+	WHERE A.RQST_NO = #{rqstNo}
+	--AND A.VRF_CD = '1' 		--등록가능
+	AND A.RVW_STS_CD = '1'  --승인
+	AND EXISTS (
+	  SELECT 1
+	    FROM WAM_DDL_GRT B
+		   INNER JOIN WAA_DB_SCH S
+	          ON B.GRTOR_SCH_ID = S.DB_SCH_ID
+	         AND S.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	   	     AND S.REG_TYP_CD IN ('C', 'U')
+	   	   INNER JOIN WAA_DB_CONN_TRG D
+	          ON D.DB_CONN_TRG_ID = S.DB_CONN_TRG_ID
+	   	     AND D.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	   	     AND D.REG_TYP_CD IN ('C', 'U') 	       
+	   	   INNER JOIN WAA_DB_ROLE S2
+	          ON B.GRTED_SCH_ID = S2.ROLE_ID
+	         AND S2.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	   	     AND S2.REG_TYP_CD IN ('C', 'U')
+	   	   INNER JOIN WAA_DB_CONN_TRG D2
+	          ON D2.DB_CONN_TRG_ID = S2.DB_CONN_TRG_ID
+	   	     AND D2.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	   	     AND D2.REG_TYP_CD IN ('C', 'U') 	 
+	    WHERE B.DDL_OBJ_PNM     = A.DDL_OBJ_PNM
+          AND S.DB_SCH_PNM      = A.GRTOR_SCH_PNM 
+          AND D.DB_CONN_TRG_PNM = A.GRTOR_DB_PNM     
+          AND B.DDL_OBJ_TYP_CD		= A.DDL_OBJ_TYP_CD
+          AND S2.ROLE_PNM      = A.GRTED_SCH_PNM 
+          AND D2.DB_CONN_TRG_PNM = A.GRTED_DB_PNM 
+	)
+   </update>
+   
+   <sql id="wam_col_ins">
+	, GRTOR_DB_ID, GRTOR_DB_PNM, GRTOR_SCH_ID, GRTOR_SCH_PNM
+	, DDL_OBJ_ID, DDL_OBJ_PNM, DDL_OBJ_TYP_CD
+	, GRTED_DB_ID, GRTED_DB_PNM, GRTED_SCH_ID, GRTED_SCH_PNM
+	, SELECT_YN, INSERT_YN, UPDATE_YN, DELETE_YN, EXECUTE_YN, SYNONYM_YN
+	
+	, PRC_TYP_CD
+	, PRC_DT
+	, PRC_DBA_ID
+	, RQST_NO
+	, RQST_SNO
+	
+	, OBJ_DESCN, OBJ_VERS, REG_TYP_CD, FRS_RQST_DTM, FRS_RQST_USER_ID 
+    , RQST_DTM, RQST_USER_ID, APRV_DTM, APRV_USER_ID, SCRT_INFO, RQST_RESN, DDL_OBJ_LNM
+   </sql>
+   
+   <sql id="wam_col">
+	, GRTOR_DB_ID, GRTOR_DB_PNM, GRTOR_SCH_ID, GRTOR_SCH_PNM
+	, DDL_OBJ_ID, DDL_OBJ_PNM, DDL_OBJ_TYP_CD
+	, GRTED_DB_ID, GRTED_DB_PNM, GRTED_SCH_ID, GRTED_SCH_PNM
+	, SELECT_YN, INSERT_YN, UPDATE_YN, DELETE_YN, EXECUTE_YN, SYNONYM_YN
+	
+	, NULL AS PRC_TYP_CD
+	, NULL AS PRC_DT
+	, NULL AS PRC_DBA_ID
+	, RQST_NO
+	, RQST_SNO
+	
+	, OBJ_DESCN, OBJ_VERS, REG_TYP_CD, FRS_RQST_DTM, FRS_RQST_USER_ID 
+    , RQST_DTM, RQST_USER_ID, APRV_DTM, APRV_USER_ID, SCRT_INFO, RQST_RESN, DDL_OBJ_LNM
+   </sql>
+   
+   <delete id="deleteWAM" parameterType="map">
+    --WAM 삭제 (등록유형코드가REG_TYP_CD 변경, 삭제일 경우)
+	DELETE FROM WAM_DDL_GRT A
+	 WHERE EXISTS ( SELECT 1 
+				      FROM WAQ_DDL_GRT B
+				     WHERE B.RQST_NO = #{rqstNo}
+				       AND B.VRF_CD = '1'
+				       AND B.RVW_STS_CD = '1'				       
+				       AND B.DDL_GRT_ID = A.DDL_GRT_ID	       
+				  )
+   </delete>   
+
+   <insert id="insertWAM" parameterType="map">
+   	--WAM 추가 (WAQ 내용을 추가, REG_TYP_CD 가 신규,변경일 경우)
+	INSERT INTO WAM_DDL_GRT
+	(DDL_GRT_ID 	
+	 <include refid="wam_col_ins"/>
+	)	
+	SELECT DDL_GRT_ID 	
+	       <include refid="wam_col"/>	
+	 FROM WAQ_DDL_GRT A
+	WHERE A.RQST_NO = #{rqstNo}
+	  AND A.VRF_CD = '1'
+	  AND A.RVW_STS_CD = '1'
+	  AND A.REG_TYP_CD IN ('C', 'U')
+   </insert>  
+   
+   <update id="updateWAH"  parameterType="map">
+   	--WAH 이력 만료...
+	UPDATE WAH_DDL_GRT A
+	   SET EXP_DTM = SYSDATE
+	 WHERE EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	   AND REG_TYP_CD IN ('C','U')
+	   AND EXISTS ( SELECT 1
+			 	      FROM WAQ_DDL_GRT B
+				     WHERE B.RQST_NO = #{rqstNo}
+				       AND B.VRF_CD = '1'
+				       AND B.RVW_STS_CD = '1'
+				       AND B.DDL_GRT_ID = A.DDL_GRT_ID	     
+				  )	
+   </update>  
+
+   <insert id="insertWAH"  parameterType="map">
+   	--WAH이력 적재...
+	INSERT INTO WAH_DDL_GRT
+	(  DDL_GRT_ID 
+	 , EXP_DTM
+	 , STR_DTM 	
+	 <include refid="wam_col_ins"/>   	
+	)
+	SELECT A.DDL_GRT_ID AS DDL_GRT_ID
+	     , TO_DATE( '9999-12-31', 'YYYY-MM-DD') AS EXP_DTM
+	     , SYSDATE AS STR_DTM 	
+	     <include refid="wam_col"/>   
+	 FROM WAQ_DDL_GRT A
+	WHERE A.RQST_NO = #{rqstNo}
+	  AND A.VRF_CD = '1'
+	  AND A.RVW_STS_CD = '1'
+   </insert>   
+
+<select id="selectddlGrtlist" parameterType="map" resultMap="BaseResultMap" >
+  	--DDL오브젝트 변경대상 조회...
+   	SELECT A.DDL_GRT_ID
+   	      , 'I' AS IBS_STATUS
+		  , A.DDL_OBJ_PNM AS DDL_OBJ_PNM
+		  , A.DDL_OBJ_LNM AS DDL_OBJ_LNM
+	      , #{reqmst.rqstDcd, jdbcType=VARCHAR} AS RQST_DCD
+	      , A.GRTOR_DB_ID    AS GRTOR_DB_ID
+	      , DB.DB_CONN_TRG_PNM  AS GRTOR_DB_PNM
+	      , A.GRTOR_SCH_ID         AS GRTOR_SCH_ID
+	      , S.DB_SCH_PNM        AS GRTOR_SCH_PNM
+	      
+	      , A.GRTED_DB_ID    AS GRTED_DB_ID
+	      , DB2.DB_CONN_TRG_PNM  AS GRTED_DB_PNM
+	      , A.GRTED_SCH_ID         AS GRTED_SCH_ID
+	      , S2.ROLE_PNM        AS GRTED_SCH_PNM
+	      
+	      , A.DDL_OBJ_TYP_CD        AS DDL_OBJ_TYP_CD
+	      , A.SCRT_INFO			AS SCRT_INFO
+	      , A.OBJ_DESCN			AS OBJ_DESCN
+	      , A.RQST_RESN			AS RQST_RESN
+	      , CASE WHEN A.SELECT_YN = 'Y' THEN 'Y' ELSE '' END SELECT_YN
+	      , CASE WHEN A.INSERT_YN = 'Y' THEN 'Y' ELSE '' END INSERT_YN
+	      , CASE WHEN A.UPDATE_YN = 'Y' THEN 'Y' ELSE '' END UPDATE_YN
+	      , CASE WHEN A.DELETE_YN = 'Y' THEN 'Y' ELSE '' END DELETE_YN
+	      , CASE WHEN A.EXECUTE_YN = 'Y' THEN 'Y' ELSE '' END EXECUTE_YN
+	   FROM WAM_DDL_GRT A
+	       LEFT JOIN WAA_DB_SCH S
+	         ON A.GRTOR_SCH_ID = S.DB_SCH_ID
+	        AND S.REG_TYP_CD IN ('C', 'U')
+	        AND S.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	       LEFT JOIN WAA_DB_CONN_TRG DB
+	         ON A.GRTOR_DB_ID = DB.DB_CONN_TRG_ID
+	        AND DB.REG_TYP_CD IN ('C', 'U')
+	        AND DB.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	        
+	       LEFT JOIN WAA_DB_ROLE S2
+	         ON A.GRTED_SCH_ID = S2.ROLE_ID
+	        AND S2.REG_TYP_CD IN ('C', 'U')
+	        AND S2.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	       LEFT JOIN WAA_DB_CONN_TRG DB2
+	         ON A.GRTED_DB_ID = DB2.DB_CONN_TRG_ID
+	        AND DB2.REG_TYP_CD IN ('C', 'U')
+	        AND DB2.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	        
+	 WHERE A.DDL_GRT_ID IN 
+	 <foreach collection="list" item="item" open="(" separator="," close=")">
+	  	#{item.ddlGrtId}
+	 </foreach>
+  </select>
+
+  <update id="updateDdlGrtScriptWaq" parameterType="kr.wise.meta.ddl.service.WaqDdlGrt">
+  	--DDL 스크립트 업데이트...
+  	UPDATE WAQ_DDL_GRT
+  	   SET SCRT_INFO = #{scrtInfo,jdbcType=VARCHAR}
+  	 WHERE RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+       AND RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+  </update>
+  
+  
+  <update id="updateObjectKeyId" parameterType="string">
+  	-- 각종 ID 업데이트
+    UPDATE WAQ_DDL_GRT A
+       SET (A.DDL_OBJ_ID, A.DDL_OBJ_TYP_CD, A.DDL_OBJ_LNM) = 
+                       (
+       					SELECT MAX(O.DDL_OBJ_ID),MAX(DDL_OBJ_TYP_CD),MAX(O.DDL_OBJ_LNM)
+                          FROM WAA_DB_SCH C
+   						   INNER JOIN WAA_DB_CONN_TRG D
+   						      ON D.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+   						     AND D.REG_TYP_CD IN ('C', 'U')
+   						     AND D.DB_CONN_TRG_ID = C.DB_CONN_TRG_ID
+   						   INNER JOIN (SELECT T.DB_SCH_ID
+                                             ,T.DDL_TBL_PNM AS DDL_OBJ_PNM
+                                             ,T.DDL_TBL_ID AS DDL_OBJ_ID
+                                             ,'TBL' AS DDL_OBJ_TYP_CD
+                                             ,T.DDL_TBL_LNM AS DDL_OBJ_LNM
+                                        FROM WAM_DDL_TBL T
+                                       UNION ALL
+                                       SELECT T.DB_SCH_ID
+                                             ,T.DDL_SEQ_PNM AS DDL_OBJ_PNM
+                                             ,T.DDL_SEQ_ID AS DDL_OBJ_ID
+                                             ,'SEQ' AS DDL_OBJ_TYP_CD
+                                             ,T.DDL_SEQ_LNM AS DDL_OBJ_LNM
+                                        FROM WAM_DDL_SEQ T
+                                       UNION ALL
+                                       SELECT T.DB_SCH_ID
+                                             ,T.DDL_ETC_PNM AS DDL_OBJ_PNM
+                                             ,T.DDL_ETC_ID AS DDL_OBJ_ID
+                                             ,T.ETC_OBJ_DCD AS DDL_OBJ_TYP_CD
+                                             ,T.DDL_ETC_LNM AS DDL_OBJ_LNM
+                                        FROM WAM_DDL_ETC T
+                                       ) O
+                               ON O.DB_SCH_ID = C.DB_SCH_ID
+                         WHERE 1 = 1
+                           AND D.DB_CONN_TRG_PNM = A.GRTOR_DB_PNM
+                           AND C.DB_SCH_PNM      = A.GRTOR_SCH_PNM  
+                           AND O.DDL_OBJ_PNM	 = A.DDL_OBJ_PNM
+                           AND C.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	   					   AND C.REG_TYP_CD IN ('C', 'U')                                                                                
+                       )
+           , A.VRF_CD = '4'
+    WHERE A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}  	
+  </update>
+  
+  <update id="updateObjectGrtYN" parameterType="string">
+  	-- 오브젝트 별 권한 'N'처리
+    UPDATE WAQ_DDL_GRT A
+		SET (SELECT_YN,INSERT_YN,UPDATE_YN,DELETE_YN,EXECUTE_YN)
+		        = (SELECT CASE WHEN A.DDL_OBJ_TYP_CD = 'TBL' THEN B.SELECT_YN
+		                       WHEN A.DDL_OBJ_TYP_CD = 'SEQ' THEN B.SELECT_YN
+		                       WHEN A.DDL_OBJ_TYP_CD = 'VIEW' THEN B.SELECT_YN
+		                       WHEN A.DDL_OBJ_TYP_CD = 'FUNC' THEN 'N'
+		                       WHEN A.DDL_OBJ_TYP_CD = 'PROC' THEN 'N'
+		                   END AS SELECT_YN
+		                  ,CASE WHEN A.DDL_OBJ_TYP_CD = 'TBL' THEN B.INSERT_YN
+		                       WHEN A.DDL_OBJ_TYP_CD = 'SEQ' THEN 'N'
+		                       WHEN A.DDL_OBJ_TYP_CD = 'VIEW' THEN 'N'
+		                       WHEN A.DDL_OBJ_TYP_CD = 'FUNC' THEN 'N'
+		                       WHEN A.DDL_OBJ_TYP_CD = 'PROC' THEN 'N'
+		                   END AS INSERT_YN
+		                  ,CASE WHEN A.DDL_OBJ_TYP_CD = 'TBL' THEN B.UPDATE_YN
+		                       WHEN A.DDL_OBJ_TYP_CD = 'SEQ' THEN 'N'
+		                       WHEN A.DDL_OBJ_TYP_CD = 'VIEW' THEN 'N'
+		                       WHEN A.DDL_OBJ_TYP_CD = 'FUNC' THEN 'N'
+		                       WHEN A.DDL_OBJ_TYP_CD = 'PROC' THEN 'N'
+		                   END AS UPDATE_YN
+		                  ,CASE WHEN A.DDL_OBJ_TYP_CD = 'TBL' THEN B.DELETE_YN
+		                       WHEN A.DDL_OBJ_TYP_CD = 'SEQ' THEN 'N'
+		                       WHEN A.DDL_OBJ_TYP_CD = 'VIEW' THEN 'N'
+		                       WHEN A.DDL_OBJ_TYP_CD = 'FUNC' THEN 'N'
+		                       WHEN A.DDL_OBJ_TYP_CD = 'PROC' THEN 'N'
+		                   END AS DELETE_YN
+		                  ,CASE WHEN A.DDL_OBJ_TYP_CD = 'TBL' THEN 'N'
+		                       WHEN A.DDL_OBJ_TYP_CD = 'SEQ' THEN 'N'
+		                       WHEN A.DDL_OBJ_TYP_CD = 'VIEW' THEN 'N'
+		                       WHEN A.DDL_OBJ_TYP_CD = 'FUNC' THEN B.EXECUTE_YN
+		                       WHEN A.DDL_OBJ_TYP_CD = 'PROC' THEN B.EXECUTE_YN
+		                   END AS EXECUTE_YN
+		             FROM WAQ_DDL_GRT B
+		            WHERE A.RQST_NO = B.RQST_NO
+		              AND A.RQST_SNO = B.RQST_SNO
+		        )
+		WHERE A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}  	
+		AND A.RQST_DCD = 'CU'
+		AND A.DDL_OBJ_TYP_CD IS NOT NULL
+  </update>
+  
+  <insert id="checkNotMatchDbms" parameterType="map">
+	  <include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSql"/>
+	  --검증쿼리 : DBMS가 다름(DDG06)
+	  AND A.RQST_DCD = 'CU'
+	  AND A.GRTOR_DB_PNM != GRTED_DB_PNM
+  </insert>
+  
+  <insert id="checkNonObject" parameterType="map">
+	  <include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSql"/>
+	  --검증쿼리 : 오브젝트 미존재(DDG07)
+	  AND A.RQST_DCD = 'CU'
+	  AND A.DDL_OBJ_ID IS NULL
+  </insert>
+  
+  <insert id="checkNotGrt" parameterType="map">
+	  <include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSql"/>
+	  --검증쿼리 : 권한 미존재(DDG08)
+	  AND A.RQST_DCD = 'CU'
+	  AND SELECT_YN = 'N'
+	  AND INSERT_YN = 'N'
+	  AND UPDATE_YN = 'N'
+	  AND DELETE_YN = 'N'
+	  AND EXECUTE_YN = 'N'      
+  </insert>
+  
+  <insert id="checkRqstMultiSchema" parameterType="map">
+	  <include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSql"/>
+	  --검증쿼리 : 한요청서에 여러 스키마 권한을 요청할 수 없음(권한을 주는 스키마에 대한 결재자를 선택해야 하기 때문에)(DDG09)
+	  AND EXISTS (SELECT 1 FROM WAQ_DDL_GRT B
+             WHERE A.RQST_NO = B.RQST_NO
+               AND A.GRTOR_SCH_PNM != B.GRTOR_SCH_PNM
+           )      
+  </insert>
+  
+  <insert id="checkRqstGrantSame" parameterType="map">
+	  <include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSql"/>
+	  --검증쿼리 : GRANTOR 에게 기본적으로 부여된 권한에 권한을 신청할 경우(DDG10)
+	  AND A.RQST_DCD = 'CU'
+	  AND REPLACE(A.GRTOR_SCH_PNM,'OWN') = REPLACE(REPLACE(A.GRTED_SCH_PNM,'RL_'),'_RCV')
+  </insert>
+  
+  <insert id="checkRqstGrantMapRole" parameterType="map">
+	  <include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSql"/>
+	  --검증쿼리 : 권한 요청용 ROLE 말고 스키마매핑용 ROLE로 권한을 요청하는 경우(DDG11)
+	  AND A.RQST_DCD = 'CU'
+	  AND EXISTS (SELECT 1 FROM WAA_DB_ROLE B
+                WHERE B.REG_TYP_CD IN ('C','U')
+                  AND B.EXP_DTM = TO_DATE('9999-12-31','YYYY-MM-DD')
+                  AND A.GRTED_SCH_ID = B.ROLE_ID
+                  )
+  </insert>
+  
+  
+  <insert id="insertWaqDdlGrtGrtorObjDD" parameterType="map">
+	  
+	INSERT INTO WAQ_DDL_GRT
+	(
+	     RQST_NO
+	    ,RQST_SNO
+	    ,DDL_GRT_ID
+	    ,RQST_DCD
+	    ,RVW_STS_CD
+	    ,RVW_CONTS
+	    ,VRF_CD
+	    ,VRF_RMK
+	    ,GRTOR_DB_ID
+	    ,GRTOR_DB_PNM
+	    ,GRTOR_SCH_ID
+	    ,GRTOR_SCH_PNM
+	    ,DDL_OBJ_ID
+	    ,DDL_OBJ_PNM
+	    ,DDL_OBJ_TYP_CD
+	    ,GRTED_DB_ID
+	    ,GRTED_DB_PNM
+	    ,GRTED_SCH_ID
+	    ,GRTED_SCH_PNM
+	    ,SELECT_YN
+	    ,INSERT_YN
+	    ,UPDATE_YN
+	    ,DELETE_YN
+	    ,EXECUTE_YN
+	    ,SYNONYM_YN
+	    ,SCRT_INFO
+	    ,OBJ_DESCN
+	    ,OBJ_VERS
+	    ,REG_TYP_CD
+	    ,FRS_RQST_DTM
+	    ,FRS_RQST_USER_ID
+	    ,RQST_DTM
+	    ,RQST_USER_ID
+	    ,APRV_DTM
+	    ,APRV_USER_ID
+	    ,RQST_RESN
+	    ,DDL_OBJ_LNM
+	)
+	SELECT 
+         A.RQST_NO
+		,ROWNUM AS RQST_SNO
+	    ,A.DDL_GRT_ID
+	    ,A.RQST_DCD
+	    ,A.RVW_STS_CD
+	    ,A.RVW_CONTS
+	    ,A.VRF_CD
+	    ,A.VRF_RMK
+	    ,A.GRTOR_DB_ID
+	    ,A.GRTOR_DB_PNM
+	    ,A.GRTOR_SCH_ID
+	    ,A.GRTOR_SCH_PNM
+	    ,A.DDL_OBJ_ID
+	    ,A.DDL_OBJ_PNM
+	    ,A.DDL_OBJ_TYP_CD
+	    ,A.GRTED_DB_ID
+	    ,A.GRTED_DB_PNM
+	    ,A.GRTED_SCH_ID
+	    ,A.GRTED_SCH_PNM
+	    ,A.SELECT_YN
+	    ,A.INSERT_YN
+	    ,A.UPDATE_YN
+	    ,A.DELETE_YN
+	    ,A.EXECUTE_YN
+	    ,A.SYNONYM_YN
+	    ,A.SCRT_INFO
+	    ,A.OBJ_DESCN
+	    ,A.OBJ_VERS
+	    ,A.REG_TYP_CD
+	    ,A.FRS_RQST_DTM
+	    ,A.FRS_RQST_USER_ID
+	    ,A.RQST_DTM
+	    ,A.RQST_USER_ID
+	    ,A.APRV_DTM
+	    ,A.APRV_USER_ID
+	    ,A.RQST_RESN
+	    ,A.DDL_OBJ_LNM
+
+	FROM (
+
+		SELECT B.RQST_NO
+		      --,ROWNUM AS RQST_SNO
+		      ,DDL_GRT_ID
+		      ,'DD' AS RQST_DCD
+		      ,'1' AS RVW_STS_CD
+		      ,'GRANTOR 테이블 삭제로 자동 삭제' AS RVW_CONTS
+		      ,'1' AS VRF_CD
+		      ,'' AS VRF_RMK
+		      ,A.GRTOR_DB_ID
+		      ,A.GRTOR_DB_PNM
+		      ,A.GRTOR_SCH_ID
+		      ,A.GRTOR_SCH_PNM
+		      ,A.DDL_OBJ_ID
+		      ,A.DDL_OBJ_PNM
+		      ,A.DDL_OBJ_TYP_CD
+		      ,A.GRTED_DB_ID
+		      ,A.GRTED_DB_PNM
+		      ,A.GRTED_SCH_ID
+		      ,A.GRTED_SCH_PNM
+		      ,A.SELECT_YN
+		      ,A.INSERT_YN
+		      ,A.UPDATE_YN
+		      ,A.DELETE_YN
+		      ,A.EXECUTE_YN
+		      ,A.SYNONYM_YN
+		      ,'' AS SCRT_INFO
+		      ,A.OBJ_DESCN
+		      ,A.OBJ_VERS
+		      ,'D' AS REG_TYP_CD   
+		      ,A.FRS_RQST_DTM
+		      ,A.FRS_RQST_USER_ID
+		      ,B.RQST_DTM     --
+		      ,B.RQST_USER_ID --
+		      ,B.APRV_DTM     --
+		      ,B.APRV_USER_ID --
+		      ,A.RQST_RESN    
+		      ,A.DDL_OBJ_LNM
+		  FROM WAM_DDL_GRT A
+		  
+		 INNER JOIN WAH_DDL_TBL B
+		    ON A.GRTOR_SCH_ID = B.DB_SCH_ID
+		   AND A.DDL_OBJ_PNM = B.DDL_TBL_PNM
+		   AND B.EXP_DTM = TO_DATE('9999-12-31','YYYY-MM-DD')
+		   AND B.REG_TYP_CD = 'D'
+		 WHERE 1=1
+		   AND B.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+		   
+		UNION ALL
+		
+		SELECT B.RQST_NO
+		      --,ROWNUM AS RQST_SNO
+		      ,DDL_GRT_ID
+		      ,'DD' AS RQST_DCD
+		      ,'1' AS RVW_STS_CD
+		      ,'GRANTOR 오브젝트 삭제로 자동 삭제' AS RVW_CONTS
+		      ,'1' AS VRF_CD
+		      ,'' AS VRF_RMK
+		      ,A.GRTOR_DB_ID
+		      ,A.GRTOR_DB_PNM
+		      ,A.GRTOR_SCH_ID
+		      ,A.GRTOR_SCH_PNM
+		      ,A.DDL_OBJ_ID
+		      ,A.DDL_OBJ_PNM
+		      ,A.DDL_OBJ_TYP_CD
+		      ,A.GRTED_DB_ID
+		      ,A.GRTED_DB_PNM
+		      ,A.GRTED_SCH_ID
+		      ,A.GRTED_SCH_PNM
+		      ,A.SELECT_YN
+		      ,A.INSERT_YN
+		      ,A.UPDATE_YN
+		      ,A.DELETE_YN
+		      ,A.EXECUTE_YN
+		      ,A.SYNONYM_YN
+		      ,'' AS SCRT_INFO
+		      ,A.OBJ_DESCN
+		      ,A.OBJ_VERS
+		      ,'D' AS REG_TYP_CD   
+		      ,A.FRS_RQST_DTM
+		      ,A.FRS_RQST_USER_ID
+		      ,B.RQST_DTM     --
+		      ,B.RQST_USER_ID --
+		      ,B.APRV_DTM     --
+		      ,B.APRV_USER_ID --
+		      ,A.RQST_RESN    
+		      ,A.DDL_OBJ_LNM
+		  FROM WAM_DDL_GRT A
+		  
+		 INNER JOIN WAH_DDL_OBJ B
+		    ON A.GRTOR_SCH_ID = B.DB_SCH_ID
+		   AND A.DDL_OBJ_PNM = B.DDL_OBJ_PNM
+		   AND B.EXP_DTM = TO_DATE('9999-12-31','YYYY-MM-DD')
+		   AND B.REG_TYP_CD = 'D'
+		 WHERE 1=1
+		   AND B.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+		   
+		UNION ALL
+		
+		SELECT B.RQST_NO
+		      --,ROWNUM AS RQST_SNO
+		      ,DDL_GRT_ID
+		      ,'DD' AS RQST_DCD
+		      ,'' AS RVW_STS_CD
+		      ,'GRANTOR 시퀀스 삭제로 자동 삭제' AS RVW_CONTS
+		      ,'1' AS VRF_CD
+		      ,'' AS VRF_RMK
+		      ,A.GRTOR_DB_ID
+		      ,A.GRTOR_DB_PNM
+		      ,A.GRTOR_SCH_ID
+		      ,A.GRTOR_SCH_PNM
+		      ,A.DDL_OBJ_ID
+		      ,A.DDL_OBJ_PNM
+		      ,A.DDL_OBJ_TYP_CD
+		      ,A.GRTED_DB_ID
+		      ,A.GRTED_DB_PNM
+		      ,A.GRTED_SCH_ID
+		      ,A.GRTED_SCH_PNM
+		      ,A.SELECT_YN
+		      ,A.INSERT_YN
+		      ,A.UPDATE_YN
+		      ,A.DELETE_YN
+		      ,A.EXECUTE_YN
+		      ,A.SYNONYM_YN
+		      ,'' AS SCRT_INFO
+		      ,A.OBJ_DESCN
+		      ,A.OBJ_VERS
+		      ,'D' AS REG_TYP_CD   
+		      ,A.FRS_RQST_DTM
+		      ,A.FRS_RQST_USER_ID
+		      ,B.RQST_DTM     --
+		      ,B.RQST_USER_ID --
+		      ,B.APRV_DTM     --
+		      ,B.APRV_USER_ID --
+		      ,A.RQST_RESN    
+		      ,A.DDL_OBJ_LNM
+		  FROM WAM_DDL_GRT A
+		  
+		 INNER JOIN WAH_DDL_SEQ B
+		    ON A.GRTOR_SCH_ID = B.DB_SCH_ID
+		   AND A.DDL_OBJ_PNM = B.DDL_SEQ_PNM
+		   AND B.EXP_DTM = TO_DATE('9999-12-31','YYYY-MM-DD')
+		   AND B.REG_TYP_CD = 'D'
+		 WHERE 1=1
+		   AND B.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+	) A
+  </insert>
+  <insert id="insertWaqRejected" parameterType="map">
+   INSERT INTO WAQ_DDL_GRT (<include refid="Base_Column_List"/>)
+   SELECT #{reqmst.rqstNo,jdbcType=VARCHAR}            
+		, RQST_SNO
+		, DDL_GRT_ID
+		, RQST_DCD
+		, NULL
+		, NULL
+		, NULL
+		, NULL
+		, GRTOR_DB_ID
+		, GRTOR_DB_PNM
+		, GRTOR_SCH_ID
+		, GRTOR_SCH_PNM
+		, DDL_OBJ_ID
+		, DDL_OBJ_PNM
+		, DDL_OBJ_TYP_CD
+		, GRTED_DB_ID
+		, GRTED_DB_PNM
+		, GRTED_SCH_ID
+		, GRTED_SCH_PNM
+		, SELECT_YN
+		, INSERT_YN
+		, UPDATE_YN
+		, DELETE_YN
+		, EXECUTE_YN
+		, SYNONYM_YN
+		, SCRT_INFO
+		, OBJ_DESCN
+		, OBJ_VERS
+		, REG_TYP_CD
+		, FRS_RQST_DTM
+		, FRS_RQST_USER_ID
+		, RQST_DTM
+		, RQST_USER_ID
+		, NULL
+		, NULL
+		, RQST_RESN
+		, DDL_OBJ_LNM
+		, SELECT_WITH_GRT_YN
+		, INSERT_WITH_GRT_YN
+		, UPDATE_WITH_GRT_YN
+		, DELETE_WITH_GRT_YN
+		, EXECUTE_WITH_GRT_YN
+   	 FROM WAQ_DDL_GRT
+   	WHERE RQST_NO = #{oldRqstNo,jdbcType=VARCHAR}
+  	  AND RVW_STS_CD = '2'
+   </insert>
+
+</mapper>

@@ -1,0 +1,1109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.meta.ldm.service.WamLdmEntyMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.meta.ldm.service.WamLdmEnty" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+    <id column="LDM_ENTY_ID" property="ldmEntyId" jdbcType="VARCHAR" />    
+    <result column="LDM_ENTY_LNM" property="ldmEntyLnm" jdbcType="VARCHAR" />
+    <result column="LDM_ATTR_PNM" property="ldmAttrPnm" jdbcType="VARCHAR" />
+    <result column="LDM_ATTR_LNM" property="ldmAttrLnm" jdbcType="VARCHAR" />
+    <result column="SUBJ_ID"      property="subjId"    jdbcType="VARCHAR" />
+    <result column="SUBJ_LNM"     property="subjLnm"   jdbcType="VARCHAR" />
+    <result column="FULL_PATH"    property="fullPath"  jdbcType="VARCHAR" />
+    <result column="STD_APL_YN"   property="stdAplYn"  jdbcType="VARCHAR" />
+    <result column="ENC_YN"       property="encYn"     jdbcType="VARCHAR" />    
+    <result column="CRG_USER_ID"  property="crgUserId" jdbcType="VARCHAR" />
+    <result column="CRG_USER_NM"  property="crgUserNm" jdbcType="VARCHAR" />
+   
+    <result column="DATA_TYPE " property="dataType" jdbcType="VARCHAR" />
+    <result column="SUBJ_LVL"   property="Level" jdbcType="INTEGER" />
+    
+	<result column="DB_CONN_TRG_ID"  property="dbConnTrgId"  jdbcType="VARCHAR" />
+    <result column="DB_CONN_TRG_PNM" property="dbConnTrgPnm" jdbcType="VARCHAR" />
+    <result column="DB_SCH_ID"       property="dbSchId"      jdbcType="VARCHAR" />
+    <result column="DB_SCH_PNM"      property="dbSchPnm"     jdbcType="VARCHAR" />
+  </resultMap>
+  
+   <resultMap id="totcntmap" type="kr.wise.portal.dashboard.service.TotalCountVO" >
+        <result column="CNT_NAME" property="cntName"  />
+    	<result column="TOT_CNT"  property="totCnt"  />	
+    	<result column="PAGE"  property="page"  />	
+    	<result column="AUTH"  property="auth"  />	
+   </resultMap>
+
+   <resultMap id="udpcntmap" type="kr.wise.portal.dashboard.service.UpdateCntVO" >
+        <result column="TERM_TYPE_NM" property="termTypeNm"  />
+    	<result column="CUR_CNT"  property="curCnt"  />	
+    	<result column="INS_CNT"  property="insCnt"  />
+    	<result column="UPD_CNT"  property="updCnt"  />
+    	<result column="DEL_CNT"  property="delCnt"  />
+    	<result column="PAGE"  property="page"  />	
+    	<result column="AUTH"  property="auth"  />
+   </resultMap>
+	
+	<resultMap id="errChart" type="kr.wise.dq.dashboard.service.DbcAllErrChartVO" >
+        <result column="NO_ERR" property="noErr"  />
+    	<result column="NO_ERR_PST"  property="noErrPst"  />	
+    	<result column="TOTAL"  property="total"  />
+        <result column="ANA_ACT_CNT" property="anaActCnt"  />
+    	<result column="ERR_CNT"  property="errCnt"  />	
+    	<result column="ERR_RATE"  property="errRate"  />
+    </resultMap>
+    
+    <!-- 표준준수율 (주제영역별) SUBJ_ID SUBJ_NM CNT CNT_Y CNT_N STDRATE -->
+    <resultMap id="standardList" type="kr.wise.portal.dashboard.service.StandardChartVO" >
+        <result column="SUBJ_ID" 	property="subjId"  />
+        <result column="SUBJ_NM" 	property="subjNm"  />
+        <result column="CNT" 		property="cnt"  />
+    	<result column="CNT_Y"  	property="cntY"  />
+    	<result column="CNT_N"  	property="cntN"  />
+    	<result column="STDRATE"  	property="stdRate"  />
+    </resultMap>
+   
+  <sql id="Base_Column_List" >
+    LDM_ENTY_ID, LDM_ENTY_PNM, LDM_ENTY_LNM, SUBJ_ID, STD_APL_YN, PART_TBL_YN, DW_TRG_TBL_YN, 
+    CRG_USER_ID, RQST_NO, RQST_SNO, OBJ_DESCN, OBJ_VERS, REG_TYP_CD, FRS_RQST_DTM, FRS_RQST_USER_ID, 
+    RQST_DTM, RQST_USER_ID, APRV_DTM, APRV_USER_ID, CTD_FCY, DEL_CRI, DEL_MTD, BCK_FCY
+  </sql>
+  <sql id="Base_Column_List2" >     
+      LDM_ENTY_LNM, SUBJ_ID, STD_APL_YN     
+    , CRG_USER_ID, RQST_NO, RQST_SNO
+    , OBJ_DESCN, OBJ_VERS, REG_TYP_CD, FRS_RQST_DTM, FRS_RQST_USER_ID 
+    , RQST_DTM, RQST_USER_ID, APRV_DTM, APRV_USER_ID    
+  </sql>
+  
+  <sql id="Base_Column_List3" >
+      LDM_ENTY_ID
+    , LDM_ENTY_LNM, A.SUBJ_ID, B.SUBJ_LNM, A.STD_APL_YN    
+    , CRG_USER_ID, RQST_NO, RQST_SNO
+    , A.OBJ_DESCN, A.OBJ_VERS, FRS_RQST_DTM, FRS_RQST_USER_ID 
+    , RQST_DTM, RQST_USER_ID, APRV_DTM, APRV_USER_ID    
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select /* WamLdmEntyMapper.selectByPrimaryKey */
+    <include refid="Base_Column_List" />
+    from WAM_LDM_ENTY
+    where LDM_ENTY_ID = #{ldmEntyId,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="selectTop30" resultMap="BaseResultMap" parameterType="kr.wise.meta.ldm.service.WamLdmEnty">
+  SELECT /* WamLdmEntyMapper.selectTop30 */
+  	* 
+  FROM (  
+		SELECT 
+		    <include refid="Base_Column_List3" />, A.REG_TYP_CD
+		             FROM WAM_LDM_ENTY A
+             LEFT OUTER JOIN WAA_SUBJ B
+             ON A.SUBJ_ID = B.SUBJ_ID
+             ANd B.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+             AND B.REG_TYP_CD IN ('C', 'U')
+     		WHERE  A.REG_TYP_CD IN ('C', 'U')
+		     ORDER BY A.RQST_DTM DESC
+	     )
+  <![CDATA[
+	WHERE ROWNUM <= 30
+  ]]>
+  </select>
+  
+  <select id="selectList" resultMap="BaseResultMap" parameterType="kr.wise.meta.ldm.service.WamLdmEnty" >
+    SELECT /* WamLdmEntyMapper.selectList */
+          <include refid="Base_Column_List3" />
+    	, B.SYS_AREA_ID
+    	, B.SUBJ_LVL
+    	, B.FULL_PATH    	
+    	, GET_USER_NM(A.CRG_USER_ID) AS CRG_USER_NM
+    	, GET_USER_NM(A.FRS_RQST_USER_ID) AS FRS_RQST_USER_NM
+    	, GET_USER_NM(A.RQST_USER_ID) AS RQST_USER_NM
+    	, GET_USER_NM(A.APRV_USER_ID) AS APRV_USER_NM     	
+    	, #{rqstDcd,jdbcType=VARCHAR}   AS RQST_DCD
+    	<choose>
+    		<when test='rqstDcd == "DD" '>
+    			, 'D'  AS REG_TYP_CD     
+    		</when>    			
+    		<otherwise>
+    			, A.REG_TYP_CD
+    		</otherwise>
+    	</choose>    	    	
+    FROM WAM_LDM_ENTY A
+         LEFT JOIN WAA_SUBJ B
+           ON B.EXP_DTM = STR_TO_DATE('9999-12-31','%Y-%m-%d')
+          AND B.REG_TYP_CD IN ('C','U') 
+          AND B.SUBJ_ID = A.SUBJ_ID
+      <if test="ldmAttrLnm != null" >
+          INNER JOIN  
+          (SELECT LDM_ENTY_ID 
+             FROM WAM_LDM_ATTR
+             WHERE  (LDM_ATTR_LNM LIKE '%'||#{ldmAttrLnm,jdbcType=VARCHAR}||'%' OR LDM_ATTR_PNM LIKE '%'||UPPER(#{ldmAttrLnm,jdbcType=VARCHAR}) ||'%')
+             GROUP BY LDM_ENTY_ID
+           ) G
+		   ON G.LDM_ENTY_ID = A.LDM_ENTY_ID
+      </if>
+			
+    WHERE 1 = 1	 	
+	  <if test="ldmEntyId != null" >
+        AND A.LDM_ENTY_ID = #{ldmEntyId,jdbcType=VARCHAR}
+      </if>
+      <if test="ldmEntyLnm != null" >
+        AND A.LDM_ENTY_LNM LIKE  '%'||UPPER(#{ldmEntyLnm,jdbcType=VARCHAR})||'%' 
+      </if>
+      <if test="subjLnm != null" >
+        AND B.FULL_PATH LIKE '%'||#{subjLnm,jdbcType=VARCHAR}||'%'
+      </if>      
+      <if test="stdAplYn != null" >
+        AND A.STD_APL_YN = #{stdAplYn,jdbcType=VARCHAR}
+      </if>
+      
+      <if test="fullPath != null">
+        AND A.FULL_PATH LIKE '%'||#{fullPath,jdbcType=VARCHAR}||'%'
+      </if>
+    
+    ORDER BY A.FULL_PATH
+           , A.LDM_ENTY_LNM 
+  </select>
+
+  <select id="selectHist" resultMap="BaseResultMap" parameterType="kr.wise.meta.ldm.service.WamLdmEnty" >
+SELECT	/* WamLdmEntyMapper.selectHist */
+      <include refid="Base_Column_List3" />
+    	, B.SYS_AREA_ID
+    	, B.SUBJ_LVL
+    	, B.FULL_PATH
+    	, A.REG_TYP_CD
+    	, GET_USER_NM(A.CRG_USER_ID) AS CRG_USER_NM
+    	, GET_USER_NM(A.FRS_RQST_USER_ID) AS FRS_RQST_USER_NM
+    	, GET_USER_NM(A.RQST_USER_ID) AS RQST_USER_NM
+    	, GET_USER_NM(A.APRV_USER_ID) AS APRV_USER_NM
+    	, A.STR_DTM
+    	, A.EXP_DTM
+    FROM WAH_LDM_ENTY A
+		    LEFT OUTER JOIN WAA_SUBJ B
+				    ON B.EXP_DTM = STR_TO_DATE('99991231','%Y%m%d')
+				    AND B.REG_TYP_CD IN ('C', 'U')
+				    AND A.SUBJ_ID = B.SUBJ_ID
+       <if test="ldmAttrLnm != null" >
+	          INNER JOIN  (SELECT LDM_ENTY_ID AS TBL_ID 
+	                                 FROM WAM_LDM_ATTR
+	                               WHERE  (LDM_ATTR_LNM LIKE '%'||#{ldmAttrLnm,jdbcType=VARCHAR}||'%' OR LDM_ATTR_PNM LIKE '%'||UPPER(#{ldmAttrLnm,jdbcType=VARCHAR}) ||'%')
+	                              GROUP BY LDM_ENTY_ID) G
+				ON A.LDM_ENTY_ID = G.TBL_ID
+      </if>
+    <where>
+		A.REG_TYP_CD LIKE                                                                         
+				CASE #{regTypCd} WHEN 'U' THEN 'U'                                                                               
+				                                WHEN 'C' THEN 'C'                                                                       
+		    		                            WHEN 'D' THEN 'D'                                                                       
+												WHEN 'ALL' THEN '%%' END       
+      <if test="sysAreaId != null" >
+        AND B.SYS_AREA_ID = #{sysAreaId,jdbcType=VARCHAR}
+      </if>
+       <if test="ldmEntyLnm != null" >
+        AND (A.LDM_ENTY_PNM LIKE  '%'||UPPER(#{ldmEntyLnm,jdbcType=VARCHAR})||'%' OR A.LDM_ENTY_LNM LIKE  '%'||#{ldmEntyLnm,jdbcType=VARCHAR}||'%')
+      </if>
+       <if test="ldmEntyId != null" >
+        AND A.LDM_ENTY_ID = #{ldmEntyId,jdbcType=VARCHAR}
+      </if>
+      <if test="subjLnm != null" >
+        AND (B.FULL_PATH LIKE '%'||#{subjLnm,jdbcType=VARCHAR}||'%')
+      </if>
+      <if test="searchBgnDe != null and searchEndDe != null and searchBgnDe != '' and searchEndDe != '' " >
+			AND (FORMAT(A.STR_DTM , '%Y-%m-%d') BETWEEN #{searchBgnDe} AND #{searchEndDe})
+      </if>
+    </where>
+    ORDER BY B.SYS_AREA_ID, B.FULL_PATH, A.LDM_ENTY_LNM,A.LDM_ENTY_ID DESC,A.OBJ_VERS DESC, A.STR_DTM DESC
+  </select>
+
+  <select id="selectStatHisTbl" resultMap="BaseResultMap" parameterType="kr.wise.meta.ldm.service.WamLdmEnty" >
+	SELECT	/* WamLdmEntyMapper.selectStatHisTbl */
+	       A.OBJ_VERS
+	     , FORMAT(A.STR_DTM,'%Y-%m-%d hh24:mi:ss') AS STR_DTM
+	     , A.LDM_ENTY_PNM
+	     , A.LDM_ENTY_LNM
+	     , B.SUBJ_LNM
+	  FROM WAH_LDM_ENTY A
+	  LEFT OUTER JOIN WAA_SUBJ B
+ 	    ON A.SUBJ_ID = B.SUBJ_ID
+ 	   AND B.REG_TYP_CD IN ('C', 'U')
+ 	   AND B.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	 WHERE A.LDM_ENTY_ID = #{ldmEntyId,jdbcType=VARCHAR}
+	 ORDER BY A.EXP_DTM DESC, A.STR_DTM DESC
+  </select>
+
+  <select id="selectHisTbl" resultMap="BaseResultMap" parameterType="kr.wise.meta.ldm.service.WamLdmEnty" >
+	   SELECT /* WamLdmEntyMapper.selectHisTbl */
+	   		A.STR_DTM
+			, A.EXP_DTM
+			, A.OBJ_VERS
+			, GET_USER_NM(A.CRG_USER_ID) AS CRG_USER_NM
+	    	, GET_USER_NM(A.FRS_RQST_USER_ID) AS FRS_RQST_USER_NM
+	    	, GET_USER_NM(A.RQST_USER_ID) AS RQST_USER_NM
+	    	, GET_USER_NM(A.APRV_USER_ID) AS APRV_USER_NM
+			, A.FRS_RQST_DTM
+			, A.RQST_DTM
+			, A.APRV_DTM 			
+			, A.LDM_ENTY_LNM
+			, A.STD_APL_YN
+			, A.REG_TYP_CD
+			, A.OBJ_VERS 		
+			, A.OBJ_DESCN
+			, B.FULL_PATH 
+	        , C.SUBJ_LNM AS UPP_SUBJ_LNM
+			, B.SUBJ_LNM
+			, CASE WHEN A.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d') AND A.REG_TYP_CD IN ('C', 'U') THEN '#0000FF'
+			  ELSE NULL END AS FontColor
+	     FROM WAH_LDM_ENTY A
+		      LEFT JOIN WAA_SUBJ B 
+	            ON B.EXP_DTM = STR_TO_DATE('99991231','%Y%m%d')
+		       AND B.REG_TYP_CD IN ('C', 'U')
+		       AND B.SUBJ_ID = A.SUBJ_ID
+		      LEFT JOIN WAA_SUBJ C -- 바로 한단계 상위의 서브젝트명 
+		        ON C.EXP_DTM = STR_TO_DATE('99991231','%Y%m%d')
+	           AND C.REG_TYP_CD IN ('C', 'U')
+	           AND C.SUBJ_ID = B.UPP_SUBJ_ID 
+	    WHERE A.LDM_ENTY_ID = #{ldmEntyId,jdbcType=VARCHAR}
+	    ORDER BY A.EXP_DTM DESC
+	           , A.STR_DTM DESC
+  </select>
+
+  <select id="selectIdxCol" resultMap="BaseResultMap" parameterType="kr.wise.meta.ldm.service.WamLdmEnty" >
+SELECT	/* WamLdmEntyMapper.selectIdxCol */
+	  B.UPP_SUBJ_LNM
+	, B.SUBJ_LNM
+	, A.LDM_ENTY_LNM
+FROM
+      WAH_LDM_ENTY A
+   LEFT OUTER JOIN
+      (SELECT C.SUBJ_ID, C.SUBJ_LNM, D.SUBJ_LNM AS UPP_SUBJ_LNM  FROM WAA_SUBJ C LEFT OUTER JOIN WAA_SUBJ D ON C.UPP_SUBJ_ID = D.SUBJ_ID) B
+   ON
+      A.SUBJ_ID = B.SUBJ_ID
+WHERE 
+      A.LDM_ENTY_ID = #{ldmEntyId,jdbcType=VARCHAR}
+ORDER BY
+      A.STR_DTM
+  </select>
+  
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete /* WamLdmEntyMapper.deleteByPrimaryKey */
+    from WAM_LDM_ENTY
+    where LDM_ENTY_ID = #{ldmEntyId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="kr.wise.meta.ldm.service.WamLdmEnty" >
+    insert /* WamLdmEntyMapper.insert */
+    into WAM_LDM_ENTY (LDM_ENTY_ID, LDM_ENTY_PNM, LDM_ENTY_LNM, 
+      SUBJ_ID, STD_APL_YN, PART_TBL_YN, 
+      DW_TRG_TBL_YN, CRG_USER_ID, RQST_NO, 
+      RQST_SNO, OBJ_DESCN, OBJ_VERS, 
+      REG_TYP_CD, FRS_RQST_DTM, FRS_RQST_USER_ID, 
+      RQST_DTM, RQST_USER_ID, APRV_DTM, 
+      APRV_USER_ID, CTD_FCY, DEL_CRI, 
+      DEL_MTD, BCK_FCY)
+    values (#{ldmEntyId,jdbcType=VARCHAR}, #{ldmEntyPnm,jdbcType=VARCHAR}, #{ldmEntyLnm,jdbcType=VARCHAR}, 
+      #{subjId,jdbcType=VARCHAR}, #{stdAplYn,jdbcType=VARCHAR}, #{partTblYn,jdbcType=VARCHAR}, 
+      #{dwTrgTblYn,jdbcType=VARCHAR}, #{crgUserId,jdbcType=VARCHAR}, #{rqstNo,jdbcType=VARCHAR}, 
+      #{rqstSno,jdbcType=DECIMAL}, #{objDescn,jdbcType=VARCHAR}, #{objVers,jdbcType=DECIMAL}, 
+      #{regTypCd,jdbcType=VARCHAR}, #{frsRqstDtm,jdbcType=DATE}, #{frsRqstUserId,jdbcType=VARCHAR}, 
+      #{rqstDtm,jdbcType=DATE}, #{rqstUserId,jdbcType=VARCHAR}, #{aprvDtm,jdbcType=DATE}, 
+      #{aprvUserId,jdbcType=VARCHAR}, #{ctdFcy,jdbcType=VARCHAR}, #{delCri,jdbcType=VARCHAR}, 
+      #{delMtd,jdbcType=VARCHAR}, #{bckFcy,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="kr.wise.meta.ldm.service.WamLdmEnty" >
+    insert /* WamLdmEntyMapper.insertSelective */
+    into WAM_LDM_ENTY
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="ldmEntyId != null" >
+        LDM_ENTY_ID,
+      </if>
+      <if test="ldmEntyPnm != null" >
+        LDM_ENTY_PNM,
+      </if>
+      <if test="ldmEntyLnm != null" >
+        LDM_ENTY_LNM,
+      </if>
+      <if test="subjId != null" >
+        SUBJ_ID,
+      </if>
+      <if test="stdAplYn != null" >
+        STD_APL_YN,
+      </if>
+      <if test="partTblYn != null" >
+        PART_TBL_YN,
+      </if>
+      <if test="dwTrgTblYn != null" >
+        DW_TRG_TBL_YN,
+      </if>
+      <if test="crgUserId != null" >
+        CRG_USER_ID,
+      </if>
+      <if test="rqstNo != null" >
+        RQST_NO,
+      </if>
+      <if test="rqstSno != null" >
+        RQST_SNO,
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN,
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS,
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD,
+      </if>
+      <if test="frsRqstDtm != null" >
+        FRS_RQST_DTM,
+      </if>
+      <if test="frsRqstUserId != null" >
+        FRS_RQST_USER_ID,
+      </if>
+      <if test="rqstDtm != null" >
+        RQST_DTM,
+      </if>
+      <if test="rqstUserId != null" >
+        RQST_USER_ID,
+      </if>
+      <if test="aprvDtm != null" >
+        APRV_DTM,
+      </if>
+      <if test="aprvUserId != null" >
+        APRV_USER_ID,
+      </if>
+      <if test="ctdFcy != null" >
+        CTD_FCY,
+      </if>
+      <if test="delCri != null" >
+        DEL_CRI,
+      </if>
+      <if test="delMtd != null" >
+        DEL_MTD,
+      </if>
+      <if test="bckFcy != null" >
+        BCK_FCY,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="ldmEntyId != null" >
+        #{ldmEntyId,jdbcType=VARCHAR},
+      </if>
+      <if test="ldmEntyPnm != null" >
+        #{ldmEntyPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="ldmEntyLnm != null" >
+        #{ldmEntyLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="subjId != null" >
+        #{subjId,jdbcType=VARCHAR},
+      </if>
+      <if test="stdAplYn != null" >
+        #{stdAplYn,jdbcType=VARCHAR},
+      </if>
+      <if test="partTblYn != null" >
+        #{partTblYn,jdbcType=VARCHAR},
+      </if>
+      <if test="dwTrgTblYn != null" >
+        #{dwTrgTblYn,jdbcType=VARCHAR},
+      </if>
+      <if test="crgUserId != null" >
+        #{crgUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstNo != null" >
+        #{rqstNo,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstSno != null" >
+        #{rqstSno,jdbcType=DECIMAL},
+      </if>
+      <if test="objDescn != null" >
+        #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null" >
+        #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="frsRqstDtm != null" >
+        #{frsRqstDtm,jdbcType=DATE},
+      </if>
+      <if test="frsRqstUserId != null" >
+        #{frsRqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDtm != null" >
+        #{rqstDtm,jdbcType=DATE},
+      </if>
+      <if test="rqstUserId != null" >
+        #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDtm != null" >
+        #{aprvDtm,jdbcType=DATE},
+      </if>
+      <if test="aprvUserId != null" >
+        #{aprvUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="ctdFcy != null" >
+        #{ctdFcy,jdbcType=VARCHAR},
+      </if>
+      <if test="delCri != null" >
+        #{delCri,jdbcType=VARCHAR},
+      </if>
+      <if test="delMtd != null" >
+        #{delMtd,jdbcType=VARCHAR},
+      </if>
+      <if test="bckFcy != null" >
+        #{bckFcy,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.meta.ldm.service.WamLdmEnty" >
+    update /* WamLdmEntyMapper.updateByPrimaryKeySelective */
+    WAM_LDM_ENTY
+    <set >
+      <if test="ldmEntyPnm != null" >
+        LDM_ENTY_PNM = #{ldmEntyPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="ldmEntyLnm != null" >
+        LDM_ENTY_LNM = #{ldmEntyLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="subjId != null" >
+        SUBJ_ID = #{subjId,jdbcType=VARCHAR},
+      </if>
+      <if test="stdAplYn != null" >
+        STD_APL_YN = #{stdAplYn,jdbcType=VARCHAR},
+      </if>
+      <if test="partTblYn != null" >
+        PART_TBL_YN = #{partTblYn,jdbcType=VARCHAR},
+      </if>
+      <if test="dwTrgTblYn != null" >
+        DW_TRG_TBL_YN = #{dwTrgTblYn,jdbcType=VARCHAR},
+      </if>
+      <if test="crgUserId != null" >
+        CRG_USER_ID = #{crgUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstNo != null" >
+        RQST_NO = #{rqstNo,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstSno != null" >
+        RQST_SNO = #{rqstSno,jdbcType=DECIMAL},
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="frsRqstDtm != null" >
+        FRS_RQST_DTM = #{frsRqstDtm,jdbcType=DATE},
+      </if>
+      <if test="frsRqstUserId != null" >
+        FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDtm != null" >
+        RQST_DTM = #{rqstDtm,jdbcType=DATE},
+      </if>
+      <if test="rqstUserId != null" >
+        RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDtm != null" >
+        APRV_DTM = #{aprvDtm,jdbcType=DATE},
+      </if>
+      <if test="aprvUserId != null" >
+        APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="ctdFcy != null" >
+        CTD_FCY = #{ctdFcy,jdbcType=VARCHAR},
+      </if>
+      <if test="delCri != null" >
+        DEL_CRI = #{delCri,jdbcType=VARCHAR},
+      </if>
+      <if test="delMtd != null" >
+        DEL_MTD = #{delMtd,jdbcType=VARCHAR},
+      </if>
+      <if test="bckFcy != null" >
+        BCK_FCY = #{bckFcy,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where LDM_ENTY_ID = #{ldmEntyId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="kr.wise.meta.ldm.service.WamLdmEnty" >
+    update /* WamLdmEntyMapper.updateByPrimaryKey */
+    WAM_LDM_ENTY
+    set LDM_ENTY_PNM = #{ldmEntyPnm,jdbcType=VARCHAR},
+      LDM_ENTY_LNM = #{ldmEntyLnm,jdbcType=VARCHAR},
+      SUBJ_ID = #{subjId,jdbcType=VARCHAR},
+      STD_APL_YN = #{stdAplYn,jdbcType=VARCHAR},
+      PART_TBL_YN = #{partTblYn,jdbcType=VARCHAR},
+      DW_TRG_TBL_YN = #{dwTrgTblYn,jdbcType=VARCHAR},
+      CRG_USER_ID = #{crgUserId,jdbcType=VARCHAR},
+      RQST_NO = #{rqstNo,jdbcType=VARCHAR},
+      RQST_SNO = #{rqstSno,jdbcType=DECIMAL},
+      OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      FRS_RQST_DTM = #{frsRqstDtm,jdbcType=DATE},
+      FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR},
+      RQST_DTM = #{rqstDtm,jdbcType=DATE},
+      RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      APRV_DTM = #{aprvDtm,jdbcType=DATE},
+      APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR},
+      CTD_FCY = #{ctdFcy,jdbcType=VARCHAR},
+      DEL_CRI = #{delCri,jdbcType=VARCHAR},
+      DEL_MTD = #{delMtd,jdbcType=VARCHAR},
+      BCK_FCY = #{bckFcy,jdbcType=VARCHAR}
+    where LDM_ENTY_ID = #{ldmEntyId,jdbcType=VARCHAR}
+  </update>
+  
+  
+      <select id="selectPdmTblCount" resultMap="totcntmap" parameterType="java.lang.String">
+      <![CDATA[       
+      SELECT /* WamLdmEntyMapper.selectPdmTblCount */
+      	A.*
+     , CASE WHEN A.USER_ID IS NOT NULL THEN 'AUTH'
+       ELSE 'NOTAUTH' END AS AUTH
+  FROM (
+        SELECT TBL1.TERM_TYPE_NM AS CNT_NAME
+             , FORMAT(MAX(CUR_CNT),0) AS TOT_CNT
+             , TBL1.PAGE
+             , MAX(U.USER_ID) AS USER_ID
+          FROM 
+               (SELECT '표준단어' AS TERM_TYPE_NM
+                     , '2' AS TERM_TYPE
+                     , COUNT(1) AS CUR_CNT
+                     , '/meta/stnd/stwd_lst.do' AS PAGE
+                  FROM WAM_STWD
+                 WHERE 1=1
+                 UNION ALL
+                SELECT '유사어' AS TERM_TYPE_NM
+                     , '1' AS TERM_TYPE 
+                     , COUNT(1) AS CUR_CNT
+                     , '/meta/stnd/symn_lst.do' AS PAGE
+                  FROM WAM_SYMN A 
+                 --INNER JOIN WAM_STWD B
+                    --ON A.STWD_ID = B.STWD_ID    -- 20151005 이상익 수정
+                    --ON A.SBSWD_LNM = B.STWD_LNM
+                   --AND A.SBSWD_PNM = B.STWD_PNM 
+                 WHERE 1=1
+                   AND A.SYMN_DCD != 'NT'
+                 UNION ALL
+                SELECT '도메인' AS TERM_TYPE_NM
+                     , 'DMIS' AS TERM_TYPE
+                     , COUNT(1) AS CUR_CNT
+                     , '/meta/stnd/dmn_lst.do' AS PAGE
+                  FROM WAM_DMN A 
+                 INNER JOIN WAA_DMNG B
+                    ON A.DMNG_ID = B.DMNG_ID
+                   AND B.EXP_DTM = STR_TO_DATE('9999-12-31','%Y-%m-%d')
+                 WHERE 1=1
+                   AND A.REG_TYP_CD IN ('C', 'U')
+                 UNION ALL
+                SELECT '도메인그룹' AS TERM_TYPE_NM
+                     , 'DMCL' AS TERM_TYPE
+                     , COUNT(1) AS CUR_CNT
+                     , '/commons/damgmt/dmnginfo/dmng_lst.do' AS PAGE
+                  FROM WAA_DMNG
+                 WHERE 1=1
+                   AND EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+                 UNION ALL
+                SELECT '인포타입' AS TERM_TYPE_NM
+                     , 'INFO' AS TERM_TYPE
+                     , COUNT(1) AS CUR_CNT
+                     , '/commons/damgmt/dmnginfo/infotp_lst.do' AS PAGE
+                  FROM WAA_INFO_TYPE
+                 WHERE 1=1
+                   AND EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+                 UNION ALL
+                SELECT '표준항목' AS TERM_TYPE_NM
+                     , '3' AS TERM_TYPE
+                     , COUNT(1) AS CUR_CNT
+                     , '/meta/stnd/sditm_lst.do' AS PAGE
+                  FROM WAM_SDITM A 
+                 INNER JOIN WAM_DMN B
+                    ON A.DMN_ID = B.DMN_ID
+                   AND B.REG_TYP_CD IN ('C','U')
+                 WHERE 1=1
+               ) TBL1 
+         INNER JOIN WAA_PRGM_MENU A
+            ON TBL1.PAGE = A.FILE_PATH
+           AND A.REG_TYP_CD IN ('C', 'U')
+           AND A.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+         INNER JOIN WAA_USERG_MENU_AUTH B
+            ON A.MENU_ID = B.MENU_ID
+           AND B.REG_TYP_CD IN ('C', 'U')
+           AND B.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+         INNER JOIN WAA_USERG G
+            ON B.USERG_ID = G.USERG_ID
+           AND G.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+           AND G.REG_TYP_CD IN ('C', 'U')
+          LEFT OUTER JOIN WAA_USER U
+            ON G.USERG_ID = U.USERG_ID
+           AND U.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+           AND U.REG_TYP_CD IN ('C', 'U')
+           AND U.USER_ID = #{userid}
+                       
+        
+         GROUP BY TERM_TYPE_NM, PAGE
+         ORDER BY TERM_TYPE_NM DESC
+         ) A
+          ]]>
+    </select>
+    
+        <select id="selectUpdateCountStat" resultMap="udpcntmap" parameterType="java.lang.String">
+          <![CDATA[     
+          SELECT /* WamLdmEntyMapper.selectUpdateCountStat */
+          	A.*
+     , CASE WHEN A.USER_ID IS NOT NULL THEN 'AUTH'
+       ELSE 'NOTAUTH' END AS AUTH
+  FROM (
+      SELECT TERM_TYPE_NM 
+                     ,MAX(PAGE) AS PAGE
+                     ,FORMAT(MAX(CUR_CNT),0) AS CUR_CNT
+                     ,FORMAT(MAX(INS_CNT),0) AS INS_CNT
+                     ,FORMAT(MAX(UPD_CNT),0) AS UPD_CNT
+                     ,FORMAT(MAX(DEL_CNT),0) AS DEL_CNT
+                     ,MAX(U.USER_ID) AS USER_ID
+              FROM (
+              
+                    SELECT '테이블(물리)' AS TERM_TYPE_NM
+                           ,'PDM' AS TERM_TYPE
+                           ,(SELECT COUNT(*) FROM WAM_LDM_ENTY) AS CUR_CNT
+                           ,0 AS INS_CNT
+                           ,0 AS UPD_CNT
+                           ,0 AS DEL_CNT
+                           ,'/meta/model/pdmtbl_lst.do' AS PAGE
+                           FROM DUAL
+                    UNION ALL
+                    SELECT '테이블(물리)' AS TERM_TYPE_NM
+                           ,'PDM' AS TERM_TYPE
+                           --,COUNT(1) AS CUR_CNT
+                           ,MAX((SELECT COUNT(*) FROM WAM_LDM_ENTY)) AS CUR_CNT
+                           ,COUNT(CASE REG_TYP_CD WHEN 'C' 
+                                                 THEN 1
+                                                 ELSE NULL
+                                                 END
+                                 )AS INS_CNT
+                           ,COUNT(CASE REG_TYP_CD WHEN 'U' 
+                                                 THEN 1
+                                                 ELSE NULL
+                                                 END
+                                 )AS UPD_CNT
+                           ,COUNT(CASE REG_TYP_CD WHEN 'D' 
+                                                 THEN 1
+                                                 ELSE NULL
+                                                 END
+                                 )AS DEL_CNT
+                           ,'/meta/model/pdmtbl_lst.do' AS PAGE
+                    FROM WAH_LDM_ENTY
+                    WHERE 1=1
+                    AND EXP_DTM = STR_TO_DATE('99991231', '%Y%m%d')
+                    AND APRV_DTM BETWEEN NOW() -7 AND NOW()
+                    UNION ALL
+                    SELECT '컬럼(물리)' AS TERM_TYPE_NM
+                           ,'PDM' AS TERM_TYPE
+                        
+                           ,(SELECT COUNT(*) FROM WAM_LDM_ATTR) AS CUR_CNT
+                           ,0 AS INS_CNT
+                           ,0 AS UPD_CNT
+                           ,0 AS DEL_CNT
+                           ,'/meta/model/pdmtbl_lst.do' AS PAGE
+                    FROM DUAL
+                    UNION ALL
+                    SELECT '컬럼(물리)' AS TERM_TYPE_NM
+                           ,'PDM' AS TERM_TYPE
+                           --,COUNT(1) AS CUR_CNT
+                           ,MAX((SELECT COUNT(*) FROM WAM_LDM_ATTR)) AS CUR_CNT
+                           ,COUNT(CASE A.REG_TYP_CD WHEN 'C' 
+                                                   THEN 1
+                                                   ELSE NULL
+                                                   END
+                                 )AS INS_CNT
+                           ,COUNT(CASE A.REG_TYP_CD WHEN 'U' 
+                                                   THEN 1
+                                                   ELSE NULL
+                                                   END
+                                 )AS UPD_CNT
+                           ,COUNT(CASE A.REG_TYP_CD WHEN 'D' 
+                                                   THEN 1
+                                                   ELSE NULL
+                                                   END
+                                 )AS DEL_CNT
+                           ,'/meta/model/pdmtbl_lst.do' AS PAGE
+                    FROM WAH_PDM_COL A
+                    WHERE 1=1
+                    AND EXP_DTM = STR_TO_DATE('99991231', '%Y%m%d')
+                    AND APRV_DTM BETWEEN NOW() -7 AND NOW()
+                    UNION ALL
+                    SELECT '테이블(DDL)' AS TERM_TYPE_NM
+                           ,'DDL' AS TERM_TYPE
+                           ,(SELECT COUNT(*) FROM WAM_DDL_TBL) AS CUR_CNT
+                           ,0 AS INS_CNT
+                           ,0 AS UPD_CNT
+                           ,0 AS DEL_CNT
+                           ,'/meta/ddl/ddltbl_lst.do' AS PAGE
+                    FROM DUAL       
+                    UNION ALL
+                    SELECT '테이블(DDL)' AS TERM_TYPE_NM
+                           ,'DDL' AS TERM_TYPE
+                           --,COUNT(1) AS CUR_CNT
+                           ,MAX((SELECT COUNT(*) FROM WAM_DDL_TBL)) AS CUR_CNT
+                           ,COUNT(CASE REG_TYP_CD WHEN 'C' 
+                                                 THEN 1
+                                                 ELSE NULL
+                                                 END
+                                 )AS INS_CNT
+                           ,COUNT(CASE REG_TYP_CD WHEN 'U' 
+                                                 THEN 1
+                                                 ELSE NULL
+                                                 END
+                                 )AS UPD_CNT
+                           ,COUNT(CASE REG_TYP_CD WHEN 'D' 
+                                                 THEN 1
+                                                 ELSE NULL
+                                                 END
+                                 )AS DEL_CNT
+                           ,'/meta/ddl/ddltbl_lst.do' AS PAGE
+                    FROM WAH_DDL_TBL
+                    WHERE 1=1
+                    AND EXP_DTM = STR_TO_DATE('99991231', '%Y%m%d')
+                    AND APRV_DTM BETWEEN NOW() -7 AND NOW()
+                    UNION ALL
+                    SELECT '컬럼(DDL)' AS TERM_TYPE_NM
+                           ,'DDL' AS TERM_TYPE
+                           ,(SELECT COUNT(*) FROM WAM_DDL_COL) AS CUR_CNT                           
+                           ,0 AS INS_CNT
+                           ,0 AS UPD_CNT
+                           ,0 AS DEL_CNT
+                           ,'/meta/ddl/ddltbl_lst.do' AS PAGE
+                    FROM DUAL       
+                    UNION ALL
+                    SELECT '컬럼(DDL)' AS TERM_TYPE_NM
+                           ,'DDL' AS TERM_TYPE
+                           --,COUNT(1) AS CUR_CNT
+                           ,MAX((SELECT COUNT(*) FROM WAM_DDL_COL)) AS CUR_CNT                           
+                           ,COUNT(CASE REG_TYP_CD WHEN 'C' 
+                                                 THEN 1
+                                                 ELSE NULL
+                                                 END
+                                 )AS INS_CNT
+                           ,COUNT(CASE REG_TYP_CD WHEN 'U' THEN 1
+                                                 ELSE NULL
+                                                 END
+                                 )AS UPD_CNT
+                           ,COUNT(CASE REG_TYP_CD WHEN 'D' 
+                                                 THEN 1
+                                                 ELSE NULL
+                                                 END
+                                 )AS DEL_CNT
+                           ,'/meta/ddl/ddltbl_lst.do' AS PAGE
+                    FROM WAH_DDL_COL
+                    WHERE 1=1
+                    AND EXP_DTM = STR_TO_DATE('99991231', '%Y%m%d')
+                    AND APRV_DTM BETWEEN NOW() -7 AND NOW()
+                    UNION ALL
+                     SELECT '인덱스(DDL)' AS TERM_TYPE_NM
+                           ,'DDL' AS TERM_TYPE
+                           ,(SELECT COUNT(*) FROM WAM_DDL_IDX) AS CUR_CNT                           
+                           ,0 AS INS_CNT
+                           ,0 AS UPD_CNT
+                           ,0 AS DEL_CNT
+                           ,'/meta/ddl/ddlidx_lst.do' AS PAGE
+                     FROM DUAL      
+                    UNION ALL
+                    SELECT '인덱스(DDL)' AS TERM_TYPE_NM
+                           ,'DDL' AS TERM_TYPE
+                           --,COUNT(1) AS CUR_CNT
+                           ,MAX((SELECT COUNT(*) FROM WAM_DDL_IDX)) AS CUR_CNT                           
+                           ,COUNT(CASE REG_TYP_CD WHEN 'C' 
+                                                 THEN 1
+                                                 ELSE NULL
+                                                 END
+                                 )AS INS_CNT
+                           ,COUNT(CASE REG_TYP_CD WHEN 'U' 
+                                                 THEN 1
+                                                 ELSE NULL
+                                                 END
+                                 )AS UPD_CNT
+                           ,COUNT(CASE REG_TYP_CD WHEN 'D' 
+                                                 THEN 1
+                                                 ELSE NULL
+                                                 END
+                                 )AS DEL_CNT
+                           ,'/meta/ddl/ddlidx_lst.do' AS PAGE
+                    FROM WAH_DDL_IDX
+                    WHERE 1=1
+                    AND EXP_DTM = STR_TO_DATE('99991231', '%Y%m%d')
+                    AND APRV_DTM BETWEEN NOW() -7 AND NOW()
+                    UNION ALL
+                    SELECT '테이블(DBMS)' AS TERM_TYPE_NM
+                           ,'PDM' AS TERM_TYPE
+                           ,COUNT(1) AS CUR_CNT
+                           ,COUNT(CASE IFNULL(A.REG_TYP, 'C') WHEN 'C' 
+                                                 THEN 1
+                                                 ELSE NULL
+                                                 END
+                                 )AS INS_CNT
+                           ,COUNT(CASE IFNULL(A.REG_TYP, 'C') WHEN 'U' 
+                                                 THEN 1
+                                                 ELSE NULL
+                                                 END
+                                 )AS UPD_CNT
+                           ,COUNT(CASE IFNULL(A.REG_TYP, 'C') WHEN 'D' 
+                                                 THEN 1
+                                                 ELSE NULL
+                                                 END
+                                 )AS DEL_CNT
+                           ,'/meta/dbc/dbctbl_lst.do' AS PAGE
+                    FROM WAT_DBC_TBL A
+                    LEFT OUTER JOIN WAA_DB_CONN_TRG B
+                    ON A.DB_CONN_TRG_ID =B.DB_CONN_TRG_ID
+                    AND B.EXP_DTM = STR_TO_DATE('99991231', '%Y%m%d')
+                    AND B.REG_TYP_CD IN ('C', 'U')
+                    WHERE 1=1
+                    AND B.META_MNG_YN  = 'Y'
+                    UNION ALL
+                    SELECT '컬럼(DBMS)' AS TERM_TYPE_NM
+                           ,'PDM' AS TERM_TYPE
+                           ,COUNT(1) AS CUR_CNT
+                           ,COUNT(CASE IFNULL(A.REG_TYP, 'C') WHEN 'C' 
+                                                 THEN 1
+                                                 ELSE NULL
+                                                 END
+                                 )AS INS_CNT
+                           ,COUNT(CASE IFNULL(A.REG_TYP, 'C') WHEN 'U' 
+                                                 THEN 1
+                                                 ELSE NULL
+                                                 END
+                                 )AS UPD_CNT
+                           ,COUNT(CASE IFNULL(A.REG_TYP, 'C') WHEN 'D' 
+                                                 THEN 1
+                                                 ELSE NULL
+                                                 END
+                                 )AS DEL_CNT
+                           ,'/meta/dbc/dbctbl_lst.do' AS PAGE
+                    FROM WAT_DBC_COL A
+                    LEFT OUTER JOIN WAA_DB_SCH C
+                    ON A.DB_SCH_ID = C.DB_SCH_ID
+                    AND C.EXP_DTM = STR_TO_DATE('99991231', '%Y%m%d')
+                    AND C.REG_TYP_CD IN ('C', 'U')
+                    LEFT OUTER JOIN WAA_DB_CONN_TRG B
+                    ON C.DB_CONN_TRG_ID =B.DB_CONN_TRG_ID
+                    AND B.EXP_DTM = STR_TO_DATE('99991231', '%Y%m%d')
+                    AND B.REG_TYP_CD IN ('C', 'U')
+                    WHERE 1=1
+                    AND B.META_MNG_YN  = 'Y'
+                   )TBL1 
+                   INNER JOIN WAA_COMM_DTL_CD B 
+                   ON TBL1.TERM_TYPE = B.COMM_DTL_CD
+                   INNER JOIN WAA_COMM_DCD C           				  
+                               ON  B.COMM_DCD_ID = C.COMM_DCD_ID
+                               AND C.COMM_DCD ='BIZ_DCD'                           
+                               AND B.REG_TYP_CD IN ('C', 'U')
+                               AND C.REG_TYP_CD IN ('C', 'U')
+                               AND B.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+                 INNER JOIN WAA_PRGM_MENU A
+                    ON TBL1.PAGE = A.FILE_PATH
+                   AND A.REG_TYP_CD IN ('C', 'U')
+                   AND A.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+                 INNER JOIN WAA_USERG_MENU_AUTH M
+                    ON A.MENU_ID = M.MENU_ID
+                   AND M.REG_TYP_CD IN ('C', 'U')
+                   AND M.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+                 INNER JOIN WAA_USERG G
+                    ON M.USERG_ID = G.USERG_ID
+                   AND G.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+                   AND G.REG_TYP_CD IN ('C', 'U')
+                  LEFT OUTER JOIN WAA_USER U
+                    ON G.USERG_ID = U.USERG_ID
+                   AND U.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+                   AND U.REG_TYP_CD IN ('C', 'U')
+                   AND U.USER_ID = #{userid}
+              WHERE 1=1
+              GROUP BY TERM_TYPE_NM
+              ORDER BY TERM_TYPE_NM DESC ) A
+		       ]]>  
+    </select>
+    
+    
+    <select id="selectErrChart" resultMap="errChart">
+		SELECT 	/* WamLdmEntyMapper.selectErrChart */
+				IFNULL(NO_ERR, 0)AS NO_ERR
+    	      ,IFNULL(CAST(ROUND(CAST(NO_ERR AS NUMERIC(15,5)) / CAST(TOTAL AS NUMERIC(15,5)) * 100,2) AS NUMERIC(15,2)), 0) AS NO_ERR_PST       
+      	      ,IFNULL(TOTAL, 0)AS TOTAL                                                                                                                      
+        FROM (SELECT SUM(CASE WHEN  IFNULL(A.LDM_ENTY_ERR_EXS,'-') = '-'  
+  		                      THEN 1 
+          		              END
+           		        )AS NO_ERR                                              
+   	 		        ,SUM(1) AS TOTAL                                                                                                     
+	          FROM WAT_DBC_TBL A INNER JOIN (SELECT A.DB_CONN_TRG_ID,
+                 A.DB_CONN_TRG_LNM,
+                 B.DB_SCH_ID,
+                 B.DB_SCH_LNM,
+                 A.DBMS_TYP_CD,
+                 B.DDL_TRG_YN
+          
+          FROM WAA_DB_CONN_TRG A INNER JOIN WAA_DB_SCH B
+          ON A.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+          AND B.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+          AND A.REG_TYP_CD IN ('C', 'U')
+          AND B.REG_TYP_CD IN ('C', 'U')
+          AND A.DB_CONN_TRG_ID = B.DB_CONN_TRG_ID) B
+	      ON A.DB_SCH_ID = B.DB_SCH_ID
+          AND A.DB_CONN_TRG_ID = B.DB_CONN_TRG_ID
+             )
+    </select>
+
+    
+    <select id="selectDeptStandardChart" resultMap="standardList">
+    
+   <![CDATA[
+	 SELECT /* WamLdmEntyMapper.selectDeptStandardChart */
+	 		A.SUBJ_ROOT_NM AS SUBJ_NM
+          , SUM(CNT)       AS CNT
+          , SUM(A.CNT_Y)   AS CNT_Y
+          , SUM(A.CNT_N)   AS CNT_N
+          , ROUND((SUM(A.CNT_Y) / SUM(A.CNT)*100),1) AS STDRATE
+       FROM (
+              SELECT REGEXP_SUBSTR(A.FULL_PATH,'[^>]+',1,2) AS SUBJ_ROOT_NM
+                   , A.SUBJ_ID                   
+                   , A.CNT
+                   , A.CNT_Y
+                   , A.CNT_N
+                FROM (SELECT T.SUBJ_ID AS SUBJ_ID
+                           , T.FULL_PATH                          
+                           , SUM(1) AS CNT
+                           , SUM(CASE WHEN T.STD_APL_YN  = 'Y' THEN 1 END) AS CNT_Y
+                           , SUM(CASE WHEN T.STD_APL_YN  = 'N' OR STD_APL_YN IS NULL THEN 1 END) AS CNT_N
+                        FROM WAM_LDM_ENTY T
+                             INNER JOIN V_WAA_SUBJ S
+                                ON T.SUBJ_ID = S.SUBJ_ID
+                               AND T.STND_ASRT = S.STND_ASRT
+                       WHERE T.REG_TYP_CD IN ('C','U')
+                       GROUP BY T.SUBJ_ID
+                              , T.FULL_PATH 
+                    ) A
+            ) A 
+      GROUP BY A.SUBJ_ROOT_NM
+    	]]>
+    </select>
+    <select id="selectListForDdlCU" resultMap="BaseResultMap" parameterType="kr.wise.meta.ldm.service.WamLdmEnty" >
+    select /* WamLdmEntyMapper.selectListForDdlCU */
+    		B.SYS_AREA_ID
+           , B.FULL_PATH
+           , B.SUBJ_ID
+		   , B.SUBJ_LNM		  
+		   , A.LDM_ENTY_ID
+		   , A.LDM_ENTY_PNM
+		   , A.LDM_ENTY_LNM
+		   , A.STD_APL_YN
+		   , A.PART_TBL_YN
+		   , A.DW_TRG_TBL_YN
+		   , A.CRG_USER_ID
+		   , A.OBJ_DESCN
+    	   , ( CASE WHEN A.LDM_ENTY_ID IS NOT NULL THEN (CASE WHEN C.LDM_ENTY_ID IS NOT NULL THEN 'U' ELSE 'C' END) END ) AS REG_TYP_CD
+    	   , E.DB_CONN_TRG_ID
+    	   , E.DB_CONN_TRG_PNM
+    	   , D.DB_SCH_ID
+    	   , D.DB_SCH_PNM
+    	   , A.APRV_DTM 
+       FROM WAM_LDM_ENTY A
+            LEFT JOIN WAA_SUBJ B
+              ON A.SUBJ_ID = B.SUBJ_ID
+             AND B.REG_TYP_CD IN ('C', 'U')
+   		     AND B.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+            LEFT JOIN WAM_DDL_TBL C
+              ON C.LDM_ENTY_ID = A.LDM_ENTY_ID
+             AND C.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR} 
+             AND C.DDL_TRG_DCD = 'D' 
+            LEFT JOIN WAA_DB_SCH D 
+              ON D.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')      
+             AND D.REG_TYP_CD IN ('C', 'U')         
+             AND D.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+            LEFT JOIN WAA_DB_CONN_TRG E
+              ON E.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')  
+             AND E.DB_CONN_TRG_ID = D.DB_CONN_TRG_ID  
+    WHERE 1 = 1 
+		<if test="ldmEntyId != null" >
+		AND A.LDM_ENTY_ID = #{ldmEntyId,jdbcType=VARCHAR}
+		</if>
+		<if test="ldmEntyLnm != null" >
+		AND (A.LDM_ENTY_PNM LIKE  '%'||UPPER(#{ldmEntyLnm,jdbcType=VARCHAR})||'%' OR A.LDM_ENTY_LNM LIKE  '%'||#{ldmEntyLnm,jdbcType=VARCHAR}||'%')
+		</if>
+		<if test="subjLnm != null" >
+		AND (B.FULL_PATH LIKE '%'||#{subjLnm,jdbcType=VARCHAR}||'%')
+		</if>
+		<if test="sysAreaId != null" >
+		AND B.SYS_AREA_ID = #{sysAreaId,jdbcType=VARCHAR}
+		</if>
+		<if test="subjId != null" >
+		AND A.SUBJ_ID = #{subjId,jdbcType=VARCHAR}
+		</if>
+		<if test="stdAplYn != null" >
+		AND A.STD_APL_YN  = #{stdAplYn,jdbcType=VARCHAR}
+		</if>
+		
+    ORDER BY A.APRV_DTM DESC 
+           , A.FULL_PATH
+           , A.LDM_ENTY_PNM  
+    
+  </select>
+  
+  <select id="selectListForDdlD" resultMap="BaseResultMap" parameterType="kr.wise.meta.ldm.service.WamLdmEnty" >
+      SELECT /* WamLdmEntyMapper.selectListForDdlD */
+      		B.SYS_AREA_ID
+           , B.FULL_PATH
+           , B.SUBJ_ID
+		   , B.SUBJ_LNM
+		   , A.LDM_ENTY_ID
+		   , E.DB_CONN_TRG_PNM
+		   , D.DB_SCH_PNM
+		   , C.DDL_TBL_PNM AS LDM_ENTY_PNM
+		   , C.DDL_TBL_LNM AS LDM_ENTY_LNM
+		   , A.STD_APL_YN
+		   , A.PART_TBL_YN
+		   , A.DW_TRG_TBL_YN
+		   , A.CRG_USER_ID
+		   , A.OBJ_DESCN
+    	   , 'D'  AS REG_TYP_CD
+    	   , 'DD' AS RQST_DCD 
+       FROM WAM_DDL_TBL C
+            LEFT JOIN WAH_LDM_ENTY A
+              ON A.LDM_ENTY_ID = C.LDM_ENTY_ID
+             AND A.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+            LEFT JOIN WAA_SUBJ B
+              ON A.SUBJ_ID = B.SUBJ_ID
+             AND B.REG_TYP_CD IN ('C', 'U')
+   		     AND B.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+   		    LEFT JOIN WAA_DB_SCH D
+              ON D.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d') 
+             AND D.REG_TYP_CD IN ('C', 'U')
+   		     AND D.DB_SCH_ID = C.DB_SCH_ID
+   		    LEFT JOIN WAA_DB_CONN_TRG E
+              ON E.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d') 
+             AND E.REG_TYP_CD IN ('C', 'U')
+   		     AND E.DB_CONN_TRG_ID = D.DB_CONN_TRG_ID   
+      WHERE 1 = 1
+        AND C.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+        <!-- 
+        AND NOT EXISTS (SELECT 1
+                          FROM WAM_LDM_ENTY X
+                         WHERE X.LDM_ENTY_ID = C.LDM_ENTY_ID
+                       )
+         -->                 
+		<if test="ldmEntyId != null" >
+		AND A.LDM_ENTY_ID = #{ldmEntyId,jdbcType=VARCHAR}
+		</if>
+		<if test="ldmEntyLnm != null" >
+		AND (A.LDM_ENTY_PNM LIKE  '%'||UPPER(#{ldmEntyLnm,jdbcType=VARCHAR})||'%' OR A.LDM_ENTY_LNM LIKE  '%'||#{ldmEntyLnm,jdbcType=VARCHAR}||'%')
+		</if>
+		<if test="subjLnm != null" >
+		AND (B.FULL_PATH LIKE '%'||#{subjLnm,jdbcType=VARCHAR}||'%')
+		</if>
+		<if test="sysAreaId != null" >
+		AND B.SYS_AREA_ID = #{sysAreaId,jdbcType=VARCHAR}
+		</if>
+		<if test="subjId != null" >
+		AND A.SUBJ_ID = #{subjId,jdbcType=VARCHAR}
+		</if>
+		<if test="stdAplYn != null" >
+		AND A.STD_APL_YN  = #{stdAplYn,jdbcType=VARCHAR}
+		</if>  
+  </select>
+    
+</mapper>

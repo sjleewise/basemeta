@@ -1,0 +1,1029 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.meta.ddl.service.WaqDdlColMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.meta.ddl.service.WaqDdlCol" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap" >
+    <id column="RQST_NO" property="rqstNo" jdbcType="VARCHAR" />
+    <id column="RQST_SNO" property="rqstSno" jdbcType="DECIMAL" />
+    <id column="RQST_DTL_SNO" property="rqstDtlSno" jdbcType="DECIMAL" />
+    <result column="DDL_COL_ID" property="ddlColId" jdbcType="VARCHAR" />
+    <result column="DDL_COL_PNM" property="ddlColPnm" jdbcType="VARCHAR" />
+    <result column="DDL_COL_LNM" property="ddlColLnm" jdbcType="VARCHAR" />
+    <result column="BF_DDL_COL_PNM" property="bfDdlColPnm" jdbcType="VARCHAR" />
+<!--     <result column="RQST_DCD" property="rqstDcd" jdbcType="VARCHAR" /> -->
+<!--     <result column="VRF_CD" property="vrfCd" jdbcType="VARCHAR" /> -->
+<!--     <result column="VRF_RMK" property="vrfRmk" jdbcType="VARCHAR" /> -->
+    <result column="DDL_TBL_ID" property="ddlTblId" jdbcType="VARCHAR" />
+    <result column="DDL_TBL_PNM" property="ddlTblPnm" jdbcType="VARCHAR" />
+    <result column="COL_ORD" property="colOrd" jdbcType="DECIMAL" />
+    <result column="DATA_TYPE" property="dataType" jdbcType="VARCHAR" />
+    <result column="DATA_LEN" property="dataLen" jdbcType="DECIMAL" />
+    <result column="DATA_SCAL" property="dataScal" jdbcType="DECIMAL" />
+    <result column="PK_YN" property="pkYn" jdbcType="VARCHAR" />
+    <result column="PK_ORD" property="pkOrd" jdbcType="DECIMAL" />
+    <result column="FK_YN" property="fkYn" jdbcType="VARCHAR" />
+    <result column="AK_YN" property="akYn" jdbcType="VARCHAR" />
+    <result column="NONUL_YN" property="nonulYn" jdbcType="VARCHAR" />
+    <result column="DEFLT_VAL" property="defltVal" jdbcType="VARCHAR" />
+    <result column="COL_UPD_YN" property="colUpdYn" jdbcType="VARCHAR" />
+    <result column="DATA_TYPE_UPD_YN" property="dataTypeUpdYn" jdbcType="VARCHAR" />
+    <result column="NONUL_UPD_YN" property="nonulUpdYn" jdbcType="VARCHAR" />
+    <result column="DEFLT_VAL_UPD_YN" property="defltValUpdYn" jdbcType="VARCHAR" />
+    <result column="ENC_YN" property="encYn" jdbcType="VARCHAR" />
+<!--     <result column="OBJ_DESCN" property="objDescn" jdbcType="VARCHAR" /> -->
+<!--     <result column="OBJ_VERS" property="objVers" jdbcType="DECIMAL" /> -->
+<!--     <result column="REG_TYP_CD" property="regTypCd" jdbcType="VARCHAR" /> -->
+<!--     <result column="FRS_RQST_DTM" property="frsRqstDtm" jdbcType="TIMESTAMP" /> -->
+<!--     <result column="FRS_RQST_USER_ID" property="frsRqstUserId" jdbcType="VARCHAR" /> -->
+<!--     <result column="RQST_DTM" property="rqstDtm" jdbcType="TIMESTAMP" /> -->
+<!--     <result column="RQST_USER_ID" property="rqstUserId" jdbcType="VARCHAR" /> -->
+<!--     <result column="APRV_DTM" property="aprvDtm" jdbcType="TIMESTAMP" /> -->
+<!--     <result column="APRV_USER_ID" property="aprvUserId" jdbcType="VARCHAR" /> -->
+  </resultMap>
+  <sql id="Base_Column_List" >
+    A.RQST_NO, A.RQST_SNO, A.RQST_DTL_SNO, A.DDL_COL_ID, A.DDL_COL_PNM, A.DDL_COL_LNM, A.BF_DDL_COL_PNM, 
+    A.RQST_DCD, A.VRF_CD, A.VRF_RMK, A.DDL_TBL_ID, A.DDL_TBL_PNM, A.COL_ORD, A.DATA_TYPE, A.DATA_LEN, 
+    A.DATA_SCAL, A.PK_YN, A.PK_ORD, A.FK_YN, A.AK_YN, A.NONUL_YN, A.DEFLT_VAL, A.COL_UPD_YN, A.DATA_TYPE_UPD_YN, A.NONUL_UPD_YN, 
+    A.DEFLT_VAL_UPD_YN, A.OBJ_DESCN, A.OBJ_VERS, A.REG_TYP_CD, A.FRS_RQST_DTM, A.FRS_RQST_USER_ID, 
+    A.RQST_DTM, A.RQST_USER_ID, A.APRV_DTM, A.APRV_USER_ID, A.ENC_YN
+  </sql>
+  
+  
+  <sql id="Data_Type_Map">
+	SELECT A.DATA_TYPE_MAPRU_ID
+		, A.MAPRU_NM
+		, A.LGC_DATA_TYPE
+		, NVL(A.MIN_VAL, -1) AS MIN_VAL
+		, CASE WHEN A.CND_CD = 'U' THEN 4000 ELSE TO_NUMBER(NVL(A.MAX_VAL, -1)) END AS MAX_VAL
+		, A.CND_CD
+		, B.DATA_TYPE_NM
+		, B.DBMS_TYP_CD 
+	  FROM WAA_DATA_TYPE_MAPRU A 
+	  JOIN WAA_DBMS_DATA_TYPE B
+	    ON A.DBMS_DATA_TYPE_ID = B.DBMS_DATA_TYPE_ID
+	   AND B.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')
+	   AND B.REG_TYP_CD IN ('C', 'U')
+	 WHERE A.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')
+	   AND A.REG_TYP_CD IN ('C', 'U')
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="map" >
+    select 
+    <include refid="Base_Column_List" />
+    from WAQ_DDL_COL A
+    where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      and RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+      and RQST_DTL_SNO = #{rqstDtlSno,jdbcType=DECIMAL}
+  </select>
+  
+  <select id="selectDdlColRqstList" parameterType="kr.wise.commons.rqstmst.service.WaqMstr" resultMap="BaseResultMap">
+  	SELECT 
+  	<include refid="Base_Column_List"/>
+  	     , CASE WHEN A.VRF_CD = '2' THEN '#FF0000' ELSE CASE WHEN A.VRF_CD = '5' THEN '#0000FF'  END END AS FontColor 
+  	     , U.USER_NM AS RQST_USER_NM
+  	  FROM WAQ_DDL_COL A
+  	  LEFT OUTER JOIN WAA_USER U
+  	    ON A.RQST_USER_ID = U.USER_ID
+  	   AND U.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+  	   AND U.REG_TYP_CD IN ('C', 'U')
+  	 WHERE A.RQST_NO = #{rqstNo}
+  	   AND A.RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+  	 ORDER BY A.RQST_SNO, A.COL_ORD
+  	
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="map" >
+    delete from WAQ_DDL_COL
+    where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      and RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+      and RQST_DTL_SNO = #{rqstDtlSno,jdbcType=DECIMAL}
+  </delete>
+  
+  <delete id="deleteByrqstSno" parameterType="kr.wise.meta.ddl.service.WaqDdlTbl">
+    DELETE FROM WAQ_DDL_COL
+    WHERE RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      AND RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+  </delete>
+  
+  
+  
+  <insert id="insertByRqstSno" parameterType="kr.wise.meta.ddl.service.WaqDdlTbl">
+  	--DDL 테이블 추가시 물리모델 컬럼을 추가한다.
+  	INSERT INTO WAQ_DDL_COL(
+	      RQST_NO, RQST_SNO, RQST_DTL_SNO, DDL_COL_ID, DDL_COL_PNM, DDL_COL_LNM, RQST_DCD
+	    , DDL_TBL_ID, DDL_TBL_PNM, COL_ORD, DATA_TYPE, DATA_LEN, DATA_SCAL, PK_YN, PK_ORD, FK_YN, AK_YN, NONUL_YN, DEFLT_VAL
+	    , OBJ_DESCN, OBJ_VERS, FRS_RQST_DTM, FRS_RQST_USER_ID, RQST_DTM, RQST_USER_ID, ENC_YN
+	)
+	SELECT B.RQST_NO, B.RQST_SNO
+	     , (SELECT NVL(MAX(RQST_DTL_SNO), 0) 
+	          FROM WAQ_DDL_COL 
+	         WHERE RQST_NO = #{rqstNo} 
+	           AND RQST_SNO = #{rqstSno} ) + ROWNUM AS RQST_DTL_SNO
+	     , C.PDM_COL_ID
+	     , C.PDM_COL_PNM
+	     , C.PDM_COL_LNM
+	     , B.RQST_DCD AS RQST_DCD
+	     , B.DDL_TBL_ID, B.DDL_TBL_PNM, C.COL_ORD
+	     --, NVL(E.DATA_TYPE_NM, C.DATA_TYPE) AS DATA_TYPE
+	     , C.DATA_TYPE
+	     , C.DATA_LEN
+	     , C.DATA_SCAL  
+	     , NVL(C.PK_YN, 'N') AS PK_YN, C.PK_ORD
+	     , NVL(C.FK_YN, 'N') AS FK_YN
+	     , NVL(C.AK_YN, 'N') AS AK_YN
+	     , NVL(C.NONUL_YN, 'N') AS NONUL_YN, C.DEFLT_VAL
+	     , C.OBJ_DESCN, C.OBJ_VERS,  B.FRS_RQST_DTM, B.FRS_RQST_USER_ID, SYSDATE, B.RQST_USER_ID
+	     , NVL(C.ENC_YN, 'N') AS ENC_YN
+	  FROM WAM_PDM_TBL A 
+	       INNER JOIN WAQ_DDL_TBL B
+	          ON B.PDM_TBL_ID = A.PDM_TBL_ID  
+	       INNER JOIN WAM_PDM_COL C
+	          ON C.PDM_TBL_ID = A.PDM_TBL_ID
+	       LEFT JOIN WAA_DB_CONN_TRG D
+	          ON D.DB_CONN_TRG_PNM = B.DB_CONN_TRG_PNM
+	         AND D.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')
+	         AND D.REG_TYP_CD IN ('C', 'U')
+	        LEFT OUTER JOIN (
+	        		<include refid="Data_Type_Map"/>
+	        ) E
+	          ON D.DBMS_TYP_CD = E.DBMS_TYP_CD
+	         AND C.DATA_TYPE   = E.LGC_DATA_TYPE
+	         AND NVL(C.DATA_LEN, -1) BETWEEN E.MIN_VAL AND E.MAX_VAL
+	WHERE B.RQST_NO   = #{rqstNo}
+	  AND B.RQST_SNO  = #{rqstSno}
+	  AND A.FULL_PATH = #{fullPath,jdbcType=VARCHAR}
+  </insert>
+  
+  <insert id="insertByRqstSnoTsf" parameterType="kr.wise.meta.ddl.service.WaqDdlTbl">
+  	--DDL 테이블 추가시 물리모델 컬럼을 추가한다.
+  	INSERT INTO WAQ_DDL_COL(
+	      RQST_NO, RQST_SNO, RQST_DTL_SNO, DDL_COL_ID, DDL_COL_PNM, DDL_COL_LNM, RQST_DCD
+	    , DDL_TBL_ID, DDL_TBL_PNM, COL_ORD, DATA_TYPE, DATA_LEN, DATA_SCAL, PK_YN, PK_ORD, NONUL_YN, DEFLT_VAL
+	    , OBJ_DESCN, OBJ_VERS, FRS_RQST_DTM, FRS_RQST_USER_ID, RQST_DTM, RQST_USER_ID 	    
+	)
+	SELECT B.RQST_NO
+	     , B.RQST_SNO
+		 , (SELECT NVL(MAX(RQST_DTL_SNO), 0)
+		      FROM WAQ_DDL_COL 
+		     WHERE RQST_NO = #{rqstNo} 
+		       AND RQST_SNO = #{rqstSno} 
+		   ) + ROWNUM AS RQST_DTL_SNO
+		 , C.DDL_COL_ID, C.DDL_COL_PNM, C.DDL_COL_LNM, B.RQST_DCD AS RQST_DCD
+		 , B.DDL_TBL_ID, B.DDL_TBL_PNM, C.COL_ORD,  C.DATA_TYPE
+		 , C.DATA_LEN, C.DATA_SCAL, C.PK_YN, C.PK_ORD, C.NONUL_YN, C.DEFLT_VAL
+		 , C.OBJ_DESCN, C.OBJ_VERS,  B.FRS_RQST_DTM, B.FRS_RQST_USER_ID, SYSDATE, B.RQST_USER_ID		 
+	  FROM WAM_DDL_TBL A 
+		   INNER JOIN WAQ_DDL_TBL B
+		      ON B.SRC_DB_SCH_ID = A.DB_SCH_ID 
+		     AND B.DDL_TBL_PNM   = A.DDL_TBL_PNM
+		   INNER JOIN WAM_DDL_COL C
+		      ON A.DDL_TBL_ID = C.DDL_TBL_ID
+		   LEFT JOIN WAA_DB_CONN_TRG D
+		     ON D.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')
+		    AND D.REG_TYP_CD IN ('C', 'U')
+		    AND D.DB_CONN_TRG_PNM = B.DB_CONN_TRG_PNM		
+	 WHERE B.RQST_NO  = #{rqstNo}
+	   AND B.RQST_SNO = #{rqstSno}
+  </insert>
+  
+  <insert id="insert" parameterType="kr.wise.meta.ddl.service.WaqDdlCol" >
+    insert into WAQ_DDL_COL (RQST_NO, RQST_SNO, RQST_DTL_SNO, 
+      DDL_COL_ID, DDL_COL_PNM, DDL_COL_LNM, 
+      BF_DDL_COL_PNM, RQST_DCD, VRF_CD, 
+      VRF_RMK, DDL_TBL_ID, DDL_TBL_PNM, 
+      COL_ORD, DATA_TYPE, DATA_LEN, 
+      DATA_SCAL, PK_YN, PK_ORD, 
+      NONUL_YN, DEFLT_VAL, COL_UPD_YN, 
+      DATA_TYPE_UPD_YN, NONUL_UPD_YN, DEFLT_VAL_UPD_YN, 
+      OBJ_DESCN, OBJ_VERS, REG_TYP_CD, 
+      FRS_RQST_DTM, FRS_RQST_USER_ID, RQST_DTM, 
+      RQST_USER_ID, APRV_DTM, APRV_USER_ID
+      )
+    values (#{rqstNo,jdbcType=VARCHAR}, #{rqstSno,jdbcType=DECIMAL}, #{rqstDtlSno,jdbcType=DECIMAL}, 
+      #{ddlColId,jdbcType=VARCHAR}, #{ddlColPnm,jdbcType=VARCHAR}, #{ddlColLnm,jdbcType=VARCHAR}, 
+      #{bfDdlColPnm,jdbcType=VARCHAR}, #{rqstDcd,jdbcType=VARCHAR}, #{vrfCd,jdbcType=VARCHAR}, 
+      #{vrfRmk,jdbcType=VARCHAR}, #{ddlTblId,jdbcType=VARCHAR}, #{ddlTblPnm,jdbcType=VARCHAR}, 
+      #{colOrd,jdbcType=DECIMAL}, #{dataType,jdbcType=VARCHAR}, #{dataLen,jdbcType=DECIMAL}, 
+      #{dataScal,jdbcType=DECIMAL}, #{pkYn,jdbcType=VARCHAR}, #{pkOrd,jdbcType=DECIMAL}, 
+      #{nonulYn,jdbcType=VARCHAR}, #{defltVal,jdbcType=VARCHAR}, #{colUpdYn,jdbcType=VARCHAR}, 
+      #{dataTypeUpdYn,jdbcType=VARCHAR}, #{nonulUpdYn,jdbcType=VARCHAR}, #{defltValUpdYn,jdbcType=VARCHAR}, 
+      #{objDescn,jdbcType=VARCHAR}, #{objVers,jdbcType=DECIMAL}, #{regTypCd,jdbcType=VARCHAR}, 
+      #{frsRqstDtm,jdbcType=TIMESTAMP}, #{frsRqstUserId,jdbcType=VARCHAR}, #{rqstDtm,jdbcType=TIMESTAMP}, 
+      #{rqstUserId,jdbcType=VARCHAR}, #{aprvDtm,jdbcType=TIMESTAMP}, #{aprvUserId,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="kr.wise.meta.ddl.service.WaqDdlCol" >
+    insert into WAQ_DDL_COL
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="rqstNo != null" >
+        RQST_NO,
+      </if>
+      <if test="rqstSno != null" >
+        RQST_SNO,
+      </if>
+      <if test="rqstDtlSno != null" >
+        RQST_DTL_SNO,
+      </if>
+      <if test="ddlColId != null" >
+        DDL_COL_ID,
+      </if>
+      <if test="ddlColPnm != null" >
+        DDL_COL_PNM,
+      </if>
+      <if test="ddlColLnm != null" >
+        DDL_COL_LNM,
+      </if>
+      <if test="bfDdlColPnm != null" >
+        BF_DDL_COL_PNM,
+      </if>
+      <if test="rqstDcd != null" >
+        RQST_DCD,
+      </if>
+      <if test="vrfCd != null" >
+        VRF_CD,
+      </if>
+      <if test="vrfRmk != null" >
+        VRF_RMK,
+      </if>
+      <if test="ddlTblId != null" >
+        DDL_TBL_ID,
+      </if>
+      <if test="ddlTblPnm != null" >
+        DDL_TBL_PNM,
+      </if>
+      <if test="colOrd != null" >
+        COL_ORD,
+      </if>
+      <if test="dataType != null" >
+        DATA_TYPE,
+      </if>
+      <if test="dataLen != null" >
+        DATA_LEN,
+      </if>
+      <if test="dataScal != null" >
+        DATA_SCAL,
+      </if>
+      <if test="pkYn != null" >
+        PK_YN,
+      </if>
+      <if test="pkOrd != null" >
+        PK_ORD,
+      </if>
+      <if test="nonulYn != null" >
+        NONUL_YN,
+      </if>
+      <if test="defltVal != null" >
+        DEFLT_VAL,
+      </if>
+      <if test="colUpdYn != null" >
+        COL_UPD_YN,
+      </if>
+      <if test="dataTypeUpdYn != null" >
+        DATA_TYPE_UPD_YN,
+      </if>
+      <if test="nonulUpdYn != null" >
+        NONUL_UPD_YN,
+      </if>
+      <if test="defltValUpdYn != null" >
+        DEFLT_VAL_UPD_YN,
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN,
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS,
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD,
+      </if>
+      <if test="frsRqstDtm != null" >
+        FRS_RQST_DTM,
+      </if>
+      <if test="frsRqstUserId != null" >
+        FRS_RQST_USER_ID,
+      </if>
+      <if test="rqstDtm != null" >
+        RQST_DTM,
+      </if>
+      <if test="rqstUserId != null" >
+        RQST_USER_ID,
+      </if>
+      <if test="aprvDtm != null" >
+        APRV_DTM,
+      </if>
+      <if test="aprvUserId != null" >
+        APRV_USER_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="rqstNo != null" >
+        #{rqstNo,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstSno != null" >
+        #{rqstSno,jdbcType=DECIMAL},
+      </if>
+      <if test="rqstDtlSno != null" >
+        #{rqstDtlSno,jdbcType=DECIMAL},
+      </if>
+      <if test="ddlColId != null" >
+        #{ddlColId,jdbcType=VARCHAR},
+      </if>
+      <if test="ddlColPnm != null" >
+        #{ddlColPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="ddlColLnm != null" >
+        #{ddlColLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="bfDdlColPnm != null" >
+        #{bfDdlColPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDcd != null" >
+        #{rqstDcd,jdbcType=VARCHAR},
+      </if>
+      <if test="vrfCd != null" >
+        #{vrfCd,jdbcType=VARCHAR},
+      </if>
+      <if test="vrfRmk != null" >
+        #{vrfRmk,jdbcType=VARCHAR},
+      </if>
+      <if test="ddlTblId != null" >
+        #{ddlTblId,jdbcType=VARCHAR},
+      </if>
+      <if test="ddlTblPnm != null" >
+        #{ddlTblPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="colOrd != null" >
+        #{colOrd,jdbcType=DECIMAL},
+      </if>
+      <if test="dataType != null" >
+        #{dataType,jdbcType=VARCHAR},
+      </if>
+      <if test="dataLen != null" >
+        #{dataLen,jdbcType=DECIMAL},
+      </if>
+      <if test="dataScal != null" >
+        #{dataScal,jdbcType=DECIMAL},
+      </if>
+      <if test="pkYn != null" >
+        #{pkYn,jdbcType=VARCHAR},
+      </if>
+      <if test="pkOrd != null" >
+        #{pkOrd,jdbcType=DECIMAL},
+      </if>
+      <if test="nonulYn != null" >
+        #{nonulYn,jdbcType=VARCHAR},
+      </if>
+      <if test="defltVal != null" >
+        #{defltVal,jdbcType=VARCHAR},
+      </if>
+      <if test="colUpdYn != null" >
+        #{colUpdYn,jdbcType=VARCHAR},
+      </if>
+      <if test="dataTypeUpdYn != null" >
+        #{dataTypeUpdYn,jdbcType=VARCHAR},
+      </if>
+      <if test="nonulUpdYn != null" >
+        #{nonulUpdYn,jdbcType=VARCHAR},
+      </if>
+      <if test="defltValUpdYn != null" >
+        #{defltValUpdYn,jdbcType=VARCHAR},
+      </if>
+      <if test="objDescn != null" >
+        #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null" >
+        #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="frsRqstDtm != null" >
+        #{frsRqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="frsRqstUserId != null" >
+        #{frsRqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDtm != null" >
+        #{rqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rqstUserId != null" >
+        #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDtm != null" >
+        #{aprvDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aprvUserId != null" >
+        #{aprvUserId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateTblNmbyRqstsno" parameterType="kr.wise.meta.ddl.service.WaqDdlTbl">
+  	UPDATE WAQ_DDL_COL A
+  	   SET (DDL_TBL_PNM, RQST_DCD) = (
+  	   	   			SELECT B.DDL_TBL_PNM, B.RQST_DCD FROM WAQ_DDL_TBL B
+  	   	   			 WHERE B.RQST_NO = A.RQST_NO
+  	   	   			   AND B.RQST_SNO = A.RQST_SNO 
+  	   )
+  	 WHERE A.RQST_NO = #{rqstNo}
+  	   AND A.RQST_SNO = #{rqstSno}
+  	 
+  </update>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.meta.ddl.service.WaqDdlCol" >
+    update WAQ_DDL_COL
+    <set >
+      <if test="ddlColId != null" >
+        DDL_COL_ID = #{ddlColId,jdbcType=VARCHAR},
+      </if>
+      <if test="ddlColPnm != null" >
+        DDL_COL_PNM = #{ddlColPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="ddlColLnm != null" >
+        DDL_COL_LNM = #{ddlColLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="bfDdlColPnm != null" >
+        BF_DDL_COL_PNM = #{bfDdlColPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDcd != null" >
+        RQST_DCD = #{rqstDcd,jdbcType=VARCHAR},
+      </if>
+      <if test="vrfCd != null" >
+        VRF_CD = #{vrfCd,jdbcType=VARCHAR},
+      </if>
+      <if test="vrfRmk != null" >
+        VRF_RMK = #{vrfRmk,jdbcType=VARCHAR},
+      </if>
+      <if test="ddlTblId != null" >
+        DDL_TBL_ID = #{ddlTblId,jdbcType=VARCHAR},
+      </if>
+      <if test="ddlTblPnm != null" >
+        DDL_TBL_PNM = #{ddlTblPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="colOrd != null" >
+        COL_ORD = #{colOrd,jdbcType=DECIMAL},
+      </if>
+      <if test="dataType != null" >
+        DATA_TYPE = #{dataType,jdbcType=VARCHAR},
+      </if>
+      <if test="dataLen != null" >
+        DATA_LEN = #{dataLen,jdbcType=DECIMAL},
+      </if>
+      <if test="dataScal != null" >
+        DATA_SCAL = #{dataScal,jdbcType=DECIMAL},
+      </if>
+      <if test="pkYn != null" >
+        PK_YN = #{pkYn,jdbcType=VARCHAR},
+      </if>
+      <if test="pkOrd != null" >
+        PK_ORD = #{pkOrd,jdbcType=DECIMAL},
+      </if>
+      <if test="nonulYn != null" >
+        NONUL_YN = #{nonulYn,jdbcType=VARCHAR},
+      </if>
+      <if test="defltVal != null" >
+        DEFLT_VAL = #{defltVal,jdbcType=VARCHAR},
+      </if>
+      <if test="colUpdYn != null" >
+        COL_UPD_YN = #{colUpdYn,jdbcType=VARCHAR},
+      </if>
+      <if test="dataTypeUpdYn != null" >
+        DATA_TYPE_UPD_YN = #{dataTypeUpdYn,jdbcType=VARCHAR},
+      </if>
+      <if test="nonulUpdYn != null" >
+        NONUL_UPD_YN = #{nonulUpdYn,jdbcType=VARCHAR},
+      </if>
+      <if test="defltValUpdYn != null" >
+        DEFLT_VAL_UPD_YN = #{defltValUpdYn,jdbcType=VARCHAR},
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="frsRqstDtm != null" >
+        FRS_RQST_DTM = #{frsRqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="frsRqstUserId != null" >
+        FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDtm != null" >
+        RQST_DTM = #{rqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rqstUserId != null" >
+        RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDtm != null" >
+        APRV_DTM = #{aprvDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aprvUserId != null" >
+        APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      and RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+      and RQST_DTL_SNO = #{rqstDtlSno,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="kr.wise.meta.ddl.service.WaqDdlCol" >
+    update WAQ_DDL_COL
+    set DDL_COL_ID = #{ddlColId,jdbcType=VARCHAR},
+      DDL_COL_PNM = #{ddlColPnm,jdbcType=VARCHAR},
+      DDL_COL_LNM = #{ddlColLnm,jdbcType=VARCHAR},
+      BF_DDL_COL_PNM = #{bfDdlColPnm,jdbcType=VARCHAR},
+      RQST_DCD = #{rqstDcd,jdbcType=VARCHAR},
+      VRF_CD = #{vrfCd,jdbcType=VARCHAR},
+      VRF_RMK = #{vrfRmk,jdbcType=VARCHAR},
+      DDL_TBL_ID = #{ddlTblId,jdbcType=VARCHAR},
+      DDL_TBL_PNM = #{ddlTblPnm,jdbcType=VARCHAR},
+      COL_ORD = #{colOrd,jdbcType=DECIMAL},
+      DATA_TYPE = #{dataType,jdbcType=VARCHAR},
+      DATA_LEN = #{dataLen,jdbcType=DECIMAL},
+      DATA_SCAL = #{dataScal,jdbcType=DECIMAL},
+      PK_YN = #{pkYn,jdbcType=VARCHAR},
+      PK_ORD = #{pkOrd,jdbcType=DECIMAL},
+      NONUL_YN = #{nonulYn,jdbcType=VARCHAR},
+      DEFLT_VAL = #{defltVal,jdbcType=VARCHAR},
+      COL_UPD_YN = #{colUpdYn,jdbcType=VARCHAR},
+      DATA_TYPE_UPD_YN = #{dataTypeUpdYn,jdbcType=VARCHAR},
+      NONUL_UPD_YN = #{nonulUpdYn,jdbcType=VARCHAR},
+      DEFLT_VAL_UPD_YN = #{defltValUpdYn,jdbcType=VARCHAR},
+      OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      FRS_RQST_DTM = #{frsRqstDtm,jdbcType=TIMESTAMP},
+      FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR},
+      RQST_DTM = #{rqstDtm,jdbcType=TIMESTAMP},
+      RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      APRV_DTM = #{aprvDtm,jdbcType=TIMESTAMP},
+      APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR}
+    where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      and RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+      and RQST_DTL_SNO = #{rqstDtlSno,jdbcType=DECIMAL}
+  </update>
+  
+  <update id="updateCheckInit" parameterType="string">
+    --등록유형 업데이트
+  	UPDATE WAQ_DDL_COL A
+    SET (A.REG_TYP_CD, A.DDL_COL_ID, A.DDL_TBL_ID) = 
+                      (SELECT CASE WHEN A.RQST_DCD = 'DD' then 'D' ELSE CASE WHEN MAX(B.DDL_COL_ID) IS NULL then 'C' else 'U' end end
+                             , MAX(B.DDL_COL_ID)
+                             , MAX(B.DDL_TBL_ID)
+                        FROM WAM_DDL_COL B
+	                         INNER JOIN WAM_DDL_TBL C
+	                            ON C.DDL_TBL_ID = B.DDL_TBL_ID
+	                           AND C.REG_TYP_CD in ('C','U')
+	                         INNER JOIN WAQ_DDL_TBL D
+	                            ON C.DB_SCH_ID = D.DB_SCH_ID
+	                           AND C.DDL_TBL_PNM = D.DDL_TBL_PNM
+	                           AND D.RQST_NO = #{rqstNo}
+                        WHERE B.REG_TYP_CD in ('C','U')
+                          AND B.DDL_COL_PNM = A.DDL_COL_PNM
+                          AND D.RQST_NO = A.RQST_NO
+                          AND D.RQST_SNO = A.RQST_SNO
+                          )
+       ,A.VRF_CD = '4'
+    WHERE A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+  </update>
+  
+  <insert id="insertDelInit" parameterType="string">
+  	--DDL에 존재하고 PDM에 없는 컬럼을 삭제대상으로 추가한다....
+  	INSERT INTO WAQ_DDL_COL(
+	      RQST_NO, RQST_SNO, RQST_DTL_SNO
+	    , VRF_CD
+	    , DDL_COL_ID, DDL_COL_PNM, DDL_COL_LNM, RQST_DCD, REG_TYP_CD
+	    , DDL_TBL_ID, DDL_TBL_PNM, COL_ORD, DATA_TYPE, DATA_LEN, DATA_SCAL, PK_YN, PK_ORD, FK_YN, AK_YN, NONUL_YN, DEFLT_VAL
+	    , OBJ_DESCN, OBJ_VERS, FRS_RQST_DTM, FRS_RQST_USER_ID, RQST_DTM, RQST_USER_ID
+	)
+    SELECT 
+	  D.RQST_NO, D.RQST_SNO
+	  , (SELECT NVL(MAX(RQST_DTL_SNO), 0) FROM WAQ_DDL_COL WHERE RQST_NO = #{rqstNo} AND RQST_SNO = D.RQST_SNO ) + ROWNUM AS RQST_DTL_SNO
+	  , '4' AS VRF_CD
+	  , C.DDL_COL_ID, C.DDL_COL_PNM, C.DDL_COL_LNM, 'DD' AS RQST_DCD, 'D' AS REG_TYP_CD
+	  , B.DDL_TBL_ID, B.DDL_TBL_PNM, C.COL_ORD, C.DATA_TYPE, C.DATA_LEN, C.DATA_SCAL, C.PK_YN, C.PK_ORD, C.FK_YN, C.AK_YN, C.NONUL_YN, C.DEFLT_VAL
+	  , C.OBJ_DESCN, C.OBJ_VERS,  D.FRS_RQST_DTM, D.FRS_RQST_USER_ID, SYSDATE, D.RQST_USER_ID
+	  FROM WAM_DDL_TBL B 
+	  JOIN WAQ_DDL_TBL D
+	    ON B.DB_SCH_ID = D.DB_SCH_ID
+       AND B.DDL_TBL_PNM = D.DDL_TBL_PNM
+<!--        AND B.DDL_TBL_LNM = D.DDL_TBL_LNM -->
+	  JOIN WAM_DDL_COL C
+        ON B.DDL_TBL_ID = C.DDL_TBL_ID
+	WHERE D.RQST_NO = #{rqstNo}
+	  AND NOT EXISTS (
+				SELECT 1 FROM WAQ_DDL_COL X 
+				 WHERE D.RQST_NO = X.RQST_NO
+				   AND D.RQST_SNO = X.RQST_SNO
+				   AND C.DDL_COL_PNM = X.DDL_COL_PNM
+<!-- 				   AND C.DDL_COL_LNM = X.DDL_COL_LNM -->
+		)
+  </insert>
+  
+  <update id="updateInitChgYn" parameterType="string">
+      UPDATE WAQ_DDL_COL
+         SET DATA_TYPE_UPD_YN = 'N'
+           , NONUL_UPD_YN     = 'N'
+           , DEFLT_VAL_UPD_YN = 'N'
+           , COL_UPD_YN       = 'N' 
+       WHERE RQST_NO = #{rqstNo, jdbcType=VARCHAR}      
+  </update>
+  
+  <update id="updateDataTypeYn" parameterType="string">
+  --DATA TYPE 업데이드 여부 
+  UPDATE WAQ_DDL_COL A
+     SET DATA_TYPE_UPD_YN = 'Y'
+   WHERE RQST_NO = #{rqstNo}  
+     AND REG_TYP_CD = 'U'
+     AND EXISTS (
+     			SELECT 1 FROM WAQ_DDL_TBL B
+     			  JOIN WAM_DDL_TBL C
+     			    ON B.DB_SCH_ID = C.DB_SCH_ID
+     			   AND C.DDL_TBL_PNM = B.DDL_TBL_PNM
+<!--                    AND C.DDL_TBL_LNM = B.DDL_TBL_LNM -->
+                   AND B.RQST_NO = #{rqstNo}
+                  JOIN WAM_DDL_COL D
+                    ON C.DDL_TBL_ID = D.DDL_TBL_ID
+                   AND D.REG_TYP_CD in ('C','U')
+                 WHERE B.RQST_NO = A.RQST_NO
+                   AND B.RQST_SNO = A.RQST_SNO
+                   AND D.DDL_COL_PNM = A.DDL_COL_PNM
+<!--                    AND D.DDL_COL_LNM = A.DDL_COL_LNM -->
+                   AND NOT(
+                   			NVL(A.DATA_TYPE, '_') = NVL(D.DATA_TYPE, '_')
+                   		AND NVL(A.DATA_LEN,  0) = NVL(D.DATA_LEN,  0)
+                   		AND NVL(A.DATA_SCAL, -1) = NVL(D.DATA_SCAL, -1)
+                   )
+                   
+     )
+  
+  </update>
+  
+  <update id="updateNonNullYn" parameterType="string">
+  --NOT NULL 업데이트 여부
+  UPDATE WAQ_DDL_COL A
+     SET NONUL_UPD_YN = 'Y'
+   WHERE RQST_NO = #{rqstNo}  
+     AND REG_TYP_CD = 'U'
+     AND EXISTS (
+     			SELECT 1 
+     			  FROM WAQ_DDL_TBL B
+	     			   JOIN WAM_DDL_TBL C
+	     			     ON B.DB_SCH_ID = C.DB_SCH_ID
+	     			    AND C.DDL_TBL_PNM = B.DDL_TBL_PNM
+	                    AND B.RQST_NO = #{rqstNo}
+	                   JOIN WAM_DDL_COL D
+	                     ON C.DDL_TBL_ID = D.DDL_TBL_ID
+	                    AND D.REG_TYP_CD in ('C','U')
+                 WHERE B.RQST_NO = A.RQST_NO
+                   AND B.RQST_SNO = A.RQST_SNO
+                   AND D.DDL_COL_PNM = A.DDL_COL_PNM
+                   AND NOT(
+                   			NVL(A.NONUL_YN, 'N') = NVL(D.NONUL_YN, 'N')
+                   )
+                   
+     )  
+  </update>
+
+  <update id="updateDefaultYn" parameterType="string">
+  --Default value 업데이트 여부
+  UPDATE WAQ_DDL_COL A
+     SET DEFLT_VAL_UPD_YN = 'Y'
+   WHERE RQST_NO = #{rqstNo}  
+     AND REG_TYP_CD = 'U'
+     AND EXISTS (
+     			SELECT 1 FROM WAQ_DDL_TBL B
+     			  JOIN WAM_DDL_TBL C
+     			    ON B.DB_SCH_ID = C.DB_SCH_ID
+     			   AND C.DDL_TBL_PNM = B.DDL_TBL_PNM
+<!--                    AND C.DDL_TBL_LNM = B.DDL_TBL_LNM -->
+                   AND B.RQST_NO = #{rqstNo}
+                  JOIN WAM_DDL_COL D
+                    ON C.DDL_TBL_ID = D.DDL_TBL_ID
+                   AND D.REG_TYP_CD in ('C','U')
+                 WHERE B.RQST_NO = A.RQST_NO
+                   AND B.RQST_SNO = A.RQST_SNO
+                   AND D.DDL_COL_PNM = A.DDL_COL_PNM
+<!--                    AND D.DDL_COL_LNM = A.DDL_COL_LNM -->
+                   AND NOT(
+                   			NVL(A.DEFLT_VAL, '_') = NVL(D.DEFLT_VAL, '_')
+                   )
+                   
+     )  
+  </update>
+
+  <update id="updateColUpdateYn" parameterType="string">
+  --컬럼 업데이트 여부
+  UPDATE WAQ_DDL_COL A
+     SET COL_UPD_YN = 'Y'
+   WHERE RQST_NO = #{rqstNo}  
+     AND REG_TYP_CD = 'U'
+     AND ( NVL(DATA_TYPE_UPD_YN, 'N') = 'Y' 
+     	OR NVL(NONUL_UPD_YN, 'N') = 'Y'
+     	OR NVL(DEFLT_VAL_UPD_YN, 'N') = 'Y'
+     )
+  </update>
+  
+  
+  <insert id="checkNotChgData" parameterType="map">
+  	 <include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.updateVrfNotChg"/>
+	--검증쿼리 : 변경사항 없을경우 (DC000)
+      AND A.REG_TYP_CD = 'U'
+      AND NOT EXISTS (SELECT 1
+                        FROM WAQ_RQST_VRF_DTLS X
+                       WHERE X.RQST_NO      = A.RQST_NO
+                         AND X.RQST_SNO     = A.RQST_SNO
+                         AND X.RQST_DTL_SNO = A.RQST_DTL_SNO
+                         AND X.BIZ_DTL_CD = #{bizDtlCd,jdbcType=VARCHAR} 
+                      )
+      AND EXISTS (SELECT 1
+		            FROM WAM_DDL_TBL D 
+			             INNER JOIN WAQ_DDL_TBL F
+			                ON F.DB_SCH_ID = D.DB_SCH_ID
+						  AND F.DDL_TBL_PNM = D.DDL_TBL_PNM
+			             INNER JOIN WAM_DDL_COL E
+			                ON D.DDL_TBL_ID = E.DDL_TBL_ID
+		           WHERE F.RQST_NO     = A.RQST_NO
+		             AND F.RQST_SNO    = A.RQST_SNO
+		             AND A.DDL_COL_PNM = E.DDL_COL_PNM 
+		             AND NVL(A.DDL_COL_LNM, '_') = NVL(E.DDL_COL_LNM  , '_')
+			  	     and NVL(A.COL_ORD    , 0)   = NVL(E.COL_ORD      , 0)
+					 and NVL(A.DATA_TYPE  , '_') = NVL(E.DATA_TYPE      , '_')
+					 and NVL(A.DATA_LEN   , 0)   = NVL(E.DATA_LEN      , 0)
+					 and NVL(A.DATA_SCAL  , -1)   = NVL(E.DATA_SCAL      , -1)
+					 and NVL(A.PK_YN      , 'N') = NVL(E.PK_YN      , 'N')
+					 and NVL(A.PK_ORD     , 0)   = NVL(E.PK_ORD      , 0)
+					 and NVL(A.NONUL_YN   , 'N') = NVL(E.NONUL_YN      , 'N')
+					 and NVL(A.DEFLT_VAL  , '_') = NVL(E.DEFLT_VAL      , '_') 		
+					 and NVL(A.ENC_YN, '_') = NVL(E.ENC_YN, '_')
+					 and NVL(A.OBJ_DESCN, '_') = NVL(E.OBJ_DESCN, '_')				
+		          )
+  </insert>
+  
+  <!-- 적재 SQL -->
+  <!--   적재쿼리 
+    selectWaqC
+    
+	int updateWaqCUD(@Param("rqstNo") String rqstNo);
+	int updateWaqC(@Param("rqstNo") String rqstNo);
+	int deleteWAM(@Param("rqstNo") String rqstNo);
+	int insertWAM(@Param("rqstNo") String rqstNo);
+	int updateWAH(@Param("rqstNo") String rqstNo);
+	int insertWAH(@Param("rqstNo") String rqstNo);
+-->
+
+    <sql id="wam_col_ins">
+		  DDL_COL_PNM, DDL_COL_LNM, DDL_TBL_ID, COL_ORD, DATA_TYPE, DATA_LEN, DATA_SCAL
+		, PK_YN, PK_ORD, FK_YN, AK_YN ,NONUL_YN, DEFLT_VAL, RQST_NO, RQST_SNO, RQST_DTL_SNO
+		, OBJ_DESCN, OBJ_VERS, REG_TYP_CD, FRS_RQST_DTM, FRS_RQST_USER_ID, RQST_DTM, RQST_USER_ID
+		, APRV_DTM, APRV_USER_ID, ENC_YN
+	</sql>
+
+	<sql id="wam_col_list">
+		A.DDL_COL_PNM, A.DDL_COL_LNM, A.DDL_TBL_ID, A.COL_ORD, A.DATA_TYPE, A.DATA_LEN, A.DATA_SCAL
+		, A.PK_YN, A.PK_ORD, A.FK_YN, A.AK_YN, A.NONUL_YN, A.DEFLT_VAL, A.RQST_NO, A.RQST_SNO, A.RQST_DTL_SNO
+		, A.OBJ_DESCN, A.OBJ_VERS, A.REG_TYP_CD, A.FRS_RQST_DTM, A.FRS_RQST_USER_ID, A.RQST_DTM, A.RQST_USER_ID
+		, A.APRV_DTM, A.APRV_USER_ID, A.ENC_YN
+	</sql>
+	
+	
+	<select id="selectWaqC" parameterType="map" resultMap="BaseResultMap">
+	--신규 적재 대상 추출
+	SELECT B.* 
+	  FROM WAQ_DDL_TBL A
+		   INNER JOIN WAQ_DDL_COL B
+		      ON A.RQST_NO = B.RQST_NO
+	         AND A.RQST_SNO = B.RQST_SNO
+   	 WHERE A.RQST_NO = #{rqstNo}
+   	   AND A.RVW_STS_CD = '1'  --승인
+   	   AND A.RQST_DCD = 'CU'
+       AND B.REG_TYP_CD = 'C'
+	</select>
+
+	<update id="updateidByKey" parameterType="kr.wise.meta.ddl.service.WaqDdlCol">
+     --신규 적재 대상 ID 업데이트
+     UPDATE WAQ_DDL_COL 
+       SET DDL_COL_ID = #{ddlColId,jdbcType=VARCHAR}
+  	 WHERE RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+       AND RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+       AND RQST_DTL_SNO = #{rqstDtlSno}	
+	</update>
+
+	<update id="updateWaqCUD" parameterType="map">
+   	--WAQ ID, VERS 등을 업데이트...
+   	--WAQ 테이블의 경우 이미 처리되어 있으므로 WAM 테이블은 참조하지 않는다.
+   	UPDATE WAQ_DDL_COL A
+   	   SET (DDL_COL_ID, DDL_TBL_ID,  OBJ_VERS, FRS_RQST_DTM, FRS_RQST_USER_ID) = (
+   	   		SELECT
+   	   			  D.DDL_COL_ID
+   	   			, B.DDL_TBL_ID
+   	   			, NVL(D.OBJ_VERS, 0) + 1 AS OBJ_VERS
+				, D.FRS_RQST_DTM
+				, D.FRS_RQST_USER_ID
+			  FROM WAQ_DDL_TBL B
+		      	   INNER JOIN WAM_DDL_COL D
+		      	      ON B.DDL_TBL_ID = D.DDL_TBL_ID
+	      	 WHERE B.RQST_NO = A.RQST_NO
+			   AND B.RQST_SNO = A.RQST_SNO
+			   AND D.DDL_COL_PNM = A.DDL_COL_PNM
+			   AND B.RVW_STS_CD = '1' --승인대상만...
+   	   	   )
+	WHERE A.RQST_NO = #{rqstNo}
+	  AND A.VRF_CD = '1' --등록가능
+	  AND EXISTS (
+	  	  SELECT 1
+	  		FROM WAQ_DDL_TBL B
+		      	 INNER JOIN WAM_DDL_COL D
+		      	    ON B.DDL_TBL_ID = D.DDL_TBL_ID
+	      	 WHERE B.RQST_NO = A.RQST_NO
+			   AND B.RQST_SNO = A.RQST_SNO
+			   AND D.DDL_COL_PNM = A.DDL_COL_PNM
+			   AND B.RVW_STS_CD = '1' --승인대상만...
+	  )   	   
+   	</update>
+   	
+   <update id="updateWaqId" parameterType="map">
+   --테이블 ID 업데이트...
+   	UPDATE WAQ_DDL_COL X SET (DDL_TBL_ID, APRV_DTM, APRV_USER_ID) = (
+		SELECT A.DDL_TBL_ID, SYSDATE, A.APRV_USER_ID
+		  FROM	WAQ_DDL_TBL A 
+	     WHERE A.RQST_NO = X.RQST_NO
+	       AND A.RQST_SNO = X.RQST_SNO
+	       AND A.RVW_STS_CD = '1' --승인대상만...	
+	) 
+	WHERE X.RQST_NO = #{rqstNo}
+	  AND X.VRF_CD = '1' --등록가능
+   </update>   	
+
+   <delete id="deleteWAM" parameterType="map">
+    --WAM 삭제 (등록유형코드가REG_TYP_CD 변경, 삭제일 경우)
+	DELETE FROM WAM_DDL_COL A
+	 WHERE EXISTS (
+		SELECT 1 FROM WAQ_DDL_TBL B 
+<!-- 	      JOIN WAM_DDL_TBL D -->
+<!-- 	        ON B.DDL_TBL_ID = D.DDL_TBL_ID -->
+		  JOIN WAQ_DDL_COL C
+	        ON B.RQST_NO = C.RQST_NO
+	       AND B.RQST_SNO = C.RQST_SNO
+		 WHERE C.RQST_NO = #{rqstNo}
+	       AND B.DDL_TBL_ID = A.DDL_TBL_ID
+	       AND C.DDL_COL_ID = A.DDL_COL_ID
+<!-- 	       AND C.DDL_COL_PNM = A.DDL_COL_PNM -->
+<!-- 	       AND C.DDL_COL_LNM = A.DDL_COL_LNM -->
+	       AND B.RVW_STS_CD = '1'
+	       AND C.VRF_CD = '1'
+	)
+   </delete>
+   
+   <insert id="insertWAM" parameterType="map">
+   	--WAM 추가 (WAQ 내용을 추가, REG_TYP_CD 가 신규,변경일 경우)
+	INSERT INTO WAM_DDL_COL
+	(
+	    DDL_COL_ID
+	  , <include refid="wam_col_ins"/>
+	)
+	SELECT 
+	    A.DDL_COL_ID
+	  , <include refid="wam_col_list"/>
+	  FROM WAQ_DDL_COL A
+	  JOIN WAQ_DDL_TBL B 
+	    ON A.RQST_NO = B.RQST_NO
+	   AND A.RQST_SNO = B.RQST_SNO
+	 WHERE A.RQST_NO = #{rqstNo}
+	   AND A.VRF_CD = '1'
+	   AND A.REG_TYP_CD IN ('C', 'U')
+	   AND B.RVW_STS_CD = '1'
+   </insert>
+   
+   <update id="updateWAH"  parameterType="map">
+   	--WAH 이력 만료...
+	UPDATE WAH_DDL_COL A 
+	  SET EXP_DTM = SYSDATE
+	WHERE A.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	  AND A.REG_TYP_CD IN ('C','U')
+	  AND EXISTS (
+				SELECT 1 
+				  FROM WAQ_DDL_TBL B 
+					   INNER JOIN WAQ_DDL_COL C
+					      ON B.RQST_NO = C.RQST_NO
+					     AND B.RQST_SNO = C.RQST_SNO
+			     WHERE C.RQST_NO = #{rqstNo}
+			       AND C.DDL_TBL_ID = A.DDL_TBL_ID
+			       AND C.DDL_COL_ID = A.DDL_COL_ID
+			       AND C.VRF_CD = '1'
+			       AND B.RVW_STS_CD = '1'
+			)
+	  
+   </update>
+   
+   <insert id="insertWAH"  parameterType="map">
+   	--WAH이력 적재...
+	INSERT INTO WAH_DDL_COL
+	(   DDL_COL_ID
+	  , EXP_DTM
+	  , STR_DTM 
+	  , <include refid="wam_col_ins"/>
+	)
+	SELECT 
+			A.DDL_COL_ID
+		  , TO_DATE( '9999-12-31', 'YYYY-MM-DD') AS EXP_DTM
+		  , SYSDATE AS STR_DTM 
+		  , <include refid="wam_col_list"/>
+	  FROM WAQ_DDL_COL A
+	  JOIN WAQ_DDL_TBL B
+	    ON B.RQST_NO = A.RQST_NO
+	   AND B.RQST_SNO = A.RQST_SNO
+	 WHERE A.RQST_NO = #{rqstNo}
+	   AND A.VRF_CD = '1'
+	   AND B.RVW_STS_CD = '1'
+   </insert>   
+   
+   <insert id="insertWaqColRejected" parameterType="map">
+		INSERT INTO WAQ_DDL_COL(
+						        RQST_NO,
+						        RQST_SNO,
+						        RQST_DTL_SNO,
+						        DDL_COL_ID,
+						        DDL_COL_PNM,
+						        DDL_COL_LNM,
+						        BF_DDL_COL_PNM,
+						        RQST_DCD,
+						        VRF_CD,
+						        VRF_RMK,
+						        DDL_TBL_ID,
+						        DDL_TBL_PNM,
+						        COL_ORD,
+						        DATA_TYPE,
+						        DATA_LEN,
+						        DATA_SCAL,
+						        PK_YN,
+						        PK_ORD,
+						        NONUL_YN,
+						        DEFLT_VAL,
+						        COL_UPD_YN,
+						        DATA_TYPE_UPD_YN,
+						        NONUL_UPD_YN,
+						        DEFLT_VAL_UPD_YN,
+						        OBJ_DESCN,
+						        OBJ_VERS,
+						        REG_TYP_CD,
+						        FRS_RQST_DTM,
+						        FRS_RQST_USER_ID,
+						        RQST_DTM,
+						        RQST_USER_ID,
+						        APRV_DTM,
+						        APRV_USER_ID,
+						        ENC_YN
+		)
+		SELECT
+				#{reqmst.rqstNo,jdbcType=VARCHAR},
+		        A.RQST_SNO,
+		        RQST_DTL_SNO,
+		        DDL_COL_ID,
+		        DDL_COL_PNM,
+		        DDL_COL_LNM,
+		        BF_DDL_COL_PNM,
+		        A.RQST_DCD,
+		        NULL,
+		        NULL,
+		        NULL,
+		        A.DDL_TBL_PNM,
+		        COL_ORD,
+		        DATA_TYPE,
+		        DATA_LEN,
+		        DATA_SCAL,
+		        PK_YN,
+		        PK_ORD,
+		        NONUL_YN,
+		        DEFLT_VAL,
+		        COL_UPD_YN,
+		        DATA_TYPE_UPD_YN,
+		        NONUL_UPD_YN,
+		        DEFLT_VAL_UPD_YN,
+		        A.OBJ_DESCN,
+		        A.OBJ_VERS,
+		        NULL,
+		        A.FRS_RQST_DTM,
+		        A.FRS_RQST_USER_ID,
+		        A.RQST_DTM,
+		        A.RQST_USER_ID,
+		        NULL,
+		        NULL,
+		        A.ENC_YN
+		FROM WAQ_DDL_COL A
+		INNER JOIN WAQ_DDL_TBL B
+		ON A.DDL_TBL_PNM =B.DDL_TBL_PNM
+		AND A.RQST_NO = B.RQST_NO
+		AND A.RQST_SNO = B.RQST_SNO
+		WHERE B.RQST_NO = #{oldRqstNo,jdbcType=VARCHAR}
+		AND B.RVW_STS_CD = '2'
+	</insert>
+  
+  
+  
+</mapper>
+
+
+
+

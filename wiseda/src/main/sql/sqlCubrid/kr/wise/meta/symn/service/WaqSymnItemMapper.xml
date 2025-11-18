@@ -1,0 +1,561 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.wise.meta.symn.service.WaqSymnItemMapper">
+  <resultMap id="BaseResultMap" type="kr.wise.meta.symn.service.WaqSymnItem" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+    <result column="RQST_NO" jdbcType="VARCHAR" property="rqstNo" />
+    <result column="RQST_SNO" jdbcType="DECIMAL" property="rqstSno" />
+    <result column="SYMN_ITEM_ID" jdbcType="VARCHAR" property="symnItemId" />
+    <result column="SYMN_ITEM_LNM" jdbcType="VARCHAR" property="symnItemLnm" />
+    <result column="SYMN_ITEM_PNM" jdbcType="VARCHAR" property="symnItemPnm" />
+    <result column="SYMN_ITEM_TYPE" jdbcType="VARCHAR" property="symnItemType" />
+    <result column="SDITM_ID" jdbcType="VARCHAR" property="sditmId" />
+    <result column="SDITM_LNM" jdbcType="VARCHAR" property="sditmLnm" />
+    <result column="SDITM_PNM" jdbcType="VARCHAR" property="sditmPnm" />
+    <result column="RQST_DCD" jdbcType="VARCHAR" property="rqstDcd" />
+    <result column="RVW_STS_CD" jdbcType="VARCHAR" property="rvwStsCd" />
+    <result column="RVW_CONTS" jdbcType="VARCHAR" property="rvwConts" />
+    <result column="VRF_RMK" jdbcType="VARCHAR" property="vrfRmk" />
+    <result column="VRF_CD" jdbcType="VARCHAR" property="vrfCd" />
+    <result column="OBJ_DESCN" jdbcType="VARCHAR" property="objDescn" />
+    <result column="OBJ_VERS" jdbcType="DECIMAL" property="objVers" />
+    <result column="REG_TYP_CD" jdbcType="VARCHAR" property="regTypCd" />
+    <result column="FRS_RQST_DTM" jdbcType="TIMESTAMP" property="frsRqstDtm" />
+    <result column="FRS_RQST_USER_ID" jdbcType="VARCHAR" property="frsRqstUserId" />
+    <result column="RQST_DTM" jdbcType="TIMESTAMP" property="rqstDtm" />
+    <result column="RQST_USER_ID" jdbcType="VARCHAR" property="rqstUserId" />
+    <result column="APRV_DTM" jdbcType="TIMESTAMP" property="aprvDtm" />
+    <result column="APRV_USER_ID" jdbcType="VARCHAR" property="aprvUserId" />
+    <result column="PNM_CRI_DS" jdbcType="VARCHAR" property="pnmCriDs" />
+  </resultMap>
+  
+  
+  <sql id="waq_Column_List" >
+   	A.RQST_NO
+	 ,A.RQST_SNO
+	 ,A.SYMN_ITEM_ID
+	 ,A.SYMN_ITEM_LNM
+	 ,A.SYMN_ITEM_PNM
+	 ,A.SYMN_ITEM_TYPE
+	 ,A.SDITM_ID
+	 ,A.SDITM_LNM
+	 ,A.SDITM_PNM
+	 ,A.RQST_DCD
+	 ,A.RVW_STS_CD
+	 ,A.RVW_CONTS
+	 ,A.VRF_RMK
+	 ,A.VRF_CD
+	 ,A.OBJ_DESCN
+	 ,A.OBJ_VERS
+	 ,A.REG_TYP_CD
+	 ,A.FRS_RQST_DTM
+	 ,A.FRS_RQST_USER_ID
+	 ,A.RQST_DTM
+	 ,A.RQST_USER_ID
+	 ,A.APRV_DTM
+	 ,A.APRV_USER_ID
+	 ,A.PNM_CRI_DS    
+  </sql>
+  
+   <sql id="wam_col">
+	 ,SYMN_ITEM_LNM
+	 ,SYMN_ITEM_PNM
+	 ,SYMN_ITEM_TYPE
+	 ,SDITM_ID
+	 ,SDITM_LNM
+	 ,SDITM_PNM
+	 ,RQST_NO
+	 ,RQST_SNO
+	 ,OBJ_DESCN
+	 ,OBJ_VERS
+	 ,REG_TYP_CD
+	 ,FRS_RQST_DTM
+	 ,FRS_RQST_USER_ID
+	 ,RQST_DTM
+	 ,RQST_USER_ID
+	 ,APRV_DTM
+	 ,APRV_USER_ID
+	 ,PNM_CRI_DS 
+   </sql>
+   
+   
+  <insert id="insert" parameterType="kr.wise.meta.symn.service.WaqSymnItem">
+    insert into WAQ_SYMN_ITEM (RQST_NO, RQST_SNO, SYMN_ITEM_ID, 
+      SYMN_ITEM_LNM, SYMN_ITEM_PNM, SYMN_ITEM_TYPE, 
+      SDITM_ID, SDITM_LNM, SDITM_PNM, 
+      RQST_DCD, RVW_STS_CD, RVW_CONTS, 
+      VRF_RMK, VRF_CD, OBJ_DESCN, 
+      OBJ_VERS, REG_TYP_CD, FRS_RQST_DTM, 
+      FRS_RQST_USER_ID, RQST_DTM, RQST_USER_ID, 
+      APRV_DTM, APRV_USER_ID, PNM_CRI_DS
+      )
+    values (#{rqstNo,jdbcType=VARCHAR}, #{rqstSno,jdbcType=DECIMAL}, #{symnItemId,jdbcType=VARCHAR}, 
+      #{symnItemLnm,jdbcType=VARCHAR}, #{symnItemPnm,jdbcType=VARCHAR}, #{symnItemType,jdbcType=VARCHAR}, 
+      #{sditmId,jdbcType=VARCHAR}, #{sditmLnm,jdbcType=VARCHAR}, #{sditmPnm,jdbcType=VARCHAR}, 
+      #{rqstDcd,jdbcType=VARCHAR}, #{rvwStsCd,jdbcType=VARCHAR}, #{rvwConts,jdbcType=VARCHAR}, 
+      #{vrfRmk,jdbcType=VARCHAR}, #{vrfCd,jdbcType=VARCHAR}, #{objDescn,jdbcType=VARCHAR}, 
+      #{objVers,jdbcType=DECIMAL}, #{regTypCd,jdbcType=VARCHAR}, #{frsRqstDtm,jdbcType=TIMESTAMP}, 
+      #{frsRqstUserId,jdbcType=VARCHAR}, #{rqstDtm,jdbcType=TIMESTAMP}, #{rqstUserId,jdbcType=VARCHAR}, 
+      #{aprvDtm,jdbcType=TIMESTAMP}, #{aprvUserId,jdbcType=VARCHAR}, #{pnmCriDs,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="kr.wise.meta.symn.service.WaqSymnItem">
+  	<selectKey keyProperty="rqstSno" resultType="int" statementType="PREPARED" order="BEFORE">
+	<!--   		<include refid="kr.wise.commons.cmm.service.CommonMapper.getNextrqstSno"/> -->
+		SELECT NVL(MAX(RQST_SNO), 0) + 1 FROM WAQ_SYMN_ITEM WHERE RQST_NO = #{rqstNo}
+  	</selectKey>
+    insert into WAQ_SYMN_ITEM
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+        RQST_NO,
+        RQST_SNO,
+      <if test="symnItemId != null">
+        SYMN_ITEM_ID,
+      </if>
+      <if test="symnItemLnm != null">
+        SYMN_ITEM_LNM,
+      </if>
+      <if test="symnItemPnm != null">
+        SYMN_ITEM_PNM,
+      </if>
+      <if test="symnItemType != null">
+        SYMN_ITEM_TYPE,
+      </if>
+      <if test="sditmId != null">
+        SDITM_ID,
+      </if>
+      <if test="sditmLnm != null">
+        SDITM_LNM,
+      </if>
+      <if test="sditmPnm != null">
+        SDITM_PNM,
+      </if>
+      <if test="rqstDcd != null">
+        RQST_DCD,
+      </if>
+      <if test="rvwStsCd != null">
+        RVW_STS_CD,
+      </if>
+      <if test="rvwConts != null">
+        RVW_CONTS,
+      </if>
+      <if test="vrfRmk != null">
+        VRF_RMK,
+      </if>
+      <if test="vrfCd != null">
+        VRF_CD,
+      </if>
+      <if test="objDescn != null">
+        OBJ_DESCN,
+      </if>
+        OBJ_VERS,
+      <if test="regTypCd != null">
+        REG_TYP_CD,
+      </if>
+      <if test="frsRqstDtm != null">
+        FRS_RQST_DTM,
+      </if>
+      <if test="frsRqstUserId != null">
+        FRS_RQST_USER_ID,
+      </if>
+      <if test="rqstDtm != null">
+        RQST_DTM,
+      </if>
+      <if test="rqstUserId != null">
+        RQST_USER_ID,
+      </if>
+      <if test="aprvDtm != null">
+        APRV_DTM,
+      </if>
+      <if test="aprvUserId != null">
+        APRV_USER_ID,
+      </if>
+      <if test="pnmCriDs != null">
+        PNM_CRI_DS,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+        #{rqstNo,jdbcType=VARCHAR},
+        #{rqstSno,jdbcType=DECIMAL},
+      <if test="symnItemId != null">
+        #{symnItemId,jdbcType=VARCHAR},
+      </if>
+      <if test="symnItemLnm != null">
+        #{symnItemLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="symnItemPnm != null">
+        UPPER( #{symnItemPnm,jdbcType=VARCHAR} ),
+      </if>
+      <if test="symnItemType != null">
+        #{symnItemType,jdbcType=VARCHAR},
+      </if>
+      <if test="sditmId != null">
+        #{sditmId,jdbcType=VARCHAR},
+      </if>
+      <if test="sditmLnm != null">
+        #{sditmLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="sditmPnm != null">
+        UPPER( #{sditmPnm,jdbcType=VARCHAR} ),
+      </if>
+      <if test="rqstDcd != null">
+        #{rqstDcd,jdbcType=VARCHAR},
+      </if>
+      <if test="rvwStsCd != null">
+        #{rvwStsCd,jdbcType=VARCHAR},
+      </if>
+      <if test="rvwConts != null">
+        #{rvwConts,jdbcType=VARCHAR},
+      </if>
+      <if test="vrfRmk != null">
+        #{vrfRmk,jdbcType=VARCHAR},
+      </if>
+      <if test="vrfCd != null">
+        #{vrfCd,jdbcType=VARCHAR},
+      </if>
+      <if test="objDescn != null">
+        #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null">
+       #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="objVers == null">
+       1 , /* 신규는 버전 1 */
+      </if>
+      <if test="regTypCd != null">
+        #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="frsRqstDtm != null">
+        #{frsRqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="frsRqstUserId != null">
+        #{frsRqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDtm != null">
+        #{rqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rqstUserId != null">
+        #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDtm != null">
+        #{aprvDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aprvUserId != null">
+        #{aprvUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="pnmCriDs != null">
+        #{pnmCriDs,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <select id="selectSymnItemRqstListbyMst"  parameterType="kr.wise.commons.rqstmst.service.WaqMstr" resultMap="BaseResultMap">
+	  	SELECT
+			  RQST_NO
+			 , RQST_SNO
+			 , SYMN_ITEM_ID
+			 , SYMN_ITEM_LNM
+			 , SYMN_ITEM_PNM
+			 , SYMN_ITEM_TYPE
+			 , SDITM_ID
+			 , SDITM_LNM
+			 , SDITM_PNM
+			 , RQST_DCD
+			 , RVW_STS_CD
+			 , RVW_CONTS
+			 , VRF_RMK
+			 , VRF_CD
+			 , OBJ_DESCN
+			 , OBJ_VERS
+			 , REG_TYP_CD
+			 , FRS_RQST_DTM
+			 , FRS_RQST_USER_ID
+			 , RQST_DTM
+			 , RQST_USER_ID
+			 , APRV_DTM
+			 , APRV_USER_ID
+			 , PNM_CRI_DS  
+			  <if test='rqstStepCd == "Q" '>
+		     , CASE WHEN A.RVW_STS_CD = '2' THEN '2' ELSE '0' END AS RVW_STS_CD
+		     </if>
+		     <if test='rqstStepCd != "Q" '>
+		     , A.RVW_STS_CD
+		     </if>
+		     , CASE WHEN A.VRF_CD = '2' THEN '#FF0000' END AS FontColor
+		     , (SELECT USER_NM FROM WAA_USER WHERE USER_ID = A.RQST_USER_ID AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD') AND REG_TYP_CD IN ('C','U')) AS RQST_USER_NM
+		FROM WAQ_SYMN_ITEM A
+	   WHERE A.RQST_NO = #{rqstNo}
+	  	 <if test='rqstStepCd == "Q" or rqstStepCd == "A" '>
+	     AND A.VRF_CD = '1'
+	     </if>
+	   ORDER BY A.RQST_SNO
+  </select>
+  
+    <update id="updateCheckInit" parameterType="java.lang.String" >
+    UPDATE WAQ_SYMN_ITEM A
+    SET A.REG_TYP_CD = (SELECT CASE WHEN A.RQST_DCD = 'DD' THEN 'D' ELSE CASE WHEN MAX(B.SYMN_ITEM_ID ) IS NULL THEN 'C' ELSE 'U' END END
+                          FROM WAM_SYMN_ITEM B
+                         WHERE B.REG_TYP_CD IN ('C','U')
+                           AND B.SYMN_ITEM_LNM = A.SYMN_ITEM_LNM
+                           )
+       ,A.VRF_CD = '4'
+    WHERE A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+  </update>
+  
+  
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.meta.symn.service.WaqSymnItem" >
+  update WAQ_SYMN_ITEM
+    <set >
+     <if test="symnItemId != null" >
+	 SYMN_ITEM_ID        = #{symnItemId,jdbcType=VARCHAR } ,
+	   </if>
+     <if test="symnItemLnm != null" >
+	 SYMN_ITEM_LNM       = #{symnItemLnm,jdbcType=VARCHAR } ,
+	   </if>
+     <if test="symnItemPnm != null" >
+	 SYMN_ITEM_PNM       = UPPER( #{symnItemPnm,jdbcType=VARCHAR } ),
+	   </if>
+     <if test="symnItemType != null" >
+	 SYMN_ITEM_TYPE      = #{symnItemType,jdbcType=VARCHAR } ,
+	   </if>
+     <if test="sditmId != null" >
+	 SDITM_ID            = #{sditmId,jdbcType=VARCHAR } ,
+	   </if>
+     <if test="sditmLnm != null" >
+	 SDITM_LNM           = #{sditmLnm,jdbcType=VARCHAR } ,
+	   </if>
+     <if test="sditmPnm != null" >
+	 SDITM_PNM           = UPPER( #{sditmPnm,jdbcType=VARCHAR } ) ,
+	   </if>
+     <if test="rqstDcd != null" >
+	 RQST_DCD            = #{rqstDcd,jdbcType=VARCHAR } ,
+	   </if>
+     <if test="rvwStsCd != null" >
+	 RVW_STS_CD          = #{rvwStsCd,jdbcType=VARCHAR } ,
+	   </if>
+     <if test="rvwConts != null" >
+	 RVW_CONTS           = #{rvwConts,jdbcType=VARCHAR } ,
+	   </if>
+     <if test="vrfRmk != null" >
+	 VRF_RMK             = #{vrfRmk,jdbcType=VARCHAR } ,
+	   </if>
+     <if test="vrfCd != null" >    
+	 VRF_CD              = #{vrfCd,jdbcType=VARCHAR } ,
+	   </if>
+     <if test="objDescn != null" >
+	 OBJ_DESCN           = #{objDescn,jdbcType=VARCHAR } ,
+	   </if>
+     <if test="objVers != null" >
+	 OBJ_VERS            = #{objVers,jdbcType=DECIMAL } ,
+	   </if>
+     <if test="regTypCd != null" >
+	 REG_TYP_CD          = #{regTypCd,jdbcType=VARCHAR } ,
+	   </if>
+     <if test="frsRqstDtm != null" >
+	 FRS_RQST_DTM        = #{frsRqstDtm,jdbcType=TIMESTAMP } ,
+	   </if>
+     <if test="frsRqstUserId != null" >
+	 FRS_RQST_USER_ID    = #{frsRqstUserId,jdbcType=VARCHAR } ,
+	   </if>
+     <if test="rqstDtm != null" >
+	 RQST_DTM            = #{rqstDtm,jdbcType=TIMESTAMP } ,
+	   </if>
+     <if test="rqstUserId != null" >
+	 RQST_USER_ID        = #{rqstUserId,jdbcType=VARCHAR } ,
+	   </if>
+     <if test="aprvDtm != null" >
+	 APRV_DTM            = #{aprvDtm,jdbcType=TIMESTAMP } ,
+	   </if>
+     <if test="aprvUserId != null" >
+	 APRV_USER_ID        = #{aprvUserId,jdbcType=VARCHAR } ,
+	   </if>
+     <if test="pnmCriDs != null" >
+	 PNM_CRI_DS          = #{pnmCriDs,jdbcType=VARCHAR } ,
+	   </if>
+	  </set>
+	   where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      and RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+  </update>
+  
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+      delete from WAQ_SYMN_ITEM
+    where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      and RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+  </delete>
+  
+    <!-- 결재처리 -->
+  <update id="updateRvwStsCd" parameterType="kr.wise.meta.symn.service.WaqSymnItem">
+  	UPDATE WAQ_SYMN_ITEM
+  	<set>
+  	    RVW_STS_CD 	= #{rvwStsCd} , 
+  		RVW_CONTS 	= #{rvwConts} , 
+  		APRV_DTM	= SYSDATETIME ,
+  		APRV_USER_ID = #{aprvUserId} ,
+  	</set>
+    WHERE RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      AND RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+      AND VRF_CD = '1'
+      AND NVL(RVW_STS_CD, '_') != '2'
+  </update>
+  
+  <select id="selectWaqC" parameterType="map" resultMap="BaseResultMap">
+   	--신규 적재 대상 추출
+   	SELECT * FROM WAQ_SYMN_ITEM
+   	WHERE RQST_NO = #{rqstNo}
+   	  AND RVW_STS_CD = '1'  --승인
+   	  AND REG_TYP_CD = 'C'
+   </select>  
+   
+   <update id="updateidByKey" parameterType="kr.wise.meta.symn.service.WaqSymnItem">
+     --신규 적재 대상 ID 업데이트
+     UPDATE WAQ_SYMN_ITEM SET SYMN_ITEM_ID = #{symnItemId,jdbcType=VARCHAR}
+  	 WHERE RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+       AND RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+   </update>
+  
+   <delete id="deleteWAM" parameterType="map">
+    --WAM 삭제 (등록유형코드가REG_TYP_CD 변경, 삭제일 경우)
+	DELETE FROM WAM_SYMN_ITEM A
+	 WHERE EXISTS ( SELECT 1 
+				      FROM WAQ_SYMN_ITEM B
+				     WHERE B.RQST_NO = #{rqstNo}
+				       AND B.VRF_CD = '1'
+				       AND B.RVW_STS_CD = '1'				       
+				       AND B.SYMN_ITEM_ID = A.SYMN_ITEM_ID	       
+				  )
+   </delete>   
+   
+   
+   
+   <insert id="insertWAM" parameterType="map">
+   	--WAM 추가 (WAQ 내용을 추가, REG_TYP_CD 가 신규,변경일 경우)
+	INSERT INTO WAM_SYMN_ITEM
+	(SYMN_ITEM_ID 	
+	 <include refid="wam_col"/>
+	)	
+	SELECT SYMN_ITEM_ID 	
+	       <include refid="wam_col"/>	
+	 FROM WAQ_SYMN_ITEM A
+	WHERE A.RQST_NO = #{rqstNo}
+	  AND A.VRF_CD = '1'
+	  AND A.RVW_STS_CD = '1'
+	  AND A.REG_TYP_CD IN ('C', 'U')
+   </insert>  
+   
+   <update id="updateWAH"  parameterType="map">
+   	--WAH 이력 만료...
+	UPDATE WAH_SYMN_ITEM A
+	   SET EXP_DTM = SYSDATETIME
+	 WHERE EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	   AND REG_TYP_CD IN ('C','U')
+	   AND EXISTS ( SELECT 1
+			 	      FROM WAQ_SYMN_ITEM B
+				     WHERE B.RQST_NO = #{rqstNo}
+				       AND B.VRF_CD = '1'
+				       AND B.RVW_STS_CD = '1'
+				       AND B.SYMN_ITEM_ID = A.SYMN_ITEM_ID	     
+				  )	
+   </update>  
+
+   <insert id="insertWAH"  parameterType="map">
+   	--WAH이력 적재...
+	INSERT INTO WAH_SYMN_ITEM
+	(  SYMN_ITEM_ID 
+	 , EXP_DTM
+	 , STR_DTM 	
+	 <include refid="wam_col"/>   	
+	)
+	SELECT A.SYMN_ITEM_ID AS SYMN_ITEM_ID
+	     , TO_DATE( '9999-12-31', 'YYYY-MM-DD') AS EXP_DTM
+	     , SYSDATETIME AS STR_DTM 	
+	     <include refid="wam_col"/>   
+	 FROM WAQ_SYMN_ITEM A
+	WHERE A.RQST_NO = #{rqstNo}
+	  AND A.VRF_CD = '1'
+	  AND A.RVW_STS_CD = '1'
+   </insert>  
+   
+    <update id="updateWaqCUD" parameterType="map">
+   	--WAQ ID, VERS 등을 업데이트...
+	UPDATE WAQ_SYMN_ITEM A
+	SET (SYMN_ITEM_ID, OBJ_VERS, FRS_RQST_DTM, FRS_RQST_USER_ID) = (
+	    SELECT 
+	          B.SYMN_ITEM_ID AS SYMN_ITEM_ID
+	        , NVL(B.OBJ_VERS, 0) + 1 AS OBJ_VERS
+	        , B.FRS_RQST_DTM
+	        , B.FRS_RQST_USER_ID
+	    FROM WAM_SYMN_ITEM B
+	    WHERE B.SYMN_ITEM_PNM = A.SYMN_ITEM_PNM /* 기준고민 */
+	      AND B.SYMN_ITEM_LNM = A.SYMN_ITEM_LNM 
+	)
+	WHERE A.RQST_NO = #{rqstNo}
+	AND A.RVW_STS_CD = '1'  --승인
+	AND EXISTS (
+		SELECT 1 FROM WAM_SYMN_ITEM B
+	     WHERE B.SYMN_ITEM_PNM = A.SYMN_ITEM_PNM /* 기준고민 */
+	      AND B.SYMN_ITEM_LNM = A.SYMN_ITEM_LNM
+	)
+   </update> 
+
+
+  <insert id="checkDupInRqst" parameterType="map">
+  	<include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSql"/>
+  	--검증쿼리 : 요청서 내 중복( ${vrfDtlCd} )
+    AND EXISTS ( SELECT 1
+	             FROM WAQ_SYMN_ITEM D
+	             WHERE A.RQST_NO = D.RQST_NO
+	               AND( A.SYMN_ITEM_PNM = D.SYMN_ITEM_PNM /* 기준고민 */
+	               	 OR A.SYMN_ITEM_LNM = D.SYMN_ITEM_LNM
+	               	)
+	               AND A.RQST_SNO != D.RQST_SNO
+                )
+  </insert>
+  
+    <insert id="checkDupOtherRqst" parameterType="map">
+  	<include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSql"/>
+  	--검증쿼리 : 등록중인 요청서( ${vrfDtlCd} )
+     AND EXISTS ( SELECT 1 FROM WAQ_MSTR E
+	             INNER JOIN WAQ_SYMN_ITEM D
+	             	ON E.RQST_NO = D.RQST_NO
+	             WHERE E.RQST_NO != A.RQST_NO
+	               AND E.RQST_STEP_CD = 'Q'
+	               AND ( A.SYMN_ITEM_LNM = D.SYMN_ITEM_LNM
+	               	OR A.SYMN_ITEM_PNM = D.SYMN_ITEM_PNM) /* 기준고민 */
+				   AND NVL(D.RVW_STS_CD, 0) != '2'
+                )
+  </insert>
+  
+  
+    <select id="selectwamlist" parameterType="map" resultMap="BaseResultMap">
+  		SELECT 
+  			((SELECT NVL(MAX(RQST_SNO), 0) FROM WAQ_APP_SDITM WHERE RQST_NO = #{reqmst.rqstNo}) + ROWNUM) AS RQST_SNO
+  		  , 'I' AS IBS_STATUS
+  		  ,	A.SYMN_ITEM_ID, A.SYMN_ITEM_LNM, A.SYMN_ITEM_PNM, A.SYMN_ITEM_TYPE, A.SDITM_ID, A.SDITM_LNM, A.SDITM_PNM, PNM_CRI_DS
+		  , #{reqmst.rqstDcd} AS RQST_DCD
+		  , A.OBJ_DESCN, A.OBJ_VERS
+	  FROM WAM_SYMN_ITEM A
+		  WHERE A.SYMN_ITEM_ID IN 
+	  <foreach collection="list" item="item" open="(" separator="," close=")">
+	  	#{item.symnItemId}
+	  </foreach>
+	    AND A.REG_TYP_CD IN ('C', 'U')  
+  </select>
+  
+  
+  
+  <insert id="checkNotChgData" parameterType="map">
+  	<!--  <include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSql"/> -->
+  	
+  	 <include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.updateVrfNotChg"/>
+  	
+  	--검증쿼리
+      AND A.REG_TYP_CD = 'U'
+      AND EXISTS (SELECT 1
+             FROM WAM_SYMN_ITEM D
+            WHERE A.SYMN_ITEM_LNM = D.SYMN_ITEM_LNM
+			  AND NVL(A.SYMN_ITEM_PNM    , '_')   = NVL(D.SYMN_ITEM_PNM    , '_')
+			  AND NVL(A.SDITM_PNM    , '_')   = NVL(D.SDITM_PNM    , '_')               
+			  AND NVL(A.SDITM_LNM    , '_')   = NVL(D.SDITM_LNM    , '_')               
+			  AND NVL(A.OBJ_DESCN    , '_')   = NVL(D.OBJ_DESCN    , '_')               
+                  )    
+  </insert>
+    
+</mapper>

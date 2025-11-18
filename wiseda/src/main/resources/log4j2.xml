@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+<Properties>
+  <Property name="logNm">WISE_log</Property>
+  <Property name="layoutPattern">%d [%t] %-5level %c(%location) - %m%n</Property>
+</Properties>
+<Appenders>
+  <Console name="console" target="SYSTEM_OUT">
+   <PatternLayout pattern="${layoutPattern}" />
+  </Console>
+
+  <RollingFile name="file" fileName="C:/ide/basemeta/logs/${logNm}.log" filePattern="/${logNm}_%d{yyyy-MM-dd}_%i.log" immediateFlush="false" append="true">
+   <PatternLayout pattern="${layoutPattern}" />
+   <Policies>
+    <SizeBasedTriggeringPolicy size="3MB" /> <!-- 3MB 용량이 초과시 DefaultRolloverStrategy 정책만큼 넘버링 -->      
+    <TimeBasedTriggeringPolicy modulate="true" interval="1" /><!-- 일별 로그 파일 생성-->
+   </Policies>
+   <DefaultRolloverStrategy max="50" fileIndex="min" /><!-- 롤링 파일 50개 까지 생성 -->
+  </RollingFile>
+ </Appenders>
+
+ <Loggers>
+ 
+  <!-- 기본 레벨은 debug -->
+  <Root level="debug" additivity="false" >
+   <AppenderRef ref="console" />
+   <AppenderRef ref="file" />
+  </Root>
+
+  <!-- 스프링 프레임워크에서 찍는건 level을 info로 설정 -->
+     <logger name="org.springframework" additivity="false" >
+      <AppenderRef ref="console" level="error" />
+      <AppenderRef ref="file" level="error" />
+     </logger>
+          
+     <!-- rolling file에는 debug, console에는 info 분리하여 처리 가능하다. -->
+     <logger name="kr.wise" additivity="false" >
+      <AppenderRef ref="console" level="debug" />
+      <AppenderRef ref="file" level="error" />
+     </logger>
+     
+	<Logger name="java.sql" additivity="false">
+		<AppenderRef ref="console" level="error" />
+		<AppenderRef ref="file" level="error" />
+	</Logger>
+	
+	<Logger name="jdbc.resultset" additivity="false"> 
+		<AppenderRef ref="console" level="error" /> 
+		<AppenderRef ref="file" level="error" />
+	</Logger>
+	
+	<Logger name="jdbc.resultsettable" additivity="false"> 
+		<AppenderRef ref="console" level="error" /> 
+		<AppenderRef ref="file" level="error" />
+	</Logger>
+	
+	<!-- log SQL with timing information, post execution -->
+	<Logger name="jdbc.sqltiming" additivity="false">
+		<AppenderRef ref="console" level="error" />
+		<AppenderRef ref="file" level="error" />
+	</Logger>
+	
+	<!-- Query Loggers -->
+	<Logger name="jdbc.sqlonly" additivity="false"> 
+		<AppenderRef ref="console" level="info" /> 
+		<AppenderRef ref="file" level="error" />
+	</Logger>
+	
+	<Logger name="org.mybatis" additivity="false"> 
+		<AppenderRef ref="console" level="error" /> 
+		<AppenderRef ref="file" level="error" />
+	</Logger>
+	
+	<Logger name="jdbc.audit" additivity="false"> 
+		<AppenderRef ref="console" level="error" /> 
+		<AppenderRef ref="file" level="error" />
+	</Logger>
+	
+	<Logger name="jdbc.connection" additivity="false"> 
+		<AppenderRef ref="console" level="error" /> 
+		<AppenderRef ref="file" level="error" />
+	</Logger>
+	
+	<Logger name="org.apache" additivity="false"> 
+		<AppenderRef ref="console" level="error" /> 
+		<AppenderRef ref="file" level="error" />
+	</Logger>
+	
+	<Logger name="log4jdbc" additivity="false"> 
+		<AppenderRef ref="console" level="error" /> 
+		<AppenderRef ref="file" level="error" />
+	</Logger>
+	
+ </Loggers>
+</Configuration>
+

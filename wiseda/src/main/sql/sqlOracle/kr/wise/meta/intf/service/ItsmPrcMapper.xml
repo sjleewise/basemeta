@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.meta.intf.service.ItsmPrcMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.sysinf.itsm.service.ItsmVo">
+		<result column="REQ_NO" property="reqNo" jdbcType="VARCHAR" />
+		<result column="REQ_TITLE" property="reqTitle" jdbcType="VARCHAR" />
+		<result column="REQ_BBR_C" property="reqBbrC" jdbcType="VARCHAR" />
+		<result column="REQ_TEM_C" property="reqTemC" jdbcType="VARCHAR" />
+		<result column="REQ_USR_ID" property="reqUsrId" jdbcType="VARCHAR" />
+		<result column="REQ_USR_NM" property="reqUsrNm" jdbcType="VARCHAR" />
+		<result column="REQ_DTM" property="reqDtm" jdbcType="VARCHAR" />
+		<result column="DOC_STS_CD" property="docStsCd" jdbcType="VARCHAR" />
+		<result column="DOC_STS_CD_NM" property="docStsCdNm" jdbcType="VARCHAR" />
+		<result column="CHG_REQ_RET_NO" property="chgReqRetNo" jdbcType="VARCHAR" />
+		<result column="CHG_REQ_RET_TITLE" property="chgReqRetTitle" jdbcType="VARCHAR" />
+		<result column="WRK_PRC_NO" property="wrkPrcNo" jdbcType="VARCHAR" />
+		<result column="WRK_DEPT_ID" property="wrkDeptId" jdbcType="VARCHAR" />
+		<result column="WRK_TEAM_ID" property="wrkTeamId" jdbcType="VARCHAR" />
+		<result column="WRK_USR_ID" property="wrkUsrId" jdbcType="VARCHAR" />
+		<result column="WRK_USR_NM" property="wrkUsrNm" jdbcType="VARCHAR" />
+		<result column="WRK_APP_C" property="wrkAppC" jdbcType="VARCHAR" />
+		<result column="WRK_APP_C_NM" property="wrkAppCNm" jdbcType="VARCHAR" />
+		<result column="WRK_APP_BIZ_LV1_C" property="wrkAppBizLv1C" jdbcType="VARCHAR" />
+		<result column="WRK_APP_BIZ_LV1_C_NM" property="wrkAppBizLv1CNm" jdbcType="VARCHAR" />
+		<result column="WRK_PRC_STS_CD" property="wrkPrcStsCd" jdbcType="VARCHAR" />
+		<result column="WRK_PRC_STS_CD_NM" property="wrkPrcStsCdNm" jdbcType="VARCHAR" />
+		<result column="BGI_DTM" property="bgiDtm" jdbcType="VARCHAR" />
+		<result column="END_DTM" property="endDtm" jdbcType="VARCHAR" />
+		<result column="OPRG_MVI_RQS_NO" property="oprgMviRqsNo" jdbcType="VARCHAR" />
+		<result column="MVI_STS_CD" property="mviStsCd" jdbcType="VARCHAR" />
+		<result column="MVI_STS_NM" property="mviStsNm" jdbcType="VARCHAR" />
+		<result column="OBJ_ID" property="objId" jdbcType="VARCHAR" />
+		<result column="DDL_TRG_DCD" property="ddlTrgDcd" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <update id="updateWaqMstrWrkPrcNo" parameterType="map">
+  	--작업처리번호 update...
+  	UPDATE WAQ_MSTR
+  	   SET WRK_PRC_NO = #{savevo.wrkPrcNo,jdbcType=VARCHAR}
+  	 WHERE RQST_NO = #{savevo.rqstNo,jdbcType=VARCHAR}
+  </update>
+  
+  <update id="updateWrkPrcNo" parameterType="map">
+  	--작업처리번호 update...
+  	UPDATE ${tblNm}
+  	   SET WRK_PRC_NO = #{savevo.wrkPrcNo,jdbcType=VARCHAR}
+  	 WHERE RQST_NO = #{savevo.rqstNo,jdbcType=VARCHAR}
+  	 <if test="savevo.rqstSno != null" >
+  	   AND RQST_SNO = #{savevo.rqstSno,jdbcType=VARCHAR} 
+ 	  </if>
+  </update> 
+  
+  <select id="selectWrkPrcNolist" parameterType="map" resultMap="BaseResultMap">
+  	--오브젝트ID로 조회하여 해당 작업처리 번호 조회(이관,운영만)
+  	SELECT WRK_PRC_NO,DDL_TRG_DCD FROM (
+	    SELECT WRK_PRC_NO,A.DDL_TRG_DCD FROM WAH_DDL_TBL A
+	    WHERE DDL_TBL_ID IN 
+		  <foreach collection="list" item="item" open="(" separator="," close=")">
+		  	#{item.objId}
+		  </foreach> 
+	    AND EXP_DTM = TO_DATE('9999-12-31','YYYY-MM-DD')
+	    AND A.DDL_TRG_DCD IN ('T','R')
+	    AND A.WRK_PRC_NO IS NOT NULL
+	    
+	    UNION ALL
+	    SELECT A.WRK_PRC_NO,B.DDL_TRG_DCD FROM WAH_DDL_IDX A
+	    INNER JOIN WAH_DDL_TBL B
+	       ON A.DDL_TBL_ID = B.DDL_TBL_ID
+	      AND B.EXP_DTM = TO_DATE('9999-12-31','YYYY-MM-DD')
+	    WHERE DDL_IDX_ID IN 
+		  <foreach collection="list" item="item" open="(" separator="," close=")">
+		  	#{item.objId}
+		  </foreach> 
+	    AND A.EXP_DTM = TO_DATE('9999-12-31','YYYY-MM-DD')
+	    AND B.DDL_TRG_DCD IN ('T','R')
+	    AND A.WRK_PRC_NO IS NOT NULL
+	    
+	    UNION ALL
+	    SELECT A.WRK_PRC_NO,B.DDL_TRG_DCD FROM WAH_DDL_PART A
+	    INNER JOIN WAH_DDL_TBL B
+	       ON A.DDL_TBL_ID = B.DDL_TBL_ID
+	      AND B.EXP_DTM = TO_DATE('9999-12-31','YYYY-MM-DD')
+	    WHERE DDL_PART_ID IN 
+		  <foreach collection="list" item="item" open="(" separator="," close=")">
+		  	#{item.objId}
+		  </foreach> 
+	    AND A.EXP_DTM = TO_DATE('9999-12-31','YYYY-MM-DD')
+	    AND B.DDL_TRG_DCD IN ('T','R')
+	    AND A.WRK_PRC_NO IS NOT NULL
+	    
+	    UNION ALL
+	    SELECT WRK_PRC_NO,A.DDL_TRG_DCD FROM WAH_DDL_OBJ A
+	    WHERE DDL_OBJ_ID IN 
+		  <foreach collection="list" item="item" open="(" separator="," close=")">
+		  	#{item.objId}
+		  </foreach> 
+	    AND A.EXP_DTM = TO_DATE('9999-12-31','YYYY-MM-DD')
+	    AND A.DDL_TRG_DCD IN ('T','R')
+	    AND A.WRK_PRC_NO IS NOT NULL
+	    
+	    UNION ALL
+	    SELECT WRK_PRC_NO,A.DDL_TRG_DCD FROM WAH_DDL_SEQ A
+	    WHERE DDL_SEQ_ID IN 
+		  <foreach collection="list" item="item" open="(" separator="," close=")">
+		  	#{item.objId}
+		  </foreach> 
+	    AND EXP_DTM = TO_DATE('9999-12-31','YYYY-MM-DD')
+	    AND A.DDL_TRG_DCD IN ('T','R')
+	    AND A.WRK_PRC_NO IS NOT NULL
+	    
+	)
+	GROUP BY WRK_PRC_NO,DDL_TRG_DCD
+   	     
+  </select>
+  
+  
+  <select id="selectWrkPrcNoDbaNPRClist" parameterType="map" resultMap="BaseResultMap">
+  	-- 작업처리 번호 별 미처리 된 목록 조회(이관,운영만)
+  	SELECT OBJ_ID FROM (
+	    SELECT A.DDL_TBL_ID AS OBJ_ID 
+	    FROM WAH_DDL_TBL A
+	    WHERE A.WRK_PRC_NO = #{savevo.wrkPrcNo,jdbcType=VARCHAR}
+	    AND A.EXP_DTM = TO_DATE('9999-12-31','YYYY-MM-DD')
+	    AND A.DDL_TRG_DCD = #{savevo.ddlTrgDcd,jdbcType=VARCHAR}
+	    AND A.WRK_PRC_NO IS NOT NULL
+	    AND NVL(A.PRC_TYP_CD,'NPC') = 'NPC'
+	    
+	    UNION ALL
+	    SELECT A.DDL_IDX_ID AS OBJ_ID 
+	    FROM WAH_DDL_IDX A
+	    INNER JOIN WAH_DDL_TBL B
+	       ON A.DDL_TBL_ID = B.DDL_TBL_ID
+	      AND B.EXP_DTM = TO_DATE('9999-12-31','YYYY-MM-DD')
+	    WHERE A.WRK_PRC_NO = #{savevo.wrkPrcNo,jdbcType=VARCHAR}
+	    AND A.EXP_DTM = TO_DATE('9999-12-31','YYYY-MM-DD')
+	    AND B.DDL_TRG_DCD = #{savevo.ddlTrgDcd,jdbcType=VARCHAR}
+	    AND A.WRK_PRC_NO IS NOT NULL
+	    AND NVL(A.PRC_TYP_CD,'NPC') = 'NPC'
+	    
+	    UNION ALL
+	    SELECT A.DDL_PART_ID AS OBJ_ID 
+	    FROM WAH_DDL_PART A
+	    INNER JOIN WAH_DDL_TBL B
+	       ON A.DDL_TBL_ID = B.DDL_TBL_ID
+	      AND B.EXP_DTM = TO_DATE('9999-12-31','YYYY-MM-DD')
+	    WHERE A.WRK_PRC_NO = #{savevo.wrkPrcNo,jdbcType=VARCHAR}
+	    AND A.EXP_DTM = TO_DATE('9999-12-31','YYYY-MM-DD')
+	    AND B.DDL_TRG_DCD = #{savevo.ddlTrgDcd,jdbcType=VARCHAR}
+	    AND A.WRK_PRC_NO IS NOT NULL
+	    AND NVL(A.PRC_TYP_CD,'NPC') = 'NPC'
+	    
+	    UNION ALL
+	    SELECT DDL_OBJ_ID AS OBJ_ID 
+	    FROM WAH_DDL_OBJ A
+	    WHERE A.WRK_PRC_NO = #{savevo.wrkPrcNo,jdbcType=VARCHAR}
+	    AND A.EXP_DTM = TO_DATE('9999-12-31','YYYY-MM-DD')
+	    AND A.DDL_TRG_DCD = #{savevo.ddlTrgDcd,jdbcType=VARCHAR}
+	    AND A.WRK_PRC_NO IS NOT NULL
+	    AND NVL(A.PRC_TYP_CD,'NPC') = 'NPC'
+	    
+	    UNION ALL
+	    SELECT DDL_SEQ_ID AS OBJ_ID 
+	    FROM WAH_DDL_SEQ A
+	    WHERE A.WRK_PRC_NO = #{savevo.wrkPrcNo,jdbcType=VARCHAR}
+	    AND EXP_DTM = TO_DATE('9999-12-31','YYYY-MM-DD')
+	    AND A.DDL_TRG_DCD = #{savevo.ddlTrgDcd,jdbcType=VARCHAR}
+	    AND A.WRK_PRC_NO IS NOT NULL
+	    AND NVL(A.PRC_TYP_CD,'NPC') = 'NPC'
+	    
+	)
+	
+   	     
+  </select>
+  
+</mapper>

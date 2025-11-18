@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.dq.result.yrdqireg.service.YrDqiRegMapper" >
+	<resultMap id="BaseResultMap" type="kr.wise.dq.result.yrdqireg.service.YrDqiRegVO">
+		<result column="UPP_DQI_LNM"  property="uppDqiLnm"  jdbcType="VARCHAR"  />
+		<result column="DQI_LNM"      property="dqiLnm"     jdbcType="VARCHAR"  />
+		
+		<result column="UPP_DQI_LNM"  property="cntName"    jdbcType="VARCHAR"  />
+		<result column="TOT_CNT"      property="totCnt"     jdbcType="VARCHAR"  />	
+		<result column="ERR_CNT"      property="errCnt"     jdbcType="VARCHAR"  />	
+		<result column="ERR_RATE"     property="errRate"    jdbcType="VARCHAR"  />
+		<result column="NO_EXE"       property="noExe"      jdbcType="VARCHAR"  />
+		<result column="COL_CNT"      property="colCnt"     jdbcType="VARCHAR"  />
+		<result column="TBL_CNT"      property="tblCnt"     jdbcType="VARCHAR"  />
+		<result column="SUM_RATE"     property="sumRate"    jdbcType="VARCHAR"  />
+		
+		<result column="ANA_STR_DTM"  property="anaStrDtm"  jdbcType="VARCHAR"  />
+		<result column="ANA_END_DTM"  property="anaEndDtm"  jdbcType="VARCHAR"  />
+		
+		<result column="ERR_SQL"  property="errSql"  jdbcType="CLOB"  />
+		<result column="DBC_TBL_KOR_NM"  property="dbcTblKorNm"  jdbcType="VARCHAR"  />
+		<result column="DBC_COL_KOR_NM"  property="dbcColKorNm"  jdbcType="VARCHAR"  />
+		<result column="PRF_KND_CD"  property="prfKndCd"  jdbcType="VARCHAR"  />
+		<result column="PRF_TYP"  property="prfTyp"  jdbcType="VARCHAR"  />
+		<result column="PRF_NM"  property="prfNm"  jdbcType="VARCHAR"  />
+		<result column="PRF_ID"  property="prfId"  jdbcType="VARCHAR"  />
+		<result column="PRF_YN"  property="prfYn"  jdbcType="VARCHAR"  />
+		<result column="DATA_TYPE"  property="dataType"  jdbcType="VARCHAR"  />
+		<result column="EXP_YN"  property="expYn"  jdbcType="VARCHAR"  />
+		<result column="EXP_RSN_CNTN"  property="expRsnCntn"  jdbcType="VARCHAR"  />
+		
+		<result column="DB_SCH_PNM"  property="dbSchPnm"  jdbcType="VARCHAR"  />
+		<result column="DB_SCH_LNM"  property="dbSchLnm"  jdbcType="VARCHAR"  />
+		<result column="DBC_TBL_NM"  property="dbcTblNm"  jdbcType="VARCHAR"  />
+		<result column="DBC_COL_NM"  property="dbcColNm"  jdbcType="VARCHAR"  />
+		
+		<result column="STND_RATE"     property="stndRate"    jdbcType="VARCHAR"  />
+		<result column="GOAL"     property="goal"    jdbcType="VARCHAR"  />
+		
+		<result column="PDM_TBL_PNM"     property="pdmTblPnm"    jdbcType="VARCHAR"  />
+		<result column="PDM_COL_PNM"     property="pdmColPnm"    jdbcType="VARCHAR"  />
+		<result column="DATA_TYPE"     property="dataType"    jdbcType="VARCHAR"  />
+		<result column="GAP_STATUS"     property="gapStatus"    jdbcType="VARCHAR"  />
+		
+		<result column="SDITM_LNM"     property="sditmLnm"    jdbcType="VARCHAR"  />
+		<result column="SDITM_PNM"     property="sditmPnm"    jdbcType="VARCHAR"  />
+		<result column="OBJ_DESCN"     property="objDescn"    jdbcType="VARCHAR"  />
+		<result column="INFOTP_LNM"     property="infotpLnm"    jdbcType="VARCHAR"  />
+		
+		<result column="DMN_LNM"     property="dmnLnm"    jdbcType="VARCHAR"  />
+		<result column="DMN_PNM"     property="dmnPnm"    jdbcType="VARCHAR"  />
+		<result column="OBJ_DESCN"     property="objDescn"    jdbcType="VARCHAR"  />
+		<result column="DATA_LEN"     property="dataLen"    jdbcType="VARCHAR"  />
+		<result column="DATA_SCAL"     property="dataScal"    jdbcType="VARCHAR"  />
+		
+		<result column="YR_DQI_ID" property="yrDqiId" jdbcType="VARCHAR" />
+		<result column="EVAL_YR" property="evalYr" jdbcType="VARCHAR" />
+		<result column="DB_CONN_TRG_ID" property="dbConnTrgId" jdbcType="VARCHAR" />
+		<result column="DATA_STND_DFS" property="dataStndDfs" jdbcType="VARCHAR" />
+		<result column="DATA_STRUC_STAB" property="dataStrucStab" jdbcType="VARCHAR" />
+		<result column="DATA_LINK_MNG" property="dataLinkMng" jdbcType="VARCHAR" />
+		<result column="DQI" property="dqi" jdbcType="VARCHAR" />
+		<result column="DATA_RES_ACT" property="dataResAct" jdbcType="VARCHAR" />
+		<result column="DATA_ERR_RATE" property="dataErrRate" jdbcType="VARCHAR" />
+		<result column="REG_TYP" property="regTyp" jdbcType="VARCHAR" />
+		<result column="STR_DTM"  property="strDtm"  jdbcType="VARCHAR" />   
+		<result column="EXP_DTM"  property="expDtm"  jdbcType="VARCHAR" />   
+	</resultMap>
+  
+
+     <select id="selectList" resultMap="BaseResultMap" parameterType="HashMap">
+		SELECT *
+		FROM YR_DQI_REG 
+		WHERE 1=1
+		AND REG_TYP IN ('C','U')
+		   <if test="dbConnTrgId != null and dbConnTrgId != ''">
+		   AND DB_CONN_TRG_ID = #{dbConnTrgId, jdbcType=VARCHAR}
+		   </if> 
+		   <if test="evalYr != null and evalYr != ''">
+		   AND EVAL_YR = #{evalYr, jdbcType=VARCHAR}
+		   </if> 
+    </select>
+    
+      <insert id="insertSelective" parameterType="kr.wise.dq.criinfo.anatrg.service.WaaColRuleRel">
+  	INSERT INTO YR_DQI_REG
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="yrDqiId != null">
+        YR_DQI_ID,
+      </if>     
+      <if test="evalYr != null">
+        EVAL_YR,
+      </if>     
+      <if test="dbConnTrgId != null">
+        DB_CONN_TRG_ID,
+      </if>    
+      <if test="dataStndDfs != null">
+        DATA_STND_DFS,
+      </if>    
+      <if test="dataStrucStab != null">
+        DATA_STRUC_STAB,
+      </if>    
+      <if test="dataLinkMng != null">
+        DATA_LINK_MNG,
+      </if>    
+      <if test="dqi != null">
+        DQI,
+      </if>    
+       <if test="dataResAct != null">
+        DATA_RES_ACT,
+      </if>
+       <if test="dataErrRate != null">
+        DATA_ERR_RATE,
+      </if>
+      STR_DTM,  
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="yrDqiId != null">
+        #{yrDqiId,jdbcType=VARCHAR},
+      </if>     
+      <if test="evalYr != null">
+        #{evalYr,jdbcType=VARCHAR},
+      </if>
+      <if test="dbConnTrgId != null">
+        #{dbConnTrgId,jdbcType=VARCHAR},
+      </if>  
+      <if test="dataStndDfs != null">
+        #{dataStndDfs,jdbcType=VARCHAR},
+      </if>    
+      <if test="dataStrucStab != null">
+         #{dataStrucStab,jdbcType=VARCHAR},
+
+      </if>    
+      <if test="dataLinkMng != null">
+         #{dataLinkMng,jdbcType=VARCHAR},
+      </if>    
+      <if test="dqi != null">
+         #{dqi,jdbcType=VARCHAR},
+      </if>
+      <if test="dataResAct != null">
+         #{dataResAct,jdbcType=VARCHAR},
+      </if>
+      <if test="dataErrRate != null">
+         #{dataErrRate,jdbcType=VARCHAR},
+      </if>   
+      NOW() ,    
+    </trim>
+  </insert>
+
+	  <update id="deleteByPrimaryKeySelective" parameterType="kr.wise.dq.result.yrdqireg.service.YrDqiRegVO" > 
+  	  UPDATE YR_DQI_REG
+  	   SET EXP_DTM = NOW(),
+  	     REG_TYP  = #{regTyp,jdbcType=VARCHAR} 
+  	WHERE YR_DQI_ID = #{yrDqiId, jdbcType=VARCHAR}
+  </update>
+  
+      <select id="cntToUpdate" parameterType="kr.wise.dq.result.yrdqireg.service.YrDqiRegVO" resultType="Integer">
+	select count(*)
+	from YR_DQI_REG
+	where YR_DQI_ID  = #{yrDqiId,jdbcType=VARCHAR}
+  </select>
+  
+    <update id="updateByPrimaryKeySelective" parameterType="kr.wise.dq.result.yrdqireg.service.YrDqiRegVO" >
+    UPDATE YR_DQI_REG
+     <set>
+      <if test="evalYr != null" >
+        EVAL_YR = #{evalYr,jdbcType=VARCHAR},  
+      </if>
+      <if test="dbConnTrgId != null" >
+     	DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR},  
+      </if>
+      <if test="dataStndDfs != null" >
+         DATA_STND_DFS   = #{dataStndDfs,jdbcType=VARCHAR},  
+      </if>
+      <if test="dataStrucStab != null" >
+       DATA_STRUC_STAB   = #{dataStrucStab,jdbcType=VARCHAR},  
+      </if>
+      <if test="dataLinkMng != null" >
+        DATA_LINK_MNG   = #{dataLinkMng,jdbcType=VARCHAR},  
+      </if>
+      <if test="dqi != null" >
+        DQI   = #{dqi,jdbcType=VARCHAR},  
+      </if>
+      <if test="dataResAct != null" >
+       DATA_RES_ACT   = #{dataResAct,jdbcType=VARCHAR},  
+      </if>
+      <if test="dataErrRate != null" >
+       DATA_ERR_RATE   = #{dataErrRate,jdbcType=VARCHAR},  
+      </if>
+      <if test="regTyp != null" >
+       REG_TYP  = #{regTyp,jdbcType=VARCHAR} ,  
+      </if>
+    </set>
+     WHERE  YR_DQI_ID  = #{yrDqiId,jdbcType=VARCHAR}
+  </update>
+  
+   <select id="cntDup" parameterType="kr.wise.dq.result.yrdqireg.service.YrDqiRegVO" resultType="Integer">
+	SELECT COUNT(*)
+	FROM YR_DQI_REG
+	WHERE  DB_CONN_TRG_ID  = #{dbConnTrgId,jdbcType=VARCHAR}
+     	 AND EVAL_YR = #{evalYr,jdbcType=VARCHAR}
+     	 AND REG_TYP IN ('C','U')
+  </select>
+</mapper>

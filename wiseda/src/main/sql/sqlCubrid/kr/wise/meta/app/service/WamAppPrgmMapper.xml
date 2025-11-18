@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.wise.meta.app.service.WamAppPrgmMapper">
+  <resultMap id="BaseResultMap" type="kr.wise.meta.app.service.WamAppPrgm" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+    <id column="APP_PRGM_ID" jdbcType="VARCHAR" property="appPrgmId" />
+    <result column="APP_PRGM_LNM" jdbcType="VARCHAR" property="appPrgmLnm" />
+    <result column="APP_PRGM_PNM" jdbcType="VARCHAR" property="appPrgmPnm" />
+    <result column="APP_PRGM_DCD" jdbcType="VARCHAR" property="appPrgmDcd" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    APP_PRGM_ID, APP_PRGM_LNM, APP_PRGM_PNM, APP_PRGM_DCD, RQST_NO, RQST_SNO, OBJ_DESCN, 
+    OBJ_VERS, REG_TYP_CD, FRS_RQST_DTM, FRS_RQST_USER_ID, RQST_DTM, RQST_USER_ID, APRV_DTM, 
+    APRV_USER_ID
+  </sql>
+  <select id="selectList" parameterType="kr.wise.meta.app.service.WamAppPrgm" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from WAM_APP_PRGM
+    WHERE 1=1
+    <if test="appPrgmLnm != null and appPrgmLnm != ''">
+      AND (APP_PRGM_LNM LIKE '%' || #{appPrgmLnm,jdbcType=VARCHAR} || '%'
+      	OR APP_PRGM_PNM LIKE '%' || #{appPrgmLnm,jdbcType=VARCHAR} || '%')
+    </if>
+    <if test="objDescn != null and objDescn != ''">
+      AND OBJ_DESCN LIKE '%' || #{objDescn,jdbcType=VARCHAR} || '%'
+    </if>
+    <if test="appPrgmDcd != null and appPrgmDcd != ''">
+      AND APP_PRGM_DCD = #{appPrgmDcd,jdbcType=VARCHAR}
+    </if>    
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from WAM_APP_PRGM
+    where APP_PRGM_ID = #{appPrgmId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="kr.wise.meta.app.service.WamAppPrgm">
+    insert into WAM_APP_PRGM (APP_PRGM_ID, APP_PRGM_LNM, APP_PRGM_PNM, 
+      APP_PRGM_DCD, RQST_NO, RQST_SNO, 
+      OBJ_DESCN, OBJ_VERS, REG_TYP_CD, 
+      FRS_RQST_DTM, FRS_RQST_USER_ID, RQST_DTM, 
+      RQST_USER_ID, APRV_DTM, APRV_USER_ID
+      )
+    values (#{appPrgmId,jdbcType=VARCHAR}, #{appPrgmLnm,jdbcType=VARCHAR}, #{appPrgmPnm,jdbcType=VARCHAR}, 
+      #{appPrgmDcd,jdbcType=VARCHAR}, #{rqstNo,jdbcType=VARCHAR}, #{rqstSno,jdbcType=DECIMAL}, 
+      #{objDescn,jdbcType=VARCHAR}, #{objVers,jdbcType=DECIMAL}, #{regTypCd,jdbcType=VARCHAR}, 
+      #{frsRqstDtm,jdbcType=TIMESTAMP}, #{frsRqstUserId,jdbcType=VARCHAR}, #{rqstDtm,jdbcType=TIMESTAMP}, 
+      #{rqstUserId,jdbcType=VARCHAR}, #{aprvDtm,jdbcType=TIMESTAMP}, #{aprvUserId,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="kr.wise.meta.app.service.WamAppPrgm">
+    insert into WAM_APP_PRGM
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="appPrgmId != null">
+        APP_PRGM_ID,
+      </if>
+      <if test="appPrgmLnm != null">
+        APP_PRGM_LNM,
+      </if>
+      <if test="appPrgmPnm != null">
+        APP_PRGM_PNM,
+      </if>
+      <if test="appPrgmDcd != null">
+        APP_PRGM_DCD,
+      </if>
+      <if test="rqstNo != null">
+        RQST_NO,
+      </if>
+      <if test="rqstSno != null">
+        RQST_SNO,
+      </if>
+      <if test="objDescn != null">
+        OBJ_DESCN,
+      </if>
+      <if test="objVers != null">
+        OBJ_VERS,
+      </if>
+      <if test="regTypCd != null">
+        REG_TYP_CD,
+      </if>
+      <if test="frsRqstDtm != null">
+        FRS_RQST_DTM,
+      </if>
+      <if test="frsRqstUserId != null">
+        FRS_RQST_USER_ID,
+      </if>
+      <if test="rqstDtm != null">
+        RQST_DTM,
+      </if>
+      <if test="rqstUserId != null">
+        RQST_USER_ID,
+      </if>
+      <if test="aprvDtm != null">
+        APRV_DTM,
+      </if>
+      <if test="aprvUserId != null">
+        APRV_USER_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="appPrgmId != null">
+        #{appPrgmId,jdbcType=VARCHAR},
+      </if>
+      <if test="appPrgmLnm != null">
+        #{appPrgmLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="appPrgmPnm != null">
+        #{appPrgmPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="appPrgmDcd != null">
+        #{appPrgmDcd,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstNo != null">
+        #{rqstNo,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstSno != null">
+        #{rqstSno,jdbcType=DECIMAL},
+      </if>
+      <if test="objDescn != null">
+        #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null">
+        #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null">
+        #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="frsRqstDtm != null">
+        #{frsRqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="frsRqstUserId != null">
+        #{frsRqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDtm != null">
+        #{rqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rqstUserId != null">
+        #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDtm != null">
+        #{aprvDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aprvUserId != null">
+        #{aprvUserId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.meta.app.service.WamAppPrgm">
+    update WAM_APP_PRGM
+    <set>
+      <if test="appPrgmLnm != null">
+        APP_PRGM_LNM = #{appPrgmLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="appPrgmPnm != null">
+        APP_PRGM_PNM = #{appPrgmPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="appPrgmDcd != null">
+        APP_PRGM_DCD = #{appPrgmDcd,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstNo != null">
+        RQST_NO = #{rqstNo,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstSno != null">
+        RQST_SNO = #{rqstSno,jdbcType=DECIMAL},
+      </if>
+      <if test="objDescn != null">
+        OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null">
+        OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null">
+        REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="frsRqstDtm != null">
+        FRS_RQST_DTM = #{frsRqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="frsRqstUserId != null">
+        FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDtm != null">
+        RQST_DTM = #{rqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rqstUserId != null">
+        RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDtm != null">
+        APRV_DTM = #{aprvDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aprvUserId != null">
+        APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where APP_PRGM_ID = #{appPrgmId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="kr.wise.meta.app.service.WamAppPrgm">
+    update WAM_APP_PRGM
+    set APP_PRGM_LNM = #{appPrgmLnm,jdbcType=VARCHAR},
+      APP_PRGM_PNM = #{appPrgmPnm,jdbcType=VARCHAR},
+      APP_PRGM_DCD = #{appPrgmDcd,jdbcType=VARCHAR},
+      RQST_NO = #{rqstNo,jdbcType=VARCHAR},
+      RQST_SNO = #{rqstSno,jdbcType=DECIMAL},
+      OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      FRS_RQST_DTM = #{frsRqstDtm,jdbcType=TIMESTAMP},
+      FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR},
+      RQST_DTM = #{rqstDtm,jdbcType=TIMESTAMP},
+      RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      APRV_DTM = #{aprvDtm,jdbcType=TIMESTAMP},
+      APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR}
+    where APP_PRGM_ID = #{appPrgmId,jdbcType=VARCHAR}
+  </update>
+  
+  <select id="selectAppPrgmDetail" resultMap="BaseResultMap" parameterType="java.lang.String">
+	  SELECT A.*
+	  	  	,(SELECT USER_NM FROM WAA_USER WHERE USER_ID = A.FRS_RQST_USER_ID AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD') AND REG_TYP_CD IN ('C','U')) AS FRS_RQST_USER_NM
+	  	  	,(SELECT USER_NM FROM WAA_USER WHERE USER_ID = A.RQST_USER_ID AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD') AND REG_TYP_CD IN ('C','U')) AS RQST_USER_NM
+	  	  	,(SELECT USER_NM FROM WAA_USER WHERE USER_ID = A.APRV_USER_ID AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD') AND REG_TYP_CD IN ('C','U')) AS APRV_USER_NM 
+	  FROM 
+	  	WAM_APP_PRGM A
+	  WHERE A.APP_PRGM_ID =  #{appPrgmId,jdbcType=VARCHAR}
+	    AND A.REG_TYP_CD IN ('C', 'U')
+  </select>
+   
+  <select id="selectAppPrgmChangeList" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    SELECT A.*
+    	 , CASE WHEN A.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD') AND A.REG_TYP_CD IN ('C', 'U') THEN '#0000FF'
+    	   ELSE NULL END AS FontColor
+      FROM WAH_APP_PRGM A
+     WHERE APP_PRGM_ID = #{appPrgmId,jdbcType=VARCHAR}
+     ORDER BY EXP_DTM DESC, STR_DTM DESC
+  </select> 
+ 
+</mapper>

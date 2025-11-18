@@ -1,0 +1,1134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.dq.impv.service.WaqImActMstrMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.dq.impv.service.WaqImActMstr" extends="kr.wise.dq.bizrule.service.WamBrMstrMapper.BaseResultMap" >
+<!--     <id column="RQST_NO" property="rqstNo" jdbcType="VARCHAR" /> -->
+<!--     <id column="RQST_SNO" property="rqstSno" jdbcType="DECIMAL" /> -->
+    <result column="ANA_JOB_ID" property="anaJobId" jdbcType="VARCHAR" />
+    <result column="ANA_JOB_NM" property="anaJobNm" jdbcType="VARCHAR" />
+    <result column="ANA_STR_DTM" property="anaStrDtm" jdbcType="TIMESTAMP" />
+    <result column="ANA_KND_CD" property="anaKndCd" jdbcType="VARCHAR" />
+    <result column="IM_RSL_CD" property="imRslCd" jdbcType="VARCHAR" />
+    <result column="IM_RSL_CD_NM" property="imRslCdNm" jdbcType="VARCHAR" />
+    <result column="IM_IL_CD" property="imIlCd" jdbcType="VARCHAR" />
+    <result column="IM_IL_CD_NM" property="imIlCdNm" jdbcType="VARCHAR" />
+    <result column="IM_ACT_DTLS" property="imActDtls" jdbcType="VARCHAR" />
+    <result column="IM_ACT_STR_DTM" property="imActStrDtm" jdbcType="VARCHAR" />
+    <result column="IM_ACT_END_DTM" property="imActEndDtm" jdbcType="VARCHAR" />
+    <result column="SHD_JOB_DEL_RQST_YN" property="shdJobDelRqstYn" jdbcType="VARCHAR" />
+<!--     <result column="RQST_DCD" property="rqstDcd" jdbcType="VARCHAR" /> -->
+<!--     <result column="RVW_STS_CD" property="rvwStsCd" jdbcType="VARCHAR" /> -->
+<!--     <result column="RVW_CONTS" property="rvwConts" jdbcType="VARCHAR" /> -->
+<!--     <result column="VRF_CD" property="vrfCd" jdbcType="VARCHAR" /> -->
+<!--     <result column="VRF_RMK" property="vrfRmk" jdbcType="VARCHAR" /> -->
+<!--     <result column="OBJ_DESCN" property="objDescn" jdbcType="VARCHAR" /> -->
+<!--     <result column="OBJ_VERS" property="objVers" jdbcType="DECIMAL" /> -->
+<!--     <result column="REG_TYP_CD" property="regTypCd" jdbcType="VARCHAR" /> -->
+<!--     <result column="FRS_RQST_DTM" property="frsRqstDtm" jdbcType="TIMESTAMP" /> -->
+<!--     <result column="FRS_RQST_USER_ID" property="frsRqstUserId" jdbcType="VARCHAR" /> -->
+<!--     <result column="RQST_DTM" property="rqstDtm" jdbcType="TIMESTAMP" /> -->
+<!--     <result column="RQST_USER_ID" property="rqstUserId" jdbcType="VARCHAR" /> -->
+<!--     <result column="APRV_DTM" property="aprvDtm" jdbcType="TIMESTAMP" /> -->
+<!--     <result column="APRV_USER_ID" property="aprvUserId" jdbcType="VARCHAR" /> -->
+    
+    <result column="CS_ANA_CD" property="csAnaCd" jdbcType="VARCHAR" />
+    <result column="CS_ANA_CD_NM" property="csAnaCdNm" jdbcType="VARCHAR" />
+    <result column="CS_ANA_DTLS" property="csAnaDtls" jdbcType="VARCHAR" />
+    <result column="CS_ANA_IL_CD" property="csAnaIlCd" jdbcType="VARCHAR" />
+    <result column="CS_ANA_IL_CD_NM" property="csAnaIlCdNm" jdbcType="VARCHAR" />
+    <result column="CS_ANA_STR_DTM" property="csAnaStrDtm" jdbcType="TIMESTAMP" />
+    <result column="CS_ANA_END_DTM" property="csAnaEndDtm" jdbcType="TIMESTAMP" />
+    <result column="IM_PL_CD" property="imPlCd" jdbcType="VARCHAR" />
+    <result column="IM_PL_CD_NM" property="imPlCdNm" jdbcType="VARCHAR" />
+    <result column="IM_PL_DTLS" property="imPlDtls" jdbcType="VARCHAR" />
+    <result column="IM_PL_STR_DTM" property="imPlStrDtm" jdbcType="TIMESTAMP" />
+    <result column="IM_PL_END_DTM" property="imPlEndDtm" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    RQST_NO, RQST_SNO, ANA_JOB_ID, ANA_JOB_NM, ANA_STR_DTM, ANA_KND_CD, IM_RSL_CD, IM_RSL_CD_NM, 
+    IM_IL_CD, IM_IL_CD_NM, IM_ACT_DTLS, IM_ACT_STR_DTM, IM_ACT_END_DTM, SHD_JOB_DEL_RQST_YN, RQST_DCD, RVW_STS_CD, 
+    RVW_CONTS, VRF_CD, VRF_RMK, OBJ_DESCN, OBJ_VERS, REG_TYP_CD, FRS_RQST_DTM, FRS_RQST_USER_ID, 
+    RQST_DTM, RQST_USER_ID, APRV_DTM, APRV_USER_ID
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="map" >
+    select 
+    <include refid="Base_Column_List" />
+    from WAQ_IM_ACT_MSTR
+    where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      and RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="map" >
+    delete from WAQ_IM_ACT_MSTR
+    where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      and RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+  </delete>
+  <insert id="insert" parameterType="kr.wise.dq.impv.service.WaqImActMstr" >
+    insert into WAQ_IM_ACT_MSTR (RQST_NO, RQST_SNO, ANA_JOB_ID, 
+      ANA_JOB_NM, ANA_STR_DTM, ANA_KND_CD, 
+      IM_RSL_CD, IM_RSL_CD_NM, IM_IL_CD, 
+      IM_IL_CD_NM, IM_ACT_DTLS, IM_ACT_STR_DTM, 
+      IM_ACT_END_DTM, RQST_DCD, RVW_STS_CD, 
+      RVW_CONTS, VRF_CD, VRF_RMK, 
+      OBJ_DESCN, OBJ_VERS, REG_TYP_CD, 
+      FRS_RQST_DTM, FRS_RQST_USER_ID, RQST_DTM, 
+      RQST_USER_ID, APRV_DTM, APRV_USER_ID
+      )
+    values (#{rqstNo,jdbcType=VARCHAR}, #{rqstSno,jdbcType=DECIMAL}, #{anaJobId,jdbcType=VARCHAR}, 
+      #{anaJobNm,jdbcType=VARCHAR}, #{anaStrDtm,jdbcType=TIMESTAMP}, #{anaKndCd,jdbcType=VARCHAR}, 
+      #{imRslCd,jdbcType=VARCHAR}, #{imRslCdNm,jdbcType=VARCHAR}, #{imIlCd,jdbcType=VARCHAR}, 
+      #{imIlCdNm,jdbcType=VARCHAR}, #{imActDtls,jdbcType=VARCHAR}, #{imActStrDtm,jdbcType=TIMESTAMP}, 
+      #{imActEndDtm,jdbcType=TIMESTAMP}, #{rqstDcd,jdbcType=VARCHAR}, #{rvwStsCd,jdbcType=VARCHAR}, 
+      #{rvwConts,jdbcType=VARCHAR}, #{vrfCd,jdbcType=VARCHAR}, #{vrfRmk,jdbcType=VARCHAR}, 
+      #{objDescn,jdbcType=VARCHAR}, #{objVers,jdbcType=DECIMAL}, #{regTypCd,jdbcType=VARCHAR}, 
+      #{frsRqstDtm,jdbcType=TIMESTAMP}, #{frsRqstUserId,jdbcType=VARCHAR}, #{rqstDtm,jdbcType=TIMESTAMP}, 
+      #{rqstUserId,jdbcType=VARCHAR}, #{aprvDtm,jdbcType=TIMESTAMP}, #{aprvUserId,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="kr.wise.dq.impv.service.WaqImActMstr" >
+    insert into WAQ_IM_ACT_MSTR
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+        RQST_NO,
+        RQST_SNO,
+      <if test="anaJobId != null" >
+        ANA_JOB_ID,
+      </if>
+      <if test="anaJobNm != null" >
+        ANA_JOB_NM,
+      </if>
+      <if test="anaStrDtm != null" >
+        ANA_STR_DTM,
+      </if>
+      <if test="anaKndCd != null" >
+        ANA_KND_CD,
+      </if>
+      <if test="imRslCd != null" >
+        IM_RSL_CD,
+      </if>
+      <if test="imRslCdNm != null" >
+        IM_RSL_CD_NM,
+      </if>
+      <if test="imIlCd != null" >
+        IM_IL_CD,
+      </if>
+      <if test="imIlCdNm != null" >
+        IM_IL_CD_NM,
+      </if>
+      <if test="imActDtls != null" >
+        IM_ACT_DTLS,
+      </if>
+      <if test="imActStrDtm != null" >
+        IM_ACT_STR_DTM,
+      </if>
+      <if test="imActEndDtm != null" >
+        IM_ACT_END_DTM,
+      </if>
+      <if test="shdJobDelRqstYn != null" >
+        SHD_JOB_DEL_RQST_YN,
+      </if>
+      <if test="rqstDcd != null" >
+        RQST_DCD,
+      </if>
+      <if test="rvwStsCd != null" >
+        RVW_STS_CD,
+      </if>
+      <if test="rvwConts != null" >
+        RVW_CONTS,
+      </if>
+      <if test="vrfCd != null" >
+        VRF_CD,
+      </if>
+      <if test="vrfRmk != null" >
+        VRF_RMK,
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN,
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS,
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD,
+      </if>
+      <if test="frsRqstDtm != null" >
+        FRS_RQST_DTM,
+      </if>
+      <if test="frsRqstUserId != null" >
+        FRS_RQST_USER_ID,
+      </if>
+      <if test="rqstDtm != null" >
+        RQST_DTM,
+      </if>
+      <if test="rqstUserId != null" >
+        RQST_USER_ID,
+      </if>
+      <if test="aprvDtm != null" >
+        APRV_DTM,
+      </if>
+      <if test="aprvUserId != null" >
+        APRV_USER_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      #{rqstNo,jdbcType=VARCHAR},
+        (SELECT IFNULL(MAX(A.RQST_SNO), 0) + 1 FROM WAQ_IM_ACT_MSTR A WHERE A.RQST_NO = #{rqstNo}) ,
+      <if test="anaJobId != null" >
+        #{anaJobId,jdbcType=VARCHAR},
+      </if>
+      <if test="anaJobNm != null" >
+        #{anaJobNm,jdbcType=VARCHAR},
+      </if>
+      <if test="anaStrDtm != null" >
+        #{anaStrDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="anaKndCd != null" >
+        #{anaKndCd,jdbcType=VARCHAR},
+      </if>
+      <if test="imRslCd != null" >
+        #{imRslCd,jdbcType=VARCHAR},
+      </if>
+      <if test="imRslCdNm != null" >
+        #{imRslCdNm,jdbcType=VARCHAR},
+      </if>
+      <if test="imIlCd != null" >
+        #{imIlCd,jdbcType=VARCHAR},
+      </if>
+      <if test="imIlCdNm != null" >
+        #{imIlCdNm,jdbcType=VARCHAR},
+      </if>
+      <if test="imActDtls != null" >
+        #{imActDtls,jdbcType=VARCHAR},
+      </if>
+      <if test="imActStrDtm != null" >
+        #{imActStrDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="imActEndDtm != null" >
+        #{imActEndDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="shdJobDelRqstYn != null" >
+        #{shdJobDelRqstYn,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDcd != null" >
+        #{rqstDcd,jdbcType=VARCHAR},
+      </if>
+      <if test="rvwStsCd != null" >
+        #{rvwStsCd,jdbcType=VARCHAR},
+      </if>
+      <if test="rvwConts != null" >
+        #{rvwConts,jdbcType=VARCHAR},
+      </if>
+      <if test="vrfCd != null" >
+        #{vrfCd,jdbcType=VARCHAR},
+      </if>
+      <if test="vrfRmk != null" >
+        #{vrfRmk,jdbcType=VARCHAR},
+      </if>
+      <if test="objDescn != null" >
+        #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null" >
+        #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="frsRqstDtm != null" >
+        #{frsRqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="frsRqstUserId != null" >
+        #{frsRqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDtm != null" >
+        #{rqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rqstUserId != null" >
+        #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDtm != null" >
+        #{aprvDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aprvUserId != null" >
+        #{aprvUserId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.dq.impv.service.WaqImActMstr" >
+    update WAQ_IM_ACT_MSTR
+    <set >
+      <if test="anaJobId != null" >
+        ANA_JOB_ID = #{anaJobId,jdbcType=VARCHAR},
+      </if>
+      <if test="anaJobNm != null" >
+        ANA_JOB_NM = #{anaJobNm,jdbcType=VARCHAR},
+      </if>
+      <if test="anaStrDtm != null" >
+        ANA_STR_DTM = #{anaStrDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="anaKndCd != null" >
+        ANA_KND_CD = #{anaKndCd,jdbcType=VARCHAR},
+      </if>
+      <if test="imRslCd != null" >
+        IM_RSL_CD = #{imRslCd,jdbcType=VARCHAR},
+      </if>
+      <if test="imRslCdNm != null" >
+        IM_RSL_CD_NM = #{imRslCdNm,jdbcType=VARCHAR},
+      </if>
+      <if test="imIlCd != null" >
+        IM_IL_CD = #{imIlCd,jdbcType=VARCHAR},
+      </if>
+      <if test="imIlCdNm != null" >
+        IM_IL_CD_NM = #{imIlCdNm,jdbcType=VARCHAR},
+      </if>
+      <if test="imActDtls != null" >
+        IM_ACT_DTLS = #{imActDtls,jdbcType=VARCHAR},
+      </if>
+      <if test="imActStrDtm != null" >
+        IM_ACT_STR_DTM = #{imActStrDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="imActEndDtm != null" >
+        IM_ACT_END_DTM = #{imActEndDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="shdJobDelRqstYn != null" >
+        SHD_JOB_DEL_RQST_YN = #{shdJobDelRqstYn,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDcd != null" >
+        RQST_DCD = #{rqstDcd,jdbcType=VARCHAR},
+      </if>
+      <if test="rvwStsCd != null" >
+        RVW_STS_CD = #{rvwStsCd,jdbcType=VARCHAR},
+      </if>
+      <if test="rvwConts != null" >
+        RVW_CONTS = #{rvwConts,jdbcType=VARCHAR},
+      </if>
+      <if test="vrfCd != null" >
+        VRF_CD = #{vrfCd,jdbcType=VARCHAR},
+      </if>
+      <if test="vrfRmk != null" >
+        VRF_RMK = #{vrfRmk,jdbcType=VARCHAR},
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="frsRqstDtm != null" >
+        FRS_RQST_DTM = #{frsRqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="frsRqstUserId != null" >
+        FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDtm != null" >
+        RQST_DTM = #{rqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rqstUserId != null" >
+        RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDtm != null" >
+        APRV_DTM = #{aprvDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aprvUserId != null" >
+        APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      and RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="kr.wise.dq.impv.service.WaqImActMstr" >
+    update WAQ_IM_ACT_MSTR
+    set ANA_JOB_ID = #{anaJobId,jdbcType=VARCHAR},
+      ANA_JOB_NM = #{anaJobNm,jdbcType=VARCHAR},
+      ANA_STR_DTM = #{anaStrDtm,jdbcType=TIMESTAMP},
+      ANA_KND_CD = #{anaKndCd,jdbcType=VARCHAR},
+      IM_RSL_CD = #{imRslCd,jdbcType=VARCHAR},
+      IM_RSL_CD_NM = #{imRslCdNm,jdbcType=VARCHAR},
+      IM_IL_CD = #{imIlCd,jdbcType=VARCHAR},
+      IM_IL_CD_NM = #{imIlCdNm,jdbcType=VARCHAR},
+      IM_ACT_DTLS = #{imActDtls,jdbcType=VARCHAR},
+      IM_ACT_STR_DTM = #{imActStrDtm,jdbcType=TIMESTAMP},
+      IM_ACT_END_DTM = #{imActEndDtm,jdbcType=TIMESTAMP},
+      RQST_DCD = #{rqstDcd,jdbcType=VARCHAR},
+      RVW_STS_CD = #{rvwStsCd,jdbcType=VARCHAR},
+      RVW_CONTS = #{rvwConts,jdbcType=VARCHAR},
+      VRF_CD = #{vrfCd,jdbcType=VARCHAR},
+      VRF_RMK = #{vrfRmk,jdbcType=VARCHAR},
+      OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      FRS_RQST_DTM = #{frsRqstDtm,jdbcType=TIMESTAMP},
+      FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR},
+      RQST_DTM = #{rqstDtm,jdbcType=TIMESTAMP},
+      RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      APRV_DTM = #{aprvDtm,jdbcType=TIMESTAMP},
+      APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR}
+    where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      and RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+  </update>
+  <select id="selectImRslList" parameterType="kr.wise.dq.impv.service.WaqImActMstr" resultMap="BaseResultMap">
+SELECT A.ANA_JOB_ID
+      ,A.ANA_STR_DTM
+      ,A.ANA_KND_CD
+      ,A.CS_ANA_CD
+      ,A.CS_ANA_CD_NM
+      ,A.CS_ANA_IL_CD
+      ,A.CS_ANA_IL_CD_NM
+      ,A.CS_ANA_DTLS
+      ,A.CS_ANA_STR_DTM
+      ,A.CS_ANA_END_DTM
+      ,A.IM_PL_CD
+      ,A.IM_PL_CD_NM
+      ,A.IM_PL_DTLS
+      ,A.IM_PL_STR_DTM
+      ,A.IM_PL_END_DTM
+      ,A.RQST_NO
+      ,A.RQST_SNO
+      ,A.OBJ_DESCN
+      ,A.OBJ_VERS
+      ,A.REG_TYP_CD
+      ,A.FRS_RQST_DTM
+      ,A.FRS_RQST_USER_ID
+      ,GET_USER_NM(A.FRS_RQST_USER_ID) AS FRS_RQST_USER_NM
+      ,A.RQST_DTM
+      ,A.RQST_USER_ID
+      ,GET_USER_NM(A.RQST_USER_ID) AS RQST_USER_NM
+      ,A.APRV_DTM
+      ,A.APRV_USER_ID
+      ,GET_USER_NM(A.APRV_USER_ID) AS APRV_USER_NM
+      ,CASE WHEN B.ANA_DGR IS NULL THEN
+<!--       '' ELSE B.ANA_DGR , ' 차' END AS ANA_DGR_DISP 최근실행차수 -->
+      '' ELSE CONCAT(B.ANA_DGR , ' ') END AS ANA_DGR_DISP -- 최근실행차수 
+      ,BI.BIZ_AREA_ID
+      ,BI.BIZ_AREA_LNM
+      ,D.DQI_ID
+      ,DM.DQI_LNM
+      ,DB.DB_CONN_TRG_ID
+      ,DB.DB_CONN_TRG_LNM
+      ,C.CTQ_ID
+      ,CM.CTQ_LNM
+      ,BM.DBC_TBL_NM
+      ,BM.DBC_COL_NM
+      ,BM.BR_NM AS ANA_JOB_NM
+      ,B.ANA_DGR
+      ,B.ANA_CNT
+      ,B.ER_CNT
+      ,B.ERR_RATE AS ER_RATE
+<!--       ,TO_CHAR(ROUND(WDQ_FC_DPMO(B.ER_CNT,B.ANA_CNT), 2)) AS DPMO                  -->
+	  ,CONCAT(ROUND(WDQ_FC_SIGMA(WDQ_FC_DPMO(B.ER_CNT,B.ANA_CNT)), 2)) AS SIGMA  
+<!--       ,IC.ANA_JOB_ID_FOR_IC -->
+<!--       ,IC.ANA_JOB_ID_CNT -->
+<!--       개선결과 등록 여부 -->
+<!--       ,CASE WHEN IMACT.ANA_JOB_ID IS NOT NULL -->
+<!--        THEN '#FF0000' -->
+<!--        ELSE '' END AS FontColor -->
+			, CASE WHEN 1 = (SELECT 1 FROM DUAL WHERE IMACT.ANA_JOB_ID = A.ANA_JOB_ID)
+            THEN '03' -- 완료
+            WHEN (NOW() BETWEEN DATE_FORMAT(A.CS_ANA_STR_DTM, '%Y%m%d') AND DATE_FORMAT(A.CS_ANA_END_DTM, '%Y%m%d'))
+            THEN '02' -- 진행중
+            WHEN (NOW() > DATE_FORMAT(A.CS_ANA_END_DTM, '%Y%m%d'))
+            THEN '01' -- 지연
+            ELSE ''
+       END AS PRGS_STAT
+      ,IMACT.*
+	FROM WAM_BR_MSTR BM
+			INNER JOIN (<include refid="kr.wise.dq.bizrule.service.WamBrResultMapper.getBrResultMaxAnaStrDtm"/>  ) B
+			    ON BM.BR_ID = B.BR_ID
+			   AND B.ER_CNT > 0
+			   AND B.ANA_DGR IS NOT NULL
+			INNER JOIN WAM_CS_ANA_MSTR A 
+			    ON A.ANA_JOB_ID = B.BR_ID
+			   AND A.ANA_STR_DTM = B.ANA_STR_DTM
+	         INNER JOIN WAM_BR_DQI_MAP D
+	            ON BM.BR_ID = D.BR_ID
+	           AND D.REG_TYP_CD IN ('C', 'U')
+	        INNER JOIN WAM_DQI DM
+	            ON D.DQI_ID = DM.DQI_ID  
+	           AND DM.REG_TYP_CD IN ('C', 'U')
+	        INNER JOIN WAM_BIZ_AREA BI 
+	         	ON BM.BIZ_AREA_ID = BI.BIZ_AREA_ID
+	           AND BI.REG_TYP_CD IN ('C', 'U')
+	          LEFT OUTER JOIN WAM_BR_CTQ_MAP C
+	            ON BM.BR_ID = C.BR_ID
+	           AND C.REG_TYP_CD IN ('C', 'U')
+	           LEFT OUTER JOIN WAM_CTQ CM
+	            ON C.CTQ_ID = CM.CTQ_ID
+	           AND CM.REG_TYP_CD IN ('C', 'U')
+	           LEFT OUTER JOIN (<include refid="kr.wise.dq.criinfo.anatrg.service.AnaTrgMapper.AnaTrg" /> ) DB
+	           ON BM.DB_CONN_TRG_ID = DB.DB_CONN_TRG_ID
+	      --    AND BM.DB_SCH_ID = DB.DB_SCH_ID
+	          AND BM.DBC_TBL_NM = DB.DBC_TBL_NM
+	          AND BM.DBC_COL_NM = DB.DBC_COL_NM
+<!--              LEFT OUTER JOIN (SELECT COUNT(ANA_JOB_ID) AS ANA_JOB_ID_CNT, ANA_JOB_ID AS ANA_JOB_ID_FOR_IC -->
+<!-- 		                             FROM WAM_IM_ACT_MSTR -->
+<!-- 		                            GROUP BY ANA_JOB_ID -->
+<!-- 		                          ) IC  -->
+<!--                ON A.ANA_JOB_ID = IC.ANA_JOB_ID_FOR_IC -->
+             LEFT OUTER JOIN WAM_IM_ACT_MSTR IMACT
+               ON B.BR_ID = IMACT.ANA_JOB_ID
+              AND B.ANA_STR_DTM = IMACT.ANA_STR_DTM
+              
+  WHERE 1=1 
+
+  <if test="dbConnTrgId != null">
+  AND DB.DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR}
+  </if>
+  <if test="dbcTblNm != null">
+  AND (BM.DBC_TBL_NM LIKE CONCAT('%' , #{dbcTblNm,jdbcType=VARCHAR} , '%') OR DB.DBC_TBL_KOR_NM LIKE CONCAT('%' , #{dbcTblNm,jdbcType=VARCHAR} , '%' ))
+  </if>
+  <if test="dbcColNm != null">
+  AND (BM.DBC_COL_NM LIKE CONCAT('%' , #{dbcColNm,jdbcType=VARCHAR} , '%')  OR DB.DBC_COL_KOR_NM LIKE CONCAT('%' , #{dbcColNm,jdbcType=VARCHAR} , '%' ))
+  </if>
+  <if test="bizAreaLnm != null">
+  AND BI.FULL_PATH LIKE CONCAT('%' , #{bizAreaLnm,jdbcType=VARCHAR} , '%')
+  </if>
+  <if test="dqiLnm != null">
+  AND DM.FULL_PATH LIKE CONCAT('%' , #{dqiLnm,jdbcType=VARCHAR} , '%')
+  </if>
+  <if test="ctqLnm != null">
+  AND CM.FULL_PATH LIKE CONCAT('%' , #{ctqLnm,jdbcType=VARCHAR} , '%')
+  </if>
+  <if test="anaJobNm != null">
+  AND BM.BR_NM LIKE CONCAT('%' , #{anaJobNm,jdbcType=VARCHAR} , '%')
+  </if>
+  <if test="anaDgr != null">
+  AND B.ANA_DGR = #{anaDgr,jdbcType=VARCHAR}
+  </if>
+  <if test="anaJobId != null">
+  AND A.ANA_JOB_ID = #{anaJobId,jdbcType=VARCHAR}
+  </if>
+
+  <if test="anaStrDtmLink != null">
+  AND DATE_FORMAT(A.ANA_STR_DTM, '%Y-%m-%d') = #{anaStrDtmLink,jdbcType=VARCHAR}
+  </if>
+  </select>
+  <select id="selectImRslList_BAK" parameterType="kr.wise.dq.impv.service.WaqImActMstr" resultMap="BaseResultMap">
+  SELECT A.ANA_JOB_ID
+      ,A.ANA_STR_DTM
+      ,A.ANA_KND_CD
+      ,A.CS_ANA_CD
+      ,A.CS_ANA_CD_NM
+      ,A.CS_ANA_IL_CD
+      ,A.CS_ANA_IL_CD_NM
+      ,A.CS_ANA_DTLS
+      ,A.CS_ANA_STR_DTM
+      ,A.CS_ANA_END_DTM
+      ,A.IM_PL_CD
+      ,A.IM_PL_CD_NM
+      ,A.IM_PL_DTLS
+      ,A.IM_PL_STR_DTM
+      ,A.IM_PL_END_DTM
+      ,A.RQST_NO
+      ,A.RQST_SNO
+      ,A.OBJ_DESCN
+      ,A.OBJ_VERS
+      ,A.REG_TYP_CD
+      ,A.FRS_RQST_DTM
+      ,A.FRS_RQST_USER_ID
+      ,GET_USER_NM(A.FRS_RQST_USER_ID) AS FRS_RQST_USER_NM
+      ,A.RQST_DTM
+      ,A.RQST_USER_ID
+      ,GET_USER_NM(A.RQST_USER_ID) AS RQST_USER_NM
+      ,A.APRV_DTM
+      ,A.APRV_USER_ID
+      ,GET_USER_NM(A.APRV_USER_ID) AS APRV_USER_NM
+      ,CASE WHEN B.ANA_DGR IS NULL THEN
+<!--       '' ELSE B.ANA_DGR || ' 차' END AS ANA_DGR_DISP 최근실행차수 -->
+      '' ELSE B.ANA_DGR || ' ' END AS ANA_DGR_DISP --최근실행차수 
+      ,BI.BIZ_AREA_ID
+      ,BI.BIZ_AREA_LNM
+      ,D.DQI_ID
+      ,DM.DQI_LNM
+      ,DB.DB_CONN_TRG_ID
+      ,DB.DB_CONN_TRG_LNM
+      ,C.CTQ_ID
+      ,CM.CTQ_LNM
+      ,BM.DBC_TBL_NM
+      ,BM.DBC_COL_NM
+      ,BM.BR_NM AS ANA_JOB_NM
+      ,B.ANA_DGR
+      ,B.ANA_CNT
+      ,B.ER_CNT
+      ,B.ERR_RATE AS ER_RATE
+<!--       ,TO_CHAR(ROUND(WDQ_FC_DPMO(B.ER_CNT,B.ANA_CNT), 2)) AS DPMO                  -->
+	  ,TO_CHAR(ROUND(WDQ_FC_SIGMA(WDQ_FC_DPMO(B.ER_CNT,B.ANA_CNT)), 2)) AS SIGMA  
+<!--       ,IC.ANA_JOB_ID_FOR_IC -->
+<!--       ,IC.ANA_JOB_ID_CNT -->
+<!--       개선결과 등록 여부 -->
+<!--       ,CASE WHEN IMACT.ANA_JOB_ID IS NOT NULL -->
+<!--        THEN '#FF0000' -->
+<!--        ELSE '' END AS FontColor -->
+      ,IMACT.*
+	FROM WAM_BR_MSTR BM
+			INNER JOIN (<include refid="kr.wise.dq.bizrule.service.WamBrResultMapper.getBrResultMaxAnaStrDtm"/>  ) B
+			    ON BM.BR_ID = B.BR_ID
+			   AND B.ER_CNT > 0
+			   AND B.ANA_DGR IS NOT NULL
+			INNER JOIN WAM_CS_ANA_MSTR A 
+			    ON A.ANA_JOB_ID = B.BR_ID
+			   AND A.ANA_STR_DTM = B.ANA_STR_DTM
+	         INNER JOIN WAM_BR_DQI_MAP D
+	            ON BM.BR_ID = D.BR_ID
+	           AND D.REG_TYP_CD IN ('C', 'U')
+	        INNER JOIN WAM_DQI DM
+	            ON D.DQI_ID = DM.DQI_ID  
+	           AND DM.REG_TYP_CD IN ('C', 'U')
+	        INNER JOIN WAM_BIZ_AREA BI 
+	         	ON BM.BIZ_AREA_ID = BI.BIZ_AREA_ID
+	           AND BI.REG_TYP_CD IN ('C', 'U')
+	          LEFT OUTER JOIN WAM_BR_CTQ_MAP C
+	            ON BM.BR_ID = C.BR_ID
+	           AND C.REG_TYP_CD IN ('C', 'U')
+	           LEFT OUTER JOIN WAM_CTQ CM
+	            ON C.CTQ_ID = CM.CTQ_ID
+	           AND CM.REG_TYP_CD IN ('C', 'U')
+	           LEFT OUTER JOIN (<include refid="kr.wise.dq.criinfo.anatrg.service.AnaTrgMapper.AnaTrg" /> ) DB
+	           ON BM.DB_CONN_TRG_ID = DB.DB_CONN_TRG_ID
+	      --    AND BM.DB_SCH_ID = DB.DB_SCH_ID
+	          AND BM.DBC_TBL_NM = DB.DBC_TBL_NM
+	          AND BM.DBC_COL_NM = DB.DBC_COL_NM
+<!--              LEFT OUTER JOIN (SELECT COUNT(ANA_JOB_ID) AS ANA_JOB_ID_CNT, ANA_JOB_ID AS ANA_JOB_ID_FOR_IC -->
+<!-- 		                             FROM WAM_IM_ACT_MSTR -->
+<!-- 		                            GROUP BY ANA_JOB_ID -->
+<!-- 		                          ) IC  -->
+<!--                ON A.ANA_JOB_ID = IC.ANA_JOB_ID_FOR_IC -->
+             LEFT OUTER JOIN WAM_IM_ACT_MSTR IMACT
+               ON B.BR_ID = IMACT.ANA_JOB_ID
+              AND B.ANA_STR_DTM = IMACT.ANA_STR_DTM
+              
+  WHERE 1=1 
+
+  <if test="dbConnTrgId != null">
+  AND DB.DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR}
+  </if>
+  <if test="dbcTblNm != null">
+  AND (BM.DBC_TBL_NM LIKE '%' || #{dbcTblNm,jdbcType=VARCHAR} || '%' OR DB.DBC_TBL_KOR_NM LIKE '%' || #{dbcTblNm,jdbcType=VARCHAR} || '%' )
+  </if>
+  <if test="dbcColNm != null">
+  AND (BM.DBC_COL_NM LIKE '%' || #{dbcColNm,jdbcType=VARCHAR} || '%'  OR DB.DBC_COL_KOR_NM LIKE '%' || #{dbcColNm,jdbcType=VARCHAR} || '%' )
+  </if>
+  <if test="bizAreaLnm != null">
+  AND BI.FULL_PATH LIKE '%' || #{bizAreaLnm,jdbcType=VARCHAR} || '%'
+  </if>
+  <if test="dqiLnm != null">
+  AND DM.FULL_PATH LIKE '%' || #{dqiLnm,jdbcType=VARCHAR} || '%'
+  </if>
+  <if test="ctqLnm != null">
+  AND CM.FULL_PATH LIKE '%' || #{ctqLnm,jdbcType=VARCHAR} || '%'
+  </if>
+  <if test="anaJobNm != null">
+  AND BM.BR_NM LIKE '%' || #{anaJobNm,jdbcType=VARCHAR} || '%'
+  </if>
+  <if test="anaDgr != null">
+  AND B.ANA_DGR = #{anaDgr,jdbcType=VARCHAR}
+  </if>
+  <if test="anaJobId != null">
+  AND A.ANA_JOB_ID = #{anaJobId,jdbcType=VARCHAR}
+  </if>
+
+  <if test="anaStrDtmLink != null">
+  AND TO_CHAR(A.ANA_STR_DTM, 'YYYY-MM-DD') = #{anaStrDtmLink,jdbcType=VARCHAR}
+  </if>
+  </select>
+  
+  <select id="selectIsNew" resultMap="BaseResultMap" parameterType="kr.wise.dq.impv.service.WaqImActMstr" >
+    select *
+    from WAQ_IM_ACT_MSTR
+    where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      and RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+      and ANA_JOB_ID = #{anaJobId,jdbcType=VARCHAR}
+      and ANA_STR_DTM = #{anaStrDtm}
+  </select>
+  
+  <select id="selectImRslRqstList" parameterType="kr.wise.commons.rqstmst.service.WaqMstr" resultMap="BaseResultMap">
+    SELECT 
+     A.RQST_NO, A.RQST_SNO, A.ANA_JOB_ID, A.ANA_JOB_NM, A.ANA_STR_DTM, A.ANA_KND_CD, A.RQST_DCD
+     <if test='rqstStepCd == "Q" '>
+     , CASE WHEN A.RVW_STS_CD = '2' THEN '2' ELSE '0' END AS RVW_STS_CD
+     </if>
+     <if test='rqstStepCd != "Q" '>
+     , A.RVW_STS_CD
+     </if>
+     , A.RVW_CONTS
+     , A.VRF_CD, A.VRF_RMK, A.IM_RSL_CD, A.IM_RSL_CD_NM, A.IM_IL_CD, A.IM_IL_CD_NM, A.IM_ACT_DTLS,
+     A.IM_ACT_STR_DTM, A.IM_ACT_END_DTM, A.SHD_JOB_DEL_RQST_YN,
+    A.OBJ_DESCN, A.OBJ_VERS, A.REG_TYP_CD, A.FRS_RQST_DTM, 
+    A.FRS_RQST_USER_ID, A.RQST_DTM, A.RQST_USER_ID, A.APRV_DTM, A.APRV_USER_ID
+    ,B.CS_ANA_CD ,B.CS_ANA_CD_NM ,B.CS_ANA_IL_CD ,B.CS_ANA_IL_CD_NM ,B.CS_ANA_DTLS ,B.CS_ANA_STR_DTM ,B.CS_ANA_END_DTM
+    ,B.IM_PL_CD ,B.IM_PL_CD_NM ,B.IM_PL_DTLS ,B.IM_PL_STR_DTM ,B.IM_PL_END_DTM
+    , (CASE WHEN A.VRF_CD = '2' THEN '#FF0000' END  ) AS FontColor
+    FROM WAQ_IM_ACT_MSTR A INNER JOIN WAM_CS_ANA_MSTR B
+    ON A.ANA_JOB_ID = B.ANA_JOB_ID
+    AND A.ANA_STR_DTM = B.ANA_STR_DTM
+    WHERE A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+    <if test='rqstStepCd == "Q" '>
+    	AND A.VRF_CD = '1'
+    </if>
+    
+    ORDER BY A.RQST_SNO
+    
+    
+  </select>
+  
+  <!--  검증코드 UPDATE  -->
+  <update id="updateCheckInit" parameterType="java.lang.String">
+    update WAQ_IM_ACT_MSTR A
+       set A.VRF_CD = '4' -- 검증전
+            ,A.RVW_STS_CD = '0' -- 검토전
+     where A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+  </update>
+  
+  <!--  OBJ_ID, OBJ_VERS UPDATE  -->
+  <update id="updateObjInfo" parameterType="java.lang.String">
+   update WAQ_IM_ACT_MSTR A, (select case when A.RQST_DCD = 'DD' then 'D' else case when B.ANA_JOB_ID IS NULL then 'C' else 'U' end end AS REG_TYP_CD 
+                                  ,case when B.OBJ_VERS is null then 1
+                                           else B.OBJ_VERS
+                                           end as OBJ_VERS
+                                 , IFNULL(B.FRS_RQST_DTM, A.RQST_DTM) as FRS_RQST_DTM
+           						 , IFNULL(B.FRS_RQST_USER_ID, A.RQST_USER_ID) as FRS_RQST_USER_ID    
+           						 , A.RQST_SNO
+                             from WAQ_IM_ACT_MSTR A LEFT OUTER JOIN  WAM_IM_ACT_MSTR B
+                            ON B.REG_TYP_CD in ('C','U')
+                              and B.ANA_JOB_ID = A.ANA_JOB_ID
+                              and B.ANA_STR_DTM = A.ANA_STR_DTM ) B
+       set A.REG_TYP_CD = B.REG_TYP_CD 
+            , A.OBJ_VERS = B.OBJ_VERS
+            , A.FRS_RQST_DTM = B.FRS_RQST_DTM
+            , A.FRS_RQST_USER_ID = B.FRS_RQST_USER_ID           
+     where A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+   	 AND A.RQST_SNO = B.RQST_SNO
+  </update>
+  <update id="updateObjInfo_BAK" parameterType="java.lang.String">
+    update WAQ_IM_ACT_MSTR A
+       set (A.REG_TYP_CD
+            , A.OBJ_VERS 
+            , A.FRS_RQST_DTM
+            , A.FRS_RQST_USER_ID ) =
+                          (select case when A.RQST_DCD = 'DD' then 'D' else case when MAX(B.ANA_JOB_ID) IS NULL then 'C' else 'U' end end
+                                  ,case when max(B.OBJ_VERS) is null then 1
+                                           else max(B.OBJ_VERS)
+                                           end as OBJ_VERS
+                                 , IFNULL(MAX(B.FRS_RQST_DTM), A.RQST_DTM) as FRS_RQST_DTM
+           						 , IFNULL(MAX(B.FRS_RQST_USER_ID), A.RQST_USER_ID) as FRS_RQST_USER_ID           
+                             from WAM_IM_ACT_MSTR B
+                            where B.REG_TYP_CD in ('C','U')
+                              and B.ANA_JOB_ID = A.ANA_JOB_ID
+                              and B.ANA_STR_DTM = A.ANA_STR_DTM )
+     where A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+  </update>
+  
+    <insert id="checkNoChg" parameterType="map">
+    <include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSql"/>
+      and A.REG_TYP_CD = 'U'
+-- 검증쿼리
+      and exists (select 1
+                    from WAM_IM_ACT_MSTR D
+                   where D.REG_TYP_CD in ('C','U')
+                     and IFNULL(A.IM_RSL_CD_NM, '▦') = IFNULL(D.IM_RSL_CD_NM, '▦')
+                     and IFNULL(A.IM_ACT_DTLS, '▦') = IFNULL(D.IM_ACT_DTLS, '▦')
+                     and IFNULL(A.IM_ACT_STR_DTM, '') = IFNULL(D.IM_ACT_STR_DTM, '')
+                     and IFNULL(A.IM_ACT_END_DTM, '') = IFNULL(D.IM_ACT_END_DTM, '')
+                     and IFNULL(A.IM_IL_CD, '▦') = IFNULL(D.IM_IL_CD, '▦')
+                     and IFNULL(A.OBJ_DESCN, '▦') = IFNULL(D.OBJ_DESCN, '▦')
+                     and IFNULL(A.SHD_JOB_DEL_RQST_YN, '') = IFNULL(D.SHD_JOB_DEL_RQST_YN, '') 
+                 )
+  </insert>
+  
+  <!-- 요청서내 중복자료 검증(IMP01) -->
+  <insert id="checkDupJobId" parameterType="map">
+    <include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSql"/>
+-- 검증쿼리
+      and exists (select 1
+					from WAQ_IM_ACT_MSTR D INNER JOIN WAQ_MSTR E
+					on D.RQST_NO = E.RQST_NO
+					and D.VRF_CD = '1'
+					and D.RVW_STS_CD ='0'
+					and E.RQST_STEP_CD = 'Q'
+					where 1=1
+					and A.ANA_JOB_ID = D.ANA_JOB_ID
+					and A.ANA_STR_DTM = D.ANA_STR_DTM
+					and A.ANA_KND_CD = D.ANA_KND_CD)
+  </insert>
+  
+  <!-- 삭제대상 존재여부 검증(IMP02) -->
+  <insert id="checkNoData" parameterType="map">
+    <include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSql"/>
+	  AND A.RQST_DCD = 'DD'
+-- 검증쿼리
+     
+             and not exists 
+             (select 1
+					from WAM_IM_ACT_MSTR D
+					where A.ANA_JOB_ID = D.ANA_JOB_ID
+					and A.ANA_STR_DTM = D.ANA_STR_DTM
+					and A.ANA_KND_CD = D.ANA_KND_CD)
+  </insert>
+  
+  
+  <update id="updateVrfCd" parameterType="kr.wise.commons.rqstmst.service.WaqMstr">
+    update WAQ_IM_ACT_MSTR A
+       set A.VRF_CD = (select case when  IFNULL(MAX(B.RQST_SNO), 0) = 0 
+                                         THEN '1' ELSE '2'  -- 1: 등록가능 2: 검증오류
+                                          END 
+                             from WAQ_RQST_VRF_DTLS B 
+                           where B.RQST_NO = A.RQST_NO
+                              and B.RQST_SNO = A.RQST_SNO)
+    where A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+  </update>
+  
+    <sql id="wam_col">
+   		, ANA_KND_CD, IM_RSL_CD, IM_RSL_CD_NM, IM_IL_CD, IM_IL_CD_NM
+   		, IM_ACT_DTLS, IM_ACT_STR_DTM, IM_ACT_END_DTM, SHD_JOB_DEL_RQST_YN
+   		, RQST_NO , RQST_SNO , OBJ_DESCN , OBJ_VERS , REG_TYP_CD
+		, FRS_RQST_DTM , FRS_RQST_USER_ID , RQST_DTM , RQST_USER_ID , APRV_DTM
+		, APRV_USER_ID  
+   </sql>
+  
+  <update id="updatervwStsCd" parameterType="kr.wise.dq.impv.service.WaqCsAnaMstr" >
+  	UPDATE WAQ_IM_ACT_MSTR
+  	<set>
+  	    RVW_STS_CD 	= #{rvwStsCd} , 
+  		RVW_CONTS 	= #{rvwConts} , 
+  		APRV_DTM	= NOW() ,
+  		APRV_USER_ID = #{aprvUserId} ,
+  	</set>
+    WHERE RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      AND RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+      AND VRF_CD = '1'
+      AND IFNULL(RVW_STS_CD, '_') != '2'
+  </update>
+  
+  <update id="updateWaqCUD" parameterType="map">
+   	-- WAQ ID, VERS 등을 업데이트...
+	UPDATE WAQ_IM_ACT_MSTR A, ( SELECT 
+						          B.ANA_JOB_ID AS ANA_JOB_ID
+						        , IFNULL(B.OBJ_VERS, 0) + 1 AS OBJ_VERS
+						        , B.FRS_RQST_DTM
+						        , B.FRS_RQST_USER_ID
+						        , A.RQST_NO
+						        , A.RQST_SNO
+						    FROM WAQ_IM_ACT_MSTR A 
+						    		LEFT OUTER JOIN WAM_IM_ACT_MSTR B 
+							    ON B.ANA_JOB_ID = A.ANA_JOB_ID 
+							    AND B.ANA_STR_DTM = A.ANA_STR_DTM
+							    AND B.REG_TYP_CD IN ('C', 'U')
+							 WHERE A.RQST_NO = #{rqstNo}
+						) B
+	SET 
+	A.ANA_JOB_ID = B.ANA_JOB_ID,
+	A.OBJ_VERS = B.OBJ_VERS,
+	A.FRS_RQST_DTM = B.FRS_RQST_DTM,
+	A.FRS_RQST_USER_ID = B.FRS_RQST_USER_ID
+	WHERE A.RQST_NO = #{rqstNo}
+	-- AND A.VRF_CD = '1' 		-- 등록가능
+	AND A.RQST_SNO = B.RQST_SNO
+	AND A.RVW_STS_CD = '1'  -- 승인
+	AND EXISTS (
+		SELECT 1
+		  FROM WAM_IM_ACT_MSTR B
+		 WHERE B.ANA_JOB_ID = A.ANA_JOB_ID 
+		   AND B.ANA_STR_DTM = A.ANA_STR_DTM
+	       AND B.REG_TYP_CD IN ('C', 'U')
+	) 
+   </update>
+   
+  <update id="updateWaqCUD_BAK" parameterType="map">
+   	-- WAQ ID, VERS 등을 업데이트...
+	UPDATE WAQ_IM_ACT_MSTR A
+	SET (ANA_JOB_ID, OBJ_VERS, FRS_RQST_DTM, FRS_RQST_USER_ID) = (
+	    SELECT 
+	          B.ANA_JOB_ID AS ANA_JOB_ID
+	        , IFNULL(B.OBJ_VERS, 0) + 1 AS OBJ_VERS
+	        , B.FRS_RQST_DTM
+	        , B.FRS_RQST_USER_ID
+	    FROM WAM_IM_ACT_MSTR B
+	    WHERE B.ANA_JOB_ID = A.ANA_JOB_ID 
+	    AND B.ANA_STR_DTM = A.ANA_STR_DTM
+	    AND B.REG_TYP_CD IN ('C', 'U')
+	)
+	WHERE A.RQST_NO = #{rqstNo}
+	-- AND A.VRF_CD = '1' 		-- 등록가능
+	AND A.RVW_STS_CD = '1'  -- 승인
+	AND EXISTS (
+		SELECT 1
+		  FROM WAM_IM_ACT_MSTR B
+		 WHERE B.ANA_JOB_ID = A.ANA_JOB_ID 
+		   AND B.ANA_STR_DTM = A.ANA_STR_DTM
+	       AND B.REG_TYP_CD IN ('C', 'U')
+	)
+   </update>
+   
+   <delete id="deleteWAM" parameterType="map">
+    -- WAM 삭제 (등록유형코드가REG_TYP_CD 변경, 삭제일 경우)
+	DELETE A FROM WAM_IM_ACT_MSTR A
+	WHERE EXISTS (
+	    SELECT 1 FROM WAQ_IM_ACT_MSTR B
+	    WHERE B.RQST_NO = #{rqstNo}
+	    AND B.RVW_STS_CD = '1'
+	    AND B.ANA_JOB_ID = A.ANA_JOB_ID
+	    AND B.ANA_STR_DTM = A.ANA_STR_DTM
+	)
+   </delete>
+   
+   <insert id="insertWAM" parameterType="map">
+   	-- WAM 추가 (WAQ 내용을 추가, REG_TYP_CD 가 신규,변경일 경우)
+	INSERT INTO WAM_IM_ACT_MSTR
+	SELECT 
+		ANA_JOB_ID, ANA_STR_DTM
+	
+	<include refid="wam_col"/>
+	
+	FROM WAQ_IM_ACT_MSTR A
+	WHERE A.RQST_NO = #{rqstNo}
+	AND A.RVW_STS_CD = '1'
+	AND A.REG_TYP_CD IN ('C', 'U')
+   </insert>
+   
+   <update id="updateWAH"  parameterType="map">
+   	-- WAH 이력 만료...
+	UPDATE WAH_IM_ACT_MSTR A
+	SET EXP_DTM = NOW()
+	WHERE EXISTS (
+	    SELECT 1 FROM WAQ_IM_ACT_MSTR B
+	    WHERE B.RQST_NO = #{rqstNo}
+	    AND B.RVW_STS_CD = '1'
+	    -- AND B.REG_TYP_CD IN ('U', 'D')
+	    AND B.ANA_JOB_ID = A.ANA_JOB_ID
+	    AND B.ANA_STR_DTM = A.ANA_STR_DTM
+	    )
+	AND EXP_DTM = '99991231'
+   </update>
+   
+   <insert id="insertWAH"  parameterType="map">
+   	-- WAH이력 적재...
+	INSERT INTO WAH_IM_ACT_MSTR
+	SELECT
+	    A.ANA_JOB_ID AS ANA_JOB_ID
+	    , A.ANA_STR_DTM AS ANA_STR_DTM
+	    , '99991231' AS EXP_DTM
+	    , NOW() AS STR_DTM 
+	
+	<include refid="wam_col"/>
+   
+	FROM WAQ_IM_ACT_MSTR A
+	WHERE A.RQST_NO = #{rqstNo}
+	AND A.RVW_STS_CD = '1'
+   </insert>
+  
+  <select id="selectRsl" parameterType="kr.wise.dq.impv.service.WaqImActMstr" resultMap="BaseResultMap">
+  
+  SELECT A.ANA_JOB_ID
+      ,A.ANA_STR_DTM
+      ,A.ANA_KND_CD
+      ,A.CS_ANA_CD
+      ,A.CS_ANA_CD_NM
+      ,A.CS_ANA_IL_CD
+      ,A.CS_ANA_IL_CD_NM
+      ,A.CS_ANA_DTLS
+      ,A.CS_ANA_STR_DTM
+      ,A.CS_ANA_END_DTM
+      ,A.IM_PL_CD
+      ,A.IM_PL_CD_NM
+      ,A.IM_PL_DTLS
+      ,A.IM_PL_STR_DTM
+      ,A.IM_PL_END_DTM
+      ,A.RQST_NO
+      ,A.RQST_SNO
+      ,A.OBJ_DESCN
+      ,A.OBJ_VERS
+      ,A.REG_TYP_CD
+      ,A.FRS_RQST_DTM
+      ,A.FRS_RQST_USER_ID
+      ,GET_USER_NM(A.FRS_RQST_USER_ID) AS FRS_RQST_USER_NM
+      ,A.RQST_DTM
+      ,A.RQST_USER_ID
+      ,GET_USER_NM(A.RQST_USER_ID) AS RQST_USER_NM
+      ,A.APRV_DTM
+      ,A.APRV_USER_ID
+      ,GET_USER_NM(A.APRV_USER_ID) AS APRV_USER_NM
+      ,CASE WHEN B.ANA_DGR IS NULL THEN
+<!--       '' ELSE B.ANA_DGR || ' 차' END AS ANA_DGR_DISP 최근실행차수 -->
+      '' ELSE CONCAT(B.ANA_DGR, ' ') END AS ANA_DGR_DISP -- 최근실행차수 
+      ,BI.BIZ_AREA_ID
+      ,BI.BIZ_AREA_LNM
+      ,D.DQI_ID
+      ,DM.DQI_LNM
+      ,DB.DB_CONN_TRG_ID
+      ,DB.DB_CONN_TRG_LNM
+      ,C.CTQ_ID
+      ,CM.CTQ_LNM
+      ,BM.DBC_TBL_NM
+      ,BM.DBC_COL_NM
+      ,BM.BR_NM AS ANA_JOB_NM
+      ,B.ANA_DGR
+      ,B.ANA_CNT
+      ,B.ER_CNT
+      ,B.ERR_RATE AS ER_RATE
+<!--       ,TO_CHAR(ROUND(WDQ_FC_DPMO(B.ER_CNT,B.ANA_CNT), 2)) AS DPMO                  -->
+	  ,CONCAT(ROUND(WDQ_FC_SIGMA(WDQ_FC_DPMO(B.ER_CNT,B.ANA_CNT)), 2)) AS SIGMA  
+      ,IM.IM_RSL_CD
+      ,IM.IM_RSL_CD_NM
+      ,IM.IM_IL_CD
+      ,IM.IM_IL_CD_NM
+      ,IM.IM_ACT_DTLS
+      ,IM.IM_ACT_STR_DTM
+      ,IM.IM_ACT_END_DTM
+      ,IM.SHD_JOB_DEL_RQST_YN      
+	FROM WAM_BR_MSTR BM
+	        INNER JOIN (<include refid="kr.wise.dq.bizrule.service.WamBrResultMapper.getBrResultMaxAnaStrDtm"/>) B
+	            ON B.BR_ID = BM.BR_ID
+               AND B.ANA_DGR IS NOT NULL
+               AND B.ER_CNT > 0
+		    INNER JOIN WAM_CS_ANA_MSTR A
+		       ON B.BR_ID = A.ANA_JOB_ID
+		      AND B.ANA_STR_DTM = A.ANA_STR_DTM
+		    INNER JOIN WAM_IM_ACT_MSTR IM
+		       ON A.ANA_JOB_ID = IM.ANA_JOB_ID
+	          AND A.ANA_STR_DTM = IM.ANA_STR_DTM
+	        INNER JOIN WAM_BR_DQI_MAP D
+	            ON BM.BR_ID = D.BR_ID
+	           AND D.REG_TYP_CD IN ('C', 'U')
+	        INNER JOIN WAM_DQI DM
+	            ON D.DQI_ID = DM.DQI_ID  
+	           AND DM.REG_TYP_CD IN ('C', 'U')
+	        INNER JOIN WAM_BIZ_AREA BI 
+	         	ON BM.BIZ_AREA_ID = BI.BIZ_AREA_ID
+	           AND BI.REG_TYP_CD IN ('C', 'U')
+	          LEFT OUTER JOIN WAM_BR_CTQ_MAP C
+	            ON BM.BR_ID = C.BR_ID
+	           AND C.REG_TYP_CD IN ('C', 'U')
+	           LEFT OUTER JOIN WAM_CTQ CM
+	            ON C.CTQ_ID = CM.CTQ_ID
+	           AND CM.REG_TYP_CD IN ('C', 'U')
+   	          LEFT OUTER JOIN (<include refid="kr.wise.dq.criinfo.anatrg.service.AnaTrgMapper.AnaTrg" /> ) DB
+	           ON BM.DB_CONN_TRG_ID = DB.DB_CONN_TRG_ID
+	    --      AND BM.DB_SCH_ID = DB.DB_SCH_ID
+	          AND BM.DBC_TBL_NM = DB.DBC_TBL_NM
+	          AND BM.DBC_COL_NM = DB.DBC_COL_NM
+  WHERE 1=1
+  <if test="dbConnTrgId != null">
+  AND DB.DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR}
+  </if>
+  <if test="dbcTblNm != null">
+  AND (BM.DBC_TBL_NM LIKE CONCAT('%' , #{dbcTblNm,jdbcType=VARCHAR} , '%') OR DB.DBC_TBL_NM LIKE CONCAT('%' , #{dbcTblNm,jdbcType=VARCHAR} , '%') )
+  </if>
+  <if test="dbcColNm != null">
+  AND ( BM.DBC_COL_NM LIKE CONCAT('%' , #{dbcColNm,jdbcType=VARCHAR} , '%') OR DB.DBC_COL_NM LIKE CONCAT('%' , #{dbcColNm,jdbcType=VARCHAR} , '%' ))
+  </if>
+  <if test="bizAreaLnm != null">
+  AND BI.FULL_PATH LIKE CONCAT('%' , #{bizAreaLnm,jdbcType=VARCHAR} , '%')
+  </if>
+  <if test="dqiLnm != null">
+  AND DM.FULL_PATH LIKE CONCAT('%' , #{dqiLnm,jdbcType=VARCHAR} , '%')
+  </if>
+  <if test="ctqLnm != null">
+  AND CM.FULL_PATH LIKE CONCAT('%' , #{ctqLnm,jdbcType=VARCHAR} , '%')
+  </if>
+  <if test="anaJobNm != null">
+  AND BM.BR_NM LIKE CONCAT('%' , #{anaJobNm,jdbcType=VARCHAR} , '%')
+  </if>
+  <if test="anaDgr != null">
+  AND B.ANA_DGR = #{anaDgr,jdbcType=VARCHAR}
+  </if>
+  <if test="anaJobId != null">
+  AND A.ANA_JOB_ID = #{anaJobId,jdbcType=VARCHAR}
+  </if>
+  <if test="anaStrDtmLink != null">
+  AND DATE_FORMAT(A.ANA_STR_DTM,'%Y-%m-%d') = #{anaStrDtmLink,jdbcType=VARCHAR}
+  </if>
+  </select>
+  
+  <select id = "getImplHstLst" parameterType="kr.wise.dq.impv.service.WaqImActMstr" resultMap="BaseResultMap">
+	SELECT BI.BIZ_AREA_LNM
+		         ,BM.BR_NM AS ANA_JOB_NM    
+		         ,DB.DB_CONN_TRG_LNM
+		         ,BM.DBC_TBL_NM
+		         ,BM.DBC_COL_NM
+		         ,DM.DQI_LNM
+		         ,CM.CTQ_LNM    
+		         ,A.CS_ANA_CD_NM
+		         ,A.IM_PL_CD_NM
+	FROM WAH_CS_ANA_MSTR A 
+			INNER JOIN WAM_BR_MSTR BM
+						ON A.ANA_JOB_ID = BM.BR_ID
+						AND BM.REG_TYP_CD IN ('C','U')   
+			INNER JOIN (SELECT A.DB_CONN_TRG_ID ,A.DB_CONN_TRG_LNM
+				                  FROM WAA_DB_CONN_TRG A  
+				                  WHERE A.EXP_DTM = '99991231'  
+				                  AND A.REG_TYP_CD IN ('C','U')                     
+				                  GROUP BY A.DB_CONN_TRG_ID, A.DB_CONN_TRG_LNM 
+				                ) DB 
+						ON BM.DB_CONN_TRG_ID = DB.DB_CONN_TRG_ID
+			INNER JOIN (SELECT D.DQI_ID, D.BR_ID
+				                  FROM WAM_BR_DQI_MAP D
+				                  WHERE REG_TYP_CD IN ('C', 'U')) D
+	             		ON BM.BR_ID = D.BR_ID
+	        INNER JOIN (SELECT DM.DQI_ID, DM.DQI_LNM
+				                  FROM WAM_DQI DM
+				                  WHERE REG_TYP_CD IN ('C','U')) DM
+	              		ON D.DQI_ID = DM.DQI_ID                 
+	        INNER JOIN (SELECT BIZ_AREA_ID, BIZ_AREA_LNM  
+			              FROM WAM_BIZ_AREA                 
+			             WHERE REG_TYP_CD IN ('C', 'U') ) BI 
+	           			ON BM.BIZ_AREA_ID = BI.BIZ_AREA_ID  
+	        LEFT OUTER JOIN (SELECT C.CTQ_ID, C.BR_ID
+						                    FROM WAM_BR_CTQ_MAP C
+						                    WHERE REG_TYP_CD IN ('C', 'U')) C
+	                    ON BM.BR_ID = C.BR_ID
+	        LEFT OUTER JOIN (SELECT CM.CTQ_ID, CM.CTQ_LNM
+						                    FROM WAM_CTQ CM
+						                    WHERE REG_TYP_CD IN ('C','U')) CM
+	                    ON C.CTQ_ID = CM.CTQ_ID   
+  WHERE 1=1
+  AND A.ANA_JOB_ID = #{anaJobId, jdbcType=VARCHAR}
+  </select>
+
+  <select id = "getImrslHstLst" parameterType="kr.wise.dq.impv.service.WaqImActMstr" resultMap="BaseResultMap">
+	SELECT A.CS_ANA_CD_NM
+	      ,A.IM_PL_CD_NM
+	      ,BI.BIZ_AREA_LNM
+	      ,BM.BR_NM AS ANA_JOB_NM
+	      ,DB.DB_CONN_TRG_LNM
+	      ,BM.DBC_TBL_NM
+	      ,BM.DBC_COL_NM
+	      ,DM.DQI_LNM
+	      ,CM.CTQ_LNM
+	      ,IM.IM_RSL_CD_NM
+	FROM WAH_IM_ACT_MSTR IM
+	    INNER JOIN WAM_CS_ANA_MSTR A
+	        ON IM.ANA_JOB_ID = A.ANA_JOB_ID
+	        AND IM.ANA_STR_DTM = A.ANA_STR_DTM
+	        AND A.REG_TYP_CD IN ('C','U')
+		INNER JOIN WAM_BR_MSTR BM
+		    ON A.ANA_JOB_ID = BM.BR_ID
+		    AND BM.REG_TYP_CD IN ('C','U')
+		INNER JOIN (SELECT A.DB_CONN_TRG_ID ,A.DB_CONN_TRG_LNM
+	                  FROM WAA_DB_CONN_TRG A  
+	                  WHERE A.EXP_DTM = '99991231'  
+	                  AND A.REG_TYP_CD IN ('C','U')                     
+	                  GROUP BY A.DB_CONN_TRG_ID, A.DB_CONN_TRG_LNM 
+		                ) DB 
+		    ON BM.DB_CONN_TRG_ID = DB.DB_CONN_TRG_ID
+		INNER JOIN (SELECT D.DQI_ID, D.BR_ID
+			                FROM WAM_BR_DQI_MAP D
+			                WHERE REG_TYP_CD IN ('C', 'U')) D
+	        ON BM.BR_ID = D.BR_ID
+	    INNER JOIN (SELECT DM.DQI_ID, DM.DQI_LNM
+			                FROM WAM_DQI DM
+			                WHERE REG_TYP_CD IN ('C','U')) DM
+	        ON D.DQI_ID = DM.DQI_ID                 
+	    INNER JOIN WAM_BIZ_AREA BI 
+	        ON BM.BIZ_AREA_ID = BI.BIZ_AREA_ID  
+	    LEFT OUTER JOIN (SELECT C.CTQ_ID, C.BR_ID
+				                       FROM WAM_BR_CTQ_MAP C
+				                       WHERE REG_TYP_CD IN ('C', 'U')) C
+	        ON BM.BR_ID = C.BR_ID
+	    LEFT OUTER JOIN (SELECT CM.CTQ_ID, CM.CTQ_LNM
+				                       FROM WAM_CTQ CM
+				                       WHERE REG_TYP_CD IN ('C','U')) CM
+	        ON C.CTQ_ID = CM.CTQ_ID   
+	  WHERE 1=1
+	  AND A.ANA_JOB_ID = #{anaJobId, jdbcType=VARCHAR}
+  </select>
+  
+</mapper>

@@ -1,0 +1,1608 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.commons.rqstmst.service.WaqMstrMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.commons.rqstmst.service.WaqMstr" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+    <result column="RQST_NM" property="rqstNm" jdbcType="VARCHAR" />
+    <result column="BIZ_DCD" property="bizDcd" jdbcType="VARCHAR" />
+    <result column="BIZ_DCD_NM" property="bizDcdNm" jdbcType="VARCHAR" />
+    <result column="RQST_STEP_CD" property="rqstStepCd" jdbcType="VARCHAR" />
+    <result column="RQST_STEP_CD_NM" property="rqstStepCdNm" jdbcType="VARCHAR" />
+    <result column="RQST_RESN" property="rqstResn" jdbcType="VARCHAR" />
+    <!--  내 요청목록 조회용 yeonho -->
+    <result column="RQST_NM" property="rqstNm" jdbcType="VARCHAR" />
+    <result column="RQST_USER_NM" property="rqstUserNm" jdbcType="VARCHAR" />
+    <result column="RQST_STEP_CD" property="rqstStepCd" jdbcType="VARCHAR" />
+    <result column="APRV_STEP_LVL" property="aprvStepLvl" jdbcType="VARCHAR" />
+    <result column="RQST_TMP_COUNT" property="rqstTmpCount" jdbcType="INTEGER" />
+    <result column="RQST_MY_COUNT" property="rqstMyCount" jdbcType="INTEGER" />
+    <result column="RQST_TO_DO_COUNT" property="rqstToDoCount" jdbcType="INTEGER" />
+    <result column="APRV_STATUS" property="aprvStatus" jdbcType="VARCHAR" />
+    <result column="BIZ_DTL_CD" property="bizDtlCd" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <resultMap id="BaseEaiResultMap" type="kr.wise.meta.intf.service.GroupWareSendVO">
+    <result column="SEND_ID" 		property="sendId" 		jdbcType="VARCHAR" />
+    <result column="SEND_NAME" 		property="sendName" 	jdbcType="VARCHAR" />
+    <result column="RECV_IDS" 		property="recvIds" 		jdbcType="VARCHAR" />
+    <result column="SUBJECT" 		property="subject" 		jdbcType="VARCHAR" />
+    <result column="CONTENTS" 		property="contents" 	jdbcType="VARCHAR" />
+    <result column="URL" 			property="url" 			jdbcType="VARCHAR" />
+    <result column="MSG_GUBUN" 		property="msgGubun" 	jdbcType="VARCHAR" />
+    <result column="DEST_GUBUN" 	property="destGubun" 	jdbcType="VARCHAR" />
+    <result column="CC_RECV_IDS" 	property="ccRecvIds" 	jdbcType="VARCHAR" />
+    <result column="BCC_RECV_IDS" 	property="bccRecvIds" 	jdbcType="VARCHAR" />
+    <result column="RSRV_FLAG" 		property="rsrvFlag" 	jdbcType="VARCHAR" />
+    <result column="RSRV_DATE" 		property="rsrvDate" 	jdbcType="VARCHAR" />
+    <result column="ATT_FLAG" 		property="attFlag" 		jdbcType="VARCHAR" />
+    <result column="ATT" 			property="att" 			jdbcType="VARCHAR" />
+    <result column="RQST" 			property="rqstNo" 		jdbcType="VARCHAR" />
+    <result column="BIZ_DCD" 		property="bizDcd" 		jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    RQST_NO, RQST_NM, BIZ_DCD, RQST_STEP_CD, RQST_RESN, WRIT_DTM, WRIT_USER_ID, RQST_DTM, 
+    RQST_USER_ID, APRV_DTM, APRV_USER_ID
+  </sql>
+  
+  <select id="selectList" resultMap="BaseResultMap" parameterType="kr.wise.commons.rqstmst.service.WaqMstr" >
+    select 
+    <include refid="Base_Column_List" />
+    from WAQ_MSTR
+    <where>
+      <if test="rqstNm != null" >
+        AND RQST_NM = #{rqstNm,jdbcType=VARCHAR}
+      </if>
+      <if test="bizDcd != null" >
+        AND BIZ_DCD = #{bizDcd,jdbcType=VARCHAR}
+      </if>
+      <if test="rqstStepCd != null" >
+        AND RQST_STEP_CD = #{rqstStepCd,jdbcType=VARCHAR}
+      </if>
+      <if test="rqstResn != null" >
+        AND RQST_RESN = #{rqstResn,jdbcType=VARCHAR}
+      </if>
+      <if test="writUserId != null" >
+        AND WRIT_USER_ID = #{writUserId,jdbcType=VARCHAR}
+      </if>
+      <if test="rqstUserId != null" >
+        AND RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR}
+      </if>
+      <if test="aprvUserId != null" >
+        AND APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
+
+  <select id="selectrequestMst" resultMap="BaseResultMap" parameterType="kr.wise.commons.rqstmst.service.WaqMstr" >
+    select 
+    <include refid="Base_Column_List" />
+    , B.COMM_DTL_CD_NM AS  BIZ_DCD_NM
+    , C.COMM_DTL_CD_NM AS  RQST_STEP_CD_NM
+    from WAQ_MSTR M
+           LEFT OUTER JOIN (SELECT B.COMM_DTL_CD, B.COMM_DTL_CD_NM
+						              FROM WAA_COMM_DCD A
+						                   INNER JOIN WAA_COMM_DTL_CD B
+						                      ON A.COMM_DCD_ID = B.COMM_DCD_ID
+						                     AND A.COMM_DCD = 'BIZ_DCD'
+						                     AND B.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+						                     AND B.REG_TYP_CD IN ('C','U')
+						             WHERE A.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+						                AND A.REG_TYP_CD IN ('C','U') ) B
+              ON M.BIZ_DCD = B.COMM_DTL_CD    
+            LEFT OUTER JOIN (SELECT B.COMM_DTL_CD, B.COMM_DTL_CD_NM
+				                    FROM WAA_COMM_DCD A
+				                         INNER JOIN WAA_COMM_DTL_CD B
+				                            ON A.COMM_DCD_ID = B.COMM_DCD_ID
+				                           AND A.COMM_DCD = 'RQST_STEP_CD'
+				                           AND B.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+				                           AND B.REG_TYP_CD IN ('C','U')
+				                    WHERE A.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+						                AND A.REG_TYP_CD IN ('C','U') ) C
+                    ON M.RQST_STEP_CD = C.COMM_DTL_CD    
+    where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+  </select>
+
+  <delete id="deleteAll" >
+    DELETE FROM WAQ_MSTR
+  </delete>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from WAQ_MSTR
+    where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+  </delete>
+
+  <insert id="insert" parameterType="kr.wise.commons.rqstmst.service.WaqMstr" >
+  	    <selectKey keyProperty="rqstNo" resultType="string" order="BEFORE" statementType="STATEMENT">
+    		<include refid="kr.wise.commons.cmm.service.CommonMapper.getRequestId"/>
+<!--   		SELECT RQST_ID.NEXTVAL FROM DUAL -->
+  		</selectKey>
+    insert into WAQ_MSTR (RQST_NO, RQST_NM, BIZ_DCD, 
+      RQST_STEP_CD, RQST_RESN, WRIT_DTM, 
+      WRIT_USER_ID, RQST_DTM, RQST_USER_ID, 
+      APRV_DTM, APRV_USER_ID)
+    values (#{rqstNo,jdbcType=VARCHAR}, #{rqstNm,jdbcType=VARCHAR}, #{bizDcd,jdbcType=VARCHAR}, 
+      #{rqstStepCd,jdbcType=VARCHAR}, #{rqstResn,jdbcType=VARCHAR}, #{writDtm,jdbcType=DATE}, 
+      #{writUserId,jdbcType=VARCHAR}, #{rqstDtm,jdbcType=DATE}, #{rqstUserId,jdbcType=VARCHAR}, 
+      #{aprvDtm,jdbcType=DATE}, #{aprvUserId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="kr.wise.commons.rqstmst.service.WaqMstr" >
+<!--   	    <selectKey keyProperty="rqstNo" resultType="string" order="BEFORE" statementType="STATEMENT"> -->
+<!--     		<include refid="kr.wise.commons.cmm.service.CommonMapper.getRequestId"/> -->
+<!--   		SELECT RQST_ID.NEXTVAL FROM DUAL -->
+<!--   		</selectKey> -->
+    insert into WAQ_MSTR
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="rqstNo != null" >
+        RQST_NO,
+      </if>
+      <if test="rqstNm != null" >
+        RQST_NM,
+      </if>
+      <if test="bizDcd != null" >
+        BIZ_DCD,
+      </if>
+      <if test="rqstStepCd != null" >
+        RQST_STEP_CD,
+      </if>
+      <if test="rqstResn != null" >
+        RQST_RESN,
+      </if>
+      <if test="writDtm != null" >
+        WRIT_DTM,
+      </if>
+      <if test="writUserId != null" >
+        WRIT_USER_ID,
+      </if>
+      <if test="rqstDtm != null" >
+        RQST_DTM,
+      </if>
+      <if test="rqstUserId != null" >
+        RQST_USER_ID,
+      </if>
+      <if test="aprvDtm != null" >
+        APRV_DTM,
+      </if>
+      <if test="aprvUserId != null" >
+        APRV_USER_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="rqstNo != null" >
+        #{rqstNo,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstNm != null" >
+        #{rqstNm,jdbcType=VARCHAR},
+      </if>
+      <if test="bizDcd != null" >
+        #{bizDcd,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstStepCd != null" >
+        #{rqstStepCd,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstResn != null" >
+        #{rqstResn,jdbcType=VARCHAR},
+      </if>
+      <if test="writDtm != null" >
+        #{writDtm,jdbcType=DATE},
+      </if>
+      <if test="writUserId != null" >
+        #{writUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDtm != null" >
+        #{rqstDtm,jdbcType=DATE},
+      </if>
+      <if test="rqstUserId != null" >
+        #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDtm != null" >
+        #{aprvDtm,jdbcType=DATE},
+      </if>
+      <if test="aprvUserId != null" >
+        #{aprvUserId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.commons.rqstmst.service.WaqMstr" >
+    update WAQ_MSTR
+    <set >
+      <if test="rqstNm != null" >
+        RQST_NM = #{rqstNm,jdbcType=VARCHAR},
+      </if>
+      <if test="bizDcd != null" >
+        BIZ_DCD = #{bizDcd,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstStepCd != null" >
+        RQST_STEP_CD = #{rqstStepCd,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstResn != null" >
+        RQST_RESN = #{rqstResn,jdbcType=VARCHAR},
+      </if>
+      <if test="writDtm != null" >
+        WRIT_DTM = #{writDtm,jdbcType=DATE},
+      </if>
+      <if test="writUserId != null" >
+        WRIT_USER_ID = #{writUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDtm != null" >
+        RQST_DTM = #{rqstDtm,jdbcType=DATE},
+      </if>
+      <if test="rqstUserId != null" >
+        RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDtm != null" >
+        APRV_DTM = #{aprvDtm,jdbcType=DATE},
+      </if>
+      <if test="aprvUserId != null" >
+        APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+  </update>
+  
+  <update id="updateWaqMstrAprvInfo" parameterType="kr.wise.commons.rqstmst.service.WaqMstr" >
+    update WAQ_MSTR
+    <set>
+    	RQST_STEP_CD = #{rqstStepCd,jdbcType=VARCHAR},
+        APRV_DTM = NOW(),
+        APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR},
+    </set>
+    where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+  </update>
+
+  <update id="updateWaqMstrRequestInfo" parameterType="kr.wise.commons.rqstmst.service.WaqMstr" >
+    update WAQ_MSTR
+    <set>
+        RQST_DTM = NOW(),
+        RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+    </set>
+    where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+  </update>
+  
+  <update id="updateWaqMstrStepCd" parameterType="kr.wise.commons.rqstmst.service.WaqMstr" >
+    UPDATE WAQ_MSTR
+    <set>
+        RQST_STEP_CD = #{rqstStepCd},
+        RQST_DTM = NOW(),
+        RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+        RQST_RESN = #{rqstResn,jdbcType=VARCHAR},
+    </set>
+    WHERE RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+  </update>
+  
+  
+  <update id="updateByPrimaryKey" parameterType="kr.wise.commons.rqstmst.service.WaqMstr" >
+    update WAQ_MSTR
+    set RQST_NM = #{rqstNm,jdbcType=VARCHAR},
+      BIZ_DCD = #{bizDcd,jdbcType=VARCHAR},
+      RQST_STEP_CD = #{rqstStepCd,jdbcType=VARCHAR},
+      RQST_RESN = #{rqstResn,jdbcType=VARCHAR},
+      WRIT_DTM = #{writDtm,jdbcType=DATE},
+      WRIT_USER_ID = #{writUserId,jdbcType=VARCHAR},
+      RQST_DTM = #{rqstDtm,jdbcType=DATE},
+      RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      APRV_DTM = #{aprvDtm,jdbcType=DATE},
+      APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR}
+    where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+  </update>
+  
+  <update id="updateWaqMstrqstNm" parameterType="map">
+	UPDATE WAQ_MSTR 
+		SET RQST_NM = (
+				SELECT 
+					CONCAT(B.BIZ_NM, ' ', A.${colnm}, CASE WHEN B.CNT > 1 THEN CONCAT(' 외 ', (B.CNT-1), '건') ELSE '' END ) AS RQST_NM
+				 FROM ${tblnm} A 
+				JOIN (
+					SELECT #{bizDtlNm,jdbcType=VARCHAR} AS BIZ_NM, 
+						   COUNT(*) AS CNT, 
+						   MIN(RQST_NO) AS RQST_NO, 
+						   MIN(RQST_SNO) AS RQST_SNO
+					FROM ${tblnm} 	
+					WHERE RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+					  --AND VRF_CD = '1'
+				) B
+				  ON A.RQST_NO = B.RQST_NO
+				 AND A.RQST_SNO = B.RQST_SNO
+				WHERE 1=1
+				LIMIT 1
+	)
+	WHERE RQST_NO = #{rqstNo,jdbcType=VARCHAR}  
+  	
+  </update>
+  
+  <update id="updateWaqMstrqstDtlNm" parameterType="map">
+	UPDATE WAQ_MSTR 
+		SET RQST_NM = (
+				SELECT 
+					CONCAT(B.BIZ_NM, ' ', A.${colnm}, CASE WHEN B.CNT > 1 THEN  CONCAT(' 외 ', (B.CNT-1), '건') ELSE '' END ) AS RQST_NM
+				 FROM ${tblnm} A 
+				JOIN (
+					SELECT #{bizDtlNm,jdbcType=VARCHAR} AS BIZ_NM, 
+						   COUNT(*) AS CNT, 
+						   MIN(RQST_NO) AS RQST_NO, 
+						   MIN(RQST_SNO) AS RQST_SNO,
+						   MIN(RQST_DTL_SNO) AS RQST_DTL_SNO 
+					FROM ${tblnm} 	
+					WHERE RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+					  --AND VRF_CD = '1'
+				) B
+				  ON A.RQST_NO      = B.RQST_NO
+				 AND A.RQST_SNO     = B.RQST_SNO
+				 AND A.RQST_DTL_SNO = B.RQST_DTL_SNO
+	)
+	WHERE RQST_NO = #{rqstNo,jdbcType=VARCHAR}  
+  	
+  </update>
+
+<update id="updateWaqMstrqstNm2" parameterType="map">
+	UPDATE WAQ_MSTR 
+		SET RQST_NM = (
+				SELECT 
+					CONCAT(B.BIZ_NM, ' ', A.${colnm}, CASE WHEN B.CNT > 1 THEN  CONCAT(' 외 ', (B.CNT-1), '건') ELSE '' END ) AS RQST_NM
+				 FROM ${tblnm} A 
+				JOIN (
+					SELECT #{bizDtlNm,jdbcType=VARCHAR} AS BIZ_NM, 
+						   COUNT(*) AS CNT, 
+						   MIN(RQST_NO) AS RQST_NO, 
+						   MIN(RQST_SNO) AS RQST_SNO
+					FROM ${tblnm} 	
+					WHERE RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+					  AND VRF_CD = '1'
+				) B
+				  ON A.RQST_NO = B.RQST_NO
+				 AND A.RQST_SNO = B.RQST_SNO
+				WHERE 1=1
+				LIMIT 1
+	)
+	WHERE RQST_NO = #{rqstNo,jdbcType=VARCHAR}  
+  	
+  </update>
+  <update id="updateWaqMstrqstNmDic" parameterType="map">
+    --요청서명 업데이트 (표준데이터 일경우...)
+	UPDATE WAQ_MSTR 
+		SET RQST_NM = (
+						SELECT 
+							CASE WHEN MAX(A.RQST_NM1) IS NOT NULL OR MAX(A.RQST_NM2) IS NOT NULL OR MAX(A.RQST_NM3) IS NOT NULL 
+								 THEN CONCAT('표준데이터 '
+								  		  	 ,CASE WHEN MAX(RQST_NM1) IS NOT NULL THEN CONCAT('[', MAX(A.RQST_NM1), ']') ELSE '' END
+								  		 	 ,CASE WHEN MAX(A.RQST_NM2) IS NOT NULL THEN CONCAT('[', MAX(A.RQST_NM2), ']') ELSE '' END
+								 		 	 ,CASE WHEN MAX(A.RQST_NM3) IS NOT NULL THEN CONCAT('[', MAX(A.RQST_NM3), ']') ELSE '' END 
+									 	 	 ,'[총 건수: ', SUM(A.CNT), ']') END AS RQST_NM   
+						 FROM (
+									SELECT 
+										
+										CONCAT(B.BIZ_NM, ': ', A.SDITM_LNM, CASE WHEN B.CNT > 1 THEN CONCAT(' 외 ', (B.CNT-1), '건') ELSE '' END ) AS RQST_NM1
+										, null AS RQST_NM2
+										, null AS RQST_NM3
+										, CNT
+									 FROM WAQ_SDITM A 
+									JOIN (
+										SELECT '표준용어' AS BIZ_NM, 
+											   COUNT(*) AS CNT, 
+											   MIN(RQST_NO) AS RQST_NO, 
+											   MIN(RQST_SNO) AS RQST_SNO
+										FROM WAQ_SDITM 	
+										WHERE RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+									--	  AND VRF_CD = '1'
+									) B
+									  ON A.RQST_NO = B.RQST_NO
+									 AND A.RQST_SNO = B.RQST_SNO
+									 
+									UNION ALL
+									
+									SELECT 
+										null AS RQST_NM1
+										, CONCAT(B.BIZ_NM, ': ', A.DMN_LNM, CASE WHEN B.CNT > 1 THEN CONCAT(' 외 ', (B.CNT-1), '건') ELSE '' END ) AS RQST_NM2
+										, null AS RQST_NM3
+										, CNT
+									 FROM WAQ_DMN A 
+									JOIN (
+										SELECT '표준도메인' AS BIZ_NM, 
+											   COUNT(*) AS CNT, 
+											   MIN(RQST_NO) AS RQST_NO, 
+											   MIN(RQST_SNO) AS RQST_SNO
+										FROM WAQ_DMN 	
+										WHERE RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+									--	  AND VRF_CD = '1'
+									) B
+									  ON A.RQST_NO = B.RQST_NO
+									 AND A.RQST_SNO = B.RQST_SNO
+									 
+									 UNION ALL
+									 
+									SELECT 
+										null AS RQST_NM1
+										, null AS RQST_NM2
+										, CONCAT(B.BIZ_NM, ': ', A.STWD_LNM, CASE WHEN B.CNT > 1 THEN CONCAT(' 외 ', (B.CNT-1), '건') ELSE '' END ) AS RQST_NM3
+										, CNT
+									 FROM WAQ_STWD A 
+									JOIN (
+										SELECT '표준단어' AS BIZ_NM, 
+											   COUNT(*) AS CNT, 
+											   MIN(RQST_NO) AS RQST_NO, 
+											   MIN(RQST_SNO) AS RQST_SNO
+										FROM WAQ_STWD 	
+										WHERE RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+									--	  AND VRF_CD = '1'
+									) B
+									  ON A.RQST_NO = B.RQST_NO
+									 AND A.RQST_SNO = B.RQST_SNO
+					) A 
+<!-- 					GROUP BY RQST_NM1, RQST_NM2, RQST_NM3 -->
+	)
+	WHERE RQST_NO = #{rqstNo,jdbcType=VARCHAR}  
+  	
+  </update>
+  
+  <update id="updateWaqMstrqstNmAdc" parameterType="map">
+    --요청서명 업데이트 (APP데이터 일경우...)
+	UPDATE WAQ_MSTR 
+		SET RQST_NM = (
+						SELECT 
+							CASE WHEN MAX(RQST_NM1) IS NOT NULL OR MAX(RQST_NM2) IS NOT NULL 
+								 THEN CONCAT('APP데이터 '
+								 			 ,CASE WHEN MAX(RQST_NM1) IS NOT NULL THEN CONCAT('[', MAX(RQST_NM1), ']') ELSE '' END
+								 			 ,CASE WHEN MAX(RQST_NM2) IS NOT NULL THEN CONCAT('[', MAX(RQST_NM2), ']') ELSE '' END
+								 			 ,'[총 건수: ', SUM(CNT), ']') END AS RQST_NM
+						 FROM (
+									SELECT 
+										
+										CONCAT(B.BIZ_NM, ': ', A.APP_SDITM_LNM, CASE WHEN B.CNT > 1 THEN CONCAT(' 외 ', (B.CNT-1), '건') ELSE '' END ) AS RQST_NM1
+										, null AS RQST_NM2
+										, CNT
+									 FROM WAQ_APP_SDITM A 
+									JOIN (
+										SELECT 'APP용어' AS BIZ_NM, 
+											   COUNT(*) AS CNT, 
+											   MIN(RQST_NO) AS RQST_NO, 
+											   MIN(RQST_SNO) AS RQST_SNO
+										FROM WAQ_APP_SDITM 	
+										WHERE RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+									--	  AND VRF_CD = '1'
+									) B
+									  ON A.RQST_NO = B.RQST_NO
+									 AND A.RQST_SNO = B.RQST_SNO
+									 
+									 UNION ALL
+									 
+									SELECT 
+										null AS RQST_NM1
+										, CONCAT(B.BIZ_NM, ': ', A.APP_STWD_LNM, CASE WHEN B.CNT > 1 THEN CONCAT(' 외 ', (B.CNT-1), '건') ELSE '' END ) AS RQST_NM2
+										, CNT
+									 FROM WAQ_APP_STWD A 
+									JOIN (
+										SELECT 'APP단어' AS BIZ_NM, 
+											   COUNT(*) AS CNT, 
+											   MIN(RQST_NO) AS RQST_NO, 
+											   MIN(RQST_SNO) AS RQST_SNO
+										FROM WAQ_APP_STWD 	
+										WHERE RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+									--	  AND VRF_CD = '1'
+									) B
+									  ON A.RQST_NO = B.RQST_NO
+									 AND A.RQST_SNO = B.RQST_SNO
+					) 
+	)
+	WHERE RQST_NO = #{rqstNo,jdbcType=VARCHAR}  
+  	
+  </update>
+  <update id="updateWaqMstrqstNmDtt" parameterType="map">
+    --요청서명 업데이트 (DDL 이관요청 일경우...)
+	UPDATE WAQ_MSTR 
+		SET RQST_NM = (
+						SELECT 
+							CASE WHEN MAX(RQST_NM1) IS NOT NULL OR MAX(RQST_NM2) IS NOT NULL OR MAX(RQST_NM3) IS NOT NULL 
+								 THEN CONCAT('DDL이관 '
+								 			 ,CASE WHEN MAX(RQST_NM1) IS NOT NULL THEN CONCAT('[', MAX(RQST_NM1), ']') ELSE '' END
+											 ,CASE WHEN MAX(RQST_NM2) IS NOT NULL THEN CONCAT('[', MAX(RQST_NM2), ']') ELSE '' END
+											 ,'[총 건수: ', SUM(CNT), ']') END AS RQST_NM
+						 FROM (
+									SELECT 
+										
+										CONCAT(B.BIZ_NM, ': ', A.DDL_TBL_PNM, CASE WHEN B.CNT > 1 THEN  CONCAT(' 외 ', (B.CNT-1), '건') ELSE '' END ) AS RQST_NM1
+										, null AS RQST_NM2
+										, null AS RQST_NM3
+										, CNT
+									 FROM WAQ_DDL_TSF_TBL A 
+									JOIN (
+										SELECT 'DDL테이블' AS BIZ_NM, 
+											   COUNT(*) AS CNT, 
+											   MIN(RQST_NO) AS RQST_NO, 
+											   MIN(RQST_SNO) AS RQST_SNO
+										FROM WAQ_DDL_TSF_TBL 	
+										WHERE RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+									--	  AND VRF_CD = '1'
+									) B
+									  ON A.RQST_NO = B.RQST_NO
+									 AND A.RQST_SNO = B.RQST_SNO
+									UNION ALL
+									SELECT 
+										null AS RQST_NM1
+										, CONCAT(B.BIZ_NM, ': ', A.DDL_IDX_PNM, CASE WHEN B.CNT > 1 THEN CONCAT(' 외 ', (B.CNT-1), '건') ELSE '' END ) AS RQST_NM2
+										, null AS RQST_NM3
+										, CNT
+									 FROM WAQ_DDL_TSF_IDX A 
+									JOIN (
+										SELECT 'DDL인덱스' AS BIZ_NM, 
+											   COUNT(*) AS CNT, 
+											   MIN(RQST_NO) AS RQST_NO, 
+											   MIN(RQST_SNO) AS RQST_SNO
+										FROM WAQ_DDL_TSF_IDX
+										WHERE RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+									--	  AND VRF_CD = '1'
+									) B
+									  ON A.RQST_NO = B.RQST_NO
+									 AND A.RQST_SNO = B.RQST_SNO
+					) 
+<!-- 					GROUP BY RQST_NM1, RQST_NM2, RQST_NM3 -->
+	)
+	WHERE RQST_NO = #{rqstNo,jdbcType=VARCHAR}  
+  	
+  </update>
+    <update id="updateWaqMstrqstNmDtt2" parameterType="map">
+    --요청서명 업데이트 (DDL 이관요청 일경우...)
+	UPDATE WAQ_MSTR 
+		SET RQST_NM = (
+						SELECT 
+							CASE WHEN MAX(RQST_NM1) IS NOT NULL OR MAX(RQST_NM2) IS NOT NULL OR MAX(RQST_NM3) IS NOT NULL 
+								 THEN CONCAT('DDL이관 '
+								 			 ,CASE WHEN MAX(RQST_NM1) IS NOT NULL THEN CONCAT('[', MAX(RQST_NM1), ']') ELSE '' END
+											 ,CASE WHEN MAX(RQST_NM2) IS NOT NULL THEN CONCAT('[', MAX(RQST_NM2), ']') ELSE '' END
+											 ,'[총 건수: ', SUM(CNT), ']') END AS RQST_NM
+						 FROM (
+									SELECT 
+										
+										CONCAT(B.BIZ_NM, ': ', A.DDL_TBL_PNM, CASE WHEN B.CNT > 1 THEN  CONCAT(' 외 ', (B.CNT-1), '건') ELSE '' END ) AS RQST_NM1
+										, null AS RQST_NM2
+										, null AS RQST_NM3
+										, CNT
+									 FROM WAQ_DDL_TSF_TBL A 
+									JOIN (
+										SELECT 'DDL테이블' AS BIZ_NM, 
+											   COUNT(*) AS CNT, 
+											   MIN(RQST_NO) AS RQST_NO, 
+											   MIN(RQST_SNO) AS RQST_SNO
+										FROM WAQ_DDL_TSF_TBL 	
+										WHERE RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+										  AND VRF_CD = '1'
+									) B
+									  ON A.RQST_NO = B.RQST_NO
+									 AND A.RQST_SNO = B.RQST_SNO
+									UNION ALL
+									SELECT 
+										null AS RQST_NM1
+										, CONCAT(B.BIZ_NM, ': ', A.DDL_IDX_PNM, CASE WHEN B.CNT > 1 THEN CONCAT(' 외 ', (B.CNT-1), '건') ELSE '' END ) AS RQST_NM2
+										, null AS RQST_NM3
+										, CNT
+									 FROM WAQ_DDL_TSF_IDX A 
+									JOIN (
+										SELECT 'DDL인덱스' AS BIZ_NM, 
+											   COUNT(*) AS CNT, 
+											   MIN(RQST_NO) AS RQST_NO, 
+											   MIN(RQST_SNO) AS RQST_SNO
+										FROM WAQ_DDL_TSF_IDX
+										WHERE RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+										  AND VRF_CD = '1'
+									) B
+									  ON A.RQST_NO = B.RQST_NO
+									 AND A.RQST_SNO = B.RQST_SNO
+					) 
+<!-- 					GROUP BY RQST_NM1, RQST_NM2, RQST_NM3 -->
+	)
+	WHERE RQST_NO = #{rqstNo,jdbcType=VARCHAR}  
+  	
+  </update>
+  
+   <update id="updateWaqMstrqstNmDDP" parameterType="map">
+ 	UPDATE WAQ_MSTR 
+		SET RQST_NM = (
+				SELECT CONCAT(B.BIZ_NM, ' ' 
+					   		  ,A.DDL_TBL_PNM, CASE WHEN C.DDL_TBL_LNM IS NULL THEN  '' ELSE CONCAT('(', C.DDL_TBL_LNM, ')') END 
+					  		  ,CASE WHEN B.CNT > 1 THEN CONCAT(' 외 ', (B.CNT-1), '건') ELSE '' END ) AS RQST_NM
+				  FROM WAQ_DDL_PART A
+				       INNER JOIN (SELECT #{bizDtlNm,jdbcType=VARCHAR} AS BIZ_NM, 
+										   COUNT(*) AS CNT, 
+										   MIN(RQST_NO) AS RQST_NO, 
+										   MIN(RQST_SNO) AS RQST_SNO
+									FROM WAQ_DDL_PART
+									WHERE RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+									  --AND VRF_CD = '1'
+								) B
+						  ON A.RQST_NO = B.RQST_NO
+						 AND A.RQST_SNO = B.RQST_SNO 
+		              LEFT OUTER JOIN WAM_DDL_TBL C
+		                ON A.DDL_TBL_ID = C.DDL_TBL_ID
+		         WHERE A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}  
+				)
+	WHERE RQST_NO = #{rqstNo,jdbcType=VARCHAR}  
+  </update>
+  
+  
+  <select id="selectrvwStatus" parameterType="map" resultType="string">
+  	<if test='tblnm == "STND" ' >
+  		--SELECT CASE WHEN COALESCE(SUM(A.APPR_CNT), 0) = 0 THEN '2' ELSE '1' END AS APPR_RET 
+  		SELECT CASE WHEN COALESCE(SUM(A.APPR_CNT), 0) = 0 THEN '2' 
+  		       WHEN COALESCE(SUM(A.REJ_CNT), 0) = 0 THEN '1'
+  		       ELSE '3' END AS APPR_RET
+  		FROM (
+	  		--SELECT COALESCE(COUNT(*),0) AS APPR_CNT
+	  		SELECT CASE WHEN RVW_STS_CD = '1' THEN 1 ELSE 0 END AS  APPR_CNT, CASE WHEN RVW_STS_CD = '2' THEN 1 ELSE 0 END AS REJ_CNT  
+		  	  FROM WAQ_STWD 
+			WHERE RQST_NO = #{rqstNo}
+			  AND VRF_CD IN ('1', '3')
+			  --AND RVW_STS_CD = '1'
+			UNION ALL
+	  		--SELECT COALESCE(COUNT(*),0) AS APPR_CNT
+	  		SELECT CASE WHEN RVW_STS_CD = '1' THEN 1 ELSE 0 END AS  APPR_CNT, CASE WHEN RVW_STS_CD = '2' THEN 1 ELSE 0 END AS REJ_CNT  
+		  	  FROM WAQ_DMN 
+			WHERE RQST_NO = #{rqstNo}
+			  AND VRF_CD IN ('1', '3')
+			  --AND RVW_STS_CD = '1'
+			UNION ALL
+	  		--SELECT COALESCE(COUNT(*),0) AS APPR_CNT
+	  		SELECT CASE WHEN RVW_STS_CD = '1' THEN 1 ELSE 0 END AS  APPR_CNT, CASE WHEN RVW_STS_CD = '2' THEN 1 ELSE 0 END AS REJ_CNT  
+		  	  FROM WAQ_SDITM 
+			WHERE RQST_NO = #{rqstNo}
+			  AND VRF_CD IN ('1', '3')
+			  --AND RVW_STS_CD = '1'
+		  ) A
+  	</if>
+  	<if test='tblnm != "STND"'>
+  		<if test='tblnm == "WAQ_DDL_TSF_TBL"'>
+	      	--SELECT CASE WHEN COALESCE(COUNT(*),0) = 0 THEN '2' ELSE '1' END
+	      	SELECT CASE WHEN COALESCE(SUM(A.APPR_CNT), 0) = 0 THEN '2' 
+  	    	       WHEN COALESCE(SUM(A.REJ_CNT), 0) = 0 THEN '1'
+  	    	       ELSE '3' END AS APPR_RET
+	      	FROM  
+	      (	SELECT CASE WHEN RVW_STS_CD = '1' THEN 1 ELSE 0 END AS  APPR_CNT, CASE WHEN RVW_STS_CD = '2' THEN 1 ELSE 0 END AS REJ_CNT  
+	      	  FROM WAQ_DDL_TSF_TBL 
+	    	WHERE RQST_NO = #{rqstNo}
+	    	  AND VRF_CD = '1'
+	    	  --AND RVW_STS_CD = '1'
+	    	UNION ALL
+	    	SELECT CASE WHEN RVW_STS_CD = '1' THEN 1 ELSE 0 END AS  APPR_CNT, CASE WHEN RVW_STS_CD = '2' THEN 1 ELSE 0 END AS REJ_CNT  
+	      	  FROM WAQ_DDL_TSF_IDX
+	    	WHERE RQST_NO = #{rqstNo}
+	    	  AND VRF_CD = '1'
+	    	  --AND RVW_STS_CD = '1'  
+	      ) A
+	    </if>
+  	    <if test='tblnm != "WAQ_DDL_TSF_TBL"'>
+  	      	<if test='tblnm == "ADC"'>
+			SELECT CASE WHEN COALESCE(SUM(A.APPR_CNT), 0) = 0 THEN '2' ELSE '1' END AS APPR_RET 
+		  		FROM (
+			  		SELECT COALESCE(COUNT(*),0) AS APPR_CNT 
+				  	  FROM WAQ_APP_STWD 
+					WHERE RQST_NO = #{rqstNo}
+					  AND VRF_CD = '1'
+					  AND RVW_STS_CD = '1'
+					UNION ALL
+			  		SELECT COALESCE(COUNT(*),0) AS APPR_CNT
+				  	  FROM WAQ_APP_SDITM 
+					WHERE RQST_NO = #{rqstNo}
+					  AND VRF_CD = '1'
+					  AND RVW_STS_CD = '1'
+				  ) A
+  			</if>
+  			<if test='tblnm != "ADC"'>
+		--SELECT CASE WHEN COALESCE(COUNT(*),0) = 0 THEN '2' ELSE '1' END
+	      	SELECT CASE WHEN COALESCE(SUM(A.APPR_CNT), 0) = 0 THEN '2' 
+  	    	       WHEN COALESCE(SUM(A.REJ_CNT), 0) = 0 THEN '1'
+  	    	       ELSE '3' END AS APPR_RET
+	      	FROM  
+	      (	SELECT CASE WHEN RVW_STS_CD = '1' THEN 1 ELSE 0 END AS  APPR_CNT, CASE WHEN RVW_STS_CD = '2' THEN 1 ELSE 0 END AS REJ_CNT  
+	      	  FROM ${tblnm} 
+	    	WHERE RQST_NO = #{rqstNo}
+	    	  AND VRF_CD = '1'
+	    	  --AND RVW_STS_CD = '1'
+	      ) A
+	    	</if>
+  		</if>
+  	</if>
+
+  </select>
+  
+  <select id="selectRqstMyList" parameterType="map" resultMap="BaseResultMap">
+	SELECT A.RQST_NO
+		 , A.BIZ_DCD
+		 , A.RQST_NM
+		 , A.RQST_DTM		 
+		 , A.RQST_STEP_CD
+		 , A.RQST_USER_ID
+		 , A.RQST_USER_NM 
+		 , A.APRV_DTM
+		 , A.APRV_STATUS 	     
+		 , CASE WHEN APRV_STEP_LVL_TEMP IS NULL
+           THEN ''
+           WHEN APRV_STEP_LVL_TEMP IS NOT NULL AND APR_LVL IS NULL
+           THEN CONCAT(APRV_STEP_LVL_TEMP, '(결재단계 없음)')
+           ELSE
+		   CONCAT(APR_LVL, ' / ', (SELECT MAX(APR_LVL) FROM WAA_APR_PRC
+     	   						 WHERE RQST_NO = A.RQST_NO), '단계 (', APRV_STEP_LVL_TEMP, ')') END AS APRV_STEP_LVL  
+     	 , CASE WHEN RQST_STEP_CD = 'A' THEN '#0000FF'
+           ELSE NULL END AS FontColor
+	
+	FROM
+		    (
+		    SELECT A.RQST_NO,
+		           A.BIZ_DCD,
+		           A.RQST_NM,
+		           A.RQST_DTM,
+		           GET_USER_NM(A.RQST_USER_ID) AS RQST_USER_NM,
+		           A.RQST_STEP_CD,
+		           A.RQST_USER_ID,
+		           B.APR_LVL,
+		           B.USER_ID,
+		           B.APRV_DTM,
+		           B.APR_FRML_CD,
+		           A.WRIT_USER_ID,
+		           B.RVW_STS_CD,
+                   CASE WHEN A.RQST_STEP_CD = 'A' AND B.RVW_STS_CD = '3' THEN '부분승인'
+                   		WHEN A.RQST_STEP_CD = 'A' AND B.RVW_STS_CD = '2' THEN '반려'
+                        WHEN A.RQST_STEP_CD = 'A' AND B.RVW_STS_CD = '1' THEN '승인'
+                        WHEN A.RQST_STEP_CD = 'A' AND B.RVW_STS_CD IS NULL THEN '자동승인'
+                   END AS APRV_STATUS,
+		           
+		           CASE WHEN A.RQST_STEP_CD = 'A' THEN
+                   '결재 완료'
+                   
+                   WHEN B.APR_FRML_CD = 'G' THEN 
+                    CONCAT((SELECT APRG_NM FROM WAA_APRG
+		            		WHERE APRG_ID = B.USER_ID
+		            		AND REG_TYP_CD IN ('C', 'U')
+		            		AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')), '그룹')
+		           WHEN B.APR_FRML_CD = 'D' THEN
+		           	CONCAT((SELECT GET_USER_NM(B.USER_ID)), '님')
+		           END AS APRV_STEP_LVL_TEMP,
+		           CASE 
+		           --결재내역중 가장 마지막 결재건, 전결된 내역, 미결재내역중 현재 결재대상건 확인
+                   WHEN (RQST_STEP_CD = 'A' AND B.APR_LVL = (SELECT MAX(APR_LVL) FROM WAA_APR_PRC
+                                     						 WHERE RQST_NO = A.RQST_NO AND APRV_DTM IS NOT NULL) 
+                      OR RQST_STEP_CD = 'A' AND B.APR_LVL IS NULL
+                      OR RQST_STEP_CD = 'Q' AND B.APR_LVL = (SELECT MIN(APR_LVL) FROM WAA_APR_PRC
+		             					                     WHERE RQST_NO = A.RQST_NO AND APRV_DTM IS NULL))
+                      OR RQST_STEP_CD = 'S'
+                   THEN '1'
+
+		           ELSE '0'
+		           END AS CHECK_APR_LVL
+		           
+	          FROM WAQ_MSTR A 
+                   LEFT JOIN WAA_APR_PRC B
+		             ON A.RQST_NO = B.RQST_NO		             
+		    )  A 		       
+	  WHERE 1 = 1 
+	    AND A.CHECK_APR_LVL = '1'
+	    AND A.RQST_NM IS NOT NULL
+		<if test="rqstNo != null" >
+	        AND UPPER(A.RQST_NO) LIKE '%' || UPPER(#{rqstNo,jdbcType=VARCHAR}) || '%'
+	    </if>
+	    
+	    <if test="bizDcd != null" >
+	        AND A.BIZ_DCD = #{bizDcd,jdbcType=VARCHAR}
+		</if>
+	    
+	    <if test="rqstNm != null" >
+	        AND A.RQST_NO IN (SELECT RQST_NO
+	                            FROM WAQ_STWD
+	                           WHERE (    UPPER(STWD_LNM) LIKE '%' || UPPER(#{rqstNm,jdbcType=VARCHAR}) ||'%' 
+	                                   OR UPPER(STWD_PNM) LIKE '%' || UPPER(#{rqstNm,jdbcType=VARCHAR})  ||'%'
+	                                 )  
+	                           UNION ALL
+	                          SELECT RQST_NO
+	                            FROM WAQ_DMN
+	                           WHERE (    UPPER(DMN_LNM) LIKE '%' || UPPER(#{rqstNm,jdbcType=VARCHAR})  ||'%' 
+	                                   OR UPPER(DMN_PNM) LIKE '%' || UPPER(#{rqstNm,jdbcType=VARCHAR})  ||'%'
+	                                 )  
+	                           UNION ALL
+	                          SELECT RQST_NO
+	                            FROM WAQ_SDITM
+	                           WHERE (    UPPER(SDITM_LNM) LIKE '%' || UPPER(#{rqstNm,jdbcType=VARCHAR})  ||'%' 
+	                                   OR UPPER(SDITM_PNM) LIKE '%' || UPPER(#{rqstNm,jdbcType=VARCHAR})  ||'%'
+	                                 )    
+	                           UNION ALL
+	                          SELECT RQST_NO
+	                            FROM WAQ_PDM_TBL
+	                           WHERE (    UPPER(PDM_TBL_LNM) LIKE '%' || UPPER(#{rqstNm,jdbcType=VARCHAR})  ||'%' 
+	                                   OR UPPER(PDM_TBL_PNM) LIKE '%' || UPPER(#{rqstNm,jdbcType=VARCHAR})  ||'%'
+	                                 )  
+	                           UNION ALL
+	                          SELECT RQST_NO
+	                            FROM WAQ_DDL_TBL
+	                           WHERE (    UPPER(DDL_TBL_LNM) LIKE '%' || UPPER(#{rqstNm,jdbcType=VARCHAR})  ||'%' 
+	                                   OR UPPER(DDL_TBL_PNM) LIKE '%' || UPPER(#{rqstNm,jdbcType=VARCHAR})  ||'%'
+	                                 )  
+	                           UNION ALL          
+	                          SELECT RQST_NO
+	                            FROM WAQ_DDL_IDX
+	                           WHERE (    UPPER(DDL_IDX_LNM) LIKE '%' || UPPER(#{rqstNm,jdbcType=VARCHAR})  ||'%' 
+	                                   OR UPPER(DDL_IDX_PNM) LIKE '%' || UPPER(#{rqstNm,jdbcType=VARCHAR})  ||'%'
+	                                 )   
+	                            UNION ALL          
+	                          SELECT RQST_NO
+	                            FROM WAQ_MSTR
+	                           WHERE UPPER(RQST_NM) LIKE '%' || UPPER(#{rqstNm,jdbcType=VARCHAR})  ||'%'                                 
+	                         )                 
+	    </if>
+	    <if test="rqstUserNm != null" >
+	        AND UPPER(A.RQST_USER_NM) LIKE '%' || UPPER(#{rqstUserNm,jdbcType=VARCHAR}) ||'%'
+	    </if>
+	    <if test="rqstStepCd != null" >
+	        AND A.RQST_STEP_CD = #{rqstStepCd,jdbcType=VARCHAR}
+	    </if>
+	    <if test="writUserId != null" >
+	        AND A.WRIT_USER_ID = #{writUserId,jdbcType=VARCHAR}
+	    </if>
+	    <if test="rqstUserId != null" >
+	        AND A.RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR}
+	    </if>
+	    
+	    <if test="aprvUserNm != null" >
+	        AND A.RQST_NO IN (SELECT X.RQST_NO
+	                            FROM WAA_APR_PRC X
+	                           WHERE GET_USER_NM(X.USER_ID) LIKE '%' || #{aprvUserNm,jdbcType=VARCHAR} ||'%' 
+	                          ) 
+	    </if>
+	    <if test="aprvStatus != null" >
+	        AND A.APRV_STATUS LIKE '%' || #{aprvStatus,jdbcType=VARCHAR} ||'%'  
+	    </if>
+	    
+	    <choose>
+	        <when test='dtSrchDcd == "R"'>
+	        	<if test="searchBgnDe != null" >
+		       		<![CDATA[ AND A.RQST_DTM >= TO_DATE(#{searchBgnDe,jdbcType=VARCHAR}, 'YYYY-MM-DD') ]]>
+			    </if>
+			    <if test="searchEndDe != null" >
+			       <![CDATA[  AND A.RQST_DTM <  TO_DATE(#{searchEndDe,jdbcType=VARCHAR}, 'YYYY-MM-DD') + 1 ]]>
+			    </if>
+	        </when> 	    	
+		    <otherwise>
+		     	<if test="searchBgnDe != null" >
+		       		<![CDATA[ AND A.APRV_DTM >= TO_DATE(#{searchBgnDe,jdbcType=VARCHAR}, 'YYYY-MM-DD') ]]>
+			    </if>
+			    <if test="searchEndDe != null" >
+			       <![CDATA[  AND A.APRV_DTM <  TO_DATE(#{searchEndDe,jdbcType=VARCHAR}, 'YYYY-MM-DD') + 1 ]]>
+			    </if>
+		    </otherwise>
+	    </choose>
+	    
+		
+		ORDER BY RQST_DTM DESC, RQST_STEP_CD, RQST_NO, APR_LVL
+  </select>
+  
+  <select id="selectRqstMyListCount" parameterType="map" resultMap="BaseResultMap">
+	SELECT COUNT(*) AS RQST_MY_COUNT
+	
+	FROM
+		    (
+		    SELECT A.RQST_NO,
+		           A.BIZ_DCD,
+		           A.RQST_NM,
+		           A.RQST_DTM,
+		           GET_USER_NM(A.RQST_USER_ID) AS RQST_USER_NM,
+		           A.RQST_STEP_CD,
+		           A.RQST_USER_ID,
+		           B.APR_LVL,
+		           B.USER_ID,
+		           B.APRV_DTM,
+		           B.APR_FRML_CD,
+		           CASE WHEN A.RQST_STEP_CD = 'A' THEN
+                   '결재 완료'
+                   
+                   WHEN B.APR_FRML_CD = 'G' THEN 
+		           CONCAT((SELECT APRG_NM FROM WAA_APRG
+		            		WHERE APRG_ID = B.USER_ID
+		           			 AND REG_TYP_CD IN ('C', 'U')
+		           			 AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')), '그룹')
+		           WHEN B.APR_FRML_CD = 'D' THEN
+		           CONCAT((SELECT GET_USER_NM(B.USER_ID)), '님')
+		           END AS APRV_STEP_LVL_TEMP,
+		           CASE 
+		           --결재내역중 가장 마지막 결재건, 전결된 내역, 미결재내역중 현재 결재대상건 확인
+                   WHEN (RQST_STEP_CD = 'A' AND B.APR_LVL = (SELECT MAX(APR_LVL) FROM WAA_APR_PRC
+                                     						 WHERE RQST_NO = A.RQST_NO AND APRV_DTM IS NOT NULL) 
+                      OR RQST_STEP_CD = 'Q' AND B.APR_LVL = (SELECT MIN(APR_LVL) FROM WAA_APR_PRC
+		             					                     WHERE RQST_NO = A.RQST_NO AND APRV_DTM IS NULL))
+                   THEN '1'
+
+		           ELSE '0'
+		           END AS CHECK_APR_LVL
+		           
+		           FROM WAQ_MSTR A INNER JOIN WAA_APR_PRC B
+		           ON A.RQST_NO =B.RQST_NO
+		    )   A
+	<where>
+	CHECK_APR_LVL = '1'
+	AND RQST_STEP_CD = 'Q'
+	<if test="rqstNo != null" >
+        AND RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+    </if>
+    <if test="rqstNm != null" >
+        AND RQST_NM LIKE '%' || #{rqstNm,jdbcType=VARCHAR} || '%'
+    </if>
+    <if test="rqstUserNm != null" >
+        AND RQST_USER_NM = #{rqstUserNm,jdbcType=VARCHAR}
+    </if>
+    <if test="rqstStepCd != null" >
+        AND RQST_STEP_CD = #{rqstStepCd,jdbcType=VARCHAR}
+    </if>
+    <if test="rqstUserId != null" >
+        AND RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR}
+    </if>
+	</where>
+	ORDER BY RQST_STEP_CD, RQST_NO, APR_LVL
+  </select>
+  
+  
+  
+  <select id="selectRqstMyListForMain" parameterType="map" resultMap="BaseResultMap">
+	SELECT Z.*
+		  ,CONCAT(APR_LVL, ' / ', (SELECT MAX(APR_LVL)
+		  							 FROM WAA_APR_PRC
+     	   							WHERE RQST_NO = Z.RQST_NO), '단계 (', APRV_STEP_LVL_TEMP, ')') AS APRV_STEP_LVL  
+          ,(SELECT B.COMM_DTL_CD_NM 
+            FROM WAA_COMM_DCD A inner JOIN WAA_COMM_DTL_CD B
+            ON A.COMM_DCD_ID = B.COMM_DCD_ID
+            AND A.REG_TYP_CD IN ('C', 'U')
+            AND A.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+            AND B.REG_TYP_CD IN ('C', 'U')
+            AND B.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+            WHERE A.COMM_DCD = 'BIZ_DCD'
+            AND B.COMM_DTL_CD = Z.BIZ_DCD) AS BIZ_DCD_NM
+	FROM
+	(
+	SELECT *
+	FROM
+		    (
+		    SELECT A.RQST_NO,
+		           A.BIZ_DCD,
+		           A.RQST_NM,
+		           A.RQST_DTM,
+		           GET_USER_NM(A.RQST_USER_ID) AS RQST_USER_NM,
+		           A.RQST_STEP_CD,
+		           A.RQST_USER_ID,
+		           B.APR_LVL,
+		           B.USER_ID,
+		           B.APRV_DTM,
+		           B.APR_FRML_CD,
+		           GET_CMCD_NM(A.BIZ_DCD) AS BIZ_DCD_NM_NOUSE,
+		           CASE WHEN A.RQST_STEP_CD = 'A' AND B.RVW_STS_CD = '1' THEN '결재 완료'
+                        WHEN A.RQST_STEP_CD = 'A' AND B.RVW_STS_CD = '2' THEN '반려'
+                        WHEN A.RQST_STEP_CD = 'A' AND B.RVW_STS_CD = '3' THEN '부분 승인'
+                        WHEN B.APR_FRML_CD = 'G' THEN 
+		                 CONCAT((SELECT APRG_NM FROM WAA_APRG
+		                  		  WHERE APRG_ID = B.APRG_ID
+                          			AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+                          			AND REG_TYP_CD IN ('C', 'U')), '그룹')
+		                WHEN B.APR_FRML_CD = 'D' THEN
+		                 CONCAT((SELECT GET_USER_NM(B.USER_ID)), '님') END AS APRV_STEP_LVL_TEMP,
+		                CASE 
+		           --결재내역중 가장 마지막 결재건, 전결된 내역, 미결재내역중 현재 결재대상건 확인
+                   WHEN (RQST_STEP_CD = 'A' AND B.APR_LVL = (SELECT MAX(APR_LVL) FROM WAA_APR_PRC
+                                     						 WHERE RQST_NO = A.RQST_NO AND APRV_DTM IS NOT NULL) 
+                      OR RQST_STEP_CD = 'Q' AND B.APR_LVL = (SELECT MIN(APR_LVL) FROM WAA_APR_PRC
+		             					                     WHERE RQST_NO = A.RQST_NO AND APRV_DTM IS NULL))
+                   THEN '1'
+
+		           ELSE '0'
+		           END AS CHECK_APR_LVL
+		           
+		           FROM WAQ_MSTR A INNER JOIN WAA_APR_PRC B
+		           ON A.RQST_NO =B.RQST_NO
+		    ) X
+	<where>
+	CHECK_APR_LVL = '1'
+	--AND RQST_STEP_CD = 'Q'
+	AND RQST_STEP_CD != 'S'
+	<if test="rqstUserId != null" >
+        AND RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR}
+    </if>
+	</where>
+	ORDER BY RQST_DTM DESC, RQST_NO, APR_LVL
+	) Z
+<!-- 	<![CDATA[ WHERE ROWNUM <=5 ]]> -->
+	limit 5
+  </select>
+  
+  
+  <select id="selectRqstToDoList" parameterType="map" resultMap="BaseResultMap">
+    SELECT A.*
+	     , CASE WHEN A.RQST_STEP_CD = 'Q' THEN '#0000FF' END AS FontColor
+	  FROM (
+	        SELECT A.RQST_NO
+	             , A.BIZ_DCD
+	             , A.RQST_NM
+	             , A.RQST_DTM
+	             , A.RQST_STEP_CD
+	             , GET_USER_NM(A.RQST_USER_ID) AS RQST_USER_NM
+	             , B.APR_LVL
+	             , B.USER_ID
+	             , B.APRV_DTM
+	             , B.APR_FRML_CD --그룹결재인지 개인결재인지
+	             , CONCAT(APR_LVL, ' / ', (SELECT MAX(APR_LVL) 
+	                                      	 FROM WAA_APR_PRC
+	                                     	WHERE RQST_NO = A.RQST_NO), '단계') AS APRV_STEP_LVL   
+	             , CASE WHEN RQST_STEP_CD = 'Q'      -- 개인 결재 결재자ID 본인 건
+	                     AND B.USER_ID = #{rqstUserId}      -- 결재자ID
+	                     AND B.APR_FRML_CD = 'D'     
+	                     AND B.APR_LVL = (SELECT MIN(APR_LVL) 
+	                                        FROM WAA_APR_PRC
+	                                       WHERE RQST_NO = A.RQST_NO 
+	                                         AND APRV_DTM IS NULL) THEN '1'
+	               ELSE 
+	               CASE WHEN RQST_STEP_CD = 'A'       -- 개인 결재 결재자ID 본인
+	                     AND B.USER_ID = #{rqstUserId}
+	                     AND B.APR_FRML_CD = 'D'
+	                     AND B.APR_LVL = (SELECT MAX(APR_LVL) 
+	                                        FROM WAA_APR_PRC
+	                                       WHERE RQST_NO = A.RQST_NO
+	                                         AND APRV_DTM IS NOT NULL) THEN '1'
+	               ELSE
+	               CASE WHEN RQST_STEP_CD = 'Q'
+	                     AND B.APR_FRML_CD = 'G'
+	                     AND B.USER_ID IN (SELECT APRG_ID 
+	                                         FROM WAA_APRG_USER 
+	                                        WHERE APRG_ID = B.APRG_ID
+	                                          AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	                                          AND REG_TYP_CD IN ('C', 'U')
+	                                          AND USER_ID = #{rqstUserId})
+	                     AND B.APR_LVL = (SELECT MIN(APR_LVL)
+	                                        FROM WAA_APR_PRC
+	                                       WHERE RQST_NO = A.RQST_NO
+	                                         AND APRV_DTM IS NULL) THEN '1'
+	               ELSE
+	               CASE WHEN RQST_STEP_CD = 'A'
+	                     AND B.APR_FRML_CD = 'G'
+	                     AND B.USER_ID IN (SELECT APRG_ID 
+	                                         FROM WAA_APRG_USER 
+	                                        WHERE APRG_ID = B.APRG_ID
+	                                          AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	                                          AND REG_TYP_CD IN ('C', 'U')
+	                                          AND USER_ID = #{rqstUserId})
+	                     AND B.APR_LVL = (SELECT MAX(APR_LVL)
+	                                        FROM WAA_APR_PRC
+	                                       WHERE RQST_NO = A.RQST_NO
+	                                         AND APRV_DTM IS NOT NULL) THEN '1'
+	               ELSE
+	               CASE WHEN RQST_STEP_CD = 'Q'
+	                     AND B.APR_FRML_CD = 'D'
+	                     AND B.USER_ID != #{rqstUserId}
+	                     AND B.USER_ID IN (SELECT USER_ID 
+	                                         FROM WAA_RQST_APRP
+	                                        WHERE 1=1
+	                                          AND ABD_DAPR_DCD = 'D'
+	                                          AND SBS_APRP_ID = #{rqstUserId}<![CDATA[   
+	                                          AND DAPR_STR_DT <= TO_CHAR(NOW(), 'YYYYMMDD')
+	                                          AND DAPR_END_DT >= TO_CHAR(NOW(), 'YYYYMMDD') --대신결재(대결)자에 이름이 있는 경우.
+	                                      )]]>
+	                     AND B.APR_LVL = (SELECT MIN(APR_LVL) 
+	                                        FROM WAA_APR_PRC
+	                                       WHERE RQST_NO = A.RQST_NO
+	                                         AND APRV_DTM IS NULL) THEN '1' 
+	               ELSE
+	               CASE WHEN RQST_STEP_CD = 'A'
+	                     AND B.APR_FRML_CD = 'D'
+	                     AND B.USER_ID != #{rqstUserId}
+	                     AND B.USER_ID IN (SELECT USER_ID 
+	                                         FROM WAA_RQST_APRP
+	                                        WHERE 1=1
+	                                          AND ABD_DAPR_DCD = 'D'
+	                                          AND SBS_APRP_ID = #{rqstUserId}<![CDATA[   
+	                                          AND DAPR_STR_DT <= TO_CHAR(NOW(), 'YYYYMMDD')
+	                                          AND DAPR_END_DT >= TO_CHAR(NOW(), 'YYYYMMDD') --대신결재(대결)자에 이름이 있는 경우.
+	                                      )]]>
+	                     AND B.APR_LVL = (SELECT MAX(APR_LVL) 
+	                                        FROM WAA_APR_PRC
+	                                       WHERE RQST_NO = A.RQST_NO
+	                                         AND APRV_DTM IS NOT NULL) THEN '1' 
+	               ELSE '0'
+	               END END END END END END AS CHECK_APR_LVL
+	                            
+	                                      
+	          FROM WAQ_MSTR A
+	         INNER JOIN WAA_APR_PRC B 
+	            ON A.RQST_NO = B.RQST_NO
+	        ) A
+	 <where>
+	   AND (A.RQST_STEP_CD = 'Q' AND A.APRV_DTM IS NULL
+	       OR A.RQST_STEP_CD = 'A' AND A.APRV_DTM IS NOT NULL)
+	   AND A.CHECK_APR_LVL = '1'
+		<if test="bizDcd != null" >
+        	AND BIZ_DCD = #{bizDcd,jdbcType=VARCHAR}
+	    </if>
+	    <if test="rqstNm != null" >
+	        AND RQST_NM LIKE '%' || #{rqstNm,jdbcType=VARCHAR} || '%'
+	    </if>
+	    <if test="searchBgnDe != null" >
+	       <![CDATA[  AND TO_CHAR(RQST_DTM, 'YYYYMMDD') >= TO_CHAR(TO_DATE(#{searchBgnDe,jdbcType=VARCHAR}, 'YYYY-MM-DD'), 'YYYYMMDD') ]]>
+	    </if>
+	    <if test="searchEndDe != null" >
+	       <![CDATA[  AND TO_CHAR(RQST_DTM, 'YYYYMMDD') <= TO_CHAR(TO_DATE(#{searchEndDe,jdbcType=VARCHAR}, 'YYYY-MM-DD'), 'YYYYMMDD') ]]>
+	    </if>
+	    
+		
+		</where>
+		
+		ORDER BY RQST_DTM DESC, RQST_NO, APR_LVL
+
+  
+  </select>
+  
+  <select id="selectRqstResultList" parameterType="map" resultMap="BaseResultMap">
+    SELECT A.RQST_NO
+    	 , A.BIZ_DCD
+    	 , A.RQST_NM
+    	 , A.RQST_DTM
+    	 , A.RQST_STEP_CD
+    	 , A.RQST_USER_NM
+    	 , MAX(A.APR_LVL) AS APR_LVL
+    	 , A.USER_ID
+    	 , MAX(A.APRV_DTM) AS APRV_DTM
+    	 , A.APR_FRML_CD
+    	 , CONCAT(MAX(A.APR_LVL), ' / ', (SELECT MAX(APR_LVL)
+                  							FROM WAA_APR_PRC
+                 						   WHERE RQST_NO = A.RQST_NO), '단계') AS APRV_STEP_LVL 
+         , A.CHECK_APR_LVL 
+         , CASE
+         	WHEN A.RQST_STEP_CD = 'Q' THEN '#0000FF' END AS FONTCOLOR
+	  FROM (
+	        SELECT A.RQST_NO
+	             , A.BIZ_DCD
+	             , A.RQST_NM
+	             , A.RQST_DTM
+	             , A.RQST_STEP_CD
+	             , GET_USER_NM(A.RQST_USER_ID) AS RQST_USER_NM
+	             , B.APR_LVL
+	             , B.USER_ID
+	             , B.APRV_DTM
+	             , B.APR_FRML_CD --그룹결재인지 개인결재인지
+
+	             , CASE WHEN       -- 개인 결재 결재자ID 본인
+	                      B.USER_ID = #{rqstUserId}
+	                     AND B.APR_FRML_CD = 'D'
+	                     AND B.APR_LVL = (SELECT MAX(APR_LVL) 
+	                                        FROM WAA_APR_PRC
+	                                       WHERE RQST_NO = A.RQST_NO
+	                                         AND APRV_DTM IS NOT NULL) THEN '1'
+	               ELSE
+	               CASE WHEN B.APR_FRML_CD = 'G'
+	                     AND B.USER_ID IN (SELECT APRG_ID 
+	                                         FROM WAA_APRG_USER 
+	                                        WHERE APRG_ID = B.APRG_ID
+	                                          AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	                                          AND REG_TYP_CD IN ('C', 'U')
+	                                          AND USER_ID = #{rqstUserId})
+	                     AND B.APR_LVL = (SELECT MAX(APR_LVL)
+	                                        FROM WAA_APR_PRC
+	                                       WHERE RQST_NO = A.RQST_NO
+	                                         AND APRV_DTM IS NOT NULL) THEN '1'
+	               ELSE
+	               CASE WHEN B.APR_FRML_CD = 'D'
+	                     AND B.USER_ID != #{rqstUserId}
+	                     AND B.USER_ID IN (SELECT USER_ID 
+	                                         FROM WAA_RQST_APRP
+	                                        WHERE 1=1
+	                                          AND ABD_DAPR_DCD = 'D'
+	                                          AND SBS_APRP_ID = #{rqstUserId}<![CDATA[   
+	                                          AND DAPR_STR_DT <= TO_CHAR(NOW(), 'YYYYMMDD')
+	                                          AND DAPR_END_DT >= TO_CHAR(NOW(), 'YYYYMMDD') --대신결재(대결)자에 이름이 있는 경우.
+	                                      )]]>
+	                     AND B.APR_LVL = (SELECT MAX(APR_LVL) 
+	                                        FROM WAA_APR_PRC
+	                                       WHERE RQST_NO = A.RQST_NO
+	                                         AND APRV_DTM IS NOT NULL) THEN '1' 
+	               ELSE '0'
+	               END END END AS CHECK_APR_LVL
+	                            
+	                                      
+	          FROM WAQ_MSTR A
+	         INNER JOIN WAA_APR_PRC B 
+	            ON A.RQST_NO = B.RQST_NO
+	        ) A
+	 <where>
+	   AND A.RQST_STEP_CD = 'A'
+	   AND A.USER_ID = #{rqstUserId}
+		<if test="bizDcd != null" >
+        	AND BIZ_DCD = #{bizDcd,jdbcType=VARCHAR}
+	    </if>
+	    <if test="rqstNm != null" >
+	        AND RQST_NM LIKE '%' || #{rqstNm,jdbcType=VARCHAR} || '%'
+	    </if>
+	    <if test="searchBgnDe != null" >
+	       <![CDATA[  AND TO_CHAR(RQST_DTM, 'YYYYMMDD') >= TO_CHAR(TO_DATE(#{searchBgnDe,jdbcType=VARCHAR}, 'YYYY-MM-DD'), 'YYYYMMDD') ]]>
+	    </if>
+	    <if test="searchEndDe != null" >
+	       <![CDATA[  AND TO_CHAR(RQST_DTM, 'YYYYMMDD') <= TO_CHAR(TO_DATE(#{searchEndDe,jdbcType=VARCHAR}, 'YYYY-MM-DD'), 'YYYYMMDD') ]]>
+	    </if>
+		</where>
+		GROUP BY A.RQST_NO, A.BIZ_DCD, A.RQST_NM, A.RQST_DTM, A.RQST_STEP_CD, A.RQST_USER_NM, A.USER_ID, A.APR_FRML_CD, A.CHECK_APR_LVL
+		ORDER BY RQST_DTM DESC, RQST_NO, APR_LVL
+
+  
+  </select>
+  
+  <select id="selectRqstToDoListCount" parameterType="map" resultMap="BaseResultMap">
+  SELECT COUNT(*) AS RQST_TO_DO_COUNT
+		FROM
+		(
+		SELECT A.RQST_NO
+		      ,A.BIZ_DCD
+		      ,A.RQST_NM
+		      ,A.RQST_DTM
+		      ,A.RQST_STEP_CD
+		      ,GET_USER_NM(A.RQST_USER_ID) AS RQST_USER_NM
+		      ,B.APR_LVL
+		      ,B.USER_ID
+		      ,B.APRV_DTM
+		      ,B.APR_FRML_CD --그룹결재인지 개인결재인지
+		      ,CASE                   
+		                    WHEN RQST_STEP_CD = 'Q'
+                          <if test="rqstUserId != null" > 
+		                     AND B.USER_ID = #{rqstUserId}      -- 실 로그인아이디
+		                  </if>
+		                     AND B.APR_FRML_CD = 'D'
+		                     AND B.APR_LVL = (SELECT MIN(APR_LVL) FROM WAA_APR_PRC
+		                                      WHERE RQST_NO = A.RQST_NO AND APRV_DTM IS NULL)   --결재대상자가 나인 경우
+		       
+		                      OR RQST_STEP_CD = 'Q' 
+		                      AND B.APR_FRML_CD = 'G'
+		                      
+		                      AND B.USER_ID IN (SELECT APRG_ID FROM WAA_APRG_USER 
+		                                        WHERE APRG_ID = B.APRG_ID
+		                                        AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+		                                        AND REG_TYP_CD IN ('C', 'U')
+		                                       <if test="rqstUserId != null" >
+		                                        AND USER_ID = #{rqstUserId} --결재그룹이 내가 속한 그룹인 경우, 실 로그인아이디
+		                                        </if>
+		                                        ) 
+		                      AND B.APR_LVL = (SELECT MIN(APR_LVL) FROM WAA_APR_PRC
+		                                       WHERE RQST_NO = A.RQST_NO AND APRV_DTM IS NULL)
+		                      OR RQST_STEP_CD = 'Q'
+		                      AND B.APR_FRML_CD = 'D'
+		                    <if test="rqstUserId != null" >
+		                      AND B.USER_ID != #{rqstUserId}
+		                    </if>
+		                      AND B.USER_ID IN (SELECT USER_ID FROM WAA_RQST_APRP
+		                                        WHERE 1=1
+		                                        AND ABD_DAPR_DCD = 'D'
+		                                      <if test="rqstUserId != null" >
+		                                        AND SBS_APRP_ID = #{rqstUserId}
+		                                       </if>
+		                      <![CDATA[             
+		                                        AND DAPR_STR_DT <= TO_CHAR(NOW(), 'YYYYMMDD')
+		                                        AND DAPR_END_DT >= TO_CHAR(NOW(), 'YYYYMMDD') --대신결재(대결)자에 이름이 있는 경우.
+		              		   ]]> 
+		                                      )
+		                      AND B.APR_LVL = (SELECT MIN(APR_LVL) FROM WAA_APR_PRC
+		                                       WHERE RQST_NO = A.RQST_NO AND APRV_DTM IS NULL) 
+		                   THEN '1'
+		
+				           ELSE '0'
+				           END AS CHECK_APR_LVL
+				,CONCAT(APR_LVL, ' / ', (SELECT MAX(APR_LVL) 
+										   FROM WAA_APR_PRC 
+										  WHERE RQST_NO = A.RQST_NO), '단계') AS APRV_STEP_LVL           
+		FROM WAQ_MSTR A 
+		INNER JOIN WAA_APR_PRC B
+		        ON A.RQST_NO = B.RQST_NO ) X
+		<where> 
+		CHECK_APR_LVL = '1'
+		<if test="bizDcd != null" >
+        	AND BIZ_DCD = #{bizDcd,jdbcType=VARCHAR}
+	    </if>
+	    <if test="rqstNm != null" >
+	        AND RQST_NM LIKE '%' || #{rqstNm,jdbcType=VARCHAR} || '%'
+	    </if>
+	    <if test="searchBgnDe != null" >
+	       <![CDATA[  AND TO_CHAR(RQST_DTM, 'YYYYMMDD') >= TO_CHAR(TO_DATE(#{searchBgnDe,jdbcType=VARCHAR}, 'YYYY-MM-DD'), 'YYYYMMDD') ]]>
+	    </if>
+	    <if test="searchEndDe != null" >
+	       <![CDATA[  AND TO_CHAR(RQST_DTM, 'YYYYMMDD') <= TO_CHAR(TO_DATE(#{searchEndDe,jdbcType=VARCHAR}, 'YYYY-MM-DD'), 'YYYYMMDD') ]]>
+	    </if>
+		</where>
+<!-- 		ORDER BY RQST_NO, APR_LVL -->
+  </select>
+  
+  <select id="selectRqstCount" parameterType="map" resultMap="BaseResultMap">
+	 SELECT  COALESCE(SUM(CASE WHEN RQST_STEP_CD = 'Q' THEN 1 ELSE 0 END), 0) AS RQST_MY_COUNT
+	           ,COALESCE(SUM(CASE WHEN RQST_STEP_CD = 'S' THEN 1 ELSE 0 END), 0) AS RQST_TMP_COUNT
+	  FROM WAQ_MSTR 
+	 WHERE RQST_STEP_CD IN ('S', 'Q')
+	   AND RQST_NM IS NOT NULL
+      <if test="rqstUserId != null" >
+        AND RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR}
+    </if>
+  </select>
+  
+  <select id="selectRqstToDoListForMain" parameterType="map" resultMap="BaseResultMap">
+  SELECT Z.*
+  		,(SELECT B.COMM_DTL_CD_NM 
+  		    FROM WAA_COMM_DCD A 
+  		    INNER JOIN WAA_COMM_DTL_CD B
+                    ON A.COMM_DCD_ID = B.COMM_DCD_ID
+                   AND A.REG_TYP_CD IN ('C', 'U')
+                   AND A.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+                   AND B.REG_TYP_CD IN ('C', 'U')
+                   AND B.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+           WHERE A.COMM_DCD = 'BIZ_DCD'
+             AND B.COMM_DTL_CD = Z.BIZ_DCD) AS BIZ_DCD_NM
+  FROM
+  (
+  SELECT * 
+		FROM
+		(
+		SELECT A.RQST_NO
+		      ,A.BIZ_DCD
+		      ,A.RQST_NM
+		      ,A.RQST_DTM
+		      ,A.RQST_STEP_CD
+		      ,GET_USER_NM(A.RQST_USER_ID) AS RQST_USER_NM
+		      ,B.APR_LVL
+		      ,B.USER_ID
+		      ,B.APRV_DTM
+		      ,GET_CMCD_NM(A.BIZ_DCD) AS BIZ_DCD_NM_NOUSE
+		      ,B.APR_FRML_CD --그룹결재인지 개인결재인지
+		      ,CASE                   
+		                    WHEN RQST_STEP_CD = 'Q' 
+		                     AND B.USER_ID = #{rqstUserId}      -- 실 로그인아이디
+		                     AND B.APR_FRML_CD = 'D'
+		                     AND B.APR_LVL = (SELECT MIN(APR_LVL) FROM WAA_APR_PRC
+		                                      WHERE RQST_NO = A.RQST_NO AND APRV_DTM IS NULL)   --결재대상자가 나인 경우
+		       
+		                      OR RQST_STEP_CD = 'Q' 
+		                      AND B.APR_FRML_CD = 'G'
+		                      
+		                      AND B.USER_ID IN (SELECT APRG_ID FROM WAA_APRG_USER 
+		                                        WHERE APRG_ID = B.APRG_ID
+		                                        AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+		                                        AND REG_TYP_CD IN ('C', 'U')
+		                                        AND USER_ID = #{rqstUserId}) --결재그룹이 내가 속한 그룹인 경우, 실 로그인아이디
+		                      AND B.APR_LVL = (SELECT MIN(APR_LVL) FROM WAA_APR_PRC
+		                                       WHERE RQST_NO = A.RQST_NO AND APRV_DTM IS NULL)
+		                      <![CDATA[             
+		                      OR RQST_STEP_CD = 'Q'
+		                      AND B.APR_FRML_CD = 'D'
+		                      AND B.USER_ID != 'meta'
+		                      AND B.USER_ID IN (SELECT USER_ID FROM WAA_RQST_APRP
+		                                        WHERE 1=1
+		                                        AND ABD_DAPR_DCD = 'D'
+		                                        AND SBS_APRP_ID = #{rqstUserId}
+		                                        AND DAPR_STR_DT <= TO_CHAR(now(), 'YYYYMMDD')
+		                                        AND DAPR_END_DT >= TO_CHAR(now(), 'YYYYMMDD') --대신결재(대결)자에 이름이 있는 경우.
+		                                      )
+		                      AND B.APR_LVL = (SELECT MIN(APR_LVL) FROM WAA_APR_PRC
+		                                       WHERE RQST_NO = A.RQST_NO AND APRV_DTM IS NULL) 
+		              		   ]]> 
+		                   THEN '1'
+		
+				           ELSE '0'
+				           END AS CHECK_APR_LVL
+				,CONCAT(APR_LVL, ' / ', (SELECT MAX(APR_LVL) 
+										   FROM WAA_APR_PRC 
+										  WHERE RQST_NO = A.RQST_NO), '단계') AS APRV_STEP_LVL          
+		FROM WAQ_MSTR A INNER JOIN WAA_APR_PRC B
+		ON A.RQST_NO = B.RQST_NO ) X
+		
+		<where> 
+		CHECK_APR_LVL = '1'
+		AND RQST_NM IS NOT NULL
+		</where>
+		
+		ORDER BY RQST_DTM DESC, RQST_NO, APR_LVL
+		) Z
+<!-- 		<![CDATA[ WHERE ROWNUM <=5 ]]> -->
+		limit 5
+  </select>
+  
+  <delete id="deleteRqst" parameterType="java.lang.String">
+    DELETE
+      FROM ${tblNm}
+    <where>
+       AND RQST_NO = #{rqstNo}
+       <if test='tblNm == "WAQ_MSTR"'>
+       AND RQST_STEP_CD = 'S'
+       </if>
+    </where>
+  </delete>
+  
+   <select id="selectRejMyList" parameterType="map" resultMap="BaseResultMap">
+	SELECT A.*
+		 , CASE WHEN APRV_STEP_LVL_TEMP IS NULL
+           THEN ''
+           WHEN APRV_STEP_LVL_TEMP IS NOT NULL AND APR_LVL IS NULL
+           THEN CONCAT(APRV_STEP_LVL_TEMP, '(결재단계 없음)')
+           ELSE
+           CONCAT(APR_LVL, ' / ', (SELECT MAX(APR_LVL) 
+           							 FROM WAA_APR_PRC
+     	   						 	WHERE RQST_NO = A.RQST_NO), '단계 (', APRV_STEP_LVL_TEMP, ')') END AS APRV_STEP_LVL  
+     	 , CASE WHEN RQST_STEP_CD = 'A' THEN '#0000FF'
+           ELSE NULL END AS FontColor
+	
+	FROM
+		    (
+		    SELECT A.RQST_NO,
+		           A.BIZ_DCD,
+		           A.RQST_NM,
+		           A.RQST_DTM,
+		           GET_USER_NM(A.RQST_USER_ID) AS RQST_USER_NM,
+		           A.RQST_STEP_CD,
+		           A.RQST_USER_ID,
+		           B.APR_LVL,
+		           B.USER_ID,
+		           B.APRV_DTM,
+		           B.APR_FRML_CD,
+		           A.WRIT_USER_ID,
+		           B.RVW_STS_CD,
+                   CASE WHEN A.RQST_STEP_CD = 'A' AND B.RVW_STS_CD = '2' THEN '반려'
+                   WHEN A.RQST_STEP_CD = 'A' AND B.RVW_STS_CD = '1' THEN '승인'
+                   WHEN A.RQST_STEP_CD = 'A' AND B.RVW_STS_CD = '3' THEN '부분승인'
+                   WHEN A.RQST_STEP_CD = 'A' AND B.RVW_STS_CD IS NULL THEN '자동승인'
+                   END AS APRV_STATUS,
+		           
+		           CASE WHEN A.RQST_STEP_CD = 'A' THEN
+                   '결재 완료'
+                   
+                   WHEN B.APR_FRML_CD = 'G' THEN 
+		           CONCAT((SELECT APRG_NM 
+		           			 FROM WAA_APRG
+		            		WHERE APRG_ID = B.USER_ID
+		            		  AND REG_TYP_CD IN ('C', 'U')
+		           			  AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')), '그룹')
+		           WHEN B.APR_FRML_CD = 'D' THEN
+		           CONCAT((SELECT GET_USER_NM(B.USER_ID)), '님')
+		           END AS APRV_STEP_LVL_TEMP,
+		           CASE 
+		           --결재내역중 가장 마지막 결재건, 전결된 내역, 미결재내역중 현재 결재대상건 확인
+                   WHEN (RQST_STEP_CD = 'A' AND B.APR_LVL = (SELECT MAX(APR_LVL) FROM WAA_APR_PRC
+                                     						 WHERE RQST_NO = A.RQST_NO AND APRV_DTM IS NOT NULL) 
+                      OR RQST_STEP_CD = 'A' AND B.APR_LVL IS NULL
+                      OR RQST_STEP_CD = 'Q' AND B.APR_LVL = (SELECT MIN(APR_LVL) FROM WAA_APR_PRC
+		             					                     WHERE RQST_NO = A.RQST_NO AND APRV_DTM IS NULL))
+                      OR RQST_STEP_CD = 'S'
+                   THEN '1'
+
+		           ELSE '0'
+		           END AS CHECK_APR_LVL
+		           
+		           FROM WAQ_MSTR A 
+                        LEFT JOIN WAA_APR_PRC B
+		                  ON A.RQST_NO =B.RQST_NO
+		    )   A
+	<where>
+	CHECK_APR_LVL = '1'
+	AND RQST_NM IS NOT NULL
+	<if test="rqstNo != null" >
+        AND RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+    </if>
+    
+    <if test="bizDcd != null" >
+        	AND BIZ_DCD = #{bizDcd,jdbcType=VARCHAR}
+	</if>
+    
+    <if test="rqstNm != null" >
+        AND RQST_NM LIKE '%' || #{rqstNm,jdbcType=VARCHAR} || '%'
+    </if>
+    <if test="rqstUserNm != null" >
+        AND RQST_USER_NM = #{rqstUserNm,jdbcType=VARCHAR}
+    </if>
+    <if test="rqstStepCd != null" >
+        AND RQST_STEP_CD = #{rqstStepCd,jdbcType=VARCHAR}
+    </if>
+    <if test="writUserId != null" >
+        AND WRIT_USER_ID = #{writUserId,jdbcType=VARCHAR}
+    </if>
+    <if test="rqstUserId != null" >
+        AND RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR}
+    </if>
+    <if test="searchBgnDe != null" >
+       <![CDATA[  AND TO_CHAR(RQST_DTM, 'YYYYMMDD') >= TO_CHAR(TO_DATE(#{searchBgnDe,jdbcType=VARCHAR}, 'YYYY-MM-DD'), 'YYYYMMDD') ]]>
+    </if>
+    <if test="searchEndDe != null" >
+       <![CDATA[  AND TO_CHAR(RQST_DTM, 'YYYYMMDD') <= TO_CHAR(TO_DATE(#{searchEndDe,jdbcType=VARCHAR}, 'YYYY-MM-DD'), 'YYYYMMDD') ]]>
+    </if>
+    <![CDATA[  AND RVW_STS_CD IN ('2', '3') ]]>
+    
+	</where>
+	ORDER BY RQST_DTM DESC, RQST_STEP_CD, RQST_NO, APR_LVL
+  </select>
+  
+  <select id="selectEaiGwSend" resultMap="BaseEaiResultMap" parameterType="java.lang.String" >
+  --ER-Accelerator 메타연계기능 관련
+    SELECT    RQST_USER_ID AS SEND_ID
+		      ,RQST_USER_NM AS SEND_NAME
+		      ,APRV_USER_ID AS RECV_IDS
+		      ,'메타시스템 결재요청' AS SUBJECT
+		      <![CDATA[ ,'메타시스템에 결재요청이 있습니다.<BR><BR>요청서명 : '||RQST_NM||'<BR>요청번호 : '||RQST_NO||'<BR>요청자 : '||RQST_USER_NM AS CONTENTS	]]>
+		      ,' ' AS URL
+		      
+		      ,'1' AS MSG_GUBUN
+		      ,'1' AS DEST_GUBUN
+		      ,'' AS CC_RECV_IDS
+		      ,'' AS BCC_RECV_IDS
+		      ,'0' AS RSRV_FLAG
+		      ,NOW() AS RSRV_DATE
+		      ,'0' AS ATT_FLAG
+		      ,'' AS ATT
+		      ,RQST
+		      ,BIZ_DCD
+		  FROM (
+		        --결재자 지정
+		        SELECT A.RQST_NO
+		              ,A.RQST_NM
+		              ,A.RQST_USER_ID
+		              ,RU.USER_NM AS RQST_USER_NM
+		              ,P.USER_ID AS APRV_USER_ID
+		              ,AU.USER_NM AS APRV_USER_NM
+		              ,P.APR_LVL
+		              ,A.RQST_NO AS RQST
+		              ,A.BIZ_DCD
+		          FROM WAQ_MSTR A
+		         INNER JOIN WAA_APR_PRC P
+		            ON A.RQST_NO = P.RQST_NO
+		         INNER JOIN WAA_USER AU
+		            ON P.USER_ID = AU.USER_ID
+		           AND AU.EXP_DTM = TO_DATE('9999-12-31','YYYY-MM-DD')
+		           AND AU.REG_TYP_CD IN ('C','U')
+		         INNER JOIN WAA_USER RU
+		            ON A.RQST_USER_ID = RU.USER_ID
+		           AND RU.EXP_DTM = TO_DATE('9999-12-31','YYYY-MM-DD')
+		           AND RU.REG_TYP_CD IN ('C','U')
+		         WHERE A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+		           AND P.APR_FRML_CD = 'D'
+		           AND A.RQST_USER_ID != P.USER_ID
+		           AND APR_LVL = (SELECT MIN(APR_LVL)
+		                            FROM WAA_APR_PRC Z
+		                           WHERE Z.RQST_NO = P.RQST_NO 
+		                             AND APRV_DTM IS NULL)
+		          AND NOT EXISTS (
+                                    SELECT 1
+                                      FROM WAA_APR_PRC Z
+                                     WHERE Z.RQST_NO = P.RQST_NO
+                                       AND Z.RVW_STS_CD = '2'
+                   )                   
+		        UNION ALL
+		        --그룹결재
+		         SELECT A.RQST_NO
+		              ,A.RQST_NM
+		              ,A.RQST_USER_ID
+		              ,RU.USER_NM AS RQST_USER_NM
+		              ,G.USER_ID AS APRV_USER_ID
+		              ,AU.USER_NM AS APRV_USER_NM
+		              ,P.APR_LVL
+		              ,A.RQST_NO AS RQST
+		              ,A.BIZ_DCD
+		          FROM WAQ_MSTR A
+		         INNER JOIN WAA_APR_PRC P
+		            ON A.RQST_NO = P.RQST_NO
+		         INNER JOIN WAA_APRG_USER G
+		            ON G.EXP_DTM = TO_DATE('9999-12-31','YYYY-MM-DD')
+		           AND G.REG_TYP_CD IN ('C','U')
+		           AND P.USER_ID = G.APRG_ID
+		         INNER JOIN WAA_USER AU
+		            ON G.USER_ID = AU.USER_ID
+		           AND AU.EXP_DTM = TO_DATE('9999-12-31','YYYY-MM-DD')
+		           AND AU.REG_TYP_CD IN ('C','U')
+		         INNER JOIN WAA_USER RU
+		            ON A.RQST_USER_ID = RU.USER_ID
+		           AND RU.EXP_DTM = TO_DATE('9999-12-31','YYYY-MM-DD')
+		           AND RU.REG_TYP_CD IN ('C','U')
+		         WHERE A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+		           AND P.APR_FRML_CD = 'G'
+		           AND A.RQST_USER_ID != G.USER_ID
+		           AND APR_LVL = (SELECT MIN(APR_LVL)
+		                            FROM WAA_APR_PRC Z
+		                           WHERE Z.RQST_NO = P.RQST_NO 
+		                             AND APRV_DTM IS NULL)
+		           AND NOT EXISTS (
+                                    SELECT 1
+                                      FROM WAA_APR_PRC Z
+                                     WHERE Z.RQST_NO = P.RQST_NO
+                                       AND Z.RVW_STS_CD = '2'
+                   )
+                  )
+  </select>
+  
+   <select id="selectBlankData" resultMap="BaseResultMap" parameterType="kr.wise.commons.cmm.CommonVo" >
+          SELECT LEVEL 
+      	    FROM GENERATE_SERIES(1,#{ibsSeq}) LEVEL
+   </select>
+</mapper>

@@ -1,0 +1,931 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.wise.advisor.prepare.otlquality.service.OtlQltyMapper">
+	<resultMap id="BaseResultMap" type="kr.wise.advisor.prepare.otlquality.service.OtlQltyVo" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+	    <result column="DB_CONN_TRG_ID"  jdbcType="VARCHAR" property="dbConnTrgId"  />
+		<result column="DB_CONN_TRG_PNM" jdbcType="VARCHAR" property="dbConnTgrPnm" />
+		<result column="DB_SCH_ID"       jdbcType="VARCHAR" property="dbSchId"      />
+		<result column="DB_SCH_PNM"      jdbcType="VARCHAR" property="dbSchPnm"     />
+		<result column="DB_SCH_LNM"      jdbcType="VARCHAR" property="dbSchLnm"     />
+		<result column="TBL_CNT"         jdbcType="VARCHAR" property="tblCnt"       />
+		<result column="COL_CNT"         jdbcType="VARCHAR" property="colCnt"       />
+		<result column="ANA_TBL_CNT"     jdbcType="VARCHAR" property="anaTblCnt"    />
+		<result column="ANA_COL_CNT"     jdbcType="VARCHAR" property="anaColCnt"    />
+		<result column="ANA_DGR"         jdbcType="VARCHAR" property="anaDgr"       />
+		<result column="ANA_CNT"         jdbcType="VARCHAR" property="anaCnt"       />
+		<result column="ESN_ER_CNT"      jdbcType="VARCHAR" property="esnErCnt"     />
+		<result column="ERR_RATE"        jdbcType="VARCHAR" property="errRate"      />
+		<result column="NON_RATE"        jdbcType="VARCHAR" property="nonRate"      />
+		
+		<result column="DQI_LNM"         jdbcType="VARCHAR" property="dqiLnm"       />
+		
+		<result column="DBC_TBL_NM"      jdbcType="VARCHAR" property="dbcTblNm"     />
+		<result column="DBC_TBL_KOR_NM"  jdbcType="VARCHAR" property="dbcTblKorNm"  />
+		
+		<result column="DBC_COL_NM"      jdbcType="VARCHAR" property="dbcColNm"     />
+		<result column="DBC_COL_KOR_NM"  jdbcType="VARCHAR" property="dbcColKorNm"  />
+ 	</resultMap>
+ 	
+ 	<resultMap id="OtlResultMap" type="kr.wise.advisor.prepare.otlquality.service.OtlAlgQltyVo" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+	    <result column="DB_CONN_TRG_ID"  jdbcType="VARCHAR" property="dbConnTrgId"  />
+		<result column="DB_CONN_TRG_PNM" jdbcType="VARCHAR" property="dbConnTgrPnm" />
+		<result column="DB_SCH_ID"       jdbcType="VARCHAR" property="dbSchId"      />
+		<result column="DB_SCH_PNM"      jdbcType="VARCHAR" property="dbSchPnm"     />
+		<result column="DB_TBL_NM"       jdbcType="VARCHAR" property="dbTblNm"      />
+	    <result column="OTL_DTC_ID"      jdbcType="VARCHAR" property="otlDtcId"     />
+		<result column="DASE_ID"         jdbcType="VARCHAR" property="daseId"       />
+		<result column="OTL_ALG_ID"      jdbcType="VARCHAR" property="otlAlgId"     />
+		<result column="ALG_ID"          jdbcType="VARCHAR" property="algId"        />
+		<result column="ALG_LNM"         jdbcType="VARCHAR" property="algLnm"       />
+		<result column="ALG_PNM"         jdbcType="VARCHAR" property="algPnm"       />
+		<result column="ALG_TYP_CD"      jdbcType="VARCHAR" property="algTypCd"     />
+		<result column="ANA_STR_DTM"     jdbcType="VARCHAR" property="anaStrDtm"    />
+		<result column="ANA_END_DTM"     jdbcType="VARCHAR" property="anaEndDtm"    />
+		<result column="ANA_DGR"         jdbcType="VARCHAR" property="anaDgr"       />
+		<result column="ANA_CNT"         jdbcType="VARCHAR" property="anaCnt"       />
+		<result column="ESN_ER_CNT"      jdbcType="VARCHAR" property="esnErCnt"     />
+		                                 
+		<result column="OTL_NM"          jdbcType="VARCHAR" property="otlNm"        />
+		                                 
+		<result column="DQI_LNM"         jdbcType="VARCHAR" property="dqiLnm"       />
+		<result column="DQI_ID"          jdbcType="VARCHAR" property="dqiId"        />
+		
+		<result column="ERR_RATE"        jdbcType="VARCHAR" property="errRate"      />
+		<result column="NON_RATE"        jdbcType="VARCHAR" property="nonRate"      />
+ 	</resultMap>
+ 	
+	<select id="selectDbmsQltyList" parameterType="map" resultMap="BaseResultMap">
+		SELECT 
+		  		  DB.DB_CONN_TRG_ID
+		         ,DB.DB_CONN_TRG_PNM           -- 진단대상명
+		         ,S.DB_SCH_ID                  
+		         ,S.DB_SCH_PNM                 -- 스키마물리명
+		         ,S.DB_SCH_LNM                 -- 스키마논리명
+		         ,T.TBL_CNT                    -- 전체테이블수
+		         ,C.COL_CNT                    -- 전체컬럼수
+		         ,DS.ANA_CNT AS ANA_TBL_CNT    -- 진단테이블건수
+		         ,DSCOL.ANA_COL_CNT            -- 진단컬럼건수
+		         ,NVL(R.ANA_DGR,0) AS ANA_DGR  -- 분석차수
+		         ,R.ANA_CNT                    -- 분석총건수
+		         ,R.ESN_ER_CNT                 -- 추정오류건수
+		         ,R.ERR_RATE                   -- 오류율
+		         ,R.NON_RATE                   -- 품질점수
+		    FROM WAA_DB_CONN_TRG DB
+		         INNER JOIN WAA_DB_SCH S
+		            ON     DB.DB_CONN_TRG_ID = S.DB_CONN_TRG_ID
+		               AND S.EXP_DTM = TO_DATE ('99991231', 'YYYYMMDD')
+		               AND S.REG_TYP_CD IN ('C', 'U')
+		         INNER JOIN (SELECT DB_CONN_TRG_ID
+		                            ,DB_SCH_ID
+		                            ,COUNT(1) AS TBL_CNT
+		                      FROM WAT_DBC_TBL 
+		                     GROUP BY DB_CONN_TRG_ID ,DB_SCH_ID ) T
+		            ON S.DB_CONN_TRG_ID = T.DB_CONN_TRG_ID
+		           AND S.DB_SCH_ID = T.DB_SCH_ID
+		         INNER JOIN (SELECT DB_SCH_ID
+		                            ,COUNT(1) AS COL_CNT
+		                      FROM WAT_DBC_COL 
+		                     GROUP BY DB_SCH_ID ) C
+		            ON S.DB_SCH_ID = C.DB_SCH_ID
+		         LEFT OUTER JOIN (SELECT DB_SCH_ID
+		                                   ,COUNT( DB_TBL_NM ) AS ANA_CNT
+		                                   ,ANA_DGR
+		                              FROM (SELECT DS.DB_SCH_ID
+		                                               ,DS.DB_TBL_NM 
+		                                               ,R.ANA_DGR  
+		                                          FROM WAD_DATA_SET DS
+		                                               INNER JOIN WAD_OTL_DTC A
+		                                                  ON DS.DASE_ID = A.DASE_ID
+		                                               INNER JOIN WAD_OTL_RESULT R
+		                                                  ON A.OTL_DTC_ID = R.OTL_DTC_ID
+		                                               INNER JOIN (SELECT OTL_DTC_ID,ANA_DGR, MAX(ANA_STR_DTM) AS ANA_STR_DTM
+		                                                             FROM WAD_OTL_RESULT
+		                                                            GROUP BY OTL_DTC_ID, ANA_DGR ) R2
+		                                                   ON R.OTL_DTC_ID = R2.OTL_DTC_ID
+		                                                  AND R.ANA_STR_DTM = R2.ANA_STR_DTM
+		                                                  AND R.ANA_DGR = R2.ANA_DGR
+		                                        GROUP BY  DS.DB_SCH_ID ,DS.DB_TBL_NM, R.ANA_DGR  
+		                            ) 
+		                            GROUP BY  DB_SCH_ID, ANA_DGR) DS -- 진단테이블 건수
+		            ON S.DB_SCH_ID = DS.DB_SCH_ID        
+		         LEFT OUTER JOIN (SELECT DB_SCH_ID ,ANA_DGR ,COUNT(DB_TBL_NM) AS ANA_COL_CNT
+		                          FROM (
+		                        SELECT DS.DB_SCH_ID, R.ANA_DGR, DS.DB_TBL_NM, C.DB_COL_NM
+		                          FROM WAD_DATA_SET DS
+		                               INNER JOIN WAD_OTL_DTC A
+		                                  ON DS.DASE_ID = A.DASE_ID
+		                               INNER JOIN WAD_OTL_VAL B
+		                                  ON A.OTL_DTC_ID = B.OTL_DTC_ID
+		                               INNER JOIN WAD_ANA_VAR C
+		                                  ON B.ANL_VAR_ID = C.ANL_VAR_ID
+		                                INNER JOIN WAD_OTL_RESULT R
+		                                  ON A.OTL_DTC_ID = R.OTL_DTC_ID
+		                               INNER JOIN (SELECT OTL_DTC_ID,ANA_DGR, MAX(ANA_STR_DTM) AS ANA_STR_DTM
+		                                             FROM WAD_OTL_RESULT
+		                                            GROUP BY OTL_DTC_ID, ANA_DGR ) R2
+		                                   ON R.OTL_DTC_ID = R2.OTL_DTC_ID
+		                                  AND R.ANA_STR_DTM = R2.ANA_STR_DTM   
+		                                  AND R.ANA_DGR = R2.ANA_DGR      
+		                         WHERE B.ANA_VAR_CHK = 1
+		                         GROUP BY DS.DB_SCH_ID,R.ANA_DGR, DS.DB_TBL_NM, C.DB_COL_NM
+		                         )
+		                         GROUP BY DB_SCH_ID, ANA_DGR) DSCOL
+		               ON S.DB_SCH_ID = DSCOL.DB_SCH_ID
+		              AND DS.ANA_DGR =  DSCOL.ANA_DGR
+		         LEFT OUTER JOIN (SELECT DS.DB_SCH_ID 
+		                                ,R.ANA_DGR
+		                                ,SUM( R.ANA_CNT ) AS ANA_CNT
+		                                ,SUM(NVL(R.ESN_ER_CNT,0)) AS ESN_ER_CNT
+		                                ,CASE WHEN SUM( R.ANA_CNT ) = 0 THEN 0 ELSE ROUND(SUM(NVL(R.ESN_ER_CNT,0))*100/SUM( R.ANA_CNT ),2) END AS ERR_RATE
+		                                ,DECODE(SUM( R.ANA_CNT ),0,0,DECODE(SUM(NVL(R.ESN_ER_CNT,0)),0,100,ROUND(((SUM( R.ANA_CNT )-SUM(NVL(R.ESN_ER_CNT,0)))/SUM( R.ANA_CNT )*100),2))) AS NON_RATE
+		                              FROM WAD_DATA_SET DS
+		                                   INNER JOIN WAD_OTL_DTC A
+		                                      ON DS.DASE_ID = A.DASE_ID
+		                                   INNER JOIN WAD_OTL_RESULT R
+		                                      ON A.OTL_DTC_ID = R.OTL_DTC_ID
+		                                   INNER JOIN (SELECT OTL_DTC_ID, ANA_DGR, MAX(ANA_STR_DTM) AS ANA_STR_DTM
+		                                                 FROM WAD_OTL_RESULT
+		                                                GROUP BY OTL_DTC_ID, ANA_DGR ) R2
+		                                       ON R.OTL_DTC_ID = R2.OTL_DTC_ID
+		                                      AND R.ANA_DGR = R2.ANA_DGR
+		                                      AND R.ANA_STR_DTM = R2.ANA_STR_DTM
+		                            GROUP BY  DS.DB_SCH_ID, R.ANA_DGR ) R
+		                          ON S.DB_SCH_ID = R.DB_SCH_ID 
+		                         AND DS.ANA_DGR =  R.ANA_DGR        
+		                   WHERE     DB.EXP_DTM = TO_DATE ('99991231', 'YYYYMMDD')
+		                         AND DB.REG_TYP_CD IN ('C', 'U')
+		                         AND R.ANA_DGR IS NOT NULL
+		                         <if test="dbConnTrgId != null and dbConnTrgId != ''">
+							    AND DB.DB_CONN_TRG_ID = #{dbConnTrgId, jdbcType=VARCHAR}
+							    </if>
+							    <if test="dbSchId != null and dbSchId != '' ">
+							    AND S.DB_SCH_ID = #{dbSchId, jdbcType=VARCHAR}
+							    </if>
+						  ORDER BY DB.DB_CONN_TRG_ID, DB.DB_CONN_TRG_PNM, S.DB_SCH_ID, R.ANA_DGR
+	</select>
+	
+	<select id="selectDbmsQltyPie" parameterType="map" resultMap="BaseResultMap">
+		-- dbms별 탭 pie data 조회
+		<!-- SELECT   DS.DB_SCH_ID
+		         ,DQI.DQI_ID
+		         ,DQI.DQI_LNM
+		         ,R.ANA_DGR
+		         ,SUM (R.ANA_CNT) AS ANA_CNT
+		         ,SUM (NVL (R.ESN_ER_CNT, 0)) AS ESN_ER_CNT
+		         ,CASE
+		            WHEN SUM (R.ANA_CNT) = 0 THEN 0
+		            ELSE ROUND (SUM (NVL (R.ESN_ER_CNT, 0)) * 100 / SUM (R.ANA_CNT), 2)
+		          END
+		            AS ERR_RATE
+		         ,DECODE (
+		            SUM (R.ANA_CNT),
+		            0, 0,
+		            DECODE (
+		               SUM (NVL (R.ESN_ER_CNT, 0)),
+		               0, 100,
+		               ROUND (
+		                  (  (SUM (R.ANA_CNT) - SUM (NVL (R.ESN_ER_CNT, 0)))
+		                   / SUM (R.ANA_CNT)
+		                   * 100),
+		                  2)))
+		            AS NON_RATE
+		    FROM WAD_DATA_SET DS
+		         INNER JOIN WAD_OTL_DTC A ON DS.DASE_ID = A.DASE_ID
+		         INNER JOIN WAM_OTL_DQI_MAP B ON A.OTL_DTC_ID = B.OTL_DTC_ID
+		         INNER JOIN WAM_DQI DQI ON B.DQI_ID = DQI.DQI_ID
+		         INNER JOIN WAD_OTL_RESULT R ON A.OTL_DTC_ID = R.OTL_DTC_ID
+		         INNER JOIN
+		         (  SELECT OTL_DTC_ID, ANA_DGR, MAX (ANA_STR_DTM) AS ANA_STR_DTM
+		              FROM WAD_OTL_RESULT
+		          GROUP BY OTL_DTC_ID, ANA_DGR) R2
+		            ON     R.OTL_DTC_ID = R2.OTL_DTC_ID
+		               AND R.ANA_DGR = R2.ANA_DGR
+		               AND R.ANA_STR_DTM = R2.ANA_STR_DTM
+		   WHERE 1 = 1 
+		   AND R.ANA_DGR = #{anaDgr, jdbcType=VARCHAR}
+		   AND DS.DB_SCH_ID = #{dbSchId, jdbcType=VARCHAR}
+		GROUP BY DS.DB_SCH_ID,
+		         DQI.DQI_ID,
+		         DQI.DQI_LNM,
+		         R.ANA_DGR
+		ORDER BY DS.DB_SCH_ID, DQI.DQI_LNM, R.ANA_DGR -->
+		
+		SELECT  DB_SCH_ID
+		       ,DQI_ID
+		       ,DQI_LNM
+		       ,ANA_DGR
+		       ,ANA_CNT
+		       ,ESN_ER_CNT
+		       ,CASE
+		            WHEN TOT_ER_CNT = 0 THEN 0
+		            ELSE ROUND (NVL (ESN_ER_CNT, 0) * 100 / TOT_ER_CNT, 2)
+		         END
+		            AS ERR_RATE
+		       ,DECODE (
+		            SUM (ANA_CNT),
+		            0, 0,
+		            DECODE (
+		               SUM (NVL (ESN_ER_CNT, 0)),
+		               0, 100,
+		               ROUND (
+		                  (  (SUM (ANA_CNT) - SUM (NVL (ESN_ER_CNT, 0)))
+		                   / SUM (ANA_CNT)
+		                   * 100),
+		                  2)))
+		            AS NON_RATE
+		FROM (
+			  SELECT DS.DB_SCH_ID,
+			         DQI.DQI_ID,
+			         DQI.DQI_LNM,
+			         R.ANA_DGR,
+			         SUM (R.ANA_CNT) OVER() AS ANA_CNT,
+			         SUM (NVL (R.ESN_ER_CNT, 0)) OVER(PARTITION BY DQI.DQI_ID) AS ESN_ER_CNT,
+			         SUM (NVL(R.ESN_ER_CNT, 0)) OVER() AS TOT_ER_CNT
+			    FROM WAD_DATA_SET DS
+			         INNER JOIN WAD_OTL_DTC A ON DS.DASE_ID = A.DASE_ID
+			         INNER JOIN WAM_OTL_DQI_MAP B ON A.OTL_DTC_ID = B.OTL_DTC_ID
+			         INNER JOIN WAM_DQI DQI ON B.DQI_ID = DQI.DQI_ID
+			         INNER JOIN WAD_OTL_RESULT R ON A.OTL_DTC_ID = R.OTL_DTC_ID
+			         INNER JOIN
+			         (  SELECT OTL_DTC_ID, ANA_DGR, MAX (ANA_STR_DTM) AS ANA_STR_DTM
+			              FROM WAD_OTL_RESULT
+			          GROUP BY OTL_DTC_ID, ANA_DGR) R2
+			            ON     R.OTL_DTC_ID = R2.OTL_DTC_ID
+			               AND R.ANA_DGR = R2.ANA_DGR
+			               AND R.ANA_STR_DTM = R2.ANA_STR_DTM
+			   WHERE 1 = 1 
+				 AND R.ANA_DGR = #{anaDgr, jdbcType=VARCHAR}
+			     AND DS.DB_SCH_ID = #{dbSchId, jdbcType=VARCHAR}
+			GROUP BY DS.DB_SCH_ID,
+			         DQI.DQI_ID,
+			         DQI.DQI_LNM,
+			         R.ANA_DGR,
+			         R.ANA_CNT,
+			         R.ESN_ER_CNT
+			ORDER BY DS.DB_SCH_ID, DQI.DQI_LNM, R.ANA_DGR
+		)
+		GROUP BY DB_SCH_ID,
+		         DQI_ID,
+		         DQI_LNM,
+		         ANA_DGR,
+		         ANA_CNT,
+		         ESN_ER_CNT,
+		         TOT_ER_CNT
+		ORDER BY DB_SCH_ID, DQI_LNM, ANA_DGR
+	</select>
+	
+	<select id="selectTblQltyList" parameterType="map" resultMap="BaseResultMap">
+		SELECT DISTINCT DB.DB_CONN_TRG_ID
+	         ,DB.DB_CONN_TRG_PNM -- 진단대상명
+	         ,S.DB_SCH_ID
+	         ,S.DB_SCH_PNM -- 스키마물리명
+	         ,S.DB_SCH_LNM -- 스키마논리명
+	         ,T.DBC_TBL_NM -- 테이블물리명
+	         ,T.DBC_TBL_KOR_NM -- 테이블한글명
+	         ,DSCOL.ANA_COL_CNT -- 진단컬럼건수
+	         ,R.ANA_DGR
+	         ,R.ANA_CNT
+	         ,R.ESN_ER_CNT
+	         ,R.ERR_RATE
+	         ,R.NON_RATE
+	    FROM WAA_DB_CONN_TRG DB
+	         INNER JOIN WAA_DB_SCH S
+	            ON     DB.DB_CONN_TRG_ID = S.DB_CONN_TRG_ID
+	               AND S.EXP_DTM = TO_DATE ('99991231', 'YYYYMMDD')
+	               AND S.REG_TYP_CD IN ('C', 'U')
+	         INNER JOIN (SELECT DB_CONN_TRG_ID
+	                            ,DB_SCH_ID
+	                            ,COUNT(1) AS TBL_CNT
+	                            ,DBC_TBL_NM
+	                            ,DBC_TBL_KOR_NM
+	                      FROM WAT_DBC_TBL 
+	                     GROUP BY DBC_TBL_NM, DB_CONN_TRG_ID ,DB_SCH_ID, DBC_TBL_KOR_NM ) T
+	            ON S.DB_CONN_TRG_ID = T.DB_CONN_TRG_ID
+	           AND S.DB_SCH_ID = T.DB_SCH_ID
+	         INNER JOIN (SELECT DB_SCH_ID
+	                            ,DBC_TBL_NM
+	                            ,COUNT(1) AS COL_CNT
+	                      FROM WAT_DBC_COL 
+	                     GROUP BY DBC_TBL_NM,DB_SCH_ID ) C
+	            ON S.DB_SCH_ID = C.DB_SCH_ID
+	           AND C.DBC_TBL_NM = T.DBC_TBL_NM
+	         LEFT OUTER JOIN (SELECT DB_SCH_ID
+	                                   ,COUNT( DB_TBL_NM ) AS ANA_CNT
+	                                   ,ANA_DGR
+	                              FROM (SELECT DS.DB_SCH_ID
+	                                               ,DS.DB_TBL_NM 
+	                                               ,R.ANA_DGR  
+	                                          FROM WAD_DATA_SET DS
+	                                               INNER JOIN WAD_OTL_DTC A
+	                                                  ON DS.DASE_ID = A.DASE_ID
+	                                               INNER JOIN WAD_OTL_RESULT R
+	                                                  ON A.OTL_DTC_ID = R.OTL_DTC_ID
+	                                               INNER JOIN (SELECT OTL_DTC_ID,ANA_DGR, MAX(ANA_STR_DTM) AS ANA_STR_DTM
+	                                                             FROM WAD_OTL_RESULT
+	                                                            GROUP BY OTL_DTC_ID, ANA_DGR ) R2
+	                                                   ON R.OTL_DTC_ID = R2.OTL_DTC_ID
+	                                                  AND R.ANA_STR_DTM = R2.ANA_STR_DTM
+	                                                  AND R.ANA_DGR = R2.ANA_DGR
+	                                        GROUP BY  DS.DB_TBL_NM, DS.DB_SCH_ID, R.ANA_DGR  
+	                            ) 
+	                            GROUP BY  DB_TBL_NM, DB_SCH_ID, ANA_DGR) DS -- 진단테이블 건수
+	            ON S.DB_SCH_ID = DS.DB_SCH_ID        
+	         LEFT OUTER JOIN (SELECT DB_SCH_ID ,ANA_DGR ,COUNT(DB_TBL_NM) AS ANA_COL_CNT, DB_TBL_NM
+	                          FROM (
+	                        SELECT DS.DB_SCH_ID, R.ANA_DGR, DS.DB_TBL_NM, C.DB_COL_NM
+	                          FROM WAD_DATA_SET DS
+	                               INNER JOIN WAD_OTL_DTC A
+	                                  ON DS.DASE_ID = A.DASE_ID
+	                               INNER JOIN WAD_OTL_VAL B
+	                                  ON A.OTL_DTC_ID = B.OTL_DTC_ID
+	                               INNER JOIN WAD_ANA_VAR C
+	                                  ON B.ANL_VAR_ID = C.ANL_VAR_ID
+	                                INNER JOIN WAD_OTL_RESULT R
+	                                  ON A.OTL_DTC_ID = R.OTL_DTC_ID
+	                               INNER JOIN (SELECT OTL_DTC_ID,ANA_DGR, MAX(ANA_STR_DTM) AS ANA_STR_DTM
+	                                             FROM WAD_OTL_RESULT
+	                                            GROUP BY OTL_DTC_ID, ANA_DGR ) R2
+	                                   ON R.OTL_DTC_ID = R2.OTL_DTC_ID
+	                                  AND R.ANA_STR_DTM = R2.ANA_STR_DTM   
+	                                  AND R.ANA_DGR = R2.ANA_DGR      
+	                         WHERE B.ANA_VAR_CHK = 1
+	                         GROUP BY DS.DB_TBL_NM, DS.DB_SCH_ID,R.ANA_DGR, C.DB_COL_NM
+	                         )
+	                         GROUP BY DB_TBL_NM, DB_SCH_ID, ANA_DGR) DSCOL
+	               ON S.DB_SCH_ID = DSCOL.DB_SCH_ID
+	              AND DS.ANA_DGR =  DSCOL.ANA_DGR
+	              AND DSCOL.DB_TBL_NM = T.DBC_TBL_NM
+	         LEFT OUTER JOIN (SELECT DS.DB_SCH_ID 
+	                                ,DS.DB_TBL_NM
+	                                ,R.ANA_DGR
+	                                ,SUM( R.ANA_CNT ) AS ANA_CNT
+	                                ,SUM(NVL(R.ESN_ER_CNT,0)) AS ESN_ER_CNT
+	                                ,CASE WHEN SUM( R.ANA_CNT ) = 0 THEN 0 ELSE ROUND(SUM(NVL(R.ESN_ER_CNT,0))*100/SUM( R.ANA_CNT ),2) END AS ERR_RATE
+	                                ,DECODE(SUM( R.ANA_CNT ),0,0,DECODE(SUM(NVL(R.ESN_ER_CNT,0)),0,100,ROUND(((SUM( R.ANA_CNT )-SUM(NVL(R.ESN_ER_CNT,0)))/SUM( R.ANA_CNT )*100),2))) AS NON_RATE
+	                              FROM WAD_DATA_SET DS
+	                                   INNER JOIN WAD_OTL_DTC A
+	                                      ON DS.DASE_ID = A.DASE_ID
+	                                   INNER JOIN WAD_OTL_RESULT R
+	                                      ON A.OTL_DTC_ID = R.OTL_DTC_ID
+	                                   INNER JOIN (SELECT OTL_DTC_ID, ANA_DGR, MAX(ANA_STR_DTM) AS ANA_STR_DTM
+	                                                 FROM WAD_OTL_RESULT
+	                                                GROUP BY OTL_DTC_ID, ANA_DGR ) R2
+	                                       ON R.OTL_DTC_ID = R2.OTL_DTC_ID
+	                                      AND R.ANA_DGR = R2.ANA_DGR
+	                                      AND R.ANA_STR_DTM = R2.ANA_STR_DTM
+	                            GROUP BY  DS.DB_TBL_NM, DS.DB_SCH_ID, R.ANA_DGR ) R
+	                          ON S.DB_SCH_ID = R.DB_SCH_ID 
+	                         AND DS.ANA_DGR =  R.ANA_DGR
+	                         AND R.DB_TBL_NM = T.DBC_TBL_NM
+	                   WHERE     DB.EXP_DTM = TO_DATE ('99991231', 'YYYYMMDD')
+	                         AND DB.REG_TYP_CD IN ('C', 'U')
+	                         <if test="dbConnTrgId != null and dbConnTrgId != ''">
+						     AND DB.DB_CONN_TRG_ID = #{dbConnTrgId, jdbcType=VARCHAR}
+						     </if>
+						     <if test="dbSchId != null and dbSchId != '' ">
+						     AND S.DB_SCH_ID = #{dbSchId, jdbcType=VARCHAR}
+						     </if>
+						     <if test="dbcTblNm != null and dbcTblNm != '' ">
+						     AND (UPPER(T.DBC_TBL_NM) LIKE '%'||UPPER(#{dbcTblNm, jdbcType=VARCHAR})||'%')
+						     </if>
+	                         AND DS.ANA_CNT IS NOT NULL
+	                         AND DSCOL.ANA_COL_CNT IS NOT NULL
+	                   ORDER BY  DB.DB_CONN_TRG_ID, S.DB_SCH_ID, S.DB_SCH_PNM, T.DBC_TBL_NM, R.ANA_DGR
+	</select>
+	
+	<select id="selectTblQltyPie" parameterType="map" resultMap="BaseResultMap">
+		  <!-- SELECT DS.DB_SCH_ID,
+		         DS.DB_TBL_NM,
+		         DQI.DQI_ID,
+		         DQI.DQI_LNM,
+		         R.ANA_DGR,
+		         SUM (R.ANA_CNT) AS ANA_CNT,
+		         SUM (NVL (R.ESN_ER_CNT, 0)) AS ESN_ER_CNT,
+		         CASE
+		            WHEN SUM (R.ANA_CNT) = 0 THEN 0
+		            ELSE ROUND (SUM (NVL (R.ESN_ER_CNT, 0)) * 100 / SUM (R.ANA_CNT), 2)
+		         END
+		            AS ERR_RATE,
+		         DECODE (
+		            SUM (R.ANA_CNT),
+		            0, 0,
+		            DECODE (
+		               SUM (NVL (R.ESN_ER_CNT, 0)),
+		               0, 100,
+		               ROUND (
+		                  (  (SUM (R.ANA_CNT) - SUM (NVL (R.ESN_ER_CNT, 0)))
+		                   / SUM (R.ANA_CNT)
+		                   * 100),
+		                  2)))
+		            AS NON_RATE
+		    FROM WAD_DATA_SET DS
+		         INNER JOIN WAD_OTL_DTC A ON DS.DASE_ID = A.DASE_ID
+		         INNER JOIN WAM_OTL_DQI_MAP B ON A.OTL_DTC_ID = B.OTL_DTC_ID
+		         INNER JOIN WAM_DQI DQI ON B.DQI_ID = DQI.DQI_ID
+		         INNER JOIN WAD_OTL_RESULT R ON A.OTL_DTC_ID = R.OTL_DTC_ID
+		         INNER JOIN
+		         (  SELECT OTL_DTC_ID, ANA_DGR, MAX (ANA_STR_DTM) AS ANA_STR_DTM
+		              FROM WAD_OTL_RESULT
+		          GROUP BY OTL_DTC_ID, ANA_DGR) R2
+		            ON     R.OTL_DTC_ID = R2.OTL_DTC_ID
+		               AND R.ANA_DGR = R2.ANA_DGR
+		               AND R.ANA_STR_DTM = R2.ANA_STR_DTM
+		   WHERE 1 = 1 
+		   AND R.ANA_DGR = #{anaDgr, jdbcType=VARCHAR}
+		   AND DS.DB_SCH_ID = #{dbSchId, jdbcType=VARCHAR}
+		GROUP BY DS.DB_TBL_NM,
+		         DS.DB_SCH_ID,
+		         DQI.DQI_ID,
+		         DQI.DQI_LNM,
+		         R.ANA_DGR
+		ORDER BY DS.DB_TBL_NM, DS.DB_SCH_ID, DQI.DQI_LNM, R.ANA_DGR -->
+		
+		SELECT  DB_SCH_ID
+		       ,DB_TBL_NM
+		       ,DQI_ID
+		       ,DQI_LNM
+		       ,ANA_DGR
+		       ,CASE
+		           WHEN TOT_ER_CNT = 0 THEN 0
+		           ELSE ROUND (SUM (NVL (ESN_ER_CNT, 0)) * 100 / TOT_ER_CNT, 2)
+		        END
+		           AS ERR_RATE
+		       ,DECODE (
+		           SUM (ANA_CNT),
+		           0, 0,
+		           DECODE (
+		              SUM (NVL (ESN_ER_CNT, 0)),
+		              0, 100,
+		              ROUND (
+		                 (  (SUM (ANA_CNT) - SUM (NVL (ESN_ER_CNT, 0)))
+		                  / SUM (ANA_CNT)
+		                  * 100),
+		                 2)))
+		           AS NON_RATE
+		  FROM (  SELECT DS.DB_SCH_ID,
+		                 DS.DB_TBL_NM,
+		                 DQI.DQI_ID,
+		                 DQI.DQI_LNM,
+		                 R.ANA_DGR,
+		                 SUM (R.ANA_CNT) AS ANA_CNT,
+		                 SUM (NVL (R.ESN_ER_CNT, 0)) OVER(PARTITION BY DQI.DQI_ID) AS ESN_ER_CNT,
+		                 SUM (NVL (R.ESN_ER_CNT, 0)) OVER () AS TOT_ER_CNT
+		            FROM WAD_DATA_SET DS
+		                 INNER JOIN WAD_OTL_DTC A ON DS.DASE_ID = A.DASE_ID
+		                 INNER JOIN WAM_OTL_DQI_MAP B ON A.OTL_DTC_ID = B.OTL_DTC_ID
+		                 INNER JOIN WAM_DQI DQI ON B.DQI_ID = DQI.DQI_ID
+		                 INNER JOIN WAD_OTL_RESULT R ON A.OTL_DTC_ID = R.OTL_DTC_ID
+		                 INNER JOIN
+		                 (  SELECT OTL_DTC_ID, ANA_DGR, MAX (ANA_STR_DTM) AS ANA_STR_DTM
+		                      FROM WAD_OTL_RESULT
+		                  GROUP BY OTL_DTC_ID, ANA_DGR) R2
+		                    ON     R.OTL_DTC_ID = R2.OTL_DTC_ID
+		                       AND R.ANA_DGR = R2.ANA_DGR
+		                       AND R.ANA_STR_DTM = R2.ANA_STR_DTM
+		           WHERE 1 = 1
+		             AND R.ANA_DGR = #{anaDgr, jdbcType=VARCHAR}
+		   			 AND DS.DB_SCH_ID = #{dbSchId, jdbcType=VARCHAR}
+		   			 AND DS.DB_TBL_NM = #{dbcTblNm, jdbcType=VARCHAR}
+		        GROUP BY DS.DB_TBL_NM,
+		                 DS.DB_SCH_ID,
+		                 DQI.DQI_ID,
+		                 DQI.DQI_LNM,
+		                 R.ANA_DGR,
+		                 R.ANA_CNT,
+		                 R.ESN_ER_CNT
+		        ORDER BY DS.DB_TBL_NM,
+		                 DS.DB_SCH_ID,
+		                 DQI.DQI_LNM,
+		                 R.ANA_DGR )
+		GROUP BY DB_SCH_ID
+		       ,DB_TBL_NM
+		       ,DQI_ID
+		       ,DQI_LNM
+		       ,ANA_DGR
+		       ,ESN_ER_CNT
+		       ,TOT_ER_CNT
+	</select>
+	
+	<select id="selectColQltyList" parameterType="map" resultMap="BaseResultMap">
+		SELECT DISTINCT DB.DB_CONN_TRG_ID,
+                DB.DB_CONN_TRG_PNM -- 진단대상명
+                ,S.DB_SCH_ID
+                ,S.DB_SCH_PNM -- 스키마물리명
+                ,S.DB_SCH_LNM -- 스키마논리명
+                ,T.DBC_TBL_NM -- 테이블물리명
+                ,T.DBC_TBL_KOR_NM -- 테이블한글명
+                ,C.DBC_COL_NM -- 컬럼물리명
+                ,C.DBC_COL_KOR_NM -- 컬럼한글명
+                ,R.ANA_DGR
+                ,R.ANA_CNT
+                ,R.ESN_ER_CNT
+                ,R.ERR_RATE
+                ,R.NON_RATE
+		  FROM WAA_DB_CONN_TRG DB
+		       INNER JOIN WAA_DB_SCH S
+		          ON     DB.DB_CONN_TRG_ID = S.DB_CONN_TRG_ID
+		             AND S.EXP_DTM = TO_DATE ('99991231', 'YYYYMMDD')
+		             AND S.REG_TYP_CD IN ('C', 'U')
+		       INNER JOIN (  SELECT DB_CONN_TRG_ID,
+		                            DB_SCH_ID,
+		                            COUNT (1) AS TBL_CNT,
+		                            DBC_TBL_NM,
+		                            DBC_TBL_KOR_NM
+		                       FROM WAT_DBC_TBL
+		                   GROUP BY DBC_TBL_NM,
+		                            DB_CONN_TRG_ID,
+		                            DB_SCH_ID,
+		                            DBC_TBL_KOR_NM) T
+		          ON     S.DB_CONN_TRG_ID = T.DB_CONN_TRG_ID
+		             AND S.DB_SCH_ID = T.DB_SCH_ID
+		       INNER JOIN (  SELECT DB_SCH_ID, DBC_TBL_NM, DBC_COL_KOR_NM, DBC_COL_NM, COUNT (1) AS COL_CNT
+		                       FROM WAT_DBC_COL
+		                   GROUP BY DBC_COL_NM, DBC_TBL_NM, DBC_COL_KOR_NM, DB_SCH_ID) C
+		          ON S.DB_SCH_ID = C.DB_SCH_ID AND C.DBC_TBL_NM = T.DBC_TBL_NM
+		       LEFT OUTER JOIN
+		       (  SELECT DB_SCH_ID, COUNT (DB_TBL_NM) AS ANA_CNT, ANA_DGR
+		            FROM (  SELECT DS.DB_SCH_ID, DS.DB_TBL_NM, R.ANA_DGR
+		                      FROM WAD_DATA_SET DS
+		                           INNER JOIN WAD_OTL_DTC A ON DS.DASE_ID = A.DASE_ID
+		                           INNER JOIN WAD_OTL_RESULT R
+		                              ON A.OTL_DTC_ID = R.OTL_DTC_ID
+		                           INNER JOIN
+		                           (  SELECT OTL_DTC_ID,
+		                                     ANA_DGR,
+		                                     MAX (ANA_STR_DTM) AS ANA_STR_DTM
+		                                FROM WAD_OTL_RESULT
+		                            GROUP BY OTL_DTC_ID, ANA_DGR) R2
+		                              ON     R.OTL_DTC_ID = R2.OTL_DTC_ID
+		                                 AND R.ANA_STR_DTM = R2.ANA_STR_DTM
+		                                 AND R.ANA_DGR = R2.ANA_DGR
+		                  GROUP BY DS.DB_TBL_NM, DS.DB_SCH_ID, R.ANA_DGR)
+		        GROUP BY DB_TBL_NM, DB_SCH_ID, ANA_DGR) DS                 -- 진단테이블 건수
+		          ON S.DB_SCH_ID = DS.DB_SCH_ID
+		       LEFT OUTER JOIN
+		       (  SELECT DB_SCH_ID,
+		                 ANA_DGR,
+		                 COUNT (DB_TBL_NM) AS ANA_COL_CNT,
+		                 DB_TBL_NM
+		            FROM (  SELECT DS.DB_SCH_ID,
+		                           R.ANA_DGR,
+		                           DS.DB_TBL_NM,
+		                           C.DB_COL_NM
+		                      FROM WAD_DATA_SET DS
+		                           INNER JOIN WAD_OTL_DTC A ON DS.DASE_ID = A.DASE_ID AND A.OTL_ALG_ID='OBJA_0001001656'
+		                           INNER JOIN WAD_OTL_VAL B
+		                              ON A.OTL_DTC_ID = B.OTL_DTC_ID
+		                           INNER JOIN WAD_ANA_VAR C
+		                              ON B.ANL_VAR_ID = C.ANL_VAR_ID
+		                             AND C.DB_TBL_NM = DS.DB_TBL_NM
+		                           INNER JOIN WAD_OTL_RESULT R
+		                              ON A.OTL_DTC_ID = R.OTL_DTC_ID
+		                           INNER JOIN
+		                           (  SELECT OTL_DTC_ID,
+		                                     ANA_DGR,
+		                                     MAX (ANA_STR_DTM) AS ANA_STR_DTM
+		                                FROM WAD_OTL_RESULT
+		                            GROUP BY OTL_DTC_ID, ANA_DGR) R2
+		                              ON     R.OTL_DTC_ID = R2.OTL_DTC_ID
+		                                 AND R.ANA_STR_DTM = R2.ANA_STR_DTM
+		                                 AND R.ANA_DGR = R2.ANA_DGR
+		                     WHERE B.ANA_VAR_CHK = 1
+		                  GROUP BY C.DB_COL_NM,
+		                           DS.DB_TBL_NM,
+		                           DS.DB_SCH_ID,
+		                           R.ANA_DGR)
+		        GROUP BY DB_TBL_NM, DB_SCH_ID, ANA_DGR) DSCOL
+		          ON     S.DB_SCH_ID = DSCOL.DB_SCH_ID
+		             AND DS.ANA_DGR = DSCOL.ANA_DGR
+		             AND DSCOL.DB_TBL_NM = T.DBC_TBL_NM
+		       LEFT OUTER JOIN
+		       (  SELECT DS.DB_SCH_ID,
+		                 DS.DB_TBL_NM,
+		                 C.DBC_COL_NM,
+		                 R.ANA_DGR,
+		                 SUM (R.ANA_CNT) AS ANA_CNT,
+		                 SUM (NVL(R.ESN_ER_CNT,0)) AS ESN_ER_CNT,
+		                 CASE
+		                    WHEN SUM (R.ANA_CNT) = 0 THEN 0
+		                    ELSE ROUND (SUM (NVL(R.ESN_ER_CNT,0)) * 100 / SUM (R.ANA_CNT), 2)
+		                 END
+		                    AS ERR_RATE,
+		                 DECODE (
+		                    SUM (R.ANA_CNT),
+		                    0, 0,
+		                    DECODE (
+		                       SUM (NVL(R.ESN_ER_CNT,0)),
+		                       0, 100,
+		                       ROUND (
+		                          (  (SUM (R.ANA_CNT) - SUM (NVL(R.ESN_ER_CNT,0)))
+		                           / SUM (R.ANA_CNT)
+		                           * 100),
+		                          2)))
+		                    AS NON_RATE
+		            FROM WAD_DATA_SET DS
+		                 INNER JOIN WAD_OTL_DTC A ON DS.DASE_ID = A.DASE_ID
+		                 INNER JOIN WAD_OTL_RESULT R ON A.OTL_DTC_ID = R.OTL_DTC_ID
+		                 INNER JOIN
+		                 (  SELECT OTL_DTC_ID, ANA_DGR, MAX (ANA_STR_DTM) AS ANA_STR_DTM
+		                      FROM WAD_OTL_RESULT
+		                  GROUP BY OTL_DTC_ID, ANA_DGR) R2
+		                    ON     R.OTL_DTC_ID = R2.OTL_DTC_ID
+		                       AND R.ANA_DGR = R2.ANA_DGR
+		                       AND R.ANA_STR_DTM = R2.ANA_STR_DTM
+		                 INNER JOIN (SELECT DB_SCH_ID, DBC_TBL_NM, DBC_COL_KOR_NM, DBC_COL_NM
+		                                   FROM WAT_DBC_COL
+		                               GROUP BY DBC_COL_NM, DBC_TBL_NM, DBC_COL_KOR_NM, DB_SCH_ID) C
+		                    ON C.DB_SCH_ID = DS.DB_SCH_ID AND C.DBC_TBL_NM = DS.DB_TBL_NM
+		        GROUP BY C.DBC_COL_NM, DS.DB_TBL_NM, DS.DB_SCH_ID, R.ANA_DGR) R
+		          ON     S.DB_SCH_ID = R.DB_SCH_ID
+		             AND DS.ANA_DGR = R.ANA_DGR
+		             AND R.DB_TBL_NM = T.DBC_TBL_NM
+		 WHERE     DB.EXP_DTM = TO_DATE ('99991231', 'YYYYMMDD')
+		       AND DB.REG_TYP_CD IN ('C', 'U')
+		       <if test="dbConnTrgId != null and dbConnTrgId != ''">
+			   AND DB.DB_CONN_TRG_ID = #{dbConnTrgId, jdbcType=VARCHAR}
+			   </if>
+			   <if test="dbSchId != null and dbSchId != '' ">
+			   AND S.DB_SCH_ID = #{dbSchId, jdbcType=VARCHAR}
+			   </if>
+		       AND DS.ANA_CNT IS NOT NULL
+		       AND DSCOL.ANA_COL_CNT IS NOT NULL
+		 ORDER BY  DB.DB_CONN_TRG_ID, S.DB_SCH_ID, S.DB_SCH_PNM, T.DBC_TBL_NM, C.DBC_COL_NM, R.ANA_DGR
+		
+		
+	</select>
+	
+	<select id="selectColQltyPie" parameterType="map" resultMap="BaseResultMap">
+		SELECT DS.DB_SCH_ID,
+	         DS.DB_TBL_NM,
+	         DQI.DQI_ID,
+	         DQI.DQI_LNM,
+	         R.ANA_DGR,
+	         SUM (R.ANA_CNT) AS ANA_CNT,
+	         SUM (NVL (R.ESN_ER_CNT, 0)) AS ESN_ER_CNT,
+	         CASE
+	            WHEN SUM (R.ANA_CNT) = 0 THEN 0
+	            ELSE ROUND (SUM (NVL (R.ESN_ER_CNT, 0)) * 100 / SUM (R.ANA_CNT), 2)
+	         END
+	            AS ERR_RATE,
+	         DECODE (
+	            SUM (R.ANA_CNT),
+	            0, 0,
+	            DECODE (
+	               SUM (NVL (R.ESN_ER_CNT, 0)),
+	               0, 100,
+	               ROUND (
+	                  (  (SUM (R.ANA_CNT) - SUM (NVL (R.ESN_ER_CNT, 0)))
+	                   / SUM (R.ANA_CNT)
+	                   * 100),
+	                  2)))
+	            AS NON_RATE
+	    FROM WAD_DATA_SET DS
+	         INNER JOIN WAD_OTL_DTC A ON DS.DASE_ID = A.DASE_ID
+	         INNER JOIN WAM_OTL_DQI_MAP B ON A.OTL_DTC_ID = B.OTL_DTC_ID
+	         INNER JOIN WAM_DQI DQI ON B.DQI_ID = DQI.DQI_ID
+	         INNER JOIN WAD_OTL_RESULT R ON A.OTL_DTC_ID = R.OTL_DTC_ID
+	         INNER JOIN
+	         (  SELECT OTL_DTC_ID, ANA_DGR, MAX (ANA_STR_DTM) AS ANA_STR_DTM
+	              FROM WAD_OTL_RESULT
+	          GROUP BY OTL_DTC_ID, ANA_DGR) R2
+	            ON     R.OTL_DTC_ID = R2.OTL_DTC_ID
+	               AND R.ANA_DGR = R2.ANA_DGR
+	               AND R.ANA_STR_DTM = R2.ANA_STR_DTM
+	   WHERE 1 = 1 
+	     AND A.OTL_ALG_ID='OBJA_0001001656'
+	     AND R.ANA_DGR = #{anaDgr, jdbcType=VARCHAR}
+		 AND DS.DB_SCH_ID = #{dbSchId, jdbcType=VARCHAR}
+	GROUP BY DS.DB_TBL_NM,
+	         DS.DB_SCH_ID,
+	         DQI.DQI_ID,
+	         DQI.DQI_LNM,
+	         R.ANA_DGR
+	ORDER BY DS.DB_TBL_NM, DS.DB_SCH_ID, DQI.DQI_LNM, R.ANA_DGR
+	</select>
+	
+	<select id="selectOtlQltyList" parameterType="map" resultMap="OtlResultMap">
+		SELECT DB.DB_CONN_TRG_ID
+	          ,DB.DB_CONN_TRG_PNM
+	          ,S.DB_SCH_ID
+	          ,S.DB_SCH_PNM
+	          ,DS.DB_TBL_NM
+	          ,A.OTL_DTC_ID
+	          ,A.DASE_ID
+	          ,A.OTL_ALG_ID
+	          ,B.ALG_ID
+	          ,B.ALG_LNM
+	          ,B.ALG_PNM
+	          ,B.ALG_TYP_CD
+	          ,R.ANA_DGR
+	          ,R.ANA_CNT
+	          ,R.ESN_ER_CNT
+	          ,A.OTL_NM
+	          ,DQI.DQI_ID
+	          ,DQI.DQI_LNM
+	          ,NVL (
+	             ROUND (R.ESN_ER_CNT * 100 / DECODE (R.ANA_CNT, 0, NULL, R.ANA_CNT),
+	                    2),
+	             0)
+	             AS ERR_RATE
+	          ,DECODE (
+	             R.ANA_CNT,
+	             0, 0,
+	             DECODE (
+	                NVL (R.ESN_ER_CNT, 0),
+	                0, 100,
+	                ROUND (
+	                   ( (R.ANA_CNT - NVL (R.ESN_ER_CNT, 0)) / R.ANA_CNT * 100),
+	                   2))) 
+	             AS NON_RATE
+	    FROM WAD_DATA_SET DS 
+	         INNER JOIN WAD_OTL_DTC A 
+	            ON A.DASE_ID = DS.DASE_ID
+	         INNER JOIN WAA_ALG B 
+	            ON A.OTL_ALG_ID = B.ALG_ID
+	         INNER JOIN WAA_DB_SCH S
+	            ON DS.DB_SCH_ID = S.DB_SCH_ID
+	           AND S.EXP_DTM = TO_DATE ('99991231', 'YYYYMMDD')
+		       AND S.REG_TYP_CD IN ('C', 'U')
+	         INNER JOIN WAA_DB_CONN_TRG DB
+	            ON DB.DB_CONN_TRG_ID = S.DB_CONN_TRG_ID            
+	           AND DB.EXP_DTM = TO_DATE ('99991231', 'YYYYMMDD')
+		       AND DB.REG_TYP_CD IN ('C', 'U')                      
+	         INNER JOIN (  SELECT R.OTL_DTC_ID,
+	                               MAX (R.ANA_DGR) AS ANA_DGR,
+	                               SUM (R.ANA_CNT) AS ANA_CNT,
+	                               SUM (NVL (R.ESN_ER_CNT, 0)) AS ESN_ER_CNT
+	                          FROM WAD_OTL_RESULT R
+	                               INNER JOIN (SELECT OTL_DTC_ID, ANA_DGR, MAX (ANA_STR_DTM) AS ANA_STR_DTM
+	                                             FROM WAD_OTL_RESULT 
+	                                            GROUP BY OTL_DTC_ID, ANA_DGR ) R2
+	                                  ON R.OTL_DTC_ID = R2.OTL_DTC_ID
+	                                 AND R.ANA_DGR = R2.ANA_DGR
+	                                 AND R.ANA_STR_DTM =R2.ANA_STR_DTM
+	                      WHERE 1 = 1
+	                        AND R.ANA_CNT IS NOT NULL
+	                        AND R.ANA_DGR IS NOT NULL
+	                      GROUP BY R.OTL_DTC_ID) R
+	            ON A.OTL_DTC_ID = R.OTL_DTC_ID
+	         LEFT OUTER JOIN
+	         (  SELECT A.OTL_DTC_ID,
+	                   LISTAGG (B.DQI_LNM, ',') WITHIN GROUP (ORDER BY A.DQI_ID) AS DQI_LNM,
+	                   LISTAGG (B.DQI_ID, ',') WITHIN GROUP (ORDER BY A.DQI_ID)  AS DQI_ID
+	              FROM WAM_OTL_DQI_MAP A 
+	                   INNER JOIN WAM_DQI B 
+	                      ON A.DQI_ID = B.DQI_ID
+	          GROUP BY A.OTL_DTC_ID) DQI
+	            ON A.OTL_DTC_ID = DQI.OTL_DTC_ID
+	   WHERE     1 = 1
+	      <if test="dbConnTrgId != null and dbConnTrgId != '' ">
+		  AND DB.DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR}
+		  </if>
+		  <if test="dbSchId != null and dbSchId != '' ">
+		  AND S.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+		  </if>
+		  <if test="dbcTblNm != null and dbcTblNm != '' ">
+	      AND (UPPER(DS.DB_TBL_NM) LIKE '%'||UPPER(#{dbcTblNm, jdbcType=VARCHAR})||'%')
+	      </if>
+		  <if test="otlAlgId != null and otlAlgId != '' ">
+		  AND A.OTL_ALG_ID = #{otlAlgId,jdbcType=VARCHAR}
+		  </if>
+		ORDER BY DB.DB_CONN_TRG_ID,
+		         S.DB_SCH_ID,
+		         DS.DB_TBL_NM,
+	         	 A.OTL_ALG_ID
+	</select>
+	
+	<select id="selectOtlQltyBar" parameterType="map" resultMap="OtlResultMap">
+		SELECT 	 A.OTL_DTC_ID,
+		         NVL (A.ANA_DGR, 0) AS ANA_DGR,
+		         A.ANA_CNT,
+		         A.ESN_ER_CNT,
+		         NVL (
+		            ROUND (A.ESN_ER_CNT * 100 / DECODE (A.ANA_CNT, 0, NULL, A.ANA_CNT),
+		                   2),
+		            0)
+		            AS ERR_RATE,
+		         DECODE (
+		            A.ANA_CNT,
+		            0, 0,
+		            DECODE (
+		               NVL (A.ESN_ER_CNT, 0),
+		               0, 100,
+		               ROUND (
+		                  ( (A.ANA_CNT - NVL (A.ESN_ER_CNT, 0)) / A.ANA_CNT * 100),
+		                  2)))
+		            AS NON_RATE,
+		         DQI.DQI_ID,
+		         DQI.DQI_LNM
+		    FROM WAD_OTL_RESULT A
+		         INNER JOIN (SELECT OTL_DTC_ID, ANA_DGR
+		                           , MAX(ANA_STR_DTM) AS ANA_STR_DTM 
+		                      FROM WAD_OTL_RESULT
+		                     WHERE OTL_DTC_ID = #{otlDtcId, jdbcType=VARCHAR}
+		                       AND ANA_DGR IS NOT NULL
+		                       AND ANA_CNT IS NOT NULL
+		                     GROUP BY OTL_DTC_ID, ANA_DGR ) R2
+		           ON A.OTL_DTC_ID = R2.OTL_DTC_ID
+		          AND A.ANA_DGR = R2.ANA_DGR
+		          AND A.ANA_STR_DTM = R2.ANA_STR_DTM
+		         LEFT OUTER JOIN
+		         (  SELECT M.OTL_DTC_ID,
+		                   LISTAGG (D.DQI_LNM, ',') WITHIN GROUP (ORDER BY M.DQI_ID)
+		                      AS DQI_LNM,
+		                   LISTAGG (D.DQI_ID, ',') WITHIN GROUP (ORDER BY M.DQI_ID)
+		                      AS DQI_ID
+		              FROM WAM_OTL_DQI_MAP M INNER JOIN WAM_DQI D ON D.DQI_ID = M.DQI_ID
+		          GROUP BY M.OTL_DTC_ID) DQI
+		            ON A.OTL_DTC_ID = DQI.OTL_DTC_ID
+		   WHERE A.OTL_DTC_ID = #{otlDtcId, jdbcType=VARCHAR}
+		ORDER BY ANA_DGR
+	</select>
+	
+	<select id="selectOtlQltyPie" parameterType="map" resultMap="OtlResultMap">
+		<!-- SELECT A.OTL_DTC_ID
+		      ,NVL(A.ANA_DGR, 0) AS ANA_DGR
+		      ,A.ANA_CNT
+		      ,A.ESN_ER_CNT
+		      ,NVL (
+		            ROUND (A.ESN_ER_CNT * 100 / DECODE (A.ANA_CNT, 0, NULL, A.ANA_CNT),
+		                   2),
+		            0)
+		            AS ERR_RATE,
+		         DECODE (
+		            A.ANA_CNT,
+		            0, 0,
+		            DECODE (
+		               NVL (A.ESN_ER_CNT, 0),
+		               0, 100,
+		               ROUND (
+		                  ( (A.ANA_CNT - NVL (A.ESN_ER_CNT, 0)) / A.ANA_CNT * 100),
+		                  2)))
+		            AS NON_RATE
+		          , DQI.DQI_ID
+		          , DQI.DQI_LNM
+		FROM   WAD_OTL_RESULT A
+		LEFT OUTER JOIN
+		         (  SELECT M.OTL_DTC_ID,
+		                   LISTAGG (D.DQI_LNM, ',') WITHIN GROUP (ORDER BY M.DQI_ID)
+		                      AS DQI_LNM,
+		                   LISTAGG (D.DQI_ID, ',') WITHIN GROUP (ORDER BY M.DQI_ID)
+		                      AS DQI_ID
+		              FROM WAM_OTL_DQI_MAP M INNER JOIN WAM_DQI D ON D.DQI_ID = M.DQI_ID
+		          GROUP BY M.OTL_DTC_ID) DQI
+		            ON A.OTL_DTC_ID = DQI.OTL_DTC_ID
+		WHERE  A.OTL_DTC_ID = #{otlDtcId, jdbcType=VARCHAR}
+		  AND  A.ANA_DGR = #{anaDgr, jdbcType=VARCHAR}
+		  AND  DQI_ID IS NOT NULL
+		ORDER BY ANA_DGR -->
+		
+		SELECT  OTL_DTC_ID
+		       ,ANA_DGR
+		       ,ANA_CNT
+		       ,ESN_ER_CNT
+		       ,DQI_ID
+		       ,DQI_LNM
+		       ,CASE
+		           WHEN TOT_ER_CNT = 0 THEN 0
+		           ELSE ROUND (SUM (NVL (ESN_ER_CNT, 0)) * 100 / TOT_ER_CNT, 2)
+		        END
+		           AS ERR_RATE
+		       ,DECODE (
+		                    ANA_CNT,
+		                    0, 0,
+		                    DECODE (
+		                       NVL (ESN_ER_CNT, 0),
+		                       0, 100,
+		                       ROUND (
+		                          ( (ANA_CNT - NVL (ESN_ER_CNT, 0)) / ANA_CNT * 100),
+		                          2)))
+		                    AS NON_RATE
+		FROM (
+		        SELECT A.OTL_DTC_ID
+		               ,NVL (A.ANA_DGR, 0) AS ANA_DGR
+		               ,A.ANA_CNT
+		               ,A.ESN_ER_CNT
+		               ,SUM (NVL (A.ESN_ER_CNT, 0)) OVER () AS TOT_ER_CNT
+		               ,DQI.DQI_ID
+		               ,DQI.DQI_LNM
+		            FROM WAD_OTL_RESULT A
+		                 LEFT OUTER JOIN
+		                 (  SELECT M.OTL_DTC_ID,
+		                           LISTAGG (D.DQI_LNM, ',') WITHIN GROUP (ORDER BY M.DQI_ID)
+		                              AS DQI_LNM,
+		                           LISTAGG (D.DQI_ID, ',') WITHIN GROUP (ORDER BY M.DQI_ID)
+		                              AS DQI_ID
+		                      FROM WAM_OTL_DQI_MAP M INNER JOIN WAM_DQI D ON D.DQI_ID = M.DQI_ID
+		                  GROUP BY M.OTL_DTC_ID) DQI
+		                    ON A.OTL_DTC_ID = DQI.OTL_DTC_ID
+		           WHERE  A.OTL_DTC_ID = #{otlDtcId, jdbcType=VARCHAR}
+		  			 AND  A.ANA_DGR = #{anaDgr, jdbcType=VARCHAR}
+		                 AND DQI_ID IS NOT NULL
+		        ORDER BY ANA_DGR )
+		GROUP BY OTL_DTC_ID
+		       ,ANA_DGR
+		       ,ANA_CNT
+		       ,ESN_ER_CNT
+		       ,DQI_ID
+		       ,DQI_LNM
+		       ,TOT_ER_CNT
+	</select>
+</mapper>

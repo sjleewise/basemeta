@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.wise.advisor.prepare.udefoutlier.daseimp.service.WadUodcDaseImpMapper">
+  <resultMap id="BaseResultMap" type="kr.wise.advisor.prepare.udefoutlier.daseimp.service.WadUodcDaseImpCol" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+    <id column="UDF_OTL_DTC_ID"     jdbcType="VARCHAR" property="udfOtlDtcId" />
+    <id column="CRE_COMP_ID"        jdbcType="VARCHAR" property="creCompId"   />
+    <result column="DB_CONN_TRG_ID" jdbcType="VARCHAR" property="dbConnTrgId" />
+    <result column="DB_SCH_ID"      jdbcType="VARCHAR" property="dbSchId"     />
+    <result column="DB_SCH_PNM"     jdbcType="VARCHAR" property="dbSchPnm"    />
+    <result column="DBC_TBL_NM"     jdbcType="VARCHAR" property="dbcTblNm"    />
+    <result column="DBC_COL_NM"     jdbcType="VARCHAR" property="dbcColNm"    />  
+    <result column="ANA_DASE_ID"    jdbcType="VARCHAR" property="anaDaseId"   />
+    <result column="DASE_ID"        jdbcType="VARCHAR" property="daseId"      />
+    <result column="IMP_DATA_DCD"   jdbcType="VARCHAR" property="impDataDcd"  />
+    <result column="COL_PNM"        jdbcType="VARCHAR" property="colPnm"      />
+    <result column="COL_LNM"        jdbcType="VARCHAR" property="colLnm"      />
+    <result column="DATA_TYPE"      jdbcType="VARCHAR" property="dataType"    />
+    <result column="ANA_DASE_NM"    jdbcType="VARCHAR" property="anaDaseNm"   />
+    <result column="ANA_VAR_ID"     jdbcType="VARCHAR" property="anaVarId"    />
+    <result column="FILE_PATH"      jdbcType="VARCHAR" property="filePath"   />
+    <result column="FILE_NAME"      jdbcType="VARCHAR" property="fileName"    />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    UDF_OTL_DTC_ID, CRE_COMP_ID, DB_SCH_ID, DBC_TBL_NM, ANA_DASE_ID, DASE_ID, IMP_DATA_DCD, 
+    OBJ_DESCN, OBJ_VERS, REG_TYP_CD, WRIT_USER_ID, WRIT_DTM, FILE_PATH, FILE_NAME
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="map" resultMap="BaseResultMap">
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM WAD_UODC_DASE_IMP
+    WHERE UDF_OTL_DTC_ID = #{udfOtlDtcId,jdbcType=VARCHAR}
+      AND CRE_COMP_ID = #{creCompId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="map">
+    delete from WAD_UODC_DASE_IMP
+    where UDF_OTL_DTC_ID = #{udfOtlDtcId,jdbcType=VARCHAR}
+      and CRE_COMP_ID = #{creCompId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="kr.wise.advisor.prepare.udefoutlier.daseimp.service.WadUodcDaseImp">
+    insert into WAD_UODC_DASE_IMP (UDF_OTL_DTC_ID, CRE_COMP_ID, DB_SCH_ID, 
+      DBC_TBL_NM, ANA_DASE_ID, DASE_ID, 
+      IMP_DATA_DCD, OBJ_DESCN, OBJ_VERS, 
+      REG_TYP_CD, WRIT_USER_ID, WRIT_DTM
+      )
+    values (#{udfOtlDtcId,jdbcType=VARCHAR}, #{creCompId,jdbcType=VARCHAR}, #{dbSchId,jdbcType=VARCHAR}, 
+      #{dbcTblNm,jdbcType=VARCHAR}, #{anaDaseId,jdbcType=VARCHAR}, #{daseId,jdbcType=VARCHAR}, 
+      #{impDataDcd,jdbcType=VARCHAR}, #{objDescn,jdbcType=VARCHAR}, #{objVers,jdbcType=DECIMAL}, 
+      #{regTypCd,jdbcType=VARCHAR}, #{writUserId,jdbcType=VARCHAR}, #{writDtm,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="kr.wise.advisor.prepare.udefoutlier.daseimp.service.WadUodcDaseImp">
+    insert into WAD_UODC_DASE_IMP
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="udfOtlDtcId != null">
+        UDF_OTL_DTC_ID,
+      </if>
+      <if test="creCompId != null">
+        CRE_COMP_ID,
+      </if>
+      <if test="dbSchId != null">
+        DB_SCH_ID,
+      </if>
+      <if test="dbcTblNm != null">
+        DBC_TBL_NM,
+      </if>
+      <if test="anaDaseId != null">
+        ANA_DASE_ID,
+      </if>
+      <if test="daseId != null">
+        DASE_ID,
+      </if>
+      <if test="impDataDcd != null">
+        IMP_DATA_DCD,
+      </if>
+      <if test="objDescn != null">
+        OBJ_DESCN,
+      </if>
+      <if test="filePath != null">
+        FILE_PATH,
+      </if>
+      <if test="fileName != null">
+        FILE_NAME,
+      </if>
+     
+        OBJ_VERS,      
+        REG_TYP_CD,     
+        WRIT_USER_ID,      
+        WRIT_DTM      
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="udfOtlDtcId != null">
+        #{udfOtlDtcId,jdbcType=VARCHAR},
+      </if>
+      <if test="creCompId != null">
+        #{creCompId,jdbcType=VARCHAR},
+      </if>
+      <if test="dbSchId != null">
+        #{dbSchId,jdbcType=VARCHAR},
+      </if>
+      <if test="dbcTblNm != null">
+        #{dbcTblNm,jdbcType=VARCHAR},
+      </if>
+      <if test="anaDaseId != null">
+        #{anaDaseId,jdbcType=VARCHAR},
+      </if>
+      <if test="daseId != null">
+        #{daseId,jdbcType=VARCHAR},
+      </if>
+      <if test="impDataDcd != null">
+        #{impDataDcd,jdbcType=VARCHAR},
+      </if>
+      <if test="objDescn != null">
+        #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="filePath != null">
+        #{filePath,jdbcType=VARCHAR},
+      </if>
+      <if test="fileName != null">
+        #{fileName,jdbcType=VARCHAR},
+      </if>
+      1,
+      'C',      
+      #{writUserId,jdbcType=VARCHAR},            
+      SYSDATE
+    </trim>
+  </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.advisor.prepare.udefoutlier.daseimp.service.WadUodcDaseImp">
+    update WAD_UODC_DASE_IMP
+    <set>
+      <if test="dbSchId != null">
+        DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR},
+      </if>
+      <if test="dbcTblNm != null">
+        DBC_TBL_NM = #{dbcTblNm,jdbcType=VARCHAR},
+      </if>
+      <if test="anaDaseId != null">
+        ANA_DASE_ID = #{anaDaseId,jdbcType=VARCHAR},
+      </if>
+      <if test="daseId != null">
+        DASE_ID = #{daseId,jdbcType=VARCHAR},
+      </if>
+      <if test="impDataDcd != null">
+        IMP_DATA_DCD = #{impDataDcd,jdbcType=VARCHAR},
+      </if>
+      <if test="objDescn != null">
+        OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null">
+        OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null">
+        REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="filePath != null">
+        FILE_PATH = #{filePath,jdbcType=DECIMAL},
+      </if>
+      <if test="fileName != null">
+        FILE_NAME = #{fileName,jdbcType=VARCHAR},
+      </if>
+        WRIT_USER_ID = #{writUserId,jdbcType=VARCHAR},       
+        WRIT_DTM     = SYSDATE      
+    </set>
+    WHERE UDF_OTL_DTC_ID = #{udfOtlDtcId,jdbcType=VARCHAR}
+      AND CRE_COMP_ID = #{creCompId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="kr.wise.advisor.prepare.udefoutlier.daseimp.service.WadUodcDaseImp">
+    update WAD_UODC_DASE_IMP
+    set DB_SCH_ID  = #{dbSchId,jdbcType=VARCHAR},
+      DBC_TBL_NM   = #{dbcTblNm,jdbcType=VARCHAR},
+      ANA_DASE_ID  = #{anaDaseId,jdbcType=VARCHAR},
+      DASE_ID      = #{daseId,jdbcType=VARCHAR},
+      IMP_DATA_DCD = #{impDataDcd,jdbcType=VARCHAR},
+      OBJ_DESCN    = #{objDescn,jdbcType=VARCHAR},
+      OBJ_VERS     = #{objVers,jdbcType=DECIMAL},
+      REG_TYP_CD   = 'U'
+      WRIT_USER_ID = #{writUserId,jdbcType=VARCHAR},
+      WRIT_DTM     = SYSDATE
+    where UDF_OTL_DTC_ID = #{udfOtlDtcId,jdbcType=VARCHAR}
+      and CRE_COMP_ID = #{creCompId,jdbcType=VARCHAR}
+  </update>
+  
+  <select id="selectDaseImpColList" parameterType="kr.wise.advisor.prepare.udefoutlier.daseimp.service.WadUodcDaseImp" resultMap="BaseResultMap" > 
+  	 
+	SELECT G.DB_CONN_TRG_ID
+	     , A.DB_SCH_ID	
+	     , G.DB_SCH_PNM
+	     , A.DBC_TBL_NM
+	     , B.DBC_COL_NM     AS COL_PNM
+	     , B.DBC_COL_KOR_NM AS COL_LNM 
+	     , B.DATA_TYPE
+	     , F.ANL_VAR_ID     AS ANA_VAR_ID
+	     , E.ANA_DASE_NM
+	     , CASE WHEN D.COL_PNM IS NOT NULL THEN 1 ELSE 0 END AS IBS_CHECK 
+	  FROM WAT_DBC_TBL A
+	       INNER JOIN WAT_DBC_COL B
+	          ON B.DB_SCH_ID  = A.DB_SCH_ID
+	         AND B.DBC_TBL_NM = A.DBC_TBL_NM 
+	       LEFT JOIN WAD_UODC_DASE_IMP C  
+	         ON C.DB_SCH_ID  = A.DB_SCH_ID
+	        AND C.DBC_TBL_NM = A.DBC_TBL_NM  
+	        <if test="udfOtlDtcId != null ">
+		   	 AND C.UDF_OTL_DTC_ID = #{udfOtlDtcId,jdbcType=VARCHAR}
+		    </if>
+		    <if test="creCompId != null ">
+		   	 AND C.CRE_COMP_ID = #{creCompId,jdbcType=VARCHAR} 
+		    </if>
+	       LEFT JOIN WAD_UODC_DASE_IMP_COL D
+	         ON D.UDF_OTL_DTC_ID = C.UDF_OTL_DTC_ID
+	        AND D.CRE_COMP_ID    = C.CRE_COMP_ID  
+	        AND D.COL_PNM        = B.DBC_COL_NM  	
+	       LEFT JOIN WAD_UODC_ANA_DASE E
+	         ON E.UDF_OTL_DTC_ID = C.UDF_OTL_DTC_ID
+	        AND E.CRE_COMP_ID    = C.CRE_COMP_ID        
+	       LEFT JOIN WAD_ANA_VAR F
+	         ON F.DB_SCH_ID  = A.DB_SCH_ID
+	        AND F.DB_TBL_NM  = A.DBC_TBL_NM
+	        AND F.DB_COL_NM  = B.DBC_COL_NM   
+	       LEFT JOIN WAA_DB_SCH G
+	         ON G.EXP_DTM = TO_DATE('9999-12-31','YYYY-MM-DD')
+	        AND G.REG_TYP_CD IN ('C','U')
+	        AND G.DB_SCH_ID = A.DB_SCH_ID
+	 WHERE 1 = 1          
+	   AND A.DB_SCH_ID  = #{dbSchId,jdbcType=VARCHAR}
+	   AND A.DBC_TBL_NM = #{dbcTblNm,jdbcType=VARCHAR}	 
+	   AND A.DBMS_TYPE != 'HIV'
+	 ORDER BY B.ORD
+  </select>
+  
+  <select id="selectDaseImpHiveColList" parameterType="kr.wise.advisor.prepare.udefoutlier.daseimp.service.WadUodcDaseImp" resultMap="BaseResultMap" > 
+  	 
+	SELECT G.DB_CONN_TRG_ID
+	     , A.DB_SCH_ID	
+	     , G.DB_SCH_PNM
+	     , A.DBC_TBL_NM
+	     , B.DBC_COL_NM     AS COL_PNM
+	     , B.DBC_COL_KOR_NM AS COL_LNM 
+	     , B.DATA_TYPE
+	     , F.ANL_VAR_ID     AS ANA_VAR_ID
+	     , E.ANA_DASE_NM
+	     , CASE WHEN D.COL_PNM IS NOT NULL THEN 1 ELSE 0 END AS IBS_CHECK 
+	  FROM WAT_DBC_TBL A
+	       INNER JOIN WAT_DBC_COL B
+	          ON B.DB_SCH_ID  = A.DB_SCH_ID
+	         AND B.DBC_TBL_NM = A.DBC_TBL_NM 
+	       LEFT JOIN WAD_UODC_DASE_IMP C  
+	         ON C.DB_SCH_ID  = A.DB_SCH_ID
+	        AND C.DBC_TBL_NM = A.DBC_TBL_NM  
+	        <if test="udfOtlDtcId != null ">
+		   	 AND C.UDF_OTL_DTC_ID = #{udfOtlDtcId,jdbcType=VARCHAR}
+		    </if>
+		    <if test="creCompId != null ">
+		   	 AND C.CRE_COMP_ID = #{creCompId,jdbcType=VARCHAR} 
+		    </if>
+	       LEFT JOIN WAD_UODC_DASE_IMP_COL D
+	         ON D.UDF_OTL_DTC_ID = C.UDF_OTL_DTC_ID
+	        AND D.CRE_COMP_ID    = C.CRE_COMP_ID  
+	        AND D.COL_PNM        = B.DBC_COL_NM  	
+	       LEFT JOIN WAD_UODC_ANA_DASE E
+	         ON E.UDF_OTL_DTC_ID = C.UDF_OTL_DTC_ID
+	        AND E.CRE_COMP_ID    = C.CRE_COMP_ID        
+	       LEFT JOIN WAD_ANA_VAR F
+	         ON F.DB_SCH_ID  = A.DB_SCH_ID
+	        AND F.DB_TBL_NM  = A.DBC_TBL_NM
+	        AND F.DB_COL_NM  = B.DBC_COL_NM   
+	       LEFT JOIN WAA_DB_SCH G
+	         ON G.EXP_DTM = TO_DATE('9999-12-31','YYYY-MM-DD')
+	        AND G.REG_TYP_CD IN ('C','U')
+	        AND G.DB_SCH_ID = A.DB_SCH_ID
+	 WHERE 1 = 1          
+	   AND A.DB_SCH_ID  = #{dbSchId,jdbcType=VARCHAR}
+	   AND A.DBC_TBL_NM = #{dbcTblNm,jdbcType=VARCHAR}	   
+	   AND A.DBMS_TYPE = 'HIV'
+	 ORDER BY B.ORD
+  </select>
+  
+  <delete id="deleteByUdfOtlDtcId" parameterType="java.lang.String" >
+	   DELETE FROM WAD_UODC_DASE_IMP   
+	    WHERE UDF_OTL_DTC_ID = #{udfOtlDtcId,jdbcType=VARCHAR}      
+  </delete>
+  
+  <select id="selectImpDataDcd" parameterType="map" resultMap="BaseResultMap">
+	   SELECT A.IMP_DATA_DCD
+         FROM WAD_UODC_DASE_IMP A
+        WHERE 1 = 1        
+	      AND A.UDF_OTL_DTC_ID = #{udfOtlDtcId,jdbcType=VARCHAR}
+	      AND A.CRE_COMP_ID    = #{creCompId,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="selectDetailInfo" parameterType="map" resultMap="BaseResultMap">
+	   SELECT A.UDF_OTL_DTC_ID
+            , A.CRE_COMP_ID
+            <if test='impDataDcd.equals("T")'>
+            , B.DB_CONN_TRG_ID
+            </if>
+            <if test='impDataDcd.equals("H")'>
+            , B.DB_CONN_TRG_ID
+            </if>
+            , A.DB_SCH_ID 
+            , A.DBC_TBL_NM
+            , A.ANA_DASE_ID
+            , A.DASE_ID
+            , A.IMP_DATA_DCD      
+            , C.ANA_DASE_NM
+            , A.FILE_PATH
+            , A.FILE_NAME
+         FROM WAD_UODC_DASE_IMP A
+         	<if test='impDataDcd.equals("T")'>
+              INNER JOIN WAA_DB_SCH B
+                 ON B.EXP_DTM = TO_DATE('9999-12-31','YYYY-MM-DD')  
+                AND B.DB_SCH_ID = A.DB_SCH_ID 
+            </if>
+            <if test='impDataDcd.equals("H")'>
+              INNER JOIN WAA_DB_SCH B
+                 ON B.EXP_DTM = TO_DATE('9999-12-31','YYYY-MM-DD')  
+                AND B.DB_SCH_ID = A.DB_SCH_ID 
+            </if>
+              LEFT JOIN WAD_UODC_ANA_DASE C
+                ON C.UDF_OTL_DTC_ID = A.UDF_OTL_DTC_ID
+               AND C.CRE_COMP_ID    = A.CRE_COMP_ID
+        WHERE 1 = 1        
+	      AND A.UDF_OTL_DTC_ID = #{udfOtlDtcId,jdbcType=VARCHAR}
+	      AND A.CRE_COMP_ID    = #{creCompId,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="selectDaseImpColForScrt" parameterType="map" resultMap="BaseResultMap">
+	  
+		SELECT A.UDF_OTL_DTC_ID
+		     , A.CRE_COMP_ID
+		     , A.DBC_TBL_NM   
+		     , B.COL_PNM
+		     , B.COL_LNM   
+		     , C.ANA_DASE_NM 
+		     , A.DB_SCH_ID
+		     , D.DB_SCH_PNM
+		     , D.DB_CONN_TRG_ID
+		     , A.FILE_PATH
+		  FROM WAD_UODC_DASE_IMP A
+		       LEFT JOIN WAD_UODC_DASE_IMP_COL B
+		         ON B.UDF_OTL_DTC_ID = A.UDF_OTL_DTC_ID
+		        AND B.CRE_COMP_ID    = A.CRE_COMP_ID
+		       LEFT JOIN WAD_UODC_ANA_DASE C
+		         ON C.UDF_OTL_DTC_ID = A.UDF_OTL_DTC_ID
+		        AND C.CRE_COMP_ID    = A.CRE_COMP_ID    
+		       LEFT JOIN WAA_DB_SCH D
+		         ON D.EXP_DTM = TO_DATE('9999-12-31','YYYY-MM-DD')
+		        AND D.REG_TYP_CD IN ('C','U') 
+		        AND D.DB_SCH_ID = A.DB_SCH_ID
+        WHERE 1 = 1        
+	      AND A.UDF_OTL_DTC_ID = #{udfOtlDtcId,jdbcType=VARCHAR}
+	      AND A.CRE_COMP_ID    = #{creCompId,jdbcType=VARCHAR}
+  </select>
+  
+  <update id="updateDaseImpAnaDaseId" parameterType="map" >  
+    <![CDATA[	 
+	UPDATE WAD_UODC_DASE_IMP A
+	   SET ANA_DASE_ID = (SELECT ANA_DASE_ID
+	                        FROM WAD_UODC_ANA_DASE X 
+	                       WHERE X.UDF_OTL_DTC_ID = A.UDF_OTL_DTC_ID
+	                         AND X.CRE_COMP_ID    = A.CRE_COMP_ID 
+	                         AND ROWNUM <= 1
+	                     )  
+	 WHERE A.UDF_OTL_DTC_ID = #{udfOtlDtcId,jdbcType=VARCHAR}
+	   AND A.CRE_COMP_ID    = #{creCompId,jdbcType=VARCHAR}
+    ]]> 
+  </update>
+  
+</mapper>

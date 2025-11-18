@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.meta.ddletc.service.WamDdlEtcMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.meta.ddletc.service.WamDdlEtc" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap" >
+    <id column="RQST_NO" property="rqstNo" jdbcType="VARCHAR" />
+    <id column="RQST_SNO" property="rqstSno" jdbcType="DECIMAL" />
+    <result column="DDL_ETC_ID"      property="ddlEtcId"     jdbcType="VARCHAR" />
+    <result column="DDL_ETC_PNM"     property="ddlEtcPnm"    jdbcType="VARCHAR" />
+    <result column="DDL_ETC_LNM"     property="ddlEtcLnm"    jdbcType="VARCHAR" />
+    <result column="ETC_OBJ_DCD"     property="etcObjDcd"    jdbcType="VARCHAR" />
+    <result column="DB_CONN_TRG_ID"  property="dbConnTrgId"  jdbcType="VARCHAR" />
+    <result column="DB_CONN_TRG_PNM" property="dbConnTrgPnm" jdbcType="VARCHAR" />      
+    <result column="DB_SCH_ID"       property="dbSchId"      jdbcType="VARCHAR" />
+    <result column="DB_SCH_PNM"      property="dbSchPnm"     jdbcType="VARCHAR" />
+    
+    <result column="SCRT_INFO"       property="scrtInfo"     jdbcType="CLOB" />
+  </resultMap>
+  
+  <resultMap id="ResultMapWithBLOBs" type="kr.wise.meta.ddletc.service.WamDdlEtc" extends="BaseResultMap" >
+    <result column="SCRT_INFO" property="scrtInfo" jdbcType="CLOB" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+      DDL_ETC_ID        
+    , DDL_ETC_PNM       
+    , DDL_ETC_LNM       
+    , ETC_OBJ_DCD       
+    , DB_SCH_ID             
+    , RQST_NO           
+    , RQST_SNO          
+    , OBJ_DESCN         
+    , OBJ_VERS          
+    , REG_TYP_CD        
+    , FRS_RQST_DTM      
+    , FRS_RQST_USER_ID  
+    , RQST_DTM          
+    , RQST_USER_ID      
+    , APRV_DTM          
+    , APRV_USER_ID     
+  </sql>
+
+  <sql id="waq_Column_List" >
+      A.RQST_NO
+    , A.RQST_SNO
+    , A.DDL_ETC_ID
+    , A.DDL_ETC_PNM
+    , A.DDL_ETC_LNM
+    , A.ETC_OBJ_DCD
+    , A.RQST_DCD
+    , A.REG_TYP_CD     
+    , A.RVW_CONTS
+    , A.VRF_CD
+    , A.VRF_RMK     
+    , A.DB_SCH_ID
+    , A.DB_SCH_PNM 
+    , A.SCRT_INFO   
+    , A.OBJ_DESCN
+    , A.OBJ_VERS
+    , A.FRS_RQST_DTM
+    , A.FRS_RQST_USER_ID
+    , A.RQST_DTM
+    , A.RQST_USER_ID
+    , A.APRV_DTM
+    , A.APRV_USER_ID
+    
+  </sql>
+
+  <sql id="Blob_Column_List" >
+    SCRT_INFO
+  </sql>
+ 
+  <select id="selectDdlEtcList" resultMap="ResultMapWithBLOBs" parameterType="map" >
+    SELECT A.DDL_ETC_ID        
+         , A.DDL_ETC_PNM       
+         , A.DDL_ETC_LNM       
+         , A.ETC_OBJ_DCD       
+         , A.DB_SCH_ID             
+         , A.RQST_NO           
+         , A.RQST_SNO          
+         , A.OBJ_DESCN         
+         , A.OBJ_VERS          
+         , A.REG_TYP_CD        
+         , A.FRS_RQST_DTM      
+         , A.FRS_RQST_USER_ID  
+         , A.RQST_DTM          
+         , A.RQST_USER_ID      
+         , A.APRV_DTM          
+         , A.APRV_USER_ID
+         , A.SCRT_INFO
+         , C.DB_CONN_TRG_PNM
+         , C.DB_CONN_TRG_LNM
+         , B.DB_SCH_PNM
+         , B.DB_SCH_LNM        
+     FROM WAM_DDL_ETC A
+          INNER JOIN WAA_DB_SCH B
+             ON B.EXP_DTM = TO_DATE('9999-12-31','YYYY-MM-DD')
+            AND B.DB_SCH_ID = A.DB_SCH_ID
+          INNER JOIN WAA_DB_CONN_TRG C
+             ON C.EXP_DTM = TO_DATE('9999-12-31','YYYY-MM-DD')
+            AND C.DB_CONN_TRG_ID = B.DB_CONN_TRG_ID   
+    WHERE 1 = 1
+      <if test="dbSchId != null" >
+      	AND A.DB_SCH_ID LIKE #{dbSchId,jdbcType=VARCHAR}
+      </if>
+      <if test="etcObjDcd != null" >
+      	AND A.ETC_OBJ_DCD LIKE #{etcObjDcd,jdbcType=VARCHAR}
+      </if>
+      <if test="ddlEtcPnm != null" >
+      	AND UPPER(A.DDL_ETC_PNM) LIKE '%'|| UPPER(#{ddlEtcPnm,jdbcType=VARCHAR}) ||'%'
+      </if>
+  </select>
+  
+  <select id="selectDdlEtcDetail" resultMap="ResultMapWithBLOBs" parameterType="map" >
+   SELECT A.DDL_ETC_ID
+        , A.DDL_ETC_PNM
+        , A.DDL_ETC_LNM
+        , A.ETC_OBJ_DCD        
+        , A.REG_TYP_CD            
+        , A.DB_SCH_ID
+        , B.DB_SCH_PNM
+        , B.DB_CONN_TRG_ID
+        , C.DB_CONN_TRG_PNM
+        , A.SCRT_INFO   
+        , A.OBJ_DESCN
+        , A.OBJ_VERS
+        , A.FRS_RQST_DTM
+        , A.FRS_RQST_USER_ID
+        , A.RQST_DTM
+        , A.RQST_USER_ID
+        , A.APRV_DTM
+        , A.APRV_USER_ID
+        , A.RQST_NO
+        , A.RQST_SNO
+     FROM WAH_DDL_ETC A
+          INNER JOIN WAA_DB_SCH B
+            ON B.EXP_DTM = TO_DATE('9999-12-31','YYYY-MM-DD')
+           AND B.DB_SCH_ID = A.DB_SCH_ID
+          LEFT JOIN WAA_DB_CONN_TRG C
+            ON C.EXP_DTM = TO_DATE('9999-12-31','YYYY-MM-DD')
+           AND C.DB_CONN_TRG_ID = B.DB_CONN_TRG_ID            
+    WHERE 1 = 1      
+      AND A.DDL_ETC_ID = #{ddlEtcId,jdbcType=VARCHAR}   
+      AND A.RQST_NO = #{rqstNo, jdbcType=VARCHAR} 
+  </select>
+  
+  <update id="updateDdlEtcRqstPrc" parameterType="kr.wise.meta.ddl.service.WamDdlTbl" >
+    UPDATE WAH_DDL_ETC
+       SET 
+       	   <if test="prcTypCd != null">
+       	   PRC_TYP_CD = #{prcTypCd,jdbcType=VARCHAR},
+       	   </if>
+       	   <if test="prcDt != null">
+--           PRC_DT = TO_CHAR(SYSDATE, 'YYYYMMDD'),
+           PRC_DT = TO_CHAR(SYSDATE, 'YYYYMMDDHH24MISS'),
+           </if>
+           <if test="prcDt == null">
+           PRC_DT = NULL,
+           </if>
+       	   <if test="prcDbaId != null">
+       	   PRC_DBA_ID = #{prcDbaId,jdbcType=VARCHAR}
+           </if>
+           <if test="prcDbaId == null">
+       	   PRC_DBA_ID = NULL
+           </if>
+     WHERE DDL_ETC_ID = #{objId,jdbcType=VARCHAR}
+      -- AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+       AND RQST_NO = #{rqstNo, jdbcType=VARCHAR}
+       AND PRC_DT IS NULL  --처리완료왼 건은 해제못함 20171214
+  </update>
+</mapper>
+
+
+
+

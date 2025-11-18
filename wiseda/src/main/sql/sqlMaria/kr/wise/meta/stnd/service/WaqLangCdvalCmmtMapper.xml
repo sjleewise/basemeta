@@ -1,0 +1,784 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.wise.meta.stnd.service.WaqLangCdvalCmmtMapper">
+
+  <resultMap id="BaseResultMap" type="kr.wise.meta.stnd.service.WaqLangCdvalCmmt" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+    <id column="RQST_NO" 	jdbcType="VARCHAR" property="rqstNo" />
+    <id column="RQST_SNO" 	jdbcType="INTEGER" property="rqstSno" />
+    <result column="LANG_CDVAL_CMMT_ID" 	jdbcType="VARCHAR" property="langCdvalCmmtId" />
+    <result column="LANG_CDVAL_CMMT_LNM" 	jdbcType="VARCHAR" property="langCdvalCmmtLnm" />
+    <result column="LANG_CDVAL_CMMT_PNM" 	jdbcType="VARCHAR" property="langCdvalCmmtPnm" />
+    <result column="CD_VAL_ID" 				jdbcType="VARCHAR" property="cdValId" />
+    <result column="DMN_LNM" 				jdbcType="VARCHAR" property="dmnLnm" />
+    <result column="CD_VAL" 				jdbcType="VARCHAR" property="cdVal" />
+    <result column="CD_VAL_NM" 				jdbcType="VARCHAR" property="cdValNm" />
+    <result column="LANG_CD" 				jdbcType="VARCHAR" property="langCd" />
+    <result column="DMN_PNM" 				jdbcType="VARCHAR" property="dmnPnm" />
+    <result column="DMN_ID" 				jdbcType="VARCHAR" property="dmnId" />
+    <result column="DMNG_ID" 				jdbcType="VARCHAR" property="dmngId" />
+    <result column="INFOTP_ID" 				jdbcType="VARCHAR" property="infotpId" />
+    <result column="DATA_TYPE" 				jdbcType="VARCHAR" property="dataType" />
+    <result column="DATA_LEN" 				jdbcType="VARCHAR" property="dataLen" />
+    <result column="DATA_SCAL" 				jdbcType="VARCHAR" property="dataScal" />
+    <result column="CD_VAL_TYP_CD" 			jdbcType="VARCHAR" property="cdValTypCd" />
+    <result column="ENC_YN" 				jdbcType="VARCHAR" property="encYn" />
+    
+  </resultMap>
+  
+  
+ <sql id="Base_Column_List">
+   RQST_NO, RQST_SNO, LANG_CDVAL_CMMT_ID, LANG_CDVAL_CMMT_LNM, LANG_CDVAL_CMMT_PNM, 
+   RQST_DCD, RVW_STS_CD, RVW_CONTS, VRF_CD, VRF_RMK, CD_VAL_ID, DMN_LNM, CD_VAL, STND_ASRT, 
+   LANG_CD, OBJ_DESCN, OBJ_VERS, REG_TYP_CD, FRS_RQST_DTM, FRS_RQST_USER_ID, RQST_DTM, 
+   RQST_USER_ID, APRV_DTM, APRV_USER_ID
+ </sql>
+  
+	<sql id="waq_col_list" >
+	    RQST_NO, RQST_SNO, RQST_DCD, RVW_STS_CD,  RVW_CONTS, VRF_CD, VRF_RMK
+	    ,LANG_CDVAL_CMMT_ID, LANG_CDVAL_CMMT_LNM, LANG_CDVAL_CMMT_PNM, , CD_VAL_ID, DMN_LNM, CD_VAL, STND_ASRT, LANG_CD
+	    ,OBJ_DESCN,  OBJ_VERS, REG_TYP_CD, FRS_RQST_DTM, FRS_RQST_USER_ID, RQST_DTM, RQST_USER_ID, APRV_DTM, APRV_USER_ID
+	</sql>
+  
+  <select id="selectByPrimaryKey" parameterType="map" resultMap="BaseResultMap">
+    SELECT /* WaqLangCdvalCmmtMapper.selectByPrimaryKey */
+    <include refid="Base_Column_List" />
+    FROM WAQ_LANG_CDVAL_CMMT
+    where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      and RQST_SNO = #{rqstSno,jdbcType=INTEGER}
+  </select>
+  
+  
+  <delete id="deleteByPrimaryKey" parameterType="map">
+    DELETE /* WaqLangCdvalCmmtMapper.deleteByPrimaryKey */
+    FROM WAQ_LANG_CDVAL_CMMT
+    where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      and RQST_SNO = #{rqstSno,jdbcType=INTEGER}
+  </delete>
+  
+  
+  <insert id="insert" parameterType="kr.wise.meta.stnd.service.WaqLangCdvalCmmt">
+    insert 	/* WaqLangCdvalCmmtMapper.insert */
+    		into waq_lang_cdval_cmmt (RQST_NO, RQST_SNO, LANG_CDVAL_CMMT_ID, 
+      LANG_CDVAL_CMMT_LNM, LANG_CDVAL_CMMT_PNM, RQST_DCD, 
+      RVW_STS_CD, RVW_CONTS, VRF_CD, 
+      VRF_RMK, CD_VAL_ID, DMN_LNM, 
+      CD_VAL, STND_ASRT, LANG_CD, 
+      OBJ_DESCN, OBJ_VERS, REG_TYP_CD, 
+      FRS_RQST_DTM, FRS_RQST_USER_ID, RQST_DTM, 
+      RQST_USER_ID, APRV_DTM, APRV_USER_ID
+      )
+    values (#{rqstNo,jdbcType=VARCHAR}, #{rqstSno,jdbcType=INTEGER}, #{langCdvalCmmtId,jdbcType=VARCHAR}, 
+      #{langCdvalCmmtLnm,jdbcType=VARCHAR}, #{langCdvalCmmtPnm,jdbcType=VARCHAR}, #{rqstDcd,jdbcType=VARCHAR}, 
+      #{rvwStsCd,jdbcType=VARCHAR}, #{rvwConts,jdbcType=VARCHAR}, #{vrfCd,jdbcType=VARCHAR}, 
+      #{vrfRmk,jdbcType=VARCHAR}, #{cdValId,jdbcType=VARCHAR}, #{dmnLnm,jdbcType=VARCHAR}, 
+      #{cdVal,jdbcType=VARCHAR}, #{stndAsrt,jdbcType=VARCHAR}, #{langCd,jdbcType=VARCHAR}, 
+      #{objDescn,jdbcType=VARCHAR}, #{objVers,jdbcType=INTEGER}, #{regTypCd,jdbcType=VARCHAR}, 
+      #{frsRqstDtm,jdbcType=TIMESTAMP}, #{frsRqstUserId,jdbcType=VARCHAR}, #{rqstDtm,jdbcType=TIMESTAMP}, 
+      #{rqstUserId,jdbcType=VARCHAR}, #{aprvDtm,jdbcType=TIMESTAMP}, #{aprvUserId,jdbcType=VARCHAR}
+      )
+  </insert>
+  	
+  	<!-- 언어별유효값코드 MAST -->
+	<select id="selectLangCdvalCmntRqstList" parameterType="kr.wise.commons.rqstmst.service.WaqMstr" resultMap="BaseResultMap">
+		SELECT	/* WaqLangCdvalCmmtMapper.selectLangCdvalCmntRqstList */
+			A.RQST_NO, A.RQST_SNO, A.LANG_CDVAL_CMMT_ID, A.LANG_CDVAL_CMMT_LNM, A.LANG_CDVAL_CMMT_PNM,
+			A.STND_ASRT, A.LANG_CD, A.RQST_DCD, 
+	 	<if test='rqstStepCd == "Q" '>
+			CASE WHEN A.RVW_STS_CD = '2' THEN '2' ELSE '0' END AS RVW_STS_CD,
+		</if>
+		<if test='rqstStepCd != "Q" '>
+			A.RVW_STS_CD,
+		</if>
+	 		A.RVW_CONTS, A.VRF_CD, A.VRF_RMK, A.CD_VAL_ID, A.DMN_LNM, A.CD_VAL, B.CD_VAL_NM ,A.OBJ_DESCN, A.OBJ_VERS, A.REG_TYP_CD, 
+			A.FRS_RQST_DTM, A.FRS_RQST_USER_ID, A.RQST_DTM, A.RQST_USER_ID, A.APRV_DTM, A.APRV_USER_ID,
+   			CASE WHEN A.VRF_CD = '2' THEN '#FF0000' ELSE CASE WHEN A.VRF_CD = '5' THEN '#0000FF'  END END AS FontColor, 
+			U.USER_NM AS RQST_USER_NM
+		FROM WAQ_LANG_CDVAL_CMMT A
+		LEFT OUTER JOIN WAA_USER U
+	      ON A.RQST_USER_ID = U.USER_ID
+	     AND U.REG_TYP_CD IN ('C', 'U')
+	     AND U.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	     LEFT OUTER JOIN WAM_CD_VAL B ON (A.CD_VAL_ID = B.CD_VAL_ID)
+		WHERE A.RQST_NO = #{rqstNo}
+		<if test='rqstStepCd == "Q" or rqstStepCd == "A" '>
+			AND A.VRF_CD = '1'
+		</if>
+		 ORDER BY A.RQST_SNO
+	</select>  	
+  	
+	<!-- 언어별유효값코드 상세 -->
+	<select id="getLangCdvalCmntDetail" parameterType="kr.wise.meta.stnd.service.WaqLangCdvalCmmt" resultMap="BaseResultMap">
+		SELECT 	/* WaqLangCdvalCmmtMapper.getLangCdvalCmntDetail */
+				A.*
+				, B.CD_VAL_NM
+		FROM WAQ_LANG_CDVAL_CMMT A
+		LEFT OUTER JOIN WAM_CD_VAL B ON (A.CD_VAL_ID = B.CD_VAL_ID)
+		WHERE A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+		AND A.RQST_SNO = #{rqstSno,jdbcType=DECIMAL} 
+	</select>
+	  
+  
+  <insert id="insertSelective" parameterType="kr.wise.meta.stnd.service.WaqLangCdvalCmmt">
+  <selectKey keyProperty="rqstSno" resultType="int" statementType="PREPARED" order="BEFORE">
+		SELECT IFNULL(MAX(RQST_SNO), 0) + 1 FROM WAQ_LANG_CDVAL_CMMT WHERE RQST_NO = #{rqstNo}
+	</selectKey>
+    INSERT 	/* WaqLangCdvalCmmtMapper.insertSelective */
+    		INTO WAQ_LANG_CDVAL_CMMT
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="rqstNo != null">
+        RQST_NO,
+      </if>
+      <if test="rqstSno != null">
+        RQST_SNO,
+      </if>
+      <if test="langCdvalCmmtId != null">
+        LANG_CDVAL_CMMT_ID,
+      </if>
+      <if test="langCdvalCmmtLnm != null">
+        LANG_CDVAL_CMMT_LNM,
+      </if>
+      <if test="langCdvalCmmtPnm != null">
+        LANG_CDVAL_CMMT_PNM,
+      </if>
+      <if test="rqstDcd != null">
+        RQST_DCD,
+      </if>
+      <if test="rvwStsCd != null">
+        RVW_STS_CD,
+      </if>
+      <if test="rvwConts != null">
+        RVW_CONTS,
+      </if>
+      <if test="vrfCd != null">
+        VRF_CD,
+      </if>
+      <if test="vrfRmk != null">
+        VRF_RMK,
+      </if>
+      <if test="cdValId != null">
+        CD_VAL_ID,
+      </if>
+      <if test="dmnLnm != null">
+        DMN_LNM,
+      </if>
+      <if test="cdVal != null">
+        CD_VAL,
+      </if>
+      <if test="stndAsrt != null">
+        STND_ASRT,
+      </if>
+      <if test="langCd != null">
+        LANG_CD,
+      </if>
+      <if test="objDescn != null">
+        OBJ_DESCN,
+      </if>
+        OBJ_VERS,
+      <if test="regTypCd != null">
+        REG_TYP_CD,
+      </if>
+      <if test="frsRqstDtm != null">
+        FRS_RQST_DTM,
+      </if>
+      <if test="frsRqstUserId != null">
+        FRS_RQST_USER_ID,
+      </if>
+      <if test="rqstDtm != null">
+        RQST_DTM,
+      </if>
+      <if test="rqstUserId != null">
+        RQST_USER_ID,
+      </if>
+      <if test="aprvDtm != null">
+        APRV_DTM,
+      </if>
+      <if test="aprvUserId != null">
+        APRV_USER_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="rqstNo != null">
+        #{rqstNo,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstSno != null">
+        #{rqstSno,jdbcType=INTEGER},
+      </if>
+      <if test="langCdvalCmmtId != null">
+        #{langCdvalCmmtId,jdbcType=VARCHAR},
+      </if>
+      <if test="langCdvalCmmtLnm != null">
+        #{langCdvalCmmtLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="langCdvalCmmtPnm != null">
+        #{langCdvalCmmtPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDcd != null">
+        CASE WHEN RQST_DCD IS NULL 
+        	 THEN 'CU'	
+        	 ELSE #{rqstDcd,jdbcType=VARCHAR}
+		END,
+      </if>
+      <if test="rvwStsCd != null">
+        #{rvwStsCd,jdbcType=VARCHAR},
+      </if>
+      <if test="rvwConts != null">
+        #{rvwConts,jdbcType=VARCHAR},
+      </if>
+      <if test="vrfCd != null">
+        #{vrfCd,jdbcType=VARCHAR},
+      </if>
+      <if test="vrfRmk != null">
+        #{vrfRmk,jdbcType=VARCHAR},
+      </if>
+      <if test="cdValId != null">
+        #{cdValId,jdbcType=VARCHAR},
+      </if>
+      <if test="dmnLnm != null">
+        #{dmnLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="cdVal != null">
+        #{cdVal,jdbcType=VARCHAR},
+      </if>
+      <if test="stndAsrt != null">
+        #{stndAsrt,jdbcType=VARCHAR},
+      </if>
+      <if test="langCd != null">
+        #{langCd,jdbcType=VARCHAR},
+      </if>
+      <if test="objDescn != null">
+        #{objDescn,jdbcType=VARCHAR},
+      </if>
+      1,
+      <if test="regTypCd != null">
+        #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="frsRqstDtm != null">
+        #{frsRqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="frsRqstUserId != null">
+        #{frsRqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDtm != null">
+        #{rqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rqstUserId != null">
+        #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDtm != null">
+        #{aprvDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aprvUserId != null">
+        #{aprvUserId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.meta.stnd.service.WaqLangCdvalCmmt">
+    update 	/* WaqLangCdvalCmmtMapper.updateByPrimaryKeySelective */
+    		waq_lang_cdval_cmmt
+    <set>
+      <if test="langCdvalCmmtId != null">
+        LANG_CDVAL_CMMT_ID = #{langCdvalCmmtId,jdbcType=VARCHAR},
+      </if>
+      <if test="langCdvalCmmtLnm != null">
+        LANG_CDVAL_CMMT_LNM = #{langCdvalCmmtLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="langCdvalCmmtPnm != null">
+        LANG_CDVAL_CMMT_PNM = #{langCdvalCmmtPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDcd != null">
+        RQST_DCD = #{rqstDcd,jdbcType=VARCHAR},
+      </if>
+      <if test="rvwStsCd != null">
+        RVW_STS_CD = #{rvwStsCd,jdbcType=VARCHAR},
+      </if>
+      <if test="rvwConts != null">
+        RVW_CONTS = #{rvwConts,jdbcType=VARCHAR},
+      </if>
+      <if test="vrfCd != null">
+        VRF_CD = #{vrfCd,jdbcType=VARCHAR},
+      </if>
+      <if test="vrfRmk != null">
+        VRF_RMK = #{vrfRmk,jdbcType=VARCHAR},
+      </if>
+      <if test="cdValId != null">
+        CD_VAL_ID = #{cdValId,jdbcType=VARCHAR},
+      </if>
+      <if test="dmnLnm != null">
+        DMN_LNM = #{dmnLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="cdVal != null">
+        CD_VAL = #{cdVal,jdbcType=VARCHAR},
+      </if>
+      <if test="stndAsrt != null">
+        STND_ASRT = #{stndAsrt,jdbcType=VARCHAR},
+      </if>
+      <if test="langCd != null">
+        LANG_CD = #{langCd,jdbcType=VARCHAR},
+      </if>
+      <if test="objDescn != null">
+        OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null">
+        OBJ_VERS = #{objVers,jdbcType=INTEGER},
+      </if>
+      <if test="regTypCd != null">
+        REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="frsRqstDtm != null">
+        FRS_RQST_DTM = #{frsRqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="frsRqstUserId != null">
+        FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDtm != null">
+        RQST_DTM = #{rqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rqstUserId != null">
+        RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDtm != null">
+        APRV_DTM = #{aprvDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aprvUserId != null">
+        APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      and RQST_SNO = #{rqstSno,jdbcType=INTEGER}
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="kr.wise.meta.stnd.service.WaqLangCdvalCmmt">
+    UPDATE 	/* WaqLangCdvalCmmtMapper.updateByPrimaryKey */
+    		WAQ_LANG_CDVAL_CMMT
+    SET 
+    	  LANG_CDVAL_CMMT_ID = #{langCdvalCmmtId,jdbcType=VARCHAR},
+	      LANG_CDVAL_CMMT_LNM = #{langCdvalCmmtLnm,jdbcType=VARCHAR},
+	      LANG_CDVAL_CMMT_PNM = #{langCdvalCmmtPnm,jdbcType=VARCHAR},
+	      RQST_DCD = #{rqstDcd,jdbcType=VARCHAR},
+	      RVW_STS_CD = #{rvwStsCd,jdbcType=VARCHAR},
+	      RVW_CONTS = #{rvwConts,jdbcType=VARCHAR},
+	      VRF_CD = #{vrfCd,jdbcType=VARCHAR},
+	      VRF_RMK = #{vrfRmk,jdbcType=VARCHAR},
+	      CD_VAL_ID = #{cdValId,jdbcType=VARCHAR},
+	      DMN_LNM = #{dmnLnm,jdbcType=VARCHAR},
+	      CD_VAL = #{cdVal,jdbcType=VARCHAR},
+	      STND_ASRT = #{stndAsrt,jdbcType=VARCHAR},
+	      LANG_CD = #{langCd,jdbcType=VARCHAR},
+	      OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+	      OBJ_VERS = #{objVers,jdbcType=INTEGER},
+	      REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+	      FRS_RQST_DTM = #{frsRqstDtm,jdbcType=TIMESTAMP},
+	      FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR},
+	      RQST_DTM = #{rqstDtm,jdbcType=TIMESTAMP},
+	      RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+	      APRV_DTM = #{aprvDtm,jdbcType=TIMESTAMP},
+	      APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR}
+    WHERE RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+	AND RQST_SNO = #{rqstSno,jdbcType=INTEGER}
+  </update>
+  
+  	<update id="updateCdValId" parameterType="java.lang.String" >
+		UPDATE 	/* WaqLangCdvalCmmtMapper.updateCdValId */
+				WAQ_LANG_CDVAL_CMMT A INNER JOIN WAM_CD_VAL B
+									 ON (A.CD_VAL = B.CD_VAL)
+		SET A.CD_VAL_ID = B.CD_VAL_ID 
+		WHERE A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+	</update> 
+  
+  	<!-- 검증로직  -->
+	<update id="updateCheckInit" parameterType="java.lang.String" >
+		<!-- UPDATE WAQ_LANG_CDVAL_CMMT A
+		SET A.REG_TYP_CD = (
+								SELECT CASE WHEN A.RQST_DCD = 'DD' THEN 'D' ELSE CASE WHEN MAX(B.LANG_CDVAL_CMMT_ID ) IS NULL THEN 'C' ELSE 'U' END END
+	                          	FROM WAM_LANG_CDVAL_CMMT B
+	                          	WHERE B.REG_TYP_CD IN ('C','U')
+	                          	AND B.STND_ASRT = A.STND_ASRT
+	                          	AND B.CD_VAL_ID = A.CD_VAL_ID
+	                          	AND B.LANG_CD = A.LANG_CD
+	                           )
+			,A.VRF_CD = '4'
+		WHERE A.RQST_NO = #{rqstNo,jdbcType=VARCHAR} -->
+		
+		UPDATE 	/* WaqLangCdvalCmmtMapper.updateCheckInit */
+				WAQ_LANG_CDVAL_CMMT A
+		LEFT JOIN WAM_LANG_CDVAL_CMMT B
+		ON B.REG_TYP_CD IN ('C','U')
+		AND B.STND_ASRT = A.STND_ASRT
+		AND B.CD_VAL_ID = A.CD_VAL_ID
+		AND B.LANG_CD = A.LANG_CD 
+		SET A.REG_TYP_CD = CASE WHEN A.RQST_DCD = 'DD' THEN 'D' ELSE CASE WHEN B.LANG_CDVAL_CMMT_ID IS NULL THEN 'C' ELSE 'U' END END
+			, A.LANG_CDVAL_CMMT_ID = B.LANG_CDVAL_CMMT_ID
+			, A.VRF_CD = '4'
+		WHERE A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}					
+		
+	</update> 
+
+	<!--검증쿼리 : 등록요청 중인 업무오류코드 존재....(LCV01) -->
+	<insert id="checkRequestCd" parameterType="map">
+	
+		/* WaqLangCdvalCmmtMapper.checkRequestCd */
+		
+		<include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSql"/>
+		AND EXISTS (
+    					SELECT 1 FROM WAQ_MSTR E
+             			INNER JOIN WAQ_LANG_CDVAL_CMMT D
+             			ON E.RQST_NO = D.RQST_NO
+             			WHERE E.RQST_NO != #{rqstNo}
+               			AND E.RQST_STEP_CD = 'Q'
+               			AND A.CD_VAL_ID = D.CD_VAL_ID
+               			AND A.LANG_CD = D.LANG_CD
+               			AND A.LANG_CDVAL_CMMT_LNM = D.LANG_CDVAL_CMMT_LNM
+               			AND A.STND_ASRT = D.STND_ASRT
+			   			AND IFNULL(D.RVW_STS_CD, 0) != '2'
+               ) 
+	</insert>
+		
+	<!--검증쿼리 언어별코드값커멘트 중복 -->
+	<insert id="checkDupCd" parameterType="map">
+	
+		/* WaqLangCdvalCmmtMapper.checkDupCd */
+		
+		<include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSql"/>
+		AND EXISTS (
+						SELECT 1
+        				FROM WAQ_LANG_CDVAL_CMMT D
+             			WHERE A.RQST_NO = D.RQST_NO
+             		 	AND A.CD_VAL_ID = D.CD_VAL_ID
+             		 	AND A.LANG_CD = D.LANG_CD
+               			AND A.LANG_CDVAL_CMMT_LNM = D.LANG_CDVAL_CMMT_LNM
+               		 	AND A.STND_ASRT = D.STND_ASRT
+               		 	AND A.RQST_SNO != D.RQST_SNO
+					)
+	</insert>
+		
+	<!--검증쿼리 존재하지 않는 언어별도메인유효값-->
+	<insert id="checkNotExistCd" parameterType="map">
+	
+		/* WaqLangCdvalCmmtMapper.checkNotExistCd */
+		
+		<include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSql"/>
+		AND A.RQST_DCD = 'DD'
+	    AND NOT EXISTS (SELECT 1
+	                  	FROM WAM_LANG_CDVAL_CMMT D
+	                  	WHERE A.LANG_CDVAL_CMMT_ID = D.LANG_CDVAL_CMMT_ID 
+	                      AND A.STND_ASRT = D.STND_ASRT 
+	                      AND D.REG_TYP_CD IN ('C', 'U'))      
+	</insert>	
+	
+	<!--존재하는 도메인인지 여부 확인 -->
+	<insert id="checkNotExitsDmn" parameterType="map">
+	
+		/* WaqLangCdvalCmmtMapper.checkNotExitsDmn */
+		
+		<include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSql"/>
+		AND NOT EXISTS (
+						SELECT 1
+        				FROM WAM_DMN D
+             			WHERE A.DMN_LNM = D.DMN_LNM
+               		 	AND A.STND_ASRT = D.STND_ASRT 
+               		 	AND D.REG_TYP_CD IN ('C','U')
+					)
+	</insert>
+	
+	<!--존재하는 코드도메인인지 여부 확인 -->
+	<insert id="checkNotExitsCodeDmn" parameterType="map">
+	
+		/* WaqLangCdvalCmmtMapper.checkNotExitsCodeDmn */
+		
+		<include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSql"/>
+		AND NOT EXISTS (
+						SELECT 1
+        				FROM WAM_CD_VAL D
+             			WHERE A.CD_VAL_ID = D.CD_VAL_ID
+             			AND A.CD_VAL = D.CD_VAL
+             			AND D.REG_TYP_CD IN ('C','U')
+               		 	AND D.USE_YN = 'Y'
+					)
+	</insert>
+  
+  	<!-- 변경된 데이터가 없을 때 -->
+	<insert id="checkNotChgData" parameterType="map">
+	
+		/* WaqLangCdvalCmmtMapper.checkNotChgData */
+		
+  		<include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.updateVrfNotChg"/>
+  	
+		AND A.REG_TYP_CD = 'U'
+		AND EXISTS (
+					SELECT 1
+	             	FROM WAM_LANG_CDVAL_CMMT D
+	            	WHERE A.LANG_CDVAL_CMMT_ID = D.LANG_CDVAL_CMMT_ID 
+					AND A.STND_ASRT = D.STND_ASRT
+					AND IFNULL(A.CD_VAL_ID , '')   			= IFNULL(D.CD_VAL_ID    , '')
+				    AND IFNULL(A.LANG_CD, '')   				= IFNULL(D.LANG_CD    , '')
+				    AND IFNULL(A.LANG_CDVAL_CMMT_LNM, '')   	= IFNULL(D.LANG_CDVAL_CMMT_LNM    , '')
+				    AND IFNULL(A.LANG_CDVAL_CMMT_PNM, '')   	= IFNULL(D.LANG_CDVAL_CMMT_PNM    , '')
+				    AND D.REG_TYP_CD IN ('C','U')
+			)    
+	</insert>  
+	
+		<!-- 결재처리 -->
+	<update id="updatervwLangCdval" parameterType="kr.wise.meta.stnd.service.WaqLangCdvalCmmt">
+		UPDATE 	/* WaqLangCdvalCmmtMapper.updatervwLangCdval */
+				WAQ_LANG_CDVAL_CMMT
+		<set>
+		    RVW_STS_CD 	= #{rvwStsCd} , 
+			RVW_CONTS 	= #{rvwConts} , 
+			APRV_DTM	= NOW() ,
+			APRV_USER_ID = #{aprvUserId} ,
+		</set>
+		WHERE RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+	      AND RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+	      AND VRF_CD = '1'
+	      AND IFNULL(RVW_STS_CD, '_') != '2'
+	</update>
+  
+  	<update id="updateidByKey" parameterType="kr.wise.meta.stnd.service.WaqLangCdvalCmmt">
+	 	UPDATE 	/* WaqLangCdvalCmmtMapper.updateidByKey */
+	 			WAQ_LANG_CDVAL_CMMT 
+	 	SET LANG_CDVAL_CMMT_ID = #{langCdvalCmmtId,jdbcType=VARCHAR}
+		 WHERE RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+	     AND RQST_SNO = #{rqstSno,jdbcType=DECIMAL} 
+	</update>
+  
+	<sql id="wam_col">
+		LANG_CDVAL_CMMT_LNM, LANG_CDVAL_CMMT_PNM, CD_VAL_ID, STND_ASRT, LANG_CD, RQST_NO,
+		RQST_SNO, OBJ_DESCN, OBJ_VERS, REG_TYP_CD, FRS_RQST_DTM, FRS_RQST_USER_ID, RQST_DTM,
+		RQST_USER_ID, APRV_DTM, APRV_USER_ID
+	</sql>
+	
+	<select id="selectWaqC" parameterType="map" resultMap="BaseResultMap">
+	 	SELECT /* WaqLangCdvalCmmtMapper.selectWaqC */
+	 		* FROM WAQ_LANG_CDVAL_CMMT
+	 	WHERE RQST_NO = #{rqstNo}
+	 	  AND RVW_STS_CD = '1'
+	 	  AND REG_TYP_CD = 'C'  	
+	</select>	
+	
+	<update id="updateWaqCUD" parameterType="map">
+   -- WAQ ID, VERS 등을 업데이트
+		UPDATE 	/* WaqLangCdvalCmmtMapper.updateWaqCUD */
+				WAQ_LANG_CDVAL_CMMT A
+		INNER JOIN WAM_LANG_CDVAL_CMMT B
+		   ON B.`LANG_CDVAL_CMMT_ID` = A.`LANG_CDVAL_CMMT_ID`
+		   AND B.REG_TYP_CD IN ('C', 'U')
+		SET A.`LANG_CDVAL_CMMT_ID` = B.`LANG_CDVAL_CMMT_ID`
+		    ,A.OBJ_VERS = IFNULL(B.OBJ_VERS, 0) + 1
+	        ,A.FRS_RQST_DTM = B.FRS_RQST_DTM
+	        ,A.FRS_RQST_USER_ID = B.FRS_RQST_USER_ID
+		WHERE A.RQST_NO = #{rqstNo}
+		AND A.RVW_STS_CD = '1'
+		AND EXISTS (
+				SELECT 1
+				FROM WAM_LANG_CDVAL_CMMT B
+				WHERE A.`LANG_CDVAL_CMMT_ID` = B.`LANG_CDVAL_CMMT_ID`
+			      AND A.STND_ASRT = B.STND_ASRT
+			      AND B.REG_TYP_CD IN ('C', 'U')
+		    	)
+	</update>
+	
+	<delete id="deleteWAM" parameterType="map">
+	-- WAM 삭제 (등록유형코드가REG_TYP_CD 변경, 삭제일 경우)
+		DELETE 	/* WaqLangCdvalCmmtMapper.deleteWAM */
+				A FROM WAM_LANG_CDVAL_CMMT A
+		WHERE EXISTS (
+		    SELECT 1 FROM WAQ_LANG_CDVAL_CMMT B
+		     WHERE B.RQST_NO = #{rqstNo}
+		       AND B.RVW_STS_CD = '1'
+		       AND B.LANG_CDVAL_CMMT_ID = A.LANG_CDVAL_CMMT_ID
+		       AND B.STND_ASRT = A.STND_ASRT
+		)
+	</delete>
+	
+	<insert id="insertWAM" parameterType="map">
+	--  WAM 추가 (WAQ 내용을 추가, REG_TYP_CD 가 신규,변경일 경우)
+		INSERT 	/* WaqLangCdvalCmmtMapper.insertWAM */
+				INTO WAM_LANG_CDVAL_CMMT 
+		(
+			LANG_CDVAL_CMMT_ID,
+			<include refid="wam_col"/>
+		)
+		SELECT 
+			A.LANG_CDVAL_CMMT_ID, 
+			<include refid="wam_col"/>
+		FROM WAQ_LANG_CDVAL_CMMT A
+		WHERE A.RQST_NO = #{rqstNo}
+		AND A.RVW_STS_CD = '1'
+		AND A.REG_TYP_CD IN ('C', 'U')
+	</insert>
+	  
+	<update id="updateWAH"  parameterType="map">
+	--  WAH 이력 만료
+		UPDATE 	/* WaqLangCdvalCmmtMapper.updateWAH */
+				WAH_LANG_CDVAL_CMMT A
+		SET EXP_DTM = NOW()
+		WHERE EXISTS (
+		    SELECT 1 FROM WAQ_LANG_CDVAL_CMMT B
+		    WHERE B.RQST_NO = #{rqstNo}
+		    AND B.RVW_STS_CD = '1'
+		    AND B.LANG_CDVAL_CMMT_ID = A.LANG_CDVAL_CMMT_ID
+		    AND B.STND_ASRT = A.STND_ASRT
+		    )
+		AND EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	</update>	  
+	  
+	<insert id="insertWAH"  parameterType="map">
+		-- WAH이력 적재
+			INSERT 	/* WaqLangCdvalCmmtMapper.insertWAH */
+					INTO WAH_LANG_CDVAL_CMMT
+			( 
+			LANG_CDVAL_CMMT_ID
+			, EXP_DTM
+			, STR_DTM
+			,
+			<include refid="wam_col"/>
+			)
+			SELECT
+			    A.LANG_CDVAL_CMMT_ID 
+			    , STR_TO_DATE('9999-12-31', '%Y-%m-%d') AS EXP_DTM
+			    , NOW() AS STR_DTM 
+			    ,
+			<include refid="wam_col"/>
+			 FROM WAQ_LANG_CDVAL_CMMT A
+			WHERE A.RQST_NO = #{rqstNo}
+			  AND A.RVW_STS_CD = '1'
+	</insert>	
+	
+	<select id="selectLangCdvalCmntList" parameterType="kr.wise.meta.stnd.service.WaqLangCdvalCmmt" resultMap="BaseResultMap">	
+		
+		SELECT 	/* WaqLangCdvalCmmtMapper.selectLangCdvalCmntList */
+				TBL.STND_ASRT
+				, TBL.LANG_CDVAL_CMMT_ID
+				, TBL.LANG_CDVAL_CMMT_LNM
+				, TBL.LANG_CDVAL_CMMT_PNM
+				, TBL.CD_VAL_ID
+				, TBL.LANG_CD
+				, TBL.RQST_NO
+				, TBL.RQST_SNO
+				, TBL.OBJ_DESCN
+				, TBL.OBJ_VERS
+				, TBL.REG_TYP_CD
+				, TBL.FRS_RQST_DTM
+				, TBL.FRS_RQST_USER_ID
+				, TBL.RQST_DTM
+				, TBL.RQST_USER_ID
+				, TBL.APRV_DTM
+				, TBL.APRV_USER_ID
+				, TBL.DMN_LNM
+				, TBL.CD_VAL
+				, TBL.CD_VAL_NM
+		FROM				
+				
+		(
+			SELECT 	A.*, 
+					(SELECT DMN_LNM FROM WAM_DMN WHERE DMN_ID = B.DMN_ID) AS DMN_LNM,
+					B.CD_VAL,
+					B.CD_VAL_NM
+			FROM WAM_LANG_CDVAL_CMMT A
+			INNER JOIN WAM_CD_VAL B ON (A.CD_VAL_ID = B.CD_VAL_ID)
+			WHERE A.REG_TYP_CD IN ('C','U')
+		) TBL
+		WHERE 1=1
+		<if test="stndAsrt != null">
+        	AND TBL.STND_ASRT = #{stndAsrt,jdbcType=VARCHAR}
+      	</if>
+      	<if test="langCd != null">
+        	AND TBL.LANG_CD = #{langCd,jdbcType=VARCHAR}
+      	</if>		
+		<if test="langCdvalCmmtLnm != null">
+        	AND TBL.LANG_CDVAL_CMMT_LNM LIKE CONCAT('%', #{langCdvalCmmtLnm,jdbcType=VARCHAR}, '%') 
+      	</if>
+      	<if test="langCdvalCmmtPnm != null">
+        	AND TBL.LANG_CDVAL_CMMT_PNM LIKE CONCAT ('%',#{langCdvalCmmtPnm,jdbcType=VARCHAR},'%') 
+      	</if>
+		<if test="dmnLnm != null">
+        	AND TBL.DMN_LNM LIKE CONCAT ('%', #{dmnLnm,jdbcType=VARCHAR}, '%')
+      	</if>      	
+	</select>
+	
+	<insert id="insertwam2waq" parameterType="map">
+  	INSERT 	/* WaqLangCdvalCmmtMapper.insertwam2waq */
+  			INTO WAQ_LANG_CDVAL_CMMT 
+  								(	RQST_NO, RQST_SNO, LANG_CDVAL_CMMT_ID, STND_ASRT, LANG_CDVAL_CMMT_LNM, LANG_CDVAL_CMMT_PNM
+  									,RQST_DCD, OBJ_DESCN, OBJ_VERS, RQST_DTM , RQST_USER_ID, CD_VAL_ID, LANG_CD , DMN_LNM, CD_VAL
+  								)
+  	SELECT #{reqmst.rqstNo} 
+  	      , IFNULL((SELECT MAX(X.RQST_SNO) 
+	          FROM WAQ_LANG_CDVAL_CMMT X
+	         WHERE X.RQST_NO  = #{reqmst.rqstNo}
+	        ), 0) + @ROWNUM := @ROWNUM + 1  AS RQST_SNO
+	        
+  		  , A.LANG_CDVAL_CMMT_ID
+  		  , A.STND_ASRT
+  		  , A.LANG_CDVAL_CMMT_LNM
+  		  , A.LANG_CDVAL_CMMT_PNM
+  		  , #{reqmst.rqstDcd} AS RQST_DCD 
+  		  , A.OBJ_DESCN
+  		  , A.OBJ_VERS
+  		  , NOW()
+  		  , #{reqmst.rqstUserId,jdbcType=VARCHAR}
+  		  , A.CD_VAL_ID
+  		  , A.LANG_CD
+		  , (SELECT DMN_LNM FROM WAM_DMN WHERE DMN_ID = B.DMN_ID) AS DMN_LNM
+		  , B.CD_VAL
+  		  
+      FROM (SELECT @rownum:=0) TMP, WAM_LANG_CDVAL_CMMT A 
+      INNER JOIN WAM_CD_VAL B ON (A.CD_VAL_ID = B.CD_VAL_ID)
+     WHERE A.LANG_CDVAL_CMMT_ID IN 
+     <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+     	#{item.langCdvalCmmtId}
+     </foreach>
+       AND A.REG_TYP_CD IN ('C' , 'U')
+ 	</insert>
+	
+	<select id="selectDomainCdvalList" resultMap="BaseResultMap" parameterType="kr.wise.meta.stnd.service.WaqLangCdvalCmmt" >
+  		SELECT 	/* WaqLangCdvalCmmtMapper.selectDomainCdvalList */
+  				A.STND_ASRT 
+  			, A.DMN_LNM
+  			, A.DMN_PNM
+  			, A.DMN_ID
+  			, A.DMNG_ID
+  			, '' AS INFOTP_ID
+  	     	, A.DATA_TYPE
+  	     	, A.DATA_LEN
+  	     	, A.DATA_SCAL 
+  	  	FROM WAM_DMN A 
+     	INNER JOIN WAA_DMNG G
+          ON A.DMNG_ID = G.DMNG_ID
+		 AND A.STND_ASRT = G.STND_ASRT
+  	<where>
+       AND A.REG_TYP_CD IN ('C', 'U')
+       AND A.DMN_TYP_CD IN ('COD','SUB')
+       AND A.DMNG_ID LIKE CONCAT ('%','COD', '%')
+      <if test="stndAsrt != null" >
+        AND A.STND_ASRT = #{stndAsrt,jdbcType=VARCHAR}
+      </if>       
+      <if test="dmngId != null" >
+        AND G.DMNG_ID = #{dmngId,jdbcType=VARCHAR}
+      </if>      
+      <if test="infotpId != null" >
+        AND A.INFOTP_ID = #{infotpId,jdbcType=VARCHAR}
+      </if>      
+      <if test="dmnLnm != null" >
+       AND (DMN_LNM LIKE CONCAT('%' , #{dmnLnm,jdbcType=VARCHAR} , '%')
+  	    OR DMN_PNM LIKE CONCAT('%' , #{dmnLnm,jdbcType=VARCHAR} , '%')
+   	    OR DMN_LNM LIKE CONCAT('%' , UPPER(#{dmnLnm,jdbcType=VARCHAR}) , '%')
+  	    OR DMN_PNM LIKE CONCAT('%' , UPPER(#{dmnLnm,jdbcType=VARCHAR}) , '%'))
+      </if>
+     
+      <if test="dataType != null" >
+        AND B.DATA_TYPE = #{dataType,jdbcType=VARCHAR}
+      </if>
+	  <!-- <if test="encYn != null" >
+        AND A.ENC_YN = #{encYn,jdbcType=VARCHAR}
+      </if>
+	  <if test="cdValTypCd != null" >
+        AND A.CD_VAL_TYP_CD = #{cdValTypCd,jdbcType=VARCHAR}
+      </if>  -->
+  	</where>
+  	ORDER BY DMN_LNM
+  </select>
+	
+</mapper>

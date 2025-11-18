@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.meta.intf.service.EraDataelmtMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.meta.intf.service.EraDataelmt" >
+    <result column="ORIGIN_TERMNM" property="originTermnm" jdbcType="VARCHAR" />
+    <result column="ORIGIN_TERMNMEN" property="originTermnmen" jdbcType="VARCHAR" />
+    <result column="TERMNM" property="termnm" jdbcType="VARCHAR" />
+    <result column="TERMNMEN" property="termnmen" jdbcType="VARCHAR" />
+    <result column="DOMAINNM" property="domainnm" jdbcType="VARCHAR" />
+    <result column="DOMAINNMEN" property="domainnmen" jdbcType="VARCHAR" />
+    <result column="INFOTYPE" property="infotype" jdbcType="VARCHAR" />
+    <result column="DATA_TYPE" property="dataType" jdbcType="VARCHAR" />
+    <result column="DESCRIPTION" property="description" jdbcType="VARCHAR" />
+    <result column="MODELNM" property="modelnm" jdbcType="VARCHAR" />
+    <result column="SUBJECTNM" property="subjectnm" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <select id="selectEraDataelmtOne" parameterType="map" resultMap="BaseResultMap" >
+  
+    SELECT #{searchVal} AS ORIGIN_TERMNM
+	     , CASE WHEN OBJ_KNM != #{searchVal}  
+                THEN OBJ_ENM || SUBSTR(#{searchVal}, LENGTH(OBJ_KNM)+1)
+                ELSE OBJ_ENM END AS ORIGIN_TERMNMEN
+         , #{searchVal} AS TERMNM
+	     , CASE WHEN OBJ_KNM != #{searchVal}  
+                THEN OBJ_ENM || SUBSTR(#{searchVal}, LENGTH(OBJ_KNM)+1)
+                ELSE OBJ_ENM END AS TERMNMEN
+	     -- , OBJ_KNM AS TERMNM
+	     -- , OBJ_ENM AS TERMNMEN
+	     , DMN_KNM AS DOMAINNM
+	     , DMN_KNM AS INFOTYPE
+	     , DATA_TYPE ||
+	       CASE WHEN DATA_LENGTH > 0 THEN '(' || DATA_LENGTH ||
+	            CASE WHEN DATA_SCALE > 0 THEN ',' || DATA_SCALE END || ')'
+	          END AS DATA_TYPE
+	     , DESCRIPTION
+	     , CASE WHEN #{searchModel} IS NULL THEN '' ELSE #{searchModel} END   AS MODELNM
+	     , CASE WHEN #{searchSubject} IS NULL THEN '' ELSE #{searchSubject} END AS SUBJECTNM
+	  FROM V_DATAELMT
+	 WHERE 1 = 1
+	 <!--  멀티표준 적용시, 모델기준 , 주제영역 기준  -->
+	 <if test='(searchModel!=null and !searchModel.equals("")) and (searchSubject!=null and !searchSubject.equals(""))'>
+		AND STND_ASRT = 
+		  	( SELECT STND_ASRT FROM V_DATAELMT_SUBJ
+			   WHERE 1=1
+			     AND P_SUBJ = #{searchModel} AND SUBJ_LNM = #{searchSubject} AND LVL = 2 AND ROWNUM = 1
+			 )	 
+	 </if>
+	 <if test='(searchModel!=null and !searchModel.equals("")) and (searchSubject!=null and searchSubject.equals(""))'>
+		AND STND_ASRT = 
+			( SELECT STND_ASRT FROM V_DATAELMT_SUBJ
+ 			   WHERE 1=1
+                 AND SUBJ_LNM = #{searchModel} AND LVL = 1 AND ROWNUM=1
+			  )	 
+	 </if>
+
+	   AND OBJ_KNM LIKE RTRIM(#{searchVal},'0123456789') 
+	   AND ROWNUM = 1
+	 
+		
+  </select>
+  <select id="selectEraDataelmt" parameterType="map" resultMap="BaseResultMap" >
+  
+	    SELECT OBJ_KNM AS ORIGIN_TERMNM
+	     , OBJ_ENM AS ORIGIN_TERMNMEN
+	     , OBJ_KNM AS TERMNM
+	     , OBJ_ENM AS TERMNMEN
+	     , DMN_KNM AS DOMAINNM
+<!-- 	     , DMN_ENM AS DOMAINNMEN -->
+	     , DMN_KNM AS INFOTYPE
+	     , DATA_TYPE ||
+	       CASE WHEN DATA_LENGTH > 0 THEN '(' || DATA_LENGTH ||
+	            CASE WHEN DATA_SCALE > 0 THEN ',' || DATA_SCALE END || ')'
+	          END AS DATA_TYPE
+	     , DESCRIPTION
+	     , CASE WHEN #{searchModel} IS NULL THEN '' ELSE #{searchModel} END   AS MODELNM
+	     , CASE WHEN #{searchSubject} IS NULL THEN '' ELSE #{searchSubject} END AS SUBJECTNM
+	  FROM V_DATAELMT
+	 WHERE 1 = 1
+	 <!--  멀티표준 적용시, 모델기준 , 주제영역 기준  -->
+	 <if test='(searchModel!=null and !searchModel.equals("")) and (searchSubject!=null and !searchSubject.equals(""))'>
+		AND STND_ASRT = 
+		  	( SELECT STND_ASRT FROM V_DATAELMT_SUBJ
+			   WHERE 1=1
+			     AND P_SUBJ = #{searchModel} AND SUBJ_LNM = #{searchSubject} AND LVL = 2 AND ROWNUM = 1
+			  )	 
+	 </if>
+	 <if test='(searchModel!=null and !searchModel.equals("")) and (searchSubject!=null and searchSubject.equals(""))'>
+		AND STND_ASRT = 
+			( SELECT STND_ASRT FROM V_DATAELMT_SUBJ
+ 			   WHERE 1=1
+                 AND SUBJ_LNM = #{searchModel} AND LVL = 1 AND ROWNUM=1
+			  )	 
+	 </if>
+			 
+	 <!--  A:%%, F:뒤%, B:앞%, E:=  -->
+	 <if test='searchCon == "A" '>
+	   AND OBJ_KNM LIKE '%' || RTRIM(#{searchVal},'0123456789') || '%'
+	 </if>
+	 <if test='searchCon == "F" '>
+	   AND OBJ_KNM LIKE  RTRIM(#{searchVal},'0123456789') || '%'
+	 </if>
+	 <if test='searchCon == "B" '>
+	   AND OBJ_KNM LIKE '%' || RTRIM(#{searchVal},'0123456789') 
+	 </if>
+	 <if test='searchCon == "E" '>
+	   AND OBJ_KNM LIKE RTRIM(#{searchVal},'0123456789') 
+	 </if>
+	 
+  </select>
+  
+  <select id="selectEraDataelmtEn" parameterType="map" resultMap="BaseResultMap" >
+	  SELECT OBJ_KNM AS ORIGIN_TERMNM
+	     , OBJ_ENM AS ORIGIN_TERMNMEN
+	     , OBJ_KNM AS TERMNM
+	     , OBJ_ENM AS TERMNMEN
+	     , DMN_KNM AS DOMAINNM
+<!-- 	     , DMN_ENM AS DOMAINNMEN -->
+	     , DMN_KNM AS INFOTYPE
+	     , DATA_TYPE ||
+	       CASE WHEN DATA_LENGTH > 0 THEN '(' || DATA_LENGTH ||
+	            CASE WHEN DATA_SCALE > 0 THEN ',' || DATA_SCALE END || ')'
+	          END AS DATA_TYPE
+	     , DESCRIPTION
+	     , CASE WHEN #{searchModel} IS NULL THEN '' ELSE #{searchModel} END   AS MODELNM
+	     , CASE WHEN #{searchSubject} IS NULL THEN '' ELSE #{searchSubject} END AS SUBJECTNM
+	  FROM V_DATAELMT
+	 WHERE  1 = 1
+	 <!--  멀티표준 적용시, 모델기준 , 주제영역 기준  -->
+	 <if test='(searchModel!=null and !searchModel.equals("")) and (searchSubject!=null and !searchSubject.equals(""))'>
+		AND STND_ASRT = 
+		  	( SELECT STND_ASRT FROM V_DATAELMT_SUBJ
+			   WHERE 1=1
+			     AND P_SUBJ = #{searchModel} AND SUBJ_LNM = #{searchSubject} AND LVL = 2 AND ROWNUM = 1
+			 )	 
+	 </if>
+	 <if test='(searchModel!=null and !searchModel.equals("")) and (searchSubject!=null and searchSubject.equals(""))'>
+		AND STND_ASRT = 
+			( SELECT STND_ASRT FROM V_DATAELMT_SUBJ
+ 			   WHERE 1=1
+                 AND SUBJ_LNM = #{searchModel} AND LVL = 1 AND ROWNUM=1
+			 )	 
+	 </if>
+	 
+	 <!--  A:%%, F:뒤%, B:앞%, E:=  -->
+	 <if test='searchCon == "A" '>
+	   AND OBJ_ENM LIKE '%' || RTRIM(#{searchVal},'0123456789') || '%'
+	 </if>
+	 <if test='searchCon == "F" '>
+	   AND OBJ_ENM LIKE  RTRIM(#{searchVal},'0123456789') || '%'
+	 </if>
+	 <if test='searchCon == "B" '>
+	   AND OBJ_ENM LIKE '%' || RTRIM(#{searchVal},'0123456789') 
+	 </if>	 
+	 <if test='searchCon == "E" '>
+	   AND OBJ_ENM LIKE RTRIM(#{searchVal},'0123456789')
+	 </if>
+  </select>
+</mapper>

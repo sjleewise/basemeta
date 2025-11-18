@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.meta.stnd.service.WamMsgTsfMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.meta.stnd.service.WamMsgTsf"  extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+    <id column="MSG_ID" 	property="msgId" 	jdbcType="VARCHAR" />
+    <id column="TGT_DB_CONN_TRG_ID" property="tgtDbConnTrgId" 	jdbcType="VARCHAR" />
+    <id column="TGT_DB_SCH_ID" property="tgtDbSchId" 	jdbcType="VARCHAR" />
+    <result column="TGT_DB_CONN_TRG_PNM" property="tgtDbConnTrgPnm" 	jdbcType="VARCHAR" />
+    <result column="TGT_DB_SCH_PNM" property="tgtDbSchPnm" 	jdbcType="VARCHAR" />
+    <result column="MSG_CD" 	property="msgCd" jdbcType="VARCHAR" />
+    <result column="MSG_CONTS" 	property="msgConts" jdbcType="VARCHAR" />
+    <result column="USE_YN" 	property="useYn" jdbcType="VARCHAR" />
+    <result column="TYP_DIV_CD" 	property="typDivCd" jdbcType="VARCHAR" />
+    <result column="BIZ_DIV_CD" 	property="bizDivCd" jdbcType="VARCHAR" />
+    <result column="SYS_DIV_CD" 	property="sysDivCd" jdbcType="VARCHAR" />
+    <result column="RQST_NO" 		property="rqstNo" 	jdbcType="VARCHAR" />
+    <result column="RQST_SNO" 		property="rqstSno" 	jdbcType="DECIMAL" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+  RQST_NO,RQST_SNO,MSG_ID,MSG_CD,MSG_CONTS,USE_YN,OBJ_DESCN,OBJ_VERS,REG_TYP_CD,FRS_RQST_DTM
+,FRS_RQST_USER_ID,RQST_DTM,RQST_USER_ID,APRV_DTM,APRV_USER_ID,TYP_DIV_CD,BIZ_DIV_CD,SYS_DIV_CD
+  </sql>
+  
+  <sql id="wam_col_list">
+  	  RQST_NO,RQST_SNO,MSG_ID,MSG_CD,MSG_CONTS,USE_YN,OBJ_DESCN,OBJ_VERS,REG_TYP_CD,FRS_RQST_DTM
+      ,FRS_RQST_USER_ID,RQST_DTM,RQST_USER_ID,APRV_DTM,APRV_USER_ID,TYP_DIV_CD,BIZ_DIV_CD,SYS_DIV_CD
+  </sql>
+  
+
+  <select id="selectList" parameterType="kr.wise.meta.stnd.service.WamMsgTsf" resultMap="BaseResultMap">
+      SELECT 
+            A.*
+            ,B.DB_CONN_TRG_PNM AS TGT_DB_CONN_TRG_PNM
+            ,C.DB_SCH_PNM AS TGT_DB_SCH_PNM
+      FROM WAM_MSG_TSF A
+      LEFT OUTER JOIN WAA_DB_CONN_TRG B
+      ON A.TGT_DB_CONN_TRG_ID = B.DB_CONN_TRG_ID
+      AND B.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+      AND B.REG_TYP_CD IN ('C', 'U')
+      LEFT OUTER JOIN WAA_DB_SCH C
+      ON A.TGT_DB_SCH_ID = C.DB_SCH_ID
+      AND C.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+      AND C.REG_TYP_CD IN ('C', 'U')
+      WHERE 1=1
+       <if test="msgCd != null" >
+        AND A.MSG_CD LIKE '%'||#{msgCd,jdbcType=VARCHAR}||'%'
+      </if>
+       <if test="msgConts != null" >
+        AND A.MSG_CONTS LIKE '%'||#{msgConts,jdbcType=VARCHAR}||'%'
+      </if>
+      <if test="typDivCd != null" >
+        AND A.TYP_DIV_CD LIKE '%'||#{typDivCd,jdbcType=VARCHAR}||'%'
+      </if>
+      <if test="bizDivCd != null" >
+        AND A.BIZ_DIV_CD LIKE '%'||#{bizDivCd,jdbcType=VARCHAR}||'%'
+      </if>
+      <if test="useYn != null" >
+        AND A.USE_YN =#{useYn,jdbcType=VARCHAR}
+      </if>
+       <if test="tgtDbConnTrgId != null" >
+        AND A.TGT_DB_CONN_TRG_ID = #{tgtDbConnTrgId,jdbcType=VARCHAR}
+      </if>
+      <if test="tgtDbSchId != null" >
+        AND A.TGT_DB_SCH_ID = #{tgtDbSchId,jdbcType=VARCHAR}
+      </if>
+  </select>
+  
+   <select id="selectMessageTsfDtl" parameterType="kr.wise.meta.stnd.service.WamMsgTsf" resultMap="BaseResultMap">
+    SELECT A.*
+          ,B.DB_CONN_TRG_PNM AS TGT_DB_CONN_TRG_PNM
+          ,C.DB_SCH_PNM AS TGT_DB_SCH_PNM
+          ,GET_USER_NM(A.FRS_RQST_USER_ID) AS  FRS_RQST_USER_NM
+          ,GET_USER_NM(A.RQST_USER_ID) AS  RQST_USER_NM
+          ,GET_USER_NM(A.APRV_USER_ID) AS  APRV_USER_NM
+	  FROM WAM_MSG_TSF A
+	  LEFT OUTER JOIN WAA_DB_CONN_TRG B
+      ON A.TGT_DB_CONN_TRG_ID = B.DB_CONN_TRG_ID
+      AND B.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+      AND B.REG_TYP_CD IN ('C', 'U')
+      LEFT OUTER JOIN WAA_DB_SCH C
+      ON A.TGT_DB_SCH_ID = C.DB_SCH_ID
+      AND C.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+      AND C.REG_TYP_CD IN ('C', 'U')
+	  <where>
+	   A.MSG_ID = #{msgId,jdbcType=VARCHAR}
+	   AND A.TGT_DB_CONN_TRG_ID = #{tgtDbConnTrgId,jdbcType=VARCHAR}
+	   AND A.TGT_DB_SCH_ID = #{tgtDbSchId,jdbcType=VARCHAR}  
+	   </where> 
+  </select>
+   <select id="selectChangeTsfList" parameterType="kr.wise.meta.stnd.service.WamMsgTsf" resultMap="BaseResultMap">
+    SELECT A.*
+          ,GET_USER_NM(A.FRS_RQST_USER_ID) AS  FRS_RQST_USER_NM
+          ,GET_USER_NM(A.RQST_USER_ID) AS  RQST_USER_NM
+          ,GET_USER_NM(A.APRV_USER_ID) AS  APRV_USER_NM
+	  FROM WAH_MSG_TSF A
+	  <where>
+	   MSG_ID = #{msgId,jdbcType=VARCHAR}  
+	   AND A.TGT_DB_CONN_TRG_ID = #{tgtDbConnTrgId,jdbcType=VARCHAR}
+	   AND A.TGT_DB_SCH_ID = #{tgtDbSchId,jdbcType=VARCHAR}
+	   </where> 
+	ORDER BY OBJ_VERS DESC
+  </select>
+  
+  
+</mapper>
+
+
+

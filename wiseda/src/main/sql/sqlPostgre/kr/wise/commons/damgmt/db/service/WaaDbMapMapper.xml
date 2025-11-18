@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.commons.damgmt.db.service.WaaDbMapMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.commons.damgmt.db.service.WaaDbMap" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+    <id 	column="DB_MAP_ID" 	 	property="dbMapId" 	jdbcType="VARCHAR" />
+    <id 	column="SRC_DB_SCH_ID" 	 	property="srcDbSchId" 	jdbcType="VARCHAR" />
+    <id 	column="TGT_DB_SCH_ID" 		property="tgtDbSchId" 	jdbcType="VARCHAR" />
+    <result column="SRC_DB_SCH_PNM" 	property="srcDbSchPnm" 	jdbcType="VARCHAR" />
+    <result column="TGT_DB_SCH_PNM" 	property="tgtDbSchPnm" 	jdbcType="VARCHAR" />
+    <result column="SRC_DB_CONN_TRG_PNM" 	property="srcDbConnTrgPnm" 	jdbcType="VARCHAR" />
+    <result column="TGT_DB_CONN_TRG_PNM" 	property="tgtDbConnTrgPnm" 	jdbcType="VARCHAR" />
+    <result column="SRC_DB_CONN_TRG_ID" 	property="srcDbConnTrgId" 	jdbcType="VARCHAR" />
+    <result column="TGT_DB_CONN_TRG_ID" 	property="tgtDbConnTrgId" 	jdbcType="VARCHAR" />
+    <result column="SRC_DDL_TRG_DCD" 	property="srcDdlTrgDcd" 	jdbcType="VARCHAR" />
+    <result column="TGT_DDL_TRG_DCD" 	property="tgtDdlTrgDcd" 	jdbcType="VARCHAR" />
+    <result column="SRC_DDL_TRG_DCD_NM" 	property="srcDdlTrgDcdNm" 	jdbcType="VARCHAR" />
+    <result column="TGT_DDL_TRG_DCD_NM" 	property="tgtDdlTrgDcdNm" 	jdbcType="VARCHAR" /> 
+<!--      <result column="EXP_DTM" 		property="expDtm" 		jdbcType="TIMESTAMP" />  -->
+<!--      <result column="STR_DTM" 		property="strDtm" 		jdbcType="TIMESTAMP" />  -->
+    <result column="DDL_TSF_YN" 		property="ddlTsfYn" 	jdbcType="VARCHAR" />
+<!--      <result column="OBJ_DESCN" 		property="objDescn" 	jdbcType="VARCHAR" />  -->
+<!--      <result column="OBJ_VERS" 		property="objVers" 		jdbcType="DECIMAL" />  -->
+<!--      <result column="REG_TYP_CD" 	property="regTypCd" 	jdbcType="VARCHAR" />  -->
+<!--      <result column="WRIT_DTM" 		property="writDtm" 		jdbcType="TIMESTAMP" />  -->
+<!--      <result column="WRIT_USER_ID" 	property="writUserId" 	jdbcType="VARCHAR" /> -->
+<!--      <result column="WRIT_USER_NM" 	property="writUserNm" 	jdbcType="VARCHAR" />  -->
+  </resultMap>
+  <sql id="Base_Column_List" >
+    SRC_DB_SCH_ID, TGT_DB_SCH_ID, EXP_DTM, STR_DTM, DDL_TSF_YN, OBJ_DESCN, OBJ_VERS, 
+    REG_TYP_CD, WRIT_DTM, WRIT_USER_ID
+  </sql>
+  
+  <select id="selectDbMapList" parameterType="kr.wise.commons.damgmt.db.service.WaaDbMap" resultMap="BaseResultMap">
+	SELECT  A.DB_MAP_ID
+	         , A.SRC_DB_SCH_ID
+		     , A.TGT_DB_SCH_ID
+		     , A.DDL_TSF_YN
+		     , A.OBJ_DESCN
+		     , A.REG_TYP_CD
+		     , A.STR_DTM
+		     , A.WRIT_DTM
+		     , A.WRIT_USER_ID
+		     , A.OBJ_VERS
+		     , GET_USER_NM(A.WRIT_USER_ID) AS WRIT_USER_NM
+		     , B.DB_SCH_PNM AS SRC_DB_SCH_PNM
+		     , C.DB_SCH_PNM AS TGT_DB_SCH_PNM
+		     , D.DB_CONN_TRG_PNM AS SRC_DB_CONN_TRG_PNM
+		     , E.DB_CONN_TRG_PNM AS TGT_DB_CONN_TRG_PNM
+		     , B.DDL_TRG_DCD AS SRC_DDL_TRG_DCD
+	     	 , C.DDL_TRG_DCD AS TGT_DDL_TRG_DCD
+	     	 , D.DB_CONN_TRG_ID AS SRC_DB_CONN_TRG_ID
+	     	 , E.DB_CONN_TRG_ID AS TGT_DB_CONN_TRG_ID
+	         , COM.COMM_DTL_CD_NM AS SRC_DDL_TRG_DCD_NM
+	         , COM2.COMM_DTL_CD_NM AS TGT_DDL_TRG_DCD_NM
+	  FROM WAA_DB_MAP A
+	  JOIN WAA_DB_SCH B
+	    ON A.SRC_DB_SCH_ID = B.DB_SCH_ID
+	   AND B.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')   
+	   AND B.REG_TYP_CD IN ('C', 'U')
+	  JOIN WAA_DB_CONN_TRG D
+	    ON B.DB_CONN_TRG_ID = D.DB_CONN_TRG_ID
+	   AND D.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')
+	   AND D.REG_TYP_CD IN ('C', 'U') 
+	  JOIN WAA_DB_SCH C
+	    ON A.TGT_DB_SCH_ID = C.DB_SCH_ID
+	   AND C.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')   
+	   AND C.REG_TYP_CD IN ('C', 'U')
+	  JOIN WAA_DB_CONN_TRG E
+	    ON C.DB_CONN_TRG_ID = E.DB_CONN_TRG_ID
+	   AND E.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')
+	   AND E.REG_TYP_CD IN ('C', 'U') 
+      LEFT OUTER JOIN ( SELECT B.COMM_DTL_CD, B.COMM_DTL_CD_NM
+                          FROM WAA_COMM_DCD A
+                         INNER JOIN WAA_COMM_DTL_CD B
+                            ON A.COMM_DCD_ID = B.COMM_DCD_ID
+                           AND B.REG_TYP_CD IN ('C', 'U')
+                           AND B.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+                         WHERE A.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+                           AND A.REG_TYP_CD IN ('C', 'U')
+                           AND A.COMM_DCD = 'DDL_TRG_DCD'
+                         ) COM
+        ON B.DDL_TRG_DCD = COM.COMM_DTL_CD
+      LEFT OUTER JOIN ( SELECT B.COMM_DTL_CD, B.COMM_DTL_CD_NM
+                          FROM WAA_COMM_DCD A
+                         INNER JOIN WAA_COMM_DTL_CD B
+                            ON A.COMM_DCD_ID = B.COMM_DCD_ID
+                           AND B.REG_TYP_CD IN ('C', 'U')
+                           AND B.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+                         WHERE A.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+                           AND A.REG_TYP_CD IN ('C', 'U')
+                           AND A.COMM_DCD = 'DDL_TRG_DCD'
+                         ) COM2
+        ON C.DDL_TRG_DCD = COM2.COMM_DTL_CD
+	 WHERE A.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')   
+	   AND A.REG_TYP_CD IN ('C', 'U') 
+	   <if test="srcDbSchId != null"  >
+        AND A.SRC_DB_SCH_ID = #{srcDbSchId,jdbcType=VARCHAR}
+      </if>
+      <if test="tgtDbSchId != null"  >
+        AND A.TGT_DB_SCH_ID = #{tgtDbSchId,jdbcType=VARCHAR}
+      </if>
+      <if test="ddlTsfYn != null"  >
+        AND A.DDL_TSF_YN = #{ddlTsfYn,jdbcType=VARCHAR}
+      </if>
+      <if test="objDescn != null"  >
+        AND A.OBJ_DESCN LIKE '%' || #{objDescn,jdbcType=VARCHAR} || '%'
+      </if>  	
+  </select>
+  
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="kr.wise.commons.damgmt.db.service.WaaDbMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from WAA_DB_MAP
+    where SRC_DB_SCH_ID = #{srcDbSchId,jdbcType=VARCHAR}
+      and TGT_DB_SCH_ID = #{tgtDbSchId,jdbcType=VARCHAR}
+      AND EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')   
+	  AND REG_TYP_CD IN ('C', 'U')
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="kr.wise.commons.damgmt.db.service.WaaDbMap" >
+    update WAA_DB_MAP
+        set EXP_DTM = NOW()
+            ,REG_TYP_CD = 'D'
+  	WHERE DB_MAP_ID = #{dbMapId,jdbcType=VARCHAR}
+  	   AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+  </delete>
+
+  <insert id="insertSelective" parameterType="kr.wise.commons.damgmt.db.service.WaaDbMap" >
+    insert into WAA_DB_MAP
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+        DB_MAP_ID,
+        SRC_DB_SCH_ID,
+        TGT_DB_SCH_ID,
+        EXP_DTM,
+        STR_DTM,
+      <if test="ddlTsfYn != null" >
+        DDL_TSF_YN,
+      </if>
+      <if test="objDescn != null and objDescn != ''" >
+        OBJ_DESCN,
+      </if>
+        OBJ_VERS,
+        REG_TYP_CD,
+        WRIT_DTM,
+        WRIT_USER_ID,
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+        #{dbMapId,jdbcType=VARCHAR},
+        #{srcDbSchId,jdbcType=VARCHAR},
+        #{tgtDbSchId,jdbcType=VARCHAR},
+        TO_DATE('9999-12-31', 'YYYY-MM-DD'),    
+        COALESCE(#{strDtm,jdbcType=TIMESTAMP},NOW()),
+      <if test="ddlTsfYn != null" >
+        #{ddlTsfYn,jdbcType=VARCHAR},
+      </if>
+      <if test="objDescn != null and objDescn != ''" >
+        #{objDescn,jdbcType=VARCHAR},
+      </if>
+        #{objVers,jdbcType=DECIMAL},
+        #{regTypCd,jdbcType=VARCHAR},
+		NOW(),
+        #{writUserId,jdbcType=VARCHAR},
+    </trim>
+  </insert>
+  
+   <update id="updateExpDtm" parameterType="kr.wise.commons.damgmt.db.service.WaaDbMap">
+  	UPDATE WAA_DB_MAP SET
+  		EXP_DTM = NOW()
+  	WHERE DB_MAP_ID = #{dbMapId,jdbcType=VARCHAR}
+  	  AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+  </update>
+  
+    <select id="selectDbMapDefaultOne" parameterType="kr.wise.commons.damgmt.db.service.WaaDbMap" resultMap="BaseResultMap">
+	SELECT  A.DB_MAP_ID
+	         , A.SRC_DB_SCH_ID
+		     , A.TGT_DB_SCH_ID
+		     , A.DDL_TSF_YN
+		     , A.OBJ_DESCN
+		     , A.REG_TYP_CD
+		     , A.STR_DTM
+		     , A.WRIT_DTM
+		     , A.WRIT_USER_ID
+		     , A.OBJ_VERS
+		     , GET_USER_NM(A.WRIT_USER_ID) AS WRIT_USER_NM
+		     , B.DB_SCH_PNM AS SRC_DB_SCH_PNM
+		     , C.DB_SCH_PNM AS TGT_DB_SCH_PNM
+		     , D.DB_CONN_TRG_PNM AS SRC_DB_CONN_TRG_PNM
+		     , E.DB_CONN_TRG_PNM AS TGT_DB_CONN_TRG_PNM
+		     , B.DDL_TRG_DCD AS SRC_DDL_TRG_DCD
+	     	 , C.DDL_TRG_DCD AS TGT_DDL_TRG_DCD
+	     	 , D.DB_CONN_TRG_ID AS SRC_DB_CONN_TRG_ID
+	     	 , E.DB_CONN_TRG_ID AS TGT_DB_CONN_TRG_ID
+	         , COM.COMM_DTL_CD_NM AS SRC_DDL_TRG_DCD_NM
+	         , COM2.COMM_DTL_CD_NM AS TGT_DDL_TRG_DCD_NM
+	  FROM WAA_DB_MAP A
+	  JOIN WAA_DB_SCH B
+	    ON A.SRC_DB_SCH_ID = B.DB_SCH_ID
+	   AND B.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')   
+	   AND B.REG_TYP_CD IN ('C', 'U')
+	  JOIN WAA_DB_CONN_TRG D
+	    ON B.DB_CONN_TRG_ID = D.DB_CONN_TRG_ID
+	   AND D.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')
+	   AND D.REG_TYP_CD IN ('C', 'U') 
+	  JOIN WAA_DB_SCH C
+	    ON A.TGT_DB_SCH_ID = C.DB_SCH_ID
+	   AND C.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')   
+	   AND C.REG_TYP_CD IN ('C', 'U')
+	  JOIN WAA_DB_CONN_TRG E
+	    ON C.DB_CONN_TRG_ID = E.DB_CONN_TRG_ID
+	   AND E.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')
+	   AND E.REG_TYP_CD IN ('C', 'U') 
+      LEFT OUTER JOIN ( SELECT B.COMM_DTL_CD, B.COMM_DTL_CD_NM
+                          FROM WAA_COMM_DCD A
+                         INNER JOIN WAA_COMM_DTL_CD B
+                            ON A.COMM_DCD_ID = B.COMM_DCD_ID
+                           AND B.REG_TYP_CD IN ('C', 'U')
+                           AND B.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+                         WHERE A.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+                           AND A.REG_TYP_CD IN ('C', 'U')
+                           AND A.COMM_DCD = 'DDL_TRG_DCD'
+                         ) COM
+        ON B.DDL_TRG_DCD = COM.COMM_DTL_CD
+      LEFT OUTER JOIN ( SELECT B.COMM_DTL_CD, B.COMM_DTL_CD_NM
+                          FROM WAA_COMM_DCD A
+                         INNER JOIN WAA_COMM_DTL_CD B
+                            ON A.COMM_DCD_ID = B.COMM_DCD_ID
+                           AND B.REG_TYP_CD IN ('C', 'U')
+                           AND B.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+                         WHERE A.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+                           AND A.REG_TYP_CD IN ('C', 'U')
+                           AND A.COMM_DCD = 'DDL_TRG_DCD'
+                         ) COM2
+        ON C.DDL_TRG_DCD = COM2.COMM_DTL_CD
+	 WHERE A.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')   
+	   AND A.REG_TYP_CD IN ('C', 'U') 
+        AND A.DDL_TSF_YN = 'Y'
+        AND ROWNUM = 1
+  </select>
+  
+  
+  
+</mapper>

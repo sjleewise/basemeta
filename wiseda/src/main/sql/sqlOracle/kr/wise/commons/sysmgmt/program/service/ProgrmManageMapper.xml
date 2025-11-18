@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.wise.commons.sysmgmt.program.service.ProgrmManageMapper">
+
+    <!-- 프로그램목록 관리 -->
+	<resultMap id="progrmManage"       type="kr.wise.commons.sysmgmt.program.service.ProgrmManageVO">
+		<result property="progrmFileNm"    column="PROGRM_FILE_NM"   />
+		<result property="progrmStrePath"  column="PROGRM_STRE_PATH" />
+		<result property="progrmKoreanNm"  column="PROGRM_KOREAN_NM" />
+		<result property="progrmDc"        column="PROGRM_DC"       />
+		<result property="url"             column="URL"            />
+	</resultMap> 
+	
+	<resultMap id="progrmUrl"			type="java.lang.String">
+		<result property="url"             column="URL"            />
+	</resultMap>
+	
+	<select id="selectProgrmUrl" parameterType="java.lang.String" resultMap="progrmUrl">
+<!-- 	       SELECT * FROM ( SELECT rownum rn, TB.* FROM ( -->
+				SELECT 
+					URL
+				FROM COMTNPROGRMLIST
+				<where>
+				     PROGRM_FILE_NM = #{progrmFileNm}
+					
+				</where>
+<!-- 	       ) TB )  WHERE rn BETWEEN #{firstIndex} + 1 AND #{firstIndex} + #{recordCountPerPage} -->
+	</select> 
+	
+	<select id="selectProgrmList" parameterType="kr.wise.commons.sysmgmt.program.service.ProgrmManageVO" resultMap="progrmManage">
+<!-- 	       SELECT * FROM ( SELECT rownum rn, TB.* FROM ( -->
+		<![CDATA[
+				SELECT 
+					  PROGRM_FILE_NM   
+					, PROGRM_STRE_PATH 
+					, PROGRM_KOREAN_NM   
+					, PROGRM_DC
+					, URL
+				FROM COMTNPROGRMLIST
+		 ]]>
+				<where>
+					<if test="progrmFileNm != null">
+				     AND (PROGRM_KOREAN_NM like  '%'|| #{progrmFileNm}||'%' 
+				     	  OR PROGRM_FILE_NM like  '%'|| #{progrmFileNm}||'%')
+					</if>
+				</where>
+<!-- 	       ) TB )  WHERE rn BETWEEN #{firstIndex} + 1 AND #{firstIndex} + #{recordCountPerPage} -->
+	</select> 
+
+	<select id="selectProgrmListTotCnt" parameterType="kr.wise.commons.cmm.SearchVO" resultType="int">
+		<![CDATA[
+				SELECT COUNT(*)
+				FROM COMTNPROGRMLIST
+		 ]]>
+				<where>
+					<if test="searchWrd != null">
+				     PROGRM_KOREAN_NM like  '%'|| #{searchWrd}||'%'
+					</if>
+				</where>
+	</select> 
+	
+	<select id="selectProgrmDetail" parameterType="kr.wise.commons.sysmgmt.program.service.ProgrmManageVO" resultMap="progrmManage">
+		<![CDATA[
+				SELECT 
+					  PROGRM_FILE_NM   
+					, PROGRM_STRE_PATH 
+					, PROGRM_KOREAN_NM   
+					, PROGRM_DC
+					, URL
+				FROM COMTNPROGRMLIST
+				WHERE PROGRM_FILE_NM = #{progrmFileNm}
+		 ]]>
+	</select> 
+
+	<insert id="insertProgram" parameterType="kr.wise.commons.sysmgmt.program.service.ProgrmManageVO" >
+		<![CDATA[
+				INSERT INTO  COMTNPROGRMLIST (
+					  PROGRM_FILE_NM   
+					, PROGRM_STRE_PATH 
+					, PROGRM_KOREAN_NM   
+					, PROGRM_DC
+					, URL
+					) VALUES (
+					#{progrmFileNm, jdbcType=VARCHAR},   	
+					#{progrmStrePath, jdbcType=VARCHAR}, 	
+					#{progrmKoreanNm, jdbcType=VARCHAR}, 	
+					#{progrmDc, jdbcType=VARCHAR},      	
+					#{url, jdbcType=VARCHAR}           	
+					)
+		 ]]>
+	</insert> 
+
+	<update id="updateProgram" parameterType="kr.wise.commons.sysmgmt.program.service.ProgrmManageVO" >
+		<![CDATA[
+				UPDATE COMTNPROGRMLIST 
+					 SET PROGRM_FILE_NM 	= #{progrmFileNm, jdbcType=VARCHAR},  
+						 PROGRM_STRE_PATH  	= #{progrmStrePath, jdbcType=VARCHAR},
+						 PROGRM_KOREAN_NM   = #{progrmKoreanNm, jdbcType=VARCHAR},
+						 PROGRM_DC			= #{progrmDc, jdbcType=VARCHAR},
+						 URL				= #{url, jdbcType=VARCHAR}
+				WHERE PROGRM_FILE_NM = #{progrmFileNm}
+		 ]]>
+	</update> 
+	
+	<delete id="deleteProgram" parameterType="java.util.Arrays">
+		<![CDATA[
+				DELETE FROM COMTNPROGRMLIST 
+				WHERE PROGRM_FILE_NM IN 
+		 ]]>
+				<foreach collection="array" item="item" index="index" open="(" separator="," close=")">
+					#{item}
+				</foreach>
+	</delete>
+
+	<delete id="deleteProgramVo" parameterType="kr.wise.commons.sysmgmt.program.service.ProgrmManageVO">
+		<![CDATA[
+				DELETE FROM COMTNPROGRMLIST 
+				WHERE PROGRM_FILE_NM  = #{progrmFileNm} 
+		 ]]>
+	</delete>
+
+</mapper>

@@ -1,0 +1,727 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.portal.totalsearch.service.TotalSearchMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.portal.totalsearch.service.TotalSearch" >
+    <result column="CATEG1_NM" property="categ1Nm" jdbcType="VARCHAR" />
+    <result column="CATEG1_CD" property="categ1Cd" jdbcType="VARCHAR" />
+    <result column="CATEG2_NM" property="categ2Nm" jdbcType="VARCHAR" />
+    <result column="CATEG2_CD" property="categ2Cd" jdbcType="VARCHAR" />
+    <result column="OBJ_ID" property="objId" jdbcType="VARCHAR" />
+    <result column="OBJ_KNM" property="objKnm" jdbcType="VARCHAR" />
+    <result column="OBJ_ENM" property="objEnm" jdbcType="VARCHAR" />
+    <result column="SHOT_DESC" property="shotDesc" jdbcType="VARCHAR" />
+    <result column="INFO1" property="info1" jdbcType="VARCHAR" />
+    <result column="REG_MAN" property="regMan" jdbcType="VARCHAR" />
+    <result column="REG_ID" property="regId" jdbcType="VARCHAR" />
+    <result column="REG_DATE" property="regDate" jdbcType="TIMESTAMP" />
+    <result column="BATCH_DATE" property="batchDate" jdbcType="TIMESTAMP" />
+    <result column="TOT_CNT" property="totCnt" jdbcType="DECIMAL" />
+    <result column="USER_ID" property="userId" jdbcType="VARCHAR" />
+    <result column="SEARCH_WORD" property="searchWord" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="kr.wise.portal.totalsearch.service.TotalSearch" extends="BaseResultMap" >
+    <result column="OBJ_DESC" property="objDesc" jdbcType="CLOB" />
+  </resultMap>
+  <sql id="Blob_Column_List" >
+    OBJ_DESC
+  </sql>
+  <insert id="insertTotalSearchWord" parameterType="java.util.Map" >
+    insert into TOTAL_SEARCH_WORD (USER_ID, SEARCH_WORD, SEARCH_DTTM) 
+    values (#{userId,jdbcType=VARCHAR}, #{searchWord,jdbcType=VARCHAR}, SYSDATETIME)
+  </insert>
+    <select id="selectTotalSearchWord" resultMap="BaseResultMap">
+		 SELECT SEARCH_WORD
+		 FROM (SELECT SEARCH_WORD, COUNT(*) AS CNT
+	 		     FROM TOTAL_SEARCH_WORD
+	 		    WHERE SEARCH_WORD REGEXP('[^[:punct:]]') 
+	 		    GROUP BY SEARCH_WORD
+	 		    ORDER BY 2 DESC)
+<![CDATA[WHERE ROWNUM < 10]]>
+    </select>
+    <select id="selectTotalSearchCnt" parameterType="java.util.Map" resultMap="BaseResultMap">
+		SELECT DISTINCT CATEG1_CD, COUNT(1) AS TOT_CNT                           
+        FROM TOTAL_SEARCH                                         
+        WHERE 1=1                             
+        <if test="searchNm != null and searchNm != ''" >
+          <![CDATA[ AND	(UOBJ_KNM LIKE '%'||#{searchNm}||'%'
+          OR UOBJ_ENM LIKE '%'||#{searchNm}||'%'
+          OR USHOT_DESC LIKE '%'||#{searchNm}||'%'
+          OR UINFO1 LIKE '%'||#{searchNm}||'%'
+          OR UREG_MAN LIKE '%'||#{searchNm}||'%')
+           ]]>
+        </if>
+        GROUP BY CATEG1_CD
+    </select>
+      <select id="selectTotalSearchTot" parameterType="java.util.Map" resultMap="BaseResultMap">
+		SELECT DISTINCT * FROM (SELECT CATEG1_NM
+            , CATEG1_CD
+            , CATEG2_NM
+            , CATEG2_CD
+            , OBJ_ID
+            , OBJ_KNM
+            , OBJ_ENM
+            , SHOT_DESC
+            , INFO1
+            , REG_MAN
+            , REG_ID
+            , REG_DATE
+            , BATCH_DATE   
+            , RANK() OVER (PARTITION BY CATEG1_CD, CATEG2_CD ORDER BY OBJ_ID DESC) RNK                            
+        FROM TOTAL_SEARCH                                         
+        WHERE 1=1      
+        <if test="searchNm != null and searchNm != ''" >
+          <![CDATA[ AND	(UOBJ_KNM LIKE '%'||#{searchNm}||'%'
+          OR UOBJ_ENM LIKE '%'||#{searchNm}||'%'
+          OR USHOT_DESC LIKE '%'||#{searchNm}||'%'
+          OR UINFO1 LIKE '%'||#{searchNm}||'%'
+          OR UREG_MAN LIKE '%'||#{searchNm}||'%')
+           ]]>
+        </if>
+<![CDATA[        ) WHERE RNK <= 2 ]]>
+        ORDER BY CATEG1_CD, CATEG2_CD, OBJ_ID
+    </select>
+  <select id="selectTotalSearchStnd" parameterType="java.util.Map" resultMap="BaseResultMap">
+		SELECT DISTINCT CATEG1_NM
+            , CATEG1_CD
+            , CATEG2_NM
+            , CATEG2_CD
+            , OBJ_ID
+            , OBJ_KNM
+            , OBJ_ENM
+            , SHOT_DESC
+            , INFO1
+            , REG_MAN
+            , REG_ID
+            , REG_DATE
+            , BATCH_DATE                               
+        FROM TOTAL_SEARCH                                         
+        WHERE CATEG1_CD = '1'                             
+        <if test="searchNm != null and searchNm != ''" >
+          <![CDATA[ AND	(UOBJ_KNM LIKE '%'||#{searchNm}||'%'
+          OR UOBJ_ENM LIKE '%'||#{searchNm}||'%'
+          OR USHOT_DESC LIKE '%'||#{searchNm}||'%'
+          OR UINFO1 LIKE '%'||#{searchNm}||'%'
+          OR UREG_MAN LIKE '%'||#{searchNm}||'%')
+           ]]>
+        </if>
+        ORDER BY CATEG1_CD, CATEG2_CD, OBJ_ID
+    </select>
+  <select id="selectTotalSearchTbl" parameterType="java.util.Map" resultMap="BaseResultMap">
+		SELECT DISTINCT CATEG1_NM
+            , CATEG1_CD
+            , CATEG2_NM
+            , CATEG2_CD
+            , OBJ_ID
+            , OBJ_KNM
+            , OBJ_ENM
+            , SHOT_DESC
+            , INFO1
+            , REG_MAN
+            , REG_ID
+            , REG_DATE
+            , BATCH_DATE                               
+        FROM TOTAL_SEARCH                                         
+        WHERE CATEG1_CD = '2'
+        <if test="searchNm != null and searchNm != ''" >
+          <![CDATA[ AND	(UOBJ_KNM LIKE '%'||#{searchNm}||'%'
+          OR UOBJ_ENM LIKE '%'||#{searchNm}||'%'
+          OR USHOT_DESC LIKE '%'||#{searchNm}||'%'
+          OR UINFO1 LIKE '%'||#{searchNm}||'%'
+          OR UREG_MAN LIKE '%'||#{searchNm}||'%')
+           ]]>
+        </if>
+        ORDER BY CATEG1_CD, CATEG2_CD, OBJ_ID
+    </select>
+<select id="selectTotalSearchDq" parameterType="java.util.Map" resultMap="BaseResultMap">
+		SELECT DISTINCT CATEG1_NM
+            , CATEG1_CD
+            , CATEG2_NM
+            , CATEG2_CD
+            , OBJ_ID
+            , OBJ_KNM
+            , OBJ_ENM
+            , SHOT_DESC
+            , INFO1
+            , REG_MAN
+            , REG_ID
+            , REG_DATE
+            , BATCH_DATE                               
+        FROM TOTAL_SEARCH                                         
+        WHERE CATEG1_CD = '3'
+        <if test="searchNm != null and searchNm != ''" >
+          <![CDATA[ AND	(UOBJ_KNM LIKE '%'||#{searchNm}||'%'
+          OR UOBJ_ENM LIKE '%'||#{searchNm}||'%'
+          OR USHOT_DESC LIKE '%'||#{searchNm}||'%'
+          OR UINFO1 LIKE '%'||#{searchNm}||'%'
+          OR UREG_MAN LIKE '%'||#{searchNm}||'%')
+           ]]>
+        </if>
+        ORDER BY CATEG1_CD, CATEG2_CD, OBJ_ID
+    </select>
+    <select id="selectTotalSearchSubj" parameterType="java.util.Map" resultMap="BaseResultMap">
+		SELECT DISTINCT CATEG1_NM
+            , CATEG1_CD
+            , CATEG2_NM
+            , CATEG2_CD
+            , OBJ_ID
+            , OBJ_KNM
+            , OBJ_ENM
+            , SHOT_DESC
+            , INFO1
+            , REG_MAN
+            , REG_ID
+            , REG_DATE
+            , BATCH_DATE                               
+        FROM TOTAL_SEARCH                                         
+        WHERE CATEG1_CD = '4'
+        <if test="searchNm != null and searchNm != ''" >
+          <![CDATA[ AND	(UOBJ_KNM LIKE '%'||#{searchNm}||'%'
+          OR UOBJ_ENM LIKE '%'||#{searchNm}||'%'
+          OR USHOT_DESC LIKE '%'||#{searchNm}||'%'
+          OR UINFO1 LIKE '%'||#{searchNm}||'%'
+          OR UREG_MAN LIKE '%'||#{searchNm}||'%')
+           ]]>
+        </if>
+        ORDER BY CATEG1_CD, CATEG2_CD, OBJ_ID
+    </select>
+  <select id="selectTotalSearchBbs" parameterType="java.util.Map" resultMap="BaseResultMap">
+		SELECT DISTINCT CATEG1_NM
+            , CATEG1_CD
+            , CATEG2_NM
+            , CATEG2_CD
+            , OBJ_ID
+            , OBJ_KNM
+            , OBJ_ENM
+            , SHOT_DESC
+            , INFO1
+            , REG_MAN
+            , REG_ID
+            , REG_DATE
+            , BATCH_DATE                               
+        FROM TOTAL_SEARCH                                         
+        WHERE CATEG1_CD = '5'                             
+        <if test="searchNm != null and searchNm != ''" >
+          <![CDATA[ AND	(UOBJ_KNM LIKE '%'||#{searchNm}||'%'
+          OR UOBJ_ENM LIKE '%'||#{searchNm}||'%'
+          OR USHOT_DESC LIKE '%'||#{searchNm}||'%'
+          OR UINFO1 LIKE '%'||#{searchNm}||'%'
+          OR UREG_MAN LIKE '%'||#{searchNm}||'%')
+           ]]>
+        </if>
+        ORDER BY CATEG1_CD, CATEG2_CD, OBJ_ID
+    </select>
+    
+    <sql id="tempidxsql">
+      INSERT INTO TOTAL_SEARCH_TEMP
+        (
+              CATEG1_NM
+            , CATEG1_CD
+            , CATEG2_NM
+            , CATEG2_CD
+            , OBJ_ID
+            , OBJ_KNM
+            , OBJ_ENM
+            , OBJ_DESC
+            , USHOT_DESC
+            , INFO1
+            , REG_MAN
+            , REG_ID
+            , REG_DATE
+            , BATCH_DATE
+        )
+    </sql>
+    
+    <delete id="deleteSearchTemp">
+    	DELETE FROM TOTAL_SEARCH_TEMP
+    </delete>
+    
+    <insert id="insertSearchTempWord">
+ 	-- 표준단어
+	<include refid="tempidxsql"/>
+   		<![CDATA[
+        SELECT DISTINCT '용어' AS CATEG1_NM
+             , '1' AS CATEG1_CD
+             , '표준단어' AS CATEG2_NM
+             , '1' AS CATEG2_CD
+             , A.STWD_ID
+             , A.STWD_LNM
+             , A.STWD_PNM
+             , A.OBJ_DESCN
+             , CASE WHEN LENGTH(A.OBJ_DESCN)>2000 THEN SUBSTR(A.OBJ_DESCN,1,2000)
+                    ELSE A.OBJ_DESCN
+                END AS USHOT_DESC
+             , A.ENG_MEAN
+             , X.USER_NM
+             , X.USER_ID
+             , A.RQST_DTM
+             , SYSDATETIME
+          FROM WAM_STWD A
+          LEFT OUTER JOIN WAA_USER X
+             ON NVL(A.RQST_USER_ID, A.FRS_RQST_USER_ID) = X.USER_ID
+          AND A.REG_TYP_CD IN ('C','U')    	
+	   ]]>
+    </insert>
+    <insert id="insertSearchTempSYMN">
+ 	-- 유사어
+	<include refid="tempidxsql"/>
+   		<![CDATA[
+        SELECT DISTINCT '용어' AS CATEG1_NM
+             , '1' AS CATEG1_CD
+             , '유사어' AS CATEG2_NM
+             , '2' AS CATEG2_CD
+             , A.SYMN_ID
+             , A.SYMN_LNM
+             , A.SYMN_PNM
+             , A.OBJ_DESCN
+             , CASE WHEN LENGTH(A.OBJ_DESCN)>2000 THEN SUBSTR(A.OBJ_DESCN,1,2000)
+                    ELSE A.OBJ_DESCN
+                END AS USHOT_DESC
+             , A.SYMN_PNM
+             , X.USER_NM
+             , X.USER_ID
+             , A.RQST_DTM
+             , SYSDATETIME
+          FROM WAM_SYMN A
+          LEFT OUTER JOIN WAA_USER X
+             ON NVL(A.RQST_USER_ID, A.FRS_RQST_USER_ID) = X.USER_ID
+          WHERE 1=1
+          AND A.REG_TYP_CD IN ('C','U')
+	   ]]>
+    </insert>
+    <insert id="insertSearchTempDomain">
+ 	-- 도메인
+	<include refid="tempidxsql"/>
+   		<![CDATA[
+        SELECT DISTINCT '용어' AS CATEG1_NM
+             , '1' AS CATEG1_CD
+             , '도메인' AS CATEG2_NM
+             , '3' AS CATEG2_CD
+             , A.DMN_ID
+             , A.DMN_LNM
+             , A.DMN_PNM
+             , A.OBJ_DESCN
+             , CASE WHEN LENGTH(A.OBJ_DESCN)>2000 THEN SUBSTR(A.OBJ_DESCN,1,2000)
+                    ELSE A.OBJ_DESCN
+                END AS USHOT_DESC
+             , A.LNM_CRI_DS
+             , X.USER_NM
+             , X.USER_ID
+             , A.RQST_DTM
+             , SYSDATETIME
+          FROM WAM_DMN A
+          LEFT OUTER JOIN WAA_USER X
+             ON NVL(A.RQST_USER_ID, A.FRS_RQST_USER_ID) = X.USER_ID
+          WHERE 1=1
+          AND A.REG_TYP_CD IN ('C','U')
+	   ]]>
+    </insert>
+    <insert id="insertSearchTempItem">
+ 	-- 표준항목
+	<include refid="tempidxsql"/>
+   		<![CDATA[
+        SELECT DISTINCT '용어' AS CATEG1_NM
+             , '1' AS CATEG1_CD
+             , '표준용어' AS CATEG2_NM
+             , '4' AS CATEG2_CD
+             , A.SDITM_ID
+             , A.SDITM_LNM
+             , A.SDITM_PNM
+             , A.OBJ_DESCN
+             , CASE WHEN LENGTH(A.OBJ_DESCN)>2000 THEN SUBSTR(A.OBJ_DESCN,1,2000)
+                    ELSE A.OBJ_DESCN
+                END AS USHOT_DESC
+             , SDITM_PNM
+             , X.USER_NM
+             , X.USER_ID
+             , A.RQST_DTM
+             , SYSDATETIME
+          FROM WAM_SDITM A
+          LEFT OUTER JOIN WAA_USER X
+             ON NVL(A.RQST_USER_ID, A.FRS_RQST_USER_ID) = X.USER_ID
+          WHERE 1=1
+          AND A.REG_TYP_CD IN ('C','U')
+	   ]]>
+    </insert>
+    <insert id="insertSearchTempPdmTbl">
+ 	-- 물리모델
+	<include refid="tempidxsql"/>
+   		<![CDATA[
+        SELECT DISTINCT '테이블정보' AS CATEG1_NM
+             , '2' AS CATEG1_CD
+             , '물리테이블' AS CATEG2_NM
+             , '1' AS CATEG2_CD
+             , A.PDM_TBL_ID
+             , A.PDM_TBL_LNM
+             , A.PDM_TBL_PNM
+             , A.OBJ_DESCN
+             , CASE WHEN LENGTH(A.OBJ_DESCN)>2000 THEN SUBSTR(A.OBJ_DESCN,1,2000)
+                    ELSE A.OBJ_DESCN
+                END AS USHOT_DESC
+             , A.PDM_TBL_PNM
+             , X.USER_NM
+             , A.CRG_USER_ID
+             , A.RQST_DTM
+             , SYSDATETIME
+          FROM WAM_PDM_TBL A 
+          LEFT OUTER JOIN WAA_USER X
+             ON A.CRG_USER_ID = X.USER_ID
+          WHERE A.REG_TYP_CD IN ('C','U')
+	   ]]>
+    </insert>
+    <insert id="insertSearchTempDdlTbl">
+ 	-- DDL 테이블
+	<include refid="tempidxsql"/>
+   		<![CDATA[
+		SELECT DISTINCT '테이블정보' AS CATEG1_NM
+             , '2' AS CATEG1_CD
+             , 'DDL테이블' AS CATEG2_NM
+             , '3' AS CATEG2_CD
+             , A.DDL_TBL_ID
+             , A.DDL_TBL_LNM
+             , A.DDL_TBL_PNM
+             , A.OBJ_DESCN
+             , CASE WHEN LENGTH(A.OBJ_DESCN)>2000 THEN SUBSTR(A.OBJ_DESCN,1,2000)
+                    ELSE A.OBJ_DESCN
+                END AS USHOT_DESC
+             , A.DDL_TBL_LNM
+             , X.USER_NM
+             , X.USER_ID
+             , A.RQST_DTM
+             , SYSDATETIME
+          FROM WAM_DDL_TBL A
+          LEFT OUTER JOIN WAA_USER X
+             ON NVL(A.RQST_USER_ID, A.FRS_RQST_USER_ID) = X.USER_ID
+          WHERE 1=1
+          AND A.REG_TYP_CD IN ('C','U')
+	   ]]>
+    </insert>
+    <insert id="insertSearchTempDbcTbl">
+ 	-- DBC 테이블
+	<include refid="tempidxsql"/>
+   		<![CDATA[
+        SELECT DISTINCT '테이블정보' AS CATEG1_NM
+             , '2' AS CATEG1_CD
+             , 'DBMS테이블' AS CATEG2_NM
+             , '2' AS CATEG2_CD
+             , A.DBC_TBL_NM
+             , NVL(A.DBC_TBL_KOR_NM, A.DBC_TBL_NM)
+             , NULL
+             , A.DESCN
+             , CASE WHEN LENGTH(A.DESCN)>2000 THEN SUBSTR(A.DESCN,1,2000)
+                    ELSE A.DESCN
+                END AS USHOT_DESC
+             , X.DB_CONN_TRG_PNM || '>' --|| Y.DB_SCH_LNM
+             , ''
+             , A.DB_SCH_ID -- dbc테이블 조회에는 2개 pk가 필요한데, 넣을공간이 없어 이곳에 추가함. (김연호)
+             , UPD_DTM
+             , SYSDATETIME
+          FROM WAT_DBC_TBL A INNER JOIN WAA_DB_CONN_TRG X
+            ON A.DB_CONN_TRG_ID = X.DB_CONN_TRG_ID
+           AND X.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')
+           AND X.REG_TYP_CD IN ('C', 'U')
+         INNER JOIN WAA_DB_SCH Y
+            ON X.DB_CONN_TRG_ID = Y.DB_CONN_TRG_ID
+           AND A.DB_SCH_ID = Y.DB_SCH_ID
+           AND Y.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+           AND Y.REG_TYP_CD IN ('C', 'U')
+	   ]]>
+    </insert>
+    <insert id="insertSearchTempSubj">
+ 	-- 주제영역
+	<include refid="tempidxsql"/>
+   		<![CDATA[
+        SELECT DISTINCT '주제영역' AS CATEG1_NM
+             , '4' AS CATEG1_CD
+             , '주제영역' AS CATEG2_NM
+             , '1' AS CATEG2_CD
+             , A.SUBJ_ID
+             , A.SUBJ_LNM
+             , A.SUBJ_PNM
+             , A.OBJ_DESCN
+             , CASE WHEN LENGTH(A.OBJ_DESCN)>2000 THEN SUBSTR(A.OBJ_DESCN,1,2000)
+                    ELSE A.OBJ_DESCN
+                END AS USHOT_DESC
+             , A.FULL_PATH
+             , X.USER_ID
+             , X.USER_ID
+             , A.WRIT_DTM
+             , SYSDATETIME
+          FROM WAA_SUBJ A LEFT OUTER JOIN WAA_USER X
+          ON A.WRIT_USER_ID = X.USER_ID
+          WHERE A.REG_TYP_CD IN ('C', 'U')
+          AND A.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	   ]]>
+    </insert>
+    <insert id="insertSearchTempProfile">
+ 	-- 프로파일
+	<include refid="tempidxsql"/>
+   		<![CDATA[
+        SELECT DISTINCT '데이터품질' AS CATEG1_NM
+             , '3' AS CATEG1_CD
+             , '프로파일' AS CATEG2_NM
+             , '2' AS CATEG2_CD
+             , A.PRF_ID
+             , A.OBJ_NM
+             , NULL
+             , A.DBC_TBL_NM || '(' || A.OBJ_NM || ')'
+             , CASE WHEN LENGTH(A.OBJ_DESCN)>2000 THEN SUBSTR(A.OBJ_DESCN,1,2000)
+                    ELSE A.OBJ_DESCN
+                END AS USHOT_DESC
+             , A.PRF_KND_CD
+             , X.USER_NM
+             , X.USER_ID
+             , A.RQST_DTM
+             , SYSDATETIME
+          FROM WAM_PRF_MSTR A
+           LEFT OUTER JOIN WAA_USER X
+             ON A.RQST_USER_ID = X.USER_ID
+          WHERE A.REG_TYP_CD IN ('C','U')
+	   ]]>
+    </insert>
+    <insert id="insertSearchTempBizRule">
+ 	-- 업무규칙
+	<include refid="tempidxsql"/>
+   		<![CDATA[
+       SELECT DISTINCT '데이터품질' AS CATEG1_NM
+             , '3' AS CATEG1_CD
+             , '업무규칙' AS CATEG2_NM
+             , '1' AS CATEG2_CD
+             , A.BR_ID
+             , A.BR_NM
+             , NULL
+             , A.OBJ_DESCN
+             , CASE WHEN LENGTH(A.OBJ_DESCN)>2000 THEN SUBSTR(A.OBJ_DESCN,1,2000)
+                    ELSE A.OBJ_DESCN
+                END AS USHOT_DESC
+             , A.DBC_TBL_NM || '(' || A.DBC_COL_NM || ')'
+             , X.USER_NM
+             , X.USER_ID
+             , A.RQST_DTM
+             , SYSDATETIME
+          FROM WAM_BR_MSTR A
+           LEFT OUTER JOIN WAA_USER X
+             ON A.RQST_USER_ID = X.USER_ID
+          WHERE A.REG_TYP_CD IN ('C','U')
+	   ]]>
+    </insert>
+    <insert id="insertSearchTempBizArea">
+ 	-- 업무영역
+	<include refid="tempidxsql"/>
+   		<![CDATA[
+        SELECT DISTINCT '데이터품질' AS CATEG1_NM
+             , '3' AS CATEG1_CD
+             , '업무영역' AS CATEG2_NM
+             , '3' AS CATEG2_CD
+             , A.BIZ_AREA_ID
+             , A.BIZ_AREA_LNM
+             , A.BIZ_AREA_PNM
+             , A.OBJ_DESCN
+             , CASE WHEN LENGTH(A.OBJ_DESCN)>2000 THEN SUBSTR(A.OBJ_DESCN,1,2000)
+                    ELSE A.OBJ_DESCN
+                END AS USHOT_DESC
+             , A.BIZ_AREA_LNM
+             , X.USER_NM
+             , X.USER_ID
+             , A.RQST_DTM
+             , SYSDATETIME
+          FROM WAM_BIZ_AREA A
+           LEFT OUTER JOIN WAA_USER X
+             ON A.RQST_USER_ID = X.USER_ID
+          WHERE A.REG_TYP_CD IN ('C','U')
+	   ]]>
+    </insert>
+    <insert id="insertSearchTempDqi">
+ 	-- DQI
+	<include refid="tempidxsql"/>
+   		<![CDATA[
+        SELECT DISTINCT '데이터품질' AS CATEG1_NM
+             , '3' AS CATEG1_CD
+             , '데이터품질지표' AS CATEG2_NM
+             , '4' AS CATEG2_CD
+             , A.DQI_ID
+             , A.DQI_LNM
+             , A.DQI_PNM
+             , A.OBJ_DESCN
+             , CASE WHEN LENGTH(A.OBJ_DESCN)>2000 THEN SUBSTR(A.OBJ_DESCN,1,2000)
+                    ELSE A.OBJ_DESCN
+                END AS USHOT_DESC
+             , A.DQI_LNM
+             , X.USER_NM
+             , X.USER_ID
+             , A.RQST_DTM
+             , SYSDATETIME
+          FROM WAM_DQI A
+           LEFT OUTER JOIN WAA_USER X
+             ON A.RQST_USER_ID = X.USER_ID
+          WHERE A.REG_TYP_CD IN ('C','U')
+	   ]]>
+    </insert>
+    <insert id="insertSearchTempCtq">
+ 	-- CTQ
+	<include refid="tempidxsql"/>
+   		<![CDATA[
+        SELECT DISTINCT '데이터품질' AS CATEG1_NM
+             , '3' AS CATEG1_CD
+             , '중요정보항목' AS CATEG2_NM
+             , '5' AS CATEG2_CD
+             , A.CTQ_ID
+             , A.CTQ_LNM
+             , A.CTQ_PNM
+             , A.OBJ_DESCN
+             , CASE WHEN LENGTH(A.OBJ_DESCN)>2000 THEN SUBSTR(A.OBJ_DESCN,1,2000)
+                    ELSE A.OBJ_DESCN
+                END AS USHOT_DESC
+             , A.CTQ_LNM
+             , X.USER_NM
+             , X.USER_ID
+             , A.RQST_DTM
+             , SYSDATETIME
+          FROM WAM_CTQ A
+           LEFT OUTER JOIN WAA_USER X
+             ON A.RQST_USER_ID = X.USER_ID
+          WHERE A.REG_TYP_CD IN ('C','U')
+	   ]]>
+    </insert>
+    <insert id="insertSearchTempImPl">
+ 	-- 개선계획
+	<include refid="tempidxsql"/>
+   		<![CDATA[
+        SELECT DISTINCT '데이터품질' AS CATEG1_NM
+             , '3' AS CATEG1_CD
+             , '개선계획' AS CATEG2_NM
+             , '6' AS CATEG2_CD
+             , A.ANA_JOB_ID
+             , A.IM_PL_CD_NM
+             , A.CS_ANA_CD_NM
+             , A.OBJ_DESCN
+             , CASE WHEN LENGTH(A.OBJ_DESCN)>2000 THEN SUBSTR(A.OBJ_DESCN,1,2000)
+                    ELSE A.OBJ_DESCN
+                END AS USHOT_DESC
+             , TO_CHAR(A.ANA_STR_DTM, 'YYYY-MM-DD')
+             , X.USER_NM
+             , X.USER_ID
+             , A.RQST_DTM
+             , SYSDATETIME
+          FROM WAM_CS_ANA_MSTR A
+           LEFT OUTER JOIN WAA_USER X
+             ON A.RQST_USER_ID = X.USER_ID
+          WHERE A.REG_TYP_CD IN ('C','U')
+	   ]]>
+    </insert>
+    <insert id="insertSearchTempImRsl">
+ 	-- 개선결과
+	<include refid="tempidxsql"/>
+   		<![CDATA[
+        SELECT DISTINCT '데이터품질' AS CATEG1_NM
+             , '3' AS CATEG1_CD
+             , '개선결과' AS CATEG2_NM
+             , '7' AS CATEG2_CD
+             , A.ANA_JOB_ID
+             , A.IM_RSL_CD_NM
+             , A.IM_IL_CD_NM
+             , A.OBJ_DESCN
+             , CASE WHEN LENGTH(A.OBJ_DESCN)>2000 THEN SUBSTR(A.OBJ_DESCN,1,2000)
+                    ELSE A.OBJ_DESCN
+                END AS USHOT_DESC
+             , TO_CHAR(A.ANA_STR_DTM, 'YYYY-MM-DD')
+             , X.USER_NM
+             , X.USER_ID
+             , A.RQST_DTM
+             , SYSDATETIME
+          FROM WAM_IM_ACT_MSTR A
+           LEFT OUTER JOIN WAA_USER X
+             ON A.RQST_USER_ID = X.USER_ID
+          WHERE A.REG_TYP_CD IN ('C','U')
+	   ]]>
+    </insert>
+    <insert id="insertSearchTempBbs">
+ 	-- 게시물
+	<include refid="tempidxsql"/>
+   		<![CDATA[
+        SELECT '게시물' AS CATEG1_NM
+             , '5' AS CATEG1_CD
+             , A.BBS_NM AS CATEG2_NM
+             , A.BBS_ID AS CATEG2_CD
+             , B.NTT_ID
+             , B.NTT_SJ
+             , NULL
+             , B.NTT_CN
+             , CASE WHEN LENGTH(REGEXP_REPLACE(B.NTT_CN, '<{1}[^<>]*>{1}|&[a-zA-Z]*;|[[:cntrl:]]', ''))>2000 
+                    THEN SUBSTR(REGEXP_REPLACE(B.NTT_CN, '<{1}[^<>]*>{1}|&[a-zA-Z]*;|[[:cntrl:]]', ''),1,2000)
+                    ELSE REGEXP_REPLACE(B.NTT_CN, '<{1}[^<>]*>{1}|&[a-zA-Z]*;|[[:cntrl:]]', '')                                                    
+                END AS ST_NTT_CN
+             , C.ORIGNL_FILE_NM
+             , NTCR_NM
+             , NTCR_ID
+             , NVL(B.LAST_UPDT_PNTTM, B.FRST_REGIST_PNTTM) AS REGIST_PNTTM
+             , SYSDATETIME
+          FROM COMTNBBSMASTER A
+          INNER JOIN COMTNBBS B
+             ON A.BBS_ID = B.BBS_ID
+            AND B.USE_AT = 'Y'
+          LEFT OUTER JOIN (SELECT A.ATCH_FILE_ID AS ATCH_FILE_ID 
+                                          ,GET_ORIGNL_FILE_NM(A.ATCH_FILE_ID )  AS ORIGNL_FILE_NM
+                                          --  데이터 미존재 시 오라클 함수 LISTAGG 오류 납니다. 
+                                          -- ,LISTAGG(A.ORIGNL_FILE_NM, ',') WITHIN GROUP(ORDER BY A.FILE_SN) AS ORIGNL_FILE_NM 
+                           FROM COMTNFILEDETAIL A
+                           WHERE EXISTS (SELECT 1 FROM COMTNFILE B
+                                         WHERE A.ATCH_FILE_ID = B.ATCH_FILE_ID
+                                           AND B.USE_AT = 'Y')
+                           GROUP BY A.ATCH_FILE_ID) C
+             ON B.ATCH_FILE_ID = C.ATCH_FILE_ID
+          WHERE A.USE_AT = 'Y'
+	   ]]>
+    </insert>
+    
+    <delete id="deleteSearchIndex">
+    	DELETE FROM TOTAL_SEARCH
+    </delete>
+    
+    <insert id="insertSearchIndex">
+    <![CDATA[
+        INSERT INTO TOTAL_SEARCH (
+              CATEG1_NM
+            , CATEG1_CD
+            , CATEG2_NM
+            , CATEG2_CD
+            , OBJ_ID
+            , OBJ_KNM
+            , OBJ_ENM
+            , OBJ_DESC
+            , SHOT_DESC
+            , INFO1
+            , REG_MAN
+            , REG_ID
+            , REG_DATE
+            , BATCH_DATE
+            , UOBJ_KNM
+            , UOBJ_ENM
+            , USHOT_DESC
+            , UINFO1
+            , UREG_MAN
+        )
+        SELECT CATEG1_NM
+            , CATEG1_CD
+            , CATEG2_NM
+            , CATEG2_CD
+            , OBJ_ID
+            , OBJ_KNM
+            , OBJ_ENM
+            , OBJ_DESC
+            , CASE WHEN LENGTH(USHOT_DESC)>200 THEN SUBSTR(USHOT_DESC,1,200)||' ...'
+                    ELSE USHOT_DESC
+                END AS SHOT_DESC
+            , INFO1
+            , REG_MAN
+            , REG_ID
+            , REG_DATE
+            , BATCH_DATE
+            , UPPER(OBJ_KNM)
+            , UPPER(OBJ_ENM)
+            , UPPER(USHOT_DESC)
+            , UPPER(INFO1)
+            , UPPER(REG_MAN)
+        FROM TOTAL_SEARCH_TEMP    
+    	]]>
+    </insert>
+</mapper>

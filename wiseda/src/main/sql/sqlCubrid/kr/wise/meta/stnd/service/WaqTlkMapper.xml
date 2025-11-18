@@ -1,0 +1,453 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.meta.stnd.service.WaqTlkMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.meta.stnd.service.WaqTlk"  extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+    <id column="RQST_NO"   property="rqstNo" jdbcType="VARCHAR" />
+    <id column="RQST_SNO"   property="rqstSno" jdbcType="DECIMAL" />
+    <result column="TLK_ID"   property="tlkId" jdbcType="VARCHAR" />
+    <result column="TBL_PNM"   property="tblPnm"   jdbcType="VARCHAR" />
+    <result column="PGM_ENM"   property="pgmEnm"   jdbcType="VARCHAR" />
+    <result column="PGM_HNM"   property="pgmHnm"   jdbcType="VARCHAR" />
+    <result column="CRE_YN"   property="creYn" jdbcType="VARCHAR" />
+    <result column="REA_YN"   property="reaYn" jdbcType="VARCHAR" />
+    <result column="UPD_YN"   property="updYn" jdbcType="VARCHAR" />
+    <result column="DEL_YN"   property="delYn" jdbcType="VARCHAR" />
+  </resultMap>
+  
+     <sql id="wam_col">
+    ,	TBL_PNM
+	,	PGM_ENM
+	,	PGM_HNM
+	,	CRE_YN
+	,	REA_YN
+	,	UPD_YN
+	,	DEL_YN
+	,	RQST_NO
+	,	RQST_SNO
+	,	OBJ_DESCN
+	,	OBJ_VERS
+	,	REG_TYP_CD
+	,	FRS_RQST_DTM
+	,	FRS_RQST_USER_ID
+	,	RQST_DTM
+	,	RQST_USER_ID
+	,	APRV_DTM
+	,	APRV_USER_ID
+   </sql>
+  
+   <select id="selectTlkRqstDetail" resultMap="BaseResultMap" parameterType="map" >
+    SELECT TLK_ID
+         , TBL_PNM
+         , PGM_ENM
+         , PGM_HNM
+         , CRE_YN    
+         , REA_YN
+         , UPD_YN    
+         , DEL_YN
+    from WAQ_TLK
+    where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      and RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+  </select>
+	
+  	<insert id="insertSelective" parameterType="kr.wise.meta.stnd.service.WaqTlk" >
+    INSERT INTO WAQ_TLK
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+        RQST_NO,
+        RQST_SNO,
+		<if test="tlkId != null">TLK_ID ,</if>
+		<if test="tblPnm != null">TBL_PNM     ,</if>
+		<if test="pgmEnm != null">PGM_ENM     ,</if>
+		<if test="pgmHnm != null">PGM_HNM     ,</if>
+        RQST_DCD,
+		<if test="rvwStsCd != null">RVW_STS_CD  ,</if>
+		<if test="rvwConts != null">RVW_CONTS   ,</if>
+		<if test="vrfRmk != null">VRF_RMK     ,</if>
+		<if test="vrfCd != null">VRF_CD      ,</if>
+		<if test="creYn != null">CRE_YN      ,</if>
+		<if test="reaYn != null">REA_YN      ,</if>
+		<if test="updYn != null">UPD_YN      ,</if>
+		<if test="delYn != null">DEL_YN      ,</if>
+		<if test="objDescn != null">OBJ_DESCN   ,</if>
+        OBJ_VERS,
+		<if test="regTypCd != null">REG_TYP_CD  ,</if>
+        FRS_RQST_DTM,
+		<if test="frsRqstUserId != null">FRS_RQST_USER_ID,</if>
+		RQST_DTM,
+		RQST_USER_ID,
+		<if test="aprvDtm != null">APRV_DTM    ,</if>
+		<if test="aprvUserId != null">APRV_USER_ID</if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+        #{rqstNo,jdbcType=VARCHAR},
+        (SELECT NVL(MAX(RQST_SNO), 0) + 1 FROM WAQ_TLK WHERE RQST_NO = #{rqstNo}) ,
+		<if test="tlkId != null">#{tlkId,jdbcType=VARCHAR} ,</if>
+		<if test="tblPnm != null">UPPER(REPLACE(#{tblPnm,jdbcType=VARCHAR},' ','')) ,</if>
+		<if test="pgmEnm != null">#{pgmEnm,jdbcType=VARCHAR} ,</if>
+		<if test="pgmHnm != null">#{pgmHnm,jdbcType=VARCHAR} ,</if>
+        #{rqstDcd,jdbcType=VARCHAR},
+		<if test="rvwStsCd != null">#{rvwStsCd,jdbcType=VARCHAR} ,</if>
+		<if test="rvwConts != null">#{rvwConts,jdbcType=VARCHAR} ,</if>
+		<if test="vrfRmk != null">#{vrfRmk,jdbcType=VARCHAR} ,</if>
+		<if test="vrfCd != null">#{vrfCd,jdbcType=VARCHAR} ,</if>
+		<if test="creYn != null">#{creYn,jdbcType=VARCHAR} ,</if>
+		<if test="reaYn != null">#{reaYn,jdbcType=VARCHAR} ,</if>
+		<if test="updYn != null">#{updYn,jdbcType=VARCHAR} ,</if>
+		<if test="delYn != null">#{delYn,jdbcType=VARCHAR} ,</if>
+		<if test="objDescn != null">#{objDescn,jdbcType=VARCHAR} ,</if>
+        1,
+		<if test="regTypCd != null">#{regTypCd,jdbcType=VARCHAR} ,</if>
+        SYSDATETIME,
+		<if test="frsRqstUserId != null">#{frsRqstUserId,jdbcType=VARCHAR} ,</if>
+        SYSDATETIME,
+        #{rqstUserId,jdbcType=VARCHAR} ,
+		<if test="aprvDtm != null">#{aprvDtm,jdbcType=VARCHAR} ,</if>
+		<if test="aprvUserId != null">#{aprvUserId,jdbcType=VARCHAR}</if>
+    </trim>
+  </insert>
+
+	<update id="updateByPrimaryKeySelective" parameterType="kr.wise.meta.stnd.service.WaqTlk" >
+    UPDATE WAQ_TLK
+    <set >
+      <if test="tlkId != null">TLK_ID = #{tlkId,jdbcType=VARCHAR} ,</if>
+		<if test="tblPnm != null">TBL_PNM = UPPER(REPLACE(#{tblPnm,jdbcType=VARCHAR},' ','')) ,</if>
+		<if test="pgmEnm != null">PGM_ENM = #{pgmEnm,jdbcType=VARCHAR} ,</if>
+		<if test="pgmHnm != null">PGM_HNM = #{pgmHnm,jdbcType=VARCHAR} ,</if>
+        <if test="rqstDcd != null">RQST_DCD = #{rqstDcd,jdbcType=VARCHAR} ,</if>
+		<if test="rvwStsCd != null">RVW_SYS_CD = #{rvwStsCd,jdbcType=VARCHAR} ,</if>
+		<if test="rvwConts != null">RVW_CONTS = #{rvwConts,jdbcType=VARCHAR} ,</if>
+		<if test="vrfRmk != null">VRF_RMK = #{vrfRmk,jdbcType=VARCHAR} ,</if>
+		<if test="vrfCd != null">VRF_CD = #{vrfCd,jdbcType=VARCHAR} ,</if>
+		<if test="creYn != null">CRE_YN  = #{creYn,jdbcType=VARCHAR} ,</if>
+		<if test="reaYn != null">REA_YN  = #{reaYn,jdbcType=VARCHAR} ,</if>
+		<if test="updYn != null">UPD_YN = #{updYn,jdbcType=VARCHAR} ,</if>
+		<if test="delYn != null">DEL_YN  = #{delYn,jdbcType=VARCHAR} ,</if>
+		<if test="objDescn != null">OBJ_DESCN = #{objDescn,jdbcType=VARCHAR} ,</if>
+		<if test="objVers != null">OBJ_VERS = #{objVers,jdbcType=VARCHAR} ,</if>
+		<if test="regTypCd != null">REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR} ,</if>
+		<if test="frs_rqst_dtm != null">FRS_RQST_DTM = #{frs_rqst_dtm,jdbcType=VARCHAR} ,</if>
+        <if test="frsRqstUserId != null">FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR} ,</if>
+        <if test="rqstDtm != null">RQST_DTM = #{rqstDtm,jdbcType=VARCHAR} ,</if>
+		<if test="rqstUserId != null">RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR} ,</if>
+		<if test="aprvDtm != null">ARPV_DTM = #{aprvDtm,jdbcType=VARCHAR} ,</if>
+		<if test="aprvUserId != null">APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR}</if>
+    </set>
+    WHERE RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      AND RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+  </update>
+
+	<delete id="deleteByPrimaryKey" parameterType="map" >
+    DELETE FROM WAQ_TLK
+    WHERE RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      AND RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+  </delete>
+	
+   <update id="updateCheckInit" parameterType="map" >
+    UPDATE WAQ_TLK A
+    SET A.REG_TYP_CD = 
+     (SELECT CASE WHEN A.RQST_DCD = 'DD' THEN 'D' ELSE CASE WHEN MAX(B.TLK_ID ) IS NULL THEN 'C' ELSE 'U' END END
+                          FROM WAM_TLK B
+                         WHERE B.REG_TYP_CD IN ('C','U')
+                           AND B.TBL_PNM = A.TBL_PNM
+                           AND B.PGM_ENM = A.PGM_ENM
+                           )
+       ,A.VRF_CD = '4'
+    WHERE A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+    </update>
+    
+  <insert id="checkRequestMsg" parameterType="map">
+  	<include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSql"/>
+	--검증쿼리
+	AND EXISTS (
+    		SELECT 1 FROM WAQ_MSTR E
+             INNER JOIN WAQ_TLK D
+             	ON E.RQST_NO = D.RQST_NO
+             WHERE D.RQST_NO != #{rqstNo}
+               AND E.RQST_STEP_CD = 'Q'
+               AND A.TBL_PNM = D.TBL_PNM
+               AND A.PGM_ENM = D.PGM_ENM
+               AND A.PGM_HNM = D.PGM_HNM
+			   AND NVL(D.RVW_STS_CD, 0) != '2'
+               ) 
+  </insert>
+  
+  <insert id="checkCRUDExists" parameterType="map" >
+  	<include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSql"/>
+	--검증쿼리
+	  AND A.REG_TYP_CD = 'C'   
+      AND EXISTS (SELECT 1
+			            FROM WAQ_TLK D
+			            WHERE D.RQST_NO = #{rqstNo}
+			              <if test="rqstSno != null" >
+						  AND D.RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+						 </if>
+                          AND D.TBL_PNM = A.TBL_PNM
+                          AND D.PGM_ENM = A.PGM_ENM
+			              AND D.CRE_YN IS NULL
+			              AND D.REA_YN IS NULL
+			              AND D.UPD_YN IS NULL
+			              AND D.DEL_YN IS NULL
+			           )
+    </insert>
+
+	<insert id="checkDupTlk" parameterType="map" >
+  	<include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSql"/>
+	--검증쿼리
+      AND EXISTS (SELECT 1
+                  FROM WAQ_TLK D
+                  WHERE A.RQST_NO = D.RQST_NO
+	               AND A.TBL_PNM = D.TBL_PNM
+	               AND A.PGM_ENM = D.PGM_ENM
+	               AND A.PGM_HNM = D.PGM_HNM
+                   AND A.RQST_SNO != D.RQST_SNO)
+  </insert>
+
+  <insert id="checkNotExistTlk" parameterType="map" >
+    <include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSql"/>
+	--검증쿼리
+      AND A.RQST_DCD = 'DD'
+      AND NOT EXISTS (SELECT 1
+	                  FROM WAQ_TLK D
+	                  WHERE A.TBL_PNM = D.TBL_PNM
+		               AND A.PGM_ENM = D.PGM_ENM
+		               AND A.PGM_HNM = D.PGM_HNM
+	                   AND D.REG_TYP_CD IN ('C', 'U'))
+  </insert>
+  
+  <!-- 결재처리 -->
+  <update id="updatervwStsCd" parameterType="kr.wise.meta.stnd.service.WaqTlk">
+  	UPDATE WAQ_TLK
+  	<set>
+  	    RVW_STS_CD 	= #{rvwStsCd} , 
+  		RVW_CONTS 	= #{rvwConts} , 
+  		APRV_DTM	= SYSDATETIME ,
+  		APRV_USER_ID = #{aprvUserId} ,
+  	</set>
+    WHERE RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      AND RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+      AND VRF_CD = '1'
+      AND NVL(RVW_STS_CD, '_') != '2'
+  </update>
+  
+  <select id="selectWaqC" parameterType="map" resultMap="BaseResultMap">
+   	SELECT * FROM WAQ_TLK
+   	WHERE RQST_NO = #{rqstNo}
+   	  AND RVW_STS_CD = '1'  --승인
+   	  AND REG_TYP_CD = 'C'  	
+  </select>
+
+  <update id="updateidByKey" parameterType="kr.wise.meta.stnd.service.WaqTlk">
+   	UPDATE WAQ_TLK SET TLK_ID = #{tlkId,jdbcType=VARCHAR}
+  	 WHERE RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+       AND RQST_SNO = #{rqstSno,jdbcType=DECIMAL} 
+  </update>
+  
+  <insert id="insertwam2waq" parameterType="map">
+  	INSERT INTO WAQ_TLK (RQST_NO, RQST_SNO, TLK_ID, TBL_PNM, PGM_ENM, PGM_HNM, RQST_DCD, RVW_STS_CD, RVW_CONTS, VRF_RMK, VRF_CD, CRE_YN, REA_YN, UPD_YN, DEL_YN, OBJ_DESCN, OBJ_VERS, REG_TYP_CD, FRS_RQST_DTM, FRS_RQST_USER_ID, RQST_DTM, RQST_USER_ID, APRV_DTM, APRV_USER_ID)
+  	SELECT #{reqmst.rqstNo} 
+  		  , (SELECT NVL(MAX(RQST_SNO), 0) FROM WAQ_TLK WHERE RQST_NO = #{reqmst.rqstNo}) + ROWNUM
+  		  , TLK_ID, TBL_PNM, PGM_ENM, PGM_HNM
+  		  , #{reqmst.rqstDcd} AS RQST_DCD, RVW_STS_CD, RVW_CONTS, VRF_RMK, VRF_CD, CRE_YN, REA_YN, UPD_YN, DEL_YN, OBJ_DESCN, OBJ_VERS, REG_TYP_CD, FRS_RQST_DTM, FRS_RQST_USER_ID
+  		  , SYSDATETIME
+  		  , #{reqmst.rqstUserId,jdbcType=VARCHAR}, APRV_DTM, APRV_USER_ID
+      FROM WAM_TLK 
+     WHERE TLK_ID IN 
+     <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+     	#{item.tlkId}
+     </foreach>
+       AND REG_TYP_CD IN ('C' , 'U')
+  </insert>
+  
+    <select id="selectExistsTlkCheck" resultMap="BaseResultMap" parameterType="kr.wise.meta.stnd.service.WaqTlk" >
+    SELECT 
+         TLK_ID
+    FROM WAQ_TLK
+    WHERE RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+    AND ROWNUM =1
+  </select>
+  
+	<insert id="insertWaqRejected" parameterType="map" >
+  	       INSERT INTO WAQ_TLK(
+                     	RQST_NO
+                       ,RQST_SNO
+                       ,TLK_ID
+                       ,TBL_PNM
+                       ,PGM_ENM
+                       ,PGM_HNM
+                       ,RQST_DCD
+                       ,RVW_STS_CD
+                       ,RVW_CONTS
+                       ,VRF_RMK
+                       ,VRF_CD
+                       ,CRE_YN
+                       ,REA_YN
+                       ,UPD_YN
+                       ,DEL_YN
+                       ,OBJ_DESCN
+                       ,OBJ_VERS
+                       ,REG_TYP_CD
+                       ,FRS_RQST_DTM
+                       ,FRS_RQST_USER_ID
+                       ,RQST_DTM
+                       ,RQST_USER_ID
+                       ,APRV_DTM
+                       ,APRV_USER_ID
+  	       )
+  	       SELECT 
+  	                   #{reqmst.rqstNo,jdbcType=VARCHAR}
+                       ,RQST_SNO
+                       ,TLK_ID
+                       ,TBL_PNM
+                       ,PGM_ENM
+                       ,PGM_HNM
+                       ,RQST_DCD
+                       ,'0'
+                       ,NULL
+                       ,NULL
+                       ,NULL
+                       ,DMN_ID
+                       ,REA_YN
+                       ,UPD_YN
+                       ,DEL_YN
+                       ,OBJ_DESCN
+                       ,OBJ_VERS
+                       ,REG_TYP_CD
+                       ,FRS_RQST_DTM
+                       ,FRS_RQST_USER_ID
+                       ,RQST_DTM
+                       ,RQST_USER_ID
+                       ,NULL
+                       ,NULL
+  	          FROM WAQ_TLK A
+  	          WHERE A.RQST_NO = #{oldRqstNo,jdbcType=VARCHAR}
+  	          AND A.RVW_STS_CD = '2'
+       </insert>
+
+	<select id="selectMsgRqstListbyMst" parameterType="kr.wise.commons.rqstmst.service.WaqMstr" resultMap="BaseResultMap">
+  	SELECT          A.RQST_NO
+                       ,A.RQST_SNO
+                       ,A.TLK_ID
+                       ,A.TBL_PNM
+                       ,A.PGM_ENM
+                       ,A.PGM_HNM
+                       ,A.RQST_DCD
+                       ,A.RVW_STS_CD
+                       ,A.RVW_CONTS
+                       ,A.VRF_RMK
+                       ,A.VRF_CD
+                       ,A.CRE_YN
+                       ,A.REA_YN
+                       ,A.UPD_YN
+                       ,A.DEL_YN
+                       ,A.OBJ_DESCN
+                       ,A.OBJ_VERS
+                       ,A.REG_TYP_CD
+                       ,A.FRS_RQST_DTM
+                       ,A.FRS_RQST_USER_ID
+                       ,A.RQST_DTM
+                       ,A.RQST_USER_ID
+                       ,A.APRV_DTM
+                       ,A.APRV_USER_ID
+  	 <if test='rqstStepCd == "Q" '>
+     , CASE WHEN A.RVW_STS_CD = '2' THEN '2' ELSE '0' END AS RVW_STS_CD
+     </if>
+     <if test='rqstStepCd != "Q" '>
+     , A.RVW_STS_CD
+     </if>
+     , CASE WHEN A.VRF_CD = '2' THEN '#FF0000' END AS FontColor
+     , U.USER_NM AS RQST_USER_NM
+  	  FROM WAQ_TLK A
+  	  LEFT OUTER JOIN WAA_USER U
+  	    ON A.RQST_USER_ID = U.USER_ID
+  	   AND U.REG_TYP_CD IN ('C', 'U')
+  	   AND U.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+  	 WHERE A.RQST_NO = #{rqstNo}
+  	<if test='rqstStepCd == "Q" or rqstStepCd == "A" '>
+    	AND A.VRF_CD = '1'
+    </if>
+  	 ORDER BY A.RQST_SNO
+  </select>
+  
+  <update id="updateWaqCUD" parameterType="map">
+   	--WAQ ID, VERS 등을 업데이트...
+	UPDATE WAQ_TLK A
+	SET (TLK_ID, OBJ_VERS, FRS_RQST_DTM, FRS_RQST_USER_ID) = (
+	    SELECT 
+	          B.TLK_ID AS TLK_ID
+	        , NVL(B.OBJ_VERS, 0) + 1 AS OBJ_VERS
+	        , B.FRS_RQST_DTM
+	        , B.FRS_RQST_USER_ID
+	    FROM WAM_TLK B
+	    WHERE  B.TBL_PNM = A.TBL_PNM
+	      AND B.PGM_ENM = A.PGM_ENM
+	      AND B.REG_TYP_CD IN ('C', 'U')
+	)
+	WHERE A.RQST_NO = #{rqstNo}
+	--AND A.VRF_CD = '1' 		--등록가능
+	AND A.RVW_STS_CD = '1'  --승인
+	AND EXISTS (
+		SELECT 1
+		  FROM WAM_TLK B
+		 WHERE B.TBL_PNM = A.TBL_PNM
+	      AND B.PGM_ENM = A.PGM_ENM
+	       AND B.REG_TYP_CD IN ('C', 'U')
+	)
+   </update>
+   
+   <update id="updateWaqC" parameterType="map">
+   </update>
+   
+   <delete id="deleteWAM" parameterType="map">
+    --WAM 삭제 (등록유형코드가REG_TYP_CD 변경, 삭제일 경우)
+	DELETE FROM WAM_TLK A
+	WHERE EXISTS (
+	    SELECT 1 FROM WAQ_TLK B
+	     WHERE B.RQST_NO = #{rqstNo}
+	       AND B.RVW_STS_CD = '1'
+	       AND B.TBL_PNM = A.TBL_PNM
+	      AND B.PGM_ENM = A.PGM_ENM
+	)
+   </delete>
+   
+   <insert id="insertWAM" parameterType="map">
+   	--WAM 추가 (WAQ 내용을 추가, REG_TYP_CD 가 신규,변경일 경우)
+	INSERT INTO WAM_TLK 
+	SELECT 
+		A.TLK_ID 
+	<include refid="wam_col"/>
+	 FROM WAQ_TLK A
+	WHERE A.RQST_NO = #{rqstNo}
+	  AND A.RVW_STS_CD = '1'
+	  AND A.REG_TYP_CD IN ('C', 'U')
+   </insert>
+   
+   <update id="updateWAH"  parameterType="map">
+   	--WAH 이력 만료...
+	UPDATE WAH_TLK A
+	SET EXP_DTM = SYSDATETIME
+	WHERE EXISTS (
+	    SELECT 1 FROM WAQ_TLK B
+	    WHERE B.RQST_NO = #{rqstNo}
+	    AND B.RVW_STS_CD = '1'
+	    --AND B.REG_TYP_CD IN ('U', 'D')
+	    AND B.TBL_PNM = A.TBL_PNM
+	      AND B.PGM_ENM = A.PGM_ENM
+	    )
+	AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+   </update>
+   
+   <insert id="insertWAH"  parameterType="map">
+   	--WAH이력 적재...
+	INSERT INTO WAH_TLK
+	SELECT
+	    A.TLK_ID 
+	    , TO_DATE( '9999-12-31', 'YYYY-MM-DD') AS EXP_DTM
+	    , SYSDATETIME AS STR_DTM 
+	
+	<include refid="wam_col"/>
+   
+	 FROM WAQ_TLK A
+	WHERE A.RQST_NO = #{rqstNo}
+	  AND A.RVW_STS_CD = '1'
+   </insert>   
+
+</mapper>

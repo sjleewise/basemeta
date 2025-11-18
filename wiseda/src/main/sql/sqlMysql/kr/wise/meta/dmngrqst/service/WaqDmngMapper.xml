@@ -1,0 +1,739 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.wise.meta.dmngrqst.service.WaqDmngMapper">
+  <resultMap id="BaseResultMap" type="kr.wise.meta.dmngrqst.service.WaqDmng" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+    <id column="RQST_NO" jdbcType="VARCHAR" property="rqstNo" />
+    <id column="RQST_SNO" jdbcType="DECIMAL" property="rqstSno" />
+    <result column="STND_ASRT" jdbcType="VARCHAR" property="stndAsrt" />
+    <result column="DMNG_ID" jdbcType="VARCHAR" property="dmngId" />
+    <result column="RQST_DCD" jdbcType="VARCHAR" property="rqstDcd" />
+    <result column="RVW_STS_CD" jdbcType="VARCHAR" property="rvwStsCd" />
+    <result column="RVW_CONTS" jdbcType="VARCHAR" property="rvwConts" />
+    <result column="VRF_CD" jdbcType="VARCHAR" property="vrfCd" />
+    <result column="VRF_RMK" jdbcType="VARCHAR" property="vrfRmk" />
+    <result column="DMNG_LNM" jdbcType="VARCHAR" property="dmngLnm" />
+    <result column="DMNG_PNM" jdbcType="VARCHAR" property="dmngPnm" />
+    <result column="UPP_DMNG_ID" jdbcType="VARCHAR" property="uppDmngId" />
+    <result column="DMNG_LVL" jdbcType="DECIMAL" property="dmngLvl" />
+    <result column="CD_DMN_YN" jdbcType="VARCHAR" property="cdDmnYn" />
+    <result column="INFOTP_CHG_CAN_YN" jdbcType="VARCHAR" property="infotpChgCanYn" />
+    <result column="OBJ_DESCN" jdbcType="VARCHAR" property="objDescn" />
+    <result column="OBJ_VERS" jdbcType="DECIMAL" property="objVers" />
+    <result column="WRIT_DTM" jdbcType="TIMESTAMP" property="writDtm" />
+    <result column="WRIT_USER_ID" jdbcType="VARCHAR" property="writUserId" />
+    <result column="FULL_PATH" jdbcType="VARCHAR" property="fullPath" />
+    <result column="UPP_DMNG_LNM" jdbcType="VARCHAR" property="uppDmngLnm" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    RQST_NO, RQST_SNO, STND_ASRT, DMNG_ID, RQST_DCD, RVW_STS_CD, RVW_CONTS, VRF_CD, VRF_RMK, 
+    DMNG_LNM, DMNG_PNM, UPP_DMNG_ID, DMNG_LVL, CD_DMN_YN, INFOTP_CHG_CAN_YN, OBJ_DESCN, 
+    OBJ_VERS, WRIT_DTM, WRIT_USER_ID, FULL_PATH, UPP_DMNG_LNM
+   ,REG_TYP_CD,FRS_RQST_DTM,FRS_RQST_USER_ID,RQST_DTM,RQST_USER_ID,APRV_DTM,APRV_USER_ID
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="map" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from WAQ_DMNG
+    where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      and RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="map">
+    delete from WAQ_DMNG
+    where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      and RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+  </delete>
+  <insert id="insert" parameterType="kr.wise.meta.dmngrqst.service.WaqDmng">
+    insert into WAQ_DMNG (RQST_NO, RQST_SNO, STND_ASRT, 
+      DMNG_ID, RQST_DCD, RVW_STS_CD, 
+      RVW_CONTS, VRF_CD, VRF_RMK, 
+      DMNG_LNM, DMNG_PNM, UPP_DMNG_ID, 
+      DMNG_LVL, CD_DMN_YN, INFOTP_CHG_CAN_YN, 
+      OBJ_DESCN, OBJ_VERS, WRIT_DTM, 
+      WRIT_USER_ID, FULL_PATH, UPP_DMNG_LNM
+      ,REG_TYP_CD,FRS_RQST_DTM,FRS_RQST_USER_ID,RQST_DTM,RQST_USER_ID,APRV_DTM,APRV_USER_ID
+      )
+    values (#{rqstNo,jdbcType=VARCHAR}, #{rqstSno,jdbcType=DECIMAL}, #{stndAsrt,jdbcType=VARCHAR}, 
+      #{dmngId,jdbcType=VARCHAR}, #{rqstDcd,jdbcType=VARCHAR}, #{rvwStsCd,jdbcType=VARCHAR}, 
+      #{rvwConts,jdbcType=VARCHAR}, #{vrfCd,jdbcType=VARCHAR}, #{vrfRmk,jdbcType=VARCHAR}, 
+      #{dmngLnm,jdbcType=VARCHAR}, #{dmngPnm,jdbcType=VARCHAR}, #{uppDmngId,jdbcType=VARCHAR}, 
+      #{dmngLvl,jdbcType=DECIMAL}, #{cdDmnYn,jdbcType=VARCHAR}, #{infotpChgCanYn,jdbcType=VARCHAR}, 
+      #{objDescn,jdbcType=VARCHAR}, #{objVers,jdbcType=DECIMAL}, #{writDtm,jdbcType=TIMESTAMP}, 
+      #{writUserId,jdbcType=VARCHAR}, #{fullPath,jdbcType=VARCHAR}, #{uppDmngLnm,jdbcType=VARCHAR}
+      , #{regTypCd,jdbcType=VARCHAR}, #{frsRqstDtm,jdbcType=TIMESTAMP},#{frsRqstUserId,jdbcType=VARCHAR}, #{rqstDtm,jdbcType=TIMESTAMP}, #{rqstUserId,jdbcType=VARCHAR}, #{aprvDtm,jdbcType=TIMESTAMP}, #{aprvUserId,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="kr.wise.meta.dmngrqst.service.WaqDmng">
+    <selectKey keyProperty="rqstSno" resultType="int" statementType="PREPARED" order="BEFORE">
+		SELECT coalesce(MAX(RQST_SNO), 0) + 1 FROM WAQ_DMNG WHERE RQST_NO = #{rqstNo}
+  	</selectKey>
+    insert into WAQ_DMNG
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="rqstNo != null">
+        RQST_NO,
+      </if>
+      <if test="rqstSno != null">
+        RQST_SNO,
+      </if>
+      <if test="stndAsrt != null">
+        STND_ASRT,
+      </if>
+      <if test="dmngId != null">
+        DMNG_ID,
+      </if>
+      <if test="rqstDcd != null">
+        RQST_DCD,
+      </if>
+      <if test="rvwStsCd != null">
+        RVW_STS_CD,
+      </if>
+      <if test="rvwConts != null">
+        RVW_CONTS,
+      </if>
+      <if test="vrfCd != null">
+        VRF_CD,
+      </if>
+      <if test="vrfRmk != null">
+        VRF_RMK,
+      </if>
+      <if test="dmngLnm != null">
+        DMNG_LNM,
+      </if>
+      <if test="dmngPnm != null">
+        DMNG_PNM,
+      </if>
+      <if test="uppDmngId != null">
+        UPP_DMNG_ID,
+      </if>
+      <if test="dmngLvl != null">
+        DMNG_LVL,
+      </if>
+      <if test="cdDmnYn != null">
+        CD_DMN_YN,
+      </if>
+      <if test="infotpChgCanYn != null">
+        INFOTP_CHG_CAN_YN,
+      </if>
+      <if test="objDescn != null">
+        OBJ_DESCN,
+      </if>
+      <if test="objVers != null">
+        OBJ_VERS,
+      </if>
+      <if test="writDtm != null">
+        WRIT_DTM,
+      </if>
+      <if test="writUserId != null">
+        WRIT_USER_ID,
+      </if>
+      <if test="fullPath != null">
+        FULL_PATH,
+      </if>
+      <if test="uppDmngLnm != null">
+        UPP_DMNG_LNM,
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD,
+      </if>
+        FRS_RQST_DTM,
+      <if test="frsRqstUserId != null" >
+        FRS_RQST_USER_ID,
+      </if>
+        RQST_DTM,
+      <if test="rqstUserId != null" >
+        RQST_USER_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="rqstNo != null">
+        #{rqstNo,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstSno != null">
+        #{rqstSno,jdbcType=DECIMAL},
+      </if>
+      <if test="stndAsrt != null">
+        #{stndAsrt,jdbcType=VARCHAR},
+      </if>
+      <if test="dmngId != null">
+        #{dmngId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDcd != null">
+        #{rqstDcd,jdbcType=VARCHAR},
+      </if>
+      <if test="rvwStsCd != null">
+        #{rvwStsCd,jdbcType=VARCHAR},
+      </if>
+      <if test="rvwConts != null">
+        #{rvwConts,jdbcType=VARCHAR},
+      </if>
+      <if test="vrfCd != null">
+        #{vrfCd,jdbcType=VARCHAR},
+      </if>
+      <if test="vrfRmk != null">
+        #{vrfRmk,jdbcType=VARCHAR},
+      </if>
+      <if test="dmngLnm != null">
+        #{dmngLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="dmngPnm != null">
+        #{dmngPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="uppDmngId != null">
+        #{uppDmngId,jdbcType=VARCHAR},
+      </if>
+      <if test="dmngLvl != null">
+        #{dmngLvl,jdbcType=DECIMAL},
+      </if>
+      <if test="cdDmnYn != null">
+        #{cdDmnYn,jdbcType=VARCHAR},
+      </if>
+      <if test="infotpChgCanYn != null">
+        #{infotpChgCanYn,jdbcType=VARCHAR},
+      </if>
+      <if test="objDescn != null">
+        #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null">
+        #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="writDtm != null">
+        #{writDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="writUserId != null">
+        #{writUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="fullPath != null">
+        #{fullPath,jdbcType=VARCHAR},
+      </if>
+      <if test="uppDmngLnm != null">
+        #{uppDmngLnm,jdbcType=VARCHAR},
+      </if>
+       <if test="regTypCd != null" >
+        #{regTypCd,jdbcType=VARCHAR},
+      </if>
+        SYSDATE ,
+      <if test="frsRqstUserId != null" >
+        #{frsRqstUserId,jdbcType=VARCHAR},
+      </if>
+        SYSDATE ,
+      <if test="rqstUserId != null" >
+        #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+      
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.meta.dmngrqst.service.WaqDmng">
+    update WAQ_DMNG
+    <set>
+      <if test="stndAsrt != null">
+        STND_ASRT = #{stndAsrt,jdbcType=VARCHAR},
+      </if>
+      <if test="dmngId != null">
+        DMNG_ID = #{dmngId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDcd != null">
+        RQST_DCD = #{rqstDcd,jdbcType=VARCHAR},
+      </if>
+      <if test="rvwStsCd != null">
+        RVW_STS_CD = #{rvwStsCd,jdbcType=VARCHAR},
+      </if>
+      <if test="rvwConts != null">
+        RVW_CONTS = #{rvwConts,jdbcType=VARCHAR},
+      </if>
+      <if test="vrfCd != null">
+        VRF_CD = #{vrfCd,jdbcType=VARCHAR},
+      </if>
+      <if test="vrfRmk != null">
+        VRF_RMK = #{vrfRmk,jdbcType=VARCHAR},
+      </if>
+      <if test="dmngLnm != null">
+        DMNG_LNM = #{dmngLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="dmngPnm != null">
+        DMNG_PNM = #{dmngPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="uppDmngId != null">
+        UPP_DMNG_ID = #{uppDmngId,jdbcType=VARCHAR},
+      </if>
+      <if test="dmngLvl != null">
+        DMNG_LVL = #{dmngLvl,jdbcType=DECIMAL},
+      </if>
+      <if test="cdDmnYn != null">
+        CD_DMN_YN = #{cdDmnYn,jdbcType=VARCHAR},
+      </if>
+      <if test="infotpChgCanYn != null">
+        INFOTP_CHG_CAN_YN = #{infotpChgCanYn,jdbcType=VARCHAR},
+      </if>
+      <if test="objDescn != null">
+        OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null">
+        OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="writDtm != null">
+        WRIT_DTM = #{writDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="writUserId != null">
+        WRIT_USER_ID = #{writUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="fullPath != null">
+        FULL_PATH = #{fullPath,jdbcType=VARCHAR},
+      </if>
+      <if test="uppDmngLnm != null">
+        UPP_DMNG_LNM = #{uppDmngLnm,jdbcType=VARCHAR},
+      </if>
+        RQST_DTM = SYSDATE ,
+      <if test="rqstUserId != null" >
+        RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      and RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="kr.wise.meta.dmngrqst.service.WaqDmng">
+    update WAQ_DMNG
+    set STND_ASRT = #{stndAsrt,jdbcType=VARCHAR},
+      DMNG_ID = #{dmngId,jdbcType=VARCHAR},
+      RQST_DCD = #{rqstDcd,jdbcType=VARCHAR},
+      RVW_STS_CD = #{rvwStsCd,jdbcType=VARCHAR},
+      RVW_CONTS = #{rvwConts,jdbcType=VARCHAR},
+      VRF_CD = #{vrfCd,jdbcType=VARCHAR},
+      VRF_RMK = #{vrfRmk,jdbcType=VARCHAR},
+      DMNG_LNM = #{dmngLnm,jdbcType=VARCHAR},
+      DMNG_PNM = #{dmngPnm,jdbcType=VARCHAR},
+      UPP_DMNG_ID = #{uppDmngId,jdbcType=VARCHAR},
+      DMNG_LVL = #{dmngLvl,jdbcType=DECIMAL},
+      CD_DMN_YN = #{cdDmnYn,jdbcType=VARCHAR},
+      INFOTP_CHG_CAN_YN = #{infotpChgCanYn,jdbcType=VARCHAR},
+      OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      WRIT_DTM = #{writDtm,jdbcType=TIMESTAMP},
+      WRIT_USER_ID = #{writUserId,jdbcType=VARCHAR},
+      FULL_PATH = #{fullPath,jdbcType=VARCHAR},
+      UPP_DMNG_LNM = #{uppDmngLnm,jdbcType=VARCHAR},
+      REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      FRS_RQST_DTM = #{frsRqstDtm,jdbcType=TIMESTAMP},
+      FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR},
+      RQST_DTM = #{rqstDtm,jdbcType=TIMESTAMP},
+      RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      APRV_DTM = #{aprvDtm,jdbcType=TIMESTAMP},
+      APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR}
+    where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      and RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+  </update>
+  
+  
+  <select id="selectDmngListbyMst" parameterType="kr.wise.commons.rqstmst.service.WaqMstr" resultMap="BaseResultMap">
+  	--도메인그룹 요청서 리스트 조회
+  	SELECT A.RQST_NO
+     ,A.RQST_SNO
+     ,A.STND_ASRT
+     ,A.DMNG_ID
+     ,A.RQST_DCD
+     ,A.RVW_CONTS
+     ,A.VRF_CD
+     ,A.VRF_RMK
+     ,A.DMNG_LNM
+     ,A.DMNG_PNM
+     ,A.UPP_DMNG_ID
+     ,A.DMNG_LVL
+     ,A.CD_DMN_YN
+     ,A.INFOTP_CHG_CAN_YN
+     ,A.OBJ_DESCN
+     ,A.OBJ_VERS
+     ,A.WRIT_DTM
+     ,A.WRIT_USER_ID
+     ,A.FULL_PATH
+     ,A.UPP_DMNG_LNM
+     ,A.REG_TYP_CD
+     ,A.FRS_RQST_DTM
+     ,A.FRS_RQST_USER_ID
+     ,A.RQST_DTM
+     ,A.RQST_USER_ID
+     ,A.APRV_DTM
+     ,A.APRV_USER_ID
+     <if test='rqstStepCd == "Q" '>
+     , CASE WHEN A.RVW_STS_CD = '2' THEN '2' ELSE '0' END AS RVW_STS_CD
+     </if>
+     <if test='rqstStepCd != "Q" '>
+     , A.RVW_STS_CD
+     </if>
+     , CASE WHEN A.VRF_CD = '2' THEN '#FF0000' ELSE CASE WHEN A.VRF_CD = '5' THEN '#0000FF'  END END AS FontColor
+     , U.USER_NM AS RQST_USER_NM
+    FROM WAQ_DMNG A
+    LEFT OUTER JOIN WAA_USER U
+      ON A.RQST_USER_ID = U.USER_ID
+     AND U.EXP_DTM = STR_TO_DATE('99991231', '%Y%m%d')
+     AND U.REG_TYP_CD IN ('C', 'U')
+    WHERE A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+    <if test='rqstStepCd == "Q" or rqstStepCd == "A" '>
+    	AND A.VRF_CD = '1'
+    </if>
+    ORDER BY A.RQST_SNO  	
+  </select>
+  
+  <update id="updateCheckInit" parameterType="java.lang.String" >
+    UPDATE WAQ_DMNG A
+       SET (A.REG_TYP_CD, A.DMNG_ID) = 
+                          (SELECT CASE WHEN A.RQST_DCD = 'DD' THEN 'D' ELSE CASE WHEN MAX(B.DMNG_ID ) IS NULL THEN 'C' ELSE 'U' END END
+                                , MAX(B.DMNG_ID) 
+                             FROM WAA_DMNG B 
+                            WHERE B.EXP_DTM = STR_TO_DATE('99991231', '%Y%m%d')
+                              AND B.STND_ASRT = A.STND_ASRT
+                              AND B.DMNG_LNM = A.DMNG_LNM            
+                              AND B.DMNG_LVL = A.DMNG_LVL               
+                          )
+        , A.VRF_CD = '4'
+    WHERE A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+  </update>
+  
+  
+  <insert id="checkDupDmng" parameterType="map">
+  	<include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSql"/>
+  	--검증쿼리 : 요청서내 중복(DG001)
+    AND EXISTS (SELECT 1
+                FROM WAQ_DMNG D
+                WHERE A.RQST_NO = D.RQST_NO
+                  AND A.STND_ASRT = D.STND_ASRT
+                  AND A.DMNG_LNM	= D.DMNG_LNM
+                  AND A.DMNG_LVL   = D.DMNG_LVL
+                  AND A.RQST_SNO != D.RQST_SNO
+               )
+  </insert>
+  
+  <insert id="checkNotExistDmng" parameterType="map">
+  	<include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSql"/>
+  	--검증쿼리 : 미존재 도메인그룹(DG002)
+  	AND A.RQST_DCD = 'DD'
+    AND EXISTS (SELECT 1
+                FROM WAA_DMNG D
+                WHERE D.EXP_DTM = STR_TO_DATE('99991231', '%Y%m%d')
+                  AND A.STND_ASRT = D.STND_ASRT
+                  AND A.DMNG_LNM  = D.DMNG_LNM
+                  AND A.DMNG_LVL  = D.DMNG_LVL
+               )
+  </insert>
+  
+  
+  <insert id="checkRequestDmng" parameterType="map">
+  	<include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSql"/>
+  	--검증쿼리 : 요청중인 도메인그룹 (DG004)
+    AND EXISTS (
+    		    SELECT 1 FROM WAQ_MSTR E
+                 INNER JOIN WAQ_DMNG D
+                 	ON E.RQST_NO = D.RQST_NO
+                 WHERE E.RQST_NO != #{rqstNo}
+                   AND E.RQST_STEP_CD = 'Q'
+                   AND A.STND_ASRT = D.STND_ASRT
+                   AND A.DMNG_LNM  = D.DMNG_LNM
+                   AND A.DMNG_LVL  = D.DMNG_LVL
+			       AND coalesce(D.RVW_STS_CD, 0) != '2'
+               )
+  </insert> 
+  
+  
+  <insert id="checkNotChgData" parameterType="map">
+	  <include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.updateVrfNotChg"/>
+	  --검증쿼리 : 변경일 때 변경된 데이터가 없을 경우 (DG000)
+      AND A.REG_TYP_CD = 'U'
+      AND EXISTS (
+      		      SELECT 1 
+      		        FROM WAA_DMNG D
+      		       WHERE D.EXP_DTM  = STR_TO_DATE('99991231', '%Y%m%d')
+      		         AND A.STND_ASRT   = D.STND_ASRT
+      		         AND A.DMNG_LNM = D.DMNG_LNM
+      		         AND A.DMNG_LVL = D.DMNG_LVL
+      		         AND coalesce(A.OBJ_DESCN, '_') 		= coalesce(D.OBJ_DESCN, '_')      		   
+      		      )
+      AND NOT EXISTS (
+      		          SELECT 1 FROM WAQ_INFO_TYPE D
+      		           WHERE D.RQST_NO = A.RQST_NO
+                         AND D.RQST_SNO = A.RQST_SNO
+                         AND D.VRF_CD = '1'
+      		          )
+  </insert>
+   
+   
+   
+    <insert id="checkInfoTypeErr" parameterType="map">
+	  <include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSql"/>
+	  --검증쿼리 : 컬럼 오류가 있을 경우 체크 (DG999)
+	  AND EXISTS (
+	  			SELECT 1 FROM WAQ_INFO_TYPE D
+	  			 WHERE A.RQST_NO = D.RQST_NO
+	  			   AND A.RQST_SNO = D.RQST_SNO
+	  			   AND D.VRF_CD = '2'
+	  			   AND EXISTS ( SELECT 1 FROM WAQ_RQST_VRF_DTLS E
+	  			   			     WHERE D.RQST_NO 	  = E.RQST_NO
+	  			   			       AND D.RQST_SNO 	  = E.RQST_SNO
+	  			   			       AND D.RQST_DTL_SNO = E.RQST_DTL_SNO
+	  			   			       AND E.VRF_DTL_CD NOT IN ('IF000')
+	  			   ) 
+	  	)
+	  
+  </insert>
+  
+  <insert id="checkExistsUppDmng" parameterType="map">
+	  <include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSql"/>
+<!-- 	  검증쿼리 : 상위도메인그룹 있는지 체크 (DG005) -->
+	  AND NOT EXISTS (
+	  	      		  SELECT 1 FROM WAQ_DMNG D
+	  	      		  WHERE A.RQST_NO = D.RQST_NO
+	  	      		   AND A.RQST_SNO != D.RQST_SNO
+	  	      		   AND A.STND_ASRT = D.STND_ASRT
+	  	      		   AND A.UPP_DMNG_LNM = D.DMNG_LNM
+	            <![CDATA[AND A.DMNG_LVL-1 = D.DMNG_LVL]]>
+	                     AND D.RQST_DCD = 'CU'
+	                    UNION ALL
+	                    SELECT 1 FROM WAA_DMNG D
+	  	      		  WHERE D.EXP_DTM = STR_TO_DATE('99991231', '%Y%m%d')
+	  	      		   AND A.STND_ASRT = D.STND_ASRT
+	  	      		   AND A.UPP_DMNG_LNM = D.DMNG_LNM
+	            <![CDATA[AND A.DMNG_LVL-1 = D.DMNG_LVL]]>
+	         	)
+	 AND A.UPP_DMNG_LNM IS NOT NULL        	
+	  
+  </insert>
+  
+  <insert id="checkDmngLvl" parameterType="map">
+	  <include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSql"/>
+<!-- 	  검증쿼리 : 최하위 도메인그룹만 인포타입매핑가능 (DG006) -->
+	  AND EXISTS (
+	  			   SELECT 1 
+	  			   FROM WAQ_INFO_TYPE D
+	  			   WHERE A.RQST_NO = D.RQST_NO
+	  			     AND A.RQST_SNO = D.RQST_SNO
+	  	         )
+<!-- 	  	         도메인그룹 레벨을 구해서 최하위가 아닌 경우 에러 -->
+      AND A.DMNG_LVL  != (SELECT BSC_LVL
+                         FROM WAA_BSC_LVL C
+                         WHERE C.EXP_DTM = STR_TO_DATE('99991231', '%Y%m%d')
+                         AND C.BSC_ID = 'DMNG'
+                         AND C.REG_TYP_CD IN ('C', 'U')
+                         )	  	         
+	  
+  </insert>
+  
+  
+  <delete id="deleteByrqstSno" parameterType="kr.wise.meta.dmngrqst.service.WaqDmng">
+  	DELETE FROM WAQ_DMNG
+  	 WHERE RQST_NO  = #{rqstNo}
+  	   AND RQST_SNO = #{rqstSno}
+  </delete>
+  
+  <select id="checkEmptyRqst" parameterType="string" resultType="boolean" >
+     SELECT CASE WHEN count(*) > 0 THEN 0 ELSE 1 END 
+ 	 FROM WAQ_DMNG
+	 WHERE RQST_NO = #{rqstNo}  
+  </select>
+  
+  
+  <select id="selectDmngDetail" resultMap="BaseResultMap" parameterType="kr.wise.meta.model.service.WaqPdmTbl" >
+    -- 물리모델 테이블 요청 상세정보 조회
+    select 
+    <include refid="Base_Column_List" />
+    from WAQ_DMNG
+    where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      and RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+  </select>
+  
+  <select id="selectwamlist" parameterType="map" resultMap="BaseResultMap" >
+  	--도메인그룹 추가대상 조회...
+   		SELECT 
+  			((SELECT coalesce(MAX(RQST_SNO), 0) FROM WAQ_DMNG WHERE RQST_NO = #{reqmst.rqstNo}) + ROWNUM) AS RQST_SNO
+  		   , 'I' AS IBS_STATUS
+		   , A.DMNG_ID, A.DMNG_PNM, A.DMNG_LNM
+		   , #{reqmst.rqstDcd} AS RQST_DCD
+		   , A.OBJ_DESCN, A.OBJ_VERS + 1
+	  FROM WAA_DMNG A
+	  WHERE A.EXP_DTM = STR_TO_DATE('99991231', '%Y%m%d')
+	   AND A.DMNG_ID IN 
+	 <foreach collection="list" item="item" open="(" separator="," close=")">
+	  	#{item.DMNG_ID}
+	 </foreach>
+  </select>
+  
+  
+  <update id="updatervwStsCd" parameterType="kr.wise.meta.dmngrqst.service.WaqDmng" >
+  	UPDATE WAQ_DMNG
+  	<set>
+  	    RVW_STS_CD 	= #{rvwStsCd} , 
+  		RVW_CONTS 	= #{rvwConts} , 
+  		APRV_DTM	= SYSDATE ,
+  		APRV_USER_ID = #{aprvUserId} ,
+  	</set>
+    WHERE RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      AND RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+      AND VRF_CD = '1'
+      AND coalesce(RVW_STS_CD, '_') != '2'
+  </update>
+  
+  
+  
+  <sql id="wam_col">
+<!-- 	DMNG_ID -->
+<!-- EXP_DTM -->
+<!-- STR_DTM -->
+    ,STND_ASRT
+    ,DMNG_LNM
+    ,DMNG_PNM
+    ,UPP_DMNG_ID
+    ,DMNG_LVL
+    ,CD_DMN_YN
+    ,INFOTP_CHG_CAN_YN
+    ,OBJ_DESCN
+    ,OBJ_VERS
+    ,WRIT_DTM
+    ,WRIT_USER_ID
+    ,FULL_PATH
+    ,UPP_DMNG_LNM
+    ,RQST_NO
+    ,RQST_SNO
+   </sql>
+   <sql id="wam_col_ins">
+<!-- 	DMNG_ID -->
+<!-- EXP_DTM -->
+<!-- STR_DTM -->
+    ,STND_ASRT
+    ,DMNG_LNM
+    ,DMNG_PNM
+    ,UPP_DMNG_ID
+    ,DMNG_LVL
+    ,CD_DMN_YN
+    ,INFOTP_CHG_CAN_YN
+    ,OBJ_DESCN
+    ,OBJ_VERS
+    ,RQST_DTM AS WRIT_DTM
+    ,RQST_USER_ID AS WRIT_USER_ID
+    ,FULL_PATH
+    ,UPP_DMNG_LNM
+    ,RQST_NO
+    ,RQST_SNO
+   </sql>
+   
+   <select id="selectWaqC" parameterType="map" resultMap="BaseResultMap">
+   	--신규 적재 대상 추출
+   	SELECT * FROM WAQ_DMNG
+   	WHERE RQST_NO = #{rqstNo}
+   	  AND RVW_STS_CD = '1'  --승인
+   	  AND REG_TYP_CD = 'C'
+   </select>
+   
+   <update id="updateidByKey" parameterType="kr.wise.meta.model.service.WaqPdmTbl">
+     --신규 적재 대상 ID 업데이트
+     UPDATE WAQ_DMNG 
+        SET DMNG_ID = #{dmngId,jdbcType=VARCHAR}
+  	  WHERE RQST_NO    = #{rqstNo,jdbcType=VARCHAR}
+        AND RQST_SNO   = #{rqstSno,jdbcType=DECIMAL}
+   </update>
+
+   <update id="updateWaqCUD" parameterType="map">
+   	--WAQ ID, VERS 등을 업데이트...
+	UPDATE WAQ_DMNG A
+	SET (DMNG_ID, OBJ_VERS) = (
+                              	SELECT 
+                              	      B.DMNG_ID AS DMNG_ID
+                              	    , coalesce(B.OBJ_VERS, 0) + 1 AS OBJ_VERS
+                              <!-- 	        , B.FRS_RQST_DTM -->
+                              <!-- 	        , B.FRS_RQST_USER_ID -->
+                                FROM WAA_DMNG B
+                                WHERE B.STND_ASRT = A.STND_ASRT
+                                AND B.DMNG_LNM = A.DMNG_LNM
+                                AND B.DMNG_LVL = A.DMNG_LVL 
+                              )
+	WHERE A.RQST_NO = #{rqstNo}
+	--AND A.VRF_CD = '1' 		--등록가능
+	AND A.RVW_STS_CD = '1'  --승인
+	AND EXISTS (
+                 SELECT 
+                       B.DMNG_ID AS DMNG_ID
+                     , coalesce(B.OBJ_VERS, 0) + 1 AS OBJ_VERS
+                 FROM WAA_DMNG B
+                 WHERE B.STND_ASRT = A.STND_ASRT
+                 AND B.DMNG_LNM = A.DMNG_LNM
+                 AND B.DMNG_LVL = A.DMNG_LVL 
+               )
+   </update>
+   
+   <update id="updateWaqId" parameterType="map">
+   	--주제영역 ID 업데이트...
+   	UPDATE WAQ_DMNG X 
+   	   SET (FULL) = (
+   		         SELECT MAX() 
+   		         )
+   	 WHERE RQST_NO = #{rqstNo}
+   	   AND RVW_STS_CD = '1' 
+   </update>
+   
+   <delete id="deleteWAM" parameterType="map">
+<!--     WAM 삭제 (등록유형코드가REG_TYP_CD 변경, 삭제일 경우) -->
+<!--      WAA 테이블은 UPDATE 이력만료시킴 -->
+    UPDATE WAA_DMNG A
+    SET EXP_DTM  = SYSDATE
+    WHERE EXISTS (SELECT 1 FROM WAQ_DMNG B    
+                  WHERE B.RQST_NO = #{rqstNo}
+	                AND B.RVW_STS_CD = '1'
+	                AND B.DMNG_ID = A.DMNG_ID 
+	             )
+<!-- 	DELETE FROM WAA_DMNG A -->
+<!-- 	WHERE EXISTS ( -->
+<!-- 	    SELECT 1  -->
+<!-- 	      FROM WAQ_DMNG B -->
+<!-- 	     WHERE B.RQST_NO = #{rqstNo} -->
+<!-- 	       AND B.RVW_STS_CD = '1' -->
+<!-- 	       AND B.DMNG_ID = A.DMNG_ID  -->
+<!-- 	) -->
+
+   </delete>   
+
+   <insert id="insertWAM" parameterType="map">
+   	--WAM 추가 (WAQ 내용을 추가, REG_TYP_CD 가 신규,변경일 경우)
+	INSERT INTO WAA_DMNG 
+	(
+	   DMNG_ID
+	   ,EXP_DTM
+	   ,STR_DTM 	
+	   	<include refid="wam_col"/>
+	)
+	SELECT  A.DMNG_ID
+	       ,STR_TO_DATE('99991231', '%Y%m%d') AS EXP_DTM
+	       ,SYSDATE AS STR_DTM
+	       <include refid="wam_col_ins"/>
+	 FROM WAQ_DMNG A
+	WHERE A.RQST_NO = #{rqstNo}
+	  AND A.RVW_STS_CD = '1'
+	  AND A.REG_TYP_CD IN ('C', 'U')
+   </insert>  
+
+<!--    WAH 이력 만료... -->   
+<!--    <update id="updateWAH"  parameterType="map"> -->
+<!-- 	UPDATE WAH_PDM_TBL A -->
+<!-- 	   SET EXP_DTM = SYSDATE -->
+<!-- 	 WHERE EXP_DTM = STR_TO_DATE('99991231', '%Y%m%d') -->
+<!-- 	   AND REG_TYP_CD IN ('C','U') -->
+<!-- 	   AND EXISTS (SELECT 1  -->
+<!-- 	                 FROM WAQ_DMNG B -->
+<!-- 	                WHERE B.RQST_NO = #{rqstNo} -->
+<!-- 	                  AND B.RVW_STS_CD = '1' -->
+<!-- 	                  AND B.PDM_TBL_ID = A.PDM_TBL_ID -->
+<!-- 	                ) -->
+	
+<!--    </update>   -->
+
+<!--    WAH이력 적재... -->
+<!--    <insert id="insertWAH"  parameterType="map"> -->
+<!-- 	INSERT INTO WAH_PDM_TBL -->
+<!-- 	( -->
+<!-- 	    PDM_TBL_ID -->
+<!-- 	   , EXP_DTM -->
+<!-- 	   , STR_DTM 	 -->
+<!-- 	   <include refid="wam_col"/>    -->
+<!-- 	) -->
+<!-- 	SELECT A.PDM_TBL_ID AS PDM_TBL_ID -->
+<!-- 	     , STR_TO_DATE( '9999-12-31', '%Y-%m-%d') AS EXP_DTM -->
+<!-- 	     , SYSDATE AS STR_DTM 	 -->
+<!-- 	     <include refid="wam_col"/>    -->
+<!-- 	 FROM WAQ_DMNG A -->
+<!-- 	WHERE A.RQST_NO = #{rqstNo} -->
+<!-- 	  AND A.RVW_STS_CD = '1' -->
+<!--    </insert> -->
+</mapper>

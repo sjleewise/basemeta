@@ -1,0 +1,952 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.meta.ddl.service.WaqDdlPartMainMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.meta.ddl.service.WaqDdlPartMain" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+<!--     <id column="RQST_NO" property="rqstNo" jdbcType="VARCHAR" /> -->
+<!--     <id column="RQST_SNO" property="rqstSno" jdbcType="DECIMAL" /> -->
+<!--     <id column="RQST_DTL_SNO" property="rqstDtlSno" jdbcType="DECIMAL" /> -->
+    <result column="DDL_MAIN_PART_ID" property="ddlMainPartId" jdbcType="VARCHAR" />
+    <result column="DDL_PART_PNM" property="ddlPartPnm" jdbcType="VARCHAR" />
+<!--     <result column="RQST_DCD" property="rqstDcd" jdbcType="VARCHAR" /> -->
+<!--     <result column="RVW_STS_CD" property="rvwStsCd" jdbcType="VARCHAR" /> -->
+<!--     <result column="RVW_CONTS" property="rvwConts" jdbcType="VARCHAR" /> -->
+<!--     <result column="VRF_CD" property="vrfCd" jdbcType="VARCHAR" /> -->
+<!--     <result column="VRF_RMK" property="vrfRmk" jdbcType="VARCHAR" /> -->
+    <result column="DDL_PART_ID" property="ddlPartId" jdbcType="VARCHAR" />
+    <result column="DDL_TBL_ID" property="ddlTblId" jdbcType="VARCHAR" />
+    <result column="DDL_TBL_PNM" property="ddlTblPnm" jdbcType="VARCHAR" />
+    <result column="DDL_PART_VAL" property="ddlPartVal" jdbcType="VARCHAR" />
+    <result column="TBL_SPAC_ID" property="tblSpacId" jdbcType="VARCHAR" />
+    <result column="TBL_SPAC_PNM" property="tblSpacPnm" jdbcType="VARCHAR" />
+<!--     <result column="OBJ_DESCN" property="objDescn" jdbcType="VARCHAR" /> -->
+<!--     <result column="OBJ_VERS" property="objVers" jdbcType="DECIMAL" /> -->
+<!--     <result column="REG_TYP_CD" property="regTypCd" jdbcType="VARCHAR" /> -->
+<!--     <result column="FRS_RQST_DTM" property="frsRqstDtm" jdbcType="TIMESTAMP" /> -->
+<!--     <result column="FRS_RQST_USER_ID" property="frsRqstUserId" jdbcType="VARCHAR" /> -->
+<!--     <result column="RQST_DTM" property="rqstDtm" jdbcType="TIMESTAMP" /> -->
+<!--     <result column="RQST_USER_ID" property="rqstUserId" jdbcType="VARCHAR" /> -->
+<!--     <result column="APRV_DTM" property="aprvDtm" jdbcType="TIMESTAMP" /> -->
+<!--     <result column="APRV_USER_ID" property="aprvUserId" jdbcType="VARCHAR" /> -->
+  </resultMap>
+  <sql id="Base_Column_List" >
+      RQST_NO, RQST_SNO, RQST_DTL_SNO
+    , RQST_DCD, RVW_STS_CD
+    , RVW_CONTS, VRF_CD, VRF_RMK
+    , DDL_MAIN_PART_ID, DDL_PART_PNM
+    , DDL_PART_ID, DDL_TBL_ID, DDL_TBL_PNM, DDL_PART_VAL, TBL_SPAC_ID, TBL_SPAC_PNM
+    , OBJ_DESCN, OBJ_VERS, REG_TYP_CD, FRS_RQST_DTM, FRS_RQST_USER_ID, RQST_DTM
+    , RQST_USER_ID, APRV_DTM, APRV_USER_ID
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="map" >
+    select /* WaqDdlPartMainMapper.selectByPrimaryKey */
+    <include refid="Base_Column_List" />
+    from WAQ_DDL_PART_MAIN
+    where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      and RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+      and RQST_DTL_SNO = #{rqstDtlSno,jdbcType=DECIMAL}
+  </select>
+  
+  <select id="selectList" parameterType="kr.wise.commons.rqstmst.service.WaqMstr" resultMap="BaseResultMap">
+  <!-- DDL 주파티션 요청 리스트 조회 by sno -->
+  SELECT /* WaqDdlPartMainMapper.selectList */
+    <include refid="Base_Column_List" />
+    , GET_USER_NM(RQST_USER_ID) AS RQST_USER_NM
+    , CASE WHEN VRF_CD = '2' THEN '#FF0000' END AS FontColor
+    FROM WAQ_DDL_PART_MAIN
+    WHERE RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      <if test="rqstSno != null" >
+      AND RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+      </if>
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="map" >
+    delete /* WaqDdlPartMainMapper.deleteByPrimaryKey */
+    from WAQ_DDL_PART_MAIN
+    where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      and RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+      and RQST_DTL_SNO = #{rqstDtlSno,jdbcType=DECIMAL}
+  </delete>
+  <insert id="insert" parameterType="kr.wise.meta.ddl.service.WaqDdlPartMain" >
+    insert /* WaqDdlPartMainMapper.insert */
+    into WAQ_DDL_PART_MAIN (RQST_NO, RQST_SNO, RQST_DTL_SNO, 
+      DDL_MAIN_PART_ID, DDL_PART_PNM, RQST_DCD, 
+      RVW_STS_CD, RVW_CONTS, VRF_CD, 
+      VRF_RMK, DDL_PART_ID, DDL_TBL_ID, 
+      DDL_TBL_PNM, DDL_PART_VAL, TBL_SPAC_ID, 
+      TBL_SPAC_PNM, OBJ_DESCN, OBJ_VERS, 
+      REG_TYP_CD, FRS_RQST_DTM, FRS_RQST_USER_ID, 
+      RQST_DTM, RQST_USER_ID, APRV_DTM, 
+      APRV_USER_ID)
+    values (#{rqstNo,jdbcType=VARCHAR}, #{rqstSno,jdbcType=DECIMAL}, #{rqstDtlSno,jdbcType=DECIMAL}, 
+      #{ddlMainPartId,jdbcType=VARCHAR}, #{ddlPartPnm,jdbcType=VARCHAR}, #{rqstDcd,jdbcType=VARCHAR}, 
+      #{rvwStsCd,jdbcType=VARCHAR}, #{rvwConts,jdbcType=VARCHAR}, #{vrfCd,jdbcType=VARCHAR}, 
+      #{vrfRmk,jdbcType=VARCHAR}, #{ddlPartId,jdbcType=VARCHAR}, #{ddlTblId,jdbcType=VARCHAR}, 
+      #{ddlTblPnm,jdbcType=VARCHAR}, #{ddlPartVal,jdbcType=VARCHAR}, #{tblSpacId,jdbcType=VARCHAR}, 
+      #{tblSpacPnm,jdbcType=VARCHAR}, #{objDescn,jdbcType=VARCHAR}, #{objVers,jdbcType=DECIMAL}, 
+      #{regTypCd,jdbcType=VARCHAR}, #{frsRqstDtm,jdbcType=TIMESTAMP}, #{frsRqstUserId,jdbcType=VARCHAR}, 
+      #{rqstDtm,jdbcType=TIMESTAMP}, #{rqstUserId,jdbcType=VARCHAR}, #{aprvDtm,jdbcType=TIMESTAMP}, 
+      #{aprvUserId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="kr.wise.meta.ddl.service.WaqDdlPartMain" >
+  	<selectKey keyProperty="rqstDtlSno" resultType="int" order="BEFORE" statementType="PREPARED">
+  		SELECT IFNULL(MAX(RQST_DTL_SNO), 0) + 1 FROM WAQ_DDL_PART_MAIN WHERE RQST_NO = #{rqstNo,jdbcType=VARCHAR} AND RQST_SNO = #{rqstSno,jdbcType=VARCHAR}
+  	</selectKey>
+    insert /* WaqDdlPartMainMapper.insertSelective */
+    into WAQ_DDL_PART_MAIN
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+        RQST_NO,
+        RQST_SNO,
+        RQST_DTL_SNO,
+        DDL_MAIN_PART_ID,
+        DDL_PART_PNM,
+        RQST_DCD,
+        DDL_PART_ID,
+        DDL_TBL_ID,
+        DDL_TBL_PNM,
+        DDL_PART_VAL,
+        TBL_SPAC_ID,
+        TBL_SPAC_PNM,
+        OBJ_DESCN,
+        OBJ_VERS,
+        FRS_RQST_DTM,
+        FRS_RQST_USER_ID,
+        RQST_DTM,
+        RQST_USER_ID,
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+        #{rqstNo,jdbcType=VARCHAR},
+        #{rqstSno,jdbcType=DECIMAL},
+        #{rqstDtlSno,jdbcType=DECIMAL},
+        #{ddlMainPartId,jdbcType=VARCHAR},
+        #{ddlPartPnm,jdbcType=VARCHAR},
+        #{rqstDcd,jdbcType=VARCHAR},
+        #{ddlPartId,jdbcType=VARCHAR},
+        #{ddlTblId,jdbcType=VARCHAR},
+        #{ddlTblPnm,jdbcType=VARCHAR},
+        #{ddlPartVal,jdbcType=VARCHAR},
+        #{tblSpacId,jdbcType=VARCHAR},
+        #{tblSpacPnm,jdbcType=VARCHAR},
+        #{objDescn,jdbcType=VARCHAR},
+        1,
+        NOW() ,
+        #{frsRqstUserId,jdbcType=VARCHAR},
+        NOW() ,
+        #{rqstUserId,jdbcType=VARCHAR},
+    </trim>
+  </insert>
+  
+  <insert id="insertByRqstSno" parameterType="kr.wise.meta.ddl.service.WaqDdlPart">
+  <!-- DDL 파티션 요청서 추가시 WAM에 존재하는 주파티션 리스트를 추가한다. -->
+  	INSERT /* WaqDdlPartMainMapper.insertByRqstSno */
+  		INTO WAQ_DDL_PART_MAIN (
+  		<include refid="Base_Column_List"/>
+	)
+	SELECT 
+		  B.RQST_NO, B.RQST_SNO
+		, (SELECT IFNULL(MAX(RQST_DTL_SNO), 0) 
+	           FROM WAM_DDL_PART_MAIN
+	          WHERE RQST_NO = #{rqstNo} 
+	            AND RQST_SNO = #{rqstSno} 
+	         ) + @rownum:=@rownum+1 AS RQST_DTL_SNO
+		, #{rqstDcd} AS RQST_DCD, NULL AS RVW_STS_CD
+	    , NULL AS RVW_CONTS, NULL AS VRF_CD, NULL AS VRF_RMK
+	    , C.DDL_MAIN_PART_ID, C.DDL_PART_PNM
+	    , C.DDL_PART_ID, C.DDL_TBL_ID, A.DDL_TBL_PNM, C.DDL_PART_VAL, C.TBL_SPAC_ID, C.TBL_SPAC_PNM
+	    , C.OBJ_DESCN, C.OBJ_VERS, C.REG_TYP_CD, B.FRS_RQST_DTM, B.FRS_RQST_USER_ID, B.RQST_DTM
+	    , B.RQST_USER_ID, NULL AS APRV_DTM, NULL AS APRV_USER_ID
+	 FROM (SELECT @rownum:=0) TMP,WAM_DDL_PART A 
+	INNER JOIN WAM_DDL_PART_MAIN C
+	   ON A.DDL_PART_ID = C.DDL_PART_ID
+    INNER JOIN WAM_DDL_TBL T
+	   ON A.DDL_TBL_ID = T.DDL_TBL_ID  
+    INNER JOIN WAA_DB_SCH S
+       ON A.DB_SCH_ID = S.DB_SCH_ID
+      AND S.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	  AND S.REG_TYP_CD IN ('C', 'U')
+	INNER JOIN WAA_DB_CONN_TRG D
+	   ON A.DB_CONN_TRG_ID = D.DB_CONN_TRG_ID
+	  AND D.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	  AND D.REG_TYP_CD IN ('C', 'U')
+	INNER JOIN WAQ_DDL_PART B
+	   ON T.DDL_TBL_PNM = B.DDL_TBL_PNM
+      AND D.DB_CONN_TRG_PNM = B.DB_CONN_TRG_PNM
+      AND S.DB_SCH_PNM = B.DB_SCH_PNM
+	WHERE B.RQST_NO = #{rqstNo}
+	  AND B.RQST_SNO = #{rqstSno}
+  </insert>
+  <insert id="insertByTsfRqstSno" parameterType="kr.wise.meta.ddl.service.WaqDdlPart">
+  <!-- DDL 파티션 이관 요청서 추가시 WAM에 존재하는 주파티션 리스트를 추가한다. -->
+  	INSERT /* WaqDdlPartMainMapper.insertByTsfRqstSno */
+  		INTO WAQ_DDL_PART_MAIN (
+  		<include refid="Base_Column_List"/>
+	)
+	SELECT 
+		  B.RQST_NO, B.RQST_SNO
+		, (SELECT IFNULL(MAX(RQST_DTL_SNO), 0) 
+	           FROM WAQ_DDL_PART_MAIN 
+	          WHERE RQST_NO = #{rqstNo} 
+	            AND RQST_SNO = #{rqstSno} 
+	         ) + @rownum:=@rownum+1 AS RQST_DTL_SNO
+		, #{rqstDcd} AS RQST_DCD, NULL AS RVW_STS_CD
+	    , NULL AS RVW_CONTS, NULL AS VRF_CD, NULL AS VRF_RMK
+	    , C.DDL_MAIN_PART_ID, C.DDL_PART_PNM
+	    , C.DDL_PART_ID, C.DDL_TBL_ID, A.DDL_TBL_PNM, C.DDL_PART_VAL, C.TBL_SPAC_ID, C.TBL_SPAC_PNM
+	    , C.OBJ_DESCN, C.OBJ_VERS, C.REG_TYP_CD, B.FRS_RQST_DTM, B.FRS_RQST_USER_ID, B.RQST_DTM
+	    , B.RQST_USER_ID, NULL AS APRV_DTM, NULL AS APRV_USER_ID
+	 FROM (SELECT @rownum:=0) TMP, WAM_DDL_PART A 
+	INNER JOIN WAM_DDL_PART_MAIN C
+	   ON A.DDL_PART_ID = C.DDL_PART_ID   
+	INNER JOIN WAQ_DDL_PART B
+	<if test="rqstDcd!='DD'">
+	   ON A.DDL_PART_ID = B.SRC_DDL_PART_ID
+	</if>
+	<if test="rqstDcd=='DD'">
+	   ON A.DDL_PART_ID = B.DDL_PART_ID
+	</if>
+	WHERE B.RQST_NO = #{rqstNo}
+	  AND B.RQST_SNO = #{rqstSno}
+  </insert>
+  
+  <insert id="insertByTsfDelRqstSno" parameterType="kr.wise.meta.ddl.service.WaqDdlPart">
+  <!-- DDL 파티션 이관 요청서 추가시 WAM에 존재하지 않는 주파티션 리스트를 삭제 대상으로 추가한다. -->
+  	INSERT /* WaqDdlPartMainMapper.insertByTsfDelRqstSno */
+  	INTO WAQ_DDL_PART_MAIN (
+  		<include refid="Base_Column_List"/>
+	)
+	SELECT 
+		  B.RQST_NO, B.RQST_SNO
+		, (SELECT IFNULL(MAX(RQST_DTL_SNO), 0) 
+	           FROM WAQ_DDL_PART_MAIN 
+	          WHERE RQST_NO = #{rqstNo} 
+	            AND RQST_SNO = #{rqstSno} 
+	         ) + @rownum:=@rownum+1 AS RQST_DTL_SNO
+		, 'DD' AS RQST_DCD, NULL AS RVW_STS_CD
+	    , NULL AS RVW_CONTS, NULL AS VRF_CD, NULL AS VRF_RMK
+	    , C.DDL_MAIN_PART_ID, C.DDL_PART_PNM
+	    , C.DDL_PART_ID, C.DDL_TBL_ID, A.DDL_TBL_PNM, C.DDL_PART_VAL, C.TBL_SPAC_ID, C.TBL_SPAC_PNM
+	    , C.OBJ_DESCN, C.OBJ_VERS, C.REG_TYP_CD, B.FRS_RQST_DTM, B.FRS_RQST_USER_ID, B.RQST_DTM
+	    , B.RQST_USER_ID, NULL AS APRV_DTM, NULL AS APRV_USER_ID
+	 FROM (SELECT @rownum:=0) TMP, WAM_DDL_PART A 
+	INNER JOIN WAM_DDL_PART_MAIN C
+	   ON A.DDL_PART_ID = C.DDL_PART_ID   
+	INNER JOIN WAQ_DDL_PART B
+	   ON A.SRC_DDL_PART_ID = B.SRC_DDL_PART_ID
+	  AND A.DDL_TRG_DCD = B.DDL_TRG_DCD
+	LEFT OUTER JOIN WAQ_DDL_PART_MAIN D
+	   ON B.RQST_NO = D.RQST_NO
+	  AND B.RQST_SNO = D.RQST_SNO
+	  AND C.DDL_PART_PNM = D.DDL_PART_PNM
+	  AND C.DDL_PART_VAL = D.DDL_PART_VAL
+	WHERE B.RQST_NO = #{rqstNo}
+	  AND B.RQST_SNO = #{rqstSno}
+	  AND D.DDL_MAIN_PART_ID IS NULL
+  </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.meta.ddl.service.WaqDdlPartMain" >
+    update /* WaqDdlPartMainMapper.updateByPrimaryKeySelective */
+    WAQ_DDL_PART_MAIN
+    <set >
+        DDL_MAIN_PART_ID = #{ddlMainPartId,jdbcType=VARCHAR},
+        DDL_PART_PNM = #{ddlPartPnm,jdbcType=VARCHAR},
+        RQST_DCD = #{rqstDcd,jdbcType=VARCHAR},
+        DDL_PART_ID = #{ddlPartId,jdbcType=VARCHAR},
+        DDL_TBL_ID = #{ddlTblId,jdbcType=VARCHAR},
+        DDL_TBL_PNM = #{ddlTblPnm,jdbcType=VARCHAR},
+        DDL_PART_VAL = #{ddlPartVal,jdbcType=VARCHAR},
+        TBL_SPAC_ID = #{tblSpacId,jdbcType=VARCHAR},
+        TBL_SPAC_PNM = #{tblSpacPnm,jdbcType=VARCHAR},
+        OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+        OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+        RQST_DTM = NOW(),
+        RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+    </set>
+    where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      and RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+      and RQST_DTL_SNO = #{rqstDtlSno,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="kr.wise.meta.ddl.service.WaqDdlPartMain" >
+    update /* WaqDdlPartMainMapper.updateByPrimaryKey */
+    WAQ_DDL_PART_MAIN
+    set DDL_MAIN_PART_ID = #{ddlMainPartId,jdbcType=VARCHAR},
+      DDL_PART_PNM = #{ddlPartPnm,jdbcType=VARCHAR},
+      RQST_DCD = #{rqstDcd,jdbcType=VARCHAR},
+      RVW_STS_CD = #{rvwStsCd,jdbcType=VARCHAR},
+      RVW_CONTS = #{rvwConts,jdbcType=VARCHAR},
+      VRF_CD = #{vrfCd,jdbcType=VARCHAR},
+      VRF_RMK = #{vrfRmk,jdbcType=VARCHAR},
+      DDL_PART_ID = #{ddlPartId,jdbcType=VARCHAR},
+      DDL_TBL_ID = #{ddlTblId,jdbcType=VARCHAR},
+      DDL_TBL_PNM = #{ddlTblPnm,jdbcType=VARCHAR},
+      DDL_PART_VAL = #{ddlPartVal,jdbcType=VARCHAR},
+      TBL_SPAC_ID = #{tblSpacId,jdbcType=VARCHAR},
+      TBL_SPAC_PNM = #{tblSpacPnm,jdbcType=VARCHAR},
+      OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      FRS_RQST_DTM = #{frsRqstDtm,jdbcType=TIMESTAMP},
+      FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR},
+      RQST_DTM = #{rqstDtm,jdbcType=TIMESTAMP},
+      RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      APRV_DTM = #{aprvDtm,jdbcType=TIMESTAMP},
+      APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR}
+    where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      and RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+      and RQST_DTL_SNO = #{rqstDtlSno,jdbcType=DECIMAL}
+  </update>
+  
+  <delete id="deleteByrqstSno" parameterType="kr.wise.meta.ddl.service.WaqDdlPartMain">
+  <!-- DDL 주파티션 삭제 --> 
+  DELETE /* WaqDdlPartMainMapper.deleteByrqstSno */
+  FROM WAQ_DDL_PART_MAIN
+  where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      and RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+      and RQST_DTL_SNO = #{rqstDtlSno,jdbcType=DECIMAL}
+  </delete>
+  <delete id="deleteByDdlPart" parameterType="kr.wise.meta.ddl.service.WaqDdlPart">
+  <!-- DDL 주파티션 삭제 --> 
+  DELETE /* WaqDdlPartMainMapper.deleteByDdlPart */
+  FROM WAQ_DDL_PART_MAIN
+  where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      and RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+  </delete>
+  
+  
+  <update id="updateTableSpace" parameterType="string">
+  <!-- 주파티션 테이블스페이스명 업데이트... (계정계일경우 계정계테이블스페이스명 업데이트...) -->
+  UPDATE /* WaqDdlPartMainMapper.updateTableSpace */
+  WAQ_DDL_PART_MAIN A
+     SET TBL_SPAC_PNM  = (
+     		SELECT CASE WHEN IFNULL(D.ACC_DBMS_YN, 'N') = 'Y' AND G.ACC_TBL_SPAC_PNM IS NOT NULL THEN G.ACC_TBL_SPAC_PNM
+     		 		    WHEN IFNULL(D.ACC_DBMS_YN, 'N') = 'Y' AND G.ACC_TBL_SPAC_PNM IS NULL THEN 'TSP'|| L3.L3CD_PNM || '001' 
+     		 		    WHEN IFNULL(D.ACC_DBMS_YN, 'N') = 'N' THEN E.DB_TBL_SPAC_PNM 
+     		 		    END
+     		  FROM WAM_DDL_TBL B
+     		  JOIN WAA_DB_SCH C
+     		    ON B.DB_SCH_ID = C.DB_SCH_ID
+     		   AND C.REG_TYP_CD IN ('C', 'U') 
+     		   AND C.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')   
+     		  JOIN WAA_DB_CONN_TRG D
+     		    ON C.DB_CONN_TRG_ID = D.DB_CONN_TRG_ID
+     		   AND D.REG_TYP_CD IN ('C', 'U') 
+     		   AND D.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+     		  LEFT OUTER JOIN WAA_TBL_SPAC E
+     		    ON D.DB_CONN_TRG_ID = E.DB_CONN_TRG_ID
+     		   AND C.DB_SCH_ID = E.DB_SCH_ID
+     		   AND E.TBL_SPAC_TYP_CD = 'P' 
+     		   AND E.REG_TYP_CD IN ('C', 'U') 
+     		   AND E.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')  
+     		  JOIN WAQ_DDL_PART F
+     		    ON B.DDL_TBL_ID = F.DDL_TBL_ID
+     		  LEFT OUTER JOIN WAA_ACC_TBL_SPAC G
+     		    ON B.PDM_TBL_ID = G.PDM_TBL_ID
+     		   AND G.ACC_TBL_SPAC_TYP_CD = 'P'
+     		  LEFT OUTER JOIN WAA_APP_CODE L3
+      			ON SUBSTR(B.DDL_TBL_PNM, 2, 3) = L3.L4CD_PNM
+     		 WHERE F.RQST_NO = A.RQST_NO
+     		   AND F.RQST_SNO = A.RQST_SNO
+     )
+   WHERE A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+     AND A.TBL_SPAC_PNM IS NULL  
+  </update>
+  
+  
+<update id="updateBaseInfo" parameterType="string">
+  	<!--  주파티션 테이블 DDL_PART_ID, DDL_TBL_ID, DDL_TBL_PNM UPDATE -->
+  	<!--
+    UPDATE /* WaqDdlPartMainMapper.updateBaseInfo */
+    WAQ_DDL_PART_MAIN A
+       SET (A.DDL_PART_ID ,A.DDL_TBL_ID, A.DDL_TBL_PNM) = ( SELECT B.DDL_PART_ID, B.DDL_TBL_ID, B.DDL_TBL_PNM
+															  FROM WAQ_DDL_PART B
+			                                                 WHERE A.RQST_NO = B.RQST_NO
+			                                                   AND A.RQST_SNO = B.RQST_SNO
+							                               )
+    WHERE A.RQST_NO = #{rqstNo,jdbcType=VARCHAR} 
+    -->
+    
+    UPDATE /* WaqDdlPartMainMapper.updateBaseInfo */
+    	   WAQ_DDL_PART_MAIN A
+    	   LEFT JOIN WAQ_DDL_PART B
+			 ON A.RQST_NO = B.RQST_NO
+			AND A.RQST_SNO = B.RQST_SNO
+	   SET A.DDL_PART_ID = B.DDL_PART_ID
+	     , A.DDL_TBL_ID  = B.DDL_TBL_ID
+	     , A.DDL_TBL_PNM = B.DDL_TBL_PNM
+	 WHERE A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+</update> 
+<update id="updateDdlMainPartId" parameterType="string">
+	<!--  주파티션 테이블 DDL_MAIN_PART_ID UPDATE -->
+	<!--
+	UPDATE 	/* WaqDdlPartMainMapper.updateDdlMainPartId */
+			WAQ_DDL_PART_MAIN A
+	SET (A.DDL_MAIN_PART_ID) = ( SELECT B.DDL_MAIN_PART_ID
+									  FROM WAM_DDL_PART_MAIN B
+                                     WHERE A.DDL_PART_ID = B.DDL_PART_ID
+                                       AND A.DDL_TBL_ID = B.DDL_TBL_ID
+                                       AND A.DDL_PART_PNM = B.DDL_PART_PNM
+	                               )
+    WHERE A.RQST_NO = #{rqstNo,jdbcType=VARCHAR} 
+    -->
+    
+    UPDATE /* WaqDdlPartMainMapper.updateDdlMainPartId */
+		   WAQ_DDL_PART_MAIN A
+		   LEFT JOIN WAM_DDL_PART_MAIN B
+             ON A.DDL_PART_ID = B.DDL_PART_ID
+            AND A.DDL_TBL_ID = B.DDL_TBL_ID
+            AND A.DDL_PART_PNM = B.DDL_PART_PNM
+	   SET A.DDL_MAIN_PART_ID = B.DDL_MAIN_PART_ID
+     WHERE A.RQST_NO = #{rqstNo,jdbcType=VARCHAR} 
+    
+</update> 
+
+<update id="updateTblSpacIdByAccDbmsYn" parameterType="string">
+  	<!--  WAQ_DDL_PART_MAIN 테이블스페이스명 업데이트... (계정계일경우 계정계테이블스페이스명 업데이트...) -->
+  	<!--  'TSD' : 테이블 'TSI' : 인덱스 'TSP' : 파티션 -->
+    UPDATE /* WaqDdlPartMainMapper.updateTblSpacIdByAccDbmsYn */
+    WAQ_DDL_PART_MAIN A
+       SET (A.TBL_SPAC_ID ,A.TBL_SPAC_PNM) = ( SELECT GET_L3_PART_SPAC_ID(B.DDL_TBL_PNM), GET_L3_PART_SPAC_NM(B.DDL_TBL_PNM)
+												FROM WAQ_DDL_PART_MAIN B
+                                               WHERE A.RQST_NO = B.RQST_NO
+                                                 AND A.RQST_SNO = B.RQST_SNO
+                                                 AND A.RQST_DTL_SNO = B.RQST_DTL_SNO
+				                             )
+    WHERE A.RQST_NO = #{rqstNo,jdbcType=VARCHAR} 
+      AND EXISTS (SELECT 1 
+                    FROM WAA_DB_CONN_TRG DB2
+                         INNER JOIN WAQ_DDL_PART P
+                            ON DB2.DB_CONN_TRG_PNM = P.DB_CONN_TRG_PNM 
+                           AND P.RQST_NO = #{rqstNo,jdbcType=VARCHAR}                                                   
+                   WHERE A.RQST_NO = P.RQST_NO
+                     AND A.RQST_SNO = P.RQST_SNO
+                     AND DB2.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+					 AND DB2.REG_TYP_CD IN ('C', 'U')
+					 
+			      ) 
+  </update> 
+  
+
+  <update id="updateTblSpacId" parameterType="string">
+  	<!--  WAQ_DDL_PART_MAIN 테이블스페이스명 업데이트... (이관대상DB가 계정계가 아닐경우 WAA_TBL_SPAC 테이블스페이스정보 업데이트...) -->
+  	<!--  'TSD' : 테이블 'TSI' : 인덱스 'TSP' : 파티션 -->
+    UPDATE /* WaqDdlPartMainMapper.updateTblSpacId */
+    WAQ_DDL_PART_MAIN A
+       SET (A.TBL_SPAC_ID ,A.TBL_SPAC_PNM) = ( SELECT E.DB_TBL_SPAC_ID, E.DB_TBL_SPAC_PNM
+												 FROM WAQ_DDL_PART Q
+												      INNER JOIN WAA_DB_SCH S
+												         ON Q.DB_SCH_PNM = S.DB_SCH_PNM
+												        AND S.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+												        AND S.REG_TYP_CD IN ('C', 'U')
+												      INNER JOIN WAA_DB_CONN_TRG DB
+												   	    ON DB.DB_CONN_TRG_ID = S.DB_CONN_TRG_ID
+												   	   AND DB.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+												   	   AND DB.REG_TYP_CD IN ('C', 'U')
+												   	 INNER JOIN WAA_TBL_SPAC E
+												   	    ON DB.DB_CONN_TRG_ID = E.DB_CONN_TRG_ID
+												   	   AND S.DB_SCH_ID = E.DB_SCH_ID
+												   	   AND E.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+												   	   AND E.REG_TYP_CD IN ('C', 'U')
+												   	   AND E.TBL_SPAC_TYP_CD = 'P'
+												   	   AND E.DEFAULT_USAGE = 'Y'
+							                    WHERE Q.RQST_NO = A.RQST_NO
+							                      AND Q.RQST_SNO = A.RQST_SNO
+				                              )
+    WHERE A.RQST_NO = #{rqstNo,jdbcType=VARCHAR} 
+      AND EXISTS (SELECT 1 
+                    FROM WAA_DB_CONN_TRG DB2
+                         INNER JOIN WAQ_DDL_PART P
+                            ON DB2.DB_CONN_TRG_PNM = P.DB_CONN_TRG_PNM
+                           AND P.RQST_NO = #{rqstNo,jdbcType=VARCHAR} 
+                   WHERE A.RQST_NO = P.RQST_NO
+                     AND A.RQST_SNO = P.RQST_SNO
+                     AND A.DDL_TBL_PNM = P.DDL_TBL_PNM
+                     AND DB2.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+					 AND DB2.REG_TYP_CD IN ('C', 'U')
+					 
+			      ) 
+  </update> 
+  
+  
+  <update id="updateCheckInit" parameterType="java.lang.String" >
+    UPDATE /* WaqDdlPartMainMapper.updateCheckInit */
+    WAQ_DDL_PART_MAIN A
+    SET A.REG_TYP_CD = (SELECT CASE WHEN A.RQST_DCD = 'DD' then 'D' 
+    							    WHEN MAX(C.DDL_MAIN_PART_ID) IS NULL THEN 'C' 
+    							    ELSE 'U' END
+                          FROM WAM_DDL_PART B
+                         INNER JOIN WAM_DDL_PART_MAIN C
+                            ON C.DDL_PART_ID = B.DDL_PART_ID
+                         INNER JOIN WAQ_DDL_PART D
+                            ON B.DDL_TBL_ID = D.DDL_TBL_ID
+                           AND B.DB_CONN_TRG_ID = D.DB_CONN_TRG_ID
+                           AND B.DB_SCH_ID = D.DB_SCH_ID
+                        WHERE 1=1
+                          AND C.DDL_PART_PNM  = A.DDL_PART_PNM 
+                          AND D.RQST_NO = A.RQST_NO
+                          AND D.RQST_SNO = A.RQST_SNO
+                          )
+       ,A.VRF_CD = '4'
+    WHERE A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+  </update>
+  
+  
+  <insert id="checkDupMainPart" parameterType="map">
+  
+  	/* WaqDdlPartMainMapper.checkDupMainPart */
+  	
+  	<include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSnoSql"/>
+	<!-- 검증쿼리 : DDL 주파티션 요청서내 중복  (DDP41) -->
+    AND EXISTS (SELECT 1
+                FROM WAQ_DDL_PART_MAIN D
+                WHERE A.RQST_NO = D.RQST_NO
+                  AND A.RQST_SNO = D.RQST_SNO
+                  AND A.DDL_PART_PNM = D.DDL_PART_PNM
+                  AND A.DDL_TBL_PNM  = D.DDL_TBL_PNM 
+<!--                   AND A.DDL_PART_VAL  = D.DDL_PART_VAL  -->
+                  AND D.REG_TYP_CD != 'D'
+                  AND A.RQST_DTL_SNO != D.RQST_DTL_SNO)
+  </insert>
+  
+  <insert id="checkNotExistMainPart" parameterType="map">
+  
+  	/* WaqDdlPartMainMapper.checkNotExistMainPart */
+  	
+  	<include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSnoSql"/>
+	<!-- 검증쿼리 :  DDL 주파티션 삭제대상 미존재 (DDP42) -->
+      AND A.RQST_DCD = 'DD'
+    <!--  검증전 WAM 테이블에서 UPDATE -->   
+      AND A.DDL_MAIN_PART_ID IS NULL
+      /*
+      AND NOT EXISTS (SELECT 1
+                      FROM WAM_DDL_PART_MAIN D
+                        INNER JOIN WAM_DDL_PART E
+                           ON E.DDL_PART_ID = D.DDL_PART_ID
+                        INNER JOIN WAQ_DDL_PART F
+                          ON F.DDL_TBL_ID = E.DDL_TBL_ID
+                        WHERE F.RQST_NO = A.RQST_NO
+                          AND F.RQST_SNO = A.RQST_SNO
+                          AND D.DDL_PART_PNM = A.DDL_PART_PNM
+                         )
+                         */
+  </insert>
+
+  <insert id="checkCountPartValbyRange_20170303" parameterType="map">
+  
+  	/* WaqDdlPartMainMapper.checkCountPartValbyRange_20170303 */
+  	
+  	<include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSnoSql"/>
+	<!-- 검증쿼리 :  RANGE 파티션인 경우 키컬럼 갯수와 파티션 구분값 수가 같아야 한다. (DDP44) -->
+	
+      AND A.RQST_DCD = 'CU'
+      AND EXISTS (
+      	SELECT 1 FROM WAQ_DDL_PART E
+      	 WHERE A.RQST_NO = E.RQST_NO
+           AND A.RQST_SNO = E.RQST_SNO
+           AND E.PART_TYP_CD = 'RANGE' 
+      )
+      AND EXISTS (SELECT 1 FROM (
+						SELECT RQST_NO, RQST_SNO, COUNT(*) AS CNT_KEY FROM (
+						SELECT  DISTINCT RQST_NO, RQST_SNO, DDL_TBL_ID, DDL_TBL_PNM , PART_KEY
+						     , UPPER(TRIM(REGEXP_SUBSTR(PART_KEY, '[^,]+', 1, LEVEL))) AS PART_KEYS
+						  FROM WAQ_DDL_PART 
+						  WHERE RQST_NO = #{rqstNo}
+						 <![CDATA[ 
+  					     CONNECT BY LEVEL <= (SELECT MAX(LENGTH(REGEXP_REPLACE(PART_KEY , '[^,]+', ''))+1 )
+						                      FROM WAQ_DDL_PART_MAIN
+						                     WHERE RQST_NO = #{rqstNo} )
+						 ]]>                    
+						<!-- CONNECT BY LEVEL <= LENGTH(REGEXP_REPLACE(PART_KEY, '[^,]+', ''))+1 -->
+						<!-- ORDER BY SUB_PART_KEY -->
+						) 
+						<!--  구분자가 ',' 가 아닐경우 제외 -->
+						WHERE PART_KEYS IS NOT NULL
+						GROUP BY RQST_NO, RQST_SNO
+					) T1 JOIN (
+							SELECT RQST_NO, RQST_SNO, RQST_DTL_SNO, COUNT(*) AS CNT_VAL FROM (
+							SELECT  DISTINCT RQST_NO, RQST_SNO, RQST_DTL_SNO, DDL_PART_VAL 
+							     , UPPER(TRIM(REGEXP_SUBSTR(DDL_PART_VAL , '[^,]+', 1, LEVEL))) AS DDL_PART_VALS 
+							  FROM WAQ_DDL_PART_MAIN
+							  WHERE RQST_NO = #{rqstNo}
+							<!--  CONNECT BY LEVEL <= LENGTH(REGEXP_REPLACE(DDL_PART_VAL , '[^,]+', ''))+1 -->
+							<![CDATA[
+							CONNECT BY LEVEL <= (SELECT MAX(LENGTH(REGEXP_REPLACE(DDL_PART_VAL , '[^,]+', ''))+1 )
+							                      FROM WAQ_DDL_PART_MAIN
+							                     WHERE RQST_NO = #{rqstNo} )
+							]]>                     
+							<!-- ORDER BY SUB_PART_KEY -->
+							) 
+							<!--  구분자가 ',' 가 아닐경우 제외 -->
+							WHERE DDL_PART_VALS IS NOT NULL
+							GROUP BY RQST_NO, RQST_SNO, RQST_DTL_SNO
+					) T2
+					ON T1.RQST_NO = T2.RQST_NO
+					AND T1.RQST_SNO = T2.RQST_SNO
+					WHERE T1.CNT_KEY != T2.CNT_VAL
+					  AND A.RQST_NO = T2.RQST_NO
+					  AND A.RQST_SNO = T2.RQST_SNO
+					  AND A.RQST_DTL_SNO = T2.RQST_DTL_SNO
+      )
+      
+  </insert>
+  <insert id="checkCountPartValbyRange" parameterType="map">
+  
+  	/* WaqDdlPartMainMapper.checkCountPartValbyRange */
+  	
+  	<include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSnoSql"/>
+	<!-- 검증쿼리 :  RANGE 파티션인 경우 키컬럼 갯수와 파티션 구분값 수가 같아야 한다. (DDP44) -->
+	<![CDATA[
+      AND A.RQST_DCD = 'CU'
+      AND EXISTS (
+      	SELECT 1 FROM WAQ_DDL_PART E
+      	 WHERE A.RQST_NO = E.RQST_NO
+           AND A.RQST_SNO = E.RQST_SNO
+           AND E.PART_TYP_CD = 'RANGE' 
+      )
+      AND EXISTS (SELECT 1
+                    FROM (SELECT RQST_NO
+						        ,RQST_SNO						 
+						        ,REGEXP_REPLACE(PART_KEY , '[^,]+') AS SEPARATOR
+						        ,REGEXP_COUNT(PART_KEY , '[,]+') AS COUNT
+						   FROM WAQ_DDL_PART
+						  WHERE RQST_NO = #{rqstNo}
+			              ) T1 
+			             INNER JOIN (SELECT RQST_NO
+									       ,RQST_SNO
+									       ,RQST_DTL_SNO
+									       ,REGEXP_REPLACE(DDL_PART_VAL , '[^,]+') AS SEPARATOR
+									       ,REGEXP_COUNT(DDL_PART_VAL , '[,]+') AS COUNT
+									  FROM WAQ_DDL_PART_MAIN
+									 WHERE RQST_NO = #{rqstNo}
+									) T2
+					      ON T1.RQST_NO = T2.RQST_NO
+					     AND T1.RQST_SNO = T2.RQST_SNO
+					   WHERE 1 = 1
+					   <!-- 파티션 키 컬럼과 구분자의 개수 비교 -->
+					     AND IFNULL(T1.SEPARATOR,'_') != IFNULL((T2.SEPARATOR),'_')
+					     AND T1.COUNT != T2.COUNT
+					     AND A.RQST_NO = T2.RQST_NO
+					     AND A.RQST_SNO = T2.RQST_SNO
+					     AND A.RQST_DTL_SNO = T2.RQST_DTL_SNO
+      				)
+      ]]>
+  </insert>
+  <insert id="checksubPartTypCdbyRange" parameterType="map">
+  
+  	/* WaqDdlPartMainMapper.checksubPartTypCdbyRange */
+  	
+  	<include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSnoSql"/>
+	<!-- 검증쿼리 :  주파티션이 RANGE 파티션인 경우 서브파티션은 RANGE 일 수 없다. (DDP45) -->
+	<![CDATA[
+      AND A.RQST_DCD = 'CU'
+      AND EXISTS (SELECT 1
+                    FROM WAQ_DDL_PART B
+				   WHERE B.PART_TYP_CD = 'RANGE' 
+				     AND B.SUB_PART_TYP_CD = 'RANGE' 
+				     AND A.RQST_NO = B.RQST_NO
+				     AND A.RQST_SNO = B.RQST_SNO
+      )
+      ]]>
+  </insert>
+  <insert id="checkMainPartVal" parameterType="map">
+  
+  	/* WaqDdlPartMainMapper.checkMainPartVal */
+  	
+  	<include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSnoSql"/>
+	<!-- 검증쿼리 :  주파티션이 RANGE 또는 LIST 파티션인 경우 구분값은 필수 입력 항목입니다. (DDP49) -->
+	<![CDATA[
+      AND A.RQST_DCD = 'CU'
+      AND A.DDL_PART_VAL IS NULL
+      AND EXISTS (SELECT 1
+                    FROM WAQ_DDL_PART B
+				   WHERE B.PART_TYP_CD IN ('LIST', 'RANGE')	
+				     AND A.RQST_NO = B.RQST_NO
+				     AND A.RQST_SNO = B.RQST_SNO
+                  )
+      ]]>
+  </insert>
+
+  <insert id="checkNonSubPart" parameterType="map">
+  
+  	/* WaqDdlPartMainMapper.checkNonSubPart */
+  	
+  	<include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSnoSql"/>
+	<!-- 검증쿼리 :  DDL 서브파티션 미존재 (DDP43) -->
+      AND A.RQST_DCD = 'CU'
+      AND EXISTS (
+      	SELECT 1 FROM WAQ_DDL_PART E
+      	 WHERE A.RQST_NO = E.RQST_NO
+           AND A.RQST_SNO = E.RQST_SNO
+           AND E.SUB_PART_KEY IS NOT NULL 
+      )
+      AND NOT EXISTS ( SELECT 1
+                         FROM WAQ_DDL_PART_SUB D
+                        WHERE D.RQST_NO = A.RQST_NO
+                          AND D.RQST_SNO = A.RQST_SNO
+                          AND D.DDL_PART_PNM = A.DDL_PART_PNM
+                          AND D.DDL_TBL_PNM = A.DDL_TBL_PNM
+                         )
+  </insert>
+  
+  <insert id="checkDupMainPartPnm" parameterType="map">
+
+	/* WaqDdlPartMainMapper.checkDupMainPartPnm */
+  	
+  <include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSnoSql"/>
+  	 <!-- 검증쿼리 : DDL 주파티션 중복 체크 (DDLMP04) -->
+  	AND A.RQST_DCD = 'CU'
+    AND EXISTS (SELECT 1
+                FROM WAQ_DDL_PART_MAIN D
+                WHERE A.RQST_NO = D.RQST_NO
+                  AND A.RQST_SNO = D.RQST_SNO
+                  AND A.DDL_PART_PNM = D.DDL_PART_PNM
+                  AND A.RQST_DTL_SNO != D.RQST_DTL_SNO)
+  	
+  </insert>
+  
+  
+  <insert id="checkNotChgData" parameterType="map">
+  
+  /* WaqDdlPartMainMapper.checkNotChgData */
+  
+  	<include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSnoSql"/>
+	<!-- 검증쿼리 : DDL 주파티션 변경사항 없을경우 (DDP40) -->
+      AND A.REG_TYP_CD = 'U'
+      AND EXISTS (SELECT 1
+            FROM WAM_DDL_PART D 
+           INNER JOIN WAM_DDL_PART_MAIN E
+              ON D.DDL_PART_ID = E.DDL_PART_ID
+           INNER JOIN WAQ_DDL_PART F
+              ON F.DDL_TBL_ID = D.DDL_TBL_ID
+           WHERE F.RQST_NO  = A.RQST_NO
+             AND F.RQST_SNO = A.RQST_SNO
+             AND A.DDL_PART_PNM = E.DDL_PART_PNM
+             AND A.DDL_PART_ID = E.DDL_PART_ID
+			 and IFNULL(A.DDL_PART_VAL  , '') = IFNULL(E.DDL_PART_VAL  , '')
+			 and IFNULL(A.TBL_SPAC_PNM  , '') = IFNULL(E.TBL_SPAC_PNM  , '')
+          )
+  </insert>
+  
+  <insert id="checkNonTblSpac" parameterType="map">
+  
+  /* WaqDdlPartMainMapper.checkNonTblSpac */
+  
+	  <include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSnoSql"/>
+	  <!-- 검증쿼리 : 테이블스페이스 미존재(DDP07) -->
+	  AND A.RQST_DCD = 'CU'
+	  AND A.TBL_SPAC_PNM IS NULL
+<!-- 	  AND A.TBL_SPAC_ID IS NULL -->
+  </insert>
+  
+    <select id="selectWaqC" parameterType="map" resultMap="BaseResultMap">
+	<!-- DDL 주파티션 신규 적재 대상 추출 -->
+	SELECT 	/* WaqDdlPartMainMapper.selectWaqC */
+			B.* FROM WAQ_DDL_PART A
+	 INNER JOIN WAQ_DDL_PART_MAIN B
+	    ON A.RQST_NO = B.RQST_NO
+       AND A.RQST_SNO = B.RQST_SNO
+   	 WHERE A.RQST_NO = #{rqstNo}
+   	   AND A.RVW_STS_CD = '1'  <!-- 승인 -->
+   	   <!-- AND A.RQST_DCD = 'CU' -->
+       AND B.REG_TYP_CD = 'C'
+       AND B.VRF_CD = '1'
+	</select>
+  
+  <update id="updateidByKey" parameterType="kr.wise.meta.ddl.service.WaqDdlIdxCol">
+     <!-- DDL 주파티션 신규 적재 대상 ID 업데이트 -->
+     UPDATE /* WaqDdlPartMainMapper.updateidByKey */
+     		WAQ_DDL_PART_MAIN 
+        SET DDL_MAIN_PART_ID  = #{ddlMainPartId,jdbcType=VARCHAR}
+  	 WHERE RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+       AND RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+       AND RQST_DTL_SNO = #{rqstDtlSno}	
+	</update>
+	<update id="updateWaqId" parameterType="map">
+   <!-- DDL 주파티션 결재시각 업데이트... -->
+   	UPDATE 	/* WaqDdlPartMainMapper.updateWaqId */
+   			WAQ_DDL_PART_MAIN X 
+   	   SET (DDL_PART_ID, DDL_TBL_ID,  APRV_DTM, APRV_USER_ID) = (
+		SELECT DDL_PART_ID, DDL_TBL_ID, NOW(), A.APRV_USER_ID
+		  FROM WAQ_DDL_PART A 
+	     WHERE A.RQST_NO = X.RQST_NO
+	       AND A.RQST_SNO = X.RQST_SNO
+	       AND A.RVW_STS_CD = '1' <!-- 승인대상만... -->	
+	) 
+	WHERE X.RQST_NO = #{rqstNo}
+	  AND X.VRF_CD = '1' <!-- 등록가능 -->
+   </update>   
+	<update id="updateWaqCUD" parameterType="map">
+   	<!-- DDL 주파티션 WAQ ID, VERS 등을 업데이트... -->
+   	UPDATE 	/* WaqDdlPartMainMapper.updateWaqCUD */
+   			WAQ_DDL_PART_MAIN A
+   	   SET (DDL_MAIN_PART_ID , OBJ_VERS, FRS_RQST_DTM, FRS_RQST_USER_ID) = (
+   	   		SELECT
+   	   			  D.DDL_MAIN_PART_ID
+   	   			<!-- , C.DDL_PART_ID -->
+   	   			<!-- , C.DDL_TBL_ID --> 
+   	   			, IFNULL(D.OBJ_VERS, 0) + 1 AS OBJ_VERS
+				, D.FRS_RQST_DTM
+				, D.FRS_RQST_USER_ID
+			  FROM WAQ_DDL_PART B
+			 INNER JOIN WAM_DDL_PART C
+			    ON B.DDL_TBL_ID = C.DDL_TBL_ID
+	      	 INNER JOIN WAM_DDL_PART_MAIN D
+	      	    ON C.DDL_PART_ID = D.DDL_PART_ID
+	      	 WHERE B.RQST_NO = A.RQST_NO
+			   AND B.RQST_SNO = A.RQST_SNO
+			   AND D.DDL_PART_PNM  = A.DDL_PART_PNM 
+			   AND B.RVW_STS_CD = '1' <!-- 승인대상만... -->
+   	   	   )
+	WHERE A.RQST_NO = #{rqstNo}
+	  AND A.VRF_CD = '1' <!-- 등록가능 -->
+	  AND EXISTS (
+	  	    SELECT 1
+			  FROM WAQ_DDL_PART B
+			 INNER JOIN WAM_DDL_PART C
+			    ON B.DDL_TBL_ID = C.DDL_TBL_ID
+	      	 INNER JOIN WAM_DDL_PART_MAIN D
+	      	    ON C.DDL_PART_ID = D.DDL_PART_ID
+	      	 WHERE B.RQST_NO = A.RQST_NO
+			   AND B.RQST_SNO = A.RQST_SNO
+			   AND D.DDL_PART_PNM  = A.DDL_PART_PNM 
+			   AND B.RVW_STS_CD = '1' <!-- 승인대상만... -->
+	  )   	   
+   	</update>
+  
+  	<sql id="wam_col_list">
+		 , A.DDL_PART_PNM, A.DDL_PART_ID, A.DDL_TBL_ID, A.DDL_PART_VAL, A.TBL_SPAC_ID, A.TBL_SPAC_PNM 
+		 , A.RQST_NO, A.RQST_SNO, A.RQST_DTL_SNO, A.OBJ_DESCN, A.OBJ_VERS, A.REG_TYP_CD, A.FRS_RQST_DTM, A.FRS_RQST_USER_ID, A.RQST_DTM, A.RQST_USER_ID, A.APRV_DTM, A.APRV_USER_ID 
+	</sql>
+	<delete id="deleteWAM" parameterType="map">
+    <!-- DDL 주파티션 WAM 삭제 (등록유형코드가REG_TYP_CD 변경, 삭제일 경우) -->
+	DELETE 	/* WaqDdlPartMainMapper.deleteWAM */
+			FROM WAM_DDL_PART_MAIN A
+	 WHERE EXISTS (
+		SELECT 1 FROM WAQ_DDL_PART B 
+	      JOIN WAM_DDL_PART D
+	        ON B.DDL_TBL_ID = D.DDL_TBL_ID
+		  JOIN WAQ_DDL_PART_MAIN C
+	        ON B.RQST_NO = C.RQST_NO
+	       AND B.RQST_SNO = C.RQST_SNO
+		 WHERE C.RQST_NO = #{rqstNo}
+	       AND D.DDL_PART_ID = A.DDL_PART_ID
+	       AND C.DDL_MAIN_PART_ID = A.DDL_MAIN_PART_ID
+	       AND B.RVW_STS_CD = '1'
+	       AND C.VRF_CD = '1'
+	)
+   </delete>
+   
+   <insert id="insertWAM" parameterType="map">
+   	<!-- DDL 주파티션 WAM 추가 (WAQ 내용을 추가, REG_TYP_CD 가 신규,변경일 경우) -->
+	INSERT 	/* WaqDdlPartMainMapper.insertWAM */
+			INTO WAM_DDL_PART_MAIN (
+	      DDL_MAIN_PART_ID
+		, DDL_PART_PNM, DDL_PART_ID, DDL_TBL_ID, DDL_PART_VAL, TBL_SPAC_ID, TBL_SPAC_PNM 
+		, RQST_NO, RQST_SNO, RQST_DTL_SNO, OBJ_DESCN, OBJ_VERS, REG_TYP_CD, FRS_RQST_DTM, FRS_RQST_USER_ID, RQST_DTM, RQST_USER_ID, APRV_DTM, APRV_USER_ID 
+	)
+	SELECT 
+	    A.DDL_MAIN_PART_ID
+	  <include refid="wam_col_list"/>
+	  FROM WAQ_DDL_PART_MAIN A
+	  JOIN WAQ_DDL_PART B 
+	    ON A.RQST_NO = B.RQST_NO
+	   AND A.RQST_SNO = B.RQST_SNO
+	 WHERE A.RQST_NO = #{rqstNo}
+	   AND A.VRF_CD = '1'
+	   AND A.REG_TYP_CD IN ('C', 'U')
+	   AND B.RVW_STS_CD = '1'
+   </insert>
+   
+   <update id="updateWAHbyTbl" parameterType="string">
+   	<!-- DDL 주파티션 WAH 이력 만료 by DDL 테이블 삭제... -->
+   	UPDATE 	/* WaqDdlPartMainMapper.updateWAHbyTbl */
+   			WAH_DDL_PART_MAIN A SET EXP_DTM = NOW()
+   	WHERE DDL_TBL_ID IN (
+		SELECT DDL_TBL_ID FROM WAQ_DDL_TBL B
+	    WHERE B.RQST_NO = #{rqstNo}
+	      AND B.RVW_STS_CD = '1'
+	      AND B.REG_TYP_CD = 'D'
+	) 
+   	AND EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+   </update>
+   
+   <insert id="insertWAHbyTbl" parameterType="string">
+   	<!-- DDL 주파티션 WAH이력 적재 by DDL 테이블 삭제... -->
+   INSERT 	/* WaqDdlPartMainMapper.insertWAHbyTbl */
+   			INTO WAH_DDL_PART_MAIN (
+	  	  DDL_MAIN_PART_ID, EXP_DTM, STR_DTM
+		, DDL_PART_PNM, DDL_PART_ID, DDL_TBL_ID, DDL_PART_VAL, TBL_SPAC_ID, TBL_SPAC_PNM 
+		, RQST_NO, RQST_SNO, RQST_DTL_SNO, OBJ_DESCN, OBJ_VERS, REG_TYP_CD, FRS_RQST_DTM, FRS_RQST_USER_ID, RQST_DTM, RQST_USER_ID, APRV_DTM, APRV_USER_ID
+	)
+	SELECT 
+			A.DDL_MAIN_PART_ID
+		  , STR_TO_DATE('9999-12-31', '%Y-%m-%d') AS EXP_DTM
+		  , NOW() AS STR_DTM 
+		, A.DDL_PART_PNM, A.DDL_PART_ID, A.DDL_TBL_ID, A.DDL_PART_VAL, A.TBL_SPAC_ID, A.TBL_SPAC_PNM 
+		 , A.RQST_NO, A.RQST_SNO, A.RQST_DTL_SNO, A.OBJ_DESCN
+		 , IFNULL(A.OBJ_VERS, 0)+1
+		, 'D' AS REG_TYP_CD
+		, A.FRS_RQST_DTM, A.FRS_RQST_USER_ID
+		, NOW() AS RQST_DTM, 'system' AS RQST_USER_ID
+		, NOW() AS APRV_DTM, '자동삭제' AS APRV_USER_ID
+	  FROM WAM_DDL_PART_MAIN A
+	  WHERE DDL_TBL_ID IN (
+		SELECT DDL_TBL_ID FROM WAQ_DDL_TBL B
+	    WHERE B.RQST_NO = #{rqstNo}
+	      AND B.RVW_STS_CD = '1'
+	      AND B.REG_TYP_CD = 'D'
+	) 
+   </insert>
+   
+   <delete id="deleteWAMbyTbl" parameterType="string">
+   <!-- DDL 주파티션 WAM 삭제  by DDL 테이블 삭제... -->
+   DELETE 	/* WaqDdlPartMainMapper.deleteWAMbyTbl */
+   			FROM WAM_DDL_PART_MAIN A
+   WHERE DDL_TBL_ID IN (
+		SELECT DDL_TBL_ID FROM WAQ_DDL_TBL B
+	    WHERE B.RQST_NO = #{rqstNo}
+	      AND B.RVW_STS_CD = '1'
+	      AND B.REG_TYP_CD = 'D'
+	) 
+   </delete>
+   
+   <update id="updateWAH"  parameterType="map">
+   	<!-- DDL 주파티션 WAH 이력 만료... -->
+	UPDATE 	/* WaqDdlPartMainMapper.updateWAH */
+			WAH_DDL_PART_MAIN A SET EXP_DTM = NOW()
+	WHERE EXISTS (
+		SELECT 1 FROM WAQ_DDL_PART B 
+	      JOIN WAQ_DDL_PART_MAIN C
+	        ON B.RQST_NO = C.RQST_NO
+	       AND B.RQST_SNO = C.RQST_SNO
+	     WHERE C.RQST_NO = #{rqstNo}
+	       AND C.DDL_PART_ID = A.DDL_PART_ID
+	       AND C.DDL_MAIN_PART_ID = A.DDL_MAIN_PART_ID
+	       AND C.VRF_CD = '1'
+	       AND B.RVW_STS_CD = '1'
+	)
+	  AND EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+   </update>
+   
+   <insert id="insertWAH"  parameterType="map">
+   	<!-- DDL 주파티션 WAH이력 적재... -->
+	INSERT 	/* WaqDdlPartMainMapper.insertWAH */
+			INTO WAH_DDL_PART_MAIN (
+	  	  DDL_MAIN_PART_ID, EXP_DTM, STR_DTM
+		, DDL_PART_PNM, DDL_PART_ID, DDL_TBL_ID, DDL_PART_VAL, TBL_SPAC_ID, TBL_SPAC_PNM 
+		, RQST_NO, RQST_SNO, RQST_DTL_SNO, OBJ_DESCN, OBJ_VERS, REG_TYP_CD, FRS_RQST_DTM, FRS_RQST_USER_ID, RQST_DTM, RQST_USER_ID, APRV_DTM, APRV_USER_ID
+	)
+	SELECT 
+			A.DDL_MAIN_PART_ID
+		  , STR_TO_DATE('9999-12-31', '%Y-%m-%d') AS EXP_DTM
+		  , NOW() AS STR_DTM 
+	<include refid="wam_col_list"/>
+	  FROM WAQ_DDL_PART_MAIN A
+	  JOIN WAQ_DDL_PART B
+	    ON B.RQST_NO = A.RQST_NO
+	   AND B.RQST_SNO = A.RQST_SNO
+	 WHERE A.RQST_NO = #{rqstNo}
+	   AND A.VRF_CD = '1'
+	   AND B.RVW_STS_CD = '1'
+	   AND A.DDL_MAIN_PART_ID IS NOT NULL
+	   AND A.DDL_PART_ID IS NOT NULL
+   </insert> 
+   
+</mapper>

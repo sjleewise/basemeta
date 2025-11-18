@@ -1,0 +1,409 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.dq.dqrs.service.DqrsViewMapper" >
+	<sql id="Base_Dbc_Col_View">
+     SELECT DISTINCT
+                   CON.DB_CONN_TRG_PNM
+                 , CON.DB_CONN_TRG_LNM 
+                 , CON.DB_CONN_TRG_ID
+                 , SCH.DB_SCH_PNM
+                 , SCH.DB_SCH_LNM
+                 , SCH.DB_SCH_ID
+                 , TBL.DBC_TBL_NM
+                 , TBL.DBC_TBL_KOR_NM
+                 , TBL.SUBJ_ID
+                 , TBL.ANA_DTM
+                 , COL.DBC_COL_NM
+                 , COL.DBC_COL_KOR_NM
+                 , COL.DATA_TYPE  
+                 , COL.DATA_LEN   
+                 , COL.DATA_PNUM  
+                 , COL.DATA_PNT   
+                 , COL.NULL_YN    
+                 , COL.DEFLT_LEN  
+                 , COL.DEFLT_VAL  
+                 , COL.PK_YN      
+                 , COL.ORD        
+                 , COL.PK_ORD     
+                 , COL.COL_DESCN
+                 , COALESCE(EX.EXP_YN, 'N') AS EXP_YN 
+                 , EX.EXP_RSN_CNTN 
+                 , CASE
+                	 WHEN EX.EXP_YN ='Y' THEN EX.EXP_RSN_CNTN
+                	 WHEN EX.TBL_CNTN IS NOT NULL AND EX.TBL_CNTN != '' THEN EX.TBL_CNTN 
+                    ELSE COL.COL_DESCN END AS DESCN
+                 , EX.ADD_CND 
+                 FROM WAT_DBC_TBL TBL
+         LEFT JOIN WAT_DBC_COL COL
+                ON COL.DB_SCH_ID = TBL.DB_SCH_ID
+               AND COL.DBC_TBL_NM = TBL.DBC_TBL_NM
+        INNER JOIN WAA_DB_SCH SCH
+                ON SCH.DB_SCH_ID = TBL.DB_SCH_ID 
+               AND SCH.DB_CONN_TRG_ID = TBL.DB_CONN_TRG_ID
+               AND SCH.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+        INNER JOIN WAA_DB_CONN_TRG CON
+                ON CON.DB_CONN_TRG_ID = SCH.DB_CONN_TRG_ID
+               AND CON.DB_CONN_TRG_ID = TBL.DB_CONN_TRG_ID
+               AND CON.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+         LEFT JOIN WAA_DQRS_EXP_TBL EX          
+           ON EX.DB_SCH_ID  = SCH.DB_SCH_ID  
+          AND EX.DBC_TBL_NM = TBL.DBC_TBL_NM
+      WHERE 1=1
+      <if test="dbConnTrgId != null and dbConnTrgId != ''" >
+			AND CON.DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR}
+		</if>
+		<if test="dbSchId != null and dbSchId != ''" >
+			AND SCH.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+		</if>
+    </sql>
+    
+  <sql id="Vrfc_View">
+  SELECT
+            -- M.PRF_KND_CD
+              DQI.DQI_LNM AS PRF_KND_CD
+            , M.DB_SCH_ID
+            , M.DB_CONN_TRG_ID
+            , R.ANA_STR_DTM AS ANA_STR_DTM
+            , M.OBJ_NM  AS OBJ_NM
+            , M.DBC_TBL_NM AS DBC_TBL_NM
+            , R.ANA_STR_DTM AS "RES_ANA_STR_DTM"
+            , R.ANA_END_DTM AS "RES_ANA_END_DTM"
+            , R.ANA_DGR AS "ANA_DGR"
+            , R.ANA_CNT AS ANA_CNT
+            , R.ESN_ER_CNT AS ESN_ER_CNT
+            , R.NULL_CNT as NULL_CNT
+            , CASE WHEN R.PRF_ID IS NOT NULL AND R.ANA_STR_DTM IS NOT NULL AND R.ANA_END_DTM IS NOT NULL THEN '01' -- 'COMPLETED'
+            		ELSE '03' END AS ANA_STS_CD -- 'FAILED'
+            , R.PRF_ID
+            , DQI.DQI_LNM AS DMN_NM
+	        , CASE
+	                  WHEN M.PRF_KND_CD = 'PC02' THEN '코드분석'
+	                  WHEN M.PRF_KND_CD = 'PC03' THEN '날짜형식분석'
+	                  WHEN M.PRF_KND_CD = 'PC04' THEN '범위분석'
+	                  WHEN M.PRF_KND_CD = 'PC05' THEN '문자열패턴분석'
+	             END AS KND_NM
+         FROM ( SELECT R1.*
+                      FROM WAM_PRF_RESULT R1
+                INNER JOIN (   SELECT PRF_ID, MAX(ANA_STR_DTM) AS ANA_STR_DTM
+                                 FROM WAM_PRF_RESULT
+                             GROUP BY PRF_ID) R2 
+                        ON R1.PRF_ID = R2.PRF_ID
+                       AND R1.ANA_STR_DTM = R2.ANA_STR_DTM
+                     WHERE 1 = 1 
+               ) R
+    		INNER JOIN WAM_PRF_MSTR M
+            	ON R.PRF_ID = M.PRF_ID
+           		AND M.REG_TYP_CD IN ('C', 'U')
+           	 LEFT JOIN WAM_DQI DQI
+           	   ON DQI.DQI_ID = M.DQI_ID
+           	  AND DQI.REG_TYP_CD IN ('C', 'U')
+           INNER JOIN WAA_DB_SCH B                                  
+          	 ON B.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')  
+          	AND B.DB_SCH_ID = M.DB_SCH_ID                          
+	        INNER JOIN WAA_DB_CONN_TRG C                             
+	           ON C.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')  
+	          AND C.DB_CONN_TRG_ID = M.DB_CONN_TRG_ID                
+	        LEFT JOIN WAA_DQRS_EXP_TBL EX                                   
+	           ON EX.DB_SCH_ID  = M.DB_SCH_ID                         		
+	          AND EX.DBC_TBL_NM = M.DBC_TBL_NM  
+          WHERE M.PRF_KND_CD NOT IN ('PC01', 'PT01', 'PT02')
+           AND NOT EXISTS (
+                	SELECT EC.DBC_TBL_NM 
+                	  FROM WAA_DQRS_EXP_COL EC
+                	 WHERE EC.DBC_TBL_NM = M.DBC_TBL_NM 
+                		AND EC.DBC_COL_NM = M.OBJ_NM
+                		AND EC.DB_SCH_ID = M.DB_SCH_ID
+                )
+                AND OBJ_NM IS NOT NULL
+                AND COALESCE(EX.EXP_YN,'N')='N' 
+		  		AND EXISTS (
+		  			SELECT E.DBC_TBL_NM
+		  			  FROM WAT_DBC_COL E
+                	 WHERE E.DBC_TBL_NM = M.DBC_TBL_NM 
+                	   AND E.DBC_COL_NM = M.OBJ_NM
+                	   AND E.DB_SCH_ID = M.DB_SCH_ID
+		  		)
+             <if test="dbConnTrgId != null and dbConnTrgId != ''" >
+				AND C.DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR}
+			</if>
+	<if test="dbSchId != null and dbSchId != ''" >
+		AND B.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+	</if>
+  </sql>
+  
+  <sql id="Vrfc_View_Tot">
+  SELECT  TBL.DB_CONN_TRG_ID
+		     , TBL.DB_SCH_ID
+		     , SCH.DB_SCH_PNM
+		     , TBL.DBC_TBL_NM
+		     , COL.DBC_COL_NM
+		     , CASE
+	                  WHEN F.PRF_KND_CD = 'PC02' THEN '코드분석'
+	                  WHEN F.PRF_KND_CD = 'PC03' THEN '날짜형식분석'
+	                  WHEN F.PRF_KND_CD = 'PC04' THEN '범위분석'
+	                  WHEN F.PRF_KND_CD = 'PC05' THEN '문자열패턴분석'
+	             END AS PRF_NM
+		     , DQI.DQI_LNM AS DMN_NM
+		     , CASE
+                    WHEN F.PRF_KND_CD = 'PC02' THEN (SELECT COALESCE(ARRAY_TO_STRING(ARRAY_AGG(PRFCD.USER_DF_EFVA_NM ORDER BY PRFCD.USER_DF_EFVA_NM),', '), '') FROM WAM_PRF_EFVA_USER_DF PRFCD WHERE PRFCD.PRF_ID = F.PRF_ID)
+                    WHEN F.PRF_KND_CD = 'PC03' THEN (SELECT COALESCE(GET_CMCD_DTL_NM('DATE_FRM_CD', PRFCD.DATE_FRM_CD), '') FROM WAM_PRF_DTFRM_ANA PRFCD WHERE PRFCD.PRF_ID = F.PRF_ID)
+                    WHEN F.PRF_KND_CD = 'PC04' THEN (SELECT COALESCE(GET_CMCD_DTL_NM('RNG_OPR_CD', PRFCD.RNG_OPR1) || ' ' 
+                    													|| CASE WHEN PRFCD.RNG_OPR1 = '05' THEN '' ELSE PRFCD.RNG_EFVA1 END 
+																		|| CASE WHEN PRFCD.RNG_CNC IS NULL THEN CONCAT(PRFCD.RNG_CNC, ' ', GET_CMCD_DTL_NM('RNG_OPR_CD', PRFCD.RNG_OPR2), ' ', CASE WHEN PRFCD.RNG_OPR2 = '05' THEN '' ELSE PRFCD.RNG_EFVA2 END) ELSE  '' END, '') 
+										               FROM WAM_PRF_RNG_ANA PRFCD 
+										              WHERE PRFCD.PRF_ID = F.PRF_ID)
+					WHEN F.PRF_KND_CD = 'PC05' THEN (SELECT COALESCE(ARRAY_TO_STRING(ARRAY_AGG(PRFCD.USER_DF_PTR ORDER BY PRFCD.USER_DF_PTR),','), '') FROM WAM_PRF_PTR_USER_DF PRFCD WHERE PRFCD.PRF_ID = F.PRF_ID)
+               END AS VRF_FRM
+			 , F.APRV_DTM
+             , F.PRF_ID
+             , R.ANA_STR_DTM
+             , CASE WHEN COL.DATA_LEN IS NULL 
+                     THEN COL.DATA_TYPE
+                     ELSE (CASE WHEN COL.DATA_PNT IS NOT NULL
+                                THEN (CONCAT(COALESCE(COL.DATA_TYPE, ''), '(', COL.DATA_LEN, ', ', COL.DATA_PNT, ')') )
+                                ELSE (CONCAT(COALESCE(COL.DATA_TYPE, ''), '(', COL.DATA_LEN, ')'))
+                                 END )
+                     END AS DATA_TYPE
+             , CASE WHEN R.ANA_STR_DTM IS NOT NULL AND R.ANA_END_DTM IS NOT NULL THEN '01' -- 'COMPLETED'
+             		ELSE '03' END AS ANA_STS_CD -- 'FAILED'
+              , COALESCE(EC.EXP_YN, 'N') AS EXP_YN
+                 , EX.EXP_RSN_CNTN 
+                 ,	CASE 
+             		WHEN EX.EXP_YN ='Y' THEN EX.EXP_RSN_CNTN
+                    ELSE COL.COL_DESCN END AS DESCN
+		  FROM WAT_DBC_TBL TBL
+		       INNER JOIN WAA_DB_SCH SCH
+		          ON SCH.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+		         AND SCH.DB_SCH_ID = TBL.DB_SCH_ID  
+		       INNER JOIN WAT_DBC_COL COL
+		          ON COL.DB_SCH_ID  = TBL.DB_SCH_ID
+		         AND COL.DBC_TBL_NM = TBL.DBC_TBL_NM       
+		       LEFT JOIN WAM_PRF_MSTR F
+		         ON F.DB_SCH_ID  = TBL.DB_SCH_ID
+		        AND F.DBC_TBL_NM = TBL.DBC_TBL_NM
+		        AND F.OBJ_NM = COL.DBC_COL_NM
+                AND F.PRF_KND_CD NOT IN ('PC01', 'PT01', 'PT02')
+	        LEFT JOIN WAM_DQI DQI
+				 ON F.DQI_ID = DQI.DQI_ID 
+				AND DQI.REG_TYP_CD IN ('C', 'U')
+            LEFT OUTER JOIN ( 
+      SELECT R.*
+       FROM WAM_PRF_RESULT R
+                INNER JOIN (SELECT PRF_ID, MAX(ANA_STR_DTM) AS ANA_STR_DTM
+                                  FROM WAM_PRF_RESULT
+                                GROUP BY PRF_ID ) R2
+                    ON R.PRF_ID = R2.PRF_ID
+                   AND R.ANA_STR_DTM = R2.ANA_STR_DTM
+    ) R
+		      ON R.PRF_ID = F.PRF_ID
+	-- 제외
+		LEFT JOIN WAA_DQRS_EXP_TBL EX          
+           ON EX.DB_SCH_ID  = SCH.DB_SCH_ID  
+          AND EX.DBC_TBL_NM = TBL.DBC_TBL_NM
+       LEFT JOIN WAA_DQRS_EXP_COL EC
+	        ON EC.DB_SCH_ID  = SCH.DB_SCH_ID
+			 AND EC.DBC_TBL_NM = TBL.DBC_TBL_NM   
+			 AND EC.DBC_COL_NM = COL.DBC_COL_NM
+       WHERE 1=1
+         <if test="dbConnTrgId != null and dbConnTrgId != ''" >
+			AND TBL.DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR}
+		</if>
+		<if test="dbSchId != null and dbSchId != ''" >
+			AND TBL.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+		</if>
+		 ORDER BY TBL.DB_SCH_ID
+		        , TBL.DBC_TBL_NM  
+		        , COL.ORD 
+  </sql>
+ 
+  <sql id="Br_View">
+          SELECT   M.BR_ID
+             , M.BR_NM 
+             , M.DBC_TBL_NM
+             , R.ANA_STR_DTM AS "RES_ANA_STR_DTM"
+             , R.ANA_END_DTM AS "RES_ANA_END_DTM"
+             , R.ANA_DGR AS "ANA_DGR"
+             , R.ANA_CNT AS ANA_CNT
+             , R.ER_CNT AS ER_CNT
+             , M.OBJ_DESCN as OBJ_DESCN
+             , R.BR_ID AS RESULT_ID -- RESULT 
+             , M.CNT_SQL 
+       		 , M.ANA_SQL
+       		 , M.ER_CNT_SQL 
+       		 , M.DBC_COL_NM
+       		 , M.DB_CONN_TRG_ID
+       		 , M.DB_SCH_ID
+       		 , DQI.DQI_LNM 
+       		 , CASE WHEN R.BR_ID IS NOT NULL AND R.ANA_STR_DTM IS NOT NULL AND R.ANA_END_DTM IS NOT NULL THEN '01' -- 'COMPLETED'
+             		ELSE '03' END AS ANA_STS_CD -- 'FAILED'
+             , R.ANA_STR_DTM 
+          FROM ( SELECT R1.*
+                       FROM WAM_BR_RESULT R1
+                 INNER JOIN (   SELECT BR_ID, MAX(ANA_STR_DTM) AS ANA_STR_DTM
+                                  FROM WAM_BR_RESULT
+                              GROUP BY BR_ID) R2 
+                         ON R1.BR_ID = R2.BR_ID
+                        AND R1.ANA_STR_DTM = R2.ANA_STR_DTM
+                      WHERE 1 = 1 
+                ) R
+    	INNER JOIN WAM_BR_MSTR M
+            ON M.BR_ID = R.BR_ID
+           AND M.REG_TYP_CD IN ('C', 'U')
+        LEFT JOIN WAM_BR_DQI_MAP DM
+	     ON DM.BR_ID = M.BR_ID
+           LEFT JOIN WAM_DQI DQI
+		 ON DQI.DQI_ID = DM.DQI_ID 
+		AND DQI.REG_TYP_CD IN ('C', 'U')
+		LEFT JOIN WAA_DQRS_EXP_COL EC
+			        ON EC.DB_SCH_ID  = M.DB_SCH_ID
+					 AND EC.DBC_TBL_NM = M.DBC_TBL_NM   
+					 AND EC.DBC_COL_NM = M.DBC_COL_NM 
+        LEFT JOIN WAA_DQRS_EXP_TBL EX                                 
+         	 ON EX.DB_SCH_ID  = M.DB_SCH_ID                         		
+       	  AND EX.DBC_TBL_NM = M.DBC_TBL_NM 
+           WHERE R.BR_ID IS NOT NULL
+            AND EC.DB_SCH_ID IS NULL         
+			   AND EC.DBC_TBL_NM IS NULL
+			   AND EC.DBC_COL_NM IS NULL	
+			AND COALESCE(EX.EXP_YN,'N')='N'  
+           
+       <if test="dbConnTrgId != null and dbConnTrgId != ''" >
+			AND M.DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR}
+		</if>
+		<if test="dbSchId != null and dbSchId != ''" >
+			AND M.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+		</if>
+    
+</sql>
+
+  <sql id="Prf_View">
+      SELECT
+            M.PRF_KND_CD
+            , M.DB_SCH_ID
+            , M.DB_CONN_TRG_ID
+            , R.ANA_STR_DTM AS ANA_STR_DTM
+            , M.OBJ_NM  AS OBJ_NM
+            , M.DBC_TBL_NM AS DBC_TBL_NM
+            , R.ANA_STR_DTM AS "RES_ANA_STR_DTM"
+            , R.ANA_END_DTM AS "RES_ANA_END_DTM"
+            , R.ANA_DGR AS "ANA_DGR"
+            , R.ANA_CNT AS ANA_CNT
+            , R.ESN_ER_CNT AS ESN_ER_CNT
+            , R.NULL_CNT as NULL_CNT
+            , CASE WHEN R.PRF_ID IS NOT NULL AND R.ANA_STR_DTM IS NOT NULL AND R.ANA_END_DTM IS NOT NULL THEN '01' -- 'COMPLETED'
+            		ELSE '03' END AS ANA_STS_CD -- 'FAILED'
+            , R.PRF_ID
+         FROM ( SELECT R1.*
+                      FROM WAM_PRF_RESULT R1
+                INNER JOIN (   SELECT PRF_ID, MAX(ANA_STR_DTM) AS ANA_STR_DTM
+                                 FROM WAM_PRF_RESULT
+                             GROUP BY PRF_ID) R2 
+                        ON R1.PRF_ID = R2.PRF_ID
+                       AND R1.ANA_STR_DTM = R2.ANA_STR_DTM
+                     WHERE 1 = 1 
+               ) R
+    		INNER JOIN WAM_PRF_MSTR M
+            	ON R.PRF_ID = M.PRF_ID
+           	  AND M.REG_TYP_CD IN ('C', 'U')
+           INNER JOIN WAA_DB_SCH B
+          	 ON B.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')  
+          	AND B.DB_SCH_ID = M.DB_SCH_ID                          
+	        INNER JOIN WAA_DB_CONN_TRG C                             
+	           ON C.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')  
+	          AND C.DB_CONN_TRG_ID = M.DB_CONN_TRG_ID                
+	        LEFT JOIN WAA_DQRS_EXP_TBL EX                                   
+	           ON EX.DB_SCH_ID  = M.DB_SCH_ID
+	          AND EX.DBC_TBL_NM = M.DBC_TBL_NM
+          WHERE M.PRF_KND_CD = 'PT01'
+           AND NOT EXISTS (
+                	SELECT RC.CH_TBL_DBC_TBL_NM FROM WAM_PRF_REL_COL RC
+                		INNER JOIN WAA_DQRS_EXP_COL EC
+                		ON EC.DBC_TBL_NM = RC.CH_TBL_DBC_TBL_NM 
+                		AND EC.DBC_COL_NM = RC.CH_TBL_DBC_COL_NM
+                		AND EC.DB_SCH_ID = RC.CH_TBL_DBC_SCH_ID
+                		WHERE RC.PRF_ID = M.PRF_ID 
+			             AND RC.REG_TYP_CD IN ('C', 'U')
+			             AND RC.CH_TBL_DBC_SCH_ID = M.DB_SCH_ID 
+			             AND RC.CH_TBL_DBC_TBL_NM = M.DBC_TBL_NM
+			              
+                )
+                AND OBJ_NM IS NOT NULL
+                AND COALESCE(EX.EXP_YN,'N')='N' 
+		  		AND EXISTS (
+		  			SELECT RC.CH_TBL_DBC_TBL_NM FROM WAM_PRF_REL_COL RC
+                		INNER JOIN WAT_DBC_COL E
+                		ON E.DBC_TBL_NM = RC.CH_TBL_DBC_TBL_NM 
+                		AND E.DBC_COL_NM = RC.CH_TBL_DBC_COL_NM
+                		AND E.DB_SCH_ID = RC.CH_TBL_DBC_SCH_ID
+                		WHERE RC.PRF_ID = M.PRF_ID 
+			             AND RC.REG_TYP_CD IN ('C', 'U')
+			             AND RC.CH_TBL_DBC_SCH_ID = M.DB_SCH_ID 
+			             AND RC.CH_TBL_DBC_TBL_NM = M.DBC_TBL_NM
+		  		)
+             <if test="dbConnTrgId != null and dbConnTrgId != ''" >
+				AND C.DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR}
+			</if>
+	<if test="dbSchId != null and dbSchId != ''" >
+		AND B.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+	</if>
+  </sql>
+  <sql id="Prf2_View">
+        
+      SELECT
+            M.PRF_KND_CD
+            , M.DB_SCH_ID
+            , M.DB_CONN_TRG_ID
+            , R.ANA_STR_DTM AS ANA_STR_DTM
+            , M.OBJ_NM  AS OBJ_NM
+            , M.DBC_TBL_NM AS DBC_TBL_NM
+            , R.ANA_STR_DTM AS "RES_ANA_STR_DTM"
+            , R.ANA_END_DTM AS "RES_ANA_END_DTM"
+            , R.ANA_DGR AS "ANA_DGR"
+            , R.ANA_CNT AS ANA_CNT
+            , R.ESN_ER_CNT AS ESN_ER_CNT
+            , R.NULL_CNT as NULL_CNT
+            , CASE WHEN R.PRF_ID IS NOT NULL AND R.ANA_STR_DTM IS NOT NULL AND R.ANA_END_DTM IS NOT NULL THEN '01' -- 'COMPLETED'
+            		ELSE '03' END AS ANA_STS_CD -- 'FAILED'
+            , R.PRF_ID
+         FROM ( SELECT R1.*
+                      FROM WAM_PRF_RESULT R1
+                INNER JOIN (   SELECT PRF_ID, MAX(ANA_STR_DTM) AS ANA_STR_DTM
+                                 FROM WAM_PRF_RESULT
+                             GROUP BY PRF_ID) R2 
+                        ON R1.PRF_ID = R2.PRF_ID
+                       AND R1.ANA_STR_DTM = R2.ANA_STR_DTM
+                     WHERE 1 = 1 
+               ) R
+    		INNER JOIN WAM_PRF_MSTR M
+            	ON R.PRF_ID = M.PRF_ID
+           		AND M.REG_TYP_CD IN ('C', 'U')
+           INNER JOIN WAA_DB_SCH B                                  
+          	 ON B.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')  
+          	AND B.DB_SCH_ID = M.DB_SCH_ID                          
+	        INNER JOIN WAA_DB_CONN_TRG C                             
+	           ON C.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')  
+	          AND C.DB_CONN_TRG_ID = M.DB_CONN_TRG_ID                
+	        LEFT JOIN WAA_DQRS_EXP_TBL EX                                   
+	           ON EX.DB_SCH_ID  = M.DB_SCH_ID                         		
+	          AND EX.DBC_TBL_NM = M.DBC_TBL_NM  
+          WHERE M.PRF_KND_CD = 'PT02'
+           AND NOT EXISTS (
+                	SELECT RC.DBC_COL_NM FROM WAM_PRF_UNQ_COL RC
+                		INNER JOIN WAA_DQRS_EXP_COL EC
+                		ON EC.DBC_COL_NM = RC.DBC_COL_NM 
+                		WHERE RC.PRF_ID = M.PRF_ID 
+			             AND RC.REG_TYP_CD IN ('C', 'U')
+			             AND EC.DB_SCH_ID = M.DB_SCH_ID 
+			             AND EC.DBC_TBL_NM = M.DBC_TBL_NM
+			              
+                )
+                AND OBJ_NM IS NOT NULL
+                AND COALESCE(EX.EXP_YN,'N')='N' 
+    <if test="dbConnTrgId != null and dbConnTrgId != ''" >
+		AND C.DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR}
+	</if>
+	<if test="dbSchId != null and dbSchId != ''" >
+		AND B.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+	</if>
+  </sql>
+</mapper>

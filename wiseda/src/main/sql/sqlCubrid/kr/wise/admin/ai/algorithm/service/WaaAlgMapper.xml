@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.wise.admin.ai.algorithm.service.WaaAlgMapper">
+  <resultMap id="BaseResultMap" type="kr.wise.admin.ai.algorithm.service.WaaAlg" extends="kr.wise.commons.code.service.CommonCodeMapper.BaseResultMap">
+    <id column="ALG_ID" jdbcType="VARCHAR" property="algId" />
+    <result column="ALG_LNM" jdbcType="VARCHAR" property="algLnm" />
+    <result column="ALG_PNM" jdbcType="VARCHAR" property="algPnm" />
+    <result column="ALG_TYP_CD" jdbcType="VARCHAR" property="algTypCd" />
+    <result column="ALG_CNT" jdbcType="DECIMAL" property="algCnt" />
+    
+  </resultMap>
+  <sql id="Base_Column_List">
+    ALG_ID, ALG_LNM, ALG_PNM, ALG_TYP_CD, OBJ_DESCN, OBJ_VERS, REG_TYP_CD, WRIT_DTM, 
+    WRIT_USER_ID, ALG_CNT
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from WAA_ALG
+    where ALG_ID = #{algId,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="selectAlgorithmList" parameterType="kr.wise.admin.ai.algorithm.service.WaaAlg" resultMap="BaseResultMap">
+  --알고리즘 목록 조회
+  SELECT 
+    <include refid="Base_Column_List" />
+    FROM WAA_ALG
+   WHERE 1=1
+   <if test="algTypCd != null">
+     AND ALG_TYP_CD = #{algTypCd,jdbcType=VARCHAR}
+   </if>
+   <if test="algLnm != null">
+     AND (UPPER(ALG_LNM) LIKE '%'||UPPER(#{algLnm,jdbcType=VARCHAR})||'%' OR UPPER(ALG_PNM) LIKE '%'||UPPER(#{algLnm,jdbcType=VARCHAR})||'%') 
+   </if>
+  
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from WAA_ALG
+    where ALG_ID = #{algId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="kr.wise.admin.ai.algorithm.service.WaaAlg">
+    insert into WAA_ALG (ALG_ID, ALG_LNM, ALG_PNM, 
+      ALG_TYP_CD, OBJ_DESCN, OBJ_VERS, 
+      REG_TYP_CD, WRIT_DTM, WRIT_USER_ID,
+      ALG_CNT
+      )
+    values (#{algId,jdbcType=VARCHAR}, #{algLnm,jdbcType=VARCHAR}, #{algPnm,jdbcType=VARCHAR}, 
+      #{algTypCd,jdbcType=VARCHAR}, #{objDescn,jdbcType=VARCHAR}, 1, 
+      #{regTypCd,jdbcType=VARCHAR}, SYSDATETIME, #{writUserId,jdbcType=VARCHAR},
+      #{algCnt, jdbcType=DECIMAL}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="kr.wise.admin.ai.algorithm.service.WaaAlg">
+    insert into WAA_ALG
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="algId != null">
+        ALG_ID,
+      </if>
+      <if test="algLnm != null">
+        ALG_LNM,
+      </if>
+      <if test="algPnm != null">
+        ALG_PNM,
+      </if>
+      <if test="algTypCd != null">
+        ALG_TYP_CD,
+      </if>
+      <if test="objDescn != null">
+        OBJ_DESCN,
+      </if>
+      <if test="objVers != null">
+        OBJ_VERS,
+      </if>
+      <if test="regTypCd != null">
+        REG_TYP_CD,
+      </if>
+      <if test="writDtm != null">
+        WRIT_DTM,
+      </if>
+      <if test="writUserId != null">
+        WRIT_USER_ID,
+      </if>
+      <if test="algCnt != null">
+      	ALG_CNT,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="algId != null">
+        #{algId,jdbcType=VARCHAR},
+      </if>
+      <if test="algLnm != null">
+        #{algLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="algPnm != null">
+        #{algPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="algTypCd != null">
+        #{algTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="objDescn != null">
+        #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null">
+        #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null">
+        #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="writDtm != null">
+        #{writDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="writUserId != null">
+        #{writUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="algCnt != null">
+        #{algCnt,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.admin.ai.algorithm.service.WaaAlg">
+    update WAA_ALG
+    <set>
+      <if test="algLnm != null">
+        ALG_LNM = #{algLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="algPnm != null">
+        ALG_PNM = #{algPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="algTypCd != null">
+        ALG_TYP_CD = #{algTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="objDescn != null">
+        OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null">
+        OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null">
+        REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="writDtm != null">
+        WRIT_DTM = #{writDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="writUserId != null">
+        WRIT_USER_ID = #{writUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="algCnt != null">
+        ALG_CNT = #{algCnt,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where ALG_ID = #{algId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="kr.wise.admin.ai.algorithm.service.WaaAlg">
+    update WAA_ALG
+    set ALG_LNM = #{algLnm,jdbcType=VARCHAR},
+      ALG_PNM = #{algPnm,jdbcType=VARCHAR},
+      ALG_TYP_CD = #{algTypCd,jdbcType=VARCHAR},
+      OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      OBJ_VERS = NVL(OBJ_VERS, 0) + 1,
+      REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      WRIT_DTM = SYSDATETIME,
+      WRIT_USER_ID = #{writUserId,jdbcType=VARCHAR},
+      ALG_CNT = #{algCnt, jdbcType=DECIMAL}
+    where ALG_ID = #{algId,jdbcType=VARCHAR}
+  </update>
+</mapper>

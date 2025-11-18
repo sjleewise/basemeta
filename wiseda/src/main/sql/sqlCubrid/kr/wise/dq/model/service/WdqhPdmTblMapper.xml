@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.wise.dq.model.service.WdqhPdmTblMapper">
+  <resultMap id="WahPdmBaseResultMap" type="kr.wise.dq.model.service.WdqhPdmTbl"  extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+    <id column="PDM_TBL_ID" jdbcType="VARCHAR" property="pdmTblId" />
+    <result column="DB_CONN_TRG_ID" jdbcType="VARCHAR" property="dbConnTrgId" />
+    <result column="DB_SCH_ID" jdbcType="VARCHAR" property="dbSchId" />
+    <result column="EXP_DTM" jdbcType="VARCHAR" property="expDtm" />
+    <result column="STR_DTM" jdbcType="VARCHAR" property="strDtm" />
+    <result column="PDM_TBL_PNM" jdbcType="VARCHAR" property="pdmTblPnm" />
+    <result column="PDM_TBL_LNM" jdbcType="VARCHAR" property="pdmTblLnm" />
+    <result column="CRG_USER_ID" jdbcType="VARCHAR" property="crgUserId" />
+    <result column="OBJ_DESCN" jdbcType="VARCHAR" property="objDescn" />
+    <result column="OBJ_VERS" jdbcType="DECIMAL" property="objVers" />
+    <result column="REG_TYP_CD" jdbcType="VARCHAR" property="regTypCd" />
+    <result column="RQST_DTM" jdbcType="VARCHAR" property="rqstDtm" />
+    <result column="RQST_USER_ID" jdbcType="VARCHAR" property="rqstUserId" />
+  </resultMap>
+  
+  <insert id="insert" parameterType="kr.wise.dq.model.service.WdqhPdmTbl">
+    insert into WDQH_PDM_TBL (PDM_TBL_ID, DB_CONN_TRG_ID, DB_SCH_ID, 
+      EXP_DTM, STR_DTM, PDM_TBL_PNM, 
+      PDM_TBL_LNM, CRG_USER_ID, OBJ_DESCN, 
+      OBJ_VERS, REG_TYP_CD, RQST_DTM, 
+      RQST_USER_ID)
+    values (#{pdmTblId,jdbcType=VARCHAR}, #{dbConnTrgId,jdbcType=VARCHAR}, #{dbSchId,jdbcType=VARCHAR}, 
+      #{expDtm,jdbcType=VARCHAR}, #{strDtm,jdbcType=VARCHAR}, #{pdmTblPnm,jdbcType=VARCHAR}, 
+      #{pdmTblLnm,jdbcType=VARCHAR}, #{crgUserId,jdbcType=VARCHAR}, #{objDescn,jdbcType=VARCHAR}, 
+      #{objVers,jdbcType=DECIMAL}, #{regTypCd,jdbcType=VARCHAR}, #{rqstDtm,jdbcType=VARCHAR}, 
+      #{rqstUserId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="kr.wise.dq.model.service.WdqhPdmTbl">
+    insert into WDQH_PDM_TBL
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="pdmTblId != null">
+        PDM_TBL_ID,
+      </if>
+      <if test="dbConnTrgId != null">
+        DB_CONN_TRG_ID,
+      </if>
+      <if test="dbSchId != null">
+        DB_SCH_ID,
+      </if>
+      <if test="expDtm != null">
+        EXP_DTM,
+      </if>
+      <if test="strDtm != null">
+        STR_DTM,
+      </if>
+      <if test="pdmTblPnm != null">
+        PDM_TBL_PNM,
+      </if>
+      <if test="pdmTblLnm != null">
+        PDM_TBL_LNM,
+      </if>
+      <if test="crgUserId != null">
+        CRG_USER_ID,
+      </if>
+      <if test="objDescn != null">
+        OBJ_DESCN,
+      </if>
+      <if test="objVers != null">
+        OBJ_VERS,
+      </if>
+      <if test="regTypCd != null">
+        REG_TYP_CD,
+      </if>
+      <if test="rqstDtm != null">
+        RQST_DTM,
+      </if>
+      <if test="rqstUserId != null">
+        RQST_USER_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="pdmTblId != null">
+        #{pdmTblId,jdbcType=VARCHAR},
+      </if>
+      <if test="dbConnTrgId != null">
+        #{dbConnTrgId,jdbcType=VARCHAR},
+      </if>
+      <if test="dbSchId != null">
+        #{dbSchId,jdbcType=VARCHAR},
+      </if>
+      <if test="expDtm != null">
+        #{expDtm,jdbcType=VARCHAR},
+      </if>
+      <if test="strDtm != null">
+        #{strDtm,jdbcType=VARCHAR},
+      </if>
+      <if test="pdmTblPnm != null">
+        #{pdmTblPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="pdmTblLnm != null">
+        #{pdmTblLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="crgUserId != null">
+        #{crgUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="objDescn != null">
+        #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null">
+        #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null">
+        #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDtm != null">
+        #{rqstDtm,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstUserId != null">
+        #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <insert id="wam2wah" parameterType="kr.wise.dq.model.service.WdqqPdmTbl">
+  	insert into WDQH_PDM_TBL (PDM_TBL_ID    
+							,DB_CONN_TRG_ID
+							,DB_SCH_ID     
+							,EXP_DTM       
+							,STR_DTM       
+							,PDM_TBL_PNM   
+							,PDM_TBL_LNM   
+							,CRG_USER_ID   
+							,OBJ_DESCN     
+							,OBJ_VERS      
+							,REG_TYP_CD    
+							,RQST_DTM      
+							,RQST_USER_ID  
+  	                        )
+  	       SELECT    PDM_TBL_ID    
+					,DB_CONN_TRG_ID
+					,DB_SCH_ID     
+					,SYSDATETIME AS EXP_DTM       
+					,SYSDATETIME AS STR_DTM       
+					,PDM_TBL_PNM   
+					,PDM_TBL_LNM   
+					,CRG_USER_ID   
+					,OBJ_DESCN     
+					,OBJ_VERS      
+					,REG_TYP_CD    
+					,RQST_DTM      
+					,RQST_USER_ID  
+  	         FROM WDQM_PDM_TBL
+  	        WHERE PDM_TBL_ID = #{pdmTblId, jdbcType=VARCHAR}  
+  </insert>
+</mapper>

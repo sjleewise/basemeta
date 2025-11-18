@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.meta.effect.service.EtclMapper" >
+
+
+<resultMap id="EtclTaskResultMap" type="kr.wise.meta.effect.service.EtclVO" >
+    <result column="OBJ_ID" 	property="objId" 	jdbcType="VARCHAR" /> 
+    <result column="OF_FIELD" 	property="of_field" 	jdbcType="VARCHAR" /> 
+    <result column="FIELD_ID" 	property="fieldId" 	jdbcType="VARCHAR" /> 
+    <result column="FIELD_NM" 	property="fieldNm" 	jdbcType="VARCHAR" /> 
+    <result column="TASK_ID" 	property="taskId" 	jdbcType="VARCHAR" /> 
+    <result column="TASK_NM" 	property="taskNm" 	jdbcType="VARCHAR" /> 
+    <result column="TASK_TYPE" 	property="taskType" 	jdbcType="VARCHAR" /> 
+    <result column="TASK_TYPE_NM" 	property="taskTypeNm" 	jdbcType="VARCHAR" /> 
+    <result column="TASK_DESC" 	property="desctiption" 	jdbcType="VARCHAR" /> 
+    <result column="IS_VALID" 	property="valid" 	jdbcType="VARCHAR" /> 
+    <result column="IS_ENABLED" 	property="enable" 	jdbcType="VARCHAR" /> 
+    <result column="IS_RESUABLE" 	property="reusable" 	jdbcType="VARCHAR" /> 
+    <result column="MAPPIND_ID" 	property="mappingId" 	jdbcType="VARCHAR" />
+    <result column="TASK_LAST_SAVED" 	property="taskLastSaved" 	jdbcType="VARCHAR" />
+    <result column="TERMS_MAPPING_NM" 	property="termsMappingNm" 	jdbcType="VARCHAR" />
+    <result column="TERMS_LAST_SAVED" 	property="termsLastSaved" 	jdbcType="VARCHAR" /> 
+    <result column="SRC_ID" 	property="srcId" 	jdbcType="VARCHAR" />
+    <result column="SRC_FIELD_ID" 	property="srcFieldId" 	jdbcType="VARCHAR" />
+    <result column="SRC_TBL_NM" 	property="srcTblNm" 	jdbcType="VARCHAR" />
+    <result column="SRC_FIELD_NM" 	property="srcFieldNm" 	jdbcType="VARCHAR" />   
+    <result column="TGT_ID" 	property="tgtId" 	jdbcType="VARCHAR" />
+    <result column="TGT_FIELD_ID" 	property="tgtFieldId" 	jdbcType="VARCHAR" />
+    <result column="TGT_TBL_NM" 	property="tgtTblNm" 	jdbcType="VARCHAR" />
+    <result column="TGT_FIELD_NM" 	property="tgtFieldNm" 	jdbcType="VARCHAR" />
+</resultMap>
+	
+	
+	<select id="selectEtclTaskList" parameterType="kr.wise.meta.effect.service.EtclVO" resultMap="EtclTaskResultMap">
+	SELECT 		/* EtclMapper.selectEtclTaskList */
+				B.OBJ_ID AS OBJ_ID
+				, B.OF_SUBJECT AS OF_FIELD
+				, B.SUBJECT_ID AS FIELD_ID
+				, A.SUBJECT_NAME AS FIELD_NM
+				, B.TASK_ID AS TASK_ID
+				, B.TASK_NAME AS TASK_NM
+                , B.TASK_TYPE AS TASK_TYPE
+				, B.TASK_TYPE_NAME AS TASK_TYPE_NM
+				, B.LAST_SAVED AS TASK_LAST_SAVED
+				, B.TASK_DESCRIPTION AS TASK_DESC
+				, B.IS_VALID AS IS_VALID
+				, B.IS_ENABLED AS IS_ENABLED
+				, B.IS_REUSABLE AS IS_RESUABLE				
+				, C.OF_MAPPING AS MAPPIND_ID
+				, D.MAPPING_NAME AS TERMS_MAPPING_NM
+                , D.LAST_SAVED AS TERMS_LAST_SAVED
+			FROM WAT_ETCL_INFA_010R A
+			INNER JOIN WAT_ETCL_INFA_020R B
+			ON A.OBJ_ID = B.OF_SUBJECT
+			LEFT OUTER JOIN WAT_ETCL_INFA_090R C
+			ON A.OBJ_ID = C.OF_SUBJECT
+			AND B.OBJ_ID = C.OF_SESSION
+			AND C.XPR_DTTM = STR_TO_DATE('9999-12-31','%Y-%m-%d')
+			AND C.ORGL_TYPE IN ('C', 'U')
+			LEFT OUTER JOIN WAT_ETCL_INFA_030R D
+            ON C.OF_MAPPING = D.OBJ_ID
+            AND D.XPR_DTTM = STR_TO_DATE('9999-12-31','%Y-%m-%d')
+			AND D.ORGL_TYPE IN ('C', 'U')
+			WHERE A.XPR_DTTM =STR_TO_DATE('9999-12-31','%Y-%m-%d')
+			AND B.XPR_DTTM = STR_TO_DATE('9999-12-31','%Y-%m-%d')
+			AND A.ORGL_TYPE IN ('C', 'U')
+			AND B.ORGL_TYPE IN ('C', 'U')
+			<if test="fieldNm != null">AND A.SUBJECT_NAME LIKE '%'||#{fieldNm}||'%'</if>
+			<if test="taskNm != null">AND B.TASK_NAME LIKE '%'||#{taskNm}||'%'</if>
+			<if test="taskType != null">AND B.TASK_TYPE = #{taskType}</if>
+		ORDER BY A.SUBJECT_NAME, B.TASK_NAME	
+	</select>
+	
+	
+	<select id="selectEtclTaskSource" parameterType="kr.wise.meta.effect.service.EtclVO" resultMap="EtclTaskResultMap">
+	SELECT 	/* EtclMapper.selectEtclTaskSource */
+			DISTINCT
+          A.OBJ_ID AS SRC_OBJ_ID
+        , B.OF_SRC AS SRC_ID
+        , B.OF_SRC_FIELD AS SRC_FIELD_ID
+        , C.SRC_NAME AS SRC_TBL_NM
+        , D.SRC_FIELD_NAME AS SRC_FIELD_NM
+	FROM WAT_ETCL_INFA_030R A
+	INNER JOIN WAT_ETCL_INFA_080R B
+	ON A.OF_SUBJECT = B.OF_SUBJECT
+	AND A.OBJ_ID = B.OF_MAPPING
+	AND B.XPR_DTTM = STR_TO_DATE('9999-12-31','%Y-%m-%d')
+	AND B.ORGL_TYPE IN ('C', 'U')
+	INNER JOIN WAT_ETCL_INFA_060R C
+	ON B.OF_SRC = C.OBJ_ID
+	AND C.XPR_DTTM =STR_TO_DATE('9999-12-31','%Y-%m-%d')
+	AND C.ORGL_TYPE IN ('C', 'U')
+	INNER JOIN WAT_ETCL_INFA_070R D
+	ON C.OBJ_ID = D.OF_SRC
+	AND B.OF_SRC_FIELD = D.OBJ_ID
+	AND D.XPR_DTTM = STR_TO_DATE('9999-12-31','%Y-%m-%d')
+	AND D.ORGL_TYPE IN ('C', 'U')
+	WHERE A.XPR_DTTM = STR_TO_DATE('9999-12-31','%Y-%m-%d')
+	AND A.ORGL_TYPE IN ('C', 'U')
+	<if test="mappingId != null">AND A.OBJ_ID = #{mappingId}</if>	
+	ORDER BY B.OF_SRC, B.OF_SRC_FIELD	
+	</select>
+	
+	<select id="selectEtclTaskTarget" parameterType="kr.wise.meta.effect.service.EtclVO" resultMap="EtclTaskResultMap">
+	SELECT /* EtclMapper.selectEtclTaskTarget */
+			DISTINCT A.OBJ_ID AS TGT_OBJ_ID
+			, C.OF_TBL AS TGT_ID
+			, B.OF_TARGET_FIELD AS TGT_FIELD_ID
+			, C.TARGET_NAME AS TGT_TBL_NM
+			, D.TARGET_FIELD_NAME AS TGT_FIELD_NM
+		FROM WAT_ETCL_INFA_030R A
+		INNER JOIN WAT_ETCL_INFA_080R B
+		ON A.OF_SUBJECT = B.OF_SUBJECT
+		AND A.OBJ_ID = B.OF_MAPPING
+        AND B.XPR_DTTM = STR_TO_DATE('9999-12-31','%Y-%m-%d')
+        AND B.ORGL_TYPE IN ('C', 'U')
+        INNER JOIN WAT_ETCL_INFA_040R C
+        ON C.OBJ_ID = B.OF_TARGET
+        AND C.XPR_DTTM =STR_TO_DATE('9999-12-31','%Y-%m-%d')
+        AND C.ORGL_TYPE IN ('C', 'U')
+        INNER JOIN WAT_ETCL_INFA_050R D
+        ON C.OBJ_ID = D.OF_TARGET
+        AND B.OF_TARGET_FIELD = D.OBJ_ID
+        AND D.XPR_DTTM = STR_TO_DATE('9999-12-31','%Y-%m-%d')
+        AND D.ORGL_TYPE IN ('C', 'U')
+		WHERE A.XPR_DTTM = STR_TO_DATE('9999-12-31','%Y-%m-%d')
+		AND A.ORGL_TYPE IN ('C', 'U')
+		<if test="mappingId != null">AND A.OBJ_ID = #{mappingId}</if>	
+     	ORDER BY C.OF_TBL, D.TARGET_FIELD_NAME
+	</select>
+	
+
+</mapper>

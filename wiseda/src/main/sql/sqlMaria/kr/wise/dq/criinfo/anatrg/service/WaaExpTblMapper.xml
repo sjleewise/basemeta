@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.dq.criinfo.anatrg.service.WaaExpTblMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.dq.criinfo.anatrg.service.WaaExpTbl" >
+    <id column="DB_SCH_ID" property="dbSchId" jdbcType="VARCHAR" />
+    <result column="DB_CONN_TRG_ID"  property="dbConnTrgId"  jdbcType="VARCHAR" />
+    <result column="DB_CONN_TRG_PNM" property="dbConnTrgPnm" jdbcType="VARCHAR" />
+    <result column="DB_CONN_TRG_LNM" property="dbConnTrgLnm" jdbcType="VARCHAR" />
+    <result column="DB_SCH_PNM"      property="dbSchPnm"     jdbcType="VARCHAR" />
+    <result column="DB_SCH_LNM"      property="dbSchLnm"     jdbcType="VARCHAR" />
+    <result column="DBC_TBL_NM"      property="dbcTblNm"     jdbcType="VARCHAR" />
+    <result column="DBC_TBL_KOR_NM"  property="dbcTblKorNm"  jdbcType="VARCHAR" />
+    <result column="EXP_YN"          property="expYn"        jdbcType="VARCHAR" />
+    <result column="EXP_RSN_CNTN"    property="expRsnCntn"   jdbcType="VARCHAR" />
+    <result column="ADD_CND"    	 property="addCnd"   	 jdbcType="VARCHAR" />
+    <result column="RELATION"    	 property="relation"   	 jdbcType="VARCHAR" />
+    
+    <result column="DBC_COL_NM"      property="dbcColNm"     jdbcType="VARCHAR" />
+    <result column="DBC_COL_KOR_NM"  property="dbcColKorNm"  jdbcType="VARCHAR" />
+    
+    <result column="EXP_RULE_ID"  property="expRuleId"  jdbcType="VARCHAR" />   
+    <result column="DB_CONN_TRG_NM"  property="dbConnTrgNm"  jdbcType="VARCHAR" />   
+    <result column="EXC_STND_RULE"  property="excStndRule"  jdbcType="VARCHAR" />
+       
+    <result column="EXP_DTM"  property="expDtm"  jdbcType="VARCHAR" />   
+    <result column="REG_TYP"  property="regTyp"  jdbcType="VARCHAR" />    
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+   	DB_SCH_ID, EXP_DTM, STR_DTM, DB_SCH_PNM, DB_SCH_LNM, DB_CONN_TRG_ID, DDL_TRG_YN, CLT_XCL_YN, DDL_TRG_DCD, CD_SND_TRG_YN
+   	CD_AUTO_SND_YN, OBJ_DESCN, OBJ_VERS, REG_TYP_CD, WRIT_DTM, WRIT_USER_ID, DB_TBL_SPAC_IC, DB_IDX_SPAC_ID
+   	, COL_PRF_YN, DMN_PDT_YN, RELATION
+  </sql>
+  
+  <insert id="insertSelective" parameterType="kr.wise.dq.criinfo.anatrg.service.WaaExpTbl">
+  	INSERT INTO WAA_EXP_TBL
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="dbSchId != null">
+        DB_SCH_ID,
+      </if>     
+      <if test="dbcTblNm != null">
+        DBC_TBL_NM,
+      </if>    
+      <if test="expYn != null">
+        EXP_YN,
+      </if>      
+      <if test="addCnd != null">
+        ADD_CND,
+      </if>    
+      <if test="expRsnCntn != null">
+        EXP_RSN_CNTN,
+      </if>    
+      WRIT_DTM,  
+      UPDT_DTM,
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="dbSchId != null">
+        #{dbSchId,jdbcType=VARCHAR},
+      </if>
+      <if test="dbcTblNm != null">
+        #{dbcTblNm,jdbcType=VARCHAR},
+      </if>  
+      <if test="expYn != null"> 
+        CASE WHEN #{expYn,jdbcType=VARCHAR} = '1' THEN 'Y' ELSE 'N' END,  
+      </if>   
+      <if test="addCnd != null">
+        #{addCnd,jdbcType=VARCHAR},
+      </if> 
+      <if test="expRsnCntn != null">
+        #{expRsnCntn,jdbcType=VARCHAR},
+      </if> 
+      NOW() ,    
+      NOW() ,
+    </trim>
+  </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.dq.criinfo.anatrg.service.WaaExpTbl" >
+    UPDATE WAA_EXP_TBL
+    <set >
+      <if test="expYn != null" >
+        EXP_YN = CASE WHEN #{expYn,jdbcType=VARCHAR} = '1' THEN 'Y' ELSE 'N' END,
+      </if>
+      <if test="expRsnCntn != null" >
+        EXP_RSN_CNTN = CASE WHEN #{expYn,jdbcType=VARCHAR} = '1' THEN #{expRsnCntn,jdbcType=VARCHAR} ELSE '' END ,
+      </if>
+      <if test="addCnd != null" >
+        ADD_CND = #{addCnd,jdbcType=VARCHAR},
+      </if>
+    </set>
+    WHERE DB_SCH_ID  = #{dbSchId,jdbcType=VARCHAR}
+      AND DBC_TBL_NM = #{dbcTblNm,jdbcType=VARCHAR}
+  </update>
+  
+   <select id="selectTrgTbl" resultMap="BaseResultMap" parameterType="HashMap">
+		SELECT C.DB_CONN_TRG_PNM
+		     , B.DB_SCH_ID
+		     , B.DB_SCH_PNM
+		     , A.DBC_TBL_NM
+		     , A.DBC_TBL_KOR_NM
+		     , CASE WHEN D.EXP_YN = 'Y' THEN '1' ELSE '0' END AS EXP_YN
+		     , D.ADD_CND
+		     , D.EXP_RSN_CNTN
+		  FROM WAT_DBC_TBL A
+		       INNER JOIN WAA_DB_SCH B
+		          ON B.EXP_DTM = '99991231'
+		         AND B.DB_SCH_ID = A.DB_SCH_ID  
+		       INNER JOIN WAA_DB_CONN_TRG C
+		          ON C.EXP_DTM = '99991231'
+		         AND C.DB_CONN_TRG_ID = B.DB_CONN_TRG_ID  
+		       LEFT JOIN WAA_EXP_TBL D
+		         ON D.DB_SCH_ID  = A.DB_SCH_ID
+		        AND D.DBC_TBL_NM = A.DBC_TBL_NM   
+		 WHERE 1 = 1
+		   <if test='dbConnTrgId != null '>
+		   AND C.DB_CONN_TRG_ID = #{dbConnTrgId, jdbcType=VARCHAR}
+		   </if> 
+		   <if test='dbSchId != null '>
+		   AND B.DB_SCH_ID = #{dbSchId, jdbcType=VARCHAR}
+		   </if> 
+		   <if test='dbcTblNm != null '> 
+		   AND UPPER(A.DBC_TBL_NM) LIKE UPPER(CONCAT('%', #{dbcTblNm, jdbcType=VARCHAR}, '%'))
+		   </if> 
+		   <if test='expYn != null '> 
+		   AND NVL(D.EXP_YN,'N') = #{expYn, jdbcType=VARCHAR}
+		   </if> 
+    </select>
+  
+  	<select id="selectCheckRuleTbl" resultMap="BaseResultMap" parameterType="HashMap">
+		SELECT C.DB_CONN_TRG_PNM
+		     , B.DB_SCH_ID
+		     , B.DB_SCH_PNM
+		     , A.DBC_TBL_NM
+		     , A.DBC_TBL_KOR_NM
+		     , E.DBC_COL_NM
+		     , E.DBC_COL_KOR_NM 
+		  FROM WAT_DBC_TBL A
+		       INNER JOIN WAA_DB_SCH B
+		          ON B.EXP_DTM = '99991231'
+		         AND B.DB_SCH_ID = A.DB_SCH_ID  
+		       INNER JOIN WAA_DB_CONN_TRG C
+		          ON C.EXP_DTM = '99991231'
+		         AND C.DB_CONN_TRG_ID = B.DB_CONN_TRG_ID  
+		       LEFT JOIN WAA_EXP_TBL D
+		         ON D.DB_SCH_ID  = A.DB_SCH_ID
+		        AND D.DBC_TBL_NM = A.DBC_TBL_NM		
+		       INNER JOIN WAT_DBC_COL E
+		          ON E.DB_SCH_ID  = A.DB_SCH_ID
+		         AND E.DBC_TBL_NM = A.DBC_TBL_NM            
+		 WHERE 1 = 1
+		   AND NVL(D.EXP_YN,'N') = 'N'
+		   
+		   <if test='dbConnTrgId != null '>
+		   AND C.DB_CONN_TRG_ID = #{dbConnTrgId, jdbcType=VARCHAR}
+		   </if> 
+		   <if test='dbcTblNm != null '> 
+		   AND A.DBC_TBL_NM = #{dbcTblNm, jdbcType=VARCHAR}
+		   </if> 
+    </select>
+    <select id="selectExpRuleTbl" resultMap="BaseResultMap" parameterType="HashMap">
+		SELECT *
+		FROM WAA_EXP_TBL_RULE 
+		WHERE 1=1
+		AND REG_TYP IN ('C','U')
+		   <if test='dbConnTrgId != null'>
+		   AND DB_CONN_TRG_ID = #{dbConnTrgId, jdbcType=VARCHAR}
+		   </if> 
+		   <if test='dbSchId != null'>
+		   AND DB_SCH_ID = #{dbSchId, jdbcType=VARCHAR}
+		   </if> 
+		   <if test='excStndRule != null'> 
+		   AND UPPER(EXC_STND_RULE) LIKE UPPER(CONCAT('%' , #{excStndRule, jdbcType=VARCHAR} , '%')) 
+		   </if> 
+    </select>
+    <update id="updateByPrimaryKeySelective2" parameterType="kr.wise.dq.criinfo.anatrg.service.WaaExpTbl" >
+    UPDATE WAA_EXP_TBL_RULE
+    <set >
+      <if test="dbConnTrgId != null" >
+        DB_CONN_TRG_ID = #{dbConnTrgId, jdbcType=VARCHAR},
+      </if>
+      <if test="excStndRule != null" >
+        EXC_STND_RULE = #{excStndRule, jdbcType=VARCHAR},
+      </if>
+      <if test="relation != null">
+        RELATION = #{relation, jdbcType=VARCHAR},
+      </if>
+      <if test="regTyp != null">
+        REG_TYP = 'U',
+      </if>      
+      <if test="dbSchId != null">
+        DB_SCH_ID = #{dbSchId, jdbcType=VARCHAR}
+      </if>   
+    </set>
+       WHERE EXP_RULE_ID = #{expRuleId, jdbcType=VARCHAR}
+  
+  </update>
+    
+  <insert id="insertSelective2" parameterType="kr.wise.dq.criinfo.anatrg.service.WaaExpTbl">
+  	INSERT INTO WAA_EXP_TBL_RULE
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="expRuleId != null">
+        EXP_RULE_ID,
+      </if>     
+      <if test="dbConnTrgId != null">
+        DB_CONN_TRG_ID,
+      </if>
+      <if test="relation != null">
+        RELATION,
+      </if>   
+      <if test="dbSchId != null">
+        DB_SCH_ID,
+      </if>
+      <if test="regTyp != null">
+        REG_TYP,
+      </if>        
+      <if test="excStndRule != null">
+        EXC_STND_RULE
+      </if>      
+     
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="expRuleId != null">
+        #{expRuleId, jdbcType=VARCHAR},
+      </if>
+      <if test="dbConnTrgId != null">
+        #{dbConnTrgId, jdbcType=VARCHAR},
+      </if>
+      <if test="relation != null">
+        #{relation, jdbcType=VARCHAR},
+      </if>   
+      <if test="dbSchId != null">
+        #{dbSchId, jdbcType=VARCHAR},
+      </if>
+      <if test="regTyp != null">
+        REG_TYP = 'I',
+      </if>   
+      <if test="excStndRule != null"> 
+         #{excStndRule, jdbcType=VARCHAR}
+      </if>
+    </trim>
+  </insert>  
+  
+  <update id="deleteExpRule" parameterType="kr.wise.dq.criinfo.anatrg.service.WaaExpTbl" >
+      UPDATE WAA_EXP_TBL_RULE
+       SET 
+          EXP_DTM = NOW(),
+          REG_TYP ='D'
+          WHERE EXP_RULE_ID = #{expRuleId, jdbcType=VARCHAR}
+  </update>
+</mapper>

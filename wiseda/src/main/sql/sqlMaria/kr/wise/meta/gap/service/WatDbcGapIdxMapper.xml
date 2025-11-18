@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.meta.gap.service.WatDbcGapIdxMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.meta.gap.service.WatDbcGapIdx" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap" >
+    <result column="SRC_DB_SCH_ID" property="srcDbSchId" jdbcType="VARCHAR" />
+    <result column="SRC_TBL_PNM" property="srcTblPnm" jdbcType="VARCHAR" />
+    <result column="SRC_IDX_PNM" property="srcIdxPnm" jdbcType="VARCHAR" />
+    <result column="SRC_IDX_LNM" property="srcIdxLnm" jdbcType="VARCHAR" />
+    <result column="SRC_IDX_SPAC_NM" property="srcIdxSpacNm" jdbcType="VARCHAR" />
+    <result column="SRC_PK_YN" property="srcPkYn" jdbcType="VARCHAR" />
+    <result column="SRC_UQ_YN" property="srcUqYn" jdbcType="VARCHAR" />
+    <result column="SRC_COL_EACNT" property="srcColEacnt" jdbcType="DECIMAL" />
+    <result column="SRC_DDL_IDX_ID" property="srcDdlIdxId" jdbcType="VARCHAR" />
+    <result column="TGT_DB_SCH_ID" property="tgtDbSchId" jdbcType="VARCHAR" />
+    <result column="TGT_TBL_PNM" property="tgtTblPnm" jdbcType="VARCHAR" />
+    <result column="TGT_IDX_PNM" property="tgtIdxPnm" jdbcType="VARCHAR" />
+    <result column="TGT_IDX_LNM" property="tgtIdxLnm" jdbcType="VARCHAR" />
+    <result column="TGT_IDX_SPAC_NM" property="tgtIdxSpacNm" jdbcType="VARCHAR" />
+    <result column="TGT_PK_YN" property="tgtPkYn" jdbcType="VARCHAR" />
+    <result column="TGT_UQ_YN" property="tgtUqYn" jdbcType="VARCHAR" />
+    <result column="TGT_COL_EACNT" property="tgtColEacnt" jdbcType="DECIMAL" />
+    <result column="TGT_DDL_IDX_ID" property="tgtDdlIdxId" jdbcType="VARCHAR" />
+    <result column="SRC_IDX_EXTNC_EXS" property="srcIdxExtncExs" jdbcType="VARCHAR" />
+    <result column="TGT_IDX_EXTNC_EXS" property="tgtIdxExtncExs" jdbcType="VARCHAR" />
+    <result column="IDX_SPAC_NM_ERR_EXS" property="idxSpacNmErrExs" jdbcType="VARCHAR" />
+    <result column="PK_YN_ERR_EXS" property="pkYnErrExs" jdbcType="VARCHAR" />
+    <result column="UQ_YN_ERR_EXS" property="uqYnErrExs" jdbcType="VARCHAR" />
+    <result column="COL_EACNT_ERR_EXS" property="colEacntErrExs" jdbcType="VARCHAR" />
+    <result column="IDX_ERR_EXS" property="idxErrExs" jdbcType="VARCHAR" />
+    <result column="IDX_ERR_DESCN" property="idxErrDescn" jdbcType="VARCHAR" />
+    <result column="IDX_COL_ERR_EXS" property="idxColErrExs" jdbcType="VARCHAR" />
+    <result column="IDX_COL_ERR_DESCN" property="idxColErrDescn" jdbcType="VARCHAR" />
+  </resultMap>
+
+
+<select id="getGapIdxList" parameterType="kr.wise.meta.gap.service.WatDbcGapIdx" resultMap="BaseResultMap">
+  	SELECT 	/* WatDbcGapIdxMapper.getGapIdxList */
+  			A.*
+  		 , CASE WHEN GAP_STATUS = 'GAP' THEN '#FF0000' END AS FontColor
+  	  FROM (
+		  	SELECT  A.SRC_DB_SCH_ID    
+						,A.SRC_TBL_PNM      
+						,A.SRC_IDX_PNM 
+						,IFNULL(A.SRC_IDX_EXTNC_EXS, 'Y') AS SRC_IDX_EXTNC_EXS
+						,A.TGT_DB_SCH_ID    
+						,A.TGT_TBL_PNM      
+						,A.TGT_IDX_PNM 
+						,IFNULL(A.IDX_ERR_EXS, 'N') AS IDX_ERR_EXS
+						,A.IDX_ERR_DESCN    
+						,IFNULL(A.IDX_COL_ERR_EXS, 'N') AS IDX_COL_ERR_EXS
+						,A.IDX_COL_ERR_DESCN    
+						,A.DESCN            
+						,A.VERS             
+						,A.REG_TYP_CD       
+						,A.WRIT_DTM         
+					    , CASE WHEN A.IDX_ERR_EXS = 'Y' THEN 'GAP'
+					       ELSE CASE WHEN A.IDX_COL_ERR_DESCN = 'Y' THEN 'GAP'
+					       ELSE 'NML' END END AS GAP_STATUS
+			  FROM WAT_DBC_GAP_IDX A
+			WHERE A.SRC_DB_SCH_ID = #{srcDbSchId,jdbcType=VARCHAR}
+			<if test="srcTblPnm != null">
+	        AND A.SRC_TBL_PNM = #{srcTblPnm,jdbcType=VARCHAR} 
+			</if>
+	   		AND A.TGT_DB_SCH_ID = #{tgtDbSchId,jdbcType=VARCHAR}
+			<if test="tgtTblPnm != null">
+	        AND A.TGT_TBL_PNM = #{tgtTblPnm,jdbcType=VARCHAR} 
+	        </if>
+			) A
+<!-- 	   AND A.GAP_STATUS = #{gapStatus,jdbcType=VARCHAR} -->
+	 ORDER BY A.GAP_STATUS, A.SRC_DB_SCH_ID  ,A.SRC_TBL_PNM ,A.TGT_DB_SCH_ID  ,A.TGT_TBL_PNM 
+  </select>
+
+
+</mapper>

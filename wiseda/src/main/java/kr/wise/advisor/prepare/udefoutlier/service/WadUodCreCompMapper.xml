@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.wise.advisor.prepare.udefoutlier.service.WadUodCreCompMapper">
+  <resultMap id="BaseResultMap" type="kr.wise.advisor.prepare.udefoutlier.service.WadUodCreComp" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+    <id column="UDF_OTL_DTC_ID"   jdbcType="VARCHAR"   property="udfOtlDtcId" />
+    <id column="CRE_COMP_ID"      jdbcType="VARCHAR"   property="creCompId"   />
+    <result column="COMP_ORD"     jdbcType="DECIMAL"   property="compOrd"     />
+    <result column="CRE_COMP_NM"  jdbcType="VARCHAR"   property="creCompNm"   />
+    <result column="COMP_ID"      jdbcType="VARCHAR"   property="compId"      />    
+    <result column="COMP_DCD"     jdbcType="VARCHAR"   property="compDcd"     />  
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    UDF_OTL_DTC_ID, CRE_COMP_ID, COMP_ORD, CRE_COMP_NM, COMP_ID, OBJ_DESCN, OBJ_VERS, 
+    REG_TYP_CD, WRIT_USER_ID, WRIT_DTM
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="map" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from WAD_UOD_CRE_COMP
+    where UDF_OTL_DTC_ID = #{udfOtlDtcId,jdbcType=VARCHAR}
+      and CRE_COMP_ID = #{creCompId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="map">
+    delete from WAD_UOD_CRE_COMP
+    where UDF_OTL_DTC_ID = #{udfOtlDtcId,jdbcType=VARCHAR}
+      and CRE_COMP_ID = #{creCompId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByUdfOtlDtcId" parameterType="map">
+    delete from WAD_UOD_CRE_COMP
+    where UDF_OTL_DTC_ID = #{udfOtlDtcId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="kr.wise.advisor.prepare.udefoutlier.service.WadUodCreComp">
+    insert into WAD_UOD_CRE_COMP (UDF_OTL_DTC_ID, CRE_COMP_ID, COMP_ORD, 
+      CRE_COMP_NM, COMP_ID, OBJ_DESCN, 
+      OBJ_VERS, REG_TYP_CD, WRIT_USER_ID, 
+      WRIT_DTM)
+    values (#{udfOtlDtcId,jdbcType=VARCHAR}, #{creCompId,jdbcType=VARCHAR}, #{compOrd,jdbcType=DECIMAL}, 
+      #{creCompNm,jdbcType=VARCHAR}, #{compId,jdbcType=VARCHAR}, #{objDescn,jdbcType=VARCHAR}, 
+      #{objVers,jdbcType=DECIMAL}, #{regTypCd,jdbcType=VARCHAR}, #{writUserId,jdbcType=VARCHAR}, 
+      #{writDtm,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="kr.wise.advisor.prepare.udefoutlier.service.WadUodCreComp">
+    insert into WAD_UOD_CRE_COMP
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="udfOtlDtcId != null">
+        UDF_OTL_DTC_ID,
+      </if>
+      <if test="creCompId != null">
+        CRE_COMP_ID,
+      </if>
+      <if test="compOrd != null">
+        COMP_ORD,
+      </if>
+      <if test="creCompNm != null">
+        CRE_COMP_NM,
+      </if>
+      <if test="compId != null">
+        COMP_ID,
+      </if>
+      <if test="objDescn != null">
+        OBJ_DESCN,
+      </if>
+      <if test="objVers != null">
+        OBJ_VERS,
+      </if>
+      <if test="regTypCd != null">
+        REG_TYP_CD,
+      </if>
+      <if test="writUserId != null">
+        WRIT_USER_ID,
+      </if>
+      <if test="writDtm != null">
+        WRIT_DTM,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="udfOtlDtcId != null">
+        #{udfOtlDtcId,jdbcType=VARCHAR},
+      </if>
+      <if test="creCompId != null">
+        #{creCompId,jdbcType=VARCHAR},
+      </if>
+      <if test="compOrd != null">
+        #{compOrd,jdbcType=DECIMAL},
+      </if>
+      <if test="creCompNm != null">
+        #{creCompNm,jdbcType=VARCHAR},
+      </if>
+      <if test="compId != null">
+        #{compId,jdbcType=VARCHAR},
+      </if>
+      <if test="objDescn != null">
+        #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null">
+        #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null">
+        #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="writUserId != null">
+        #{writUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="writDtm != null">
+        #{writDtm,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.advisor.prepare.udefoutlier.service.WadUodCreComp">
+    update WAD_UOD_CRE_COMP
+    <set>
+      <if test="compOrd != null">
+        COMP_ORD = #{compOrd,jdbcType=DECIMAL},
+      </if>
+      <if test="creCompNm != null">
+        CRE_COMP_NM = #{creCompNm,jdbcType=VARCHAR},
+      </if>
+      <if test="compId != null">
+        COMP_ID = #{compId,jdbcType=VARCHAR},
+      </if>
+      <if test="objDescn != null">
+        OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null">
+        OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null">
+        REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="writUserId != null">
+        WRIT_USER_ID = #{writUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="writDtm != null">
+        WRIT_DTM = #{writDtm,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where UDF_OTL_DTC_ID = #{udfOtlDtcId,jdbcType=VARCHAR}
+      and CRE_COMP_ID = #{creCompId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="kr.wise.advisor.prepare.udefoutlier.service.WadUodCreComp">
+    update WAD_UOD_CRE_COMP
+    set COMP_ORD = #{compOrd,jdbcType=DECIMAL},
+      CRE_COMP_NM = #{creCompNm,jdbcType=VARCHAR},
+      COMP_ID = #{compId,jdbcType=VARCHAR},
+      OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      WRIT_USER_ID = #{writUserId,jdbcType=VARCHAR},
+      WRIT_DTM = #{writDtm,jdbcType=TIMESTAMP}
+    where UDF_OTL_DTC_ID = #{udfOtlDtcId,jdbcType=VARCHAR}
+      and CRE_COMP_ID = #{creCompId,jdbcType=VARCHAR}
+  </update>
+  
+   <select id="selectUodCompForScrt"  parameterType="kr.wise.advisor.prepare.udefoutlier.service.WadUod" resultMap="BaseResultMap">
+    	
+	SELECT COMP_DCD
+	     , UDF_OTL_DTC_ID
+	     , CRE_COMP_ID
+	  FROM (	    
+		SELECT 'DataImp' AS COMP_DCD
+		     , UDF_OTL_DTC_ID
+		     , CRE_COMP_ID
+		  FROM WAD_UODC_DASE_IMP
+		 WHERE UDF_OTL_DTC_ID = #{udfOtlDtcId,jdbcType=VARCHAR}   
+		UNION ALL
+		SELECT 'SubsetCol'
+		     , UDF_OTL_DTC_ID
+		     , CRE_COMP_ID
+		  FROM WAD_UODC_COL_DASE_DV
+		 WHERE UDF_OTL_DTC_ID = #{udfOtlDtcId,jdbcType=VARCHAR}   
+		UNION ALL
+		SELECT 'SubsetRow'
+		     , UDF_OTL_DTC_ID
+		     , CRE_COMP_ID
+		  FROM WAD_UODC_DASE_ROW_DV
+		 WHERE UDF_OTL_DTC_ID = #{udfOtlDtcId,jdbcType=VARCHAR}  
+		UNION ALL
+		SELECT 'Join'
+		     , UDF_OTL_DTC_ID
+		     , CRE_COMP_ID
+		  FROM WAD_UODC_DASE_JN
+		 WHERE UDF_OTL_DTC_ID = #{udfOtlDtcId,jdbcType=VARCHAR}  
+		UNION ALL
+		SELECT 'Filter'
+		     , UDF_OTL_DTC_ID
+		     , CRE_COMP_ID
+		  FROM WAD_UODC_DASE_CND_DV
+		 WHERE UDF_OTL_DTC_ID = #{udfOtlDtcId,jdbcType=VARCHAR}  
+		UNION ALL
+		SELECT 'Cleansing'
+		     , UDF_OTL_DTC_ID
+		     , CRE_COMP_ID
+		  FROM WAD_UODC_DATA_CLN
+		 WHERE UDF_OTL_DTC_ID = #{udfOtlDtcId,jdbcType=VARCHAR}  
+		 UNION ALL
+		SELECT 'ODBP'
+		     , UDF_OTL_DTC_ID
+		     , CRE_COMP_ID
+		  FROM WAD_UODC_BOXPLOT
+		 WHERE UDF_OTL_DTC_ID = #{udfOtlDtcId,jdbcType=VARCHAR}  
+		 UNION ALL
+		SELECT 'ODIsFr'
+		     , UDF_OTL_DTC_ID
+		     , CRE_COMP_ID
+		  FROM WAD_UODC_ISL_FRST
+		 WHERE UDF_OTL_DTC_ID = #{udfOtlDtcId,jdbcType=VARCHAR}  
+		 UNION ALL
+		SELECT 'ODLOF'
+		     , UDF_OTL_DTC_ID
+		     , CRE_COMP_ID
+		  FROM WAD_UODC_LCL_OTL_FCTR
+		 WHERE UDF_OTL_DTC_ID = #{udfOtlDtcId,jdbcType=VARCHAR}  
+		 UNION ALL
+		SELECT 'ODOCV'
+		     , UDF_OTL_DTC_ID
+		     , CRE_COMP_ID
+		  FROM WAD_UODC_ONE_CLSS_SVM
+		 WHERE UDF_OTL_DTC_ID = #{udfOtlDtcId,jdbcType=VARCHAR}  
+		 UNION ALL
+		SELECT 'ODELEV'
+		     , UDF_OTL_DTC_ID
+		     , CRE_COMP_ID
+		  FROM WAD_UODC_ELLPT_ENVLP
+		 WHERE UDF_OTL_DTC_ID = #{udfOtlDtcId,jdbcType=VARCHAR}  
+		 UNION ALL
+		SELECT 'RRGR'
+		     , UDF_OTL_DTC_ID
+		     , CRE_COMP_ID
+		  FROM WAD_UODC_RBST_RGRS
+		 WHERE UDF_OTL_DTC_ID = #{udfOtlDtcId,jdbcType=VARCHAR}  
+		 UNION ALL
+		SELECT 'SaveRes'
+		     , UDF_OTL_DTC_ID
+		     , CRE_COMP_ID
+		  FROM WAD_UODC_SV_RES
+		 WHERE UDF_OTL_DTC_ID = #{udfOtlDtcId,jdbcType=VARCHAR}         
+	  )	    
+	  WHERE 1 =1 
+	    AND UDF_OTL_DTC_ID = #{udfOtlDtcId,jdbcType=VARCHAR}
+	    <if test="creCompId != null"> 
+	       AND CRE_COMP_ID = #{creCompId,jdbcType=VARCHAR}
+	    </if> 
+		    		   
+  </select>
+</mapper>

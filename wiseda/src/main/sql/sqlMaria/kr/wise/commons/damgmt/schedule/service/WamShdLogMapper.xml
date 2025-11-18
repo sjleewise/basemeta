@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.commons.damgmt.schedule.service.WamShdLogMapper" >
+  <resultMap id="ShdLogResultMap" type="kr.wise.commons.damgmt.schedule.service.WamShdLogVO" extends="kr.wise.commons.damgmt.schedule.service.WamShdJobMapper.BaseResultMap">
+      <id column="ANA_LOG_ID" property="anaLogId" jdbcType="VARCHAR" />
+    <result column="OBJ_ID" property="objId" jdbcType="VARCHAR" />
+    <result column="SHD_LNM" property="shdLnm" jdbcType="VARCHAR" />
+    <result column="ANA_STR_DTM" property="anaStrDtm" jdbcType="TIMESTAMP" />
+    <result column="ANA_END_DTM" property="anaEndDtm" jdbcType="TIMESTAMP" />
+    <result column="ANA_STS_CD" property="anaStsCd" jdbcType="VARCHAR" />
+    <result column="ANA_ER_MSG" property="anaErMsg" jdbcType="VARCHAR" />
+    <result column="ANA_USER_ID" property="anaUserId" jdbcType="VARCHAR" />
+    <result column="ANA_USER_NM" property="anaUserNm" jdbcType="VARCHAR" />
+    <result column="ANA_CNT" property="anaCnt" jdbcType="VARCHAR" />
+    <result column="ANA_SEC" property="anaSec" jdbcType="DECIMAL" />
+    <result column="JOB_CNT" property="jobCnt" jdbcType="VARCHAR" />
+    <result column="SUC_CNT" property="sucCnt" jdbcType="VARCHAR" />
+    <result column="ER_CNT" property="erCnt" jdbcType="VARCHAR" />
+    <result column="ER_RATE" property="erRate" jdbcType="VARCHAR" />
+    <result column="OBJ_NM" property="objNm" jdbcType="VARCHAR" />
+    <result column="USER_NM" property="userNm" jdbcType="VARCHAR" />
+  </resultMap>
+  
+<select id="selecLogtList" resultMap="ShdLogResultMap" parameterType="kr.wise.commons.damgmt.schedule.service.WamShdLogVO">
+ 	SELECT M.SHD_ID, M.SHD_LNM, M.SHD_PNM, M.SHD_KND_CD, M.SHD_USE_YN , M.SHD_BPR_YN , M.ER_DATA_LD_YN , M.ER_DATA_LD_CNT 
+               , M.PK_DATA_LD_YN, M.PK_DATA_LD_CNT, M.ANA_DGR, M.ANA_DGR_AUTO_INC_YN, M.SHD_TYP_CD, M.SHD_STR_HR, M.SHD_STR_MNT 
+               , M.SHD_DLY, M.SHD_DLY_VAL, M.SHD_WKL, M.SHD_WKL_VAL, M.SHD_MNY, M.SHD_MNY_VAL, M.OBJ_DESCN  
+		       , L.SHD_STR_DTM, L.ANA_STR_DTM, L.ANA_END_DTM, L.ANA_SEC, L.JOB_CNT, L.SUC_CNT, L.ANA_CNT, L.ER_CNT, L.BF_CNT, L.USER_NM
+    FROM WAM_SHD_MSTR M
+         INNER JOIN ( SELECT   L.SHD_ID
+		                             , L.SHD_STR_DTM
+		                             , J2.JOB_CNT AS JOB_CNT
+		                             , SUM(CASE ANA_STS_CD WHEN  '01' THEN 1 ELSE 0 END) AS SUC_CNT
+		                             , SUM(CASE ANA_STS_CD WHEN  '02' THEN 1 ELSE 0 END) AS ANA_CNT
+		                             , (SUM(CASE ANA_STS_CD WHEN  '03' THEN 1 ELSE 0 END) + SUM(CASE ANA_STS_CD WHEN  '04' THEN 1 ELSE 0 END)) AS ER_CNT
+		                             , SUM(CASE ANA_STS_CD WHEN  '05' THEN 1 ELSE 0 END) AS BF_CNT
+		                             , MAX(L.ANA_USER_ID) AS ANA_USER_ID
+		                             , MIN(L.ANA_STR_DTM) AS ANA_STR_DTM
+	                                 , MAX(L.ANA_END_DTM) AS ANA_END_DTM
+	                                 , SUM(ANA_SEC) AS ANA_SEC
+	                                 , MAX(U.USER_NM) AS USER_NM
+		                        FROM WAM_SHD_JOB J
+		                                INNER JOIN WAA_SHD_LOG L
+                                           ON J.SHD_ID = L.SHD_ID
+                                          AND J.SHD_JOB_ID = L.SHD_JOB_ID
+                                          AND J.REG_TYP_CD IN ('C', 'U')
+                        	              LEFT OUTER JOIN (SELECT SHD_ID, COUNT(SHD_JOB_ID) AS JOB_CNT
+                                                                  FROM WAM_SHD_JOB 
+                                                                 GROUP BY SHD_ID) J2
+                                      ON J.SHD_ID = J2.SHD_ID                                          
+                        	  <if test="shdKndCd != null and shdKndCd == 'SC' ">
+                   	              LEFT OUTER JOIN (SELECT DB_CONN_TRG_ID, DB_CONN_TRG_PNM AS OBJ_NM
+                   	            							    FROM WAA_DB_CONN_TRG
+                   	            							    WHERE EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+                   	            							      AND REG_TYP_CD IN ('C', 'U')) R
+                                  ON L.ANA_LOG_ID = R.DB_CONN_TRG_ID
+                              </if>
+                           	  <if test="shdKndCd != null and shdKndCd == 'QP' ">
+                                LEFT OUTER JOIN WAM_PRF_RESULT R
+                                ON L.ANA_LOG_ID = R.ANA_LOG_ID
+                              </if>    
+                              <if test="shdKndCd != null and shdKndCd == 'QB' ">
+                   	            LEFT OUTER JOIN WAM_BR_RESULT R
+                                  ON L.ANA_LOG_ID = R.ANA_LOG_ID
+                              </if>
+                                LEFT OUTER JOIN WAA_USER U
+                                  ON L.ANA_USER_ID = U.USER_ID
+                                 AND U.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+                                 AND U.REG_TYP_CD IN ('C', 'U')
+                       GROUP BY L.SHD_ID, J2.JOB_CNT,  L.SHD_STR_DTM ) L
+            ON M.SHD_ID = L.SHD_ID
+			<where>
+					M.REG_TYP_CD IN ('C','U')
+  			<if test="anaUserNm != null and anaUserNm != '' " >
+		      		AND L.USER_NM LIKE CONCAT('%',#{anaUserNm, jdbcType=VARCHAR},'%')
+	   		</if>
+   			<if test="objNm != null and objNm != '' " >
+		      		AND L.SHD_JOB_NM LIKE CONCAT('%', #{objNm, jdbcType=VARCHAR},'%')
+	    	</if>
+	    	<if test="shdKndCd != null and shdKndCd != '' " >
+        			AND M.SHD_KND_CD = #{shdKndCd, jdbcType=VARCHAR}
+			</if>
+			<if test="anaStsCd != null and anaStsCd != '' " >
+					 AND EXISTS (SELECT 1 
+                                 FROM WAA_SHD_LOG E 
+                                 WHERE E.SHD_ID = M.SHD_ID
+                                 AND L.SHD_STR_DTM =E.SHD_STR_DTM
+                                 AND E.ANA_STS_CD = #{anaStsCd, jdbcType=VARCHAR} 
+              )  
+			</if>
+			<if test="shdLnm != null and shdLnm !=  '' " >
+ 	    			AND (M.SHD_LNM LIKE CONCAT('%',#{shdLnm, jdbcType=VARCHAR},'%') OR M.SHD_PNM LIKE CONCAT('%',UPPER(#{shdLnm, jdbcType=VARCHAR}),'%' ))
+			</if>
+			<if test="searchBgnDe != null and searchEndDe != null and searchBgnDe != '' and searchEndDe != '' " >
+					AND (DATE_FORMAT(L.ANA_STR_DTM , '%Y-%m-%d') BETWEEN #{searchBgnDe} AND #{searchEndDe})
+			</if>
+</where>
+ ORDER BY L.SHD_STR_DTM DESC
+</select>
+
+<select id="selecJobtList" resultMap="ShdLogResultMap" parameterType="kr.wise.commons.damgmt.schedule.service.WamShdLogVO">
+SELECT M.SHD_ID
+		       ,J.SHD_JOB_ID
+		       ,IFNULL(J.ETC_JOB_NM,M.SHD_LNM) AS OBJ_NM
+		       ,L.ANA_STS_CD
+		       ,L.ANA_USER_ID
+		       ,L.SHD_STR_DTM
+		       ,L.ANA_STR_DTM
+		       ,L.ANA_END_DTM
+		       ,L.ANA_ER_MSG
+		       ,L.ANA_SEC 
+		       ,U.USER_NM
+		<if test="shdKndCd != null and shdKndCd == 'QB' ">
+		       ,R.ANA_CNT
+		       ,R.ER_CNT
+			   <!-- ORACLE VER :  , (CASE WHEN ANA_CNT IS NULL THEN NULL ELSE (CASE WHEN ANA_CNT = '0' THEN '0' ELSE TO_CHAR(ROUND(ER_CNT*100/R.ANA_CNT,2)) END ) END ) AS ER_RATE -->
+			   , (CASE WHEN ANA_CNT IS NULL THEN NULL ELSE (CASE WHEN ANA_CNT = '0' THEN '0' ELSE CONVERT(ROUND(ER_CNT*100/R.ANA_CNT,2), CHAR) END ) END ) AS ER_RATE
+		</if>
+		<if test="shdKndCd != null and shdKndCd == 'QP' ">
+			   ,PM.PRF_KND_CD
+		       ,R.ANA_CNT
+		       ,(CASE WHEN PM.PRF_KND_CD = 'PC01' THEN NULL ELSE R.ESN_ER_CNT END) AS ER_CNT
+		       <!-- ORACLE VER : ,(CASE WHEN PM.PRF_KND_CD = 'PC01' THEN NULL ELSE (CASE WHEN ANA_CNT IS NULL THEN NULL  ELSE (CASE WHEN ANA_CNT = '0' THEN '0' ELSE TO_CHAR(ROUND(ESN_ER_CNT*100/R.ANA_CNT,2)) END ) END )  END )  AS ER_RATE -->
+		       ,(CASE WHEN PM.PRF_KND_CD = 'PC01' THEN NULL ELSE (CASE WHEN ANA_CNT IS NULL THEN NULL  ELSE (CASE WHEN ANA_CNT = '0' THEN '0' ELSE CONVERT(ROUND(ESN_ER_CNT*100/R.ANA_CNT,2),CHAR) END ) END )  END )  AS ER_RATE
+		</if>
+  FROM WAM_SHD_MSTR M
+       INNER JOIN WAM_SHD_JOB J
+          ON M.SHD_ID = J.SHD_ID
+         AND J.REG_TYP_CD IN ('C','U')
+        LEFT JOIN WAA_SHD_LOG L
+          ON J.SHD_ID = L.SHD_ID
+         AND J.SHD_JOB_ID = L.SHD_JOB_ID
+		
+		<if test="shdKndCd != null and shdKndCd == 'QP' ">
+		LEFT JOIN WAM_PRF_MSTR PM
+		  ON L.SHD_JOB_ID = PM.PRF_ID
+		LEFT JOIN WAM_PRF_RESULT R
+		  ON L.SHD_JOB_ID = R.PRF_ID
+	     AND L.ANA_LOG_ID = R.ANA_LOG_ID
+		</if>    
+		<if test="shdKndCd != null and shdKndCd == 'QB' ">
+		LEFT JOIN WAM_BR_RESULT R
+		  ON L.SHD_JOB_ID = R.BR_ID
+		 AND L.ANA_LOG_ID = R.ANA_LOG_ID
+		</if>
+		<if test="shdKndCd != null and shdKndCd == 'GN' ">
+		  LEFT JOIN (SELECT IFNULL(COUNT(*),0) AS ANA_CNT, SHD_JOB_ID, SHD_ID
+	                               FROM WAA_SHD_LOG
+	                               WHERE SHD_JOB_ID = 'OBJ_00000007032'
+	                               AND SHD_STR_DTM = STR_TO_DATE('20140516 153439', '%Y-%m-%d %H:%i:%S')
+	                               -- STR_TO_DATE('20140516 153439', '%Y%m%d %H%i%S') 입력값과 형식을 동일하게 맞춰주어야합니다.
+	                               -- STR_TO_DATE('20140516 15:34:39', '%Y%m%d %H:%i:%S') 입력값과 형식을 동일하게 맞춰주어야합니다.
+	                               
+	                               GROUP BY SHD_JOB_ID, SHD_ID) AC
+	                   ON AC.SHD_ID = J.SHD_ID
+	                 AND AC.SHD_JOB_ID = J.SHD_JOB_ID
+	           LEFT OUTER JOIN (SELECT IFNULL(COUNT(*),0) AS ER_CNT, SHD_JOB_ID, SHD_ID
+	                               FROM WAA_SHD_LOG
+	                               WHERE SHD_JOB_ID = 'OBJ_00000007032'
+	                               AND SHD_STR_DTM = STR_TO_DATE('20140516 153439', '%Y-%m-%d %H:%i:%S')
+	                               GROUP BY SHD_JOB_ID, SHD_ID) EC
+	                   ON EC.SHD_ID = J.SHD_ID
+	                 AND EC.SHD_JOB_ID = J.SHD_JOB_ID
+		</if>
+       LEFT JOIN WAA_USER U
+         ON L.ANA_USER_ID = U.USER_ID
+        AND U.EXP_DTM = DATE_FORMAT('9999-12-31', '%Y-%m-%d')
+        AND U.REG_TYP_CD IN ('C', 'U')
+ WHERE M.REG_TYP_CD IN ('C','U')
+   AND L.SHD_ID = #{shdId, jdbcType=VARCHAR}
+   AND L.SHD_STR_DTM = DATE_FORMAT(#{shdStrDtm, jdbcType=VARCHAR}, '%Y-%m-%d %T')
+ ORDER BY CASE WHEN ANA_STS_CD = '05' THEN 1
+               WHEN ANA_STS_CD = '01' THEN 2
+               ELSE 9
+           END     
+        , IFNULL(L.ANA_END_DTM, DATE_FORMAT('1000-01-01','%Y-%m-%d')) 
+        
+</select>
+	  
+	<select id="selectByPrimaryKey" resultMap="ShdLogResultMap" parameterType="kr.wise.commons.damgmt.schedule.service.WamShdLogVO" >
+		SELECT 	M.*
+				,GET_USER_NM(M.FRS_RQST_USER_ID) AS FRS_RQST_USER_NM
+				,GET_USER_NM(M.RQST_USER_ID) AS RQST_USER_NM
+				,GET_USER_NM(M.APRV_USER_ID) AS APRV_USER_NM
+		FROM WAM_SHD_MSTR M
+		WHERE M.SHD_ID = #{shdId, jdbcType=VARCHAR}
+		AND M.REG_TYP_CD IN ('C', 'U')
+  	</select>
+
+	<select id="selectLogLst" resultMap="ShdLogResultMap" parameterType="kr.wise.commons.damgmt.schedule.service.WamShdLogVO" >
+		SELECT 	L.*
+				, R.ANA_DGR
+		FROM WAA_SHD_LOG L
+		LEFT OUTER JOIN ${objResTbl} R
+	    ON L.ANA_LOG_ID = R.ANA_LOG_ID
+		WHERE SHD_JOB_ID = #{objId, jdbcType=VARCHAR}
+		ORDER BY L.SHD_STR_DTM DESC, L.ANA_END_DTM DESC
+    
+  </select>
+
+<select id="selectAnaKndCd" resultMap="ShdLogResultMap" parameterType="kr.wise.commons.damgmt.schedule.service.WamShdLogVO">
+SELECT SUBSTR(M.PRF_KND_CD,0,2) AS PRF_KND_CD
+FROM WAA_SHD_LOG L
+	LEFT OUTER JOIN WAM_PRF_MSTR M
+	ON L.SHD_JOB_ID = M.PRF_ID
+WHERE L.SHD_ID = #{shdId, jdbcType=VARCHAR}
+GROUP BY M.PRF_KND_CD
+</select>  
+
+<delete id="deleteShdLog" parameterType="kr.wise.commons.damgmt.schedule.service.WamShdLogVO">
+DELETE FROM WAA_SHD_LOG
+ WHERE SHD_ID = #{shdId,jdbcType=VARCHAR}
+   AND SHD_STR_DTM = DATE_FORMAT(#{shdStrDtm,jdbcType=VARCHAR}, '%Y-%m-%d %H:%i:%S')
+</delete>
+</mapper>

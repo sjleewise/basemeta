@@ -1,0 +1,240 @@
+/**
+ * 0. Project  : WDML 프로젝트
+ *
+ * 1. FileName : UserCtrl.java
+ * 2. Package : kr.wise.cmvw.user.controller
+ * 3. Comment :
+ * 4. 작성자  : (ycyoo)유연철
+ * 5. 작성일  : 2013. 4. 24
+ * 6. 변경이력 :
+ *    이름		: 일자          	: 변경내용
+ *    ------------------------------------------------------
+ *    유연철 	: 2013. 4. 24. 		: 신규 개발.
+ */
+package kr.wise.commons.user.web;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import javax.inject.Inject;
+
+import kr.wise.commons.WiseMetaConfig;
+import kr.wise.commons.code.service.CmcdCodeService;
+import kr.wise.commons.code.service.CodeListService;
+import kr.wise.commons.code.service.CodeListVo;
+import kr.wise.commons.helper.grid.IBSResultVO;
+import kr.wise.commons.helper.grid.IBSheetListVO;
+import kr.wise.commons.sysmgmt.dept.service.WaaDept;
+import kr.wise.commons.user.service.UserService;
+import kr.wise.commons.user.service.WaaUser;
+import kr.wise.commons.util.UtilJson;
+import kr.wise.commons.util.UtilString;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.propertyeditors.StringTrimmerEditor;
+import org.springframework.context.MessageSource;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
+
+
+/**
+ * <PRE>
+ * 1. ClassName : 
+ * 2. FileName  : UserCtrl.java
+ * 3. Package  : kr.wise.commons.user.web
+ * 4. Comment  : 
+ * 5. 작성자   : yeonho
+ * 6. 작성일   : 2014. 4. 28. 오후 7:50:12
+ * </PRE>
+ */ 
+@Controller("UserCtrl")
+@RequestMapping("/commons/user/*")
+public class UserCtrl {
+
+	Logger logger = LoggerFactory.getLogger(getClass());
+
+//	IBSJsonSearch ibsresult = new IBSJsonSearch();
+//	IBSResult ibsres = new IBSResult();
+
+	static class WaaUsers extends HashMap<String, ArrayList<WaaUser>> { }
+
+	private Map<String, Object> codeMap;
+
+	@Inject
+	private UserService userService;
+
+	@Inject
+	private CodeListService codelistService;
+	
+	@Inject
+	private CmcdCodeService cmcdCodeService;
+
+	@Inject
+	private MessageSource message;
+
+	@InitBinder
+	public void initBinder(WebDataBinder binder) {
+	    binder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
+	}
+
+	/** 사용자 관리 화면 */
+	@RequestMapping("user_lst.do")
+	public String formpage() {
+		return "/commons/user/user_lst";
+	}
+
+
+
+	/** 사용자 팝업 화면 */
+	@RequestMapping("pop/userSearchPop.do")
+	public String gosubjSearchPop(@ModelAttribute("search") WaaUser search, Model model, Locale locale) {
+		logger.debug("{}", search);
+
+		ModelAndView mv = new ModelAndView();
+		if(!UtilString.isBlank(search.getUserId())) {
+			model.addAttribute("userId" , search.getUserId());
+		}
+		return "/commons/user/popup/userSearchPop";
+	}
+
+	/** 사용자 팝업 화면 */
+	@RequestMapping("popup/userSearchPop.do")
+	public String gouserSearchPop(@ModelAttribute("search") WaaUser search, Model model, Locale locale) {
+		logger.debug("{}", search);
+
+		return "/commons/user/popup/userSearchPop";
+	}
+
+
+	/** 사용자 리스트 조회 - IBSheet JSON */
+	@RequestMapping("userSelectlist.do")
+	@ResponseBody
+	public IBSheetListVO<WaaUser> selectList(@ModelAttribute WaaUser search) {
+		logger.debug("{}", search);
+		List<WaaUser> list = userService.getList(search);
+		return new IBSheetListVO<WaaUser>(list, list.size());
+	}
+
+
+	/** 사용자 리스트 조회 - IBSheet JSON 
+	 * @throws Exception */
+	@RequestMapping("getuserlistbydept.do")
+	@ResponseBody
+	public IBSheetListVO<WaaUser> getUserListbyDept(@ModelAttribute WaaUser search) throws Exception {
+		logger.debug("{}", search);
+		List<WaaUser> list = userService.getUserListbyDept(search);
+		return new IBSheetListVO<WaaUser>(list, list.size());
+	}
+
+	/** 사용자 리스트 조회(로그인유저 부서기준 정렬) - IBSheet JSON */
+	/** @param search
+	/** @return yeonho */
+	@RequestMapping("userSelectlistOrderByDeptNm.do")
+	@ResponseBody
+	public IBSheetListVO<WaaUser> selectListOrderByDeptNm(@ModelAttribute WaaUser search) {
+		logger.debug("{}", search);
+		List<WaaUser> list = userService.getListOrderByDeptNm(search);
+		return new IBSheetListVO<WaaUser>(list, list.size());
+	}
+
+
+	/** 사용자 리스트 등록 - IBSheet JSON */
+	@RequestMapping("userReglist.do")
+	@ResponseBody
+	public IBSResultVO<WaaUser> regList(@RequestBody WaaUsers data, Locale locale) {
+
+		logger.debug("{}", data);
+		ArrayList<WaaUser> list = data.get("data");
+
+		int result = userService.regList(list);
+		String resmsg;
+
+		if(result > 0) {
+			result = 0;
+			resmsg = message.getMessage("MSG.SAVE", null, locale);
+		} else {
+			result = -1;
+			resmsg = message.getMessage("ERR.SAVE", null, locale);
+		}
+
+		String action = WiseMetaConfig.IBSAction.REG_LIST.getAction();
+
+		return new IBSResultVO<WaaUser>(result, resmsg, action);
+	}
+
+	/** 사용자 리스트 삭제 - IBSheet JSON */
+	@RequestMapping("userDellist.do")
+	@ResponseBody
+	public IBSResultVO<WaaUser> delList(@RequestBody WaaUsers data, Locale locale) {
+
+		logger.debug("{}", data);
+		ArrayList<WaaUser> list = data.get("data");
+
+		int result = userService.delList(list);
+
+		String resmsg ;
+		if (result > 0) {
+			result = 0;
+			resmsg = message.getMessage("MSG.DEL", null, locale);
+		} else {
+			result = -1;
+			resmsg = message.getMessage("ERR.DEL", null, locale);
+		}
+
+		String action = WiseMetaConfig.IBSAction.DEL.getAction();
+
+
+		return new IBSResultVO<WaaUser>(result, resmsg, action);
+	}
+
+	/** 결재자 등록을 위한 팝업 화면 */
+	@RequestMapping("userPop.do")
+	public String approveuserPop(@RequestParam("aprgId") String aprgId) {
+		return "/commons/damgmt/approve/popup/approveuser_pop";
+	}
+
+	/** 부서 팝업 화면 */
+	@RequestMapping("popup/deptlst_pop.do")
+	public String goDeptSearchPop(@ModelAttribute("search") WaaDept search, Model model, @RequestParam(value="row") String row, Locale locale) {
+		logger.debug("파람값은 : {}", row);		
+		model.addAttribute("row", row);
+		return "/commons/user/popup/deptlst_pop";
+	}
+	
+
+	/** 공통코드 및 목록성 코드 조회  */
+	@ModelAttribute("codeMap")
+	public Map<String, Object> getcodeMap() {
+
+		codeMap = new HashMap<String, Object>();
+
+		//시스템영역 코드리스트 JSON
+//		String sysarea = codelistService.getCodeListJson("sysarea");
+
+		List<CodeListVo> userglist = codelistService.getCodeList(WiseMetaConfig.CodeListAction.usergroup);
+		codeMap.put("userglist", userglist);
+		codeMap.put("usergp", UtilJson.convertJsonString(codelistService.getCodeListIBS(userglist)));
+
+		//공통코드
+		String regTypCd = UtilJson.convertJsonString(cmcdCodeService.getCodeListIBS("REG_TYP_CD"));
+		codeMap.put("regTypCdibs", regTypCd);
+		
+
+		return codeMap;
+	}
+
+
+
+}

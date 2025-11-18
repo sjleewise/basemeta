@@ -1,0 +1,790 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.wise.commons.damgmt.db.service.WaaDbConnTrgMapper">
+  <resultMap id="BaseResultMap" type="kr.wise.commons.damgmt.db.service.WaaDbConnTrgVO" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+    <id column="DB_CONN_TRG_ID"            property="dbConnTrgId"  jdbcType="VARCHAR"  />
+    <result column="DB_CONN_TRG_PNM"       property="dbConnTrgPnm" jdbcType="VARCHAR"  />
+    <result column="DB_CONN_TRG_LNM"       property="dbConnTrgLnm" jdbcType="VARCHAR"  />
+    <result column="DBMS_TYP_CD"           property="dbmsTypCd"    jdbcType="VARCHAR"  />
+    <result column="DBMS_VERS_CD"          property="dbmsVersCd"   jdbcType="VARCHAR" />
+    <result column="CONN_TRG_DB_LNK_CHRW"  property="connTrgDbLnkChrw" jdbcType="VARCHAR" />
+    <result column="CONN_TRG_LNK_URL"      property="connTrgLnkUrl" jdbcType="VARCHAR"  />
+    <result column="CONN_TRG_DRVR_NM"      property="connTrgDrvrNm" jdbcType="VARCHAR"  />
+    <result column="CRGP_NM"               property="crgpNm"       jdbcType="VARCHAR" />
+    <result column="CRGP_CNTEL"            property="crgpCntel"    jdbcType="VARCHAR" />
+    <result column="DB_CONN_AC_ID"         property="dbConnAcId"   jdbcType="VARCHAR" />
+	<result column="DB_CONN_AC_PWD"        property="dbConnAcPwd"  jdbcType="VARCHAR" />
+	<result column="DB_LNK_STS"            property="dbLnkSts"     jdbcType="VARCHAR" />
+	<result column="DB_SCH_ID"             property="dbSchId"      jdbcType="VARCHAR" />
+	<result column="DB_SCH_PNM"            property="dbSchPnm"     jdbcType="VARCHAR" />
+    <result column="DB_SCH_LNM"            property="dbSchLnm"     jdbcType="VARCHAR" />
+    <result column="DDL_TRG_YN"            property="ddlTrgYn"     jdbcType="VARCHAR" />
+    <result column="CLT_XCL_YN"            property="cltXclYn"     jdbcType="VARCHAR" />
+    <result column="DDL_TRG_DCD"           property="ddlTrgDcd"    jdbcType="VARCHAR" />
+    <result column="CD_SND_TRG_YN"         property="cdSndTrgYn"   jdbcType="VARCHAR" />
+    <result column="CD_AUTO_SND_YN"        property="cdAutoSndYn"  jdbcType="VARCHAR" />
+    <result column="WRIT_USER_NM"          property="writUserNm"   jdbcType="VARCHAR" />
+    <result column="META_MNG_YN"           property="metaMngYn"    jdbcType="VARCHAR" />
+    <result column="DB_LNK_STS_CTNS"       property="dbLnkStsCtns" jdbcType="VARCHAR" />
+    <result column="INFO_SYS_CD"           property="infoSysCd"    jdbcType="VARCHAR"  />
+    <result column="DAM_CONN_CD"           property="damConnCd"    jdbcType="VARCHAR"  />
+    <result column="DAM_CONN_PORT"         property="damConnPort"    jdbcType="VARCHAR"  />
+    <result column="DAM_TNS_PNM"           property="damTnsPnm"    jdbcType="VARCHAR"  />
+    <result column="DBC_CLT_YN"           property="dbcCltYn"    jdbcType="VARCHAR"  />
+    <result column="IS_CUS_INF_TRANS"           property="isCusInfTrans"    jdbcType="VARCHAR"  />
+    
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    DB_CONN_TRG_ID, EXP_DTM, STR_DTM, DB_CONN_TRG_PNM, DB_CONN_TRG_LNM, DBMS_TYP_CD, 
+    DBMS_VERS_CD, CONN_TRG_DB_LNK_CHRW, CONN_TRG_LNK_URL, CONN_TRG_DRVR_NM, DB_CONN_AC_ID, DB_CONN_AC_PWD, DB_LNK_STS, CRGP_NM, 
+    CRGP_CNTEL, OBJ_DESCN, OBJ_VERS, REG_TYP_CD, WRIT_DTM, WRIT_USER_ID,META_MNG_YN
+  </sql>
+  
+<select id="selectList" parameterType="kr.wise.commons.damgmt.db.service.WaaDbConnTrgVO" resultMap="BaseResultMap">
+  	 SELECT /* WaaDbConnTrgMapper.selectList */				 <!-- 전체 컬럼 출력 -->
+		    DB_CONN_TRG_ID
+		   ,EXP_DTM
+		   ,STR_DTM
+		   ,DB_CONN_TRG_PNM
+		   ,DB_CONN_TRG_LNM
+		   ,DBMS_TYP_CD
+		   ,DBMS_VERS_CD
+		   ,CONN_TRG_DB_LNK_CHRW
+		   ,CONN_TRG_LNK_URL
+		   ,CONN_TRG_DRVR_NM
+		   ,DB_CONN_AC_ID
+		   ,DB_CONN_AC_PWD
+		   ,DB_LNK_STS
+		   ,CRGP_NM
+		   ,CRGP_CNTEL
+		   ,OBJ_DESCN
+		   ,OBJ_VERS
+		   ,REG_TYP_CD
+		   ,WRIT_DTM
+		   ,WRIT_USER_ID
+		   ,META_MNG_YN
+		   ,DB_LNK_STS_CTNS
+  	   FROM WAA_DB_CONN_TRG
+  	<where>
+  		AND EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+  		AND REG_TYP_CD IN ('C', 'U')
+      <if test="dbConnTrgLnm != null" >
+        AND 
+        (	
+	        	DB_CONN_TRG_LNM LIKE CONCAT('%' , #{dbConnTrgLnm,jdbcType=VARCHAR} , '%') 
+	        OR 	DB_CONN_TRG_LNM LIKE CONCAT('%' , UPPER(#{dbConnTrgLnm,jdbcType=VARCHAR}) , '%')
+	        OR 	DB_CONN_TRG_PNM LIKE CONCAT('%' , #{dbConnTrgLnm,jdbcType=VARCHAR} , '%')
+	        OR 	DB_CONN_TRG_PNM LIKE CONCAT('%' , UPPER(#{dbConnTrgLnm,jdbcType=VARCHAR}) , '%')
+        ) 
+      </if>
+      <if test="dbmsTypCd != null" >
+        AND DBMS_TYP_CD = #{dbmsTypCd,jdbcType=VARCHAR}
+      </if>
+      <if test="dbmsVersCd != null" >
+        AND DBMS_VERS_CD = #{dbmsVersCd,jdbcType=VARCHAR}
+      </if>
+  	</where>
+  </select>
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM WAA_DB_CONN_TRG
+    WHERE DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR}
+      AND EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+      AND REG_TYP_CD IN ('C', 'U')
+  </select>
+  
+<select id="selectListDqDbms" parameterType="kr.wise.commons.damgmt.db.service.WaaDbConnTrgVO" resultMap="BaseResultMap">
+ SELECT DB_CONN_TRG_ID
+  	   ,EXP_DTM
+  	   ,STR_DTM
+  	   ,DB_CONN_TRG_PNM
+  	   ,DB_CONN_TRG_LNM
+  	   ,DBMS_TYP_CD
+  	   ,DBMS_VERS_CD
+  	   ,CONN_TRG_DB_LNK_CHRW
+  	   ,CONN_TRG_LNK_URL
+  	   ,CONN_TRG_DRVR_NM
+  	   ,DB_CONN_AC_ID
+  	   ,DB_CONN_AC_PWD
+  	   ,DB_LNK_STS
+  	   ,CRGP_NM
+  	   ,CRGP_CNTEL
+  	   ,OBJ_DESCN
+  	   ,OBJ_VERS
+  	   ,REG_TYP_CD
+  	   ,WRIT_DTM
+  	   ,GET_USER_NM(WRIT_USER_ID) AS WRIT_USER_NM
+       ,META_MNG_YN
+  FROM  WAA_DB_CONN_TRG
+  	<where>
+    AND EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+    AND REG_TYP_CD IN ('C', 'U')
+  <if test="dbConnTrgId != null"  >
+    AND DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR}
+  </if>
+  <if test="dbmsTypCd != null"  >
+    AND DBMS_TYP_CD = #{dbmsTypCd,jdbcType=VARCHAR}
+  </if>
+  	</where>
+</select>
+  
+<select id="selectByPrimaryKeyDqDbms" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM WAA_DB_CONN_TRG
+   WHERE DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR}
+     AND EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+     AND REG_TYP_CD IN ('C', 'U')
+</select>
+  
+<select id="selectHstListDqDbms" parameterType="java.lang.String" resultMap="BaseResultMap">
+SELECT   
+         	 DB_CONN_TRG_ID,
+           , EXP_DTM
+           , STR_DTM
+           , DB_CONN_TRG_PNM
+           , DB_CONN_TRG_LNM
+           , DBMS_TYP_CD
+           , DBMS_VERS_CD
+           , CONN_TRG_DB_LNK_CHRW
+           , CONN_TRG_LNK_URL
+	       , CONN_TRG_DRVR_NM
+	       , DB_CONN_AC_ID
+	       , DB_CONN_AC_PWD
+	       , DB_LNK_STS
+	       , CRGP_NM
+	       , CRGP_CNTEL
+	       , OBJ_DESCN
+	       , OBJ_VERS
+	       , REG_TYP_CD
+	       , WRIT_DTM
+           , GET_USER_NM(WRIT_USER_ID) AS WRIT_USER_NM
+	       , META_MNG_YN
+       FROM  WAA_DB_CONN_TRG
+  	   <where>
+			 DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR}
+       </where>
+     		 ORDER BY STR_DTM
+</select> 
+<select id="getDbSchList" parameterType="java.lang.String" resultMap="BaseResultMap" >
+   SELECT
+   	       A.DB_SCH_ID
+   	     , A.EXP_DTM
+   	     , A.STR_DTM
+   	     , A.DB_SCH_PNM
+   	     , A.DB_SCH_LNM
+   	     , A.DB_CONN_TRG_ID
+   	     , A.DDL_TRG_YN
+   	     , A.CLT_XCL_YN
+   	     , A.DDL_TRG_DCD
+   	     , A.CD_SND_TRG_YN
+   	     , A.CD_AUTO_SND_YN
+   	     , A.OBJ_DESCN
+   	     , A.OBJ_VERS
+   	     , A.REG_TYP_CD
+   	     , A.WRIT_DTM
+   	     , A.WRIT_USER_ID
+   	     , A.DB_TBL_SPAC_ID
+   	     , A.DB_IDX_SPAC_ID
+   	     , A.COL_PRF_YN
+   	     , A.DMN_PDT_YN
+   	     , A.DEL_YN
+         , B.DB_CONN_TRG_PNM AS DB_CONN_TRG_PNM
+         , B.DB_CONN_TRG_LNM AS DB_CONN_TRG_LNM
+         , GET_USER_NM(A.WRIT_USER_ID) AS WRIT_USER_NM
+      FROM WAA_DB_SCH A 
+INNER JOIN WAA_DB_CONN_TRG B
+ 	   ON A.DB_CONN_TRG_ID = B.DB_CONN_TRG_ID
+       AND B.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+       AND B.REG_TYP_CD IN ('C', 'U')
+	 <where>
+  	   AND A.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+  	   AND A.REG_TYP_CD IN ('C', 'U')
+       AND A.DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR}
+     </where>
+</select> 
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    DELETE FROM WAA_DB_CONN_TRG
+          WHERE DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR}
+  </delete>
+  
+<insert id="insert" parameterType="kr.wise.commons.damgmt.db.service.WaaDbConnTrgVO">
+  insert into WAA_DB_CONN_TRG 
+    (
+      	DB_CONN_TRG_ID
+      , EXP_DTM, STR_DTM
+      , DB_CONN_TRG_PNM
+      , DB_CONN_TRG_LNM
+      , DBMS_TYP_CD
+      , DBMS_VERS_CD
+      , CONN_TRG_DB_LNK_CHRW
+      , CONN_TRG_LNK_UR
+      , CONN_TRG_DRVR_NM
+      , DB_CONN_AC_ID
+      , DB_CONN_AC_PWD
+      , DB_LNK_STS
+      , CRGP_NM
+      , CRGP_CNTEL
+      , OBJ_DESCN
+      , OBJ_VERS
+      , REG_TYP_CD
+      , WRIT_DTM
+      , WRIT_USER_ID
+      , META_MNG_YN
+    )
+  values 
+    (
+        #{dbConnTrgId,jdbcType=VARCHAR}
+      , #{expDtm,jdbcType=DATE}
+      , #{strDtm,jdbcType=DATE}
+      , #{dbConnTrgPnm,jdbcType=VARCHAR}
+      , #{dbConnTrgLnm,jdbcType=VARCHAR}
+      , #{dbmsTypCd,jdbcType=VARCHAR}
+      , #{dbmsVersCd,jdbcType=VARCHAR}
+      , #{connTrgDbLnkChrw,jdbcType=VARCHAR}
+      , #{connTrgLnkUrl,jdbcType=VARCHAR}
+      , #{connTrgDrvrNm,jdbcType=VARCHAR}
+      , #{dbConnAcId,jdbcType=VARCHAR}
+      , #{dbConnAcPwd,jdbcType=VARCHAR}
+      , #{dbLnkSts,jdbcType=VARCHAR}
+      , #{crgpNm,jdbcType=VARCHAR}
+      , #{crgpCntel,jdbcType=VARCHAR}
+      , #{objDescn,jdbcType=VARCHAR}
+      , #{objVers,jdbcType=DECIMAL}
+      , #{regTypCd,jdbcType=VARCHAR}
+      , #{writDtm,jdbcType=DATE}
+      , #{writUserId,jdbcType=VARCHAR}
+      , #{metaMngYn,jdbcType=VARCHAR}
+    )
+</insert>
+
+  <update id="deleteRegTyp" parameterType="kr.wise.commons.damgmt.db.service.WaaDbConnTrgVO" >
+    UPDATE WAA_DB_CONN_TRG
+       SET REG_TYP_CD = #{regTypCd}
+     WHERE DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR}
+       AND EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+       AND REG_TYP_CD IN ('C', 'U')
+  </update>
+  
+<insert id="insertSelective" parameterType="kr.wise.commons.damgmt.db.service.WaaDbConnTrgVO">
+<!--   	<selectKey keyProperty="dbConnTrgId" resultType="string" order="BEFORE" statementType="STATEMENT"> -->
+<!--   		<include refid="kr.wise.commons.cmm.service.CommonMapper.getObjId"/> -->
+<!--   	</selectKey> -->
+ insert into WAA_DB_CONN_TRG
+	    <trim prefix="(" suffix=")" suffixOverrides=",">
+		      <if test="dbConnTrgId != null">
+		        DB_CONN_TRG_ID,
+		      </if>
+		        EXP_DTM,
+		        STR_DTM,
+		      <if test="dbConnTrgPnm != null">
+		        DB_CONN_TRG_PNM,
+		      </if>
+		      <if test="dbConnTrgLnm != null">
+		        DB_CONN_TRG_LNM,
+		      </if>
+		      <if test="dbmsTypCd != null">
+		        DBMS_TYP_CD,
+		      </if>
+		      <if test="dbmsVersCd != null">
+		        DBMS_VERS_CD,
+		      </if>
+		      <if test="connTrgDbLnkChrw != null">
+		        CONN_TRG_DB_LNK_CHRW,
+		      </if>
+		      <if test="connTrgLnkUrl != null">
+		        CONN_TRG_LNK_URL,
+		      </if>
+		      <if test="connTrgDrvrNm != null">
+		        CONN_TRG_DRVR_NM,
+		      </if>
+		      <if test="dbConnAcId != null">
+		        DB_CONN_AC_ID,
+		      </if>
+		      <if test="dbConnAcPwd != null">
+		        DB_CONN_AC_PWD,
+		      </if>
+		      <if test="dbLnkSts != null">
+		        DB_LNK_STS,
+		      </if>
+		      <if test="crgpNm != null">
+		        CRGP_NM,
+		      </if>
+		      <if test="crgpCntel != null">
+		        CRGP_CNTEL,
+		      </if>
+		      <if test="objDescn != null">
+		        OBJ_DESCN,
+		      </if>
+		      <if test="objVers != null">
+		        OBJ_VERS,
+		      </if>
+		      <if test="regTypCd != null">
+		        REG_TYP_CD,
+		      </if>
+		        WRIT_DTM,
+		      <if test="writUserId != null">
+		        WRIT_USER_ID,
+		      </if>
+		      <if test="metaMngYn != null">
+		        META_MNG_YN,
+		      </if>
+		      <if test="infoSysCd != null">
+		        INFO_SYS_CD,
+		      </if>
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides=",">
+		        #{dbConnTrgId,jdbcType=VARCHAR},
+		        STR_TO_DATE('9999-12-31', '%Y-%m-%d'),
+		        NOW(),
+		        #{dbConnTrgPnm,jdbcType=VARCHAR},
+		      <if test="dbConnTrgLnm != null">
+		        #{dbConnTrgLnm,jdbcType=VARCHAR},
+		      </if>
+		      <if test="dbmsTypCd != null">
+		        #{dbmsTypCd,jdbcType=VARCHAR},
+		      </if>
+		      <if test="dbmsVersCd != null">
+		        #{dbmsVersCd,jdbcType=VARCHAR},
+		      </if>
+		      <if test="connTrgDbLnkChrw != null">
+		        #{connTrgDbLnkChrw,jdbcType=VARCHAR},
+		      </if>
+		      <if test="connTrgLnkUrl != null">
+		        #{connTrgLnkUrl,jdbcType=VARCHAR},
+		      </if>
+		      <if test="connTrgDrvrNm != null">
+		        #{connTrgDrvrNm,jdbcType=VARCHAR},
+		      </if>
+		      <if test="dbConnAcId != null">
+		        #{dbConnAcId,jdbcType=VARCHAR},
+		      </if>
+		      <if test="dbConnAcPwd != null">
+		        #{dbConnAcPwd,jdbcType=VARCHAR},
+		      </if>
+		      <if test="dbLnkSts != null">
+		        #{dbLnkSts,jdbcType=VARCHAR},
+		      </if>
+		      <if test="crgpNm != null">
+		        #{crgpNm,jdbcType=VARCHAR},
+		      </if>
+		      <if test="crgpCntel != null">
+		        #{crgpCntel,jdbcType=VARCHAR},
+		      </if>
+		      <if test="objDescn != null">
+		        #{objDescn,jdbcType=VARCHAR},
+		      </if>
+		      <if test="objVers != null">
+		        #{objVers,jdbcType=DECIMAL},
+		      </if>
+		      <if test="regTypCd != null">
+		        #{regTypCd,jdbcType=VARCHAR},
+		      </if>
+		        NOW(),
+		      <if test="writUserId != null">
+		        #{writUserId,jdbcType=VARCHAR},
+		      </if>
+		      <if test="metaMngYn != null">
+		        #{metaMngYn,jdbcType=VARCHAR},
+		      </if>
+		      <if test="infoSysCd != null">
+		        #{infoSysCd,jdbcType=VARCHAR},
+		      </if>
+	    </trim>
+  </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.commons.damgmt.db.service.WaaDbConnTrgVO">
+    UPDATE WAA_DB_CONN_TRG
+	   <set>
+	     <if test="expDtm != null">
+	       EXP_DTM = #{expDtm,jdbcType=DATE},
+	     </if>
+	     <if test="strDtm != null">
+	       STR_DTM = #{strDtm,jdbcType=DATE},
+	     </if>
+	     <if test="dbConnTrgPnm != null">
+	       DB_CONN_TRG_PNM = #{dbConnTrgPnm,jdbcType=VARCHAR},
+	     </if>
+	     <if test="dbConnTrgLnm != null">
+	       DB_CONN_TRG_LNM = #{dbConnTrgLnm,jdbcType=VARCHAR},
+	     </if>
+	     <if test="dbmsTypCd != null">
+	       DBMS_TYP_CD = #{dbmsTypCd,jdbcType=VARCHAR},
+	     </if>
+	     <if test="dbmsVersCd != null">
+	       DBMS_VERS_CD = #{dbmsVersCd,jdbcType=VARCHAR},
+	     </if>
+	     <if test="connTrgDbLnkChrw != null">
+	       CONN_TRG_DB_LNK_CHRW = #{connTrgDbLnkChrw,jdbcType=VARCHAR},
+	      </if>
+	      <if test="connTrgLnkUrl != null">
+           CONN_TRG_LNK_URL = #{connTrgLnkUrl,jdbcType=VARCHAR},
+	      </if>
+	      <if test="connTrgDrvrNm != null">
+	       CONN_TRG_DRVR_NM = #{connTrgDrvrNm,jdbcType=VARCHAR},
+	      </if>
+	      <if test="dbConnAcId != null">
+	       DB_CONN_AC_ID = #{dbConnAcId,jdbcType=VARCHAR},
+	      </if>
+	      <if test="dbConnAcPwd != null">
+	       DB_CONN_AC_PWD = #{dbConnAcPwd,jdbcType=VARCHAR},
+	      </if>
+	      <if test="dbLnkSts != null">
+	       DB_LNK_STS = #{dbLnkSts,jdbcType=VARCHAR},
+	      </if>
+	      <if test="crgpNm != null">
+	       CRGP_NM = #{crgpNm,jdbcType=VARCHAR},
+	      </if>
+	      <if test="crgpCntel != null">
+	       CRGP_CNTEL = #{crgpCntel,jdbcType=VARCHAR},
+	      </if>
+	      <if test="objDescn != null">
+	       OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+	      </if>
+	      <if test="objVers != null">
+	       OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+	      </if>
+	      <if test="regTypCd != null">
+	       REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+	      </if>
+	      <if test="writDtm != null">
+	       WRIT_DTM = #{writDtm,jdbcType=DATE},
+	      </if>
+	      <if test="writUserId != null">
+	       WRIT_USER_ID = #{writUserId,jdbcType=VARCHAR},
+	      </if>
+	      <if test="metaMngYn != null">
+	       META_MNG_YN = #{metaMngYn,jdbcType=VARCHAR},
+	      </if>
+	      <if test="infoSysCd != null">
+	       INFO_SYS_CD = #{infoSysCd,jdbcType=VARCHAR},
+	      </if>
+	    </set>
+     where DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR}
+       AND EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+       AND REG_TYP_CD IN ('C', 'U')
+  </update>
+  
+ <update id="updateByPrimaryKey" parameterType="kr.wise.commons.damgmt.db.service.WaaDbConnTrgVO">
+    UPDATE WAA_DB_CONN_TRG
+       SET EXP_DTM = #{expDtm,jdbcType=DATE}
+         , STR_DTM = #{strDtm,jdbcType=DATE}
+         , DB_CONN_TRG_PNM = #{dbConnTrgPnm,jdbcType=VARCHAR}
+         , DB_CONN_TRG_LNM = #{dbConnTrgLnm,jdbcType=VARCHAR}
+         , DBMS_TYP_CD = #{dbmsTypCd,jdbcType=VARCHAR}
+         , DBMS_VERS_CD = #{dbmsVersCd,jdbcType=VARCHAR}
+         , CONN_TRG_DB_LNK_CHRW = #{connTrgDbLnkChrw,jdbcType=VARCHAR}
+         , CONN_TRG_LNK_URL = #{connTrgLnkUrl,jdbcType=VARCHAR}
+         , CONN_TRG_DRVR_NM = #{connTrgDrvrNm,jdbcType=VARCHAR}
+         , DB_CONN_AC_ID = #{dbConnAcId,jdbcType=VARCHAR}
+         , DB_CONN_AC_PWD = #{dbConnAcPwd,jdbcType=VARCHAR}
+         , DB_LNK_STS = #{dbLnkSts,jdbcType=VARCHAR}
+         , CRGP_NM = #{crgpNm,jdbcType=VARCHAR}
+         , CRGP_CNTEL = #{crgpCntel,jdbcType=VARCHAR}
+         , OBJ_DESCN = #{objDescn,jdbcType=VARCHAR}
+         , OBJ_VERS = #{objVers,jdbcType=DECIMAL}
+         , REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR}
+         , WRIT_DTM = #{writDtm,jdbcType=DATE}
+         , WRIT_USER_ID = #{writUserId,jdbcType=VARCHAR}
+         , META_MNG_YN = #{metaMngYn,jdbcType=VARCHAR}
+     where DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR}
+       AND EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+       AND REG_TYP_CD IN ('C', 'U')
+  </update>
+  
+  <update id="updateExpDtm" parameterType = "kr.wise.commons.damgmt.db.service.WaaDbConnTrgVO">
+	  UPDATE WAA_DB_CONN_TRG /* WaaDbConnTrgMapper.updateExpDtm */
+	     SET EXP_DTM = NOW()
+	   WHERE DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR}
+	     AND EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+  </update>
+  
+  <update id="updateConnTest" parameterType="kr.wise.commons.damgmt.db.service.WaaDbConnTrgVO">
+  UPDATE  WAA_DB_CONN_TRG
+     SET  DB_LNK_STS = #{dbLnkSts,jdbcType=VARCHAR}
+        , DB_LNK_STS_CTNS = #{dbLnkStsCtns,jdbcType=VARCHAR}
+   WHERE  DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR}
+     AND  EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+  </update>
+  
+   <select id="selectMtaDbDefnList" parameterType="kr.wise.commons.damgmt.db.service.WaaDbConnTrgVO" resultMap="BaseResultMap">
+   SELECT 
+   	       A.DB_CONN_TRG_ID	
+ 		 , A.DB_CONN_TRG_PNM	
+ 		 , A.DB_CONN_TRG_LNM	
+ 		 , A.INFO_SYS_CD	
+ 		 , A.DBMS_TYP_CD	
+ 		 , A.DBMS_VERS_CD	
+ 		 , A.CONN_TRG_DB_LNK_CHRW	
+ 		 , A.CONN_TRG_LNK_URL	
+ 		 , A.CONN_TRG_DRVR_NM	
+ 		 , A.DB_CONN_AC_ID	
+ 		 , A.DB_CONN_AC_PWD	
+ 		 , A.DB_LNK_STS	
+ 		 , A.CRGP_NM	
+ 		 , A.CRGP_CNTEL	
+ 		 , A.OBJ_DESCN	
+ 		 , A.OBJ_VERS	
+ 		 , A.REG_TYP_CD	
+ 		 , A.WRIT_DTM	
+ 		 , A.WRIT_USER_ID	
+ 	  	 , CASE WHEN C.ORG_LVL = 1 THEN C.ORG_CD
+ 		 		ELSE C.UPP_ORG_CD END AS TOP_ORG_CD
+ 	  	 , CASE WHEN C.ORG_LVL = 1 THEN ''
+ 	  	 		ELSE C.ORG_CD END AS ORG_CD
+      FROM WAA_DB_CONN_TRG A   		
+		   INNER JOIN WAA_INFO_SYS B 
+	    	  ON A.INFO_SYS_CD = B.INFO_SYS_CD
+	     	 AND B.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	 	   INNER JOIN WAA_ORG C 
+	  	      ON B.ORG_CD = C.ORG_CD 
+	   		 AND C.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d') 
+	   		 AND C.REG_TYP_CD IN ('C', 'U')
+  	 WHERE 1 = 1
+  	   AND A.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+  	   AND A.REG_TYP_CD IN ('C', 'U')
+  	   AND A.DB_CONN_TRG_ID IN (
+  	   							 SELECT DB_CONN_TRG_ID  
+  	                               FROM WAM_MTA_TBL
+  	                             <!-- 전송완료된 건 -->
+  	                             WHERE  GAP_STS_CD = 'S'                            
+  	                           )
+      <choose>
+	  	<when test="orgCd != null">
+		  	<!-- adminYn != null and orgCd != null 이면 조회조건에 orgCd없이 전체 조회라 강제로 생성 -->
+		  	<if test='adminYn == null or ( adminYn != null and adminYn == "N")'>
+  				AND C.ORG_CD = #{orgCd, jdbcType=VARCHAR}
+		  	</if>
+	  	</when>
+	  	<when test="orgCd == null">
+	  		<if test="orgNm != null">
+	  		AND C.FULL_PATH LIKE CONCAT('%', REPLACE(#{orgNm,jdbcType=VARCHAR}, '_', '#_'), '%') ESCAPE '#'
+	  		</if>
+	  		<if test="adminYn == null">
+	  		AND C.ORG_CD in ( SELECT ORG_CD 
+		  					  FROM WAA_ORG
+							  START WITH IFNULL(UPP_ORG_CD,'') ='' AND EXP_DTM = STR_TO_DATE('99991231', '%Y%m%d') AND REG_TYP_CD IN ('C', 'U')
+		       				  CONNECT BY PRIOR ORG_CD = IFNULL(UPP_ORG_CD,'')
+	       				 	)
+	  		</if>
+	  	</when>
+	  </choose>
+      <if test="dbConnTrgLnm != null" >
+        AND (A.DB_CONN_TRG_LNM LIKE CONCAT('%', REPLACE(#{dbConnTrgLnm,jdbcType=VARCHAR}, '_', '#_'), '%') ESCAPE '#'
+        OR UPPER(A.DB_CONN_TRG_LNM) LIKE CONCAT('%', REPLACE(UPPER(#{dbConnTrgLnm,jdbcType=VARCHAR}), '_', '#_'), '%') ESCAPE '#'
+        OR A.DB_CONN_TRG_PNM LIKE CONCAT('%', REPLACE(#{dbConnTrgLnm,jdbcType=VARCHAR}, '_', '#_'), '%') ESCAPE '#'
+        OR UPPER(A.DB_CONN_TRG_PNM) LIKE CONCAT('%', REPLACE(UPPER(#{dbConnTrgLnm,jdbcType=VARCHAR}), '_', '#_'), '%') ESCAPE '#')
+      </if>
+      <if test="dbmsTypCd != null" >
+        AND A.DBMS_TYP_CD = #{dbmsTypCd,jdbcType=VARCHAR}
+      </if>
+      <if test="dbmsVersCd != null" >
+        AND A.DBMS_VERS_CD = #{dbmsVersCd,jdbcType=VARCHAR}
+      </if>
+<!--       <if test="orgCd == null and orgNm != null" >
+        AND C.FULL_PATH LIKE '%' || REPLACE(#{orgNm,jdbcType=VARCHAR}, '_', '#_') || '%' ESCAPE '#'
+      </if> -->
+      <if test="infoSysCd != null" >
+        AND B.INFO_SYS_CD = #{infoSysCd,jdbcType=VARCHAR}
+      </if>
+      <if test="infoSysNm != null" >
+        AND UPPER(B.INFO_SYS_NM) LIKE CONCAT('%', REPLACE(UPPER(#{infoSysNm,jdbcType=VARCHAR}), '_', '#_'), '%') ESCAPE '#'
+      </if>
+  	
+  </select>
+  
+  <select id="selectDbDefnInfo" resultMap="BaseResultMap" parameterType="java.lang.String">		
+	SELECT   
+		  A.DB_CONN_TRG_ID
+		, A.EXP_DTM
+		, A.DB_CONN_TRG_PNM	
+		, A.DB_CONN_TRG_LNM
+		, A.INFO_SYS_CD	
+		, A.DBMS_TYP_CD	
+		, (SELECT X.COMM_DTL_CD_NM FROM WAA_COMM_DTL_CD X
+			INNER JOIN WAA_COMM_DCD Y
+			   ON X.COMM_DCD_ID = Y.COMM_DCD_ID
+		      AND Y.REG_TYP_CD IN ('C','U')
+		      AND Y.EXP_DTM = STR_TO_DATE('99991231','%Y%m%d')
+		      AND Y.COMM_DCD = 'DBMS_TYP_CD'
+		    WHERE X.REG_TYP_CD IN ('C','U')
+	          AND X.EXP_DTM = STR_TO_DATE('99991231','%Y%m%d')
+	          AND X.COMM_DTL_CD = A.DBMS_TYP_CD) AS DBMS_TYP_NM
+		, A.DBMS_VERS_CD
+		, (SELECT X.COMM_DTL_CD_NM FROM WAA_COMM_DTL_CD X
+			INNER JOIN WAA_COMM_DCD Y
+			   ON X.COMM_DCD_ID = Y.COMM_DCD_ID
+		      AND Y.REG_TYP_CD IN ('C','U')
+		      AND Y.EXP_DTM = STR_TO_DATE('99991231','%Y%m%d')
+		      AND Y.COMM_DCD = 'DBMS_VERS_CD'
+		     WHERE X.REG_TYP_CD IN ('C','U')
+	          AND X.EXP_DTM = STR_TO_DATE('99991231','%Y%m%d')
+			  AND X.COMM_DTL_CD = A.DBMS_VERS_CD) AS DBMS_VERS_NM	
+		, A.CONN_TRG_DB_LNK_CHRW	
+		, A.CONN_TRG_LNK_URL	
+		, A.CONN_TRG_DRVR_NM	
+		, A.DB_CONN_AC_ID	
+		, A.DB_CONN_AC_PWD	
+		, A.DB_LNK_STS	
+		, A.CRGP_NM	
+		, A.CRGP_CNTEL	
+		, A.OBJ_DESCN	
+		, A.OBJ_VERS	
+		, A.REG_TYP_CD	
+		, A.WRIT_DTM	
+		, A.WRIT_USER_ID	
+	  	, B.ORG_CD
+	  	, B.INFO_SYS_NM
+	  	, C.FULL_PATH AS ORG_NM
+	  	, A.APLY_BIZ_NM
+	  	, A.TBL_CNT
+	  	, A.CONST_DT
+	  	, A.DATA_CPCT
+	  	, A.POSS_OBJ
+	  	<!-- , A.OS_VER_NM 2019-01-22 코드로 관리 -->
+	  	, IFNULL((SELECT X.COMM_DTL_CD_NM FROM WAA_COMM_DTL_CD X
+			INNER JOIN WAA_COMM_DCD Y
+			   ON X.COMM_DCD_ID = Y.COMM_DCD_ID
+		      AND Y.REG_TYP_CD IN ('C','U')
+		      AND Y.EXP_DTM = STR_TO_DATE('99991231','%Y%m%d')
+		      AND Y.COMM_DCD = 'OS_VERS_CD'
+		     WHERE X.REG_TYP_CD IN ('C','U')
+	          AND X.EXP_DTM = STR_TO_DATE('99991231','%Y%m%d')
+			  AND X.COMM_DTL_CD = A.OS_VER_NM), A.OS_VER_NM)  AS OS_VER_NM
+	  	, A.PDATA_EXPT_RSN
+	  	, (SELECT X.COMM_DTL_CD_NM FROM WAA_COMM_DTL_CD X
+			INNER JOIN WAA_COMM_DCD Y
+			   ON X.COMM_DCD_ID = Y.COMM_DCD_ID
+		      AND Y.REG_TYP_CD IN ('C','U')
+		      AND Y.EXP_DTM = STR_TO_DATE('99991231','%Y%m%d')
+		      AND Y.COMM_DCD = 'PDATA_EXPT_RSN'
+		     WHERE X.REG_TYP_CD IN ('C','U')
+	          AND X.EXP_DTM = STR_TO_DATE('99991231','%Y%m%d')
+			  AND X.COMM_DTL_CD = A.PDATA_EXPT_RSN) AS PDATA_EXPT_RSN_NM
+	FROM WAA_DB_CONN_TRG  A 
+		INNER JOIN WAA_INFO_SYS B ON A.ORG_CD = B.ORG_CD 
+		AND A.INFO_SYS_CD = B.INFO_SYS_CD 
+		AND B.EXP_DTM = STR_TO_DATE('99991231','%Y%m%d')
+		INNER JOIN WAA_ORG C ON B.ORG_CD = C.ORG_CD 
+		AND C.EXP_DTM = STR_TO_DATE('99991231','%Y%m%d') 
+		AND C.REG_TYP_CD IN ('C', 'U')
+	  <where>
+  		 AND A.DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR}
+		AND A.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+		AND A.REG_TYP_CD IN ('C', 'U')
+      </where>
+  </select>
+  	 
+  	   <resultMap id="EsbDbConMap" type="java.util.HashMap">		
+		<result column="ORG_CD"          property="org_cd"          jdbcType="VARCHAR" />
+		<result column="INFO_SYS_CD"     property="info_sys_cd"     jdbcType="VARCHAR" />
+		<result column="DB_CONN_TRG_ID"  property="db_conn_trg_id"  jdbcType="VARCHAR" />
+		<result column="DB_CONN_TRG_PNM" property="db_conn_trg_pnm" jdbcType="VARCHAR" />
+		<result column="DB_CONN_TRG_LNM" property="db_conn_trg_lnm" jdbcType="VARCHAR" />		
+		<result column="OBJ_DESCN"       property="obj_descn"       jdbcType="VARCHAR" />  		
+		<result column="OBJ_VERS"        property="obj_vers"        jdbcType="VARCHAR" />
+		<result column="REG_TYP_CD"      property="reg_typ_cd"      jdbcType="VARCHAR" />
+		<result column="WRIT_USER_ID"    property="writ_user_id"    jdbcType="VARCHAR" />
+		<result column="WRIT_DTM"        property="writ_dtm"        jdbcType="VARCHAR" />		
+		<result column="DBMS_TYP_CD"     property="dbms_typ_cd"     jdbcType="VARCHAR" />
+		<result column="DBMS_TYP_NM"     property="dbms_typ_nm"     jdbcType="VARCHAR" />
+		<result column="DBMS_VERS_CD"    property="dbms_vers_cd"    jdbcType="VARCHAR" />
+		<result column="DBMS_VERS_NM"    property="dbms_vers_nm"    jdbcType="VARCHAR" />
+		<result column="CRGP_NM"         property="crgp_nm"         jdbcType="VARCHAR" />
+		<result column="CRGP_CNTEL"      property="crgp_cntel"      jdbcType="VARCHAR" />
+		<result column="APLY_BIZ_NM"     property="aply_biz_nm"     jdbcType="VARCHAR" />	
+		<result column="TBL_CNT"         property="tbl_cnt"         jdbcType="VARCHAR" />
+		<result column="CONST_DT"        property="const_dt"        jdbcType="VARCHAR" />
+		<result column="DATA_CPCT"       property="data_cpct"       jdbcType="VARCHAR" />
+		<result column="POSS_OBJ"        property="poss_obj"        jdbcType="VARCHAR" />
+		<result column="OS_VER_NM"       property="os_ver_nm"       jdbcType="VARCHAR" />
+		<result column="PDATA_EXPT_RSN"  property="pdata_expt_rsn"  jdbcType="VARCHAR" />
+	</resultMap>
+  	 
+	 <select id="selectEsbDbConnTrg"  resultMap="EsbDbConMap" parameterType="java.lang.String" >
+  	   SELECT A.DB_CONN_TRG_ID
+	    	, A.EXP_DTM
+	    	, A.DB_CONN_TRG_PNM	
+	    	, A.DB_CONN_TRG_LNM			
+	    	, A.INFO_SYS_CD	
+	    	, A.DBMS_TYP_CD	
+	    	, (SELECT X.COMM_DTL_CD_NM FROM WAA_COMM_DTL_CD X
+	    		INNER JOIN WAA_COMM_DCD Y
+	    		   ON X.COMM_DCD_ID = Y.COMM_DCD_ID
+	    	      AND Y.REG_TYP_CD IN ('C','U')
+	    	      AND Y.EXP_DTM = STR_TO_DATE('99991231','%Y%m%d')
+	    	      AND Y.COMM_DCD = 'DBMS_TYP_CD'
+	    	    WHERE X.REG_TYP_CD IN ('C','U')
+	              AND X.EXP_DTM = STR_TO_DATE('99991231','%Y%m%d')
+	              AND X.COMM_DTL_CD = A.DBMS_TYP_CD) AS DBMS_TYP_NM
+	    	, A.DBMS_VERS_CD
+	    	, (SELECT X.COMM_DTL_CD_NM FROM WAA_COMM_DTL_CD X
+	    		INNER JOIN WAA_COMM_DCD Y
+	    		   ON X.COMM_DCD_ID = Y.COMM_DCD_ID
+	    	      AND Y.REG_TYP_CD IN ('C','U')
+	    	      AND Y.EXP_DTM = STR_TO_DATE('99991231','%Y%m%d')
+	    	      AND Y.COMM_DCD = 'DBMS_VERS_CD'
+	    	     WHERE X.REG_TYP_CD IN ('C','U')
+	              AND X.EXP_DTM = STR_TO_DATE('99991231','%Y%m%d')
+	    		  AND X.COMM_DTL_CD = A.DBMS_VERS_CD) AS DBMS_VERS_NM	
+	    	, A.CONN_TRG_DB_LNK_CHRW	
+	    	, A.CONN_TRG_LNK_URL	
+	    	, A.CONN_TRG_DRVR_NM	
+	    	, A.DB_CONN_AC_ID	
+	    	, A.DB_CONN_AC_PWD	
+	    	, A.DB_LNK_STS	
+	    	, IFNULL(A.CRGP_NM,'')    AS CRGP_NM 	
+	    	, IFNULL(A.CRGP_CNTEL,'') AS CRGP_CNTEL	
+	    	, IFNULL(A.OBJ_DESCN,'')  AS OBJ_DESCN	
+	    	, A.OBJ_VERS	
+	    	, A.REG_TYP_CD	
+	    	, DATE_FORMAT(A.WRIT_DTM, '%Y%m%d%H%i%S') AS WRIT_DTM
+	    	, A.WRIT_USER_ID	
+	      	, B.ORG_CD
+	      	, B.INFO_SYS_NM
+	      	, C.FULL_PATH AS ORG_NM
+	      <!-- 	, IFNULL(A.APLY_BIZ_NM,'')    AS APLY_BIZ_NM --> 
+	      <!-- 	, IFNULL(A.TBL_CNT,'')        AS TBL_CNT -->
+	      <!-- 	, IFNULL(A.CONST_DT,'')       AS CONST_DT -->
+	      <!-- 	, IFNULL(A.DATA_CPCT,'')      AS DATA_CPCT -->
+	      <!-- 	, IFNULL(A.POSS_OBJ,'')       AS POSS_OBJ -->
+	      <!-- 	, IFNULL(A.OS_VER_NM,'')      AS OS_VER_NM -->
+	     <!--  	, IFNULL(A.PDATA_EXPT_RSN,'') AS PDATA_EXPT_RSN -->
+	     <!--  	, (SELECT X.COMM_DTL_CD_NM FROM WAA_COMM_DTL_CD X -->
+	    <!-- 	INNER JOIN WAA_COMM_DCD Y -->
+	    <!--    ON X.COMM_DCD_ID = Y.COMM_DCD_ID -->
+	    <!-- 	      AND Y.REG_TYP_CD IN ('C','U') -->
+	   	 <!--      AND Y.EXP_DTM = STR_TO_DATE('99991231','%Y%m%d') -->
+	    <!-- 	      AND Y.COMM_DCD = 'PDATA_EXPT_RSN' -->
+	    <!-- 	     WHERE X.REG_TYP_CD IN ('C','U') -->
+	     <!--          AND X.EXP_DTM = STR_TO_DATE('99991231','%Y%m%d') -->
+	    	<!-- 	  AND X.COMM_DTL_CD = A.PDATA_EXPT_RSN) AS PDATA_EXPT_RSN_NM -->
+	    	, A.DBC_CLT_YN
+	    FROM WAA_DB_CONN_TRG  A 
+	    	 LEFT JOIN WAA_INFO_SYS B 
+	    	 	 ON A.INFO_SYS_CD = B.INFO_SYS_CD 
+	    	<!--    ON A.ORG_CD = B.ORG_CD --> 
+	    	<!--   AND A.INFO_SYS_CD = B.INFO_SYS_CD --> 
+	    	  AND B.EXP_DTM = STR_TO_DATE('99991231','%Y%m%d')
+	    	 LEFT JOIN WAA_ORG C 
+	    	   ON B.ORG_CD = C.ORG_CD 
+	    	  AND C.EXP_DTM = STR_TO_DATE('99991231','%Y%m%d') 
+	    	  AND C.REG_TYP_CD IN ('C', 'U')
+	   WHERE A.EXP_DTM = STR_TO_DATE('99991231','%Y%m%d') 	  
+  </select>
+  
+   <select id="selectDbmsInfo" resultMap="BaseResultMap" parameterType="kr.wise.commons.damgmt.db.service.WaaDbConnTrgVO" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM WAA_DB_CONN_TRG
+    WHERE 1 = 1
+      AND EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+      AND REG_TYP_CD IN ('C', 'U')
+      AND DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR}
+  </select>  
+  
+</mapper>

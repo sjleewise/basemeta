@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.commons.sysmgmt.dept.service.WaaDeptMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.commons.sysmgmt.dept.service.WaaDept" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap" >
+    <id column="DEPT_ID" property="deptId" jdbcType="VARCHAR" />
+<!--     <result column="EXP_DTM" property="expDtm" jdbcType="DATE" /> -->
+<!--     <result column="STR_DTM" property="strDtm" jdbcType="DATE" /> -->
+    <result column="DEPT_NM" property="deptNm" jdbcType="VARCHAR" />
+    <result column="UPP_DEPT_ID" property="uppDeptId" jdbcType="VARCHAR" />
+    <result column="DEPT_LVL" property="deptLvl" jdbcType="INTEGER" />
+    <result column="DEPT_LVL" property="Level" jdbcType="INTEGER" />
+<!--     <result column="OBJ_DESCN" property="objDescn" jdbcType="VARCHAR" /> -->
+<!--     <result column="OBJ_VERS" property="objVers" jdbcType="INTEGER" /> -->
+<!--     <result column="REG_TYP_CD" property="regTypCd" jdbcType="VARCHAR" /> -->
+<!--     <result column="WRIT_DTM" property="writDtm" jdbcType="DATE" /> -->
+<!--     <result column="WRIT_USER_ID" property="writUserId" jdbcType="VARCHAR" /> -->
+    <result column="ALL_DEPT_NM" property="allDeptNm" jdbcType="VARCHAR" />
+    <result column="UPP_DEPT_NM" property="uppDeptNm" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    USER_ID, EXP_DTM, STR_DTM, LOGIN_AC_ID, LOGIN_AC_PWD, USER_NM, USERG_ID, DEPT_ID, 
+    JGD_NM, USER_TELNO, USER_HTELNO, EMAIL_ADDR, EXCL_DWLD_AUTH_YN, ID_USE_EXP_DT, PWD_EXP_DT, 
+    OBJ_DESCN, OBJ_VERS, REG_TYP_CD, RQST_DTM, RQST_USER_ID, APRV_DCD, APRV_DTM, APRV_USER_ID
+  </sql>
+  
+  <sql id="selfJoinSql">
+  SELECT DEPT_ID
+      , DEPT_NM
+      , DEPT_LVL
+      , CASE WHEN DEPT_LVL = '0' THEN DEPT_NM 
+             WHEN DEPT_LVL = '1' THEN B_DEPT_NM||DEPT_NM
+             WHEN DEPT_LVL = '2' THEN C_DEPT_NM||B_DEPT_NM||DEPT_NM
+             WHEN DEPT_LVL = '3' THEN D_DEPT_NM||C_DEPT_NM||B_DEPT_NM||DEPT_NM
+             WHEN DEPT_LVL = '4' THEN E_DEPT_NM||D_DEPT_NM||C_DEPT_NM||B_DEPT_NM||DEPT_NM
+             WHEN DEPT_LVL = '5' THEN F_DEPT_NM||E_DEPT_NM||D_DEPT_NM||C_DEPT_NM||B_DEPT_NM||DEPT_NM
+             END AS FULL_PATH
+  FROM (SELECT   A.DEPT_ID
+               , A.DEPT_NM
+               , A.DEPT_LVL
+               , B.DEPT_ID AS B_DEPT_ID
+               , B.DEPT_LVL AS B_DEPT_LVL
+               , CASE WHEN B.DEPT_NM IS NULL THEN NULL ELSE B.DEPT_NM || '>' END B_DEPT_NM
+               , C.DEPT_ID AS C_DEPT_ID
+               , C.DEPT_LVL AS C_DEPT_LVL
+               , CASE WHEN C.DEPT_NM IS NULL THEN NULL ELSE C.DEPT_NM || '>' END C_DEPT_NM
+               , D.DEPT_ID AS D_DEPT_ID
+               , D.DEPT_LVL AS D_DEPT_LVL
+               , CASE WHEN D.DEPT_NM IS NULL THEN NULL ELSE D.DEPT_NM || '>' END D_DEPT_NM
+               , E.DEPT_ID AS E_DEPT_ID
+               , E.DEPT_LVL AS E_DEPT_LVL
+               , CASE WHEN E.DEPT_NM IS NULL THEN NULL ELSE E.DEPT_NM || '>' END E_DEPT_NM
+               , F.DEPT_ID AS F_DEPT_ID
+               , F.DEPT_LVL AS F_DEPT_LVL
+               , CASE WHEN F.DEPT_NM IS NULL THEN NULL ELSE F.DEPT_NM || '>' END F_DEPT_NM              
+          FROM WAA_DEPT A
+                LEFT OUTER JOIN WAA_DEPT B
+                  ON A.UPP_DEPT_ID = B.DEPT_ID
+                 AND B.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')
+                 AND B.REG_TYP_CD IN ('C', 'U')
+                LEFT OUTER JOIN WAA_DEPT C
+                  ON B.UPP_DEPT_ID = C.DEPT_ID
+                 AND C.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')
+                 AND C.REG_TYP_CD IN ('C', 'U')
+                LEFT OUTER JOIN WAA_DEPT D
+                  ON C.UPP_DEPT_ID = D.DEPT_ID
+                 AND D.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')
+                 AND D.REG_TYP_CD IN ('C', 'U') 
+                LEFT OUTER JOIN WAA_DEPT E
+                  ON D.UPP_DEPT_ID = E.DEPT_ID
+                 AND E.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')
+                 AND E.REG_TYP_CD IN ('C', 'U') 
+                LEFT OUTER JOIN WAA_DEPT F
+                  ON E.UPP_DEPT_ID = F.DEPT_ID
+                 AND F.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')
+                 AND F.REG_TYP_CD IN ('C', 'U')  
+         WHERE A.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')
+           AND A.REG_TYP_CD IN ('C', 'U') )
+  </sql>
+  
+  <!-- for 문 사용 SQL -->
+ <sql id="SelectSql" >
+    SELECT DEPT_ID     
+			, EXP_DTM     
+			, STR_DTM     
+			, DEPT_NM     
+			, UPP_DEPT_ID 
+			, DEPT_LVL    
+			, OBJ_DESCN   
+			, OBJ_VERS    
+			, REG_TYP_CD  
+			, WRIT_DTM    
+			, WRIT_USER_ID
+			, ALL_DEPT_NM 
+            , UPP_DEPT_ID||DEPT_ID AS ORDER_COLUMN
+   FROM WAA_DEPT
+  WHERE DEPT_LVL = #{item}
+    AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+    AND REG_TYP_CD  IN ('C','U')
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select *
+    from WAA_DEPT
+    where DEPT_ID = #{deptId,jdbcType=VARCHAR}
+    AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from WAA_DEPT
+    where DEPT_ID = #{deptId,jdbcType=VARCHAR}
+  </delete>
+  
+    <delete id="deleteAll" >
+    delete from WAA_DEPT
+    </delete>
+    <update id="updateExpDtm" parameterType="kr.wise.commons.sysmgmt.dept.service.WaaDept">
+  	UPDATE WAA_DEPT SET
+  		EXP_DTM = SYSDATETIME
+  	WHERE DEPT_ID = #{deptId}
+  	  AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+  	  AND REG_TYP_CD IN ('C', 'U')
+  </update>
+ 
+  <insert id="insert" parameterType="kr.wise.commons.sysmgmt.dept.service.WaaDept" >
+<!--   누구냐 -->
+<!--     	    <selectKey keyProperty="usergId" resultType="string" order="BEFORE" statementType="STATEMENT"> -->
+<!--     		<include refid="kr.wise.commons.cmm.service.CommonMapper.getObjId"/> -->
+<!--     		</selectKey> -->
+    insert into WAA_USER (USER_ID, EXP_DTM, STR_DTM, 
+      LOGIN_AC_ID, LOGIN_AC_PWD, USER_NM, 
+      USERG_ID, DEPT_ID, JGD_NM, 
+      USER_TELNO, USER_HTELNO, EMAIL_ADDR, 
+      EXCL_DWLD_AUTH_YN, ID_USE_EXP_DT, PWD_EXP_DT, 
+      OBJ_DESCN, OBJ_VERS, REG_TYP_CD, 
+      RQST_DTM, RQST_USER_ID, APRV_DCD, 
+      APRV_DTM, APRV_USER_ID)
+    values (#{userId,jdbcType=VARCHAR}, #{expDtm,jdbcType=DATE}, #{strDtm,jdbcType=DATE}, 
+      #{loginAcId,jdbcType=VARCHAR}, #{loginAcPwd,jdbcType=VARCHAR}, #{userNm,jdbcType=VARCHAR}, 
+      #{usergId,jdbcType=VARCHAR}, #{deptId,jdbcType=VARCHAR}, #{jgdNm,jdbcType=VARCHAR}, 
+      #{userTelno,jdbcType=VARCHAR}, #{userHtelno,jdbcType=VARCHAR}, #{emailAddr,jdbcType=VARCHAR}, 
+      #{exclDwldAuthYn,jdbcType=VARCHAR}, #{idUseExpDt,jdbcType=VARCHAR}, #{pwdExpDt,jdbcType=VARCHAR}, 
+      #{objDescn,jdbcType=VARCHAR}, #{objVers,jdbcType=DECIMAL}, #{regTypCd,jdbcType=VARCHAR}, 
+      #{rqstDtm,jdbcType=DATE}, #{rqstUserId,jdbcType=VARCHAR}, #{aprvDcd,jdbcType=VARCHAR}, 
+      #{aprvDtm,jdbcType=DATE}, #{aprvUserId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="kr.wise.commons.sysmgmt.dept.service.WaaDept" >  
+<!--   이거 누가 넣은거지? -->
+<!--   	<selectKey keyProperty="userId"  resultType="string" order="BEFORE" statementType="STATEMENT"> -->
+<!--   	<include refid="kr.wise.commons.cmm.service.CommonMapper.getObjId"/> -->
+<!--   	</selectKey> -->
+    INSERT INTO WAA_DEPT
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="deptId != null" >
+        DEPT_ID,
+      </if>
+      <if test="expDtm != null" >
+        EXP_DTM,
+      </if>
+      <if test="strDtm != null" >
+        STR_DTM,
+      </if>
+      <if test="deptNm != null" >
+        DEPT_NM,
+      </if>
+      <if test="uppDeptId != null" >
+        UPP_DEPT_ID,
+      </if>
+      <if test="deptLvl != null" >
+        DEPT_LVL,
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN,
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS,
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD,
+      </if>
+      <if test="writDtm != null" >
+        WRIT_DTM,
+      </if>
+      <if test="writUserId != null" >
+        WRIT_USER_ID,
+      </if>
+      <if test="allDeptNm != null" >
+        ALL_DEPT_NM,
+      </if>      
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="deptId != null" >
+        #{deptId,jdbcType=VARCHAR},
+      </if>
+      <if test="expDtm != null" >
+        #{expDtm,jdbcType=DATE},
+      </if>
+      <if test="strDtm != null" >
+        #{strDtm,jdbcType=DATE},
+      </if>
+      <if test="deptNm != null" >
+        #{deptNm,jdbcType=VARCHAR},
+      </if>
+      <if test="uppDeptId != null" >
+        #{uppDeptId,jdbcType=VARCHAR},
+      </if>
+      <if test="deptLvl != null" >
+        #{deptLvl,jdbcType=INTEGER},
+      </if>
+      <if test="objDescn != null" >
+        #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        #{objVers,jdbcType=INTEGER},
+      </if>
+      <if test="regTypCd != null" >
+        #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="writDtm != null" >
+        SYSDATETIME,
+      </if>
+      <if test="writUserId != null" >
+        #{writUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="allDeptNm != null" >
+        #{allDeptNm,jdbcType=VARCHAR},
+      </if>
+      
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.commons.sysmgmt.dept.service.WaaDept" >
+    UPDATE WAA_DEPT
+    <set>
+        EXP_DTM = TO_DATE ('9999-12-31', 'YYYY-MM-DD'),
+        STR_DTM = SYSDATETIME,
+      <if test="deptNm != null" >
+        DEPT_NM = #{deptNm,jdbcType=VARCHAR},
+      </if>
+      <if test="uppDeptId != null" >
+        UPP_DEPT_ID = #{uppDeptId,jdbcType=VARCHAR},
+      </if>
+      <if test="deptLvl != null" >
+        DEPT_LVL = #{deptLvl,jdbcType=INTEGER},
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS = #{objVers,jdbcType=INTEGER},
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="writUserId != null" >
+        WRIT_USER_ID = #{writUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="allDeptNm != null" >
+        ALL_DEPT_NM = #{allDeptNm,jdbcType=VARCHAR},
+      </if>      
+    </set>
+    where DEPT_ID = #{deptId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="kr.wise.commons.sysmgmt.dept.service.WaaDept" >
+  	UPDATE WAA_DEPT SET
+        EXP_DTM = TO_DATE ('9999-12-31 ', 'YYYY-MM-DD'),
+        STR_DTM = SYSDATETIME,\
+        DEPT_NM = #{deptNm,jdbcType=VARCHAR},\
+        UPP_DEPT_ID = #{uppDeptId,jdbcType=VARCHAR},\
+        DEPT_LVL = #{deptLvl,jdbcType=INTEGER},\
+        OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},\
+        OBJ_VERS = #{objVers,jdbcType=INTEGER},\
+        REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},\
+        WRIT_DTM = #{writDtm,jdbcType=DATE},\
+        WRIT_USER_ID = #{writUserId,jdbcType=VARCHAR},\
+        ALL_DEPT_NM = #{allDeptNm,jdbcType=VARCHAR},\\
+    where DEPT_ID = #{deptId,jdbcType=VARCHAR}
+  </update>
+  <update id="deleteRegTypCd" parameterType="kr.wise.commons.sysmgmt.dept.service.WaaDept" >
+    UPDATE WAA_DEPT
+    SET REG_TYP_CD = #{regTypCd}
+    where DEPT_ID = #{deptId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateAllDeptNm" parameterType="kr.wise.commons.sysmgmt.dept.service.WaaDept" >
+  UPDATE WAA_DEPT A
+	SET ALL_DEPT_NM = (SELECT FULL_PATH 
+                                FROM V_WAA_DEPT B
+<!--                                 FROM (<include refid="selfJoinSql"/> ) B -->
+                               WHERE A.DEPT_ID = B.DEPT_ID )
+       WHERE A.REG_TYP_CD IN ('C', 'U')
+         AND A.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+    <!-- OBJ_ID WHERE 조건 추가 -->
+<!--    WHERE A.DEPT_ID = #{deptId,jdbcType=VARCHAR} -->
+  </update>
+<!--   <update id="updateAllDeptNm" parameterType="kr.wise.commons.sysmgmt.dept.service.WaaDept" > -->
+<!--   UPDATE WAA_DEPT A -->
+<!-- 	SET ALL_DEPT_NM = ( -->
+<!-- 	SELECT ALL_DEPT_NM  -->
+<!--     FROM ( -->
+<!--     SELECT DEPT_ID, SUBSTR(SYS_CONNECT_BY_PATH(DEPT_NM, '>'), 2) AS ALL_DEPT_NM -->
+<!--     FROM -->
+<!--     (SELECT A.*  -->
+<!--     FROM WAA_DEPT A -->
+<!--         WHERE  A.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD') -->
+<!--        AND A.REG_TYP_CD IN ('C', 'U') -->
+<!--         )   START WITH DEPT_LVL = 0 -->
+<!--     CONNECT BY PRIOR DEPT_ID = UPP_DEPT_ID -->
+<!--     ORDER SIBLINGS BY DEPT_NM)  B -->
+<!--         WHERE A.DEPT_ID = DEPT_ID -->
+<!--         ) -->
+<!--   </update> -->
+
+<select id="selectList" parameterType="kr.wise.commons.sysmgmt.dept.service.WaaDept" resultMap="BaseResultMap">
+SELECT  A.DEPT_ID     
+		, A.EXP_DTM     
+		, A.STR_DTM     
+		, A.DEPT_NM     
+		, A.UPP_DEPT_ID 
+		, A.DEPT_LVL    
+		, A.OBJ_DESCN   
+		, A.OBJ_VERS    
+		, A.REG_TYP_CD  
+		, A.WRIT_DTM    
+		, A.WRIT_USER_ID
+		, A.ALL_DEPT_NM 
+	    , (SELECT USER_NM FROM WAA_USER WHERE USER_ID = A.WRIT_USER_ID AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD') AND REG_TYP_CD IN ('C','U')) AS WRIT_USER_NM
+	    , B.DEPT_NM AS UPP_DEPT_NM
+	  FROM (
+<!-- 	  		collection = 전달받은 인자값 -->
+<!-- 	  		item   = 전달받은 인자값을 다른이름으로 대체  -->
+<!-- 	  		open 해당 구문이 시작할떄  -->
+<!-- 	  		lose 해당구문이 끝날떄 -->
+<!-- 			separator  한번 이상 반복할때 반복되는 사이에  해당 문을 넣어줌 -->
+	  		<foreach collection="lvlList" item="item" index="index" open="" separator="UNION ALL" close="">
+				<include refid="SelectSql" />	      
+			</foreach>
+	       ) A
+	       LEFT OUTER JOIN WAA_DEPT B
+	         ON A.UPP_DEPT_ID = B.DEPT_ID
+	        AND B.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	        AND B.REG_TYP_CD IN ('C','U')
+	<where>
+			AND A.REG_TYP_CD IN ('C', 'U')
+			AND A.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+		<if test="deptNm != null" >
+			AND UPPER(A.ALL_DEPT_NM) LIKE '%' || UPPER(#{deptNm,jdbcType=VARCHAR}) || '%'
+		</if>
+	</where>
+	 ORDER BY A.ALL_DEPT_NM, A.DEPT_LVL
+</select>   
+
+<!-- <select id="selectList" parameterType="kr.wise.commons.sysmgmt.dept.service.WaaDept" resultMap="BaseResultMap"> -->
+<!-- 	SELECT * -->
+<!-- 	FROM ( -->
+<!-- 	SELECT A.*, -->
+<!-- 		   GET_USER_NM(A.WRIT_USER_ID) AS WRIT_USER_NM, -->
+<!-- 		   (SELECT ALL_DEPT_NM FROM WAA_DEPT  -->
+<!-- 	        WHERE DEPT_ID = A.UPP_DEPT_ID -->
+<!-- 	        AND REG_TYP_CD IN ('C', 'U') -->
+<!-- 	        AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')) AS UPP_DEPT_NM -->
+		   
+<!-- 	FROM -->
+<!-- 	(SELECT A.*  -->
+<!-- 	FROM WAA_DEPT A -->
+<!-- 	    WHERE  A.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD') -->
+<!-- 	   AND A.REG_TYP_CD IN ('C', 'U')  -->
+	  
+<!-- 	 ) A   START WITH DEPT_LVL = 0 -->
+<!-- 	CONNECT BY PRIOR DEPT_ID = UPP_DEPT_ID -->
+<!-- 	ORDER SIBLINGS BY DEPT_NM -->
+<!-- 	) -->
+<!-- 	<where> -->
+<!-- 		<if test="deptNm != null" > -->
+<!-- 			AND ALL_DEPT_NM LIKE '%' || #{deptNm,jdbcType=VARCHAR} || '%' -->
+<!-- 		</if> -->
+<!-- 	</where> -->
+<!-- </select>    -->
+
+    
+</mapper>

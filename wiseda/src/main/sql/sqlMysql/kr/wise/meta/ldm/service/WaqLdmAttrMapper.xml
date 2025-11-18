@@ -1,0 +1,1569 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.meta.ldm.service.WaqLdmAttrMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.meta.ldm.service.WaqLdmAttr" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+    <id column="RQST_NO"      property="rqstNo" jdbcType="VARCHAR" />
+    <id column="RQST_SNO"     property="rqstSno" jdbcType="DECIMAL" />
+    <id column="RQST_DTL_SNO" property="rqstDtlSno" jdbcType="DECIMAL" />
+    <result column="LDM_ATTR_ID"     property="ldmAttrId"  jdbcType="VARCHAR" />
+    <result column="LDM_ATTR_LNM"    property="ldmAttrLnm" jdbcType="VARCHAR" />    
+    <result column="LDM_ENTY_ID"     property="ldmEntyId"  jdbcType="VARCHAR" />
+    <result column="LDM_ENTY_LNM"    property="ldmEntyLnm" jdbcType="VARCHAR" />     
+    <result column="SDITM_ID"        property="sditmId"    jdbcType="VARCHAR" />
+    <result column="ATTR_ORD"        property="attrOrd"     jdbcType="DECIMAL" />
+    <result column="DATA_TYPE"       property="dataType"   jdbcType="VARCHAR" />
+    <result column="DATA_LEN"        property="dataLen"    jdbcType="DECIMAL" />
+    <result column="DATA_SCAL"       property="dataScal"   jdbcType="DECIMAL" />
+    <result column="PK_YN"           property="pkYn"       jdbcType="VARCHAR" />
+    <result column="PK_ORD"          property="pkOrd"      jdbcType="DECIMAL" />
+    <result column="NONUL_YN"        property="nonulYn"    jdbcType="VARCHAR" />
+    <result column="DEFLT_VAL"       property="defltVal"   jdbcType="VARCHAR" />     
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+      RQST_NO, RQST_SNO, RQST_DTL_SNO
+    , LDM_ATTR_ID
+    , LDM_ATTR_LNM 
+    , RQST_DCD, VRF_CD, VRF_RMK
+    , LDM_ENTY_ID
+    , LDM_ENTY_LNM, MDL_LNM, UPP_SUBJ_LNM, SUBJ_ID
+    , SUBJ_LNM, SDITM_ID
+    , ATTR_ORD, DATA_TYPE, DATA_LEN, DATA_SCAL
+    , PK_YN, PK_ORD, NONUL_YN, DEFLT_VAL
+    , OBJ_DESCN, OBJ_VERS, REG_TYP_CD, FRS_RQST_DTM, FRS_RQST_USER_ID, RQST_DTM 
+    , RQST_USER_ID, APRV_DTM, APRV_USER_ID
+  </sql>
+  
+  <sql id="Base_Column_List2" >
+      A.RQST_NO, A.RQST_SNO, A.RQST_DTL_SNO
+    , A.LDM_ATTR_ID
+    , A.LDM_ATTR_LNM
+    , A.RQST_DCD, A.VRF_CD, A.VRF_RMK 
+    , A.LDM_ENTY_ID
+    , A.LDM_ENTY_LNM     
+    , A.SUBJ_LNM
+    , A.SDITM_ID
+    , A.ATTR_ORD, A.DATA_TYPE, A.DATA_LEN, A.DATA_SCAL
+    , CASE WHEN A.PK_YN IS NULL THEN 'N' ELSE A.PK_YN END AS PK_YN, A.PK_ORD
+    , CASE WHEN A.NONUL_YN IS NULL THEN 'N' ELSE A.NONUL_YN END AS NONUL_YN 
+    , A.DEFLT_VAL, A.OBJ_DESCN, A.OBJ_VERS, A.REG_TYP_CD, A.FRS_RQST_DTM, A.FRS_RQST_USER_ID, A.RQST_DTM 
+    , A.RQST_USER_ID, A.APRV_DTM, A.APRV_USER_ID
+    , B.FULL_PATH
+  </sql>
+
+  <sql id="waq_Column_List" >
+    RQST_NO, RQST_SNO, RQST_DTL_SNO, LDM_ATTR_ID, LDM_ATTR_LNM, LDM_ATTR_LNM, BF_LDM_ATTR_LNM, 
+    RQST_DCD, VRF_CD, VRF_RMK, LDM_ENTY_ID, LDM_ENTY_LNM, MDL_LNM, UPP_SUBJ_LNM, SUBJ_ID, 
+    SUBJ_LNM, SDITM_ID, ATTR_ORD, DATA_TYPE, DATA_LEN, DATA_SCAL, PK_YN, PK_ORD, NONUL_YN, 
+    DEFLT_VAL, OBJ_DESCN, OBJ_VERS, REG_TYP_CD, FRS_RQST_DTM, FRS_RQST_USER_ID, RQST_DTM, 
+    RQST_USER_ID, APRV_DTM, APRV_USER_ID
+  </sql>
+
+  <select id="selectLdmColDetail" resultMap="BaseResultMap" parameterType="kr.wise.meta.ldm.service.WaqLdmAttr" >
+    select /* WaqLdmAttrMapper.selectLdmColDetail */
+    <include refid="Base_Column_List" />
+    from WAQ_LDM_ATTR
+    where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      and RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+      and RQST_DTL_SNO = #{rqstDtlSno,jdbcType=DECIMAL}
+  </select>
+
+  <select id="selectLdmAttrRqstList" parameterType="kr.wise.commons.rqstmst.service.WaqMstr" resultMap="BaseResultMap">
+  	SELECT /* WaqLdmAttrMapper.selectLdmAttrRqstList */
+  	<include refid="Base_Column_List2"/>
+   	, CASE WHEN A.VRF_CD = '2' THEN '#FF0000' ELSE CASE WHEN A.VRF_CD = '5' THEN '#0000FF'  END END AS FontColor   
+ 	--, CASE WHEN A.VRF_CD = '2' THEN '#FF0000' END AS FontColor
+  	, U.USER_NM AS RQST_USER_NM  	
+  	FROM WAQ_LDM_ATTR A
+  	     INNER JOIN WAQ_LDM_ENTY B
+  	        ON B.RQST_NO  = A.RQST_NO
+  	       AND B.RQST_SNO = A.RQST_SNO
+  	     LEFT JOIN WAA_USER U
+  	       ON U.USER_ID = A.RQST_USER_ID 
+  	      AND U.REG_TYP_CD IN ('C', 'U')
+  	      AND U.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+  	WHERE A.RQST_NO = #{rqstNo}
+  	<if test='rqstSno != null'>
+      AND A.RQST_SNO = #{rqstSno}
+  	</if>
+  	ORDER BY A.RQST_SNO, A.ATTR_ORD
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="kr.wise.meta.ldm.service.WaqLdmAttr" >
+    delete /* WaqLdmAttrMapper.deleteByPrimaryKey */
+    from WAQ_LDM_ATTR
+    where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      and RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+      and RQST_DTL_SNO = #{rqstDtlSno,jdbcType=DECIMAL}
+  </delete>
+  
+  <insert id="insert" parameterType="kr.wise.meta.ldm.service.WaqLdmAttr" >
+    insert /* WaqLdmAttrMapper.insert */
+    into WAQ_LDM_ATTR (RQST_NO, RQST_SNO, RQST_DTL_SNO, 
+      LDM_ATTR_ID, LDM_ATTR_LNM, LDM_ATTR_LNM, 
+      RQST_DCD, VRF_CD, 
+      VRF_RMK, LDM_ENTY_ID, LDM_ENTY_LNM, 
+      MDL_LNM, UPP_SUBJ_LNM, SUBJ_ID, 
+      SUBJ_LNM, SDITM_ID, ATTR_ORD, 
+      DATA_TYPE, DATA_LEN, DATA_SCAL, 
+      PK_YN, PK_ORD, NONUL_YN, 
+      DEFLT_VAL, OBJ_DESCN, OBJ_VERS, 
+      REG_TYP_CD, FRS_RQST_DTM, FRS_RQST_USER_ID, 
+      RQST_DTM, RQST_USER_ID, APRV_DTM, 
+      APRV_USER_ID)
+    values (#{rqstNo,jdbcType=VARCHAR}, #{rqstSno,jdbcType=DECIMAL}, #{rqstDtlSno,jdbcType=DECIMAL}, 
+      #{ldmAttrId,jdbcType=VARCHAR}, #{ldmAttrLnm,jdbcType=VARCHAR}, #{pdmColLnm,jdbcType=VARCHAR}, 
+      #{rqstDcd,jdbcType=VARCHAR}, #{vrfCd,jdbcType=VARCHAR}, 
+      #{vrfRmk,jdbcType=VARCHAR}, #{ldmEntyId,jdbcType=VARCHAR}, #{ldmEntyLnm,jdbcType=VARCHAR}, 
+      #{mdlLnm,jdbcType=VARCHAR}, #{uppSubjLnm,jdbcType=VARCHAR}, #{subjId,jdbcType=VARCHAR}, 
+      #{subjLnm,jdbcType=VARCHAR}, #{sditmId,jdbcType=VARCHAR}, #{attrOrd,jdbcType=DECIMAL}, 
+      #{dataType,jdbcType=VARCHAR}, #{dataLen,jdbcType=DECIMAL}, #{dataScal,jdbcType=DECIMAL}, 
+      #{pkYn,jdbcType=VARCHAR}, #{pkOrd,jdbcType=DECIMAL}, #{nonulYn,jdbcType=VARCHAR}, 
+      #{defltVal,jdbcType=VARCHAR}, #{objDescn,jdbcType=VARCHAR}, #{objVers,jdbcType=DECIMAL}, 
+      #{regTypCd,jdbcType=VARCHAR}, #{frsRqstDtm,jdbcType=TIMESTAMP}, #{frsRqstUserId,jdbcType=VARCHAR}, 
+      #{rqstDtm,jdbcType=TIMESTAMP}, #{rqstUserId,jdbcType=VARCHAR}, #{aprvDtm,jdbcType=TIMESTAMP}, 
+      #{aprvUserId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="kr.wise.meta.ldm.service.WaqLdmAttr" >
+  	<selectKey keyProperty="rqstDtlSno" resultType="int" order="BEFORE" statementType="PREPARED">
+  		SELECT IFNULL(MAX(RQST_DTL_SNO), 0) + 1 
+  		  FROM WAQ_LDM_ATTR 
+  		 WHERE RQST_NO  = #{rqstNo,jdbcType=VARCHAR} 
+  		   AND RQST_SNO = #{rqstSno,jdbcType=VARCHAR}
+  	</selectKey>
+    insert /* WaqLdmAttrMapper.insertSelective */
+    into WAQ_LDM_ATTR
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="rqstNo != null" >
+        RQST_NO,
+      </if>
+      <if test="rqstSno != null" >
+        RQST_SNO,
+      </if>
+      <if test="rqstDtlSno != null" >
+        RQST_DTL_SNO,
+      </if>
+      <if test="ldmAttrId != null" >
+        LDM_ATTR_ID,
+      </if>
+      <if test="ldmAttrLnm != null" >
+        LDM_ATTR_LNM,
+      </if>       
+      <if test="rqstDcd != null" >
+        RQST_DCD,
+      </if>
+      <if test="vrfCd != null" >
+        VRF_CD,
+      </if>
+      <if test="vrfRmk != null" >
+        VRF_RMK,
+      </if>
+      <if test="ldmEntyId != null" >
+        LDM_ENTY_ID,
+      </if>
+      <if test="ldmEntyLnm != null" >
+        LDM_ENTY_LNM,
+      </if>
+      <if test="mdlLnm != null" >
+        MDL_LNM,
+      </if>
+      <if test="uppSubjLnm != null" >
+        UPP_SUBJ_LNM,
+      </if>
+      <if test="subjId != null" >
+        SUBJ_ID,
+      </if>
+      <if test="subjLnm != null" >
+        SUBJ_LNM,
+      </if>
+      <if test="sditmId != null" >
+        SDITM_ID,
+      </if>
+      <if test="attrOrd != null" >
+        ATTR_ORD,
+      </if>
+      <if test="dataType != null" >
+        DATA_TYPE,
+      </if>
+      <if test="dataLen != null" >
+        DATA_LEN,
+      </if>
+      <if test="dataScal != null" >
+        DATA_SCAL,
+      </if>
+        PK_YN,
+      <if test="pkOrd != null" >
+        PK_ORD,
+      </if>
+        NONUL_YN,
+      <if test="defltVal != null" >
+        DEFLT_VAL,
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN,
+      </if>
+        OBJ_VERS,
+      <if test="regTypCd != null" >
+        REG_TYP_CD,
+      </if>
+        FRS_RQST_DTM,
+        FRS_RQST_USER_ID,
+        RQST_DTM,
+      <if test="rqstUserId != null" >
+        RQST_USER_ID,
+      </if>        
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="rqstNo != null" >
+        #{rqstNo,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstSno != null" >
+        #{rqstSno,jdbcType=DECIMAL},
+      </if>
+      <if test="rqstDtlSno != null" >
+        #{rqstDtlSno,jdbcType=DECIMAL},
+      </if>
+      <if test="ldmAttrId != null" >
+        #{ldmAttrId,jdbcType=VARCHAR},
+      </if>
+      <if test="ldmAttrLnm != null" >
+        #{ldmAttrLnm,jdbcType=VARCHAR},
+      </if>       
+      <if test="rqstDcd != null" >
+        #{rqstDcd,jdbcType=VARCHAR},
+      </if>
+      <if test="vrfCd != null" >
+        #{vrfCd,jdbcType=VARCHAR},
+      </if>
+      <if test="vrfRmk != null" >
+        #{vrfRmk,jdbcType=VARCHAR},
+      </if>
+      <if test="ldmEntyId != null" >
+        #{ldmEntyId,jdbcType=VARCHAR},
+      </if>
+      <if test="ldmEntyLnm != null" >
+        #{ldmEntyLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="mdlLnm != null" >
+        #{mdlLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="uppSubjLnm != null" >
+        #{uppSubjLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="subjId != null" >
+        #{subjId,jdbcType=VARCHAR},
+      </if>
+      <if test="subjLnm != null" >
+        #{subjLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="sditmId != null" >
+        #{sditmId,jdbcType=VARCHAR},
+      </if>
+      <if test="attrOrd != null" >
+        #{attrOrd,jdbcType=DECIMAL},
+      </if>
+      <if test="dataType != null" >
+        #{dataType,jdbcType=VARCHAR},
+      </if>
+      <if test="dataLen != null" >
+        #{dataLen,jdbcType=DECIMAL},
+      </if>
+      <if test="dataScal != null" >
+        #{dataScal,jdbcType=DECIMAL},
+      </if>
+        #{pkYn,jdbcType=VARCHAR},
+      <if test="pkOrd != null" >
+        #{pkOrd,jdbcType=DECIMAL},
+      </if>
+        #{nonulYn,jdbcType=VARCHAR},
+      <if test="defltVal != null" >
+        #{defltVal,jdbcType=VARCHAR},
+      </if>
+      <if test="objDescn != null" >
+        #{objDescn,jdbcType=VARCHAR},
+      </if>
+        1 ,
+      <if test="regTypCd != null" >
+        #{regTypCd,jdbcType=VARCHAR},
+      </if>
+        NOW() ,
+        #{frsRqstUserId,jdbcType=VARCHAR},
+        NOW(),
+      <if test="rqstUserId != null" >
+        #{rqstUserId,jdbcType=VARCHAR},
+      </if>         
+    </trim>
+  </insert>
+  
+  <insert id="insertByRqstSno" parameterType="kr.wise.meta.ldm.service.WaqLdmEnty">
+    --테이블 추가시 WAM에 존재하는 컬럼 추가한다.
+  	INSERT /* WaqLdmAttrMapper.insertByRqstSno */
+  	INTO WAQ_LDM_ATTR(
+	      RQST_NO, RQST_SNO, RQST_DTL_SNO
+	    , LDM_ATTR_ID
+	    , LDM_ATTR_LNM
+	    , LDM_ATTR_PNM
+	    , RQST_DCD
+	    , LDM_ENTY_ID, LDM_ENTY_LNM, SUBJ_ID, SDITM_ID
+	    , ATTR_ORD, DATA_TYPE, DATA_LEN, DATA_SCAL
+	    , PK_YN, PK_ORD, NONUL_YN, DEFLT_VAL
+	    , OBJ_DESCN, OBJ_VERS, FRS_RQST_DTM, FRS_RQST_USER_ID, RQST_DTM, RQST_USER_ID
+	)
+	SELECT B.RQST_NO, B.RQST_SNO
+	      , (SELECT IFNULL(MAX(RQST_DTL_SNO), 0) 
+	           FROM WAQ_LDM_ATTR 
+	          WHERE RQST_NO = #{rqstNo} 
+	            AND RQST_SNO = #{rqstSno} 
+	         ) + ROWNUM AS RQST_DTL_SNO
+	      , C.LDM_ATTR_ID
+	      , C.LDM_ATTR_LNM
+	      , C.LDM_ATTR_PNM
+	      , 'CU' AS RQST_DCD
+	      , C.LDM_ENTY_ID
+	      , A.LDM_ENTY_LNM
+	      , A.SUBJ_ID
+	      , C.SDITM_ID
+	      , C.ATTR_ORD
+	      , C.DATA_TYPE
+	      , C.DATA_LEN
+	      , C.DATA_SCAL
+	      , IFNULL(C.PK_YN,'N')
+	      , C.PK_ORD
+	      , IFNULL(C.NONUL_YN,'N')
+	      , C.DEFLT_VAL
+	      , C.OBJ_DESCN
+	      , C.OBJ_VERS,  B.FRS_RQST_DTM, B.FRS_RQST_USER_ID, NOW(), B.RQST_USER_ID
+	  FROM WAM_LDM_ENTY A 
+	       INNER JOIN WAQ_LDM_ENTY B
+	         ON A.LDM_ENTY_ID = B.LDM_ENTY_ID
+	       INNER JOIN WAM_LDM_ATTR C
+	          ON A.LDM_ENTY_ID = C.LDM_ENTY_ID
+	WHERE B.RQST_NO = #{rqstNo}
+	  AND B.RQST_SNO = #{rqstSno}
+  </insert>
+
+  
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.meta.ldm.service.WaqLdmAttr" >
+    update /* WaqLdmAttrMapper.updateByPrimaryKeySelective */
+    WAQ_LDM_ATTR
+    <set >
+      <if test="ldmAttrId != null" >
+        LDM_ATTR_ID = #{ldmAttrId,jdbcType=VARCHAR},
+      </if>
+        LDM_ATTR_LNM = #{ldmAttrLnm,jdbcType=VARCHAR},
+          
+      <if test="rqstDcd != null" >
+        RQST_DCD = #{rqstDcd,jdbcType=VARCHAR},
+      </if>
+      <if test="vrfCd != null" >
+        VRF_CD = #{vrfCd,jdbcType=VARCHAR},
+      </if>
+      <if test="vrfRmk != null" >
+        VRF_RMK = #{vrfRmk,jdbcType=VARCHAR},
+      </if>
+      <if test="ldmEntyId != null" >
+        LDM_ENTY_ID = #{ldmEntyId,jdbcType=VARCHAR},
+      </if>
+      <if test="ldmEntyLnm != null" >
+        LDM_ENTY_LNM = #{ldmEntyLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="mdlLnm != null" >
+        MDL_LNM = #{mdlLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="uppSubjLnm != null" >
+        UPP_SUBJ_LNM = #{uppSubjLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="subjId != null" >
+        SUBJ_ID = #{subjId,jdbcType=VARCHAR},
+      </if>
+      <if test="subjLnm != null" >
+        SUBJ_LNM = #{subjLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="sditmId != null" >
+        SDITM_ID = #{sditmId,jdbcType=VARCHAR},
+      </if>
+        ATTR_ORD = #{attrOrd,jdbcType=DECIMAL},
+        DATA_TYPE = #{dataType,jdbcType=VARCHAR},
+        DATA_LEN = #{dataLen,jdbcType=DECIMAL},
+        DATA_SCAL = #{dataScal,jdbcType=DECIMAL},
+        PK_YN = #{pkYn,jdbcType=VARCHAR},
+        PK_ORD = #{pkOrd,jdbcType=DECIMAL},
+        NONUL_YN = #{nonulYn,jdbcType=VARCHAR},
+        DEFLT_VAL = #{defltVal,jdbcType=VARCHAR},
+        OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      <if test="objVers != null" >
+        OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="frsRqstDtm != null" >
+        FRS_RQST_DTM = #{frsRqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="frsRqstUserId != null" >
+        FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR},
+      </if>
+        RQST_DTM = NOW() ,
+      <if test="rqstUserId != null" >
+        RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      </if>        
+    </set>
+    where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      and RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+      and RQST_DTL_SNO = #{rqstDtlSno,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="kr.wise.meta.ldm.service.WaqLdmAttr" >
+    update /* WaqLdmAttrMapper.updateByPrimaryKey */
+    WAQ_LDM_ATTR
+    set LDM_ATTR_ID = #{ldmAttrId,jdbcType=VARCHAR},
+      LDM_ATTR_LNM = #{ldmAttrLnm,jdbcType=VARCHAR},            
+      RQST_DCD = #{rqstDcd,jdbcType=VARCHAR},
+      VRF_CD = #{vrfCd,jdbcType=VARCHAR},
+      VRF_RMK = #{vrfRmk,jdbcType=VARCHAR},
+      LDM_ENTY_ID = #{ldmEntyId,jdbcType=VARCHAR},
+      LDM_ENTY_LNM = #{ldmEntyLnm,jdbcType=VARCHAR},
+      MDL_LNM = #{mdlLnm,jdbcType=VARCHAR},
+      UPP_SUBJ_LNM = #{uppSubjLnm,jdbcType=VARCHAR},
+      SUBJ_ID = #{subjId,jdbcType=VARCHAR},
+      SUBJ_LNM = #{subjLnm,jdbcType=VARCHAR},
+      SDITM_ID = #{sditmId,jdbcType=VARCHAR},
+      ATTR_ORD = #{attrOrd,jdbcType=DECIMAL},
+      DATA_TYPE = #{dataType,jdbcType=VARCHAR},
+      DATA_LEN = #{dataLen,jdbcType=DECIMAL},
+      DATA_SCAL = #{dataScal,jdbcType=DECIMAL},
+      PK_YN = #{pkYn,jdbcType=VARCHAR},
+      PK_ORD = #{pkOrd,jdbcType=DECIMAL},
+      NONUL_YN = #{nonulYn,jdbcType=VARCHAR},
+      DEFLT_VAL = #{defltVal,jdbcType=VARCHAR},
+      OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      FRS_RQST_DTM = #{frsRqstDtm,jdbcType=TIMESTAMP},
+      FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR},
+      RQST_DTM = #{rqstDtm,jdbcType=TIMESTAMP},
+      RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      APRV_DTM = #{aprvDtm,jdbcType=TIMESTAMP},
+      APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR}
+    where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      and RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+      and RQST_DTL_SNO = #{rqstDtlSno,jdbcType=DECIMAL}
+  </update>
+  
+  
+  <delete id="deleteByrqstSno" parameterType="kr.wise.meta.ldm.service.WaqLdmEnty">
+    DELETE /* WaqLdmAttrMapper.deleteByrqstSno */
+    FROM WAQ_LDM_ATTR
+    WHERE RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      AND RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+  </delete>
+  
+  
+  
+  
+  <!-- 검증로직 시작 -->
+  <update id="updateRqstDcdbyTable" parameterType="java.lang.String" >
+  --테이블 삭제요청이 DD 일 경우 컬럼도 동일하게 처리
+  UPDATE /* WaqLdmAttrMapper.updateRqstDcdbyTable */
+  WAQ_LDM_ATTR A
+     SET A.RQST_DCD = 'DD'
+   WHERE A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+     AND EXISTS (
+     				SELECT 1 FROM WAQ_LDM_ENTY B
+     				 WHERE B.RQST_NO = A.RQST_NO
+     				   AND B.RQST_SNO = A.RQST_SNO
+     				   AND B.RQST_DCD = 'DD'
+     )
+  </update>
+  
+  <update id="updateCheckInit" parameterType="java.lang.String" >
+    UPDATE /* WaqLdmAttrMapper.updateCheckInit */
+    WAQ_LDM_ATTR A
+       SET (A.REG_TYP_CD, A.LDM_ATTR_ID) = 
+                     (SELECT CASE WHEN A.RQST_DCD = 'DD' THEN 'D' ELSE CASE WHEN MAX(B.LDM_ATTR_ID) IS NULL THEN 'C' ELSE 'U' END END
+                           , MAX(B.LDM_ATTR_ID) AS LDM_ATTR_ID 
+                        FROM WAM_LDM_ATTR B
+                             INNER JOIN WAM_LDM_ENTY C
+                                ON C.LDM_ENTY_ID = B.LDM_ENTY_ID
+                               AND C.REG_TYP_CD IN ('C','U')
+                             INNER JOIN WAQ_LDM_ENTY D
+                                ON C.FULL_PATH   = D.FULL_PATH
+                               AND C.LDM_ENTY_LNM = D.LDM_ENTY_LNM
+                        WHERE B.REG_TYP_CD IN ('C','U')
+                          AND B.LDM_ATTR_LNM = A.LDM_ATTR_LNM 
+                          AND D.RQST_NO  = A.RQST_NO
+                          AND D.RQST_SNO = A.RQST_SNO
+                          )
+        , A.VRF_CD = '4'
+        , A.SDITM_ID = NULL
+    WHERE A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+  </update>
+  
+  
+  
+  
+  <update id="updateTblPnmbyRqstSno" parameterType="string">
+  	--테이블 물리명 업데이트...
+  	UPDATE /* WaqLdmAttrMapper.updateTblPnmbyRqstSno */
+  	WAQ_LDM_ATTR A
+  	   SET LDM_ENTY_LNM = ( 
+  	   					   SELECT MAX(LDM_ENTY_LNM) 
+  	   					     FROM WAQ_LDM_ENTY B
+  	                        WHERE B.RQST_NO = A.RQST_NO
+  	                          AND B.RQST_SNO = A.RQST_SNO
+  	   					 )   	
+     WHERE A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+       AND A.LDM_ENTY_LNM IS NULL
+  </update>
+  
+  <update id="updateObjEnm" parameterType="string">
+  	--데이터 타입이 없는 경우 표준항목정보를 업데이트한다. 한글명 기준으로...
+	UPDATE /* WaqLdmAttrMapper.updateObjEnm */
+	WAQ_LDM_ATTR A
+	  	   SET (SDITM_ID, DATA_TYPE, DATA_LEN, DATA_SCAL) 
+			 = (
+			   SELECT DISTINCT B.SDITM_ID, C.DATA_TYPE, C.DATA_LEN, C.DATA_SCAL FROM WAM_SDITM B
+				 JOIN WAA_INFO_TYPE C
+	               ON B.INFOTP_ID = C.INFOTP_ID
+				  AND C.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	            WHERE B.SDITM_LNM = RTRIM(A.LDM_ATTR_LNM, '_0123456789')		   
+		       )
+	 WHERE A.RQST_NO = #{rqstNo}
+	   --AND A.SDITM_ID IS NULL
+	   AND A.DATA_TYPE IS NULL
+	   AND EXISTS (
+					SELECT 1 FROM WAQ_LDM_ENTY D 
+					 WHERE D.RQST_NO = A.RQST_NO
+					   AND D.RQST_SNO = A.RQST_SNO
+					   --AND D.STD_APL_YN = 'Y'
+	   )
+  </update>
+  
+  <update id="updateStndDateType" parameterType="string">
+  	--데이터 타입이 없는 경우 표준항목정보를 업데이트한다. 한글명 기준으로...
+	UPDATE /* WaqLdmAttrMapper.updateStndDateType */
+	WAQ_LDM_ATTR A
+	   SET (DATA_TYPE, DATA_LEN, DATA_SCAL) 
+			 = (SELECT DISTINCT C.DATA_TYPE, C.DATA_LEN, C.DATA_SCAL 
+			      FROM WAM_SDITM B
+			           INNER JOIN WAA_INFO_TYPE C
+			              ON C.EXP_DTM = STR_TO_DATE('9999-12-31','%Y-%m-%d') 			             
+			             AND C.INFOTP_ID = B.INFOTP_ID 
+	             WHERE B.SDITM_LNM = RTRIM(A.LDM_ATTR_LNM, '_0123456789')	              
+		        )
+	 WHERE A.RQST_NO = #{rqstNo}
+	   AND A.RQST_DCD = 'CU'
+	   AND A.SDITM_ID IS NOT NULL	 
+	   AND EXISTS (SELECT 1
+			         FROM WAM_SDITM B
+	                WHERE B.SDITM_LNM = RTRIM(A.LDM_ATTR_LNM, '_0123456789') 	                  		   
+		           )   
+	   AND EXISTS (SELECT 1 
+					 FROM WAQ_LDM_ENTY D 
+				    WHERE D.RQST_NO = A.RQST_NO
+					  AND D.RQST_SNO = A.RQST_SNO
+					  AND D.STD_APL_YN = 'Y'
+	              )
+  </update>
+  
+  <update id="updateLdmColPnm" parameterType="string">
+  	--컬럼영문명 항목영문명 + NUMBER UPDATE. 한글명 기준으로...
+	UPDATE /* WaqLdmAttrMapper.updateLdmColPnm */
+	WAQ_LDM_ATTR A
+	  	   SET A.LDM_ATTR_LNM 
+			 = (
+			   SELECT B.SDITM_PNM ||  SUBSTR(A.LDM_ATTR_LNM, LENGTH(RTRIM(A.LDM_ATTR_LNM, '_0123456789'))+1, LENGTH(A.LDM_ATTR_LNM))
+			     FROM WAM_SDITM B
+	            WHERE B.SDITM_LNM = RTRIM(A.LDM_ATTR_LNM, '_0123456789')		
+	               AND B.REG_TYP_CD IN ('C','U')   
+		       )
+	 WHERE A.RQST_NO = #{rqstNo}
+	   AND EXISTS (
+					SELECT 1 FROM WAQ_LDM_ENTY D 
+					 WHERE D.RQST_NO = A.RQST_NO
+					   AND D.RQST_SNO = A.RQST_SNO
+					   AND D.STD_APL_YN = 'Y'
+	   )
+	   AND EXISTS (
+                    SELECT 1 FROM WAM_SDITM B 
+                    WHERE B.SDITM_LNM = RTRIM(A.LDM_ATTR_LNM, '_0123456789')
+                      AND B.REG_TYP_CD IN ('C','U')
+       
+       )
+  </update>
+  
+  <update id="updateSditm" parameterType="string">
+  --컬럼명, 데이터 타입, 길이, 소수점이 같을 경우 표준항목ID를 업데이트 한다.
+  UPDATE /* WaqLdmAttrMapper.updateSditm */
+  WAQ_LDM_ATTR A
+  	 SET (SDITM_ID) = (
+  	 					SELECT DISTINCT SDITM_ID  	 					    
+  	 					  FROM WAM_SDITM B 
+  	 					       INNER JOIN WAA_INFO_TYPE C
+  	 					          ON C.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')   	 					         
+  	 					         AND C.INFOTP_ID = B.INFOTP_ID 
+				  		       LEFT JOIN WAM_DMN D
+				  		         ON D.DMN_ID    = B.DMN_ID     
+				  		        AND D.INFOTP_ID = B.INFOTP_ID    
+				  		 WHERE 1 = 1
+				  		   AND B.SDITM_LNM 	= RTRIM(A.LDM_ATTR_LNM, '_0123456789') 				  		  
+  	 			    )
+  	WHERE A.RQST_NO = #{rqstNo}
+	  AND A.SDITM_ID IS NULL
+	  AND 'Y' = (SELECT IFNULL(STD_APL_YN,'N') 
+	               FROM WAQ_LDM_ENTY Z
+	              WHERE Z.RQST_NO = #{rqstNo}
+	                AND Z.RQST_SNO = A.RQST_SNO   
+	            )
+  </update>
+  
+  <update id="updatePkOrd" parameterType="string">
+  --PK가 Y인 경우 PK순서를 컬럼순서로 업데이트...
+  UPDATE /* WaqLdmAttrMapper.updatePkOrd */
+  		WAQ_LDM_ATTR X
+     SET X.PK_ORD = X.ATTR_ORD
+   WHERE X.RQST_NO = #{rqstNo}
+     AND X.PK_YN = 'Y'
+     AND X.PK_ORD IS NULL 
+  </update>
+  
+  <insert id="checkDupCol" parameterType="map">
+  
+  	/* WaqLdmAttrMapper.checkDupCol */
+  	
+  	<include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSnoSql"/>
+	--검증쿼리 : 중복 컬럼(PC001)
+    AND EXISTS (SELECT 1
+                  FROM WAQ_LDM_ATTR D
+                 WHERE A.RQST_NO = D.RQST_NO
+                   AND A.RQST_SNO = D.RQST_SNO
+                   AND A.LDM_ATTR_LNM = D.LDM_ATTR_LNM
+                   AND A.RQST_DTL_SNO != D.RQST_DTL_SNO
+                )
+  </insert>  
+
+  <insert id="checkNotExistCol" parameterType="map">
+  
+  	/* WaqLdmAttrMapper.checkNotExistCol */
+  	
+  	<include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSnoSql"/>
+	--검증쿼리 : 삭제대상 미존재 컬럼 (PC002)
+      AND A.RQST_DCD = 'DD'
+      AND NOT EXISTS (SELECT 1
+                        FROM WAM_LDM_ATTR D
+                             INNER JOIN WAM_LDM_ENTY E
+                                ON E.LDM_ENTY_ID = D.LDM_ENTY_ID
+                               AND E.REG_TYP_CD IN ('C','U')
+                             INNER JOIN WAQ_LDM_ENTY F
+                                ON F.FULL_PATH    = E.FULL_PATH
+                               AND F.LDM_ENTY_LNM = E.LDM_ENTY_LNM
+                        WHERE F.RQST_NO  = A.RQST_NO
+                          AND F.RQST_SNO = A.RQST_SNO
+                          AND D.LDM_ATTR_LNM = A.LDM_ATTR_LNM
+                      )
+  </insert>
+  
+  <insert id="checkRequestCol" parameterType="map">
+  
+  	/* WaqLdmAttrMapper.checkRequestCol */
+  	
+  	<include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSnoSql"/>
+	--검증쿼리 : 요청중인 컬럼(요청중인 테이블일 경우 전체 적용...) (PC003)
+	AND EXISTS (
+    		SELECT 1 
+    		  FROM WAQ_MSTR E
+                   INNER JOIN WAQ_LDM_ENTY D
+                   	  ON E.RQST_NO = D.RQST_NO
+                     AND E.RQST_NO != #{rqstNo}
+                     AND E.RQST_STEP_CD = 'Q'
+			         AND IFNULL(D.RVW_STS_CD, 0) != '2'
+                   INNER JOIN WAQ_LDM_ENTY F
+                      ON F.LDM_ENTY_LNM = D.LDM_ENTY_LNM
+                     AND F.FULL_PATH	= D.FULL_PATH
+             WHERE F.RQST_NO  = A.RQST_NO
+               AND F.RQST_SNO = A.RQST_SNO
+	)
+  </insert>
+  
+  <insert id="checkColNameLength" parameterType="map">
+  
+  	/* WaqLdmAttrMapper.checkColNameLength */
+  	
+  	 <include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSnoSql"/>
+	  --검증쿼리 : 컬럼명 길이 체크(PC004)
+      <![CDATA[
+      AND A.RQST_DCD = 'CU'
+      AND LENGTH(A.LDM_ATTR_LNM) > 30
+      ]]>
+  </insert>
+  
+  <insert id="checkNoDataType" parameterType="map">
+  
+  	/* WaqLdmAttrMapper.checkNoDataType */
+  	
+  	 <include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSnoSql"/>
+  	 --검증쿼리 : 데이터 타입이 없는 경우 체크(PC005)
+  	 AND ( A.DATA_TYPE IS NULL OR A.DATA_TYPE = '' ) 
+  
+  </insert>
+  
+  <insert id="checkDupColPnm" parameterType="map">
+  
+  	/* WaqLdmAttrMapper.checkDupColPnm */
+  	
+  	 <include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSnoSql"/>
+  	 --검증쿼리 : 컬럼 영문명 중복 체크 (PC006)
+    AND EXISTS (SELECT 1
+                  FROM WAQ_LDM_ATTR D
+                 WHERE A.RQST_NO      = D.RQST_NO
+                   AND A.RQST_SNO     = D.RQST_SNO                  
+                   AND A.LDM_ATTR_LNM = D.LDM_ATTR_LNM
+                   AND A.RQST_DTL_SNO != D.RQST_DTL_SNO
+                )
+  	
+  </insert>
+  <insert id="checkNoColPnm" parameterType="map">
+  
+  	/* WaqLdmAttrMapper.checkNoColPnm */
+  	
+  	 <include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSnoSql"/>
+  	 --검증쿼리 : 컬럼 물리명 미존재(PC014)
+    AND A.LDM_ATTR_LNM IS NULL
+  	
+  </insert>
+  
+
+  <insert id="checkDupColLnm" parameterType="map">
+  
+  	/* WaqLdmAttrMapper.checkDupColLnm */
+  	
+  	 <include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSnoSql"/>
+  	 --검증쿼리 : 컬럼 한글명 중복 체크 (PC007)
+  	AND A.REG_TYP_CD IN ('C', 'U')
+    AND EXISTS (SELECT 1
+                  FROM WAQ_LDM_ATTR D
+                 WHERE A.RQST_NO  = D.RQST_NO
+                   AND A.RQST_SNO = D.RQST_SNO
+                   AND A.LDM_ATTR_LNM = D.LDM_ATTR_LNM                    
+                   AND A.RQST_DTL_SNO != D.RQST_DTL_SNO
+                   AND D.REG_TYP_CD IN ('C', 'U')
+                )
+  	
+  </insert>
+  
+  <insert id="checkNoSditm" parameterType="map">
+  
+  	/* WaqLdmAttrMapper.checkNoSditm */
+  	
+  	 <include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSnoSql"/>
+  	 --검증쿼리 : 표준적용인데 표준항목이 없는 경우 체크(PC008)
+  	 AND A.RQST_DCD = 'CU'
+  	 AND A.SDITM_ID IS NULL
+  	 AND EXISTS (SELECT 1 
+  	               FROM WAQ_LDM_ENTY D 
+  	 			  WHERE D.RQST_NO = A.RQST_NO 
+  	 			    AND D.RQST_SNO = A.RQST_SNO
+  	 			    AND D.STD_APL_YN = 'Y'
+  	 			 )
+  
+  </insert>
+  
+  <insert id="checkDataLenScal" parameterType="map">
+  
+  	/* WaqLdmAttrMapper.checkDataLenScal */
+  	
+  	 <include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSnoSql"/>
+	  	 --검증쿼리 : 타입, 데이터길이,소수점 체크 (PC015)
+	  	 AND A.RQST_DCD = 'CU'
+	  	 AND A.SDITM_ID IS NOT NULL
+	  	 AND NOT EXISTS (SELECT 1
+		  	               FROM WAM_SDITM X
+		  	                    INNER JOIN WAA_INFO_TYPE Y
+		  	                       ON Y.EXP_DTM = STR_TO_DATE('9999-12-31','%Y-%m-%d')
+		  	                      AND Y.INFOTP_ID = X.INFOTP_ID 
+		  	              WHERE X.SDITM_LNM = RTRIM(A.LDM_ATTR_LNM,'_0123456789') 
+		  	                AND Y.DATA_TYPE = A.DATA_TYPE
+		  	                AND IFNULL(Y.DATA_LEN,0)  = IFNULL(A.DATA_LEN,0)
+		  	                AND IFNULL(Y.DATA_SCAL,0) = IFNULL(A.DATA_SCAL,0)
+		  	             )	  	            
+		 AND EXISTS (SELECT 1 
+	  	               FROM WAQ_LDM_ENTY D 
+	  	 			  WHERE D.RQST_NO  = A.RQST_NO 
+	  	 			    AND D.RQST_SNO = A.RQST_SNO
+	  	 			    AND D.STD_APL_YN = 'Y'
+	  	 			 )	  	            
+  	
+  </insert>
+  
+  <insert id="checkPkNotNull" parameterType="map">
+  
+  	/* WaqLdmAttrMapper.checkPkNotNull */
+  	
+  	 <include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSnoSql"/>
+  	 --검증쿼리 : PK컬럼일 경우 NOT NULL 여부 체크 (PC009)
+  	 AND A.RQST_DCD = 'CU'
+  	 AND A.PK_YN = 'Y'
+  	 AND A.NONUL_YN != 'Y' 
+  
+  </insert>
+  
+  <insert id="checkColOrdDup" parameterType="map">
+  
+  	/* WaqLdmAttrMapper.checkColOrdDup */
+  	
+  	 <include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSnoSql"/>
+  	 --검증쿼리 : 컬럼순서 중복 체크 (PC010)
+    AND A.RQST_DCD = 'CU'
+    AND EXISTS (SELECT 1
+                FROM WAQ_LDM_ATTR D
+                WHERE A.RQST_NO = D.RQST_NO
+                  AND A.RQST_SNO = D.RQST_SNO
+                  AND A.ATTR_ORD = D.ATTR_ORD
+                  AND D.RQST_DCD = 'CU'
+                  AND A.RQST_DTL_SNO != D.RQST_DTL_SNO)
+  	
+  </insert>
+  
+  <insert id="checkPKColOrdDup" parameterType="map">
+  
+  	/* WaqLdmAttrMapper.checkPKColOrdDup */
+  	
+  	 <include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSnoSql"/>
+  	 --검증쿼리 : PK컬럼순서 중복 체크 (PC011)
+  	AND A.RQST_DCD = 'CU'
+  	AND A.PK_YN = 'Y'
+  	AND A.PK_ORD IS NOT NULL
+    AND EXISTS (SELECT 1
+                FROM WAQ_LDM_ATTR D
+                WHERE A.RQST_NO = D.RQST_NO
+                  AND A.RQST_SNO = D.RQST_SNO
+                  AND A.PK_ORD = D.PK_ORD
+                  AND D.RQST_DCD = 'CU'
+                  AND A.RQST_DTL_SNO != D.RQST_DTL_SNO)
+  	
+  </insert>
+  <insert id="checkPKOrdNonul" parameterType="map">
+  
+  	/* WaqLdmAttrMapper.checkPKOrdNonul */
+  	
+  	 <include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSnoSql"/>
+  	 --검증쿼리 : PK여부 Y일때 PK순서, NOTNULL 여부 체크 (PC012)
+  	AND A.RQST_DCD = 'CU'
+  	AND A.PK_YN = 'Y'
+  	AND A.PK_ORD IS NULL
+  	AND A.NONUL_YN IS NULL
+  	
+  </insert>
+  <insert id="checkColOrdNonul" parameterType="map">
+  
+  	/* WaqLdmAttrMapper.checkColOrdNonul */
+  	
+  	 <include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSnoSql"/>
+  	 --검증쿼리 : 컬럼순서 공백 체크 (PC013)
+  	AND A.RQST_DCD = 'CU'
+  	AND A.ATTR_ORD IS NULL
+  	
+  </insert>
+  
+  <insert id="checkNotChgData" parameterType="map">
+  
+  	/* WaqLdmAttrMapper.checkNotChgData */
+  	
+<!--   	<include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSnoSql"/> -->
+  	<include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.updateVrfNotChg"/>
+	--검증쿼리 : 변경사항 없을경우 (PC000)
+      AND A.REG_TYP_CD = 'U'
+      AND EXISTS (SELECT 1
+            FROM WAM_LDM_ENTY D 
+                 INNER JOIN WAM_LDM_ATTR E
+                    ON D.LDM_ENTY_ID = E.LDM_ENTY_ID
+                 INNER JOIN WAQ_LDM_ENTY F
+                    ON F.FULL_PATH = D.FULL_PATH
+                   AND F.LDM_ENTY_LNM = D.LDM_ENTY_LNM
+           WHERE F.RQST_NO  = A.RQST_NO
+             AND F.RQST_SNO = A.RQST_SNO
+             AND A.LDM_ATTR_LNM = E.LDM_ATTR_LNM              
+	  	     AND IFNULL(A.ATTR_ORD, 0)      = IFNULL(E.ATTR_ORD, 0)
+			 AND IFNULL(A.DATA_TYPE, '_')   = IFNULL(E.DATA_TYPE, '_')
+			 AND IFNULL(A.DATA_LEN, 0)      = IFNULL(E.DATA_LEN, 0)
+			 AND IFNULL(A.DATA_SCAL, 0)     = IFNULL(E.DATA_SCAL, 0)
+			 AND IFNULL(A.PK_YN, 'N')       = IFNULL(E.PK_YN, 'N')
+			 AND IFNULL(A.PK_ORD, 0)        = IFNULL(E.PK_ORD, 0)
+			 AND IFNULL(A.NONUL_YN, 'N')    = IFNULL(E.NONUL_YN, 'N')
+			 AND IFNULL(A.DEFLT_VAL, '_')   = IFNULL(E.DEFLT_VAL, '_')
+			 AND IFNULL(A.OBJ_DESCN, '_')   = IFNULL(E.OBJ_DESCN, '_')			
+			 AND NOT EXISTS (SELECT 1 
+			                   FROM WAQ_RQST_VRF_DTLS V 
+			                  WHERE V.RQST_NO      = A.RQST_NO 
+			                    AND V.RQST_SNO     = A.RQST_SNO 
+			                    AND V.RQST_DTL_SNO = A.RQST_DTL_SNO
+			                 )	
+          )
+  </insert>
+  
+
+  <insert id="checkNumberLenDef" parameterType="map">
+  
+  	/* WaqLdmAttrMapper.checkNumberLenDef */
+  	
+  	 <include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSnoSql"/>
+  	 --검증쿼리 : default 값 0 체크 (PC015)
+  	AND A.RQST_DCD = 'CU'
+  	AND A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+  	AND A.DATA_TYPE LIKE '%NUMBER%'
+    --AND (A.DEFLT_VAL != 0 OR NONUL_YN ='N')
+    AND IFNULL(NONUL_YN,'N') ='N'
+    AND IFNULL(A.DEFLT_VAL,-1) !=0
+    AND A.LDM_ATTR_LNM NOT LIKE '%#_SRNO' ESCAPE '#' --'%일련번호'
+    AND A.LDM_ATTR_LNM NOT LIKE '%#_NO' ESCAPE '#' --번호
+    AND EXISTS (SELECT 1 FROM WAQ_LDM_ENTY Z
+                WHERE A.RQST_NO = Z.RQST_NO
+                AND A.RQST_SNO = Z.RQST_SNO
+                AND Z.STD_APL_YN ='Y')
+    
+  </insert>
+   <insert id="checkCommonColNotNull" parameterType="map">
+   
+   	/* WaqLdmAttrMapper.checkCommonColNotNull */
+   	
+  	 <include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSnoSql"/>
+  	 --검증쿼리 : 시스템공통컬럼 NOT NULL 체크 (PC016)
+  	AND A.RQST_DCD = 'CU'
+  	AND A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+    AND A.LDM_ATTR_LNM IN ('SYS_REG_DTTM','SYS_RGSR_EMNO','SYS_REG_BRCD','SYS_CHG_DTTM','SYS_EDIR_EMNO','SYS_CHG_BRCD'	)
+    AND A.NONUL_YN = 'N'
+
+    
+  </insert>
+  
+  <update id="updateNotChgData" parameterType="map">
+  --검증결과를 변경사항 없슴으로 업데이트한다.
+  UPDATE 	/* WaqLdmAttrMapper.updateNotChgData */
+  			WAQ_LDM_ATTR A
+     SET A.VRF_CD = '5'
+   WHERE A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+     AND A.REG_TYP_CD = 'U'
+     AND EXISTS (SELECT 1
+                   FROM WAM_LDM_ENTY D 
+                        INNER JOIN WAM_LDM_ATTR E
+                          ON D.LDM_ENTY_ID = E.LDM_ENTY_ID
+                        INNER JOIN WAQ_LDM_ENTY F
+                          ON F.FULL_PATH = D.FULL_PATH
+                         AND F.LDM_ENTY_LNM = D.LDM_ENTY_LNM
+                  WHERE F.RQST_NO     = A.RQST_NO
+                    AND F.RQST_SNO    = A.RQST_SNO
+                    AND A.LDM_ATTR_LNM = E.LDM_ATTR_LNM
+                    AND IFNULL(A.LDM_ATTR_LNM, '_') = IFNULL(E.LDM_ATTR_LNM	, '_')
+	  	            AND IFNULL(A.ATTR_ORD    , 0)   = IFNULL(E.ATTR_ORD      , 0)
+		   	        AND IFNULL(A.DATA_TYPE  , '_') = IFNULL(E.DATA_TYPE      , '_')
+		   	        AND IFNULL(A.DATA_LEN   , 0)   = IFNULL(E.DATA_LEN      , 0)
+		   	        AND IFNULL(A.DATA_SCAL  , 0)   = IFNULL(E.DATA_SCAL      , 0)
+		   	        AND IFNULL(A.PK_YN      , '_') = IFNULL(E.PK_YN      , '_')
+		   	        AND IFNULL(A.PK_ORD     , 0)   = IFNULL(E.PK_ORD      , 0)
+		   	        AND IFNULL(A.NONUL_YN   , '_') = IFNULL(E.NONUL_YN      , '_')
+		   	        AND IFNULL(A.DEFLT_VAL  , '_') = IFNULL(E.DEFLT_VAL      , '_')
+		   	        AND IFNULL(A.OBJ_DESCN  , '_') = IFNULL(E.OBJ_DESCN      , '_') 		   	        
+                 )
+  </update> 
+  
+  <!-- 적재 SQL -->
+  <!--   적재쿼리 
+    selectWaqC
+    
+	int updateWaqCUD(@Param("rqstNo") String rqstNo);
+	int updateWaqC(@Param("rqstNo") String rqstNo);
+	int deleteWAM(@Param("rqstNo") String rqstNo);
+	int insertWAM(@Param("rqstNo") String rqstNo);
+	int updateWAH(@Param("rqstNo") String rqstNo);
+	int insertWAH(@Param("rqstNo") String rqstNo);
+-->
+	<sql id="wam_col_list">
+		  A.LDM_ATTR_LNM		
+		, A.LDM_ENTY_ID, A.SDITM_ID
+		, A.ATTR_ORD
+		, A.DATA_TYPE, A.DATA_LEN, A.DATA_SCAL
+		, A.PK_YN, A.PK_ORD
+		, A.NONUL_YN, A.DEFLT_VAL
+		, A.RQST_NO, A.RQST_SNO, A.RQST_DTL_SNO, A.OBJ_DESCN 
+	    , A.OBJ_VERS, A.REG_TYP_CD, A.FRS_RQST_DTM, A.FRS_RQST_USER_ID, A.RQST_DTM, A.RQST_USER_ID, A.APRV_DTM, A.APRV_USER_ID	    
+	</sql>
+	
+	<sql id="wam_ins_col_list">
+		  LDM_ATTR_LNM		
+		, LDM_ENTY_ID, SDITM_ID
+		, ATTR_ORD
+		, DATA_TYPE, DATA_LEN, DATA_SCAL
+		, PK_YN, PK_ORD
+		, NONUL_YN, DEFLT_VAL
+		, RQST_NO, RQST_SNO, RQST_DTL_SNO, OBJ_DESCN 
+	    , OBJ_VERS, REG_TYP_CD, FRS_RQST_DTM, FRS_RQST_USER_ID, RQST_DTM, RQST_USER_ID, APRV_DTM, APRV_USER_ID 	    
+	</sql>
+	 
+
+	<select id="selectWaqC" parameterType="map" resultMap="BaseResultMap">
+	--신규 적재 대상 추출
+	SELECT /* WaqLdmAttrMapper.selectWaqC */
+		B.* 
+	  FROM WAQ_LDM_ENTY A
+	       INNER JOIN WAQ_LDM_ATTR B
+	          ON A.RQST_NO = B.RQST_NO
+             AND A.RQST_SNO = B.RQST_SNO
+   	 WHERE A.RQST_NO = #{rqstNo}
+   	   AND A.RVW_STS_CD = '1'  --승인
+   	   AND A.RQST_DCD = 'CU'
+       AND B.REG_TYP_CD = 'C'
+       AND B.VRF_CD = '1' --등록가능
+	</select>
+	
+	<update id="updateidByKey" parameterType="kr.wise.meta.ldm.service.WaqLdmAttr">
+     --신규 적재 대상 ID 업데이트
+     UPDATE /* WaqLdmAttrMapper.updateidByKey */
+     		WAQ_LDM_ATTR 
+        SET LDM_ATTR_ID = #{ldmAttrId,jdbcType=VARCHAR}
+  	  WHERE RQST_NO       = #{rqstNo,jdbcType=VARCHAR}
+        AND RQST_SNO     = #{rqstSno,jdbcType=DECIMAL}
+        AND RQST_DTL_SNO = #{rqstDtlSno}	
+	</update>
+	
+	<update id="updateWaqCUD" parameterType="map">
+   	--WAQ ID, VERS 등을 업데이트...
+   	UPDATE 	/* WaqLdmAttrMapper.updateWaqCUD */
+   			WAQ_LDM_ATTR A
+   	   SET (LDM_ATTR_ID, LDM_ENTY_ID,  OBJ_VERS, FRS_RQST_DTM, FRS_RQST_USER_ID) = (
+   	   		SELECT
+   	   			  D.LDM_ATTR_ID
+   	   			, B.LDM_ENTY_ID
+   	   			, IFNULL(D.OBJ_VERS, 0) + 1 AS OBJ_VERS
+				, D.FRS_RQST_DTM
+				, D.FRS_RQST_USER_ID
+			  FROM WAQ_LDM_ENTY B
+	      	       INNER JOIN WAM_LDM_ATTR D
+	      	         ON B.LDM_ENTY_ID = D.LDM_ENTY_ID
+	      	 WHERE B.RQST_NO = A.RQST_NO
+			   AND B.RQST_SNO = A.RQST_SNO
+			   AND D.LDM_ATTR_LNM = A.LDM_ATTR_LNM
+			   AND B.RVW_STS_CD = '1' --승인대상만...
+   	   	   )
+	WHERE A.RQST_NO = #{rqstNo}
+	  AND A.VRF_CD = '1' --등록가능
+	  AND EXISTS (
+	  	  SELECT 1
+	  		FROM WAQ_LDM_ENTY B
+	      	     INNER JOIN WAM_LDM_ATTR D
+	      	        ON B.LDM_ENTY_ID = D.LDM_ENTY_ID
+	      	 WHERE B.RQST_NO = A.RQST_NO
+			   AND B.RQST_SNO = A.RQST_SNO
+			   AND D.LDM_ATTR_LNM = A.LDM_ATTR_LNM 
+			   AND B.RVW_STS_CD = '1' --승인대상만...
+	  )   	   
+   	</update>
+   	
+   <update id="updateWaqId" parameterType="map">
+   --주제영역 ID, 테이블 ID 업데이트...
+   	UPDATE 	/* WaqLdmAttrMapper.updateWaqId */
+   			WAQ_LDM_ATTR X 
+   	   SET (SUBJ_ID, LDM_ENTY_ID, APRV_DTM, APRV_USER_ID) = (
+		SELECT A.SUBJ_ID, A.LDM_ENTY_ID, NOW(), A.APRV_USER_ID
+		  FROM	WAQ_LDM_ENTY A 
+	     WHERE A.RQST_NO = X.RQST_NO
+	       AND A.RQST_SNO = X.RQST_SNO
+	       AND A.RVW_STS_CD = '1' --승인대상만...	
+	) 
+	WHERE X.RQST_NO = #{rqstNo}
+	  AND X.VRF_CD = '1' --등록가능
+   </update>   	
+   <delete id="deleteWAM" parameterType="map">
+    --WAM 삭제 (등록유형코드가REG_TYP_CD 변경, 삭제일 경우)
+	DELETE /* WaqLdmAttrMapper.deleteWAM */
+	FROM WAM_LDM_ATTR A
+	 WHERE EXISTS (
+		SELECT 1 
+		  FROM WAQ_LDM_ENTY B 
+		       INNER JOIN WAQ_LDM_ATTR C
+	             ON B.RQST_NO  = C.RQST_NO
+	            AND B.RQST_SNO = C.RQST_SNO
+		 WHERE C.RQST_NO = #{rqstNo}
+	       AND B.LDM_ENTY_ID  = A.LDM_ENTY_ID
+	       AND C.LDM_ATTR_ID  = A.LDM_ATTR_ID
+	       AND C.LDM_ATTR_LNM = A.LDM_ATTR_LNM
+	       AND B.RVW_STS_CD = '1'
+	       AND C.VRF_CD = '1'
+	)
+   </delete>
+   
+   <insert id="insertWAM" parameterType="map">
+   	--WAM 추가 (WAQ 내용을 추가, REG_TYP_CD 가 신규,변경일 경우)
+	INSERT 	/* WaqLdmAttrMapper.insertWAM */
+			INTO WAM_LDM_ATTR
+	(
+	   LDM_ATTR_ID
+	  , <include refid="wam_ins_col_list"/>
+	)
+	SELECT A.LDM_ATTR_ID
+	     , <include refid="wam_col_list"/>
+	  FROM WAQ_LDM_ATTR A
+	       INNER JOIN WAQ_LDM_ENTY B 
+	          ON A.RQST_NO  = B.RQST_NO
+	         AND A.RQST_SNO = B.RQST_SNO
+	 WHERE A.RQST_NO = #{rqstNo}
+	   AND A.VRF_CD = '1'
+	   AND A.REG_TYP_CD IN ('C', 'U')
+	   AND B.RVW_STS_CD = '1'
+   </insert>
+   
+   <update id="updateWAH"  parameterType="map">
+   	--WAH 이력 만료...
+	UPDATE 	/* WaqLdmAttrMapper.updateWAH */
+			WAH_LDM_ATTR A 
+	   SET EXP_DTM = NOW()
+	 WHERE EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	   AND REG_TYP_CD IN ('C','U')
+	   AND EXISTS (SELECT 1 
+	                 FROM WAQ_LDM_ENTY B 
+	                       INNER JOIN WAQ_LDM_ATTR C
+	                         ON B.RQST_NO  = C.RQST_NO
+	                        AND B.RQST_SNO = C.RQST_SNO
+	                 WHERE C.RQST_NO = #{rqstNo}
+	                   AND C.LDM_ENTY_ID = A.LDM_ENTY_ID
+	                   AND C.LDM_ATTR_ID = A.LDM_ATTR_ID
+	                   AND C.VRF_CD = '1'
+	                   AND B.RVW_STS_CD = '1'
+	               )
+	  
+   </update>
+   
+   <insert id="insertWAH"  parameterType="map">
+   	--WAH이력 적재...
+	INSERT 	/* WaqLdmAttrMapper.insertWAH */
+			INTO WAH_LDM_ATTR
+	(
+	    LDM_ATTR_ID
+	  , EXP_DTM
+      , STR_DTM 
+      , <include refid="wam_ins_col_list"/>
+	)
+	SELECT 
+			A.LDM_ATTR_ID
+		  , STR_TO_DATE('9999-12-31', '%Y-%m-%d') AS EXP_DTM
+		  , NOW() AS STR_DTM 
+		  , <include refid="wam_col_list"/>
+	  FROM WAQ_LDM_ATTR A
+	       INNER JOIN WAQ_LDM_ENTY B
+	         ON B.RQST_NO = A.RQST_NO
+	        AND B.RQST_SNO = A.RQST_SNO
+	 WHERE A.RQST_NO = #{rqstNo}
+	   AND A.VRF_CD = '1'
+	   AND B.RVW_STS_CD = '1'
+   </insert>   
+   
+   <insert id="insertByRqstMartCol" parameterType="kr.wise.meta.ldm.service.WaqLdmEnty">
+    --테이블 추가시 WAM에 존재하는 컬럼 추가한다.
+  	INSERT 	/* WaqLdmAttrMapper.insertByRqstMartCol */
+  			INTO WAQ_LDM_ATTR(
+	      RQST_NO, RQST_SNO, RQST_DTL_SNO, LDM_ATTR_ID, LDM_ATTR_LNM, LDM_ATTR_LNM, RQST_DCD
+	    , LDM_ENTY_ID, LDM_ENTY_LNM, SUBJ_ID, SDITM_ID, ATTR_ORD, DATA_TYPE, DATA_LEN, DATA_SCAL, PK_YN, PK_ORD, NONUL_YN, DEFLT_VAL
+	    , OBJ_DESCN, OBJ_VERS, FRS_RQST_DTM, FRS_RQST_USER_ID, RQST_DTM, RQST_USER_ID
+	)
+	
+	  SELECT    DISTINCT SE.RQST_NO, RQST_SNO
+	              ,(SELECT IFNULL(MAX(RQST_DTL_SNO), 0) FROM WAQ_LDM_ATTR WHERE RQST_NO = #{rqstNo} AND RQST_SNO = #{rqstSno} ) + ROWNUM AS RQST_DTL_SNO
+	              ,'' AS LDM_ATTR_ID
+	              ,MMART7.WISE_M7_INFO.GET_COLUMN_NAME(J.OBJECTID) AS LDM_ATTR_LNM
+	              ,MMART7.WISE_M7_INFO.GET_ATTRIBUTE_NAME(J.OBJECTID) ASLDM_ATTR_LNM
+	              ,'CU' AS RQST_DCD
+	              ,'' AS LDM_ENTY_ID
+				  ,TRIM(IFNULL(I.STRINGVALUE, H.STRINGVALUE)) AS LDM_ENTY_LNM
+				  ,'' AS SUBJ_ID
+				  ,'' AS SDITM_ID
+				  ,K.SEQUENCENUMBER + 1 AS ATTR_ORD
+				  ,UPPER(MMART7.WISE_M7_INFO.GET_LOGICAL_DATATYPE(J.OBJECTID)) AS DATA_TYPE
+				  ,MMART7.WISE_M7_INFO.GET_LOGICAL_DATALENGTH(J.OBJECTID) AS DATA_LENGTH
+        		  ,'' AS DATA_SCALE
+        		  ,'' AS IS_PK_YN
+        		  ,CASE WHEN MMART7.WISE_M7_INFO.GET_KEY_TYPE('PK', J.OBJECTID) = 'Y' THEN K.SEQUENCENUMBER + 1 END AS PK_POSITION
+        		  ,CASE WHEN IFNULL(UPPER(MMART7.WISE_M7_INFO.GET_NULL(J.OBJECTID)),'NULL') = 'NULL' THEN 'N' ELSE 'Y' END AS NOT_NULL_YN
+        		  ,MMART7.WISE_M7_INFO.GET_DEFAULT_VALUE(J.OBJECTID) AS DATA_DEFAULT
+        		  ,CASE WHEN MMART7.WISE_M7_INFO.GET_ATTR_DEFINITION_CNT(J.OBJECTID) > 0 THEN MMART7.WISE_M7_INFO.get_attribute_definition(J.OBJECTID) ELSE  M.STRINGVALUE END AS DESCRIPTION
+        		  ,SE.OBJ_VERS AS OBJ_VERS
+        		  ,SE.FRS_RQST_DTM
+        		  , SE.FRS_RQST_USER_ID
+        		  , NOW()
+        		  , SE.RQST_USER_ID
+--			      ,MMART7.WISE_M7_INFO.GET_LOGICALONLY(J.OBJECTID) AS IS_LDMONLY
+--			      ,MMART7.WISE_M7_INFO.GET_KEY_TYPE('FK', J.OBJECTID) AS IS_FK_YN
+--			      --,CASE MMART7.WISE_M7_INFO.GET_KEY_TYPE('PK', J.OBJECTID) WHEN 'Y' THEN 'N' ELSE CASE WHEN L.INTVALUE = 1 THEN 'N' ELSE 'Y' END END AS IS_NULL_YN
+--			      ,MMART7.WISE_M7_INFO.GET_UDP_INFO(d.objectid, j.objectid, '$UDP_OF_COL_TYPE_NM', 'Logical', 'Attribute') AS OF_COL_TYPE
+--			      ,MMART7.WISE_M7_INFO.GET_UDP_INFO(d.objectid, j.objectid, '$UDP_OF_DPL_TAB_COL_NM', 'Logical', 'Attribute') AS OF_DPL_TAB_COL
+--			      ,MMART7.WISE_M7_INFO.GET_UDP_INFO(d.objectid, j.objectid, '$UDP_OF_DRV_DTL_NM', 'Logical', 'Attribute') AS OF_DRV_DTL
+--			      ,MMART7.WISE_M7_INFO.GET_UDP_INFO(d.objectid, j.objectid, '$UDP_IQUNIQUE_VALUE_NM', 'Logical', 'Attribute') AS IQUNIQUE_VALUE
+			FROM  MMART7.M7LIBRARY A
+			      , MMART7.M7OBJECT B
+			      , MMART7.M7OBJECT C
+			      , MMART7.M7LIBRARY D
+			      , MMART7.M7OBJECT E
+			      , MMART7.M7LIBRARY F
+			      , MMART7.M7OBJECTPROPERTY G
+			      , MMART7.M7OBJECTPROPERTY H
+			      , MMART7.M7OBJECTPROPERTY I
+			      , MMART7.M7OBJECT J
+			      , MMART7.M7OBJECTPROPERTY K
+			      , MMART7.M7OBJECTPROPERTY L
+			      , MMART7.M7OBJECTPROPERTY M
+        	      , WAQ_LDM_ENTY 	SE
+			WHERE A.OBJECTID = B.OBJECTID
+			  AND B.CLASSID = 2 AND B.ENDVERSION IS NULL
+			  AND A.OBJECTID = C.CONTAINERID
+			  AND C.CLASSID = 1075838978
+			  AND C.ENDVERSION IS NULL
+			  AND C.OBJECTID = D.OBJECTID
+			  AND D.OBJECTID = E.CONTAINERID
+			  AND E.CLASSID = 1075839014
+			  AND E.ENDVERSION IS NULL
+			  AND E.OBJECTID = F.OBJECTID
+			  AND F.OBJECTID = G.OBJECTID
+			  AND G.PROPERTYID = 1075849443
+			  AND G.VALUEOBJECTID = H.OBJECTID
+			  AND H.PROPERTYID = 1073742126
+			  AND H.OBJECTID = I.OBJECTID(+)
+			  AND I.PROPERTYID(+) = 1075849176
+			  AND H.OBJECTID = J.CONTEXTID
+			  AND J.CLASSID||'' = 1075838981
+			  AND J.ENDVERSION IS NULL
+			  AND J.OBJECTID = K.VALUEOBJECTID
+			  AND K.OBJECTID = H.OBJECTID
+			  AND K.PROPERTYID = 1075850197
+			  AND J.OBJECTID = L.OBJECTID(+)
+			  AND L.PROPERTYID(+) = 1075849062
+			  AND J.OBJECTID = M.OBJECTID(+)
+			  AND M.PROPERTYID(+) = 1073742125
+              AND F.OBJECTNAME != '&lt;Main Subject Area&gt;'
+--			  AND A.OBJECTNAME 	=	SE.MDL_LNM
+--			  AND D.OBJECTNAME 	=	SE.UPP_SUBJ_LNM
+--			  AND F.OBJECTNAME 	=	SE.SUBJ_LNM
+			  AND SE.RQST_NO	=	#{rqstNo}
+			  AND SE.RQST_SNO    =   #{rqstSno}
+--			  AND IFNULL(H.OBJECTID, I.OBJECTID) =	SE.ENTITY_ID
+              AND IFNULL(H.STRINGVALUE, I.STRINGVALUE) = SE.PDM_TBL_LNM
+			  AND MMART7.WISE_M7_INFO.GET_LOGICALONLY(J.OBJECTID) = 0
+--			  AND SE.ORGL_TYPE ='U'
+			  ORDER BY LDM_ENTY_LNM, ATTR_ORD
+  </insert>
+  
+       <insert id="insertWaqColRejected" parameterType="map" >
+  	       INSERT 	/* WaqLdmAttrMapper.insertWaqColRejected */
+  	       			INTO WAQ_LDM_ATTR(
+                     	RQST_NO
+                       ,RQST_SNO
+                       ,RQST_DTL_SNO
+                       ,LDM_ATTR_ID
+                       ,LDM_ATTR_LNM
+                       ,LDM_ATTR_LNM
+                       ,BF_LDM_ATTR_LNM
+                       ,RQST_DCD
+                       ,VRF_CD
+                       ,VRF_RMK
+                       ,LDM_ENTY_ID
+                       ,LDM_ENTY_LNM
+                       ,MDL_LNM
+                       ,UPP_SUBJ_LNM
+                       ,SUBJ_ID
+                       ,SUBJ_LNM
+                       ,SDITM_ID
+                       ,ATTR_ORD
+                       ,DATA_TYPE
+                       ,DATA_LEN
+                       ,DATA_SCAL
+                       ,PK_YN
+                       ,PK_ORD
+                       ,NONUL_YN
+                       ,DEFLT_VAL
+                       ,OBJ_DESCN
+                       ,OBJ_VERS
+                       ,REG_TYP_CD
+                       ,FRS_RQST_DTM
+                       ,FRS_RQST_USER_ID
+                       ,RQST_DTM
+                       ,RQST_USER_ID
+                       ,APRV_DTM
+                       ,APRV_USER_ID
+  	       )
+  	       SELECT 
+  	                   #{reqmst.rqstNo,jdbcType=VARCHAR}
+                       ,A.RQST_SNO
+                       ,A.RQST_DTL_SNO
+                       ,A.LDM_ATTR_ID
+                       ,A.LDM_ATTR_LNM
+                       ,A.LDM_ATTR_LNM
+                       ,A.BF_LDM_ATTR_LNM
+                       ,A.RQST_DCD
+                       ,NULL
+                       ,NULL
+                       ,A.LDM_ENTY_ID
+                       ,A.LDM_ENTY_LNM
+                       ,A.MDL_LNM
+                       ,A.UPP_SUBJ_LNM
+                       ,A.SUBJ_ID
+                       ,A.SUBJ_LNM
+                       ,A.SDITM_ID
+                       ,A.ATTR_ORD
+                       ,A.DATA_TYPE
+                       ,A.DATA_LEN
+                       ,A.DATA_SCAL
+                       ,A.PK_YN
+                       ,A.PK_ORD
+                       ,A.NONUL_YN
+                       ,A.DEFLT_VAL
+                       ,A.OBJ_DESCN
+                       ,A.OBJ_VERS
+                       ,A.REG_TYP_CD
+                       ,A.FRS_RQST_DTM
+                       ,A.FRS_RQST_USER_ID
+                       ,A.RQST_DTM
+                       ,A.RQST_USER_ID
+                       ,NULL
+                       ,NULL
+  	          FROM WAQ_LDM_ATTR A
+  	          INNER JOIN WAQ_LDM_ENTY B
+  	           ON A.LDM_ENTY_LNM =B.LDM_ENTY_LNM
+  	          AND A.RQST_NO = B.RQST_NO 
+  	          AND A.RQST_SNO = B.RQST_SNO
+  	          WHERE B.RQST_NO = #{oldRqstNo,jdbcType=VARCHAR}
+  	          AND B.RVW_STS_CD = '2'
+       </insert>
+       <insert id="insertnoWaqdelCol" parameterType="kr.wise.meta.ldm.service.WaqLdmAttr" > 
+       --erd에서 삭제된 대상은 삭제로 요청 
+         INSERT /* WaqLdmAttrMapper.insertnoWaqdelCol */
+         		INTO WAQ_LDM_ATTR 
+         (  RQST_NO, RQST_SNO, RQST_DTL_SNO 
+          , LDM_ATTR_ID
+          , LDM_ATTR_LNM           
+          , RQST_DCD
+          , VRF_CD
+          , VRF_RMK
+          , LDM_ENTY_ID
+          , LDM_ENTY_LNM 
+          , MDL_LNM
+          , UPP_SUBJ_LNM
+          , SUBJ_ID
+          , SUBJ_LNM, SDITM_ID, ATTR_ORD
+          , DATA_TYPE, DATA_LEN, DATA_SCAL 
+          , PK_YN, PK_ORD, NONUL_YN
+          , DEFLT_VAL, OBJ_DESCN, OBJ_VERS 
+          , REG_TYP_CD, FRS_RQST_DTM, FRS_RQST_USER_ID 
+          , RQST_DTM, RQST_USER_ID
+         )
+         SELECT C.RQST_NO
+              , C.RQST_SNO 
+              , IFNULL((SELECT MAX(E.RQST_DTL_SNO) 
+                       FROM WAQ_LDM_ATTR E 
+                      WHERE E.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+                        AND E.RQST_SNO = C.RQST_SNO
+                 ),0)+ROWNUM AS RQST_DTL_SNO
+               , B.LDM_ATTR_ID
+               , B.LDM_ATTR_LNM               
+               , 'DD'  AS RQST_DCD
+               , 1     AS VRF_CD
+               , NULL  AS VRF_RMK
+               , B.LDM_ENTY_ID
+               , C.LDM_ENTY_LNM 
+               , C.MDL_LNM
+               , C.UPP_SUBJ_LNM
+               , C.SUBJ_ID
+               , C.SUBJ_LNM, B.SDITM_ID, B.ATTR_ORD
+               , B.DATA_TYPE, B.DATA_LEN, B.DATA_SCAL 
+               , B.PK_YN, B.PK_ORD, B.NONUL_YN
+               , B.DEFLT_VAL, B.OBJ_DESCN, B.OBJ_VERS+1
+               , 'D'
+               , C.FRS_RQST_DTM, C.FRS_RQST_USER_ID 
+               , C.RQST_DTM, C.RQST_USER_ID
+            FROM WAM_LDM_ENTY A
+                 INNER JOIN WAQ_LDM_ENTY C
+                    ON A.LDM_ENTY_LNM = C.LDM_ENTY_LNM
+                   AND A.FULL_PATH = C.FULL_PATH
+                 INNER JOIN WAM_LDM_ATTR B
+                    ON A.LDM_ENTY_ID = B.LDM_ENTY_ID
+                 LEFT JOIN WAQ_LDM_ATTR D
+                   ON C.LDM_ENTY_LNM = D.LDM_ENTY_LNM
+                  AND C.RQST_NO  =D.RQST_NO
+                  AND C.RQST_SNO = D.RQST_SNO
+                  AND B.LDM_ATTR_LNM = D.LDM_ATTR_LNM
+          WHERE C.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+            AND D.LDM_ATTR_LNM IS NULL
+  </insert>
+  <update id="updateEncYnisNull" parameterType="java.lang.String" >
+  --ENC_YN 업데이트
+  UPDATE 	/* WaqLdmAttrMapper.updateEncYnisNull */
+  			WAQ_LDM_ATTR A
+     SET A.ENC_YN = 'N'
+   WHERE A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+     AND A.ENC_YN IS NULL 
+  </update>
+  
+    <insert id="checkMstColExists" parameterType="map">
+    
+    /* WaqLdmAttrMapper.checkMstColExists */
+    
+  	<include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSnoSql"/>
+	--검증쿼리 : 마스터 컬럼 미존재(PC017)
+    AND EXISTS (
+                  SELECT 1
+                  FROM WAM_MST_TBL_MAP Z
+                  WHERE Z.REG_TYP_CD IN ('C', 'U')
+                  AND Z.EXP_DTM = STR_TO_DATE('99991231', '%Y%m%d')
+                  AND Z.HIST_DDL_TBL_PNM = A.LDM_ENTY_LNM
+                  AND A.PK_YN != 'Y'
+                  AND A.LDM_ATTR_LNM NOT IN (SELECT Q.LDM_ATTR_LNM 
+                                            FROM WAQ_LDM_ATTR Q 
+                                            WHERE Q.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+                                            AND Q.LDM_ENTY_LNM = Z.MST_DDL_TBL_PNM
+                                            )      
+               )
+  </insert>  
+   <insert id="checkHistColExists" parameterType="map">
+   
+   	/* WaqLdmAttrMapper.checkHistColExists */
+   	
+  	<include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSnoSql"/>
+	--검증쿼리 : 이력 테이블  컬럼 미존재(PC018)
+    AND EXISTS (
+                  SELECT 1
+                  FROM WAM_MST_TBL_MAP Z
+                  WHERE Z.REG_TYP_CD IN ('C', 'U')
+                  AND Z.EXP_DTM = STR_TO_DATE('99991231', '%Y%m%d')
+                  AND Z.MST_DDL_TBL_PNM = A.LDM_ENTY_LNM
+                  AND A.PK_YN != 'Y'
+                  AND A.LDM_ATTR_LNM NOT IN (SELECT Q.LDM_ATTR_LNM 
+                                            FROM WAQ_LDM_ATTR Q 
+                                            WHERE Q.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+                                            AND Q.LDM_ENTY_LNM = Z.HIST_DDL_TBL_PNM
+                                            )      
+               )
+  </insert>
+   <insert id="checkColDataTypeDiff" parameterType="map">
+   
+   	/* WaqLdmAttrMapper.checkColDataTypeDiff */
+   	
+  	<include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSnoSql"/>
+	--검증쿼리 : 마스터 이력 테이블 컬럼 데이터타입 상이(PC019)
+         AND (A.RQST_NO, A.LDM_ENTY_LNM, A.LDM_ATTR_LNM) IN ( SELECT #{rqstNo,jdbcType=VARCHAR},F.LDM_ENTY_LNM, F.LDM_ATTR_LNM 
+                                                            FROM (
+                                                                    SELECT Z.OBJ_ID,COL.LDM_ENTY_LNM , COL.LDM_ATTR_LNM,COL.DATA_TYPE,COL.DATA_LEN,COL.DATA_SCAL,COL.ATTR_ORD
+                                                                    FROM WAM_MST_TBL_MAP Z
+                                                                    INNER JOIN WAQ_LDM_ATTR COL
+                                                                    ON Z.MST_DDL_TBL_PNM = COL.LDM_ENTY_LNM
+                                                                    WHERE Z.REG_TYP_CD IN ('C', 'U')
+                                                                    AND Z.EXP_DTM = STR_TO_DATE('99991231', '%Y%m%d')
+                                                                    AND IFNULL(COL.PK_YN,'N') != 'Y'
+                                                                    AND COL.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+                                                                  ) E
+                                                            INNER JOIN (
+                                                                   SELECT Z.OBJ_ID,COL.LDM_ENTY_LNM , COL.LDM_ATTR_LNM,COL.DATA_TYPE,COL.DATA_LEN,COL.DATA_SCAL,COL.ATTR_ORD
+                                                                   FROM WAM_MST_TBL_MAP Z
+                                                                   INNER JOIN WAQ_LDM_ATTR COL
+                                                                   ON Z.HIST_DDL_TBL_PNM = COL.LDM_ENTY_LNM
+                                                                   WHERE Z.REG_TYP_CD IN ('C', 'U')
+                                                                   AND Z.EXP_DTM = STR_TO_DATE('99991231', '%Y%m%d')
+                                                                   AND IFNULL(COL.PK_YN,'N') != 'Y'
+                                                                   AND COL.RQST_NO = #{rqstNo,jdbcType=VARCHAR}) F
+                                                            ON E.OBJ_ID = F.OBJ_ID
+                                                            AND E.LDM_ATTR_LNM = F.LDM_ATTR_LNM
+                                                            WHERE (IFNULL(E.DATA_TYPE,'-') != IFNULL(F.DATA_TYPE,'-') OR IFNULL(E.DATA_LEN,0) != IFNULL(F.DATA_LEN,0) OR IFNULL(E.DATA_SCAL,0) != IFNULL(F.DATA_SCAL,0))
+             )
+  </insert>
+     <insert id="checkColNullDiff" parameterType="map">
+     
+     /* WaqLdmAttrMapper.checkColNullDiff */
+     
+  	<include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSnoSql"/>
+	--검증쿼리 : 마스터 이력 테이블 컬럼 널여부 상이(PC020)
+         AND (A.RQST_NO, A.LDM_ENTY_LNM, A.LDM_ATTR_LNM) IN ( SELECT #{rqstNo,jdbcType=VARCHAR},F.LDM_ENTY_LNM, F.LDM_ATTR_LNM 
+                                                            FROM (
+                                                                    SELECT Z.OBJ_ID,COL.LDM_ENTY_LNM , COL.LDM_ATTR_LNM,COL.NONUL_YN 
+                                                                    FROM WAM_MST_TBL_MAP Z
+                                                                    INNER JOIN WAQ_LDM_ATTR COL
+                                                                    ON Z.MST_DDL_TBL_PNM = COL.LDM_ENTY_LNM
+                                                                    WHERE Z.REG_TYP_CD IN ('C', 'U')
+                                                                    AND Z.EXP_DTM = STR_TO_DATE('99991231', '%Y%m%d')
+                                                                    AND IFNULL(COL.PK_YN,'N') != 'Y'
+                                                                    AND COL.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+                                                                  ) E
+                                                            INNER JOIN (
+                                                                   SELECT Z.OBJ_ID,COL.LDM_ENTY_LNM , COL.LDM_ATTR_LNM,COL.NONUL_YN
+                                                                   FROM WAM_MST_TBL_MAP Z
+                                                                   INNER JOIN WAQ_LDM_ATTR COL
+                                                                   ON Z.HIST_DDL_TBL_PNM = COL.LDM_ENTY_LNM
+                                                                   WHERE Z.REG_TYP_CD IN ('C', 'U')
+                                                                   AND Z.EXP_DTM = STR_TO_DATE('99991231', '%Y%m%d')
+                                                                   AND IFNULL(COL.PK_YN,'N') != 'Y'
+                                                                   AND COL.RQST_NO = #{rqstNo,jdbcType=VARCHAR}) F
+                                                            ON E.OBJ_ID = F.OBJ_ID
+                                                            AND E.LDM_ATTR_LNM = F.LDM_ATTR_LNM
+                                                            WHERE IFNULL(E.NONUL_YN,'N') != IFNULL(F.NONUL_YN, 'N')
+             )
+  </insert>
+       <insert id="checkColDefDiff" parameterType="map">
+       
+       /* WaqLdmAttrMapper.checkColDefDiff */
+       
+  	<include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSnoSql"/>
+	--검증쿼리 : 마스터 이력 테이블 컬럼 디폴트 상이(PC021)
+         AND (A.RQST_NO, A.LDM_ENTY_LNM, A.LDM_ATTR_LNM) IN ( SELECT #{rqstNo,jdbcType=VARCHAR},F.LDM_ENTY_LNM, F.LDM_ATTR_LNM 
+                                                            FROM (
+                                                                    SELECT Z.OBJ_ID,COL.LDM_ENTY_LNM , COL.LDM_ATTR_LNM,COL.DEFLT_VAL  
+                                                                    FROM WAM_MST_TBL_MAP Z
+                                                                    INNER JOIN WAQ_LDM_ATTR COL
+                                                                    ON Z.MST_DDL_TBL_PNM = COL.LDM_ENTY_LNM
+                                                                    WHERE Z.REG_TYP_CD IN ('C', 'U')
+                                                                    AND Z.EXP_DTM = STR_TO_DATE('99991231', '%Y%m%d')
+                                                                    AND IFNULL(COL.PK_YN,'N') != 'Y'
+                                                                    AND COL.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+                                                                  ) E
+                                                            INNER JOIN (
+                                                                   SELECT Z.OBJ_ID,COL.LDM_ENTY_LNM , COL.LDM_ATTR_LNM,COL.DEFLT_VAL 
+                                                                   FROM WAM_MST_TBL_MAP Z
+                                                                   INNER JOIN WAQ_LDM_ATTR COL
+                                                                   ON Z.HIST_DDL_TBL_PNM = COL.LDM_ENTY_LNM
+                                                                   WHERE Z.REG_TYP_CD IN ('C', 'U')
+                                                                   AND Z.EXP_DTM = STR_TO_DATE('99991231', '%Y%m%d')
+                                                                   AND IFNULL(COL.PK_YN,'N') != 'Y'
+                                                                   AND COL.RQST_NO = #{rqstNo,jdbcType=VARCHAR}) F
+                                                            ON E.OBJ_ID = F.OBJ_ID
+                                                            AND E.LDM_ATTR_LNM = F.LDM_ATTR_LNM
+                                                            WHERE IFNULL(E.DEFLT_VAL ,'_') != IFNULL(F.DEFLT_VAL , '_')
+             )
+  </insert>
+  
+   
+   <update id="updateColOrd" parameterType="string">
+  	 UPDATE /* WaqLdmAttrMapper.updateColOrd */
+  	 		WAQ_LDM_ATTR C 
+	    SET C.ATTR_ORD = (                                                     
+	           SELECT X.ATTR_ORD                                                               
+	             FROM                                                                             
+	             (                                                                                
+	                 SELECT A.RQST_NO
+	                      , A.RQST_SNO
+	                      , A.RQST_DTL_SNO
+	                      , A.LDM_ENTY_LNM
+	                      , A.LDM_ATTR_LNM                                                              		
+	                      , RANK() OVER(PARTITION BY A.RQST_NO, A.RQST_SNO, A.LDM_ENTY_LNM ORDER BY A.ATTR_ORD, A.LDM_ATTR_LNM) AS ATTR_ORD  
+	                   FROM WAQ_LDM_ATTR A                                            
+	                  WHERE A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}                                           
+	                    AND IFNULL(A.REG_TYP_CD,'X') !='D'                        
+	             ) X                                                                             
+	            WHERE 1 = 1                                                                        
+	              AND X.RQST_NO      = C.RQST_NO
+	              AND X.RQST_SNO     = C.RQST_SNO   
+	              AND X.RQST_DTL_SNO = C.RQST_DTL_SNO                                                     
+	              AND X.LDM_ENTY_LNM = C.LDM_ENTY_LNM                                                        
+	              AND X.LDM_ATTR_LNM = C.LDM_ATTR_LNM
+	              AND ROWNUM = 1
+	       )                                                                                      
+	 WHERE C.RQST_NO = #{rqstNo,jdbcType=VARCHAR}                                              
+	   AND IFNULL(C.REG_TYP_CD, 'X') != 'D'	
+	   					                             	
+  </update>
+
+ 
+</mapper>
+
+

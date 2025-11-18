@@ -1,0 +1,380 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="kr.wise.commons.bbs.service.ComtnbbsmasterMapper" >
+<!--   <resultMap id="BaseResultMap" type="kr.wise.commons.bbs.service.Comtnbbsmaster" > -->
+<!--     <id column="BBS_ID" property="bbsId" jdbcType="CHAR" /> -->
+<!--     <result column="BBS_NM" property="bbsNm" jdbcType="VARCHAR" /> -->
+<!--     <result column="BBS_INTRCN" property="bbsIntrcn" jdbcType="VARCHAR" /> -->
+<!--     <result column="BBS_TY_CODE" property="bbsTyCode" jdbcType="CHAR" /> -->
+<!--     <result column="BBS_ATTRB_CODE" property="bbsAttrbCode" jdbcType="CHAR" /> -->
+<!--     <result column="REPLY_POSBL_AT" property="replyPosblAt" jdbcType="CHAR" /> -->
+<!--     <result column="FILE_ATCH_POSBL_AT" property="fileAtchPosblAt" jdbcType="CHAR" /> -->
+<!--     <result column="ATCH_POSBL_FILE_NUMBER" property="atchPosblFileNumber" jdbcType="DECIMAL" /> -->
+<!--     <result column="ATCH_POSBL_FILE_SIZE" property="atchPosblFileSize" jdbcType="DECIMAL" /> -->
+<!--     <result column="USE_AT" property="useAt" jdbcType="CHAR" /> -->
+<!--     <result column="TMPLAT_ID" property="tmplatId" jdbcType="CHAR" /> -->
+<!--     <result column="FRST_REGISTER_ID" property="frstRegisterId" jdbcType="VARCHAR" /> -->
+<!--     <result column="FRST_REGIST_PNTTM" property="frstRegistPnttm" jdbcType="TIMESTAMP" /> -->
+<!--     <result column="LAST_UPDUSR_ID" property="lastUpdusrId" jdbcType="VARCHAR" /> -->
+<!--     <result column="LAST_UPDT_PNTTM" property="lastUpdtPnttm" jdbcType="TIMESTAMP" /> -->
+<!--   </resultMap> -->
+  
+  	<resultMap id="boardMasterDetail" type="kr.wise.commons.bbs.service.BoardMasterVO">
+		<result property="bbsId" 			column="BBS_ID" 		/>
+		<result property="bbsTyCode" 		column="BBS_TY_CODE" 	/>
+		<result property="bbsAttrbCode" 	column="BBS_ATTRB_CODE" />
+		<result property="bbsNm" 			column="BBS_NM" 		/>
+		<result property="bbsIntrcn" 		column="BBS_INTRCN" 	/>
+		<result property="replyPosblAt" 	column="REPLY_POSBL_AT" />
+		<result property="fileAtchPosblAt" 	column="FILE_ATCH_POSBL_AT" />
+		<result property="posblAtchFileNumber" column="ATCH_POSBL_FILE_NUMBER" />
+		<result property="posblAtchFileSize" column="ATCH_POSBL_FILE_SIZE" />
+		<result property="tmplatId" 		column="TMPLAT_ID" 		/>
+		<result property="frstRegisterId" 	column="FRST_REGISTER_ID" />
+		<result property="frstRegisterNm" 	column="FRST_REGISTER_NM" />
+		<result property="frstRegisterPnttm" column="FRST_REGIST_PNTTM" />
+		<result property="lastUpdusrId" 	column="LAST_UPDUSR_ID" />
+		<result property="lastUpdusrPnttm" column="LAST_UPDT_PNTTM" />
+		<result property="bbsTyCodeNm" 		column="BBS_TY_CODE_NM" />
+		<result property="bbsAttrbCodeNm" 	column="BBS_ATTRB_CODE_NM" />
+ 	    <result property="tmplatNm" 		column="TMPLAT_NM" 		/>
+		<result property="authFlag" 		column="AUTH_FLAG" 		/>
+		<result property="tmplatCours" 		column="TMPLAT_COURS" 	/>
+		<result property="cateCode" 		column="CATE_CODE" 	/>
+		<result property="useAt" 		column="USE_AT" 	/>
+		<result property="menuCode" 		column="MENU_CODE" 	/>
+	</resultMap>
+  
+<!--   <sql id="Base_Column_List" >
+    BBS_ID, BBS_NM, BBS_INTRCN, BBS_TY_CODE, BBS_ATTRB_CODE, REPLY_POSBL_AT, FILE_ATCH_POSBL_AT, 
+    ATCH_POSBL_FILE_NUMBER, ATCH_POSBL_FILE_SIZE, USE_AT, TMPLAT_ID, FRST_REGISTER_ID, 
+    FRST_REGIST_PNTTM, LAST_UPDUSR_ID, LAST_UPDT_PNTTM
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from COMTNBBSMASTER
+    where BBS_ID = #{bbsId,jdbcType=CHAR}
+  </select> -->
+  <select id="selectBBSMasterInf" resultMap="boardMasterDetail" parameterType="kr.wise.commons.bbs.service.BoardMasterVO" >
+  			<![CDATA[
+            SELECT  
+ 				a.BBS_ID, a.BBS_TY_CODE, b.CODE_NM as BBS_TY_CODE_NM, a.BBS_INTRCN,  
+ 				a.BBS_ATTRB_CODE, c.CODE_NM as BBS_ATTRB_CODE_NM, a.BBS_NM,  
+ 				TRIM(a.TMPLAT_ID) AS TMPLAT_ID, f.CODE_NM as TMPLAT_NM, a.FILE_ATCH_POSBL_AT, a.ATCH_POSBL_FILE_NUMBER, 
+ 				a.ATCH_POSBL_FILE_SIZE, a.REPLY_POSBL_AT, a.FRST_REGISTER_ID, e.USER_NM as FRST_REGISTER_NM, 
+ 				a.USE_AT, TO_CHAR(a.FRST_REGIST_PNTTM, 'YYYY-MM-DD') as FRST_REGIST_PNTTM				 
+ 				,a.USE_AT as AUTH_FLAG 
+ 				, a.CATE_CODE , a.MENU_CODE
+ 			FROM 
+ 				COMTNBBSMASTER a 
+ 			LEFT OUTER JOIN  
+ 				(SELECT CODE_ID, CODE, CODE_NM FROM COMTCCMMNDETAILCODE WHERE CODE_ID = 'COM004' AND USE_AT='Y') b 
+ 				ON a.BBS_TY_CODE = b.CODE 
+ 			LEFT OUTER JOIN  
+ 				(SELECT CODE_ID, CODE, CODE_NM FROM COMTCCMMNDETAILCODE WHERE CODE_ID = 'COM009' AND USE_AT='Y') c 
+ 				ON a.BBS_ATTRB_CODE = c.CODE 
+ 			LEFT OUTER JOIN COMTNTMPLATINFO d 
+ 				ON a.TMPLAT_ID = d.TMPLAT_SE_CODE				 
+ 			LEFT OUTER JOIN WAA_USER e 
+ 				ON a.FRST_REGISTER_ID = e.LOGIN_AC_ID
+ 			   AND E.REG_TYP_CD IN ('C', 'U')
+ 			   AND E.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')		 
+ 			LEFT OUTER JOIN  
+ 				(SELECT CODE_ID, CODE, CODE_NM FROM COMTCCMMNDETAILCODE WHERE CODE_ID = 'COM005' AND USE_AT='Y') f 
+ 				ON a.TMPLAT_ID = c.CODE_ID 
+ 			WHERE a.BBS_ID = #{bbsId}
+		]]>	
+  
+  </select>
+  
+  <select id="selectAllBoardMstrList" resultMap="boardMasterDetail" parameterType="kr.wise.commons.bbs.service.BoardMasterVO" >
+<![CDATA[
+			SELECT 
+				BBS_ID, BBS_NM, BBS_INTRCN, BBS_TY_CODE, BBS_ATTRB_CODE, 
+				REPLY_POSBL_AT, FILE_ATCH_POSBL_AT,
+				ATCH_POSBL_FILE_NUMBER, ATCH_POSBL_FILE_SIZE, USE_AT, 
+				TMPLAT_ID, FRST_REGISTER_ID, FRST_REGIST_PNTTM,
+				 LAST_UPDUSR_ID, LAST_UPDT_PNTTM, CATE_CODE, MENU_CODE
+			FROM
+				COMTNBBSMASTER
+			 WHERE 1=1
+			 ]]>
+			 <if test="searchWrd != null">
+			       <![CDATA[   AND BBS_NM like  '%'|| #{searchWrd}||'%']]>
+<!-- 				     BBS_NM like  REPLACE( #{searchWrd}, '*', '%') -->
+			 </if>
+			 <if test="bbsTyCode != null">
+				    <![CDATA[   AND BBS_TY_CODE like '%'|| #{bbsTyCode}||'%']]>
+			 </if>
+			 <if test="bbsAttrbCode != null">
+				     <![CDATA[  AND BBS_ATTRB_CODE like '%'||#{bbsAttrbCode}||'%']]>
+			 </if>
+			 <if test="tmplatId != null">
+				    <![CDATA[  AND TMPLAT_ID like '%'||#{tmplatId}||'%']]>
+			 </if>
+			 <if test="replyPosblAt != null">
+				    <![CDATA[  AND REPLY_POSBL_AT like '%'||#{replyPosblAt}||'%']]>
+			 </if>
+			 <if test="fileAtchPosblAt != null">
+				    <![CDATA[  AND FILE_ATCH_POSBL_AT like '%'||#{fileAtchPosblAt}||'%']]>
+			 </if>
+			 <if test="useAt != null">
+				      <![CDATA[ AND USE_AT like '%'||#{useAt}||'%']]>
+			 </if>
+			 <if test="cateCode != null">
+				     <![CDATA[  AND CATE_CODE like '%'||#{cateCode}||'%']]>
+			 </if>
+			         	ORDER BY BBS_ID
+  </select>
+  
+  <insert id="insertBBSMastetInf" parameterType="kr.wise.commons.bbs.service.BoardMasterVO" >
+		<![CDATA[
+				INSERT INTO  COMTNBBSMASTER (
+					  BBS_ID, BBS_NM, BBS_INTRCN, BBS_TY_CODE, BBS_ATTRB_CODE, 
+				REPLY_POSBL_AT, ATCH_POSBL_FILE_SIZE, FILE_ATCH_POSBL_AT,
+				ATCH_POSBL_FILE_NUMBER, USE_AT, 
+				TMPLAT_ID, FRST_REGISTER_ID, FRST_REGIST_PNTTM,
+				 CATE_CODE, MENU_CODE
+					) VALUES (
+					#{bbsId, jdbcType=CHAR},   	
+					#{bbsNm, jdbcType=VARCHAR}, 	
+					#{bbsIntrcn, jdbcType=VARCHAR}, 	
+					#{bbsTyCode, jdbcType=CHAR},      	
+					#{bbsAttrbCode, jdbcType=CHAR},           	
+					#{replyPosblAt, jdbcType=CHAR},        	
+					#{posblAtchFileSize, jdbcType=VARCHAR}::INTEGER,           	
+					#{fileAtchPosblAt, jdbcType=CHAR},            	
+					#{posblAtchFileNumber, jdbcType=INTEGER},            	
+					#{useAt, jdbcType=CHAR},         	
+					#{tmplatId, jdbcType=CHAR},           	
+					#{frstRegisterId, jdbcType=VARCHAR},           	
+					TO_CHAR(NOW(),  'YYYY-MM-DD')::TIMESTAMP,
+					#{cateCode, jdbcType=VARCHAR},
+					#{menuCode, jdbcType=VARCHAR}
+					)
+		 ]]>
+	</insert>
+	
+	<update id="updateBBSMastetInf" parameterType="kr.wise.commons.bbs.service.BoardMasterVO" >
+		<![CDATA[
+				UPDATE COMTNBBSMASTER 
+					 SET  
+					 BBS_NM 	= #{bbsNm, jdbcType=VARCHAR}, 
+					 BBS_INTRCN 	= #{bbsIntrcn, jdbcType=VARCHAR},
+					 BBS_TY_CODE 	= #{bbsTyCode, jdbcType=CHAR}, 
+					 BBS_ATTRB_CODE 	= #{bbsAttrbCode, jdbcType=CHAR}, 
+					 REPLY_POSBL_AT 	= #{replyPosblAt, jdbcType=CHAR}, 
+					 FILE_ATCH_POSBL_AT 	= #{fileAtchPosblAt, jdbcType=CHAR},
+				     ATCH_POSBL_FILE_NUMBER 	= #{posblAtchFileNumber, jdbcType=INTEGER}, 
+				     ATCH_POSBL_FILE_SIZE 	= #{posblAtchFileSize, jdbcType=VARCHAR}::INTEGER,
+				     USE_AT 	= #{useAt, jdbcType=CHAR}, 
+				     TMPLAT_ID 	= #{tmplatId, jdbcType=CHAR}, 
+				     LAST_UPDUSR_ID 	= #{lastUpdusrId, jdbcType=VARCHAR}, 
+				     LAST_UPDT_PNTTM 	= TO_CHAR(NOW(),  'YYYY-MM-DD')::TIMESTAMP,
+				     CATE_CODE 	= #{cateCode, jdbcType=VARCHAR},
+				     MENU_CODE = #{menuCode, jdbcType=VARCHAR}
+				WHERE BBS_ID = #{bbsId}
+		 ]]>
+	</update> 
+	
+	<delete id="deleteBbs" parameterType="java.util.Arrays">
+		<![CDATA[
+				DELETE FROM COMTNBBSMASTER 
+				WHERE BBS_ID IN 
+		 ]]>
+				<foreach collection="array" item="item" index="index" open="(" separator="," close=")">
+					#{item}
+				</foreach>
+	</delete>
+
+	<delete id="deleteBbsVO" parameterType="kr.wise.commons.bbs.service.BoardMasterVO">
+		<![CDATA[
+				DELETE FROM COMTNBBSMASTER 
+				WHERE BBS_ID  = #{bbsId} 
+		 ]]>
+	</delete>
+  
+<!--   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from COMTNBBSMASTER
+    where BBS_ID = #{bbsId,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="kr.wise.commons.bbs.service.Comtnbbsmaster" >
+    insert into COMTNBBSMASTER (BBS_ID, BBS_NM, BBS_INTRCN, 
+      BBS_TY_CODE, BBS_ATTRB_CODE, REPLY_POSBL_AT, 
+      FILE_ATCH_POSBL_AT, ATCH_POSBL_FILE_NUMBER, ATCH_POSBL_FILE_SIZE, 
+      USE_AT, TMPLAT_ID, FRST_REGISTER_ID, 
+      FRST_REGIST_PNTTM, LAST_UPDUSR_ID, LAST_UPDT_PNTTM
+      )
+    values (#{bbsId,jdbcType=CHAR}, #{bbsNm,jdbcType=VARCHAR}, #{bbsIntrcn,jdbcType=VARCHAR}, 
+      #{bbsTyCode,jdbcType=CHAR}, #{bbsAttrbCode,jdbcType=CHAR}, #{replyPosblAt,jdbcType=CHAR}, 
+      #{fileAtchPosblAt,jdbcType=CHAR}, #{atchPosblFileNumber,jdbcType=DECIMAL}, #{atchPosblFileSize,jdbcType=DECIMAL}, 
+      #{useAt,jdbcType=CHAR}, #{tmplatId,jdbcType=CHAR}, #{frstRegisterId,jdbcType=VARCHAR}, 
+      #{frstRegistPnttm,jdbcType=TIMESTAMP}, #{lastUpdusrId,jdbcType=VARCHAR}, #{lastUpdtPnttm,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="kr.wise.commons.bbs.service.Comtnbbsmaster" >
+    insert into COMTNBBSMASTER
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="bbsId != null" >
+        BBS_ID,
+      </if>
+      <if test="bbsNm != null" >
+        BBS_NM,
+      </if>
+      <if test="bbsIntrcn != null" >
+        BBS_INTRCN,
+      </if>
+      <if test="bbsTyCode != null" >
+        BBS_TY_CODE,
+      </if>
+      <if test="bbsAttrbCode != null" >
+        BBS_ATTRB_CODE,
+      </if>
+      <if test="replyPosblAt != null" >
+        REPLY_POSBL_AT,
+      </if>
+      <if test="fileAtchPosblAt != null" >
+        FILE_ATCH_POSBL_AT,
+      </if>
+      <if test="atchPosblFileNumber != null" >
+        ATCH_POSBL_FILE_NUMBER,
+      </if>
+      <if test="atchPosblFileSize != null" >
+        ATCH_POSBL_FILE_SIZE,
+      </if>
+      <if test="useAt != null" >
+        USE_AT,
+      </if>
+      <if test="tmplatId != null" >
+        TMPLAT_ID,
+      </if>
+      <if test="frstRegisterId != null" >
+        FRST_REGISTER_ID,
+      </if>
+      <if test="frstRegistPnttm != null" >
+        FRST_REGIST_PNTTM,
+      </if>
+      <if test="lastUpdusrId != null" >
+        LAST_UPDUSR_ID,
+      </if>
+      <if test="lastUpdtPnttm != null" >
+        LAST_UPDT_PNTTM,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="bbsId != null" >
+        #{bbsId,jdbcType=CHAR},
+      </if>
+      <if test="bbsNm != null" >
+        #{bbsNm,jdbcType=VARCHAR},
+      </if>
+      <if test="bbsIntrcn != null" >
+        #{bbsIntrcn,jdbcType=VARCHAR},
+      </if>
+      <if test="bbsTyCode != null" >
+        #{bbsTyCode,jdbcType=CHAR},
+      </if>
+      <if test="bbsAttrbCode != null" >
+        #{bbsAttrbCode,jdbcType=CHAR},
+      </if>
+      <if test="replyPosblAt != null" >
+        #{replyPosblAt,jdbcType=CHAR},
+      </if>
+      <if test="fileAtchPosblAt != null" >
+        #{fileAtchPosblAt,jdbcType=CHAR},
+      </if>
+      <if test="atchPosblFileNumber != null" >
+        #{atchPosblFileNumber,jdbcType=DECIMAL},
+      </if>
+      <if test="atchPosblFileSize != null" >
+        #{atchPosblFileSize,jdbcType=DECIMAL},
+      </if>
+      <if test="useAt != null" >
+        #{useAt,jdbcType=CHAR},
+      </if>
+      <if test="tmplatId != null" >
+        #{tmplatId,jdbcType=CHAR},
+      </if>
+      <if test="frstRegisterId != null" >
+        #{frstRegisterId,jdbcType=VARCHAR},
+      </if>
+      <if test="frstRegistPnttm != null" >
+        #{frstRegistPnttm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastUpdusrId != null" >
+        #{lastUpdusrId,jdbcType=VARCHAR},
+      </if>
+      <if test="lastUpdtPnttm != null" >
+        #{lastUpdtPnttm,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.commons.bbs.service.Comtnbbsmaster" >
+    update COMTNBBSMASTER
+    <set >
+      <if test="bbsNm != null" >
+        BBS_NM = #{bbsNm,jdbcType=VARCHAR},
+      </if>
+      <if test="bbsIntrcn != null" >
+        BBS_INTRCN = #{bbsIntrcn,jdbcType=VARCHAR},
+      </if>
+      <if test="bbsTyCode != null" >
+        BBS_TY_CODE = #{bbsTyCode,jdbcType=CHAR},
+      </if>
+      <if test="bbsAttrbCode != null" >
+        BBS_ATTRB_CODE = #{bbsAttrbCode,jdbcType=CHAR},
+      </if>
+      <if test="replyPosblAt != null" >
+        REPLY_POSBL_AT = #{replyPosblAt,jdbcType=CHAR},
+      </if>
+      <if test="fileAtchPosblAt != null" >
+        FILE_ATCH_POSBL_AT = #{fileAtchPosblAt,jdbcType=CHAR},
+      </if>
+      <if test="atchPosblFileNumber != null" >
+        ATCH_POSBL_FILE_NUMBER = #{atchPosblFileNumber,jdbcType=DECIMAL},
+      </if>
+      <if test="atchPosblFileSize != null" >
+        ATCH_POSBL_FILE_SIZE = #{atchPosblFileSize,jdbcType=DECIMAL},
+      </if>
+      <if test="useAt != null" >
+        USE_AT = #{useAt,jdbcType=CHAR},
+      </if>
+      <if test="tmplatId != null" >
+        TMPLAT_ID = #{tmplatId,jdbcType=CHAR},
+      </if>
+      <if test="frstRegisterId != null" >
+        FRST_REGISTER_ID = #{frstRegisterId,jdbcType=VARCHAR},
+      </if>
+      <if test="frstRegistPnttm != null" >
+        FRST_REGIST_PNTTM = #{frstRegistPnttm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastUpdusrId != null" >
+        LAST_UPDUSR_ID = #{lastUpdusrId,jdbcType=VARCHAR},
+      </if>
+      <if test="lastUpdtPnttm != null" >
+        LAST_UPDT_PNTTM = #{lastUpdtPnttm,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where BBS_ID = #{bbsId,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="kr.wise.commons.bbs.service.Comtnbbsmaster" >
+    update COMTNBBSMASTER
+    set BBS_NM = #{bbsNm,jdbcType=VARCHAR},
+      BBS_INTRCN = #{bbsIntrcn,jdbcType=VARCHAR},
+      BBS_TY_CODE = #{bbsTyCode,jdbcType=CHAR},
+      BBS_ATTRB_CODE = #{bbsAttrbCode,jdbcType=CHAR},
+      REPLY_POSBL_AT = #{replyPosblAt,jdbcType=CHAR},
+      FILE_ATCH_POSBL_AT = #{fileAtchPosblAt,jdbcType=CHAR},
+      ATCH_POSBL_FILE_NUMBER = #{atchPosblFileNumber,jdbcType=DECIMAL},
+      ATCH_POSBL_FILE_SIZE = #{atchPosblFileSize,jdbcType=DECIMAL},
+      USE_AT = #{useAt,jdbcType=CHAR},
+      TMPLAT_ID = #{tmplatId,jdbcType=CHAR},
+      FRST_REGISTER_ID = #{frstRegisterId,jdbcType=VARCHAR},
+      FRST_REGIST_PNTTM = #{frstRegistPnttm,jdbcType=TIMESTAMP},
+      LAST_UPDUSR_ID = #{lastUpdusrId,jdbcType=VARCHAR},
+      LAST_UPDT_PNTTM = #{lastUpdtPnttm,jdbcType=TIMESTAMP}
+    where BBS_ID = #{bbsId,jdbcType=CHAR}
+  </update> -->
+</mapper>

@@ -1,0 +1,535 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.commons.user.service.WaaUsersMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.commons.user.service.WaaUsers" >
+    <id column="USER_ID" property="userId" jdbcType="VARCHAR" />
+    <result column="RN" property="rn" />
+    <result column="STA_DTTM" property="staDttm" jdbcType="TIMESTAMP" />
+    <result column="XPR_DTTM" property="xprDttm" jdbcType="TIMESTAMP" />
+    <result column="USER_KNM" property="userKnm" jdbcType="VARCHAR" />
+    <result column="USER_ENM" property="userEnm" jdbcType="VARCHAR" />
+    <result column="VERSION" property="version" jdbcType="DECIMAL" />
+    <result column="ORGL_TYPE" property="orglType" jdbcType="VARCHAR" />
+    <result column="IS_DELETED" property="isDeleted" jdbcType="VARCHAR" />
+    <result column="ORGL_DTTM" property="orglDttm" jdbcType="TIMESTAMP" />
+    <result column="ORGL_USER" property="orglUser" jdbcType="VARCHAR" />
+    <result column="UPDT_DTTM" property="updtDttm" jdbcType="TIMESTAMP" />
+    <result column="UPDT_USER" property="updtUser" jdbcType="VARCHAR" />
+    <result column="APRV_DTTM" property="aprvDttm" jdbcType="TIMESTAMP" />
+    <result column="APRV_USER" property="aprvUser" jdbcType="VARCHAR" />
+    <result column="DEFINITION" property="definition" jdbcType="VARCHAR" />
+    <result column="DESCRIPTION" property="description" jdbcType="VARCHAR" />
+    <result column="REMARKS" property="remarks" jdbcType="VARCHAR" />
+    <result column="OF_DEPT" property="ofDept" jdbcType="VARCHAR" />
+    <result column="DEPT_CD" property="deptCd" jdbcType="VARCHAR" />
+    <result column="EMP_NO" property="empNo" jdbcType="VARCHAR" />
+    <result column="PASSWORD" property="password" jdbcType="VARCHAR" />
+    <result column="USER_GROUP_ID" property="userGroupId" jdbcType="VARCHAR" />
+    <result column="POSITION" property="position" jdbcType="VARCHAR" />
+    <result column="OFFICE_TEL_NO" property="officeTelNo" jdbcType="VARCHAR" />
+    <result column="HOME_TEL_NO" property="homeTelNo" jdbcType="VARCHAR" />
+    <result column="MOBILE_TEL_NO" property="mobileTelNo" jdbcType="VARCHAR" />
+    <result column="PRIMARY_EMAIL" property="primaryEmail" jdbcType="VARCHAR" />
+    <result column="SECONDARY_EMAIL" property="secondaryEmail" jdbcType="VARCHAR" />
+    <result column="IS_LOCKED" property="isLocked" jdbcType="VARCHAR" />
+    <result column="OF_PROFILE" property="ofProfile" jdbcType="VARCHAR" />
+    <result column="PWD_XPR_DTTM" property="pwdXprDttm" jdbcType="TIMESTAMP" />
+    <result column="RETC_IP" property="retcIp" jdbcType="VARCHAR" />
+    <result column="EXCEL_DOWNLOAD_AUTH" property="excelDownloadAuth" jdbcType="VARCHAR" />
+    <result column="ID_XPR_DTTM" property="idXprDttm" jdbcType="TIMESTAMP" />
+    <result column="RETC_IP_LEVEL" property="retcIpLevel" jdbcType="VARCHAR" />
+    <result column="HEAD_USER_ID" property="headUserId" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    USER_ID, STA_DTTM, XPR_DTTM, USER_KNM, USER_ENM, VERSION, ORGL_TYPE, IS_DELETED, 
+    ORGL_DTTM, ORGL_USER, UPDT_DTTM, UPDT_USER, APRV_DTTM, APRV_USER, DEFINITION, DESCRIPTION, 
+    REMARKS, OF_DEPT, DEPT_CD, EMP_NO, PASSWORD, USER_GROUP_ID, POSITION, OFFICE_TEL_NO, 
+    HOME_TEL_NO, MOBILE_TEL_NO, PRIMARY_EMAIL, SECONDARY_EMAIL, IS_LOCKED, OF_PROFILE, 
+    PWD_XPR_DTTM, RETC_IP, EXCEL_DOWNLOAD_AUTH, ID_XPR_DTTM, RETC_IP_LEVEL, HEAD_USER_ID
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from WAA_USERS
+    where USER_ID = #{userId,jdbcType=VARCHAR}
+  </select>
+  <select id="selectUserList" resultMap="BaseResultMap" parameterType="java.util.Map" >
+		SELECT A.* 
+		FROM (SELECT ROWNUM RN
+		            ,A.EMP_NO
+		            ,A.USER_KNM
+		            ,B.OBJ_NM AS DEPT_CD
+		            ,C.USER_GROUP_KNM AS USER_GROUP_ID
+		      FROM WAA_USERS A LEFT OUTER JOIN WAA_DEPT B
+		                                  ON A.DEPT_CD = B.OBJ_ID
+		                                  AND B.IS_DELETED = 'N'
+		                       LEFT OUTER JOIN WAA_USER_GROUPS C
+		                                  ON A.USER_GROUP_ID = C.USER_GROUP_ID
+		                                  AND C.IS_DELETED = 'N'
+		      WHERE A.IS_DELETED = 'N'
+		      AND A.USER_ID LIKE '0%'
+		      <if test="empNo != null and empNo != ''">
+		         AND EMP_NO = #{empNo}
+		      </if>
+		      <if test="userKnm != null and userKnm != ''">
+		         AND USER_KNM = #{userKnm}
+		      </if>
+		     )A
+		WHERE A.RN BETWEEN #{firstIndex} + 1 AND #{firstIndex} + #{recordCountPerPage} 
+  </select>
+  <select id="selectUserList2" resultMap="BaseResultMap" parameterType="java.util.Map" >
+		SELECT ROWNUM RN
+		            ,A.EMP_NO
+		            ,A.USER_KNM
+		            ,B.OBJ_NM AS DEPT_CD
+		            ,C.USER_GROUP_KNM AS USER_GROUP_ID
+		      FROM WAA_USERS A LEFT OUTER JOIN WAA_DEPT B
+		                                  ON A.DEPT_CD = B.OBJ_ID
+		                                  AND B.IS_DELETED = 'N'
+		                                  AND B.XPR_DTTM = TO_DATE('99991231', 'yyyymmdd')
+		                       LEFT OUTER JOIN WAA_USER_GROUPS C
+		                                  ON A.USER_GROUP_ID = C.USER_GROUP_ID
+		                                  AND C.IS_DELETED = 'N'
+		                                  AND C.XPR_DTTM = TO_DATE('99991231', 'yyyymmdd')
+		      WHERE A.IS_DELETED = 'N'
+		      AND A.USER_ID LIKE '0%'
+		      AND A.XPR_DTTM = TO_DATE('99991231', 'yyyymmdd')
+		      <if test="empNo != null and empNo != ''">
+		         AND EMP_NO = #{empNo}
+		      </if>
+		      <if test="userKnm != null and userKnm != ''">
+		         AND USER_KNM = #{userKnm}
+		      </if>
+  </select>
+  
+ 
+   <select id="selectTotCountList" parameterType="java.util.Map" resultType="int">
+		SELECT COUNT(T.EMP_NO)AS TOT_CNT
+		FROM (SELECT A.EMP_NO
+		            ,A.USER_KNM
+		            ,B.OBJ_NM AS DEPT_CD
+		            ,C.USER_GROUP_KNM AS USER_GROUP_ID
+		      FROM WAA_USERS A LEFT OUTER JOIN WAA_DEPT B
+		                                  ON A.DEPT_CD = B.OBJ_ID
+		                                  AND B.IS_DELETED = 'N'
+		                       LEFT OUTER JOIN WAA_USER_GROUPS C
+		                                  ON A.USER_GROUP_ID = C.USER_GROUP_ID
+		                                  AND C.IS_DELETED = 'N'
+		      WHERE A.IS_DELETED = 'N'
+		      AND A.USER_ID LIKE '0%'
+		      <if test="empNo != null and empNo != ''">
+		         AND EMP_NO = #{empNo}
+		      </if>
+		      <if test="userKnm != null and userKnm != ''">
+		         AND USER_KNM = #{userKnm}
+		      </if>
+		     )T
+   </select>
+ 
+ 
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from WAA_USERS
+    where USER_ID = #{userId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="kr.wise.commons.user.service.WaaUsers" >
+    insert into WAA_USERS (USER_ID, STA_DTTM, XPR_DTTM, 
+      USER_KNM, USER_ENM, VERSION, 
+      ORGL_TYPE, IS_DELETED, ORGL_DTTM, 
+      ORGL_USER, UPDT_DTTM, UPDT_USER, 
+      APRV_DTTM, APRV_USER, DEFINITION, 
+      DESCRIPTION, REMARKS, OF_DEPT, 
+      DEPT_CD, EMP_NO, PASSWORD, 
+      USER_GROUP_ID, POSITION, OFFICE_TEL_NO, 
+      HOME_TEL_NO, MOBILE_TEL_NO, PRIMARY_EMAIL, 
+      SECONDARY_EMAIL, IS_LOCKED, OF_PROFILE, 
+      PWD_XPR_DTTM, RETC_IP, EXCEL_DOWNLOAD_AUTH, 
+      ID_XPR_DTTM, RETC_IP_LEVEL, HEAD_USER_ID
+      )
+    values (#{userId,jdbcType=VARCHAR}, #{staDttm,jdbcType=TIMESTAMP}, #{xprDttm,jdbcType=TIMESTAMP}, 
+      #{userKnm,jdbcType=VARCHAR}, #{userEnm,jdbcType=VARCHAR}, #{version,jdbcType=DECIMAL}, 
+      #{orglType,jdbcType=VARCHAR}, #{isDeleted,jdbcType=VARCHAR}, #{orglDttm,jdbcType=TIMESTAMP}, 
+      #{orglUser,jdbcType=VARCHAR}, #{updtDttm,jdbcType=TIMESTAMP}, #{updtUser,jdbcType=VARCHAR}, 
+      #{aprvDttm,jdbcType=TIMESTAMP}, #{aprvUser,jdbcType=VARCHAR}, #{definition,jdbcType=VARCHAR}, 
+      #{description,jdbcType=VARCHAR}, #{remarks,jdbcType=VARCHAR}, #{ofDept,jdbcType=VARCHAR}, 
+      #{deptCd,jdbcType=VARCHAR}, #{empNo,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
+      #{userGroupId,jdbcType=VARCHAR}, #{position,jdbcType=VARCHAR}, #{officeTelNo,jdbcType=VARCHAR}, 
+      #{homeTelNo,jdbcType=VARCHAR}, #{mobileTelNo,jdbcType=VARCHAR}, #{primaryEmail,jdbcType=VARCHAR}, 
+      #{secondaryEmail,jdbcType=VARCHAR}, #{isLocked,jdbcType=VARCHAR}, #{ofProfile,jdbcType=VARCHAR}, 
+      #{pwdXprDttm,jdbcType=TIMESTAMP}, #{retcIp,jdbcType=VARCHAR}, #{excelDownloadAuth,jdbcType=VARCHAR}, 
+      #{idXprDttm,jdbcType=TIMESTAMP}, #{retcIpLevel,jdbcType=VARCHAR}, #{headUserId,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="kr.wise.commons.user.service.WaaUsers" >
+    insert into WAA_USERS
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="userId != null" >
+        USER_ID,
+      </if>
+      <if test="staDttm != null" >
+        STA_DTTM,
+      </if>
+      <if test="xprDttm != null" >
+        XPR_DTTM,
+      </if>
+      <if test="userKnm != null" >
+        USER_KNM,
+      </if>
+      <if test="userEnm != null" >
+        USER_ENM,
+      </if>
+      <if test="version != null" >
+        VERSION,
+      </if>
+      <if test="orglType != null" >
+        ORGL_TYPE,
+      </if>
+      <if test="isDeleted != null" >
+        IS_DELETED,
+      </if>
+      <if test="orglDttm != null" >
+        ORGL_DTTM,
+      </if>
+      <if test="orglUser != null" >
+        ORGL_USER,
+      </if>
+      <if test="updtDttm != null" >
+        UPDT_DTTM,
+      </if>
+      <if test="updtUser != null" >
+        UPDT_USER,
+      </if>
+      <if test="aprvDttm != null" >
+        APRV_DTTM,
+      </if>
+      <if test="aprvUser != null" >
+        APRV_USER,
+      </if>
+      <if test="definition != null" >
+        DEFINITION,
+      </if>
+      <if test="description != null" >
+        DESCRIPTION,
+      </if>
+      <if test="remarks != null" >
+        REMARKS,
+      </if>
+      <if test="ofDept != null" >
+        OF_DEPT,
+      </if>
+      <if test="deptCd != null" >
+        DEPT_CD,
+      </if>
+      <if test="empNo != null" >
+        EMP_NO,
+      </if>
+      <if test="password != null" >
+        PASSWORD,
+      </if>
+      <if test="userGroupId != null" >
+        USER_GROUP_ID,
+      </if>
+      <if test="position != null" >
+        POSITION,
+      </if>
+      <if test="officeTelNo != null" >
+        OFFICE_TEL_NO,
+      </if>
+      <if test="homeTelNo != null" >
+        HOME_TEL_NO,
+      </if>
+      <if test="mobileTelNo != null" >
+        MOBILE_TEL_NO,
+      </if>
+      <if test="primaryEmail != null" >
+        PRIMARY_EMAIL,
+      </if>
+      <if test="secondaryEmail != null" >
+        SECONDARY_EMAIL,
+      </if>
+      <if test="isLocked != null" >
+        IS_LOCKED,
+      </if>
+      <if test="ofProfile != null" >
+        OF_PROFILE,
+      </if>
+      <if test="pwdXprDttm != null" >
+        PWD_XPR_DTTM,
+      </if>
+      <if test="retcIp != null" >
+        RETC_IP,
+      </if>
+      <if test="excelDownloadAuth != null" >
+        EXCEL_DOWNLOAD_AUTH,
+      </if>
+      <if test="idXprDttm != null" >
+        ID_XPR_DTTM,
+      </if>
+      <if test="retcIpLevel != null" >
+        RETC_IP_LEVEL,
+      </if>
+      <if test="headUserId != null" >
+        HEAD_USER_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="userId != null" >
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="staDttm != null" >
+        #{staDttm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="xprDttm != null" >
+        #{xprDttm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userKnm != null" >
+        #{userKnm,jdbcType=VARCHAR},
+      </if>
+      <if test="userEnm != null" >
+        #{userEnm,jdbcType=VARCHAR},
+      </if>
+      <if test="version != null" >
+        #{version,jdbcType=DECIMAL},
+      </if>
+      <if test="orglType != null" >
+        #{orglType,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null" >
+        #{isDeleted,jdbcType=VARCHAR},
+      </if>
+      <if test="orglDttm != null" >
+        #{orglDttm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orglUser != null" >
+        #{orglUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updtDttm != null" >
+        #{updtDttm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updtUser != null" >
+        #{updtUser,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDttm != null" >
+        #{aprvDttm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aprvUser != null" >
+        #{aprvUser,jdbcType=VARCHAR},
+      </if>
+      <if test="definition != null" >
+        #{definition,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="remarks != null" >
+        #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="ofDept != null" >
+        #{ofDept,jdbcType=VARCHAR},
+      </if>
+      <if test="deptCd != null" >
+        #{deptCd,jdbcType=VARCHAR},
+      </if>
+      <if test="empNo != null" >
+        #{empNo,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="userGroupId != null" >
+        #{userGroupId,jdbcType=VARCHAR},
+      </if>
+      <if test="position != null" >
+        #{position,jdbcType=VARCHAR},
+      </if>
+      <if test="officeTelNo != null" >
+        #{officeTelNo,jdbcType=VARCHAR},
+      </if>
+      <if test="homeTelNo != null" >
+        #{homeTelNo,jdbcType=VARCHAR},
+      </if>
+      <if test="mobileTelNo != null" >
+        #{mobileTelNo,jdbcType=VARCHAR},
+      </if>
+      <if test="primaryEmail != null" >
+        #{primaryEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="secondaryEmail != null" >
+        #{secondaryEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="isLocked != null" >
+        #{isLocked,jdbcType=VARCHAR},
+      </if>
+      <if test="ofProfile != null" >
+        #{ofProfile,jdbcType=VARCHAR},
+      </if>
+      <if test="pwdXprDttm != null" >
+        #{pwdXprDttm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="retcIp != null" >
+        #{retcIp,jdbcType=VARCHAR},
+      </if>
+      <if test="excelDownloadAuth != null" >
+        #{excelDownloadAuth,jdbcType=VARCHAR},
+      </if>
+      <if test="idXprDttm != null" >
+        #{idXprDttm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="retcIpLevel != null" >
+        #{retcIpLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="headUserId != null" >
+        #{headUserId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.commons.user.service.WaaUsers" >
+    update WAA_USERS
+    <set >
+      <if test="staDttm != null" >
+        STA_DTTM = #{staDttm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="xprDttm != null" >
+        XPR_DTTM = #{xprDttm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userKnm != null" >
+        USER_KNM = #{userKnm,jdbcType=VARCHAR},
+      </if>
+      <if test="userEnm != null" >
+        USER_ENM = #{userEnm,jdbcType=VARCHAR},
+      </if>
+      <if test="version != null" >
+        VERSION = #{version,jdbcType=DECIMAL},
+      </if>
+      <if test="orglType != null" >
+        ORGL_TYPE = #{orglType,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null" >
+        IS_DELETED = #{isDeleted,jdbcType=VARCHAR},
+      </if>
+      <if test="orglDttm != null" >
+        ORGL_DTTM = #{orglDttm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orglUser != null" >
+        ORGL_USER = #{orglUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updtDttm != null" >
+        UPDT_DTTM = #{updtDttm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updtUser != null" >
+        UPDT_USER = #{updtUser,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDttm != null" >
+        APRV_DTTM = #{aprvDttm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aprvUser != null" >
+        APRV_USER = #{aprvUser,jdbcType=VARCHAR},
+      </if>
+      <if test="definition != null" >
+        DEFINITION = #{definition,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        DESCRIPTION = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="remarks != null" >
+        REMARKS = #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="ofDept != null" >
+        OF_DEPT = #{ofDept,jdbcType=VARCHAR},
+      </if>
+      <if test="deptCd != null" >
+        DEPT_CD = #{deptCd,jdbcType=VARCHAR},
+      </if>
+      <if test="empNo != null" >
+        EMP_NO = #{empNo,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        PASSWORD = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="userGroupId != null" >
+        USER_GROUP_ID = #{userGroupId,jdbcType=VARCHAR},
+      </if>
+      <if test="position != null" >
+        POSITION = #{position,jdbcType=VARCHAR},
+      </if>
+      <if test="officeTelNo != null" >
+        OFFICE_TEL_NO = #{officeTelNo,jdbcType=VARCHAR},
+      </if>
+      <if test="homeTelNo != null" >
+        HOME_TEL_NO = #{homeTelNo,jdbcType=VARCHAR},
+      </if>
+      <if test="mobileTelNo != null" >
+        MOBILE_TEL_NO = #{mobileTelNo,jdbcType=VARCHAR},
+      </if>
+      <if test="primaryEmail != null" >
+        PRIMARY_EMAIL = #{primaryEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="secondaryEmail != null" >
+        SECONDARY_EMAIL = #{secondaryEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="isLocked != null" >
+        IS_LOCKED = #{isLocked,jdbcType=VARCHAR},
+      </if>
+      <if test="ofProfile != null" >
+        OF_PROFILE = #{ofProfile,jdbcType=VARCHAR},
+      </if>
+      <if test="pwdXprDttm != null" >
+        PWD_XPR_DTTM = #{pwdXprDttm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="retcIp != null" >
+        RETC_IP = #{retcIp,jdbcType=VARCHAR},
+      </if>
+      <if test="excelDownloadAuth != null" >
+        EXCEL_DOWNLOAD_AUTH = #{excelDownloadAuth,jdbcType=VARCHAR},
+      </if>
+      <if test="idXprDttm != null" >
+        ID_XPR_DTTM = #{idXprDttm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="retcIpLevel != null" >
+        RETC_IP_LEVEL = #{retcIpLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="headUserId != null" >
+        HEAD_USER_ID = #{headUserId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where USER_ID = #{userId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="kr.wise.commons.user.service.WaaUsers" >
+    update WAA_USERS
+    set STA_DTTM = #{staDttm,jdbcType=TIMESTAMP},
+      XPR_DTTM = #{xprDttm,jdbcType=TIMESTAMP},
+      USER_KNM = #{userKnm,jdbcType=VARCHAR},
+      USER_ENM = #{userEnm,jdbcType=VARCHAR},
+      VERSION = #{version,jdbcType=DECIMAL},
+      ORGL_TYPE = #{orglType,jdbcType=VARCHAR},
+      IS_DELETED = #{isDeleted,jdbcType=VARCHAR},
+      ORGL_DTTM = #{orglDttm,jdbcType=TIMESTAMP},
+      ORGL_USER = #{orglUser,jdbcType=VARCHAR},
+      UPDT_DTTM = #{updtDttm,jdbcType=TIMESTAMP},
+      UPDT_USER = #{updtUser,jdbcType=VARCHAR},
+      APRV_DTTM = #{aprvDttm,jdbcType=TIMESTAMP},
+      APRV_USER = #{aprvUser,jdbcType=VARCHAR},
+      DEFINITION = #{definition,jdbcType=VARCHAR},
+      DESCRIPTION = #{description,jdbcType=VARCHAR},
+      REMARKS = #{remarks,jdbcType=VARCHAR},
+      OF_DEPT = #{ofDept,jdbcType=VARCHAR},
+      DEPT_CD = #{deptCd,jdbcType=VARCHAR},
+      EMP_NO = #{empNo,jdbcType=VARCHAR},
+      PASSWORD = #{password,jdbcType=VARCHAR},
+      USER_GROUP_ID = #{userGroupId,jdbcType=VARCHAR},
+      POSITION = #{position,jdbcType=VARCHAR},
+      OFFICE_TEL_NO = #{officeTelNo,jdbcType=VARCHAR},
+      HOME_TEL_NO = #{homeTelNo,jdbcType=VARCHAR},
+      MOBILE_TEL_NO = #{mobileTelNo,jdbcType=VARCHAR},
+      PRIMARY_EMAIL = #{primaryEmail,jdbcType=VARCHAR},
+      SECONDARY_EMAIL = #{secondaryEmail,jdbcType=VARCHAR},
+      IS_LOCKED = #{isLocked,jdbcType=VARCHAR},
+      OF_PROFILE = #{ofProfile,jdbcType=VARCHAR},
+      PWD_XPR_DTTM = #{pwdXprDttm,jdbcType=TIMESTAMP},
+      RETC_IP = #{retcIp,jdbcType=VARCHAR},
+      EXCEL_DOWNLOAD_AUTH = #{excelDownloadAuth,jdbcType=VARCHAR},
+      ID_XPR_DTTM = #{idXprDttm,jdbcType=TIMESTAMP},
+      RETC_IP_LEVEL = #{retcIpLevel,jdbcType=VARCHAR},
+      HEAD_USER_ID = #{headUserId,jdbcType=VARCHAR}
+    where USER_ID = #{userId,jdbcType=VARCHAR}
+  </update>
+</mapper>

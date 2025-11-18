@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.dq.measure.profile.service.WdqPrfMstMapper" >
+
+ 
+    <resultMap id="tblChangeMap" type="kr.wise.dq.dashboard.service.WidgetsChartVO" >
+        <result column="BIZAREA_NM" property="bizareaNm"  />
+        <result column="ERR_RATE" property="errRate"  />
+    	<result column="SEQ"  property="seq"  />
+    </resultMap>
+
+    <select id="selectWidgetsChart" resultMap="tblChangeMap">
+		SELECT AA.*                                            
+		FROM (SELECT A.BIZ_AREA_LNM AS BIZAREA_NM
+		            ,A.ERR_RATE
+		            ,2 AS SEQ                                                                                                           
+		      FROM (SELECT BIZ_AREA_LNM                                                                                                               
+		                  ,TO_CHAR(ROUND(SUM(ERR_CNT)*100/DECODE(SUM(TOT_CNT),0,1,SUM(TOT_CNT)),2),'FM990.00')AS ERR_RATE                       
+		            FROM (SELECT BIZ_AREA_LNM
+		                        ,SUM(SYS_CNT)AS SYS_CNT                                                                                   
+		                        ,SUM(TBL_CNT)AS TBL_CNT                                                                                             
+		                        ,SUM(RULE_CNT)AS RULE_CNT                                                                                           
+		                        ,SUM(TOT_CNT)AS TOT_CNT                                                                                             
+		                        ,SUM(ERR_CNT)AS ERR_CNT                                                                                             
+		                  FROM (SELECT BIZ_AREA_LNM
+		                              ,0 AS SYS_CNT                                                                                        
+		                              ,COUNT(*)AS TBL_CNT                                                                                           
+		                              ,SUM(BIZ_CNT)AS RULE_CNT                                                                                       
+		                              ,SUM(ANA_TOT_CNT)AS TOT_CNT                                                                                    
+		                              ,SUM(TOT_ERR_CNT)AS ERR_CNT                                                                                    
+		                        FROM (SELECT X.BIZ_AREA_LNM
+		                                    ,X.DBC_TBL_NM
+		                                    ,COUNT(*) AS BIZ_CNT
+		                                    ,SUM(X.ANA_TOT_CNT)AS ANA_TOT_CNT
+		                                    ,SUM(X.ER_CNT)AS TOT_ERR_CNT                                                                           
+		                              FROM (SELECT D.BIZ_AREA_LNM                                                                                        
+		                                          ,A.DBC_TBL_NM                                                                                         
+		                                          ,B.ANA_CNT AS ANA_TOT_CNT                                                                     
+		                                          ,B.ER_CNT                                                                                        
+		                                    FROM WAM_BR_MSTR A INNER JOIN WAM_BR_RESULT B                                                                             
+		                                                             ON A.BR_ID = B.BR_ID                                                                                     
+		                                                             AND A.REG_TYP_CD IN ('C','U') 
+		                                                       INNER JOIN WAM_BIZ_AREA C
+		                                                             ON A.BIZ_AREA_ID = C.BIZ_AREA_ID                                                              
+		                                                             AND C.REG_TYP_CD IN ('C','U')
+		                                                       INNER JOIN WAM_BIZ_AREA D
+		                                                             ON C.UPP_BIZ_AREA_ID = D.BIZ_AREA_ID                                                               
+		                                                             AND D.REG_TYP_CD IN ('C','U')
+		                                    WHERE B.ANA_DGR = (SELECT MIN(ANA_DGR) 
+		                                                       FROM WAM_BR_RESULT Z 
+		                                                       WHERE Z.BR_ID = B.BR_ID
+		                                                      )               
+		                                   )X                                                                                                      
+		                              GROUP BY X.BIZ_AREA_LNM, X.DBC_TBL_NM                                                                                 
+		                             )
+		                        GROUP BY  BIZ_AREA_LNM                                                                                              
+		                        UNION ALL                                                                                                              
+		                        SELECT BIZ_AREA_LNM
+		                              ,COUNT(*) AS SYS_CNT                                                                                   
+		                              ,0 AS TBL_CNT                                                                                                   
+		                              ,0 AS RULE_CNT                                                                                                  
+		                              ,0 AS TOT_CNT                                                                                                   
+		                              ,0 AS ERR_CNT                                                                                                   
+		                        FROM (SELECT BIZ_AREA_LNM                                                                                                    
+		                              FROM (SELECT D.BIZ_AREA_LNM                                                                                                 
+		                                    FROM WAM_BR_MSTR A INNER JOIN WAM_BR_RESULT B                                                                                      
+		                                                             ON A.BR_ID = B.BR_ID
+		                                                             AND A.REG_TYP_CD IN ('C','U') 
+		                                                       INNER JOIN WAM_BIZ_AREA C
+		                                                             ON A.BIZ_AREA_ID = C.BIZ_AREA_ID                                                               
+		                                                             AND C.REG_TYP_CD IN ('C','U')
+		                                                       INNER JOIN WAM_BIZ_AREA D
+		                                                             ON C.UPP_BIZ_AREA_ID = D.BIZ_AREA_ID                                                              
+		                                                             AND D.REG_TYP_CD IN ('C','U')
+		                                    WHERE B.ANA_DGR = (SELECT MIN(ANA_DGR) 
+		                                                       FROM WAM_BR_RESULT Z 
+		                                                       WHERE Z.BR_ID = B.BR_ID  
+		                                                      )                        
+		                                   )                                                                                                                  
+		                              GROUP BY BIZ_AREA_LNM                                                                                                   
+		                        )    
+		                     GROUP BY BIZ_AREA_LNM                                                                                                  
+		                    )    
+		                 GROUP BY BIZ_AREA_LNM                                                                                                      
+		                 )     
+		           GROUP BY BIZ_AREA_LNM                                                                                                          
+		          )A                                                                                                 
+		            UNION ALL                                                                                                                      
+		            SELECT '전체'                                                                                                              
+		                   ,TO_CHAR(ROUND(ERR_CNT*100/DECODE(TOT_CNT,0,1,TOT_CNT),2),'FM990.00')AS ERR_RATE                                            
+		                   ,1 AS SEQ                                                                                                                     
+		            FROM (SELECT SUM(SYS_CNT) AS SYS_CNT                                                                                           
+		                          ,SUM(TBL_CNT) AS TBL_CNT                                                                                           
+		                          ,SUM(RULE_CNT) AS RULE_CNT                                                                                         
+		                          ,SUM(TOT_CNT) AS TOT_CNT                                                                                           
+		                          ,SUM(ERR_CNT) AS ERR_CNT                                                                                           
+		                  FROM (SELECT 0 AS SYS_CNT                                                                                                
+		                              ,COUNT(*) AS TBL_CNT                                                                                         
+		                              ,SUM(BIZ_CNT) AS RULE_CNT                                                                                     
+		                              ,SUM(ANA_TOT_CNT) AS TOT_CNT                                                                                  
+		                              ,SUM(TOT_ERR_CNT) AS ERR_CNT                                                                                  
+		                        FROM (SELECT X.BIZ_AREA_LNM
+		                                    ,X.DBC_TBL_NM
+		                                    ,COUNT(*) AS BIZ_CNT
+		                                    ,SUM(X.ANA_TOT_CNT) AS ANA_TOT_CNT
+		                                    ,SUM(X.ER_CNT) AS TOT_ERR_CNT                                                                         
+		                              FROM (SELECT D.BIZ_AREA_LNM                                                                                        
+		                                          ,A.DBC_TBL_NM                                                                                         
+		                                          ,A.BR_ID                                                                                       
+		                                          ,B.ANA_CNT AS ANA_TOT_CNT                                                                     
+		                                          ,B.ER_CNT                                                                                        
+		                                    FROM WAM_BR_MSTR A INNER JOIN WAM_BR_RESULT B                                                                             
+		                                                             ON A.BR_ID = B.BR_ID                                                                                  
+		                                                             AND A.REG_TYP_CD IN ('C','U')  
+		                                                       INNER JOIN WAM_BIZ_AREA C
+		                                                             ON A.BIZ_AREA_ID = C.BIZ_AREA_ID                                                               
+		                                                             AND C.REG_TYP_CD IN ('C','U')
+		                                                       INNER JOIN WAM_BIZ_AREA D
+		                                                             ON C.UPP_BIZ_AREA_ID = D.BIZ_AREA_ID                                                               
+		                                                             AND D.REG_TYP_CD IN ('C','U')
+		                                    WHERE B.ANA_DGR = (SELECT MIN(ANA_DGR) 
+		                                                       FROM WAM_BR_RESULT Z 
+		                                                       WHERE Z.BR_ID = B.BR_ID  
+		                                                      )               
+		                                   )X                                                                  
+		                              GROUP BY X.BIZ_AREA_LNM, X.DBC_TBL_NM                                                                           
+		                             )                                                                                                                
+		                        UNION ALL                                                                                                            
+		                        SELECT COUNT(*) AS SYS_CNT                                                                                           
+		                              ,0 AS TBL_CNT                                                                                                 
+		                              ,0 AS RULE_CNT                                                                                                
+		                              ,0 AS TOT_CNT                                                                                                 
+		                              ,0 AS ERR_CNT                                                                                                 
+		                        FROM (SELECT BIZ_AREA_LNM                                                                                          
+		                              FROM (SELECT D.BIZ_AREA_LNM                                                                                    
+		                                    FROM WAM_BR_MSTR A INNER JOIN WAM_BR_RESULT B                                                                                  
+		                                                             ON A.BR_ID = B.BR_ID                                                                                    
+		                                                       INNER JOIN WAM_BIZ_AREA C
+		                                                             ON A.BIZ_AREA_ID = C.BIZ_AREA_ID                                                               
+		                                                             AND C.REG_TYP_CD IN ('C','U')
+		                                                       INNER JOIN WAM_BIZ_AREA D
+		                                                             ON C.UPP_BIZ_AREA_ID = D.BIZ_AREA_ID                                                                 
+		                                                             AND D.REG_TYP_CD IN ('C','U')
+		                                    WHERE B.ANA_DGR = (SELECT MIN(ANA_DGR) 
+		                                                       FROM WAM_BR_RESULT Z 
+		                                                       WHERE Z.BR_ID = B.BR_ID  
+		                                                      )                          
+		                                   )                                                                           
+		                              GROUP BY BIZ_AREA_LNM                                                                                                 
+		                             )                                                                                                                    
+		                      )                                                                                                                        
+		                )                                                                                                                            
+		     )AA 
+		ORDER BY SEQ                                                                                                           
+    </select>
+
+</mapper>

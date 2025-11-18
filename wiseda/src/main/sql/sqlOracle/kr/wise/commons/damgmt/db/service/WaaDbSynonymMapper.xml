@@ -1,0 +1,361 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.commons.damgmt.db.service.WaaDbSynonymMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.commons.damgmt.db.service.WaaDbSynonym" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+    <id column="SYNONYM_ID" property="synonymId" jdbcType="VARCHAR" />
+<!--     <id column="EXP_DTM" property="expDtm" jdbcType="TIMESTAMP" /> -->
+<!--     <result column="STR_DTM" property="strDtm" jdbcType="TIMESTAMP" /> -->
+    <result column="SRC_DB_CONN_TRG_ID" property="srcDbConnTrgId" jdbcType="VARCHAR" />
+    <result column="SRC_DB_SCH_ID" property="srcDbSchId" jdbcType="VARCHAR" />
+    <result column="SRC_DB_SCH_PNM" property="srcDbSchPnm" jdbcType="VARCHAR" />
+    <result column="SRC_DB_SCH_LNM" property="srcDbSchLnm" jdbcType="VARCHAR" />
+    <result column="SRC_OBJ_PNM" property="srcObjPnm" jdbcType="VARCHAR" />
+    <result column="SRC_OBJ_LNM" property="srcObjLnm" jdbcType="VARCHAR" />
+    <result column="TRG_DB_CONN_TRG_ID" property="trgDbConnTrgId" jdbcType="VARCHAR" />
+    <result column="TRG_DB_SCH_ID" property="trgDbSchId" jdbcType="VARCHAR" />
+    <result column="TRG_DB_SCH_PNM" property="trgDbSchPnm" jdbcType="VARCHAR" />
+    <result column="TRG_DB_SCH_LNM" property="trgDbSchLnm" jdbcType="VARCHAR" />
+    <result column="SYNONYM_PNM" property="synonymPnm" jdbcType="VARCHAR" />
+    <result column="SYNONYM_LNM" property="synonymLnm" jdbcType="VARCHAR" />
+    <result column="PUBLIC_YN" property="publicYn" jdbcType="VARCHAR" />
+    <result column="SYNONYM_PREFIX" property="synonymPrefix" jdbcType="VARCHAR" />
+    <result column="SYNONYM_SUFFIX" property="synonymSuffix" jdbcType="VARCHAR" />
+<!--     <result column="OBJ_DESCN" property="objDescn" jdbcType="VARCHAR" /> -->
+<!--     <result column="OBJ_VERS" property="objVers" jdbcType="DECIMAL" /> -->
+<!--     <result column="REG_TYP_CD" property="regTypCd" jdbcType="VARCHAR" /> -->
+<!--     <result column="WRIT_DTM" property="writDtm" jdbcType="TIMESTAMP" /> -->
+<!--     <result column="WRIT_USER_ID" property="writUserId" jdbcType="VARCHAR" /> -->
+  </resultMap>
+  <sql id="Base_Column_List" >
+		SYNONYM_ID,EXP_DTM,STR_DTM,SRC_DB_CONN_TRG_ID,SRC_DB_SCH_ID,SRC_DB_SCH_PNM,SRC_DB_SCH_LNM,
+		SRC_OBJ_PNM,SRC_OBJ_LNM,TRG_DB_CONN_TRG_ID,TRG_DB_SCH_ID,TRG_DB_SCH_PNM,TRG_DB_SCH_LNM,
+		SYNONYM_PNM,SYNONYM_LNM,PUBLIC_YN,SYNONYM_PREFIX,SYNONYM_SUFFIX,OBJ_DESCN,OBJ_VERS,REG_TYP_CD,WRIT_DTM,WRIT_USER_ID
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+      FROM WAA_DB_SYNONYM
+     WHERE SYNONYM_ID = #{synonymId,jdbcType=VARCHAR}
+       AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+       AND REG_TYP_CD IN ('C', 'U')
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="map" >
+    delete from WAA_DB_SYNONYM
+    where SYNONYM_ID = #{synonymId,jdbcType=VARCHAR}
+      and EXP_DTM = #{expDtm,jdbcType=TIMESTAMP}
+  </delete>
+  <insert id="insert" parameterType="kr.wise.commons.damgmt.db.service.WaaDbSynonym" >
+    insert into WAA_DB_SYNONYM (
+		SYNONYM_ID,EXP_DTM,STR_DTM,SRC_DB_CONN_TRG_ID,SRC_DB_SCH_ID,SRC_DB_SCH_PNM,SRC_DB_SCH_LNM,
+		SRC_OBJ_PNM,SRC_OBJ_LNM,TRG_DB_CONN_TRG_ID,TRG_DB_SCH_ID,TRG_DB_SCH_PNM,TRG_DB_SCH_LNM,
+		SYNONYM_PNM,SYNONYM_LNM,PUBLIC_YN,SYNONYM_PREFIX,SYNONYM_SUFFIX,OBJ_DESCN,OBJ_VERS,REG_TYP_CD,WRIT_DTM,WRIT_USER_ID
+      )
+    values (
+      #{synonymId,jdbcType=VARCHAR}, #{expDtm,jdbcType=TIMESTAMP}, #{strDtm,jdbcType=TIMESTAMP}, 
+      #{srcDbConnTrgId,jdbcType=VARCHAR}, #{srcDbSchId,jdbcType=VARCHAR}, #{srcDbSchPnm,jdbcType=VARCHAR}, #{srcDbSchLnm,jdbcType=VARCHAR},
+      #{srcObjPnm,jdbcType=VARCHAR}, #{srcObjLnm,jdbcType=VARCHAR}, #{trgDbConnTrgId,jdbcType=VARCHAR}, #{trgDbSchId,jdbcType=VARCHAR},
+      #{trgDbSchPnm,jdbcType=VARCHAR}, #{trgDbSchLnm,jdbcType=VARCHAR}, #{synonymPnm,jdbcType=VARCHAR}, #{synonymLnm,jdbcType=VARCHAR},
+      #{publicYn,jdbcType=VARCHAR},#{synonymPrefix,jdbcType=VARCHAR},#{synonymSuffix,jdbcType=VARCHAR},
+      #{objDescn,jdbcType=VARCHAR}, #{objVers,jdbcType=DECIMAL}, 
+      #{regTypCd,jdbcType=VARCHAR}, #{writDtm,jdbcType=TIMESTAMP}, #{writUserId,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="kr.wise.commons.damgmt.db.service.WaaDbSynonym" >
+    insert into WAA_DB_SYNONYM
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="synonymId != null" >
+        SYNONYM_ID,
+      </if>
+		EXP_DTM,
+		STR_DTM,
+      <if test="srcDbConnTrgId != null" >
+        SRC_DB_CONN_TRG_ID,
+      </if>
+      <if test="srcDbSchId != null" >
+        SRC_DB_SCH_ID,
+      </if>
+      <if test="srcDbSchPnm != null" >
+        SRC_DB_SCH_PNM,
+      </if>
+      <if test="srcDbSchLnm != null" >
+        SRC_DB_SCH_LNM,
+      </if>
+      <if test="srcObjPnm != null" >
+        SRC_OBJ_PNM,
+      </if>
+      <if test="srcObjLnm != null" >
+        SRC_OBJ_LNM,
+      </if>
+      <if test="trgDbConnTrgId != null" >
+        TRG_DB_CONN_TRG_ID,
+      </if>
+      <if test="trgDbSchId != null" >
+        TRG_DB_SCH_ID,
+      </if>
+      <if test="trgDbSchPnm != null" >
+        TRG_DB_SCH_PNM,
+      </if>
+      <if test="trgDbSchLnm != null" >
+        TRG_DB_SCH_LNM,
+      </if>
+      <if test="synonymPnm != null" >
+        SYNONYM_PNM,
+      </if>
+      <if test="synonymLnm != null" >
+        SYNONYM_LNM,
+      </if>
+      <if test="publicYn != null" >
+        PUBLIC_YN,
+      </if>
+      <if test="synonymPrefix != null" >
+        SYNONYM_PREFIX,
+      </if>
+      <if test="synonymSuffix != null" >
+        SYNONYM_SUFFIX,
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN,
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS,
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD,
+      </if>
+        WRIT_DTM,
+      <if test="writUserId != null" >
+        WRIT_USER_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+    
+      <if test="synonymId != null" >
+        #{synonymId,jdbcType=VARCHAR},
+      </if>
+      	TO_DATE('9999-12-31', 'YYYY-MM-DD'),
+      	SYSDATE,
+      <if test="srcDbConnTrgId != null" >
+        #{srcDbConnTrgId,jdbcType=VARCHAR},
+      </if>
+      <if test="srcDbSchId != null" >
+        #{srcDbSchId,jdbcType=VARCHAR},
+      </if>
+      <if test="srcDbSchPnm != null" >
+        #{srcDbSchPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="srcDbSchLnm != null" >
+        #{srcDbSchLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="srcObjPnm != null" >
+        #{srcObjPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="srcObjLnm != null" >
+        #{srcObjLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="trgDbConnTrgId != null" >
+        #{trgDbConnTrgId,jdbcType=VARCHAR},
+      </if>
+      <if test="trgDbSchId != null" >
+        #{trgDbSchId,jdbcType=VARCHAR},
+      </if>
+      <if test="trgDbSchPnm != null" >
+        #{trgDbSchPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="trgDbSchLnm != null" >
+        #{trgDbSchLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="synonymPnm != null" >
+        #{synonymPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="synonymLnm != null" >
+        #{synonymLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="trgDbSchLnm != null" >
+        #{trgDbSchLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="publicYn != null" >
+        #{publicYn,jdbcType=VARCHAR},
+      </if>
+      <if test="synonymPrefix != null" >
+        #{synonymPrefix,jdbcType=VARCHAR},
+      </if>
+      <if test="synonymSuffix != null" >
+        #{synonymSuffix,jdbcType=VARCHAR},
+      </if>      
+      <if test="objDescn != null" >
+        #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null" >
+        #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      	SYSDATE,
+      <if test="writUserId != null" >
+        #{writUserId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.commons.damgmt.db.service.WaaDbSynonym" >
+    update WAA_DB_SYNONYM
+    <set >
+      <if test="strDtm != null" >
+        STR_DTM = #{strDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="srcDbConnTrgId != null" >
+        SRC_DB_CONN_TRG_ID = #{srcDbConnTrgId,jdbcType=VARCHAR},
+      </if>
+      <if test="srcDbSchId != null" >
+        SRC_DB_SCH_ID = #{srcDbSchId,jdbcType=VARCHAR},
+      </if>
+      <if test="srcDbSchPnm != null" >
+        SRC_DB_SCH_PNM = #{srcDbSchPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="srcDbSchLnm != null" >
+        SRC_DB_SCH_LNM = #{srcDbSchLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="srcObjPnm != null" >
+        SRC_OBJ_PNM = #{srcObjPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="srcObjLnm != null" >
+        SRC_OBJ_LNM = #{srcObjLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="trgDbConnTrgId != null" >
+        TRG_DB_CONN_TRG_ID = #{trgDbConnTrgId,jdbcType=VARCHAR},
+      </if>
+      <if test="trgDbSchId != null" >
+        TRG_DB_SCH_ID = #{trgDbSchId,jdbcType=VARCHAR},
+      </if>
+      <if test="trgDbSchPnm != null" >
+        TRG_DB_SCH_PNM = #{trgDbSchPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="trgDbSchLnm != null" >
+        TRG_DB_SCH_LNM = #{trgDbSchLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="synonymPnm != null" >
+        SYNONYM_PNM = #{synonymPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="synonymLnm != null" >
+        SYNONYM_LNM = #{synonymLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="publicYn != null" >
+        PUBLIC_YN = #{publicYn,jdbcType=VARCHAR},
+      </if>
+      <if test="synonymPrefix != null" >
+        SYNONYM_PREFIX = #{synonymPrefix,jdbcType=VARCHAR},
+      </if>
+      <if test="synonymSuffix != null" >
+        SYNONYM_SUFFIX = #{synonymSuffix,jdbcType=VARCHAR},
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="writDtm != null" >
+        WRIT_DTM = #{writDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="writUserId != null" >
+        WRIT_USER_ID = #{writUserId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where SYNONYM_ID = #{synonymId,jdbcType=VARCHAR}
+      and EXP_DTM = #{expDtm,jdbcType=TIMESTAMP}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="kr.wise.commons.damgmt.db.service.WaaDbSynonym" >
+    update WAA_DB_SYNONYM
+    set STR_DTM = #{strDtm,jdbcType=TIMESTAMP},
+      SRC_DB_CONN_TRG_ID = #{srcDbConnTrgId,jdbcType=VARCHAR},
+      SRC_DB_SCH_ID = #{srcDbSchId,jdbcType=VARCHAR},
+      SRC_DB_SCH_PNM = #{srcDbSchPnm,jdbcType=VARCHAR},
+      SRC_DB_SCH_LNM = #{srcDbSchLnm,jdbcType=VARCHAR},
+      SRC_OBJ_PNM = #{srcObjPnm,jdbcType=VARCHAR},
+      SRC_OBJ_LNM = #{srcObjLnm,jdbcType=VARCHAR},
+      TRG_DB_CONN_TRG_ID = #{trgDbConnTrgId,jdbcType=VARCHAR},
+      TRG_DB_SCH_ID = #{trgDbSchId,jdbcType=VARCHAR},
+      TRG_DB_SCH_PNM = #{trgDbSchPnm,jdbcType=VARCHAR},
+      TRG_DB_SCH_LNM = #{trgDbSchLnm,jdbcType=VARCHAR},
+      SYNONYM_PNM = #{synonymPnm,jdbcType=VARCHAR},
+      SYNONYM_LNM = #{synonymLnm,jdbcType=VARCHAR},
+      PUBLIC_YN = #{publicYn,jdbcType=VARCHAR},
+      SYNONYM_PREFIX = #{synonymPrefix,jdbcType=VARCHAR},
+      SYNONYM_SUFFIX = #{synonymSuffix,jdbcType=VARCHAR},
+      OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      WRIT_DTM = #{writDtm,jdbcType=TIMESTAMP},
+      WRIT_USER_ID = #{writUserId,jdbcType=VARCHAR}
+    where SYNONYM_ID = #{synonymId,jdbcType=VARCHAR}
+      and EXP_DTM = #{expDtm,jdbcType=TIMESTAMP}
+  </update>
+  
+  <select id="getDbSynonymList" parameterType="kr.wise.commons.damgmt.db.service.WaaDbSynonym" resultMap="BaseResultMap">
+	SELECT A.*
+	     , U.USER_NM AS WRIT_USER_NM
+	  FROM WAA_DB_SYNONYM A
+	 INNER JOIN WAA_DB_CONN_TRG SDB
+	    ON A.SRC_DB_CONN_TRG_ID = SDB.DB_CONN_TRG_ID
+	   AND SDB.REG_TYP_CD IN ('C', 'U')
+	   AND SDB.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	 INNER JOIN WAA_DB_CONN_TRG TDB
+	    ON A.TRG_DB_CONN_TRG_ID = TDB.DB_CONN_TRG_ID
+	   AND TDB.REG_TYP_CD IN ('C', 'U')
+	   AND TDB.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	  LEFT OUTER JOIN WAA_USER U
+	    ON A.WRIT_USER_ID = U.USER_ID
+	   AND U.REG_TYP_CD IN ('C', 'U')
+	   AND U.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	 WHERE A.REG_TYP_CD IN ('C', 'U')
+	   AND A.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+      
+ 	<if test="srcObjPnm != null"  >
+     AND ( A.SRC_OBJ_PNM LIKE '%' || #{srcObjPnm,jdbcType=VARCHAR} || '%'
+     	OR A.SRC_OBJ_PNM LIKE '%' || UPPER(#{srcObjPnm,jdbcType=VARCHAR}) || '%')
+    </if>
+ 	<if test="synonymPnm != null"  >
+     AND ( A.SYNONYM_PNM LIKE '%' || #{synonymPnm,jdbcType=VARCHAR} || '%'
+     	OR A.SYNONYM_PNM LIKE '%' || UPPER(#{synonymPnm,jdbcType=VARCHAR}) || '%')
+    </if>
+    
+
+ 	<if test="srcDbConnTrgId != null" >
+      AND A.SRC_DB_CONN_TRG_ID = #{srcDbConnTrgId,jdbcType=VARCHAR}
+    </if>
+ 	<if test="srcDbSchId != null" >
+      AND A.SRC_DB_SCH_ID = #{srcDbSchId,jdbcType=VARCHAR}
+    </if>  
+ 	<if test="trgDbConnTrgId != null" >
+      AND A.TRG_DB_CONN_TRG_ID = #{trgDbConnTrgId,jdbcType=VARCHAR}
+    </if>  
+ 	<if test="trgDbSchId != null" >
+      AND A.TRG_DB_SCH_ID = #{trgDbSchId,jdbcType=VARCHAR}
+    </if>  
+      
+ 	<if test='publicYn == "Y"'>
+ 	   AND A.PUBLIC_YN = 'Y'
+ 	</if>
+  </select>
+  
+  <update id="updateExpDtm" parameterType="kr.wise.commons.damgmt.db.service.WaaDbSynonym">
+  UPDATE WAA_DB_SYNONYM
+     SET EXP_DTM = SYSDATE
+   WHERE SYNONYM_ID = #{synonymId,jdbcType=VARCHAR}
+     AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+     AND REG_TYP_CD IN ('C', 'U')
+  
+  </update>
+  <update id="deleteDbSynonymAuth" parameterType="kr.wise.commons.damgmt.db.service.WaaDbSynonym">
+  UPDATE WAA_DB_SYNONYM
+     SET REG_TYP_CD = 'D'
+   WHERE SYNONYM_ID = #{synonymId,jdbcType=VARCHAR}
+     AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+     AND REG_TYP_CD IN ('C', 'U')
+  
+  </update>
+  
+</mapper>

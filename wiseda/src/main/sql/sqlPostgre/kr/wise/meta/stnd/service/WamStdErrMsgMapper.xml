@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.meta.stnd.service.WamStdErrMsgMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.meta.stnd.service.WamStdErrMsg" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+    <id column="STD_ERR_MSG_ID" property="stdErrMsgId" jdbcType="VARCHAR" />
+    <result column="STD_ERR_MSG_LNM" property="stdErrMsgLnm" jdbcType="VARCHAR" />
+    <result column="STD_ERR_MSG_PNM" property="stdErrMsgPnm" jdbcType="VARCHAR" />
+    <result column="ERR_TLG_LAN_DSCD" property="errTlgLanDscd" jdbcType="VARCHAR" />
+    <result column="ERR_TP_CD" property="errTpCd" jdbcType="VARCHAR" />
+    <result column="MSG_DIT" property="msgDit" jdbcType="VARCHAR" />
+    <result column="STD_ERR_CD_YN" property="stdErrCdYn" jdbcType="VARCHAR" />
+    <result column="ACTN_CD" property="actnCd" jdbcType="VARCHAR" />
+    <result column="ERR_CD" property="errCd" jdbcType="VARCHAR" />
+    <result column="ISD_ERR_CAS_CTS" property="isdErrCasCts" jdbcType="VARCHAR" />
+    <result column="ISD_ERR_ACTN_CTS" property="isdErrActnCts" jdbcType="VARCHAR" />
+    <result column="OSD_ERR_CAS_CTS" property="osdErrCasCts" jdbcType="VARCHAR" />
+    <result column="OSD_ERR_ACTN_CTS" property="osdErrActnCts" jdbcType="VARCHAR" />
+    <result column="ERR_CD_APL_DT" property="errCdAplDt" jdbcType="VARCHAR" />
+    <result column="STSY_ERR_CD" property="stsyErrCd" jdbcType="VARCHAR" />
+    <result column="TSK_DMN" property="tskDmn" jdbcType="VARCHAR" />
+    <result column="MNG_USER" property="mngUser" jdbcType="VARCHAR" />
+    <result column="MSG_TYP" property="msgTyp" jdbcType="VARCHAR" />
+    <result column="BIZ_DIT" property="bizDit" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    STD_ERR_MSG_ID, STD_ERR_MSG_LNM, STD_ERR_MSG_PNM, RQST_NO, RQST_SNO, OBJ_DESCN, OBJ_VERS, 
+    REG_TYP_CD, FRS_RQST_DTM, FRS_RQST_USER_ID, RQST_DTM, RQST_USER_ID, APRV_DTM, APRV_USER_ID, 
+    ERR_TLG_LAN_DSCD, ERR_TP_CD, MSG_DIT, STD_ERR_CD_YN, ACTN_CD, ERR_CD, ISD_ERR_CAS_CTS, 
+    ISD_ERR_ACTN_CTS, OSD_ERR_CAS_CTS, OSD_ERR_ACTN_CTS, ERR_CD_APL_DT, STSY_ERR_CD, 
+    TSK_DMN, MNG_USER, MSG_TYP, BIZ_DIT
+  </sql>
+     <select id="selectList" parameterType="kr.wise.meta.stnd.service.WamStdErrMsg" resultMap="BaseResultMap">
+    SELECT A.*
+	  FROM WAM_STD_ERR_MSG A
+	  <where>
+		  <if test="errTlgLanDscd != null" >
+	        AND ERR_TLG_LAN_DSCD LIKE '%'||#{errTlgLanDscd,jdbcType=VARCHAR}||'%'
+	      </if>
+	      <if test="errTpCd != null" >
+	        AND ERR_TP_CD LIKE '%'||#{errTpCd,jdbcType=VARCHAR}||'%'
+	      </if>
+	      <if test="msgDit != null" >
+	        AND MSG_DIT LIKE '%'||#{msgDit,jdbcType=VARCHAR}||'%'
+	      </if>
+	      <if test="msgTyp != null" >
+	        AND MSG_TYP LIKE '%'||#{msgTyp,jdbcType=VARCHAR}||'%'
+	      </if>
+	      <if test="bizDit != null" >
+	        AND BIZ_DIT LIKE '%'||#{bizDit,jdbcType=VARCHAR}||'%'
+	      </if>
+	      <if test="stdErrCdYn != null" >
+	        AND STD_ERR_CD_YN LIKE '%'||#{stdErrCdYn,jdbcType=VARCHAR}||'%'
+	      </if>
+	      <if test="actnCd != null" >
+	        AND ACTN_CD LIKE '%'||#{actnCd,jdbcType=VARCHAR}||'%'
+	      </if>
+	      <if test="errCd != null" >
+	        AND ERR_CD LIKE '%'||#{errCd,jdbcType=VARCHAR}||'%'
+	      </if>
+	      <if test="isdErrCasCts != null" >
+	        AND ISD_ERR_CAS_CTS LIKE '%'||#{isdErrCasCts,jdbcType=VARCHAR}||'%'
+	      </if>
+	      <if test="isdErrActnCts != null" >
+	        AND ISD_ERR_ACTN_CTS LIKE '%'||#{isdErrActnCts,jdbcType=VARCHAR}||'%'
+	      </if>
+	      <if test="osdErrCasCts != null" >
+	        AND (OSD_ERR_CAS_CTS LIKE '%'||#{osdErrCasCts,jdbcType=VARCHAR}||'%' 
+	        OR ISD_ERR_CAS_CTS LIKE '%'||#{osdErrCasCts,jdbcType=VARCHAR}||'%')
+	      </if>
+	      <if test="osdErrActnCts != null" >
+	        AND OSD_ERR_ACTN_CTS LIKE '%'||#{osdErrActnCts,jdbcType=VARCHAR}||'%'
+	      </if>
+	      <if test="errCdAplDt != null" >
+	        AND ERR_CD_APL_DT LIKE '%'||#{errCdAplDt,jdbcType=VARCHAR}||'%'
+	      </if>
+	      <if test="stsyErrCd != null" >
+	        AND STSY_ERR_CD LIKE '%'||#{stsyErrCd,jdbcType=VARCHAR}||'%'
+	      </if>
+	      <if test="tskDmn != null" >
+	        AND TSK_DMN LIKE '%'||#{tskDmn,jdbcType=VARCHAR}||'%'
+	      </if>
+	      <if test="mngUser != null" >
+	        AND MNG_USER LIKE '%'||#{mngUser,jdbcType=VARCHAR}||'%'
+	      </if>
+	      <if test="frsRqstUserId != null" >
+	        AND FRS_RQST_USER_ID = (SELECT USER_ID FROM WAA_USER WHERE USER_NM = #{frsRqstUserId,jdbcType=VARCHAR} OR USER_ID = #{frsRqstUserId,jdbcType=VARCHAR})
+	      </if>
+	   </where> 
+	 ORDER BY ERR_CD
+  </select>
+  
+   <select id="selectMessageDtl" parameterType="java.lang.String" resultMap="BaseResultMap">
+    SELECT A.*
+    	   ,GET_USER_NM(A.FRS_RQST_USER_ID) AS FRS_RQST_USER_NM
+    	   ,GET_USER_NM(A.RQST_USER_ID) AS RQST_USER_NM
+    	   ,GET_USER_NM(A.APRV_USER_ID) AS APRV_USER_NM
+	  FROM WAM_STD_ERR_MSG A
+	  <where>
+	   STD_ERR_MSG_ID = #{stdErrMsgId,jdbcType=VARCHAR}  
+	   </where> 
+  </select>
+   <select id="selectChangeList" parameterType="java.lang.String" resultMap="BaseResultMap">
+    SELECT A.*
+	  FROM WAH_STD_ERR_MSG A
+	  <where>
+	   STD_ERR_MSG_ID = #{stdErrMsgId,jdbcType=VARCHAR}  
+	   </where> 
+	ORDER BY OBJ_VERS DESC
+  </select>
+</mapper>

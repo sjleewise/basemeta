@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.meta.gap.service.WatDbcGapIdxColMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.meta.gap.service.WatDbcGapIdxCol" extends="kr.wise.meta.gap.service.WatDbcGapIdxMapper.BaseResultMap" >
+    <result column="SRC_IDX_COL_PNM" property="srcIdxColPnm" jdbcType="VARCHAR" />
+    <result column="SRC_IDX_COL_LNM" property="srcIdxColLnm" jdbcType="VARCHAR" />
+    <result column="SRC_ORD" property="srcOrd" jdbcType="DECIMAL" />
+    <result column="SRC_SORT_TYPE" property="srcSortType" jdbcType="VARCHAR" />
+    <result column="SRC_DATA_TYPE" property="srcDataType" jdbcType="VARCHAR" />
+    <result column="SRC_DATA_PNUM" property="srcDataPnum" jdbcType="DECIMAL" />
+    <result column="SRC_DATA_LEN" property="srcDataLen" jdbcType="DECIMAL" />
+    <result column="SRC_DATA_PNT" property="srcDataPnt" jdbcType="DECIMAL" />
+    <result column="SRC_DDL_IDX_COL_ID" property="srcDdlIdxColId" jdbcType="VARCHAR" />
+    <result column="TGT_IDX_COL_PNM" property="tgtIdxColPnm" jdbcType="VARCHAR" />
+    <result column="TGT_IDX_COL_LNM" property="tgtIdxColLnm" jdbcType="VARCHAR" />
+    <result column="TGT_ORD" property="tgtOrd" jdbcType="DECIMAL" />
+    <result column="TGT_SORT_TYPE" property="tgtSortType" jdbcType="VARCHAR" />
+    <result column="TGT_DATA_TYPE" property="tgtDataType" jdbcType="VARCHAR" />
+    <result column="TGT_DATA_PNUM" property="tgtDataPnum" jdbcType="DECIMAL" />
+    <result column="TGT_DATA_LEN" property="tgtDataLen" jdbcType="DECIMAL" />
+    <result column="TGT_DATA_PNT" property="tgtDataPnt" jdbcType="DECIMAL" />
+    <result column="TGT_DDL_IDX_COL_ID" property="tgtDdlIdxColId" jdbcType="VARCHAR" />
+    <result column="SRC_IDX_COL_EXTNC_EXS" property="srcIdxColExtncExs" jdbcType="VARCHAR" />
+    <result column="TGT_IDX_COL_EXTNC_EXS" property="tgtIdxColExtncExs" jdbcType="VARCHAR" />
+    <result column="ORD_ERR_EXS" property="ordErrExs" jdbcType="VARCHAR" />
+    <result column="SORT_TYPE_ERR_EXS" property="sortTypeErrExs" jdbcType="VARCHAR" />
+    <result column="DATA_TYPE_ERR_EXS" property="dataTypeErrExs" jdbcType="VARCHAR" />
+    <result column="DATA_PNUM_ERR_EXS" property="dataPnumErrExs" jdbcType="VARCHAR" />
+    <result column="DATA_LEN_ERR_EXS" property="dataLenErrExs" jdbcType="VARCHAR" />
+    <result column="DATA_PNT_ERR_EXS" property="dataPntErrExs" jdbcType="VARCHAR" />
+    <result column="IDX_COL_ERR_EXS" property="idxColErrExs" jdbcType="VARCHAR" />
+    <result column="IDX_COL_ERR_DESCN" property="idxColErrDescn" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <select id="getGapIdxColSrcList" parameterType="kr.wise.meta.gap.service.WatDbcGapIdx" resultMap="BaseResultMap">
+	SELECT 
+	         C.SRC_DB_SCH_ID
+	  	   , C.SRC_TBL_PNM
+	  	   , C.SRC_IDX_PNM
+	  	   , C.SRC_IDX_COL_PNM
+	  	   , C.SRC_ORD
+	  	   , C.SRC_SORT_TYPE 
+	  	   , C.SRC_DATA_TYPE 
+	  	   , C.SRC_DATA_PNUM 
+	  	   , C.SRC_DATA_LEN 
+	  	   , C.SRC_DATA_PNT 
+	  	   , CASE WHEN C.IDX_COL_ERR_EXS = 'Y' THEN  '#FF0000' END AS FontColor
+		FROM WAT_DBC_GAP_IDX_COL C
+	   WHERE C.SRC_DB_SCH_ID = #{srcDbSchId,jdbcType=VARCHAR}
+	      AND C.SRC_TBL_PNM = #{srcTblPnm,jdbcType=VARCHAR}
+	   ORDER BY  C.SRC_IDX_PNM, C.SRC_ORD
+  </select>
+  
+  <select id="getGapIdxColTgtList" parameterType="kr.wise.meta.gap.service.WatDbcGapIdx" resultMap="BaseResultMap">
+	SELECT 
+	         C.TGT_DB_SCH_ID
+	  	   , C.TGT_TBL_PNM
+	  	   , C.TGT_IDX_PNM
+	  	   , C.TGT_IDX_COL_PNM
+	  	   , C.TGT_ORD
+	  	   , C.TGT_SORT_TYPE 
+	  	   , C.TGT_DATA_TYPE 
+	  	   , C.TGT_DATA_PNUM 
+	  	   , C.TGT_DATA_LEN 
+	  	   , C.TGT_DATA_PNT 
+	  	   , CASE WHEN C.IDX_COL_ERR_EXS = 'Y' THEN  '#FF0000' END AS FontColor
+		FROM WAT_DBC_GAP_IDX_COL C
+	   WHERE C.TGT_DB_SCH_ID = #{tgtDbSchId,jdbcType=VARCHAR}
+	      AND C.TGT_TBL_PNM = #{tgtTblPnm,jdbcType=VARCHAR}
+	   ORDER BY C.TGT_IDX_PNM, C.SRC_ORD
+  </select>
+  
+  
+  
+  
+  
+</mapper>

@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.meta.mta.service.WamMtaColMapper" >
+	<resultMap id="BaseResultMap" type="kr.wise.meta.mta.service.WamMtaCol" extends = "kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+	  	<id column="MTA_COL_ID" property="mtaColId" jdbcType="VARCHAR" />
+		<result column="MTA_COL_PNM" property="mtaColPnm" jdbcType="VARCHAR" />
+		<result column="MTA_COL_LNM" property="mtaColLnm" jdbcType="VARCHAR" />
+		<result column="MTA_TBL_ID" property="mtaTblId" jdbcType="VARCHAR" />
+		<result column="COL_REL_ENTY_NM" property="colRelEntyNm" jdbcType="VARCHAR" />
+		<result column="COL_REL_ATTR_NM" property="colRelAttrNm" jdbcType="VARCHAR" />
+		<result column="COL_ORD" property="colOrd" jdbcType="DECIMAL" />
+		<result column="PK_YN" property="pkYn" jdbcType="VARCHAR" />
+		<result column="PK_ORD" property="pkOrd" jdbcType="DECIMAL" />
+		<result column="FK_YN" property="fkYn" jdbcType="VARCHAR" />
+		<result column="DATA_TYPE" property="dataType" jdbcType="VARCHAR" />
+		<result column="DATA_LEN" property="dataLen" jdbcType="VARCHAR" />
+		<result column="DATA_SCAL" property="dataScal" jdbcType="DECIMAL" />
+		<result column="DATA_FMT" property="dataFmt" jdbcType="VARCHAR" />
+		<result column="NONUL_YN" property="nonulYn" jdbcType="VARCHAR" />
+		<result column="DEFLT_VAL" property="defltVal" jdbcType="VARCHAR" />
+		<result column="CONST_CND" property="constCnd" jdbcType="VARCHAR" />
+		<result column="OPEN_YN" property="openYn" jdbcType="VARCHAR" />
+		<result column="PRSN_INFO_YN" property="prsnInfoYn" jdbcType="VARCHAR" />
+		<result column="ENC_TRG_YN" property="encTrgYn" jdbcType="VARCHAR" />
+		<result column="PRI_RSN" property="priRsn" jdbcType="VARCHAR" />
+		<result column="RQST_NO" property="rqstNo" jdbcType="VARCHAR" />
+		<result column="RQST_SNO" property="rqstSno" jdbcType="DECIMAL" />
+		<result column="RQST_DTL_SNO" property="rqstDtlSno" jdbcType="DECIMAL" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+	  MTA_COL_ID, MTA_COL_PNM, MTA_COL_LNM, MTA_TBL_ID, COL_REL_ENTY_NM, COL_REL_ATTR_NM, COL_ORD
+	, PK_YN, PK_ORD, FK_YN, DATA_TYPE, DATA_LEN, DATA_SCAL, DATA_FMT, NONUL_YN, DEFLT_VAL, CONST_CND
+	, OPEN_YN, PRSN_INFO_YN, ENC_TRG_YN, PRI_RSN, RQST_NO, RQST_SNO, RQST_DTL_SNO, OBJ_DESCN
+	, OBJ_VERS, REG_TYP_CD, FRS_RQST_DTM, FRS_RQST_USER_ID, RQST_DTM, RQST_USER_ID, APRV_DTM, APRV_USER_ID
+	</sql>
+
+	<select id="selectList" parameterType="kr.wise.meta.mta.service.WamMtaCol" resultMap="BaseResultMap">
+	<!-- 신규 적재 대상 추출 -->
+	 SELECT 
+			  MTA_COL_ID, MTA_COL_PNM, MTA_COL_LNM
+			, MTA_TBL_ID, COL_REL_ENTY_NM, COL_REL_ATTR_NM, COL_ORD
+			, PK_YN, PK_ORD, FK_YN, DATA_TYPE, DATA_LEN, DATA_SCAL, DATA_FMT, NONUL_YN, DEFLT_VAL, CONST_CND
+			, OPEN_YN, PRSN_INFO_YN, ENC_TRG_YN, PRI_RSN, RQST_NO, RQST_SNO, RQST_DTL_SNO, OBJ_DESCN
+			, OBJ_VERS, REG_TYP_CD, FRS_RQST_DTM, FRS_RQST_USER_ID, RQST_DTM, RQST_USER_ID, APRV_DTM, APRV_USER_ID
+	  FROM 	WAM_MTA_COL
+   	 WHERE 	MTA_TBL_ID = #{mtaTblId,jdbcType=VARCHAR}
+   	 <if test="mtaColPnm != null">
+   	 	AND (  MTA_COL_PNM LIKE '%'||UPPER(#{mtaColPnm,jdbcType=VARCHAR})||'%'
+				OR MTA_COL_PNM LIKE '%'||#{mtaColPnm,jdbcType=VARCHAR}||'%'
+				OR MTA_COL_LNM LIKE '%'||UPPER(#{mtaColPnm,jdbcType=VARCHAR})||'%'
+				OR MTA_COL_LNM LIKE '%'||#{mtaColPnm,jdbcType=VARCHAR}||'%')
+   	 </if>
+   	 AND	REG_TYP_CD IN ('C', 'U')
+   	 ORDER BY COL_ORD, MTA_COL_PNM
+	</select>
+	
+	<resultMap id="MtaColMap" type="java.util.HashMap">
+		<result column="MTA_COL_ID" property="mta_col_id" jdbcType="VARCHAR" />
+		<result column="MTA_COL_PNM" property="mta_col_pnm" jdbcType="VARCHAR" />
+		<result column="MTA_COL_LNM" property="mta_col_lnm" jdbcType="VARCHAR" />
+		<result column="MTA_TBL_ID" property="mta_tbl_id" jdbcType="VARCHAR" />
+		<result column="COL_REL_ENTY_NM" property="col_rel_enty_nm" jdbcType="VARCHAR" />
+		<result column="COL_REL_ATTR_NM" property="col_rel_attr_nm" jdbcType="VARCHAR" />
+		<result column="COL_ORD" property="col_ord" jdbcType="VARCHAR" />
+		<result column="PK_YN" property="pk_yn" jdbcType="VARCHAR" />
+		<result column="PK_ORD" property="pk_ord" jdbcType="VARCHAR" />
+		<result column="FK_YN" property="fk_yn" jdbcType="VARCHAR" />
+		<result column="DATA_TYPE" property="data_type" jdbcType="VARCHAR" />
+		<result column="DATA_LEN" property="data_len" jdbcType="DECIMAL" />
+		<result column="DATA_SCAL" property="data_scal" jdbcType="DECIMAL" />
+		<result column="DATA_FMT" property="data_fmt" jdbcType="VARCHAR" />
+		<result column="NONUL_YN" property="nonul_yn" jdbcType="VARCHAR" />
+		<result column="DEFLT_VAL" property="deflt_val" jdbcType="VARCHAR" />
+		<result column="CONST_CND" property="const_cnd" jdbcType="VARCHAR" />
+		<result column="OPEN_YN" property="open_yn" jdbcType="VARCHAR" />
+		<result column="PRSN_INFO_YN" property="prsn_info_yn" jdbcType="VARCHAR" />
+		<result column="ENC_TRG_YN" property="enc_trg_yn" jdbcType="VARCHAR" />
+		<result column="PRI_RSN" property="pri_rsn" jdbcType="VARCHAR" />
+		<result column="RQST_NO" property="rqst_no" jdbcType="VARCHAR" />
+		<result column="RQST_SNO" property="rqst_sno" jdbcType="VARCHAR" />
+		<result column="RQST_DTL_SNO" property="rqst_dtl_sno" jdbcType="VARCHAR" />
+		<result column="OBJ_DESCN" property="obj_descn" jdbcType="VARCHAR" />
+		<result column="OBJ_VERS" property="obj_vers" jdbcType="DECIMAL" />
+		<result column="REG_TYP_CD" property="reg_typ_cd" jdbcType="VARCHAR" />
+		<result column="FRS_RQST_DTM" property="frs_rqst_dtm" jdbcType="VARCHAR" />
+		<result column="FRS_RQST_USER_ID" property="frs_rqst_user_id" jdbcType="VARCHAR" />
+		<result column="RQST_DTM" property="rqst_dtm" jdbcType="VARCHAR" />
+		<result column="RQST_USER_ID" property="rqst_user_id" jdbcType="VARCHAR" />
+		<result column="APRV_DTM" property="aprv_dtm" jdbcType="VARCHAR" />
+		<result column="APRV_USER_ID" property="aprv_user_id" jdbcType="VARCHAR" />
+		
+		<result column="INFO_SYS_CD" property="info_sys_cd" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<!-- <select id="selectMtaColList" parameterType="map" resultMap="MtaTblMap" > -->
+	<select id="selectListByRqstNo" resultMap="MtaColMap" parameterType="java.lang.String" >
+  	<!-- 메타데이터 테이블 추가대상 조회 -->
+	   SELECT A.MTA_COL_ID
+			, NVL(A.MTA_COL_PNM,'') MTA_COL_PNM
+			, NVL(A.MTA_COL_LNM,'') MTA_COL_LNM
+			, NVL(A.MTA_TBL_ID,'') MTA_TBL_ID
+			, NVL(A.COL_REL_ENTY_NM,'') COL_REL_ENTY_NM
+			, NVL(A.COL_REL_ATTR_NM,'') COL_REL_ATTR_NM
+			, NVL(A.COL_ORD,'') COL_ORD
+			, NVL(A.PK_YN,'') PK_YN
+			, NVL(A.PK_ORD,'') PK_ORD
+			, NVL(A.FK_YN,'') FK_YN
+			, NVL(A.DATA_TYPE,'') DATA_TYPE
+			, NVL(A.DATA_LEN,'') DATA_LEN
+			, NVL(A.DATA_SCAL,'') DATA_SCAL
+			, NVL(A.DATA_FMT,'') DATA_FMT
+			, NVL(A.NONUL_YN,'') NONUL_YN
+			, NVL(A.DEFLT_VAL,'') DEFLT_VAL
+			, NVL(A.CONST_CND,'') CONST_CND
+			, NVL(A.OPEN_YN,'') OPEN_YN
+			, NVL(A.PRSN_INFO_YN,'') PRSN_INFO_YN
+			, NVL(A.ENC_TRG_YN,'') ENC_TRG_YN
+			, NVL(A.PRI_RSN,'') PRI_RSN
+			, NVL(A.RQST_NO,'') RQST_NO
+			, NVL(A.RQST_SNO,'') RQST_SNO
+			, NVL(A.RQST_DTL_SNO,'') RQST_DTL_SNO
+			, NVL(A.OBJ_DESCN,'') OBJ_DESCN
+			, NVL(A.OBJ_VERS,'') OBJ_VERS
+			, NVL(A.REG_TYP_CD,'U') REG_TYP_CD
+			, TO_CHAR(A.FRS_RQST_DTM,'YYYYMMDDHH24MISS') AS FRS_RQST_DTM
+			, NVL(A.FRS_RQST_USER_ID,'') FRS_RQST_USER_ID
+			, TO_CHAR(A.RQST_DTM,'YYYYMMDDHH24MISS') AS RQST_DTM
+			, NVL(A.RQST_USER_ID,'') RQST_USER_ID
+			, NVL(TO_CHAR(A.APRV_DTM,'YYYYMMDDHH24MISS'),'') AS APRV_DTM 
+			, NVL(A.APRV_USER_ID,'') APRV_USER_ID
+			, B.INFO_SYS_CD
+		 FROM WAQ_MTA_COL A 
+		      INNER JOIN WAQ_MTA_TBL B 
+		         ON B.RQST_NO  = A.RQST_NO
+		        AND B.RQST_SNO = A.RQST_SNO 			  
+		WHERE B.RVW_STS_CD = '1'
+		  AND B.RQST_NO =  #{rqstNo,jdbcType=VARCHAR}
+	 
+  </select>
+  <select id="selectListByTblId" resultMap="MtaColMap" parameterType="java.lang.String" >
+  	<!-- 메타데이터 테이블 추가대상 조회 -->
+	   SELECT A.MTA_COL_ID
+			, NVL(A.MTA_COL_PNM,'') MTA_COL_PNM
+			, NVL(A.MTA_COL_LNM,'') MTA_COL_LNM
+			, NVL(A.MTA_TBL_ID,'') MTA_TBL_ID
+			, NVL(A.COL_REL_ENTY_NM,'') COL_REL_ENTY_NM
+			, NVL(A.COL_REL_ATTR_NM,'') COL_REL_ATTR_NM
+			, NVL(A.COL_ORD,'') COL_ORD
+			, NVL(A.PK_YN,'') PK_YN
+			, NVL(A.PK_ORD,'') PK_ORD
+			, NVL(A.FK_YN,'') FK_YN
+			, NVL(A.DATA_TYPE,'') DATA_TYPE
+			, NVL(A.DATA_LEN,'') DATA_LEN
+			, NVL(A.DATA_SCAL,'') DATA_SCAL
+			, NVL(A.DATA_FMT,'') DATA_FMT
+			, NVL(A.NONUL_YN,'') NONUL_YN
+			, NVL(A.DEFLT_VAL,'') DEFLT_VAL
+			, NVL(A.CONST_CND,'') CONST_CND
+			, NVL(A.OPEN_YN,'') OPEN_YN
+			, NVL(A.PRSN_INFO_YN,'') PRSN_INFO_YN
+			, NVL(A.ENC_TRG_YN,'') ENC_TRG_YN
+			, NVL(A.PRI_RSN,'') PRI_RSN
+			, NVL(A.RQST_NO,'') RQST_NO
+			, NVL(A.RQST_SNO,'') RQST_SNO
+			, NVL(A.RQST_DTL_SNO,'') RQST_DTL_SNO
+			, NVL(A.OBJ_DESCN,'') OBJ_DESCN
+			, NVL(A.OBJ_VERS,'') OBJ_VERS
+			, NVL(A.REG_TYP_CD,'U') REG_TYP_CD
+			, TO_CHAR(A.FRS_RQST_DTM,'YYYYMMDDHH24MISS') AS FRS_RQST_DTM
+			, NVL(A.FRS_RQST_USER_ID,'') FRS_RQST_USER_ID
+			, TO_CHAR(A.RQST_DTM,'YYYYMMDDHH24MISS') AS RQST_DTM
+			, NVL(A.RQST_USER_ID,'') RQST_USER_ID
+			, NVL(TO_CHAR(A.APRV_DTM,'YYYYMMDDHH24MISS'),'') AS APRV_DTM 
+			, NVL(A.APRV_USER_ID,'') APRV_USER_ID
+			, B.INFO_SYS_CD
+		 FROM WAM_MTA_COL A 
+		      INNER JOIN WAM_MTA_TBL B 
+		         ON B.MTA_TBL_ID = A.MTA_TBL_ID				  
+		WHERE 1=1
+		  AND B.MTA_TBL_ID =  #{mtaTblId,jdbcType=VARCHAR}
+	 
+  </select>
+  <select id="selectWamMtaColByRqstNo" resultMap="MtaColMap" parameterType="java.lang.String" >
+  	<!-- 메타데이터 테이블 추가대상 조회 -->
+	   SELECT A.MTA_COL_ID
+			, NVL(A.MTA_COL_PNM,'') MTA_COL_PNM
+			, NVL(A.MTA_COL_LNM,'') MTA_COL_LNM
+			, NVL(A.MTA_TBL_ID,'') MTA_TBL_ID
+			, NVL(A.COL_REL_ENTY_NM,'') COL_REL_ENTY_NM
+			, NVL(A.COL_REL_ATTR_NM,'') COL_REL_ATTR_NM
+			, NVL(A.COL_ORD,'') COL_ORD
+			, NVL(A.PK_YN,'') PK_YN
+			, NVL(A.PK_ORD,'') PK_ORD
+			, NVL(A.FK_YN,'') FK_YN
+			, NVL(A.DATA_TYPE,'') DATA_TYPE
+			, NVL(A.DATA_LEN,'') DATA_LEN
+			, NVL(A.DATA_SCAL,'') DATA_SCAL
+			, NVL(A.DATA_FMT,'') DATA_FMT
+			, NVL(A.NONUL_YN,'') NONUL_YN
+			, NVL(A.DEFLT_VAL,'') DEFLT_VAL
+			, NVL(A.CONST_CND,'') CONST_CND
+			, NVL(A.OPEN_YN,'') OPEN_YN
+			, NVL(A.PRSN_INFO_YN,'') PRSN_INFO_YN
+			, NVL(A.ENC_TRG_YN,'') ENC_TRG_YN
+			, NVL(A.PRI_RSN,'') PRI_RSN
+			, NVL(A.RQST_NO,'') RQST_NO
+			, NVL(A.RQST_SNO,'') RQST_SNO
+			, NVL(A.RQST_DTL_SNO,'') RQST_DTL_SNO
+			, NVL(A.OBJ_DESCN,'') OBJ_DESCN
+			, NVL(A.OBJ_VERS,'') OBJ_VERS
+			, NVL(A.REG_TYP_CD,'U') REG_TYP_CD
+			, TO_CHAR(A.FRS_RQST_DTM,'YYYYMMDDHH24MISS') AS FRS_RQST_DTM
+			, NVL(A.FRS_RQST_USER_ID,'') FRS_RQST_USER_ID
+			, TO_CHAR(A.RQST_DTM,'YYYYMMDDHH24MISS') AS RQST_DTM
+			, NVL(A.RQST_USER_ID,'') RQST_USER_ID
+			, NVL(TO_CHAR(A.APRV_DTM,'YYYYMMDDHH24MISS'),'') AS APRV_DTM 
+			, NVL(A.APRV_USER_ID,'') APRV_USER_ID
+			, B.INFO_SYS_CD
+		 FROM WAQ_MTA_COL A 
+		      INNER JOIN WAM_MTA_TBL B 
+		         ON B.MTA_TBL_ID = A.MTA_TBL_ID		  
+		WHERE 1 = 1
+		  AND EXISTS (SELECT 1
+		                FROM WAQ_MTA_TBL X
+		               WHERE X.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+		                 AND X.DB_SCH_ID   = B.DB_SCH_ID
+		                 AND X.MTA_TBL_PNM = B.MTA_TBL_PNM   
+		                 AND X.RVW_STS_CD = '1'
+		              ) 		 
+	 
+  </select>
+	
+</mapper>

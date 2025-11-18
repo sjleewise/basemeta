@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.dq.metadmn.service.MetaInterfaceMapper" >
+  <resultMap id="DmnResultMap" type="kr.wise.dq.metadmn.service.MetaDmnItfVO"  >
+    <result column="SDITM_ID" property="sditmId" jdbcType="VARCHAR" />
+    <result column="SDITM_LNM" property="sditmLnm" jdbcType="VARCHAR" />
+    <result column="SDITM_PNM" property="sditmPnm" jdbcType="VARCHAR" />
+    <result column="DMNG_ID" property="dmngId" jdbcType="VARCHAR" />
+    <result column="DMNG_LNM" property="dmngLnm" jdbcType="VARCHAR" />
+    <result column="DMNG_PNM" property="dmngPnm" jdbcType="VARCHAR" />
+    <result column="DMN_ID" property="dmnId" jdbcType="VARCHAR" />
+    <result column="DMN_LNM" property="dmnLnm" jdbcType="VARCHAR" />
+    <result column="DMN_PNM" property="dmnPnm" jdbcType="VARCHAR" />
+    <result column="CD_VAL_TYP_CD" property="cdValTypCd" jdbcType="VARCHAR" />
+    <result column="CD_VAL_TYP_NM" property="cdValTypNm" jdbcType="VARCHAR" />
+    <result column="LST_ENTY_ID" property="lstEntyId" jdbcType="VARCHAR" />
+    <result column="LST_ENTY_PNM" property="lstEntyPnm" jdbcType="VARCHAR" />
+    <result column="LST_ENTY_LNM" property="lstEntyLnm" jdbcType="VARCHAR" />
+    <result column="INFOTP_ID" property="infotpId" jdbcType="VARCHAR" />
+    <result column="INFOTP_LNM" property="infotpLnm" jdbcType="VARCHAR" />
+    <result column="DATA_TYPE" property="dataType" jdbcType="VARCHAR" />
+    <result column="DATA_LEN" property="dataLen" jdbcType="DECIMAL" />
+    <result column="DATA_SCAL" property="dataScal" jdbcType="DECIMAL" />
+    <result column="DBC_COL_NM" property="dbcColNm" jdbcType="VARCHAR" />
+    <result column="DBC_COL_KOR_NM" property="dbcColKorNm" jdbcType="VARCHAR" />
+    <result column="PDM_COL_LNM" property="pdmColLnm" jdbcType="VARCHAR" />
+    <result column="PDM_COL_PNM" property="pdmColPnm" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <resultMap id="CdDmnLstResultMap" type="kr.wise.dq.metadmn.service.MetaDmnCdValItfVO"  >
+    <result column="CD_VAL_ID" property="cdValId" jdbcType="VARCHAR" />
+    <result column="CD_VAL" property="cdVal" jdbcType="VARCHAR" />
+    <result column="CD_VAL_NM" property="cdValNm" jdbcType="VARCHAR" />
+<!--     <result column="OBJ_DESCN" property="objDescn" jdbcType="VARCHAR" /> -->
+  </resultMap>
+  
+  <select id="selectMetaDmnDtl" resultMap="DmnResultMap" parameterType="kr.wise.dq.metadmn.service.MetaDmnItfVO" >
+    SELECT  A.SDITM_ID 
+		       ,A.SDITM_LNM
+		       ,A.SDITM_PNM
+		       ,G.DMNG_ID
+		       ,G.DMNG_LNM
+		       ,G.DMNG_PNM
+		       ,B.DMN_ID
+		       ,B.DMN_LNM
+		       ,B.DMN_PNM
+		       ,B.LST_ENTY_ID
+		       ,B.LST_ENTY_PNM
+		       ,B.LST_ENTY_LNM
+		       ,B.CD_VAL_TYP_CD  
+		       ,CD.COMM_DTL_CD_NM AS CD_VAL_TYP_NM
+		       ,PC.PDM_COL_PNM  
+		       ,PC.PDM_COL_LNM
+		       ,D.INFOTP_LNM
+		       ,D.DATA_TYPE
+		       ,D.DATA_LEN
+		       ,D.DATA_SCAL
+		       ,#{dbcColNm,jdbcType=VARCHAR} as DBC_COL_NM
+		       ,#{dbcColKorNm,jdbcType=VARCHAR} as DBC_COL_KOR_NM		       
+		FROM WAM_SDITM A 
+		     INNER JOIN WAM_DMN B
+		        ON A.DMN_ID = B.DMN_ID
+		     INNER JOIN WAA_DMNG G
+		        ON A.DMNG_ID = G.DMNG_ID
+		       AND G.EXP_DTM = STR_TO_DATE('99991231', '%Y%m%d')
+		     INNER JOIN WAA_DMNG_INFOTP_MAP C
+		        ON A.DMNG_ID = C.DMNG_ID
+		       AND A.INFOTP_ID = C.INFOTP_ID
+		       AND C.EXP_DTM = STR_TO_DATE('99991231', '%Y%m%d')
+		     INNER JOIN WAA_INFO_TYPE D
+		        ON C.INFOTP_ID = D.INFOTP_ID
+		       AND D.EXP_DTM = STR_TO_DATE('99991231', '%Y%m%d')
+		      LEFT OUTER JOIN WAA_COMM_DTL_CD CD
+		        ON B.CD_VAL_TYP_CD = CD.COMM_DTL_CD
+		       AND CD.EXP_DTM = STR_TO_DATE('99991231', '%Y%m%d')
+		       AND CD.REG_TYP_CD IN ('C','U')
+		       AND COMM_DCD_ID = 'OBJ_00000001017' --코드도메인유형
+<!-- 		      LEFT OUTER JOIN WAM_PDM_TBL PT -->
+<!-- 		        ON B.LST_ENTY_ID = PT.PDM_TBL_ID -->
+<!-- 		       AND B.LST_ENTY_PNM = PT.PDM_TBL_PNM -->
+		      LEFT OUTER JOIN WAM_PDM_COL PC
+		        ON B.LST_ENTY_ID = PC.PDM_TBL_ID
+		       AND A.SDITM_ID = PC.SDITM_ID
+		       AND PC.REG_TYP_CD IN ('C','U')
+		 WHERE SDITM_PNM = RTRIM(#{dbcColNm,jdbcType=VARCHAR},'1234567890')
+	 	 AND A.STND_ASRT = (SELECT 
+						 	SJ.STND_ASRT 
+						 FROM WAA_DB_SCH SCH
+						 INNER JOIN WAA_SUBJ_DB_SCH_MAP MP
+						 	ON SCH.DB_SCH_ID = MP.DB_SCH_ID 
+						 	AND SCH.EXP_DTM = STR_TO_DATE('99991231', '%Y%m%d')
+						 	AND MP.EXP_DTM = STR_TO_DATE('99991231', '%Y%m%d')
+						 INNER JOIN WAA_SUBJ SJ
+							 ON MP.SUBJ_ID =SJ.SUBJ_ID 
+							 AND SJ.EXP_DTM = STR_TO_DATE('99991231', '%Y%m%d')
+						 WHERE SCH.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+						limit 1)
+  </select>  
+  
+  <select id="selectMetaDmnCdValLst" resultMap="CdDmnLstResultMap" parameterType="java.lang.String" >
+    SELECT CD_VAL_ID 
+             ,CD_VAL
+             ,CD_VAL_NM
+             ,CD.OBJ_DESCN
+     FROM WAM_DMN M
+             INNER JOIN WAM_CD_VAL CD
+                 ON M.DMN_ID = CD.DMN_ID
+                AND CD.REG_TYP_CD IN ('C','U')
+    WHERE M.DMN_ID = #{dmnId,jdbcType=VARCHAR}
+       AND M.REG_TYP_CD IN ('C','U')
+    ORDER BY CD.CD_VAL
+  </select>
+  
+  
+</mapper>

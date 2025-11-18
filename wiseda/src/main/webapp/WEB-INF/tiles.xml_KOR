@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN"
+       "http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+<tiles-definitions>
+    <definition name="da.definition" template="/WEB-INF/decorators/daTemplate.jsp">
+        <put-attribute name="title" 	value="" />
+        <put-attribute name="header" 	value="/WEB-INF/decorators/metagnbContent.jsp" />
+<!--         <put-attribute name="menu" 		value="/WEB-INF/decorators/metaSideMenu.jsp" /> -->
+        <put-attribute name="body" 		value="" />
+        <put-attribute name="footer" 	value="/WEB-INF/decorators/adminfooterContent.jsp" />
+    </definition>
+
+    <definition name="pt.definition" template="/WEB-INF/decorators/ptTemplate.jsp">
+        <put-attribute name="title" 	value="포탈" />
+        <put-attribute name="header" 	value="/WEB-INF/decorators/headerContent.jsp" />
+        <put-attribute name="menu" 		value="/WEB-INF/decorators/sideMenuContent.jsp" />
+        <put-attribute name="body" 		value="" />
+        <put-attribute name="footer" 	value="/WEB-INF/decorators/footerContent.jsp" />
+    </definition>
+
+    <definition name="main.definition" template="/WEB-INF/decorators/ptmainTemplate.jsp">
+        <put-attribute name="title" 	value="메인" />
+        <put-attribute name="header" 	value="/WEB-INF/decorators/headerContent.jsp" />
+        <put-attribute name="body" 		value="" />
+        <put-attribute name="footer" 	value="/WEB-INF/decorators/footerContent.jsp" />
+    </definition>
+
+    <definition name="damain.definition" template="/WEB-INF/decorators/damainTemplate.jsp">
+        <put-attribute name="title" 	value="메인" />
+        <put-attribute name="header" 	value="/WEB-INF/decorators/metagnbContent.jsp" />
+        <put-attribute name="body" 		value="" />
+        <put-attribute name="footer" 	value="/WEB-INF/decorators/adminfooterContent.jsp" />
+    </definition>
+
+    <definition name="dapop.definition" template="/WEB-INF/decorators/dapopTemplate.jsp">
+        <put-attribute name="title" 	value="" />
+        <put-attribute name="body" 		value="" />
+    </definition>
+
+    <definition name="login.definition" template="/WEB-INF/decorators/daloginTemplate.jsp">
+<!--         <put-attribute name="title" 	value="" /> -->
+        <put-attribute name="body" 		value="" />
+    </definition>
+
+    <definition name="empty.definition" template="/WEB-INF/decorators/daemptyTemplate.jsp">
+<!--         <put-attribute name="title" 	value="" /> -->
+        <put-attribute name="body" 		value="" />
+    </definition>
+    
+    
+    
+    <definition name="/**_dtl" extends="empty.definition">
+    	<put-attribute name="body" expression="/WEB-INF/views/{1}_dtl.jsp" />
+    </definition>
+    
+    <definition name="/**_rqst_ifm" extends="dapop.definition">
+<!--     	<put-attribute name="title" value="" /> -->
+    	<put-attribute name="body" expression="/WEB-INF/views/{1}_rqst_ifm.jsp" />
+    </definition>
+
+    <definition name="/meta/**/popup/**" extends="dapop.definition">
+    	<put-attribute name="title" value="POPUP" />
+    	<put-attribute name="body" expression="/WEB-INF/views/meta/{1}/popup/{2}.jsp" />
+    </definition>
+    <definition name="/dq/**/popup/**" extends="dapop.definition">
+    	<put-attribute name="title" value="POPUP" />
+    	<put-attribute name="body" expression="/WEB-INF/views/dq/{1}/popup/{2}.jsp" />
+    </definition>
+    <definition name="/commons/**/popup/**" extends="dapop.definition">
+    	<put-attribute name="title" value="POPUP" />
+    	<put-attribute name="body" expression="/WEB-INF/views/commons/{1}/popup/{2}.jsp" />
+    </definition>
+    <definition name="/admin/**/popup/**" extends="dapop.definition">
+    	<put-attribute name="title" value="POPUP" />
+    	<put-attribute name="body" expression="/WEB-INF/views/admin/{1}/popup/{2}.jsp" />
+    </definition>
+
+    <definition name="/login*" extends="login.definition">
+<!--     	<put-attribute name="title" value="로그인" /> -->
+    	<put-attribute name="body" expression="/WEB-INF/views/login{1}.jsp" />
+    </definition>
+
+    <definition name="/main" extends="main.definition">
+    	<put-attribute name="title" value="메인" />
+    	<put-attribute name="body" expression="/WEB-INF/views/main.jsp" />
+    </definition>
+
+    <definition name="/damain" extends="damain.definition">
+    	<put-attribute name="title" value="메인" />
+    	<put-attribute name="body" expression="/WEB-INF/views/damain.jsp" />
+    </definition>
+
+    <definition name="/portal/totalsearch/*" extends="damain.definition">
+    	<put-attribute name="title" value="통합검색" />
+    	<put-attribute name="body" expression="/WEB-INF/views/portal/totalsearch/totalsearch.jsp" />
+    </definition>
+    
+    <definition name="/dqmain" extends="damain.definition">
+    	<put-attribute name="title" value="메인" />
+        <put-attribute name="header" 	value="/WEB-INF/decorators/dqgnbContent.jsp" />
+    	<put-attribute name="body" expression="/WEB-INF/views/dqmain.jsp" />
+    </definition>
+    
+    
+    <definition name="/meta/**" extends="da.definition">
+    	<put-attribute name="title" 	value="메타" />
+        <put-attribute name="header" 	value="/WEB-INF/decorators/metagnbContent.jsp" />
+<!--         <put-attribute name="menu" 		value="/WEB-INF/decorators/metaSideMenu.jsp" /> -->
+    	<put-attribute name="body" 		expression="/WEB-INF/views/meta/{1}.jsp" />
+    </definition>
+    <definition name="/dq/**" extends="da.definition">
+    	<put-attribute name="title" 	value="데이터품질" />
+        <put-attribute name="header" 	value="/WEB-INF/decorators/dqgnbContent.jsp" />
+<!--         <put-attribute name="menu" 		value="/WEB-INF/decorators/dqSideMenu.jsp" /> -->
+    	<put-attribute name="body" 		expression="/WEB-INF/views/dq/{1}.jsp" />
+    </definition>
+
+    <definition name="/portal/**" extends="pt.definition">
+    	<put-attribute name="title" 	value="포탈" />
+    	<put-attribute name="body" 		expression="/WEB-INF/views/portal/{1}.jsp" />
+    </definition>
+    
+    <definition name="/commons/bbs/**" extends="da.definition">
+    	<put-attribute name="title" value="게시판" />
+    	<put-attribute name="header" 	value="/WEB-INF/decorators/metagnbContent.jsp" />
+<!--     	<put-attribute name="menu" 		value="/WEB-INF/decorators/adminMenuContent.jsp" /> -->
+    	<put-attribute name="body" expression="/WEB-INF/views/commons/bbs/{1}.jsp" />
+    </definition>
+    
+    <definition name="/commons/sys/**" extends="da.definition">
+    	<put-attribute name="title" 	value="관리자" />
+        <put-attribute name="header" 	value="/WEB-INF/decorators/adminheaderContent.jsp" />
+<!--         <put-attribute name="menu" 		value="/WEB-INF/decorators/adminMenuContent.jsp" /> -->
+    	<put-attribute name="body" 		expression="/WEB-INF/views/commons/sys/{1}.jsp" />
+    </definition>
+    <definition name="/commons/sysmgmt/**" extends="da.definition">
+    	<put-attribute name="title" 	value="관리자" />
+        <put-attribute name="header" 	value="/WEB-INF/decorators/adminheaderContent.jsp" />
+<!--         <put-attribute name="menu" 		value="/WEB-INF/decorators/adminMenuContent.jsp" /> -->
+    	<put-attribute name="body" 		expression="/WEB-INF/views/commons/sysmgmt/{1}.jsp" />
+    </definition>
+    <definition name="/commons/code/**" extends="da.definition">
+    	<put-attribute name="title" 	value="관리자" />
+        <put-attribute name="header" 	value="/WEB-INF/decorators/adminheaderContent.jsp" />
+<!--         <put-attribute name="menu" 		value="/WEB-INF/decorators/adminMenuContent.jsp" /> -->
+    	<put-attribute name="body" 		expression="/WEB-INF/views/commons/code/{1}.jsp" />
+    </definition>
+    <definition name="/commons/user/**" extends="da.definition">
+    	<put-attribute name="title" 	value="관리자" />
+        <put-attribute name="header" 	value="/WEB-INF/decorators/adminheaderContent.jsp" />
+<!--         <put-attribute name="menu" 		value="/WEB-INF/decorators/adminMenuContent.jsp" /> -->
+    	<put-attribute name="body" 		expression="/WEB-INF/views/commons/user/{1}.jsp" />
+    </definition>
+    <definition name="/commons/damgmt/**" extends="da.definition">
+    	<put-attribute name="title" 	value="관리자" />
+        <put-attribute name="header" 	value="/WEB-INF/decorators/adminheaderContent.jsp" />
+<!--         <put-attribute name="menu" 		value="/WEB-INF/decorators/adminMenuContent.jsp" /> -->
+    	<put-attribute name="body" 		expression="/WEB-INF/views/commons/damgmt/{1}.jsp" />
+    </definition>
+    <definition name="/admin/sys/**" extends="da.definition">
+    	<put-attribute name="title" 	value="관리자" />
+        <put-attribute name="header" 	value="/WEB-INF/decorators/adminheaderContent.jsp" />
+        <put-attribute name="menu" 		value="/WEB-INF/decorators/adminMenuContent.jsp" />
+    	<put-attribute name="body" 		expression="/WEB-INF/views/admin/sys/{1}.jsp" />
+    </definition>
+    
+<!--     <definition name="/commons/damgmt/schedule/ajaxgrid/*" extends="da.definition"> -->
+<!--     	<put-attribute name="title" 	value="관리자" /> -->
+<!--         <put-attribute name="header" 	value="/WEB-INF/decorators/adminheaderContent.jsp" /> -->
+<!--         <put-attribute name="menu" 		value="/WEB-INF/decorators/adminMenuContent.jsp" /> -->
+<!--     	<put-attribute name="body" 		expression="/WEB-INF/views/commons/damgmt/schedule/{1}.jsp" /> -->
+<!--     </definition> -->
+    
+<!--     <definition name="/meta/*/*_dtl" > -->
+<!--     	<put-attribute name="body" expression="/WEB-INF/views/meta/{1}/{2}_dtl.jsp" /> -->
+<!--     </definition> -->
+<!--     <definition name="/login" extends="base.definition"> -->
+<!--     	<put-attribute name="title" value="login" /> -->
+<!--     	<put-attribute name="body" value="/WEB-INF/views/login.jsp" /> -->
+<!--     </definition> -->
+ 
+<!--     <definition name="contact" extends="base.definition"> -->
+<!--         <put-attribute name="title" value="Contact Manager" /> -->
+<!--         <put-attribute name="body" value="/WEB-INF/jsp/contact.jsp" /> -->
+<!--     </definition> -->
+ 
+</tiles-definitions>

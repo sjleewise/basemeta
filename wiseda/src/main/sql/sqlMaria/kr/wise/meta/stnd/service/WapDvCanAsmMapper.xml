@@ -1,0 +1,1132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.meta.stnd.service.WapDvCanAsmMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.meta.stnd.service.WapDvCanAsm"  extends="kr.wise.commons.damgmt.dmnginfo.service.WaaInfoTypeMapper.BaseResultMap">
+    <result column="DV_RQST_NO" 	   property="dvRqstNo" 	     jdbcType="VARCHAR" />
+    <result column="DIC_ASM_LNM" 	   property="dicAsmLnm" 	 jdbcType="VARCHAR" />
+    <result column="DIC_ASM_PNM" 	   property="dicAsmPnm" 	 jdbcType="VARCHAR" />
+    <result column="DMN_LNM" 		   property="dmnLnm" 		 jdbcType="VARCHAR" />
+    <result column="DMN_PNM" 		   property="dmnPnm" 		 jdbcType="VARCHAR" />
+    <result column="DMNG_LNM" 		   property="dmngLnm" 		 jdbcType="VARCHAR" />
+    <result column="DMNG_ID" 		   property="dmngId" 		 jdbcType="VARCHAR" />
+    <result column="DIC_ASM_DS_LNM"    property="dicAsmDsLnm" 	 jdbcType="VARCHAR" />
+    <result column="DIC_ASM_DS_PNM"    property="dicAsmDsPnm" 	 jdbcType="VARCHAR" />
+    <result column="DV_TRG_LNM" 	   property="dvTrgLnm" 	     jdbcType="VARCHAR" />
+    <result column="DV_ORG_LNM" 	   property="dvOrgLnm" 	     jdbcType="VARCHAR" />
+    <result column="DV_ENC_YN" 	       property="dvEncYn" 	     jdbcType="VARCHAR" />
+    <result column="DV_OBJ_DESCN" 	   property="dvObjDescn" 	 jdbcType="VARCHAR" />
+    <result column="DV_RQST_RES" 	   property="dvRqstRes" 	 jdbcType="VARCHAR" />
+    <result column="PRC_CD" 		   property="prcCd"          jdbcType="VARCHAR" />
+    <result column="REG_POS_YN" 	   property="regPosYn"       jdbcType="VARCHAR" />
+    <result column="DV_SE_CD" 		   property="dvSeCd"         jdbcType="VARCHAR" />
+    <result column="SDITM_AUTO_CRT_YN" property="sditmAutoCrtYn" jdbcType="VARCHAR" />
+    <result column="CD_VAL_TYP_CD"     property="cdValTypCd"     jdbcType="VARCHAR" />
+    <result column="CD_VAL_IVW_CD"     property="cdValIvwCd"     jdbcType="VARCHAR" /> 
+    <result column="STND_ASRT"     	   property="stndAsrt"     	 jdbcType="VARCHAR" /> 
+<!--     <result column="PERS_INFO_CNV_YN"  property="persInfoCnvYn"     jdbcType="VARCHAR" />  -->
+<!--     <result column="PERS_INFO_GRD"     property="persInfoGrd"     jdbcType="VARCHAR" />  -->
+  </resultMap>
+  
+  <insert id="insertFirst" parameterType="kr.wise.meta.stnd.service.WapDvCanDic" >
+    insert 	/* WapDvCanAsmMapper.insertFirst */
+    		into WAP_DV_CAN_ASM (DV_RQST_NO, DV_TRG_LNM, PRC_CD, DV_ORG_LNM ,DV_RQST_USER_ID ,DV_ENC_YN ,DV_OBJ_DESCN, DV_SE_CD,STND_ASRT
+<!--     		, DATA_TYPE, DATA_LEN, DATA_SCAL -->
+    		 )
+    values (#{dvRqstNo,jdbcType=VARCHAR}, #{trgLnm,jdbcType=VARCHAR}, 'A', #{trgLnm,jdbcType=VARCHAR}, #{dvRqstUserId,jdbcType=VARCHAR}
+          , #{dvEncYn,jdbcType=VARCHAR}, #{dvObjDescn,jdbcType=VARCHAR}, #{dvSeCd,jdbcType=VARCHAR}, #{stndAsrt,jdbcType=VARCHAR}
+<!--           , #{dataType,jdbcType=VARCHAR}, #{dataLen,jdbcType=VARCHAR}, #{dataScal,jdbcType=VARCHAR} -->
+          )
+  </insert>
+  
+  <insert id="insertDvListFirst" parameterType="kr.wise.meta.stnd.service.WapDvCanAsm" >
+    insert 	/* WapDvCanAsmMapper.insertDvListFirst */
+    		into WAP_DV_CAN_ASM (
+    	DV_RQST_NO
+    	, DV_TRG_LNM
+    	, PRC_CD
+    	, DV_ORG_LNM 
+    	, DV_RQST_DTM
+    	, DV_RQST_USER_ID 
+    	, DV_ENC_YN 
+    	, DV_OBJ_DESCN
+    	, DV_SE_CD
+    	, DMNG_LNM  
+    	, INFOTP_LNM   
+    	, SDITM_AUTO_CRT_YN
+    	, CD_VAL_TYP_CD
+    	, CD_VAL_IVW_CD
+    	, FULL_PATH
+    	, STND_ASRT
+<!--     	, DATA_TYPE -->
+<!--     	, DATA_LEN -->
+<!--     	, DATA_SCAL -->
+    	 )  values (
+    	 #{dvRqstNo,jdbcType=VARCHAR}
+    	 , #{dvOrgLnm,jdbcType=VARCHAR}
+    	 , 'A'
+    	 , #{dvOrgLnm,jdbcType=VARCHAR}
+    	 , NOW()
+    	 , #{dvRqstUserId,jdbcType=VARCHAR}
+    	 , #{dvEncYn,jdbcType=VARCHAR}
+    	 , #{dvObjDescn,jdbcType=VARCHAR}
+    	 , #{dvSeCd,jdbcType=VARCHAR}    	 
+    	 , #{dmngLnm,jdbcType=VARCHAR}
+    	 , #{infotpLnm,jdbcType=VARCHAR}
+    	 , #{sditmAutoCrtYn,jdbcType=VARCHAR}
+    	 , #{cdValTypCd,jdbcType=VARCHAR}   	    	 
+    	 , #{cdValIvwCd,jdbcType=VARCHAR}
+    	 , #{fullPath,jdbcType=VARCHAR}
+    	 , #{stndAsrt,jdbcType=VARCHAR}
+<!--     	 , #{dataType,jdbcType=VARCHAR} -->
+<!--     	 , #{dataLen,jdbcType=VARCHAR} -->
+<!--     	 , #{dataScal,jdbcType=VARCHAR} -->
+
+    	 )
+  </insert>
+  
+  <update id="updateDvListFirst" parameterType="java.lang.String" >
+ UPDATE /* WapDvCanAsmMapper.updateDvListFirst */
+ 		WAP_DV_CAN_ASM A
+   SET (A.DV_TRG_LNM, A.DV_TRG_LNM_NUM) = (SELECT RTRIM(DV_ORG_LNM, '1234567890'), SUBSTR(DV_ORG_LNM, CHAR_LENGTH(RTRIM(DV_ORG_LNM, '1234567890'))+1, CHAR_LENGTH(DV_ORG_LNM) )
+                                         FROM WAP_DV_CAN_ASM B
+                                        WHERE B.DV_RQST_NO = #{dvRqstNo,jdbcType=VARCHAR}
+                                          AND A.DV_RQST_NO = B.DV_RQST_NO
+                                          AND A.DV_ORG_LNM = B.DV_ORG_LNM
+                                          AND A.STND_ASRT = B.STND_ASRT
+                                          )
+ WHERE A.DV_RQST_NO = #{dvRqstNo,jdbcType=VARCHAR}  
+  </update>
+  
+  <insert id="insertAsmDic" parameterType="java.lang.String" >
+	insert 	/* WapDvCanAsmMapper.insertAsmDic */
+			into WAP_DV_CAN_ASM (
+		DV_RQST_NO
+		, DIC_ASM_LNM
+		, DIC_ASM_PNM
+		, DMN_LNM
+		, DMN_PNM
+		, DIC_ASM_DS_LNM
+		, DIC_ASM_DS_PNM
+		, DV_TRG_LNM
+		, PRC_CD
+		, DV_ORG_LNM 
+		, DV_RQST_DTM
+		, DV_RQST_USER_ID 
+		, DV_ENC_YN 
+		, DV_OBJ_DESCN
+		, DV_SE_CD
+		, DMNG_LNM  
+    	, INFOTP_LNM 
+    	, SDITM_AUTO_CRT_YN
+    	, CD_VAL_TYP_CD
+    	, CD_VAL_IVW_CD
+    	, FULL_PATH
+    	, STND_ASRT
+<!--     	, DATA_TYPE -->
+<!--     	, DATA_LEN -->
+<!--     	, DATA_SCAL -->
+	)  
+	SELECT DISTINCT 
+	        B.DV_RQST_NO
+	      , CONCAT(IFNULL(B.DIC_ASM_LNM,''), A.DIC_LNM)      AS DIC_ASM_LNM 
+ 	      , CONCAT(IFNULL(B.DIC_ASM_PNM,''), '_', A.DIC_PNM) AS DIC_ASM_PNM
+ 	      , B.DMN_LNM
+ 	      , B.DMN_PNM  
+ 	      , CONCAT(IFNULL(B.DIC_ASM_DS_LNM,''), ';', A.DIC_LNM)   AS DIC_ASM_DS_LNM
+	      , CONCAT(IFNULL(B.DIC_ASM_DS_PNM,''),';', A.DIC_PNM)    AS DIC_ASM_DS_PNM 
+	      , SUBSTR(B.DV_TRG_LNM, CHAR_LENGTH (A.DIC_LNM)+1)        AS DV_TRG_LNM
+	      , CASE WHEN SUBSTR(B.DV_TRG_LNM, CHAR_LENGTH (A.DIC_LNM)+1) = '' THEN 'Y' ELSE 'N' END AS PRC_CD 
+	      , B.DV_ORG_LNM
+	      , NOW()
+	      , B.DV_RQST_USER_ID 
+	      , B.DV_ENC_YN 
+	      , B.DV_OBJ_DESCN
+	      , B.DV_SE_CD
+	      , B.DMNG_LNM  
+    	  , B.INFOTP_LNM 
+    	  , B.SDITM_AUTO_CRT_YN
+    	  , B.CD_VAL_TYP_CD
+    	  , B.CD_VAL_IVW_CD
+    	  , B.FULL_PATH
+    	  , B.STND_ASRT
+<!--     	  , B.DATA_TYPE -->
+<!-- 	      , B.DATA_LEN -->
+<!-- 	      , B.DATA_SCAL -->
+	  FROM WAP_DV_CAN_DIC A
+	       INNER JOIN WAP_DV_CAN_ASM B
+	          ON B.DV_TRG_LNM LIKE CONCAT(IFNULL(A.DIC_LNM,''),'%') 
+	         AND B.DV_RQST_NO = A.DV_RQST_NO
+	         AND B.STND_ASRT     = A.STND_ASRT  
+	         AND B.PRC_CD = 'A' 
+	         AND B.DV_RQST_RES IS NULL	         
+	WHERE A.DIC_DS = 'W' 
+	  AND A.DV_RQST_NO = #{dvRqstNo,jdbcType=VARCHAR} 
+  </insert>
+  
+  <insert id="insertAsmDmn" parameterType="java.lang.String" >
+	insert 	/* WapDvCanAsmMapper.insertAsmDmn */
+			into WAP_DV_CAN_ASM 
+	(  DV_RQST_NO
+	 , DMN_LNM
+	 , DMN_PNM
+	 , DV_TRG_LNM
+	 , PRC_CD
+	 , DV_ORG_LNM 
+	 , DV_RQST_DTM
+	 , DV_RQST_USER_ID 
+	 , DV_ENC_YN 
+	 , DV_OBJ_DESCN
+	 , DV_SE_CD
+	 , INFOTP_LNM
+	 , FULL_PATH
+	 , STND_ASRT
+<!-- 	 , DATA_TYPE -->
+<!--      , DATA_LEN -->
+<!--      , DATA_SCAL -->
+	)  
+	SELECT B.DV_RQST_NO
+ 	     , A.DIC_LNM AS DMN_LNM
+ 	     , A.DIC_PNM AS DMN_PNM
+	     , SUBSTR(B.DV_TRG_LNM, 1, CHAR_LENGTH (B.DV_TRG_LNM) - CHAR_LENGTH (A.DIC_LNM)) AS DV_TRG_LNM
+	     , CASE WHEN SUBSTR(B.DV_TRG_LNM, 1, CHAR_LENGTH (B.DV_TRG_LNM) - CHAR_LENGTH (A.DIC_LNM)) = '' THEN 'Y' ELSE 'A' END AS PRC_CD
+	     , B.DV_ORG_LNM
+	     , NOW()
+	     , B.DV_RQST_USER_ID 
+	     , B.DV_ENC_YN 
+	     , B.DV_OBJ_DESCN
+	     , B.DV_SE_CD
+	     , B.INFOTP_LNM
+	     , B.FULL_PATH
+	     , B.STND_ASRT
+<!-- 	     , B.DATA_TYPE -->
+<!--     	 , B.DATA_LEN -->
+<!--     	 , B.DATA_SCAL -->
+	  FROM WAP_DV_CAN_DIC A
+	       INNER JOIN WAP_DV_CAN_ASM B
+	          ON B.DV_TRG_LNM LIKE CONCAT('%', A.DIC_LNM) 
+	         AND B.DV_RQST_NO = A.DV_RQST_NO 
+	         AND B.STND_ASRT     = A.STND_ASRT  
+	WHERE A.DIC_DS = 'D'
+	  AND A.DV_RQST_NO = #{dvRqstNo,jdbcType=VARCHAR} 
+  </insert>
+  
+  <insert id="insertAsmNotExistDic" parameterType="java.lang.String" >
+	
+	INSERT 	/* WapDvCanAsmMapper.insertAsmNotExistDic */
+			INTO WAP_DV_CAN_ASM 
+	(
+		DV_RQST_NO
+		, DIC_ASM_LNM
+		, DIC_ASM_PNM
+		, DMN_LNM
+		, DMN_PNM
+		, DIC_ASM_DS_LNM
+		, DIC_ASM_DS_PNM
+		, DV_TRG_LNM
+		, PRC_CD
+		, DV_ORG_LNM 
+		, DV_RQST_DTM
+		, DV_RQST_USER_ID 
+		, DV_ENC_YN 
+		, DV_OBJ_DESCN
+		, DV_SE_CD
+		, DMNG_LNM  
+    	, INFOTP_LNM
+    	, FULL_PATH
+    	, STND_ASRT
+<!--     	, DATA_TYPE -->
+<!--     	, DATA_LEN -->
+<!--     	, DATA_SCAL -->
+		)  
+
+	SELECT DISTINCT A.DV_RQST_NO
+	      , CONCAT(IFNULL(A.DIC_ASM_LNM,''),CASE WHEN SUBSTR(A.DIC_ASM_LNM,-1,1) = ']' THEN '' ELSE '[X]' END) AS DIC_ASM_LNM 
+	      , CONCAT(IFNULL(A.DIC_ASM_PNM,''), CASE WHEN SUBSTR(A.DIC_ASM_LNM,-1,1) = ']' THEN '' ELSE '_[X]' END) AS DIC_ASM_PNM
+ 	      , A.DMN_LNM
+ 	      , A.DMN_PNM
+	      , CONCAT(IFNULL(A.DIC_ASM_DS_LNM,''), CASE WHEN SUBSTR(A.DIC_ASM_LNM,-1,1) = ']' THEN '' ELSE ';[X]' END) AS DIC_ASM_DS_LNM
+	      , CONCAT(IFNULL(A.DIC_ASM_DS_PNM,''), CASE WHEN SUBSTR(A.DIC_ASM_LNM,-1,1) = ']' THEN '' ELSE ';[X]' END) AS DIC_ASM_DS_PNM
+	      , SUBSTR(A.DV_TRG_LNM,2) AS DV_TRG_LNM
+	      , CASE WHEN SUBSTR(A.DV_TRG_LNM,2) = '' THEN 'Y' ELSE 'N' END AS PRC_CD 
+	      , A.DV_ORG_LNM
+	      , NOW()
+	      , A.DV_RQST_USER_ID 
+	      , A.DV_ENC_YN 
+	      , A.DV_OBJ_DESCN
+	      , A.DV_SE_CD
+		  , A.DMNG_LNM  
+    	  , A.INFOTP_LNM	
+    	  , A.FULL_PATH      
+    	  , A.STND_ASRT
+<!--     	  , A.DATA_TYPE -->
+<!--     	  , A.DATA_LEN -->
+<!--     	  , A.DATA_SCAL          	 -->
+	  FROM WAP_DV_CAN_ASM A
+	 WHERE A.PRC_CD = 'A' 
+	   AND A.DV_TRG_LNM IS NOT NULL
+	   AND A.DV_RQST_RES IS NULL
+	   		<![CDATA[ 
+	   AND A.DV_RQST_NO = #{dvRqstNo,jdbcType=VARCHAR} 
+	   AND NOT EXISTS (SELECT 1 
+	                     FROM WAP_DV_CAN_ASM B	                     	                     
+	                    WHERE CONCAT(SUBSTRING_INDEX(B.DIC_ASM_DS_LNM,';',-1), B.DV_TRG_LNM) = A.DV_TRG_LNM 
+	                      AND B.DV_RQST_NO = A.DV_RQST_NO 
+	                      AND B.STND_ASRT     = A.STND_ASRT  
+	                      AND B.DV_RQST_NO = #{dvRqstNo,jdbcType=VARCHAR} 	                      
+	                      AND B.PRC_CD <> 'A'
+	                  )
+	]]> 
+  </insert>
+<!-- 250line	                    WHERE SUBSTR(B.DIC_ASM_DS_LNM, INSTR(B.DIC_ASM_DS_LNM,';',-1)+1)||B.DV_TRG_LNM = A.DV_TRG_LNM -->
+<!-- WHERE CONCAT(SUBSTR(B.DIC_ASM_DS_LNM, CHAR_LENGTH (B.DIC_ASM_DS_LNM) - INSTR(REVERSE(B.DIC_ASM_DS_LNM),';') +1), B.DV_TRG_LNM) -->
+  
+<!--   <delete id="deleteExistDmnAsm" parameterType="java.lang.String" > -->
+<!-- 	DELETE /* WapDvCanAsmMapper.deleteExistDmnAsm */ -->
+<!-- 	    A FROM WAP_DV_CAN_ASM A -->
+<!-- 	 WHERE A.DV_RQST_NO = #{dvRqstNo,jdbcType=VARCHAR}  -->
+<!-- 	   AND NULLIF(A.DMN_LNM,'') IS NULL -->
+<!-- 	   AND EXISTS ( -->
+<!-- 	   				SELECT 1  -->
+<!-- 	                 FROM WAP_DV_CAN_ASM B -->
+<!-- 	                WHERE B.DV_RQST_NO = A.DV_RQST_NO -->
+<!-- 	                  AND CONCAT(NULLIF(B.DV_TRG_LNM,'') , NULLIF(B.DMN_LNM,'')) = A.DV_TRG_LNM  -->
+<!-- 	                  AND NULLIF(B.DMN_LNM,'') IS NOT NULL -->
+<!-- 	                  AND B.STND_ASRT = A.STND_ASRT -->
+<!-- 	              ) -->
+<!--   </delete> -->
+  
+  <delete id="deleteExistDmnAsm" parameterType="java.lang.String" >
+	DELETE A  /* WapDvCanAsmMapper.deleteExistDmnAsm */
+	  FROM WAP_DV_CAN_ASM A
+	  	   INNER JOIN WAP_DV_CAN_ASM B
+	  	      ON B.DV_RQST_NO = A.DV_RQST_NO
+	  	     AND B.STND_ASRT     = A.STND_ASRT
+	  	     AND B.DMN_LNM IS NOT NULL
+	  	     AND CONCAT(B.DV_TRG_LNM ,B.DMN_LNM) = A.DV_TRG_LNM
+	 WHERE A.DV_RQST_NO = #{dvRqstNo,jdbcType=VARCHAR} 
+	   AND A.DMN_LNM IS NULL
+  </delete>
+  
+  
+  <delete id="delItemAutoDiv" parameterType="kr.wise.meta.stnd.service.WapDvCanAsm" >
+	DELETE /* WapDvCanAsmMapper.delItemAutoDiv */
+	  FROM WAP_DV_CAN_ASM
+	 WHERE DV_RQST_NO = #{dvRqstNo,jdbcType=VARCHAR} 	
+	   AND DV_ORG_LNM = #{dvOrgLnm,jdbcType=VARCHAR}     
+	   AND STND_ASRT = #{stndAsrt,jdbcType=VARCHAR}     
+  </delete>
+  
+  <delete id="delDmnAutoDiv" parameterType="kr.wise.meta.stnd.service.WapDvCanAsm" >
+	DELETE /* WapDvCanAsmMapper.delDmnAutoDiv */
+	  FROM WAP_DV_CAN_ASM
+	 WHERE DV_RQST_NO = #{dvRqstNo,jdbcType=VARCHAR} 
+	     AND DV_ORG_LNM = #{dvOrgLnm,jdbcType=VARCHAR}
+	     AND DIC_ASM_PNM = CONCAT('_', #{dicAsmPnm,jdbcType=VARCHAR})
+	     AND STND_ASRT = #{stndAsrt,jdbcType=VARCHAR}
+  </delete>
+  
+    <delete id="deleteNotEndPrcAsmDic" parameterType="java.lang.String" >
+	delete /* WapDvCanAsmMapper.deleteNotEndPrcAsmDic */
+	 from WAP_DV_CAN_ASM 
+	where DV_RQST_NO = #{dvRqstNo,jdbcType=VARCHAR} and PRC_CD = 'A'
+	  <!--  AND STND_ASRT = #{stndAsrt,jdbcType=VARCHAR}  -->
+  </delete>
+  
+  <update id="updateNotEndPrcAsmDic" parameterType="java.lang.String" >
+	update /* WapDvCanAsmMapper.updateNotEndPrcAsmDic */
+	WAP_DV_CAN_ASM
+	set PRC_CD = 'A'
+	where DV_RQST_NO = #{dvRqstNo,jdbcType=VARCHAR} and PRC_CD = 'N'
+	   <!--  AND STND_ASRT = #{stndAsrt,jdbcType=VARCHAR}  -->
+  </update>
+  
+  <select id="selectList" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    
+   SELECT /* WapDvCanAsmMapper.selectList */
+   		  DIC_ASM_LNM
+        , DIC_ASM_PNM
+        , DMN_LNM
+        , DMN_PNM
+        , DV_ORG_LNM
+        , DIC_ASM_DS_LNM
+        , DIC_ASM_DS_PNM
+        , DV_ENC_YN 
+	    , DV_OBJ_DESCN
+	    , STND_ASRT
+
+     FROM (
+            -- 단어,도메인 모두 존재
+            SELECT DISTINCT
+                   CONCAT(IFNULL(DIC_ASM_LNM,'') , IFNULL(DMN_LNM,'')) as DIC_ASM_LNM
+                 , SUBSTR(CONCAT(IFNULL(DIC_ASM_PNM,''), CASE WHEN DMN_PNM IS NULL THEN '' ELSE CONCAT('_',IFNULL(DMN_PNM,'')) END),2) AS DIC_ASM_PNM
+                 , DMN_LNM
+                 , DMN_PNM
+                 , DV_ORG_LNM
+                 , SUBSTR(DIC_ASM_DS_LNM,2) as DIC_ASM_DS_LNM
+                 , SUBSTR(DIC_ASM_DS_PNM,2) as DIC_ASM_DS_PNM
+                 , DV_ENC_YN 
+                 , DV_OBJ_DESCN 
+                 , A.STND_ASRT
+              FROM WAP_DV_CAN_ASM A
+             WHERE DV_RQST_NO = #{dvRqstNo,jdbcType=VARCHAR}
+               AND PRC_CD = 'Y'
+               AND IFNULL(INSTR(A.DIC_ASM_LNM,'[X]'),0) = 0    
+               AND DMN_LNM IS NOT NULL
+             UNION ALL   
+            -- 도메인 미존재 
+            SELECT DISTINCT
+                   CONCAT(IFNULL(DIC_ASM_LNM,'') , IFNULL(DMN_LNM,'')) as DIC_ASM_LNM
+                 , SUBSTR(CONCAT(IFNULL(DIC_ASM_PNM,''), CASE WHEN DMN_PNM IS NULL THEN '' ELSE CONCAT('_',IFNULL(DMN_PNM,'')) END),2) AS DIC_ASM_PNM
+                 , DMN_LNM
+                 , DMN_PNM
+                 , DV_ORG_LNM
+                 , SUBSTR(DIC_ASM_DS_LNM,2) as DIC_ASM_DS_LNM
+                 , SUBSTR(DIC_ASM_DS_PNM,2) as DIC_ASM_DS_PNM
+                 , DV_ENC_YN 
+                 , DV_OBJ_DESCN 
+                 , A.STND_ASRT
+              FROM WAP_DV_CAN_ASM A
+             WHERE DV_RQST_NO = #{dvRqstNo,jdbcType=VARCHAR}
+               AND PRC_CD = 'Y'
+               AND IFNULL(INSTR(A.DIC_ASM_LNM,'[X]'),0) = 0    
+               AND DMN_LNM IS NULL   
+               AND NOT EXISTS (SELECT 1
+                                 FROM WAP_DV_CAN_ASM  X
+                                WHERE IFNULL(INSTR(X.DIC_ASM_LNM,'[X]'),0) = 0
+                                  AND X.DV_RQST_NO = A.DV_RQST_NO
+                                  AND X.DV_ORG_LNM = A.DV_ORG_LNM
+                                  AND X.DMN_LNM IS NOT NULL 
+                              )      
+            UNION ALL
+            -- 단어 미존재
+            SELECT DISTINCT
+                   CONCAT(IFNULL(DIC_ASM_LNM,'') , IFNULL(DMN_LNM,'')) as DIC_ASM_LNM
+                 , SUBSTR(CONCAT(IFNULL(DIC_ASM_PNM,''), CASE WHEN DMN_PNM IS NULL THEN '' ELSE CONCAT('_',IFNULL(DMN_PNM,'')) END),2) AS DIC_ASM_PNM
+                 , DMN_LNM
+                 , DMN_PNM
+                 , DV_ORG_LNM
+                 , SUBSTR(DIC_ASM_DS_LNM,2) AS DIC_ASM_DS_LNM
+                 , SUBSTR(DIC_ASM_DS_PNM,2) AS DIC_ASM_DS_PNM
+                 , DV_ENC_YN 
+                 , DV_OBJ_DESCN 
+                 , A.STND_ASRT
+              FROM WAP_DV_CAN_ASM A
+             WHERE DV_RQST_NO = #{dvRqstNo,jdbcType=VARCHAR}
+               AND PRC_CD = 'Y'
+                  <![CDATA[  AND IFNULL(INSTR(A.DIC_ASM_LNM,'[X]'),0) > 0 ]]>
+               AND NOT EXISTS (SELECT 1
+                                 FROM WAP_DV_CAN_ASM  X
+                                WHERE IFNULL(INSTR(X.DIC_ASM_LNM,'[X]'),0) = 0
+                                  AND X.DV_RQST_NO = A.DV_RQST_NO
+                                  AND X.DV_ORG_LNM = A.DV_ORG_LNM
+                              )
+      ) A     
+      <![CDATA[ ORDER BY (CHAR_LENGTH(DIC_ASM_PNM) - CHAR_LENGTH(REPLACE(DIC_ASM_PNM, '[_]', '')) * 100 + CHAR_LENGTH(DIC_ASM_PNM) )
+            , CHAR_LENGTH(DMN_PNM) DESC ]]>
+            
+<!--  REGEXP_COUNT 수정해야함       -->
+<!--    ORDER BY (REGEXP_COUNT(DIC_ASM_PNM,'[_]') * 100 + CHAR_LENGTH(DIC_ASM_PNM) ) -->
+<!--             , CHAR_LENGTH(DMN_PNM) DESC  -->
+<!--      ORDER BY CHAR_LENGTH(DIC_ASM_PNM) , CHAR_LENGTH(DMN_PNM) DESC  -->
+	
+  </select>
+  
+  <select id="selectBtnDvSditmList" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    
+   <![CDATA[ 
+   SELECT /* WapDvCanAsmMapper.selectBtnDvSditmList */
+   		  DIC_ASM_LNM
+        , DIC_ASM_PNM
+        , DMN_LNM
+        , DMN_PNM
+        , DV_ORG_LNM
+        , DIC_ASM_DS_LNM
+        , DIC_ASM_DS_PNM
+        , DV_ENC_YN 
+	    , DV_OBJ_DESCN
+	    , STND_ASRT 
+<!-- 	    , DATA_TYPE -->
+<!--     	, DATA_LEN -->
+<!--     	, DATA_SCAL -->
+     FROM (
+            # 단어,도메인 모두 존재
+            SELECT DISTINCT
+                   CONCAT(IFNULL(DIC_ASM_LNM,'') , IFNULL(DMN_LNM,'')) as DIC_ASM_LNM
+                 , SUBSTR(CONCAT(IFNULL(DIC_ASM_PNM,''), CASE WHEN DMN_PNM IS NULL THEN '' ELSE CONCAT('_',IFNULL(DMN_PNM,'')) END),2) AS DIC_ASM_PNM
+                 , DMN_LNM
+                 , DMN_PNM
+                 , DV_ORG_LNM
+                 , SUBSTR(DIC_ASM_DS_LNM,2) as DIC_ASM_DS_LNM
+                 , SUBSTR(DIC_ASM_DS_PNM,2) as DIC_ASM_DS_PNM
+                 , DV_ENC_YN 
+                 , DV_OBJ_DESCN 
+                 , A.STND_ASRT
+<!--                  , DATA_TYPE -->
+<!-- 			     , DATA_LEN -->
+<!-- 			     , DATA_SCAL -->
+              FROM WAP_DV_CAN_ASM A
+             WHERE DV_RQST_NO = #{dvRqstNo,jdbcType=VARCHAR}
+               AND PRC_CD = 'Y'
+               AND IFNULL(INSTR(A.DIC_ASM_LNM,'[X]'),0) = 0    
+               AND DMN_LNM IS NOT NULL     
+             ORDER BY CHAR_LENGTH(DIC_ASM_PNM) , CHAR_LENGTH(DMN_PNM) DESC                              
+      ) A     
+      LIMIT 1
+   
+
+	]]>
+
+  </select>
+  
+  <select id="selectBtnDvDmnList" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    
+
+   SELECT /* WapDvCanAsmMapper.selectBtnDvDmnList */
+   		  DIC_ASM_LNM
+        , DIC_ASM_PNM
+        , DMN_LNM
+        , DMN_PNM
+        , DV_ORG_LNM
+        , DIC_ASM_DS_LNM
+        , DIC_ASM_DS_PNM
+        , DV_ENC_YN 
+	    , DV_OBJ_DESCN
+	    , STND_ASRT 
+<!-- 	    , DATA_TYPE -->
+<!-- 	    , DATA_LEN -->
+<!-- 		, DATA_SCAL -->
+     FROM (
+            # 도메인 미존재 
+            SELECT DISTINCT
+                   CONCAT(IFNULL(DIC_ASM_LNM,'') , IFNULL(DMN_LNM,'')) as DIC_ASM_LNM
+                 , SUBSTR(CONCAT(IFNULL(DIC_ASM_PNM,''), CASE WHEN DMN_PNM IS NULL THEN '' ELSE CONCAT('_',IFNULL(DMN_PNM,'')) END),2) AS DIC_ASM_PNM
+                 , DMN_LNM
+                 , DMN_PNM
+                 , DV_ORG_LNM
+                 , SUBSTR(DIC_ASM_DS_LNM,2) as DIC_ASM_DS_LNM
+                 , SUBSTR(DIC_ASM_DS_PNM,2) as DIC_ASM_DS_PNM
+                 , DV_ENC_YN 
+                 , DV_OBJ_DESCN 
+                 , A.STND_ASRT
+<!--                  , A.DATA_TYPE -->
+<!-- 			     , A.DATA_LEN -->
+<!-- 			     , A.DATA_SCAL -->
+              FROM WAP_DV_CAN_ASM A
+             WHERE DV_RQST_NO = #{dvRqstNo,jdbcType=VARCHAR}
+               AND PRC_CD = 'Y'
+               AND IFNULL(INSTR(A.DIC_ASM_LNM,'[X]'),0) = 0    
+               AND DMN_LNM IS NULL   
+               AND NOT EXISTS (SELECT 1
+                                 FROM WAP_DV_CAN_ASM  X
+                                WHERE IFNULL(INSTR(X.DIC_ASM_LNM,'[X]'),0) = 0
+                                  AND X.DV_RQST_NO = A.DV_RQST_NO
+                                  AND X.DV_ORG_LNM = A.DV_ORG_LNM
+                                  AND X.DMN_LNM IS NOT NULL 
+                              )     
+             ORDER BY CHAR_LENGTH(DIC_ASM_PNM) , CHAR_LENGTH(DMN_PNM) DESC                              
+      ) A     
+      LIMIT 1
+   
+   <![CDATA[ 
+	]]>
+
+  </select>
+  
+  
+<select id="selectItemDvRqstList" resultMap="BaseResultMap" parameterType="kr.wise.meta.stnd.service.WapDvCanDic" >
+  SELECT /* WapDvCanAsmMapper.selectItemDvRqstList */
+  		*
+    FROM (
+        SELECT DISTINCT
+               A.DV_RQST_NO
+             , IFNULL(A.DIC_ASM_LNM,'') AS DIC_ASM_LNM
+             , IFNULL(A.DIC_ASM_PNM,'') AS DIC_ASM_PNM
+             , A.DMN_LNM
+             , A.DMN_PNM
+             , G1.DMNG_ID
+             , G1.DMNG_LNM
+             , A.DV_ORG_LNM
+             , A.DIC_ASM_DS_LNM
+             , A.DIC_ASM_DS_PNM
+             , A.DV_ENC_YN 
+      	     , A.DV_OBJ_DESCN
+      	     , (CASE WHEN A.INFOTP_LNM IS NULL THEN I.INFOTP_LNM 
+      	     		 WHEN A.INFOTP_LNM = '' THEN I.INFOTP_LNM 	ELSE A.INFOTP_LNM  END)  AS INFOTP_LNM  
+<!--      	 , (CASE WHEN A.INFOTP_LNM IS NULL THEN I.INFOTP_LNM ELSE A.INFOTP_LNM  END)  AS INFOTP_LNM   -->
+      	     , (CASE WHEN G.INFOTP_LNM IS NOT NULL THEN G.DATA_TYPE ELSE I.DATA_TYPE END) AS DATA_TYPE
+      	     , (CASE WHEN G.INFOTP_LNM IS NOT NULL THEN G.DATA_LEN  ELSE I.DATA_LEN END)  AS DATA_LEN
+      	     , (CASE WHEN G.INFOTP_LNM IS NOT NULL THEN G.DATA_SCAL ELSE I.DATA_SCAL END) AS DATA_SCAL
+      	     , A.DV_RQST_RES 
+      	     , CASE WHEN A.DV_RQST_RES  IS NOT NULL THEN '#FF0000'  END AS FontColor
+      	     , CASE WHEN A.DV_RQST_RES  IS NOT NULL THEN 'N' ELSE 'Y' END AS REG_POS_YN  
+      	     , A.FULL_PATH
+      	     , A.STND_ASRT
+<!--       	     , A.DATA_TYPE -->
+<!-- 			 , A.DATA_LEN -->
+<!-- 			 , A.DATA_SCAL -->
+      	     <choose>
+               	   <when test="dvRqstDiv == 'DESC' ">
+             			<choose>
+             				<when test="dvRqstDivDmn == 'DESC'">
+             					, ROW_NUMBER() OVER (PARTITION BY DV_ORG_LNM,A.STND_ASRT ORDER BY WRD_CNT DESC, DMN_WRD_CNT DESC) AS  X_RANK
+             				</when>
+             				<otherwise>
+             					, ROW_NUMBER() OVER (PARTITION BY DV_ORG_LNM,A.STND_ASRT ORDER BY WRD_CNT DESC, DMN_WRD_CNT ASC) AS  X_RANK
+             				</otherwise>
+             			</choose>  	   
+               	        
+                   </when>                             			                              
+                   <otherwise>
+                   	   <choose>
+             				<when test="dvRqstDivDmn == 'DESC'">
+             					, ROW_NUMBER() OVER (PARTITION BY DV_ORG_LNM,A.STND_ASRT ORDER BY WRD_CNT ASC, DMN_WRD_CNT DESC) AS  X_RANK
+             				</when>
+             				<otherwise>
+             					, ROW_NUMBER() OVER (PARTITION BY DV_ORG_LNM,A.STND_ASRT ORDER BY WRD_CNT ASC, DMN_WRD_CNT ASC) AS  X_RANK
+             				</otherwise>
+             			</choose>  	                             
+                   </otherwise>                             
+             </choose>  
+         FROM (
+      		     SELECT #{dvRqstNo,jdbcType=VARCHAR} AS DV_RQST_NO
+      		            , IFNULL(DIC_ASM_LNM,'') AS DIC_ASM_LNM
+                        , IFNULL(DIC_ASM_PNM,'') AS DIC_ASM_PNM
+                        , DMN_LNM
+                        , DMN_PNM
+                        , DV_ORG_LNM
+                        , DIC_ASM_DS_LNM
+                        , DIC_ASM_DS_PNM
+                        , DV_ENC_YN 
+                        , DV_OBJ_DESCN 
+                        , DV_RQST_RES
+                        , PRC_CD
+                        , INFOTP_LNM     
+                        , CHAR_LENGTH(DIC_ASM_PNM) - CHAR_LENGTH(REPLACE(DIC_ASM_PNM, '[_]', '')) * 100 + CHAR_LENGTH(DIC_ASM_PNM) AS WRD_CNT
+<!--                         , CHAR_LENGTH(REGEXP_REPLACE(IFNULL(DIC_ASM_PNM,''),'[^A-Z,a-z,가-힝,0-9]','')) * 100 + CHAR_LENGTH(IFNULL(DIC_ASM_PNM,'')) AS WRD_CNT -->
+                        , CHAR_LENGTH(DMN_PNM)                                             AS DMN_WRD_CNT   
+                        , FULL_PATH     
+                        , STND_ASRT 
+<!--                         , DATA_TYPE -->
+<!-- 			     		, DATA_LEN -->
+<!-- 			     		, DATA_SCAL      -->
+                      
+      			  FROM (
+      			            -- 단어,도메인 모두 존재
+                              SELECT DISTINCT
+                                     CONCAT(IFNULL(DIC_ASM_LNM,''), DMN_LNM) AS DIC_ASM_LNM
+                                   , SUBSTR(CONCAT(IFNULL(DIC_ASM_PNM,''), CASE WHEN DMN_PNM IS NULL THEN '' ELSE CONCAT('_',DMN_PNM) END),2) AS DIC_ASM_PNM
+                                   , DMN_LNM
+                                   , DMN_PNM
+                                   , DV_ORG_LNM
+                                   , SUBSTR(DIC_ASM_DS_LNM,2) AS DIC_ASM_DS_LNM
+                                   , SUBSTR(DIC_ASM_DS_PNM,2) AS DIC_ASM_DS_PNM
+                                   , DV_ENC_YN 
+                                   , DV_OBJ_DESCN   
+                                   , DV_RQST_RES
+                                   , PRC_CD
+                                   , INFOTP_LNM     
+                                   , FULL_PATH        
+                                   , A.STND_ASRT
+<!--                                    , A.DATA_TYPE -->
+<!-- 			     				   , A.DATA_LEN -->
+<!-- 			     				   , A.DATA_SCAL   -->
+                                FROM WAP_DV_CAN_ASM A
+                               WHERE DV_RQST_NO = #{dvRqstNo,jdbcType=VARCHAR}
+                                 AND PRC_CD = 'Y'
+                                 AND IFNULL(INSTR(A.DIC_ASM_LNM,'[X]'),0) = 0    
+                                 AND DMN_LNM IS NOT NULL
+                               UNION ALL   
+                              -- 도메인 미존재 
+                              SELECT DISTINCT
+                                     CONCAT(DIC_ASM_LNM , DMN_LNM) AS DIC_ASM_LNM
+                                   , SUBSTR(CONCAT(DIC_ASM_PNM , CASE WHEN DMN_PNM IS NULL THEN '' ELSE CONCAT('_',DMN_PNM) END),2) AS DIC_ASM_PNM
+                                   , DMN_LNM
+                                   , DMN_PNM
+                                   , DV_ORG_LNM
+                                   , SUBSTR(DIC_ASM_DS_LNM,2) as DIC_ASM_DS_LNM
+                                   , SUBSTR(DIC_ASM_DS_PNM,2) as DIC_ASM_DS_PNM
+                                   , DV_ENC_YN 
+                                   , DV_OBJ_DESCN 
+                                   , DV_RQST_RES
+                                   , PRC_CD
+                                   , INFOTP_LNM    
+                                   , FULL_PATH      
+                                   , A.STND_ASRT
+<!--                                    , A.DATA_TYPE -->
+<!-- 			     			       , A.DATA_LEN -->
+<!-- 			     				   , A.DATA_SCAL -->
+                                FROM WAP_DV_CAN_ASM A
+                               WHERE DV_RQST_NO = #{dvRqstNo,jdbcType=VARCHAR}
+                                 AND PRC_CD = 'Y'
+                                 AND IFNULL(INSTR(A.DIC_ASM_LNM,'[X]'),0) = 0    
+                                 AND DMN_LNM IS NULL   
+                                 AND NOT EXISTS (SELECT 1
+                                                   FROM WAP_DV_CAN_ASM  X
+                                                  WHERE IFNULL(INSTR(X.DIC_ASM_LNM,'[X]'),0) = 0
+                                                    AND X.DV_RQST_NO = A.DV_RQST_NO
+                                                    AND X.DV_ORG_LNM = A.DV_ORG_LNM
+                                                    AND X.DMN_LNM IS NOT NULL 
+                                                    AND X.STND_ASRT =  A.STND_ASRT
+                                                )      
+                              UNION ALL
+                              -- 단어 미존재
+                              SELECT DISTINCT
+                                     CONCAT(IFNULL(DIC_ASM_LNM,''), DMN_LNM) AS DIC_ASM_LNM
+                                   , SUBSTR(CONCAT(IFNULL(DIC_ASM_PNM,''), CASE WHEN DMN_PNM IS NULL THEN '' ELSE CONCAT('_', DMN_PNM) END),2) AS DIC_ASM_PNM
+                                   , DMN_LNM
+                                   , DMN_PNM
+                                   , DV_ORG_LNM
+                                   , SUBSTR(DIC_ASM_DS_LNM,2) AS DIC_ASM_DS_LNM
+                                   , SUBSTR(DIC_ASM_DS_PNM,2) AS DIC_ASM_DS_PNM
+                                   , DV_ENC_YN 
+                                   , DV_OBJ_DESCN 
+                                   , DV_RQST_RES
+                                   , PRC_CD
+                                   , INFOTP_LNM         
+                                   , FULL_PATH     
+                                   , A.STND_ASRT
+<!--                                    , A.DATA_TYPE -->
+<!-- 			     				   , A.DATA_LEN -->
+<!-- 			     				   , A.DATA_SCAL -->
+                                FROM WAP_DV_CAN_ASM A
+                               WHERE DV_RQST_NO = #{dvRqstNo,jdbcType=VARCHAR}
+                                 AND PRC_CD = 'Y'
+                                 
+                                  <![CDATA[ AND IFNULL(INSTR(A.DIC_ASM_LNM,'[X]'),0) > 0 ]]>
+                                 AND NOT EXISTS (SELECT 1
+                                                   FROM WAP_DV_CAN_ASM  X
+                                                  WHERE IFNULL(INSTR(X.DIC_ASM_LNM,'[X]'),0) = 0
+                                                    AND X.DV_RQST_NO = A.DV_RQST_NO
+                                                    AND X.DV_ORG_LNM = A.DV_ORG_LNM
+                                                    AND X.STND_ASRT =  A.STND_ASRT
+                                                )     
+      		                     			        
+      			       ) A         		 
+              ) A
+             LEFT JOIN WAM_DMN D
+               ON A.DMN_LNM = D.DMN_LNM         
+              AND A.STND_ASRT = D.STND_ASRT 
+             LEFT JOIN WAA_DMNG G1
+               ON G1.EXP_DTM = STR_TO_DATE('99991231','%Y%m%d')
+              AND G1.DMNG_ID = D.DMNG_ID
+             LEFT JOIN WAA_INFO_TYPE I
+               ON I.EXP_DTM = STR_TO_DATE('99991231','%Y%m%d')
+              AND I.INFOTP_ID = D.INFOTP_ID  
+             LEFT JOIN WAA_INFO_TYPE G
+               ON G.EXP_DTM = STR_TO_DATE('99991231','%Y%m%d')
+              AND G.INFOTP_LNM = A.INFOTP_LNM
+              AND G.STND_ASRT = A.STND_ASRT          
+       WHERE A.DV_RQST_NO = #{dvRqstNo,jdbcType=VARCHAR}  
+         AND A.PRC_CD = 'Y'
+       ) A
+ WHERE A.X_RANK = 1
+ ORDER BY DIC_ASM_LNM 
+ 
+ 
+ </select>
+  
+  
+<select id="selectDmnDvRqstList" resultMap="BaseResultMap" parameterType="kr.wise.meta.stnd.service.WapDvCanDic" >
+SELECT 	 /* WapDvCanAsmMapper.selectDmnDvRqstList */
+		 DISTINCT
+         A.DV_RQST_NO
+       , CONCAT(A.DIC_ASM_LNM , A.DMN_LNM) as DIC_ASM_LNM
+       , SUBSTR(CONCAT(A.DIC_ASM_PNM , case when A.DMN_PNM is null then '' else CONCAT('_',A.DMN_PNM) end),2) as DIC_ASM_PNM
+       , A.DMN_LNM
+       , A.DMN_PNM
+       , A.DMNG_LNM
+       , A.DMNG_ID
+       , A.INFOTP_LNM
+       , A.INFOTP_ID
+       , A.DV_ORG_LNM
+       , SUBSTR(A.DIC_ASM_DS_LNM,2) as DIC_ASM_DS_LNM
+       , SUBSTR(A.DIC_ASM_DS_PNM,2) as DIC_ASM_DS_PNM
+       , A.DV_ENC_YN 
+	   , A.DV_OBJ_DESCN
+	   , I.DATA_TYPE
+	   , I.DATA_LEN
+	   , I.DATA_SCAL
+	   , A.DV_RQST_RES 
+	   , CASE WHEN A.DV_RQST_RES  IS NOT NULL THEN '#FF0000'  END AS FontColor
+	   , CASE WHEN A.DV_RQST_RES  IS NOT NULL THEN 'N' ELSE 'Y' END AS REG_POS_YN
+	   , A.CD_VAL_TYP_CD       
+	   , A.CD_VAL_IVW_CD      	
+	   , A.SDITM_AUTO_CRT_YN   
+	   , A.FULL_PATH
+	   , A.STND_ASRT
+<!-- 	   , A.DATA_TYPE -->
+<!-- 	   , A.DATA_LEN -->
+<!-- 	   , A.DATA_SCAL -->
+   FROM (
+		     SELECT *
+			  FROM (
+			        SELECT A.*
+			               ,ROW_NUMBER() OVER (PARTITION BY A.DV_ORG_LNM,A.STND_ASRT ORDER BY INSTR(A.DIC_ASM_DS_PNM, '[X]')  ) X_RANK
+			          FROM (SELECT * 
+			                  FROM (SELECT A.*
+			                  
+			                  
+			                  
+			                               ,ROW_NUMBER() OVER (PARTITION BY DV_ORG_LNM,A.STND_ASRT ORDER BY CHAR_LENGTH(A.DIC_ASM_DS_PNM)    <if test="dvRqstDiv != null and dvRqstDiv != ''"> ${dvRqstDiv} </if>  ) RANK
+			                          FROM WAP_DV_CAN_ASM A
+			                         WHERE DV_RQST_NO = #{dvRqstNo,jdbcType=VARCHAR}  
+			                           AND DV_RQST_RES IS NULL ) A
+			                <if test="dvRqstDiv != null and dvRqstDiv != ''">
+			                WHERE A.RANK = 1
+			                </if>
+			                UNION ALL 
+			                 SELECT * 
+			                  FROM (SELECT A.*
+			                               ,ROW_NUMBER() OVER (PARTITION BY DV_ORG_LNM,A.STND_ASRT ORDER BY CHAR_LENGTH(A.DIC_ASM_DS_PNM) <if test="dvRqstDiv != null and dvRqstDiv != ''"> ${dvRqstDiv} </if> ) RANK
+			                          FROM WAP_DV_CAN_ASM A
+			                         WHERE DV_RQST_NO = #{dvRqstNo,jdbcType=VARCHAR}  
+			                           AND DV_RQST_RES IS NOT NULL ) A
+			                 <if test="dvRqstDiv != null and dvRqstDiv != ''">
+			                 WHERE A.RANK = 1
+			                 </if>
+			                 ) A
+			         WHERE A.DV_RQST_NO = #{dvRqstNo,jdbcType=VARCHAR} ) A
+         <if test="dvRqstDiv != null and dvRqstDiv != ''">
+		 WHERE X_RANK = 1
+		 </if>
+        ) A
+       LEFT OUTER JOIN WAA_DMNG G
+         ON A.DMNG_ID = G.DMNG_ID
+        AND G.EXP_DTM = STR_TO_DATE('99991231','%Y%m%d')
+       LEFT OUTER JOIN WAA_INFO_TYPE I
+         ON A.INFOTP_ID = I.INFOTP_ID
+        AND I.EXP_DTM = STR_TO_DATE('99991231','%Y%m%d')
+ where A.DV_RQST_NO = #{dvRqstNo,jdbcType=VARCHAR}
+   and A.PRC_CD = 'Y'
+ order by DIC_ASM_LNM, CHAR_LENGTH(DIC_ASM_PNM)
+  </select>
+
+  <select id="selectItemDivList" resultMap="BaseResultMap" parameterType="java.lang.String" >
+  SELECT /* WapDvCanAsmMapper.selectItemDivList */
+  	* FROM (
+	    SELECT DISTINCT
+	   		DV_ORG_LNM AS DV_TRG_LNM
+	       ,CONCAT(IFNULL(DIC_ASM_LNM,'') , DMN_LNM) as DIC_ASM_LNM
+	       ,SUBSTR(CONCAT(IFNULL(DIC_ASM_PNM,'') , case when DMN_PNM is null then '' else CONCAT('_',DMN_PNM) end),2) as DIC_ASM_PNM
+	       ,DMN_LNM
+	       ,DMN_PNM
+	       ,SUBSTR(IFNULL(DIC_ASM_DS_LNM,''),2) as DIC_ASM_DS_LNM
+	       ,SUBSTR(IFNULL(DIC_ASM_DS_PNM,''),2) as DIC_ASM_DS_PNM
+<!-- 	   ,ROW_NUMBER() OVER(PARTITION BY DV_ORG_LNM,STND_ASRT ORDER BY (CASE WHEN DIC_ASM_LNM NOT LIKE '%[X]%' THEN 0 ELSE 1 END), CHAR_LENGTH(DMN_LNM) DESC, CHAR_LENGTH(DIC_ASM_LNM), DIC_ASM_PNM) AS RSEQ -->
+		   ,ROW_NUMBER() OVER(PARTITION BY DV_ORG_LNM,STND_ASRT 
+	       					  ORDER BY (CASE WHEN IFNULL(DIC_ASM_LNM,'') NOT LIKE '%[X]%' 
+	       					  				 THEN 0 
+	       					  				 ELSE 1 
+	       					  		    END)
+	       					  		    , CHAR_LENGTH(DMN_LNM) DESC
+	       					  		    , CHAR_LENGTH(DIC_ASM_DS_LNM) ASC
+	       					  		    , DIC_ASM_PNM DESC
+	       					  		    ) AS RSEQ
+	       , STND_ASRT
+<!-- 	       , DATA_TYPE -->
+<!-- 		   , DATA_LEN -->
+<!-- 		   , DATA_SCAL -->
+	    FROM WAP_DV_CAN_ASM
+	    WHERE DV_RQST_NO = #{dvRqstNo,jdbcType=VARCHAR}
+	      AND PRC_CD = 'Y'
+    ) A WHERE A.RSEQ = 1
+    ORDER BY DV_TRG_LNM,  DIC_ASM_LNM, CHAR_LENGTH(DIC_ASM_PNM)
+  </select>
+  
+  <delete id="deleteDvCanAsmByDvRqstNo" parameterType="java.lang.String" >
+	delete /* WapDvCanAsmMapper.deleteDvCanAsmByDvRqstNo */
+	from WAP_DV_CAN_ASM where DV_RQST_NO = #{dvRqstNo,jdbcType=VARCHAR}
+  </delete>
+  
+  <delete id="deleteDvCanAsmByDup" parameterType="java.lang.String"  >
+	DELETE /* WapDvCanAsmMapper.deleteDvCanAsmByDup */
+		WAP_DV_CAN_ASM P
+	WHERE DV_ORG_LNM IN ( SELECT DV_ORG_LNM
+										FROM WAP_DV_CAN_ASM W
+										WHERE W.DV_RQST_NO = #{dvRqstNo,jdbcType=VARCHAR}
+										GROUP BY DV_ORG_LNM,SUBSTR(CONCAT(W.DIC_ASM_PNM , CASE WHEN W.DMN_PNM IS NULL THEN '' ELSE CONCAT('_', W.DMN_PNM) END),2)
+										HAVING COUNT(*) >1 )
+	AND P.DV_RQST_NO = #{dvRqstNo,jdbcType=VARCHAR}
+	AND P.DIC_ASM_LNM IS NOT NULL
+  </delete>
+  <delete id="deleteDvCanAsmByDvOrderBy" parameterType="kr.wise.meta.stnd.service.WapDvCanDic" >
+	DELETE /* WapDvCanAsmMapper.deleteDvCanAsmByDvOrderBy */
+		WAP_DV_CAN_ASM W
+	WHERE W.DV_RQST_NO = #{dvRqstNo,jdbcType=VARCHAR}
+	AND DIC_ASM_PNM NOT IN (
+	SELECT DISTINCT IFNULL(A.DIC_ASM_PNM,'-') 
+	 FROM (
+		     SELECT *
+			  FROM (
+			        SELECT A.*
+			               ,ROW_NUMBER() OVER (PARTITION BY A.DV_ORG_LNM ORDER BY INSTR(A.DIC_ASM_DS_PNM, '[X]')  ) X_RANK
+			          FROM (SELECT * 
+			                  FROM (SELECT A.*
+			                               ,ROW_NUMBER() OVER (PARTITION BY DV_ORG_LNM,A.STND_ASRT ORDER BY CHAR_LENGTH(A.DIC_ASM_DS_PNM)    <if test="dvRqstDiv != null and dvRqstDiv != ''"> ${dvRqstDiv} </if>  ) RANK
+			                          FROM WAP_DV_CAN_ASM A
+			                         WHERE DV_RQST_NO = #{dvRqstNo,jdbcType=VARCHAR}  
+			                           AND DV_RQST_RES IS NULL ) A
+			                <if test="dvRqstDiv != null and dvRqstDiv != ''">
+			                WHERE A.RANK = 1
+			                </if>
+			                UNION ALL 
+			                 SELECT * 
+			                  FROM (SELECT A.*
+			                               <choose>
+			                               	   <when test="dvRqstDiv == 'DESC'">
+			                               	       , ROW_NUMBER() OVER (PARTITION BY DV_ORG_LNM,A.STND_ASRT ORDER BY 
+			                                                             CASE WHEN INSTR(A.DIC_ASM_PNM,'[X]') = 0 THEN 999999
+                                                                              ELSE CHAR_LENGTH(A.DIC_ASM_DS_PNM) END ${dvRqstDiv} ) RANK 
+                                               </when>                             
+			                                   <when test="dvRqstDiv == 'ASC'">
+			                                   	   , ROW_NUMBER() OVER (PARTITION BY DV_ORG_LNM,A.STND_ASRT ORDER BY 
+			                                                              CASE WHEN INSTR(A.DIC_ASM_PNM,'[X]') = 0 THEN -1
+                                                                               ELSE CHAR_LENGTH(A.DIC_ASM_DS_PNM) END ${dvRqstDiv} ) RANK 
+                                               </when>                             
+                                               <otherwise>
+                                           		   , ROW_NUMBER() OVER (PARTITION BY DV_ORG_LNM,A.STND_ASRT ORDER BY CHAR_LENGTH(A.DIC_ASM_DS_PNM) <if test="dvRqstDiv != null and dvRqstDiv != ''"> ${dvRqstDiv} </if> ) RANK    
+                                               </otherwise>                             
+			                               </choose>
+			                               
+			                          FROM WAP_DV_CAN_ASM A
+			                         WHERE DV_RQST_NO = #{dvRqstNo,jdbcType=VARCHAR}  
+			                           AND DV_RQST_RES IS NOT NULL ) A
+			                 <if test="dvRqstDiv != null and dvRqstDiv != ''">
+			                 WHERE A.RANK = 1
+			                 </if>
+			                 ) A
+			         WHERE A.DV_RQST_NO = #{dvRqstNo,jdbcType=VARCHAR} ) A
+         <if test="dvRqstDiv != null and dvRqstDiv != ''">
+		 WHERE X_RANK = 1
+		 </if>
+        ) A
+     )
+  </delete>
+  
+  <insert id="insert" parameterType="kr.wise.meta.stnd.service.WapDvCanAsm" >
+    insert 	/* WapDvCanAsmMapper.insert */
+    		into WAP_DV_CAN_ASM (DV_RQST_NO, DIC_ASM_LNM, DIC_ASM_PNM, 
+      DMN_LNM, DMN_PNM, DIC_ASM_DS_LNM, 
+      DIC_ASM_DS_PNM, DV_TRG_LNM, PRC_CD, STND_ASRT
+<!--       , DATA_TYPE, DATA_LEN, DATA_SCAL -->
+      )
+    values (#{dvRqstNo,jdbcType=VARCHAR}, #{dicAsmLnm,jdbcType=VARCHAR}, #{dicAsmPnm,jdbcType=VARCHAR}, 
+      #{dmnLnm,jdbcType=VARCHAR}, #{dmnPnm,jdbcType=VARCHAR}, #{dicAsmDsLnm,jdbcType=VARCHAR}, 
+      #{dicAsmDsPnm,jdbcType=VARCHAR}, #{dvTrgLnm,jdbcType=VARCHAR}, #{prcCd,jdbcType=VARCHAR},#{stndAsrt,jdbcType=VARCHAR},
+<!--       #{dataType,jdbcType=VARCHAR}, #{dataLen,jdbcType=VARCHAR}, #{dataScal,jdbcType=VARCHAR} -->
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="kr.wise.meta.stnd.service.WapDvCanAsm" >
+    insert 	/* WapDvCanAsmMapper.insertSelective */
+    		into WAP_DV_CAN_ASM
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="dvRqstNo != null" >
+        DV_RQST_NO,
+      </if>
+      <if test="dicAsmLnm != null" >
+        DIC_ASM_LNM,
+      </if>
+      <if test="dicAsmPnm != null" >
+        DIC_ASM_PNM,
+      </if>
+      <if test="dmnLnm != null" >
+        DMN_LNM,
+      </if>
+      <if test="dmnPnm != null" >
+        DMN_PNM,
+      </if>
+      <if test="dicAsmDsLnm != null" >
+        DIC_ASM_DS_LNM,
+      </if>
+      <if test="dicAsmDsPnm != null" >
+        DIC_ASM_DS_PNM,
+      </if>
+      <if test="dvTrgLnm != null" >
+        DV_TRG_LNM,
+      </if>
+      <if test="prcCd != null" >
+        PRC_CD,
+      </if>
+      <if test="stndAsrt != null" >
+        STND_ASRT,
+      </if>
+<!--       <if test="dataType != null" > -->
+<!--         DATA_TYPE, -->
+<!--       </if> -->
+<!--       <if test="dataLen != null" > -->
+<!--         DATA_LEN, -->
+<!--       </if> -->
+<!--       <if test="dataScal != null" > -->
+<!--         DATA_SCAL, -->
+<!--       </if> -->
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="dvRqstNo != null" >
+        #{dvRqstNo,jdbcType=VARCHAR},
+      </if>
+      <if test="dicAsmLnm != null" >
+        #{dicAsmLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="dicAsmPnm != null" >
+        #{dicAsmPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="dmnLnm != null" >
+        #{dmnLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="dmnPnm != null" >
+        #{dmnPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="dicAsmDsLnm != null" >
+        #{dicAsmDsLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="dicAsmDsPnm != null" >
+        #{dicAsmDsPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="dvTrgLnm != null" >
+        #{dvTrgLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="prcCd != null" >
+        #{prcCd,jdbcType=VARCHAR},
+      </if>
+      <if test="stndAsrt != null" >
+       #{stndAsrt,jdbcType=VARCHAR},
+      </if>
+<!--       <if test="dataType != null" > -->
+<!--        #{dataType,jdbcType=VARCHAR},   -->
+<!--       </if> -->
+<!--       <if test="dataLen != null" > -->
+<!--        #{dataLen,jdbcType=VARCHAR}, -->
+<!--       </if> -->
+<!--       <if test="dataScal != null" > -->
+<!--        #{dataScal,jdbcType=VARCHAR} -->
+<!--       </if> -->
+      
+    </trim>
+  </insert>
+  
+    <insert id="insertFirstApp" parameterType="kr.wise.meta.stnd.service.WapDvCanDic" >
+    insert 	/* WapDvCanAsmMapper.insertFirstApp */
+    		into WAP_DV_CAN_ASM (DV_RQST_NO, DV_TRG_LNM, PRC_CD, DV_ORG_LNM ,DV_RQST_USER_ID ,DV_ENC_YN ,DV_OBJ_DESCN, DV_SE_CD, STND_ASRT )
+    values (#{dvRqstNo,jdbcType=VARCHAR}, #{trgLnm,jdbcType=VARCHAR}, 'P', #{trgLnm,jdbcType=VARCHAR}, #{dvRqstUserId,jdbcType=VARCHAR}, #{dvEncYn,jdbcType=VARCHAR},
+            #{dvObjDescn,jdbcType=VARCHAR}, #{dvSeCd,jdbcType=VARCHAR}, #{stndAsrt,jdbcType=VARCHAR})
+  </insert>
+  
+  <insert id="insertAsmAppDic" parameterType="java.lang.String" >
+	insert 	/* WapDvCanAsmMapper.insertAsmAppDic */
+			into WAP_DV_CAN_ASM (
+		DV_RQST_NO
+		, DIC_ASM_LNM
+		, DIC_ASM_PNM
+		, DMN_LNM
+		, DMN_PNM
+		, DIC_ASM_DS_LNM
+		, DIC_ASM_DS_PNM
+		, DV_TRG_LNM
+		, PRC_CD
+		, DV_ORG_LNM 
+		, DV_RQST_USER_ID 
+		, DV_ENC_YN 
+		, DV_OBJ_DESCN
+		, DV_SE_CD
+		, DMNG_LNM  
+    	--, INFOTP_LNM
+    	, STND_ASRT 
+	)  
+	select distinct B.DV_RQST_NO
+	      ,CONCAT(B.DIC_ASM_LNM, A.DIC_LNM) as DIC_ASM_LNM 
+ 	      ,CONCAT(B.DIC_ASM_PNM, '_', A.DIC_PNM) as DIC_ASM_PNM
+ 	      ,B.DMN_LNM
+ 	      ,B.DMN_PNM  
+	      ,CONCAT(B.DIC_ASM_DS_PNM, ';', A.DIC_PNM) as DIC_ASM_DS_PNM 
+	      ,SUBSTR(B.DV_TRG_LNM, CHAR_LENGTH(A.DIC_LNM)+1) AS DV_TRG_LNM
+	      ,case when SUBSTR(B.DV_TRG_LNM, CHAR_LENGTH(A.DIC_LNM)+1) is null then 'Y' else 'N' end AS PRC_CD
+	      ,B.DV_ORG_LNM
+	      ,B.DV_RQST_USER_ID 
+	      ,B.DV_ENC_YN 
+	      ,B.DV_OBJ_DESCN
+	      ,B.DV_SE_CD
+	      ,B.DMNG_LNM  
+    	--  ,B.INFOTP_LNM 
+    	  ,B.STND_ASRT
+	from WAP_DV_CAN_DIC A
+	inner join WAP_DV_CAN_ASM B
+	   on B.DV_TRG_LNM like CONCAT(A.DIC_LNM, '%')
+	  AND B.STND_ASRT = B.STND_ASRT 
+	  and B.DV_RQST_NO = A.DV_RQST_NO 
+	  and B.PRC_CD = 'P' 
+	  and B.DV_RQST_RES IS NULL
+	where A.DIC_DS = 'P' 
+	and   A.DV_RQST_NO = #{dvRqstNo,jdbcType=VARCHAR} 
+  </insert>
+  
+  <insert id="insertAsmNotExistAppDic" parameterType="java.lang.String" >
+	<![CDATA[ 
+	insert 	/* WapDvCanAsmMapper.insertAsmNotExistAppDic */
+			into WAP_DV_CAN_ASM (
+		DV_RQST_NO
+		, DIC_ASM_LNM
+		, DIC_ASM_PNM
+		, DMN_LNM
+		, DMN_PNM
+		, DIC_ASM_DS_LNM
+		, DIC_ASM_DS_PNM
+		, DV_TRG_LNM
+		, PRC_CD, DV_ORG_LNM 
+		, DV_RQST_USER_ID 
+		, DV_ENC_YN 
+		, DV_OBJ_DESCN
+		, DV_SE_CD
+		, DMNG_LNM  
+    	--, INFOTP_LNM
+    	, STND_ASRT
+		)  
+	select distinct A.DV_RQST_NO
+	      ,CONCAT(A.DIC_ASM_LNM, case when SUBSTR(A.DIC_ASM_LNM,-1,1) = ']' then '' else '[X]' end) as DIC_ASM_LNM 
+	      ,CONCAT(A.DIC_ASM_PNM, case when SUBSTR(A.DIC_ASM_LNM,-1,1) = ']' then '' else '_[X]' end) as DIC_ASM_PNM
+ 	      ,A.DMN_LNM
+ 	      ,A.DMN_PNM
+	      ,CONCAT(A.DIC_ASM_DS_LNM, case when SUBSTR(A.DIC_ASM_LNM,-1,1) = ']' then '' else ';[X]' end) as DIC_ASM_DS_LNM
+	      ,CONCAT(A.DIC_ASM_DS_PNM, case when SUBSTR(A.DIC_ASM_LNM,-1,1) = ']' then '' else ';[X]' end) as DIC_ASM_DS_PNM
+	      ,SUBSTR(A.DV_TRG_LNM,2) AS DV_TRG_LNM
+	      ,case when SUBSTR(A.DV_TRG_LNM,2) is null then 'Y' else 'N' end AS PRC_CD
+	      ,A.DV_ORG_LNM
+	      ,A.DV_RQST_USER_ID 
+	      ,A.DV_ENC_YN 
+	      ,A.DV_OBJ_DESCN
+	      ,A.DV_SE_CD
+		  ,A.DMNG_LNM  
+    	 -- ,A.INFOTP_LNM	
+    	  ,A.STND_ASRT      
+	from WAP_DV_CAN_ASM A
+	where A.PRC_CD = 'P' 
+	and   A.DV_TRG_LNM is not null
+	and   A.DV_RQST_RES IS NULL
+	and   A.DV_RQST_NO = #{dvRqstNo,jdbcType=VARCHAR} 
+	and not exists (select 1 from WAP_DV_CAN_ASM B
+	                 where CONCAT(SUBSTR(B.DIC_ASM_DS_LNM, INSTR(B.DIC_ASM_DS_LNM,';',-1)+1), B.DV_TRG_LNM) = A.DV_TRG_LNM
+	                   and B.DV_RQST_NO = A.DV_RQST_NO 
+	                   and B.DV_RQST_NO = #{dvRqstNo,jdbcType=VARCHAR}
+	                   AND B.STND_ASRT = A.STND_ASRT 
+	                   and B.PRC_CD <> 'P'
+	               )
+	]]> 
+  </insert>
+  <delete id="deleteNotEndPrcAsmAppDic" parameterType="java.lang.String" >
+	delete /* WapDvCanAsmMapper.deleteNotEndPrcAsmAppDic */
+	from WAP_DV_CAN_ASM where DV_RQST_NO = #{dvRqstNo,jdbcType=VARCHAR} and PRC_CD = 'P'
+  </delete>
+  
+  <update id="updateNotEndPrcAsmAppDic" parameterType="java.lang.String" >
+	update 	/* WapDvCanAsmMapper.updateNotEndPrcAsmAppDic */
+			WAP_DV_CAN_ASM
+	set PRC_CD = 'P'
+	where DV_RQST_NO = #{dvRqstNo,jdbcType=VARCHAR} and PRC_CD = 'N'
+  </update>
+  
+  <update id="updateUnderbar" parameterType="java.lang.String" >
+ 	UPDATE 	/* WapDvCanAsmMapper.updateUnderbar */
+ 			WAP_DV_CAN_ASM A
+   	SET (A.DIC_ASM_PNM, A.DIC_ASM_DS_LNM, A.DIC_ASM_DS_PNM) = (SELECT REPLACE(A.DIC_ASM_PNM,'__','_'), REPLACE(A.DIC_ASM_DS_LNM,'_',''), REPLACE(A.DIC_ASM_DS_PNM,'_','') FROM DUAL)
+ 	WHERE A.DV_RQST_NO = #{dvRqstNo,jdbcType=VARCHAR}  
+  </update>
+</mapper>

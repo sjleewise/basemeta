@@ -1,0 +1,821 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.commons.damgmt.schedule.service.WamShdJobMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.commons.damgmt.schedule.service.WamShdJob" extends="kr.wise.commons.damgmt.schedule.service.WamShdMapper.ShdResultMap">
+    <result column="SHD_JOB_ID" property="shdJobId" jdbcType="VARCHAR" />
+    <result column="SHD_JOB_SNO" property="shdJobSno" jdbcType="DECIMAL" />
+    
+    <result column="SHD_JOB_DTLS" property="shdJobDtls" jdbcType="VARCHAR" />
+    <result column="SHD_JOB_NM" property="shdJobNm" jdbcType="VARCHAR" />
+    <result column="SHD_JOB_KND_CD" property="shdJobKndCd" jdbcType="VARCHAR" />
+    
+    
+    <result column="ETC_JOB_DTLS" property="etcJobDtls" jdbcType="VARCHAR" />
+    <result column="ETC_JOB_NM" property="etcJobNm" jdbcType="VARCHAR" />
+    <result column="ETC_JOB_KND_CD" property="etcJobKndCd" jdbcType="VARCHAR" />
+    
+    <result column="DB_CONN_TRG_ID" property="dbConnTrgId" jdbcType="VARCHAR" />
+    <result column="DB_CONN_TRG_LNM" property="dbConnTrgLnm" jdbcType="VARCHAR" />
+    <result column="REG_YN" property="regYn" jdbcType="VARCHAR" />
+    
+    <result column="COMM_DTL_CD" 	property="commDtlCd" jdbcType="VARCHAR" />
+    <result column="COMM_DTL_CD_NM" property="commDtlCdNm" jdbcType="VARCHAR" />
+    <result column="COMM_DCD_ID" 	property="commDcdId" jdbcType="VARCHAR" />
+    
+    <result column="PRF_ID" property="prfId" jdbcType="VARCHAR" />
+    <result column="PRF_KND_CD" property="prfKndCd" jdbcType="VARCHAR" />
+    <result column="DBC_TBL_NM" property="dbcTblNm" jdbcType="VARCHAR" />
+    <result column="OBJ_NM" property="objNm" jdbcType="VARCHAR" />
+    
+    <result column="BR_ID" property="brId" jdbcType="VARCHAR" />
+    <result column="BR_NM" property="brNm" jdbcType="VARCHAR" />
+    <result column="BIZ_AREA_ID" property="bizAreaId" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  
+  
+  <sql id="Base_Column_List" >
+    SHD_ID, SHD_JOB_ID, SHD_JOB_SNO, RQST_NO, RQST_SNO, OBJ_DESCN, OBJ_VERS, REG_TYP_CD, 
+    FRS_RQST_DTM, FRS_RQST_USER_ID, RQST_DTM, RQST_USER_ID, APRV_DTM, APRV_USER_ID
+  </sql>
+  
+   <select id="selectJobList" resultMap="BaseResultMap" parameterType="kr.wise.commons.damgmt.schedule.service.WamShdJob" >
+  SELECT * FROM(  
+    SELECT 
+        A.DB_CONN_TRG_ID AS DB_CONN_TRG_ID,
+        A.DB_CONN_TRG_LNM AS DB_CONN_TRG_LNM,
+        '[스키마 수집]' || A.DB_CONN_TRG_LNM AS SHD_JOB_NM, 
+        'SC' AS SHD_KND_CD
+        ,B.SHD_ID AS SHD_ID
+        ,B.SHD_JOB_ID AS SHD_JOB_ID
+        ,CASE WHEN COUNT(B.SHD_JOB_ID) = 0 THEN 'N' ELSE 'Y' END AS REG_YN
+    FROM WAA_DB_CONN_TRG A 
+	LEFT OUTER JOIN WAM_SHD_JOB B
+	ON B.SHD_JOB_ID = A.DB_CONN_TRG_ID
+	WHERE 1=1
+	AND A.REG_TYP_CD IN ('C', 'U')
+	AND A.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')
+    AND B.SHD_ID = #{shdId,jdbcType=VARCHAR}
+	GROUP BY A.DB_CONN_TRG_LNM, A.DB_CONN_TRG_ID, B.SHD_ID, B.SHD_JOB_ID
+	ORDER BY A.DB_CONN_TRG_LNM
+) A
+WHERE 1 = 1
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="map" >
+    select 
+    <include refid="Base_Column_List" />
+    from WAM_SHD_JOB
+    where SHD_ID = #{shdId,jdbcType=VARCHAR}
+      and SHD_JOB_ID = #{shdJobId,jdbcType=VARCHAR}
+      and SHD_JOB_SNO = #{shdJobSno,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="map" >
+    delete from WAM_SHD_JOB
+    where SHD_ID = #{shdId,jdbcType=VARCHAR}
+      and SHD_JOB_ID = #{shdJobId,jdbcType=VARCHAR}
+      and SHD_JOB_SNO = #{shdJobSno,jdbcType=DECIMAL}
+  </delete>
+  <insert id="insert" parameterType="kr.wise.commons.damgmt.schedule.service.WamShdJob" >
+    insert into WAM_SHD_JOB (SHD_ID, SHD_JOB_ID, SHD_JOB_SNO, 
+      RQST_NO, RQST_SNO, OBJ_DESCN, 
+      OBJ_VERS, REG_TYP_CD, FRS_RQST_DTM, 
+      FRS_RQST_USER_ID, RQST_DTM, RQST_USER_ID, 
+      APRV_DTM, APRV_USER_ID)
+    values (#{shdId,jdbcType=VARCHAR}, #{shdJobId,jdbcType=VARCHAR}, #{shdJobSno,jdbcType=DECIMAL}, 
+      #{rqstNo,jdbcType=VARCHAR}, #{rqstSno,jdbcType=DECIMAL}, #{objDescn,jdbcType=VARCHAR}, 
+      #{objVers,jdbcType=DECIMAL}, #{regTypCd,jdbcType=VARCHAR}, #{frsRqstDtm,jdbcType=TIMESTAMP}, 
+      #{frsRqstUserId,jdbcType=VARCHAR}, #{rqstDtm,jdbcType=TIMESTAMP}, #{rqstUserId,jdbcType=VARCHAR}, 
+      #{aprvDtm,jdbcType=TIMESTAMP}, #{aprvUserId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="kr.wise.commons.damgmt.schedule.service.WamShdJob" >
+    insert into WAM_SHD_JOB
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="shdId != null" >
+        SHD_ID,
+      </if>
+      <if test="shdJobId != null" >
+        SHD_JOB_ID,
+      </if>
+      <if test="shdJobSno != null" >
+        SHD_JOB_SNO,
+      </if>
+      <if test="rqstNo != null" >
+        RQST_NO,
+      </if>
+      <if test="rqstSno != null" >
+        RQST_SNO,
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN,
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS,
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD,
+      </if>
+      <if test="frsRqstDtm != null" >
+        FRS_RQST_DTM,
+      </if>
+      <if test="frsRqstUserId != null" >
+        FRS_RQST_USER_ID,
+      </if>
+      <if test="rqstDtm != null" >
+        RQST_DTM,
+      </if>
+      <if test="rqstUserId != null" >
+        RQST_USER_ID,
+      </if>
+      <if test="aprvDtm != null" >
+        APRV_DTM,
+      </if>
+      <if test="aprvUserId != null" >
+        APRV_USER_ID,
+      </if>
+      <if test="shdJobNm != null" >
+        SHD_JOB_NM,
+      </if>
+      <if test="etcJobDtls != null" >
+        ETC_JOB_DTLS,
+      </if>
+      <if test="etcJobKndCd != null" >
+        ETC_JOB_KND_CD,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="shdId != null" >
+        #{shdId,jdbcType=VARCHAR},
+      </if>
+      <if test="shdJobId != null" >
+        #{shdJobId,jdbcType=VARCHAR},
+      </if>
+      <if test="shdJobSno != null" >
+        #{shdJobSno,jdbcType=DECIMAL},
+      </if>
+      <if test="rqstNo != null" >
+        #{rqstNo,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstSno != null" >
+        #{rqstSno,jdbcType=DECIMAL},
+      </if>
+      <if test="objDescn != null" >
+        #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null" >
+        #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="frsRqstDtm != null" >
+        #{frsRqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="frsRqstUserId != null" >
+        #{frsRqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDtm != null" >
+        #{rqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rqstUserId != null" >
+        #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDtm != null" >
+        #{aprvDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aprvUserId != null" >
+        #{aprvUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="shdJobNm != null" >
+        #{shdJobNm,jdbcType=VARCHAR},
+      </if>
+      <if test="etcJobDtls != null" >
+        #{etcJobDtls,jdbcType=VARCHAR},
+      </if>
+      <if test="etcJobKndCd != null" >
+        #{etcJobKndCd,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateScheduleJob" parameterType="kr.wise.commons.damgmt.schedule.service.WamShdJob" >
+    update WAM_SHD_JOB
+    <set >
+      <if test="rqstNo != null" >
+        RQST_NO = #{rqstNo,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstSno != null" >
+        RQST_SNO = #{rqstSno,jdbcType=DECIMAL},
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="frsRqstDtm != null" >
+        FRS_RQST_DTM = #{frsRqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="frsRqstUserId != null" >
+        FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDtm != null" >
+        RQST_DTM = #{rqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rqstUserId != null" >
+        RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDtm != null" >
+        APRV_DTM = #{aprvDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aprvUserId != null" >
+        APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where SHD_ID = #{shdId,jdbcType=VARCHAR}
+      and SHD_JOB_ID = #{shdJobId,jdbcType=VARCHAR}
+      and SHD_JOB_SNO = #{shdJobSno,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="kr.wise.commons.damgmt.schedule.service.WamShdJob" >
+    update WAM_SHD_JOB
+    set RQST_NO = #{rqstNo,jdbcType=VARCHAR},
+      RQST_SNO = #{rqstSno,jdbcType=DECIMAL},
+      OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      FRS_RQST_DTM = #{frsRqstDtm,jdbcType=TIMESTAMP},
+      FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR},
+      RQST_DTM = #{rqstDtm,jdbcType=TIMESTAMP},
+      RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      APRV_DTM = #{aprvDtm,jdbcType=TIMESTAMP},
+      APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR}
+    where SHD_ID = #{shdId,jdbcType=VARCHAR}
+      and SHD_JOB_ID = #{shdJobId,jdbcType=VARCHAR}
+      and SHD_JOB_SNO = #{shdJobSno,jdbcType=DECIMAL}
+  </update>
+  
+<delete id="deleteShdJob" parameterType="java.lang.String" >
+  DELETE FROM WAM_SHD_JOB
+  WHERE SHD_JOB_ID = #{shdJobId,jdbcType=VARCHAR}
+</delete>
+  
+  
+  <select id="selectScJobList" resultMap="BaseResultMap" parameterType="kr.wise.commons.damgmt.schedule.service.WamShdJob" >
+    SELECT 
+		    A.DB_CONN_TRG_ID AS SHD_JOB_ID,
+		    A.DB_CONN_TRG_LNM AS DB_CONN_TRG_LNM,
+		    '[스키마 수집]' || A.DB_CONN_TRG_LNM AS SHD_JOB_NM 
+		    , #{shdKndCd,jdbcType=VARCHAR}  AS SHD_KND_CD
+		    ,B.SHD_ID AS SHD_ID
+		 FROM WAA_DB_CONN_TRG A 
+		         LEFT OUTER JOIN WAM_SHD_JOB B
+		          ON B.SHD_JOB_ID = A.DB_CONN_TRG_ID
+		 WHERE 1=1
+		    AND A.REG_TYP_CD IN ('C', 'U')
+		    AND A.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')
+            AND B.SHD_ID = #{shdId,jdbcType=VARCHAR}
+		 ORDER BY A.DB_CONN_TRG_LNM
+  </select>
+    <select id="selectCsJobList" resultMap="BaseResultMap" parameterType="kr.wise.commons.damgmt.schedule.service.WamShdJob" >
+    SELECT 
+		    A.DB_CONN_TRG_ID AS SHD_JOB_ID,
+		    A.DB_CONN_TRG_LNM AS DB_CONN_TRG_LNM,
+		    '[코드전송]' || A.DB_CONN_TRG_LNM AS SHD_JOB_NM 
+		    , #{shdKndCd,jdbcType=VARCHAR}  AS SHD_KND_CD
+		    ,B.SHD_ID AS SHD_ID
+		 FROM WAA_DB_CONN_TRG A 
+		         LEFT OUTER JOIN WAM_SHD_JOB B
+		          ON B.SHD_JOB_ID = A.DB_CONN_TRG_ID
+		 WHERE 1=1
+		    AND A.REG_TYP_CD IN ('C', 'U')
+		    AND A.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')
+            AND B.SHD_ID = #{shdId,jdbcType=VARCHAR}
+		 ORDER BY A.DB_CONN_TRG_LNM
+  </select>
+
+    <select id="selectMaJobList" resultMap="BaseResultMap" parameterType="kr.wise.commons.damgmt.schedule.service.WamShdJob" >
+    SELECT 
+		    A.SHD_ID
+		    , A.SHD_JOB_ID
+		    , A.SHD_JOB_SNO
+		    , A.OBJ_VERS
+		    , A.REG_TYP_CD
+		    , A.ETC_JOB_DTLS AS SHD_JOB_DTLS
+		    , A.ETC_JOB_NM AS SHD_JOB_NM
+		    , A.ETC_JOB_KND_CD AS SHD_JOB_KND_CD
+		    , B.SHD_KND_CD
+  	FROM WAM_SHD_JOB A
+    INNER JOIN WAM_SHD_MSTR B
+    ON A.SHD_ID = B.SHD_ID
+  	WHERE A.SHD_ID = #{shdId,jdbcType=VARCHAR}
+  </select>
+  <select id="selectQpJobList" resultMap="BaseResultMap" parameterType="kr.wise.commons.damgmt.schedule.service.WamShdJob" >
+		SELECT T.DB_CONN_TRG_ID  AS DB_CONN_TRG_ID
+		     , T.DB_CONN_TRG_LNM AS DB_CONN_TRG_LNM
+		     ,  '['||C.COMM_DTL_CD_NM||'] ' ||A.DBC_TBL_NM ||'.'|| A.OBJ_NM AS SHD_JOB_NM
+		     , A.PRF_KND_CD AS PRF_KND_CD
+		     , A.PRF_ID     AS SHD_JOB_ID
+		     , 'QP'         AS SHD_KND_CD
+		     , B.SHD_ID     AS SHD_ID
+		  FROM WAA_DB_CONN_TRG T 
+		       INNER JOIN WAM_PRF_MSTR A
+		          ON T.DB_CONN_TRG_ID = A.DB_CONN_TRG_ID
+		         AND T.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')
+		         AND T.REG_TYP_CD IN ('C', 'U')   
+		       INNER JOIN WAA_COMM_DCD D
+                  ON D.COMM_DCD = 'PRF_KND_CD'
+                 AND D.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD') 
+                 AND D.REG_TYP_CD IN ('C', 'U')
+		       INNER JOIN WAA_COMM_DTL_CD C
+		          ON C.COMM_DCD_ID = D.COMM_DCD_ID
+		         AND COMM_DTL_CD = A.PRF_KND_CD
+                 AND C.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD') 
+                 AND C.REG_TYP_CD IN ('C', 'U') 
+		       LEFT JOIN WAM_SHD_JOB B
+		         ON B.SHD_JOB_ID = A.PRF_ID
+          WHERE 1 = 1
+           AND B.SHD_ID = #{shdId,jdbcType=VARCHAR}
+		ORDER BY T.DB_CONN_TRG_LNM,  A.DBC_TBL_NM, A.OBJ_NM
+  </select>
+  
+  <select id="selectQbJobList" resultMap="BaseResultMap" parameterType="kr.wise.commons.damgmt.schedule.service.WamShdJob" >
+	   SELECT                            
+	       T.DB_CONN_TRG_LNM  AS DB_CONN_TRG_LNM    
+	      , 'QB'  AS SHD_KND_CD          
+	      , B.BR_NM AS SHD_JOB_NM         
+	      , B.BR_ID AS SHD_JOB_ID         
+	      , B.OBJ_DESCN AS OBJ_DESCN
+	      , M.SHD_ID AS SHD_ID
+	   FROM WAM_BR_MSTR B           
+	        INNER JOIN WAA_DB_CONN_TRG T          
+	           ON B.DB_CONN_TRG_ID = T.DB_CONN_TRG_ID
+	          AND T.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')                            
+	          AND T.REG_TYP_CD IN ('C', 'U')           
+	            INNER JOIN WAM_BIZ_AREA Z                     
+	           ON B.BIZ_AREA_ID = Z.BIZ_AREA_ID                              
+	          AND Z.REG_TYP_CD IN ('C', 'U')   
+	         LEFT OUTER JOIN WAM_SHD_JOB M                
+	           ON M.SHD_JOB_ID = B.BR_ID  
+	           WHERE 1=1
+	           AND M.SHD_ID = #{shdId,jdbcType=VARCHAR}
+	  ORDER BY T.DB_CONN_TRG_LNM, B.BR_NM 
+  </select>
+  
+  
+<select id="selectDgJobList" resultMap="BaseResultMap" parameterType="kr.wise.commons.damgmt.schedule.service.WamShdJob" >
+SELECT COM.COMM_DTL_CD_NM || ' -> ' || COM2.COMM_DTL_CD_NM AS DB_CONN_TRG_LNM
+		, #{shdKndCd,jdbcType=VARCHAR}  AS SHD_KND_CD 
+		, D.DB_CONN_TRG_PNM ||'.'|| B.DB_SCH_PNM || ' -> ' || E.DB_CONN_TRG_PNM || '.' || C.DB_SCH_PNM   AS SHD_JOB_NM  
+		, A.DB_MAP_ID	AS SHD_JOB_ID
+		, A.OBJ_DESCN
+		, M.SHD_ID 
+ FROM WAA_DB_MAP A
+	     INNER JOIN WAA_DB_SCH B
+		   ON A.SRC_DB_SCH_ID = B.DB_SCH_ID
+		  AND B.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')   
+		  AND B.REG_TYP_CD IN ('C', 'U')
+		 INNER JOIN WAA_DB_CONN_TRG D
+		   ON B.DB_CONN_TRG_ID = D.DB_CONN_TRG_ID
+		  AND D.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')
+		  AND D.REG_TYP_CD IN ('C', 'U') 
+		 INNER JOIN WAA_DB_SCH C
+		   ON A.TGT_DB_SCH_ID = C.DB_SCH_ID
+		  AND C.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')   
+		  AND C.REG_TYP_CD IN ('C', 'U')
+		 INNER JOIN WAA_DB_CONN_TRG E
+		   ON C.DB_CONN_TRG_ID = E.DB_CONN_TRG_ID
+		  AND E.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')
+		  AND E.REG_TYP_CD IN ('C', 'U') 
+	    INNER JOIN WAM_SHD_JOB M                
+	       ON M.SHD_JOB_ID = A.DB_MAP_ID
+	     AND M.SHD_ID = #{shdId,jdbcType=VARCHAR}
+	     AND M.REG_TYP_CD IN ('C', 'U') 
+	    LEFT OUTER JOIN ( SELECT B.COMM_DTL_CD, B.COMM_DTL_CD_NM
+	                        FROM WAA_COMM_DCD A
+	                       INNER JOIN WAA_COMM_DTL_CD B
+	                          ON A.COMM_DCD_ID = B.COMM_DCD_ID
+	                         AND B.REG_TYP_CD IN ('C', 'U')
+	                         AND B.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	                       WHERE A.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	                         AND A.REG_TYP_CD IN ('C', 'U')
+	                         AND A.COMM_DCD = 'DDL_TRG_DCD'
+	                       ) COM
+	      ON B.DDL_TRG_DCD = COM.COMM_DTL_CD
+	    LEFT OUTER JOIN ( SELECT B.COMM_DTL_CD, B.COMM_DTL_CD_NM
+	                        FROM WAA_COMM_DCD A
+	                       INNER JOIN WAA_COMM_DTL_CD B
+	                          ON A.COMM_DCD_ID = B.COMM_DCD_ID
+	                         AND B.REG_TYP_CD IN ('C', 'U')
+	                         AND B.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	                       WHERE A.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	                         AND A.REG_TYP_CD IN ('C', 'U')
+	                         AND A.COMM_DCD = 'DDL_TRG_DCD'
+	                       ) COM2
+	      ON C.DDL_TRG_DCD = COM2.COMM_DTL_CD
+WHERE A.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')   
+  AND A.REG_TYP_CD IN ('C', 'U')
+  AND A.DDL_TSF_YN = 'Y' 
+  </select>
+  
+  <select id="selectGnJobList" resultMap="BaseResultMap" parameterType="kr.wise.commons.damgmt.schedule.service.WamShdJob" >
+    SELECT 
+		    A.SHD_ID
+		    , A.SHD_JOB_ID
+		    , A.SHD_JOB_SNO
+		    , A.OBJ_VERS
+		    , A.REG_TYP_CD
+		    , A.ETC_JOB_DTLS AS SHD_JOB_DTLS
+		    , A.ETC_JOB_NM AS SHD_JOB_NM
+		    , A.ETC_JOB_KND_CD AS SHD_JOB_KND_CD
+		    , B.SHD_KND_CD
+  	FROM WAM_SHD_JOB A
+    INNER JOIN WAM_SHD_MSTR B
+    ON A.SHD_ID = B.SHD_ID
+  	WHERE A.SHD_ID = #{shdId,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="selectJobScPopList" resultMap="BaseResultMap" parameterType="kr.wise.commons.damgmt.schedule.service.WamShdJob" >
+	 SELECT * FROM(  
+		 SELECT 
+		    A.DB_CONN_TRG_ID AS SHD_JOB_ID,
+		    A.DB_CONN_TRG_LNM AS DB_CONN_TRG_LNM,
+		    '[스키마 수집]' || A.DB_CONN_TRG_LNM AS SHD_JOB_NM, 
+		    'SC' AS SHD_KND_CD
+		    ,CASE WHEN COUNT(B.SHD_ID) = 0 THEN 'N' ELSE 'Y' END AS REG_YN
+		 FROM WAA_DB_CONN_TRG A 
+		    LEFT OUTER JOIN WAM_SHD_JOB B
+		    ON B.SHD_JOB_ID = A.DB_CONN_TRG_ID
+		 WHERE 1=1
+		 AND A.REG_TYP_CD IN ('C', 'U')
+		 AND A.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')
+		 GROUP BY A.DB_CONN_TRG_LNM, A.DB_CONN_TRG_ID, B.SHD_JOB_ID
+		 ORDER BY A.DB_CONN_TRG_LNM
+	 ) A
+	 WHERE 1 = 1
+	 <if test="dbConnTrgLnm != null and dbConnTrgLnm !='' ">
+     AND DB_CONN_TRG_LNM LIKE '%' || #{dbConnTrgLnm,jdbcType=VARCHAR} || '%'
+     </if>
+	 <if test="regYn != null and regYn !='' ">
+     AND REG_YN = #{regYn,jdbcType=VARCHAR}
+     </if>
+	 <if test="shdJobNm != null and shdJobNm !='' ">
+     AND SHD_JOB_NM LIKE '%' || #{shdJobNm,jdbcType=VARCHAR} || '%'
+     </if>
+ </select>
+ 
+ <select id="selectJobQpPobList"  resultMap="BaseResultMap" parameterType="kr.wise.commons.damgmt.schedule.service.WamShdJob" >
+	SELECT * FROM (
+
+		SELECT 
+		     T.DB_CONN_TRG_ID AS DB_CONN_TRG_ID
+		     ,T.DB_CONN_TRG_LNM AS DB_CONN_TRG_LNM
+		     , '['||C.COMM_DTL_CD_NM||'] ' ||A.DBC_TBL_NM ||'.'|| A.OBJ_NM AS SHD_JOB_NM
+		     ,A.PRF_KND_CD AS PRF_KND_CD
+		     ,A.PRF_ID AS SHD_JOB_ID
+		     ,'QP' AS SHD_KND_CD
+		     , CASE WHEN COUNT(B.SHD_JOB_ID) = 0 THEN 'N' ELSE 'Y' END AS REG_YN 
+		     ,R.PRF_ID
+		     FROM WAA_DB_CONN_TRG T 
+				     INNER JOIN WAM_PRF_MSTR A
+				        ON T.DB_CONN_TRG_ID = A.DB_CONN_TRG_ID
+				      AND A.REG_TYP_CD IN ('C', 'U')   
+				     INNER JOIN WAA_COMM_DTL_CD C
+				        ON C.COMM_DCD_ID = 'OBJ_00000000342'
+				       AND C.COMM_DTL_CD = A.PRF_KND_CD 
+				       AND C.REG_TYP_CD IN ('C', 'U')   
+				       AND C.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')
+				     LEFT OUTER JOIN ( <include refid="kr.wise.dq.profile.anares.service.WamPrfResultMapper.getPrfResultMaxAnaStrDtm"/> ) R
+                      ON A.PRF_ID = R.PRF_ID
+				     LEFT OUTER JOIN WAM_SHD_JOB B
+				      ON B.SHD_JOB_ID = A.PRF_ID
+				     AND B.REG_TYP_CD IN ('C', 'U')   
+		WHERE T.REG_TYP_CD IN ('C', 'U')   
+		   AND T.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')
+		GROUP BY T.DB_CONN_TRG_LNM, A.DBC_TBL_NM, A.OBJ_NM,  A.PRF_KND_CD,T.DB_CONN_TRG_ID, A.PRF_ID, R.PRF_ID, C.COMM_DTL_CD_NM, A.PRF_KND_CD
+		ORDER BY T.DB_CONN_TRG_LNM,  A.DBC_TBL_NM, A.OBJ_NM
+
+	) A
+	WHERE 1=1
+	<if test="dbConnTrgLnm != null and dbConnTrgLnm !='' ">
+    AND DB_CONN_TRG_LNM LIKE '%' || #{dbConnTrgLnm,jdbcType=VARCHAR} || '%'
+    </if>
+  	 <if test="regYn != null and regYn !='' ">
+     AND REG_YN = #{regYn,jdbcType=VARCHAR}
+     </if>
+	<if test="prfKndCd != null and prfKndCd !='' ">
+    AND PRF_KND_CD = #{prfKndCd,jdbcType=VARCHAR} 
+    </if>
+    <if test="shdJobNm != null and shdJobNm !='' ">
+     AND SHD_JOB_NM LIKE '%' || #{shdJobNm,jdbcType=VARCHAR} || '%'
+     </if>
+    <if test='exeYn == "Y" '>
+     AND A.PRF_ID IS NOT NULL
+     </if>
+    <if test='exeYn == "N" '>
+     AND A.PRF_ID IS NULL
+     </if>
+ </select>
+ 
+  <select id="selectJobQbPopList"  resultMap="BaseResultMap" parameterType="kr.wise.commons.damgmt.schedule.service.WamShdJob" >
+  	SELECT * FROM (
+	   SELECT                            
+	       T.DB_CONN_TRG_LNM  AS DB_CONN_TRG_LNM    
+	      , 'QB'  AS SHD_KND_CD          
+	      , B.BR_NM AS SHD_JOB_NM         
+	      , B.BR_ID AS SHD_JOB_ID         
+	      , B.OBJ_DESCN AS OBJ_DESCN  
+	      , CASE WHEN COUNT(M.SHD_JOB_ID) = 0 THEN 'N' ELSE 'Y' END AS REG_YN 
+	      , B.BR_ID
+	   FROM WAA_DB_CONN_TRG T           
+	        INNER JOIN WAM_BR_MSTR B          
+	           ON B.DB_CONN_TRG_ID = T.DB_CONN_TRG_ID                            
+	          AND B.REG_TYP_CD IN ('C', 'U')           
+	        INNER JOIN WAM_BIZ_AREA Z                     
+	           ON B.BIZ_AREA_ID = Z.BIZ_AREA_ID                              
+	          AND Z.REG_TYP_CD IN ('C', 'U')  
+	         LEFT OUTER JOIN ( <include refid="kr.wise.dq.bizrule.service.WamBrResultMapper.getBrResultMaxAnaStrDtm"/>  ) R
+              ON B.BR_ID = R.BR_ID 
+	         LEFT OUTER JOIN WAM_SHD_JOB M                
+	           ON M.SHD_ID = B.BR_ID
+	          AND M.REG_TYP_CD IN ('C', 'U') 
+	  WHERE T.REG_TYP_CD IN ('C', 'U') 
+	     AND T.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')  
+	  GROUP BY T.DB_CONN_TRG_LNM, B.BR_ID, R.BR_ID, B.BR_NM, B.OBJ_DESCN 
+	  ORDER BY T.DB_CONN_TRG_LNM, B.BR_NM 
+  	) A
+	WHERE 1=1
+	<if test="dbConnTrgLnm != null and dbConnTrgLnm !='' ">
+    AND DB_CONN_TRG_LNM LIKE '%' || #{dbConnTrgLnm,jdbcType=VARCHAR} || '%'
+    </if>
+     <if test="regYn != null and regYn !='' ">
+     AND REG_YN = #{regYn,jdbcType=VARCHAR}
+     </if>
+      <if test="shdJobNm != null and shdJobNm !='' ">
+     AND SHD_JOB_NM LIKE '%' || #{shdJobNm,jdbcType=VARCHAR} || '%'
+     </if>
+     <if test='exeYn == "Y" '>
+     AND A.BR_ID IS NOT NULL
+     </if>
+    <if test='exeYn == "N" '>
+     AND A.BR_ID IS NULL
+     </if>
+  </select>
+  
+  
+  
+  <select id="selectJobDgPopList"  resultMap="BaseResultMap" parameterType="kr.wise.commons.damgmt.schedule.service.WamShdJob" >
+  	SELECT * FROM (SELECT COM.COMM_DTL_CD_NM || ' -> ' || COM2.COMM_DTL_CD_NM AS DB_CONN_TRG_LNM
+					             , 'DG'  AS SHD_KND_CD 
+					             , D.DB_CONN_TRG_PNM ||'.'|| B.DB_SCH_PNM || ' -> ' || E.DB_CONN_TRG_PNM || '.' || C.DB_SCH_PNM   AS SHD_JOB_NM  
+					             , A.DB_MAP_ID	AS SHD_JOB_ID
+							     , A.OBJ_DESCN
+					             , CASE WHEN M.SHD_JOB_ID IS NULL THEN 'N' ELSE 'Y' END AS REG_YN 
+						  FROM WAA_DB_MAP A
+						  JOIN WAA_DB_SCH B
+						    ON A.SRC_DB_SCH_ID = B.DB_SCH_ID
+						   AND B.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')   
+						   AND B.REG_TYP_CD IN ('C', 'U')
+						  JOIN WAA_DB_CONN_TRG D
+						    ON B.DB_CONN_TRG_ID = D.DB_CONN_TRG_ID
+						   AND D.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')
+						   AND D.REG_TYP_CD IN ('C', 'U') 
+						  JOIN WAA_DB_SCH C
+						    ON A.TGT_DB_SCH_ID = C.DB_SCH_ID
+						   AND C.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')   
+						   AND C.REG_TYP_CD IN ('C', 'U')
+						  JOIN WAA_DB_CONN_TRG E
+						    ON C.DB_CONN_TRG_ID = E.DB_CONN_TRG_ID
+						   AND E.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')
+						   AND E.REG_TYP_CD IN ('C', 'U') 
+					      LEFT OUTER JOIN WAM_SHD_JOB M                
+						    ON M.SHD_JOB_ID = A.DB_MAP_ID
+						   AND M.REG_TYP_CD IN ('C', 'U') 
+					      LEFT OUTER JOIN ( SELECT B.COMM_DTL_CD, B.COMM_DTL_CD_NM
+					                          FROM WAA_COMM_DCD A
+					                         INNER JOIN WAA_COMM_DTL_CD B
+					                            ON A.COMM_DCD_ID = B.COMM_DCD_ID
+					                           AND B.REG_TYP_CD IN ('C', 'U')
+					                           AND B.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+					                         WHERE A.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+					                           AND A.REG_TYP_CD IN ('C', 'U')
+					                           AND A.COMM_DCD = 'DDL_TRG_DCD'
+					                         ) COM
+					        ON B.DDL_TRG_DCD = COM.COMM_DTL_CD
+					      LEFT OUTER JOIN ( SELECT B.COMM_DTL_CD, B.COMM_DTL_CD_NM
+					                          FROM WAA_COMM_DCD A
+					                         INNER JOIN WAA_COMM_DTL_CD B
+					                            ON A.COMM_DCD_ID = B.COMM_DCD_ID
+					                           AND B.REG_TYP_CD IN ('C', 'U')
+					                           AND B.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+					                         WHERE A.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+					                           AND A.REG_TYP_CD IN ('C', 'U')
+					                           AND A.COMM_DCD = 'DDL_TRG_DCD'
+					                         ) COM2
+					        ON C.DDL_TRG_DCD = COM2.COMM_DTL_CD
+						 WHERE A.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')   
+						   AND A.REG_TYP_CD IN ('C', 'U')
+					       AND A.DDL_TSF_YN = 'Y' 
+  						) A
+	WHERE 1=1
+	<if test="dbConnTrgLnm != null and dbConnTrgLnm !='' ">
+    AND DB_CONN_TRG_LNM LIKE '%' || #{dbConnTrgLnm,jdbcType=VARCHAR} || '%'
+    </if>
+     <if test="regYn != null and regYn !='' ">
+     AND REG_YN = #{regYn,jdbcType=VARCHAR}
+     </if>
+      <if test="shdJobNm != null and shdJobNm !='' ">
+     AND SHD_JOB_NM LIKE '%' || #{shdJobNm,jdbcType=VARCHAR} || '%'
+     </if>
+  </select>
+  
+    <select id="selectJobCsPopList" resultMap="BaseResultMap" parameterType="kr.wise.commons.damgmt.schedule.service.WamShdJob" >
+	 SELECT * FROM(  
+		 SELECT 
+		    A.DB_CONN_TRG_ID AS SHD_JOB_ID,
+		    A.DB_CONN_TRG_LNM AS DB_CONN_TRG_LNM,
+		    '[코드전송]' || A.DB_CONN_TRG_LNM AS SHD_JOB_NM, 
+		    'CS' AS SHD_KND_CD
+		    ,CASE WHEN COUNT(B.SHD_ID) = 0 THEN 'N' ELSE 'Y' END AS REG_YN
+		 FROM WAA_DB_CONN_TRG A 
+		    LEFT OUTER JOIN WAM_SHD_JOB B
+		    ON B.SHD_JOB_ID = A.DB_CONN_TRG_ID
+		 WHERE 1=1
+		 AND A.REG_TYP_CD IN ('C', 'U')
+		 AND A.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')
+		 AND EXISTS (SELECT 1 
+                        FROM WAA_DB_SCH C 
+                        WHERE A.DB_CONN_TRG_ID = C.DB_CONN_TRG_ID 
+                        AND C.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+                        AND C.REG_TYP_CD IN ('C', 'U')
+                        AND CD_SND_TRG_YN ='Y'
+                        ) 
+		 GROUP BY A.DB_CONN_TRG_LNM, A.DB_CONN_TRG_ID, B.SHD_JOB_ID
+		 ORDER BY A.DB_CONN_TRG_LNM
+	 ) A
+	 WHERE 1 = 1
+	 <if test="dbConnTrgLnm != null and dbConnTrgLnm !='' ">
+     AND DB_CONN_TRG_LNM LIKE '%' || #{dbConnTrgLnm,jdbcType=VARCHAR} || '%'
+     </if>
+	 <if test="regYn != null and regYn !='' ">
+     AND REG_YN = #{regYn,jdbcType=VARCHAR}
+     </if>
+	 <if test="shdJobNm != null and shdJobNm !='' ">
+     AND SHD_JOB_NM LIKE '%' || #{shdJobNm,jdbcType=VARCHAR} || '%'
+     </if>
+ </select>
+
+
+  
+  <select id="selectImdScheduleJobList" resultMap="BaseResultMap" parameterType="kr.wise.commons.damgmt.schedule.service.WamShdJob" >
+    SELECT 	  A.SHD_ID
+		    , A.SHD_JOB_ID
+		    , A.SHD_JOB_SNO
+		    , A.ETC_JOB_DTLS 
+		    , A.ETC_JOB_NM 
+		    , A.ETC_JOB_KND_CD 
+		    , B.SHD_KND_CD
+  	FROM WAM_SHD_JOB A
+    	 INNER JOIN WAM_SHD_MSTR B
+    		ON A.SHD_ID = B.SHD_ID
+  	WHERE A.SHD_ID = #{shdId,jdbcType=VARCHAR}
+  </select>
+   <select id="selectJobCrPopList"  resultMap="BaseResultMap" parameterType="kr.wise.commons.damgmt.schedule.service.WamShdJob" >
+ SELECT * FROM (
+		 SELECT C.DB_CONN_TRG_ID AS DB_CONN_TRG_ID
+		     ,C.DB_CONN_TRG_LNM AS DB_CONN_TRG_LNM
+		     , (F.VRFC_NM||' '|| B.DB_SCH_PNM||'.'|| A.DBC_TBL_NM|| '.'|| E.DBC_COL_NM) AS ETC_JOB_NM
+             , (F.VRFC_NM||' '|| B.DB_SCH_PNM||'.'|| A.DBC_TBL_NM|| '.'|| E.DBC_COL_NM) AS SHD_JOB_NM
+             , CASE WHEN CD.CD_RULE_ID IS NOT NULL AND G.VRFC_TYP IS NULL THEN 'CD'
+             ELSE G.VRFC_TYP END AS PRF_KND_CD
+		     , F.RULE_REL_ID AS SHD_JOB_ID
+		     , 'CR'          AS SHD_KND_CD
+		     , CASE WHEN COUNT(F.RULE_REL_ID) = 0 THEN 'N' ELSE 'Y' END AS REG_YN 
+		     , R.PRF_ID
+		  FROM WAT_DBC_TBL A
+		       INNER JOIN WAA_DB_SCH B
+		          ON B.EXP_DTM = TO_DATE( '99991231', 'YYYYMMDD')
+		         AND B.DB_SCH_ID = A.DB_SCH_ID  
+		       INNER JOIN WAA_DB_CONN_TRG C
+		          ON C.EXP_DTM = TO_DATE( '99991231', 'YYYYMMDD')
+		         AND C.DB_CONN_TRG_ID = B.DB_CONN_TRG_ID   
+		       LEFT JOIN WAA_EXP_TBL D
+		         ON D.DB_SCH_ID  = A.DB_SCH_ID
+		        AND D.DBC_TBL_NM = A.DBC_TBL_NM		
+		       INNER JOIN WAT_DBC_COL E
+		          ON E.DB_SCH_ID  = A.DB_SCH_ID
+		         AND E.DBC_TBL_NM = A.DBC_TBL_NM       
+		       LEFT JOIN WAA_COL_RULE_REL F
+		         ON F.DB_SCH_ID  = A.DB_SCH_ID
+		        AND F.DBC_TBL_NM = A.DBC_TBL_NM
+		        AND F.DBC_COL_NM = E.DBC_COL_NM
+		       LEFT JOIN WAA_VRFC_RULE G
+		         ON G.VRFC_ID = F.VRFC_ID
+		        AND G.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+		        AND G.REG_TYP_CD IN ('C', 'U')
+		        LEFT JOIN WAA_CD_RULE CD
+		         ON CD.CD_RULE_ID = F.VRFC_ID
+		      LEFT JOIN 
+		      (SELECT M.DB_CONN_TRG_ID, M.DB_SCH_ID, M.DBC_TBL_NM, M.OBJ_NM, M.PRF_ID
+           	     FROM WAM_PRF_MSTR M            	  
+           	    WHERE M.REG_TYP_CD IN ('C','U')
+           	      AND M.PRF_KND_CD LIKE CONCAT('PC01','%')
+           	      <if test='dbConnTrgId != null '>
+				   AND M.DB_CONN_TRG_ID = #{dbConnTrgId, jdbcType=VARCHAR}
+				   </if> 
+                 ) PM
+                ON C.DB_CONN_TRG_ID = PM.DB_CONN_TRG_ID
+			   AND B.DB_SCH_ID      = PM.DB_SCH_ID
+			   AND A.DBC_TBL_NM     = PM.DBC_TBL_NM
+               AND E.DBC_COL_NM     = PM.OBJ_NM
+				LEFT JOIN ( <include refid="kr.wise.dq.profile.anares.service.WamPrfResultMapper.getPrfResultMaxAnaStrDtm"/> ) R
+                      ON R.PRF_ID = F.RULE_REL_ID
+		 WHERE 1 = 1
+		   AND NVL(D.EXP_YN,'N') = 'N'
+	       AND NOT exists (SELECT 1
+	   			             FROM WAA_EXP_TBL_RULE EXR
+	   			   		    WHERE EXR.REG_TYP IN ('C', 'U')
+	   			    	  	  AND EXR.DB_SCH_ID = B.DB_SCH_ID
+        					  AND EXR.DB_CONN_TRG_ID = C.DB_CONN_TRG_ID 
+        					  AND A.DBC_TBL_NM LIKE (CASE WHEN (EXR.RELATION = 'F') THEN EXR.EXC_STND_RULE || '_' || '%' 
+													     WHEN (EXR.RELATION = 'B') THEN  '%' || '_' || EXR.EXC_STND_RULE END) 
+		  )
+    --검증룰 적용된 항목만 가져오기
+	AND F.RULE_REL_ID IS NOT NULL
+		 GROUP BY C.DB_CONN_TRG_ID 
+		     ,C.DB_CONN_TRG_LNM 
+		     , CD.CD_RULE_ID
+		     , B.DB_SCH_PNM  , F.VRFC_NM, A.DBC_TBL_NM, E.DBC_COL_NM
+             , G.VRFC_TYP 
+		     , F.RULE_REL_ID 
+		     , R.PRF_ID
+		 ORDER BY B.DB_SCH_PNM 
+		        , A.DBC_TBL_NM  
+		        , E.DBC_COL_NM
+		        )
+	WHERE 1=1
+	<if test="dbConnTrgLnm != null and dbConnTrgLnm !='' ">
+    AND DB_CONN_TRG_LNM LIKE '%' || #{dbConnTrgLnm,jdbcType=VARCHAR} || '%'
+    </if>
+  	 <if test="regYn != null and regYn !='' ">
+     AND REG_YN = #{regYn,jdbcType=VARCHAR}
+     </if>
+	<if test="prfKndCd != null and prfKndCd !='' ">
+    AND PRF_KND_CD = #{prfKndCd,jdbcType=VARCHAR} 
+    </if>
+    <if test="shdJobNm != null and shdJobNm !='' ">
+     AND SHD_JOB_NM LIKE '%' || #{shdJobNm,jdbcType=VARCHAR} || '%'
+     </if>
+    <if test='exeYn == "Y" '>
+     AND PRF_ID IS NOT NULL
+     </if>
+    <if test='exeYn == "N" '>
+     AND PRF_ID IS NULL
+     </if>
+ </select>
+  <select id="selectVrfcJobList" resultMap="BaseResultMap" parameterType="kr.wise.commons.damgmt.schedule.service.WamShdJob" >
+    
+    SELECT A.RULE_REL_ID AS SHD_JOB_ID
+         , C.VRFC_NM     AS DB_CONN_TRG_LNM   
+         , B.ETC_JOB_NM  AS SHD_JOB_NM
+         , B.ETC_JOB_NM 
+		 , 'CR'  AS SHD_KND_CD
+		 , B.SHD_ID AS SHD_ID
+	  FROM WAA_COL_RULE_REL A 
+		   LEFT JOIN WAM_SHD_JOB B 
+		     ON B.SHD_JOB_ID = A.RULE_REL_ID
+           INNER JOIN WAA_VRFC_RULE C
+              ON C.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')
+             AND C.VRFC_ID = A.VRFC_ID
+     WHERE 1 = 1	
+       AND B.SHD_ID = #{shdId,jdbcType=VARCHAR}
+     UNION ALL
+     SELECT A.RULE_REL_ID AS SHD_JOB_ID
+         , A.VRFC_NM     AS DB_CONN_TRG_LNM   
+         , B.ETC_JOB_NM  AS SHD_JOB_NM
+         , B.ETC_JOB_NM 
+		 , 'CR'  AS SHD_KND_CD
+		 , B.SHD_ID AS SHD_ID
+	  FROM WAA_COL_RULE_REL A 
+		   LEFT JOIN WAM_SHD_JOB B 
+		     ON B.SHD_JOB_ID = A.RULE_REL_ID
+           INNER JOIN WAA_CD_RULE C
+              ON C.CD_RULE_ID = A.VRFC_ID
+     WHERE 1 = 1	
+       AND B.SHD_ID = #{shdId,jdbcType=VARCHAR}
+     UNION ALL
+     SELECT A.PRF_ID     AS SHD_JOB_ID
+         , A.PRF_NM      AS DB_CONN_TRG_LNM   
+         , B.ETC_JOB_NM  AS SHD_JOB_NM
+         , B.ETC_JOB_NM 
+		 , 'CR'  AS SHD_KND_CD
+		 , B.SHD_ID AS SHD_ID
+	  FROM WAM_PRF_MSTR A 
+		   LEFT JOIN WAM_SHD_JOB B 
+		     ON B.SHD_JOB_ID = A.PRF_ID           
+     WHERE 1 = 1	
+       AND B.SHD_ID = #{shdId,jdbcType=VARCHAR}  
+   
+  </select>
+</mapper>

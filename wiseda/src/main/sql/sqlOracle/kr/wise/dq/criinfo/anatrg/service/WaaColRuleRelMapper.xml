@@ -1,0 +1,644 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.dq.criinfo.anatrg.service.WaaColRuleRelMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.dq.criinfo.anatrg.service.WaaColRuleRel" >
+    <result column="RULE_REL_ID"     property="ruleRelId"    jdbcType="VARCHAR" />
+    <result column="SHD_JOB_ID"      property="shdJobId"     jdbcType="VARCHAR" />
+    <result column="ETC_JOB_KND_CD"  property="etcJobKndCd"  jdbcType="VARCHAR" />
+    <result column="SHD_JOB_KND_CD"  property="shdJobKndCd"  jdbcType="VARCHAR" /> 
+    <result column="SHD_JOB_NM"      property="shdJobNm"     jdbcType="VARCHAR" />
+    <result column="SHD_KND_CD"      property="shdKndCd"     jdbcType="VARCHAR" />
+    <result column="ETC_JOB_NM"      property="etcJobNm"     jdbcType="VARCHAR" />
+    
+    <result column="DB_SCH_ID"       property="dbSchId"      jdbcType="VARCHAR" />
+    <result column="DB_CONN_TRG_ID"  property="dbConnTrgId"  jdbcType="VARCHAR" />
+    <result column="DB_CONN_TRG_PNM" property="dbConnTrgPnm" jdbcType="VARCHAR" />
+    <result column="DB_CONN_TRG_LNM" property="dbConnTrgLnm" jdbcType="VARCHAR" />
+    <result column="DB_SCH_PNM"      property="dbSchPnm"     jdbcType="VARCHAR" />
+    <result column="DB_SCH_LNM"      property="dbSchLnm"     jdbcType="VARCHAR" />
+    <result column="DBC_TBL_NM"      property="dbcTblNm"     jdbcType="VARCHAR" />
+    <result column="DBC_TBL_KOR_NM"  property="dbcTblKorNm"  jdbcType="VARCHAR" />    
+    <result column="DBC_COL_NM"      property="dbcColNm"     jdbcType="VARCHAR" />
+    <result column="DBC_COL_KOR_NM"  property="dbcColKorNm"  jdbcType="VARCHAR" />
+    <result column="VRFC_ID"         property="vrfcId"       jdbcType="VARCHAR" />
+	<result column="VRFC_NM"         property="vrfcNm"       jdbcType="VARCHAR" />
+	<result column="CD_CLS_ID"       property="cdClsId"      jdbcType="VARCHAR" />
+    
+    <result column="SHD_JOB_ID"      property="shdJobId"     jdbcType="VARCHAR" />
+    <result column="SHD_KND_CD"      property="shdKndCd"     jdbcType="VARCHAR" />
+    <result column="ETC_JOB_NM"      property="etcJobNm"     jdbcType="VARCHAR" />
+    <result column="SHD_JOB_NM"      property="shdJobNm"     jdbcType="VARCHAR" />
+
+	<result column="PRF_ID"      	 property="prfId"     	 jdbcType="VARCHAR" />
+    <result column="ANA_STR_DTM"     property="anaStrDtm"    jdbcType="TIMESTAMP" />
+    <result column="DATA_TYPE"       property="dataType"     jdbcType="VARCHAR" />
+    <!-- 진단상태, 분석차수를 가져오기 위해 추가 -->
+	<result column="ANA_DGR"       property="anaDgr"      jdbcType="VARCHAR" />
+	<result column="ANA_DGR_NM"       property="anaDgrNm"      jdbcType="VARCHAR" />
+    <result column="ANA_STS_CD"      property="anaStsCd"     jdbcType="VARCHAR" />
+    
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+   	DB_SCH_ID, EXP_DTM, STR_DTM, DB_SCH_PNM, DB_SCH_LNM, DB_CONN_TRG_ID, DDL_TRG_YN, CLT_XCL_YN, DDL_TRG_DCD, CD_SND_TRG_YN
+   	CD_AUTO_SND_YN, OBJ_DESCN, OBJ_VERS, REG_TYP_CD, WRIT_DTM, WRIT_USER_ID, DB_TBL_SPAC_IC, DB_IDX_SPAC_ID
+   	, COL_PRF_YN, DMN_PDT_YN, ANA_STS_CD
+  </sql>
+  
+  <!-- 최근실행일자 -->
+  <sql id="getPrfResultMaxAnaStrDtm" >
+      SELECT R.*
+       FROM WAM_PRF_RESULT R
+                INNER JOIN (SELECT PRF_ID, MAX(ANA_STR_DTM) AS ANA_STR_DTM
+                                  FROM WAM_PRF_RESULT
+                                GROUP BY PRF_ID ) R2
+                    ON R.PRF_ID = R2.PRF_ID
+                   AND R.ANA_STR_DTM = R2.ANA_STR_DTM
+  </sql>
+  
+  <insert id="insertSelective" parameterType="kr.wise.dq.criinfo.anatrg.service.WaaColRuleRel">
+  	INSERT INTO WAA_COL_RULE_REL
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="ruleRelId != null">
+        RULE_REL_ID,
+      </if>     
+      <if test="dbSchId != null">
+        DB_SCH_ID,
+      </if>     
+      <if test="dbcTblNm != null">
+        DBC_TBL_NM,
+      </if>    
+      <if test="dbcColNm != null">
+        DBC_COL_NM,
+      </if>    
+      <if test="vrfcId != null">
+        VRFC_ID,
+      </if>    
+      <if test="cdClsId != null">
+        CD_CLS_ID,
+      </if>    
+      <if test="vrfcNm != null">
+        VRFC_NM,
+      </if>    
+      WRIT_DTM,  
+      UPDT_DTM,
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="ruleRelId != null">
+        #{ruleRelId,jdbcType=VARCHAR},
+      </if>     
+      <if test="dbSchId != null">
+        #{dbSchId,jdbcType=VARCHAR},
+      </if>
+      <if test="dbcTblNm != null">
+        #{dbcTblNm,jdbcType=VARCHAR},
+      </if>  
+      <if test="dbcColNm != null">
+        #{dbcColNm,jdbcType=VARCHAR},
+      </if>    
+      <if test="vrfcNm != null">
+         #{vrfcId,jdbcType=VARCHAR},
+         <!-- 
+         (SELECT VRFC_ID
+            FROM WAA_VRFC_RULE X
+           WHERE EXP_DTM = DATE_FORMAT('99991231','YYYYMMDD')
+             AND REG_TYP_CD IN ('C','U')
+             AND VRFC_NM = #{vrfcNm,jdbcType=VARCHAR}    
+           UNION ALL
+          SELECT CD_RULE_ID
+            FROM WAA_CD_RULE X
+           WHERE #{vrfcNm,jdbcType=VARCHAR}LIKE CONCAT(CD_RULE_NM,'%')  
+             AND DB_CONN_TRG_ID IN (SELECT DB_CONN_TRG_ID
+                                      FROM WAA_DB_SCH
+                                     WHERE EXP_DTM = DATE_FORMAT('99991231','YYYYMMDD') 
+                                       AND DB_SCH_ID   = #{dbSchId,jdbcType=VARCHAR} 
+                                   )  
+          LIMIT 1                         
+         ),   
+          -->
+      </if>    
+      <if test="cdClsId != null">
+         #{cdClsId,jdbcType=VARCHAR},
+      </if>    
+      <if test="vrfcNm != null">
+         #{vrfcNm,jdbcType=VARCHAR},
+      </if>    
+      SYSDATE ,    
+      SYSDATE ,
+    </trim>
+  </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.dq.criinfo.anatrg.service.WaaColRuleRel" >
+    UPDATE WAA_COL_RULE_REL
+       SET UPDT_DTM = SYSDATE
+         , VRFC_ID = #{vrfcId,jdbcType=VARCHAR}       
+         <!-- 
+         , VRFC_ID  = (SELECT VRFC_ID
+                         FROM WAA_VRFC_RULE X
+                        WHERE EXP_DTM = DATE_FORMAT('99991231','YYYYMMDD')
+                          AND REG_TYP_CD IN ('C','U')
+                          AND VRFC_NM = #{vrfcNm,jdbcType=VARCHAR}    
+                        UNION ALL
+                        SELECT CD_RULE_ID
+                          FROM WAA_CD_RULE X
+                         WHERE 1 = 1
+                           AND #{vrfcNm,jdbcType=VARCHAR}LIKE CONCAT(CD_RULE_NM,'%')  
+                           AND DB_CONN_TRG_ID IN (SELECT DB_CONN_TRG_ID
+                                                    FROM WAA_DB_SCH
+                                                   WHERE EXP_DTM = DATE_FORMAT('99991231','YYYYMMDD') 
+                                                     AND DB_SCH_ID   = #{dbSchId,jdbcType=VARCHAR} 
+                                                 )   
+                         LIMIT 1                         
+                      )
+              -->          
+         ,  CD_CLS_ID = #{cdClsId,jdbcType=VARCHAR}            
+         ,  VRFC_NM   = #{vrfcNm,jdbcType=VARCHAR}            
+     WHERE DB_SCH_ID   = #{dbSchId,jdbcType=VARCHAR}
+       AND DBC_TBL_NM  = #{dbcTblNm,jdbcType=VARCHAR}
+       AND DBC_COL_NM  = #{dbcColNm,jdbcType=VARCHAR}
+       <!-- AND CHK_RULE_ID = #{chkRuleId,jdbcType=VARCHAR} -->
+  </update>
+  
+   <select id="selectTrgTbl" resultMap="BaseResultMap" parameterType="HashMap">
+		SELECT C.DB_CONN_TRG_PNM
+		     , B.DB_SCH_ID
+		     , B.DB_SCH_PNM
+		     , A.DBC_TBL_NM
+		     , A.DBC_TBL_KOR_NM
+		     , CASE WHEN D.EXP_YN = 'Y' THEN '1' ELSE '0' END AS EXP_YN
+		     , D.EXP_RSN_CNTN
+		  FROM WAT_DBC_TBL A
+		       INNER JOIN WAA_DB_SCH B
+		          ON B.EXP_DTM = TO_DATE( '99991231', 'YYYYMMDD')
+		         AND B.DB_SCH_ID = A.DB_SCH_ID  
+		       INNER JOIN WAA_DB_CONN_TRG C
+		          ON C.EXP_DTM = TO_DATE( '99991231', 'YYYYMMDD')
+		         AND C.DB_CONN_TRG_ID = B.DB_CONN_TRG_ID  
+		       LEFT JOIN WAA_EXP_TBL D
+		         ON D.DB_SCH_ID  = A.DB_SCH_ID
+		        AND D.DBC_TBL_NM = A.DBC_TBL_NM   
+		 WHERE 1 = 1
+		 	AND NVL(D.EXP_YN,'N')='N' 
+	        AND NOT exists (SELECT 1
+	   			              FROM WAA_EXP_TBL_RULE EXR
+	   			   		     WHERE EXR.REG_TYP IN ('C', 'U')
+	   			    		   AND EXR.DB_SCH_ID = A.DB_SCH_ID
+        					   AND EXR.DB_CONN_TRG_ID = B.DB_CONN_TRG_ID 
+        					   AND A.DBC_TBL_NM LIKE (CASE WHEN (EXR.RELATION = 'F') THEN EXR.EXC_STND_RULE || '_' || '%' 
+													   WHEN (EXR.RELATION = 'B') THEN  '%' || '_' || EXR.EXC_STND_RULE END) 
+		)
+		   <if test='dbConnTrgId != null '>
+		   AND C.DB_CONN_TRG_ID = #{dbConnTrgId, jdbcType=VARCHAR}
+		   </if> 
+		   <if test='dbcTblNm != null '> 
+		   AND A.DBC_TBL_NM = #{dbcTblNm, jdbcType=VARCHAR}
+		   </if> 
+    </select>
+  <select id="selectCheckRuleTbl" resultMap="BaseResultMap" parameterType="HashMap" fetchSize="2000" >
+		SELECT F.RULE_REL_ID
+			, R.ANA_DGR
+			, DECODE(R.ANA_DGR, NULL, '', R.ANA_DGR || '차') AS ANA_DGR_NM
+		     , C.DB_CONN_TRG_PNM
+		     , C.DB_CONN_TRG_ID
+		     , B.DB_SCH_ID
+		     , B.DB_SCH_PNM
+		     , A.DBC_TBL_NM
+		     , A.DBC_TBL_KOR_NM
+		     , E.DBC_COL_NM
+		     , E.DBC_COL_KOR_NM 
+		     , F.VRFC_ID
+		     , F.VRFC_NM
+		     , F.CD_CLS_ID
+		     , F.RULE_REL_ID AS SHD_JOB_ID
+		     , 'CR'          AS SHD_KND_CD
+		     , (F.VRFC_NM||' '|| B.DB_SCH_PNM||'.'|| A.DBC_TBL_NM|| '.'|| E.DBC_COL_NM) AS ETC_JOB_NM
+             , (F.VRFC_NM||' '|| B.DB_SCH_PNM||'.'|| A.DBC_TBL_NM|| '.'|| E.DBC_COL_NM) AS SHD_JOB_NM
+             , PM.PRF_ID
+             , R.ANA_STR_DTM
+             , CASE WHEN E.DATA_LEN IS NULL 
+                     THEN E.DATA_TYPE
+                     ELSE (CASE WHEN E.DATA_PNT IS NOT NULL
+                                THEN (E.DATA_TYPE||'('||E.DATA_LEN||', '||E.DATA_PNT||')' )
+                                ELSE (E.DATA_TYPE||'('||E.DATA_LEN||')')
+                                 END )
+                     END AS DATA_TYPE
+                     <!-- 진단 실행상태 스케줄러 로그 상태코드로 가져오려 했으나 로그 삭제시 문제 발생으로 분석시작과 끝이 있으면 완료로 변경 -->
+             , CASE WHEN F.RULE_REL_ID IS NOT NULL AND R.ANA_STR_DTM IS NOT NULL AND R.ANA_END_DTM IS NOT NULL THEN '완료'
+             		WHEN F.RULE_REL_ID IS NOT NULL AND R.ANA_STR_DTM IS NOT NULL AND R.ANA_END_DTM IS NULL THEN '진행'
+             		--WHEN F.RULE_REL_ID IS NOT NULL AND R.ANA_STR_DTM IS NULL AND R.ANA_END_DTM IS NULL THEN '실패'
+             		ELSE NULL END AS ANA_STS_CD
+		  FROM WAT_DBC_TBL A
+		       INNER JOIN WAA_DB_SCH B
+		          ON B.EXP_DTM = TO_DATE( '99991231', 'YYYYMMDD')
+		         AND B.DB_SCH_ID = A.DB_SCH_ID  
+		       INNER JOIN WAA_DB_CONN_TRG C
+		          ON C.EXP_DTM = TO_DATE( '99991231', 'YYYYMMDD')
+		         AND C.DB_CONN_TRG_ID = B.DB_CONN_TRG_ID  
+		       LEFT JOIN WAA_EXP_TBL D
+		         ON D.DB_SCH_ID  = A.DB_SCH_ID
+		        AND D.DBC_TBL_NM = A.DBC_TBL_NM		
+		       INNER JOIN WAT_DBC_COL E
+		          ON E.DB_SCH_ID  = A.DB_SCH_ID
+		         AND E.DBC_TBL_NM = A.DBC_TBL_NM       
+		       LEFT JOIN WAA_COL_RULE_REL F
+		         ON F.DB_SCH_ID  = A.DB_SCH_ID
+		        AND F.DBC_TBL_NM = A.DBC_TBL_NM
+		        AND F.DBC_COL_NM = E.DBC_COL_NM
+		        
+		       LEFT JOIN WAA_VRFC_RULE G
+		         ON G.VRFC_ID = F.VRFC_ID
+		        AND G.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+		        AND G.REG_TYP_CD IN ('C', 'U')
+		      LEFT JOIN 
+		      (SELECT M.DB_CONN_TRG_ID, M.DB_SCH_ID, M.DBC_TBL_NM, M.OBJ_NM, M.PRF_ID
+           	     FROM WAM_PRF_MSTR M            	  
+           	    WHERE M.REG_TYP_CD IN ('C','U')
+           	      AND M.PRF_KND_CD LIKE CONCAT('PC01','%')
+           	      <if test='dbConnTrgId != null '>
+				   AND M.DB_CONN_TRG_ID = #{dbConnTrgId, jdbcType=VARCHAR}
+				   </if> 
+                 ) PM
+                ON C.DB_CONN_TRG_ID = PM.DB_CONN_TRG_ID
+			   AND B.DB_SCH_ID      = PM.DB_SCH_ID
+			   AND A.DBC_TBL_NM     = PM.DBC_TBL_NM
+               AND E.DBC_COL_NM     = PM.OBJ_NM
+            LEFT OUTER JOIN (<include refid="getPrfResultMaxAnaStrDtm"/> ) R
+		      ON R.PRF_ID = F.RULE_REL_ID
+		 WHERE 1 = 1
+		   AND NVL(D.EXP_YN,'N') = 'N'
+	       AND NOT exists (SELECT 1
+	   			             FROM WAA_EXP_TBL_RULE EXR
+	   			   		    WHERE EXR.REG_TYP IN ('C', 'U')
+	   			    	  	  AND EXR.DB_SCH_ID = B.DB_SCH_ID
+        					  AND EXR.DB_CONN_TRG_ID = C.DB_CONN_TRG_ID 
+        					  AND A.DBC_TBL_NM LIKE (CASE WHEN (EXR.RELATION = 'F') THEN EXR.EXC_STND_RULE || '_' || '%' 
+													     WHEN (EXR.RELATION = 'B') THEN  '%' || '_' || EXR.EXC_STND_RULE END) 
+		  )
+		   <if test='dbConnTrgId != null '>
+		   AND C.DB_CONN_TRG_ID = #{dbConnTrgId, jdbcType=VARCHAR}
+		   </if> 
+		   <if test='dbSchId != null '>
+		   AND B.DB_SCH_ID = #{dbSchId, jdbcType=VARCHAR}
+		</if>
+			
+			<if test='dbcTblNm != null'>
+			<choose>
+				<when test='selectNm == "all" '>
+					AND (A.DBC_TBL_NM = UPPER( #{dbcTblNm, jdbcType=VARCHAR}) )
+				</when>
+				<when test='selectNm == "include" '>
+						AND (UPPER(A.DBC_TBL_NM) LIKE UPPER('%' || #{dbcTblNm,jdbcType=VARCHAR} || '%') )				
+				</when>
+				<when test='selectNm == "front" '>
+						AND (UPPER(A.DBC_TBL_NM) LIKE UPPER( #{dbcTblNm,jdbcType=VARCHAR} || '%') )			
+				</when>
+					<when test='selectNm == "back" '>
+						AND ( UPPER(A.DBC_TBL_NM) LIKE UPPER('%' || #{dbcTblNm,jdbcType=VARCHAR} ) ) 
+				</when>
+			</choose>
+			</if>
+		   <if test='dbcColNm != null'>
+		   	<choose>
+				<when test='selectCol == "all" '>
+					AND (UPPER(E.DBC_COL_NM) = UPPER(#{dbcColNm, jdbcType=VARCHAR}) OR UPPER(E.DBC_COL_KOR_NM) = UPPER(#{dbcColNm, jdbcType=VARCHAR}) )
+				</when>
+				<when test='selectCol == "include" '>
+						AND (UPPER(E.DBC_COL_NM) LIKE UPPER('%' || #{dbcColNm,jdbcType=VARCHAR} || '%') OR UPPER(E.DBC_COL_KOR_NM) = UPPER('%' || #{dbcColNm, jdbcType=VARCHAR} || '%') )
+				</when>
+				<when test='selectCol == "front" '>
+						AND (UPPER(E.DBC_COL_NM) LIKE UPPER(  #{dbcColNm,jdbcType=VARCHAR} || '%') OR UPPER(E.DBC_COL_KOR_NM) LIKE UPPER(  #{dbcColNm,jdbcType=VARCHAR} || '%') ) 
+				</when>
+					<when test='selectCol == "back" '>
+						AND ( UPPER(E.DBC_COL_NM) LIKE UPPER('%' || #{dbcColNm,jdbcType=VARCHAR}  )  OR UPPER(E.DBC_COL_KOR_NM) LIKE UPPER('%' || #{dbcColNm,jdbcType=VARCHAR}  ) ) 
+				</when>
+			</choose>
+		   </if>
+		   
+		   <if test='dbcColKorNm != null '> 
+		   AND E.DBC_COL_KOR_NM LIKE ('%' || #{dbcColKorNm, jdbcType=VARCHAR} || '%')
+		   </if>
+		   <choose>
+		       <when test='regYn == "Y" '> 
+		       	AND F.RULE_REL_ID IS NOT NULL
+		       	AND F.VRFC_ID IS NOT NULL
+		       </when>
+		       <when test='regYn == "N" '> 
+			   AND F.RULE_REL_ID IS NULL
+			   </when>  
+		   </choose>
+		   		   
+		   <if test='vrfcTyp != null '> 
+		   AND NVL(G.VRFC_TYP,'CD') = #{vrfcTyp, jdbcType=VARCHAR}  
+		   </if> 
+		 ORDER BY A.DB_SCH_ID
+		        , A.DBC_TBL_NM  
+		        , E.ORD  
+    </select>
+  	<select id="selectCheckRuleTbl2" resultMap="BaseResultMap" parameterType="HashMap">
+		SELECT F.RULE_REL_ID
+		     , C.DB_CONN_TRG_PNM
+		     , C.DB_CONN_TRG_ID
+		     , B.DB_SCH_ID
+		     , B.DB_SCH_PNM
+		     , A.DBC_TBL_NM
+		     , A.DBC_TBL_KOR_NM
+		     , E.DBC_COL_NM
+		     , E.DBC_COL_KOR_NM 
+		     , F.VRFC_ID
+		     , F.VRFC_NM
+		     , F.CD_CLS_ID
+		     , F.RULE_REL_ID AS SHD_JOB_ID
+		     , 'CR'          AS SHD_KND_CD
+		     , (F.VRFC_NM||' '|| B.DB_SCH_PNM||'.'|| A.DBC_TBL_NM|| '.'|| E.DBC_COL_NM) AS ETC_JOB_NM
+             , (F.VRFC_NM||' '|| B.DB_SCH_PNM||'.'|| A.DBC_TBL_NM|| '.'|| E.DBC_COL_NM) AS SHD_JOB_NM
+             , PM.PRF_ID
+             , R.ANA_STR_DTM
+             , CASE WHEN E.DATA_LEN IS NULL 
+                     THEN E.DATA_TYPE
+                     ELSE (CASE WHEN E.DATA_PNT IS NOT NULL
+                                THEN (E.DATA_TYPE||'('||E.DATA_LEN||', '||E.DATA_PNT||')' )
+                                ELSE (E.DATA_TYPE||'('||E.DATA_LEN||')')
+                                 END )
+                     END AS DATA_TYPE
+		  FROM WAT_DBC_TBL A
+		       INNER JOIN WAA_DB_SCH B
+		          ON B.EXP_DTM = TO_DATE( '99991231', 'YYYYMMDD')
+		         AND B.DB_SCH_ID = A.DB_SCH_ID  
+		       INNER JOIN WAA_DB_CONN_TRG C
+		          ON C.EXP_DTM = TO_DATE( '99991231', 'YYYYMMDD')
+		         AND C.DB_CONN_TRG_ID = B.DB_CONN_TRG_ID  
+		       LEFT JOIN WAA_EXP_TBL D
+		         ON D.DB_SCH_ID  = A.DB_SCH_ID
+		        AND D.DBC_TBL_NM = A.DBC_TBL_NM		
+		       INNER JOIN WAT_DBC_COL E
+		          ON E.DB_SCH_ID  = A.DB_SCH_ID
+		         AND E.DBC_TBL_NM = A.DBC_TBL_NM       
+		       LEFT JOIN WAA_COL_RULE_REL F
+		         ON F.DB_SCH_ID  = A.DB_SCH_ID
+		        AND F.DBC_TBL_NM = A.DBC_TBL_NM
+		        AND F.DBC_COL_NM = E.DBC_COL_NM
+		       LEFT JOIN WAA_VRFC_RULE G
+		         ON G.VRFC_ID = F.VRFC_ID
+		        AND G.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+		        AND G.REG_TYP_CD IN ('C', 'U')
+		      LEFT JOIN 
+		      (SELECT M.DB_CONN_TRG_ID, M.DB_SCH_ID, M.DBC_TBL_NM, M.OBJ_NM, M.PRF_ID
+           	     FROM WAM_PRF_MSTR M            	  
+           	    WHERE M.REG_TYP_CD IN ('C','U')
+           	      AND M.PRF_KND_CD LIKE CONCAT('PC01','%')
+           	      <if test='dbConnTrgId != null '>
+				   AND M.DB_CONN_TRG_ID = #{dbConnTrgId, jdbcType=VARCHAR}
+				   </if> 
+                 ) PM
+                ON C.DB_CONN_TRG_ID = PM.DB_CONN_TRG_ID
+			   AND B.DB_SCH_ID      = PM.DB_SCH_ID
+			   AND A.DBC_TBL_NM     = PM.DBC_TBL_NM
+               AND E.DBC_COL_NM     = PM.OBJ_NM
+            LEFT OUTER JOIN (<include refid="getPrfResultMaxAnaStrDtm"/> ) R
+		      ON R.PRF_ID = PM.PRF_ID
+		 WHERE 1 = 1
+		   AND NVL(D.EXP_YN,'N') = 'N'
+		   
+		   <if test='dbConnTrgId != null '>
+		   AND C.DB_CONN_TRG_ID = #{dbConnTrgId, jdbcType=VARCHAR}
+		   </if> 
+		   <if test='dbSchId != null '>
+		   AND B.DB_SCH_ID = #{dbSchId, jdbcType=VARCHAR}
+		   </if> 
+		   <if test='dbcTblNm != null '> 
+		   AND (A.DBC_TBL_NM LIKE ('%' ||  #{dbcTblNm, jdbcType=VARCHAR} ||  '%') OR A.DBC_TBL_NM LIKE UPPER(('%' ||  #{dbcTblNm, jdbcType=VARCHAR} || '%')))
+		   </if> 
+		   <if test='dbcColNm != null '> 
+		   AND (E.DBC_COL_NM LIKE ('%' || #{dbcColNm, jdbcType=VARCHAR} || '%') OR E.DBC_COL_NM LIKE UPPER(('%' ||  #{dbcColNm, jdbcType=VARCHAR} || '%'))) 
+		   </if>
+		   <if test='dbcColKorNm != null '> 
+		   AND E.DBC_COL_KOR_NM LIKE ('%' || #{dbcColKorNm, jdbcType=VARCHAR} || '%')
+		   </if>
+		   <choose>
+		       <when test='regYn == "Y" '> 
+		       	AND F.RULE_REL_ID IS NOT NULL
+		       	AND F.VRFC_ID IS NOT NULL
+		       </when>
+		       <when test='regYn == "N" '> 
+			   AND F.RULE_REL_ID IS NULL
+			   </when>  
+		   </choose>
+		   		   
+		   <if test='vrfcTyp != null '> 
+		   AND G.VRFC_TYP = #{vrfcTyp, jdbcType=VARCHAR}  
+		   </if> 
+		 ORDER BY A.DB_SCH_ID
+		        , A.DBC_TBL_NM  
+		        , E.ORD  
+    </select>
+    
+    <select id="selectDqliteJobPopList" resultMap="BaseResultMap" parameterType="HashMap">
+		SELECT F.RULE_REL_ID      AS SHD_JOB_ID
+		     , C.DB_CONN_TRG_PNM
+		     , C.DB_CONN_TRG_ID
+		     , B.DB_SCH_ID
+		     , B.DB_SCH_PNM
+		     , A.DBC_TBL_NM
+		     , A.DBC_TBL_KOR_NM
+		     , E.DBC_COL_NM
+		     , E.DBC_COL_KOR_NM 
+		     , F.VRFC_ID
+		     , G.VRFC_NM
+		     , ('[' || G.VRFC_NM,']' || A.DBC_TBL_NM || '.' || E.DBC_COL_NM) AS SHD_JOB_NM
+		     , ('[' || G.VRFC_NM,']' || A.DBC_TBL_NM || '.' || E.DBC_COL_NM) AS ETC_JOB_NM    
+		     , 'EX'           AS ETC_JOB_KND_CD
+		     , 'EX'           AS SHD_JOB_KND_CD   
+		     , 'CR'           AS SHD_KND_CD  
+		  FROM WAT_DBC_TBL A
+		       INNER JOIN WAA_DB_SCH B
+		          ON B.EXP_DTM = TO_DATE( '99991231', 'YYYYMMDD')
+		         AND B.DB_SCH_ID = A.DB_SCH_ID  
+		       INNER JOIN WAA_DB_CONN_TRG C
+		          ON C.EXP_DTM = TO_DATE( '99991231', 'YYYYMMDD')
+		         AND C.DB_CONN_TRG_ID = B.DB_CONN_TRG_ID  
+		       LEFT JOIN WAA_EXP_TBL D
+		         ON D.DB_SCH_ID  = A.DB_SCH_ID
+		        AND D.DBC_TBL_NM = A.DBC_TBL_NM		
+		       INNER JOIN WAT_DBC_COL E
+		          ON E.DB_SCH_ID  = A.DB_SCH_ID
+		         AND E.DBC_TBL_NM = A.DBC_TBL_NM       
+		       INNER JOIN WAA_COL_RULE_REL F
+		         ON F.DB_SCH_ID  = A.DB_SCH_ID
+		        AND F.DBC_TBL_NM = A.DBC_TBL_NM
+		        AND F.DBC_COL_NM = E.DBC_COL_NM
+		       INNER JOIN WAA_VRFC_RULE G
+		         ON G.VRFC_ID = F.VRFC_ID
+		        AND G.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+		        AND G.REG_TYP_CD IN ('C', 'U')
+		        AND G.VRFC_TYP != 'CD'
+		 WHERE 1 = 1
+		   AND NVL(D.EXP_YN,'N') = 'N'
+	       AND NOT exists (SELECT 1
+	   			             FROM WAA_EXP_TBL_RULE EXR
+	   			   		    WHERE EXR.REG_TYP IN ('C', 'U')
+	   			    		  AND EXR.DB_SCH_ID = B.DB_SCH_ID
+        					  AND EXR.DB_CONN_TRG_ID = C.DB_CONN_TRG_ID 
+        					  AND A.DBC_TBL_NM LIKE (CASE WHEN (EXR.RELATION = 'F') THEN EXR.EXC_STND_RULE || '_' || '%' 
+													     WHEN (EXR.RELATION = 'B') THEN  '%' || '_' || EXR.EXC_STND_RULE END) 
+		  )
+		   <if test='dbConnTrgId != null and dbConnTrgId != ""'>
+		   AND C.DB_CONN_TRG_ID = #{dbConnTrgId, jdbcType=VARCHAR}
+		   </if> 
+		   <if test='dbConnTrgPnm != null and dbConnTrgPnm != "" '>
+		   AND C.DB_CONN_TRG_PNM LIKE #{dbConnTrgPnm, jdbcType=VARCHAR}
+		   </if> 
+		   <if test='dbSchId != null and dbSchId != "" '>
+		   AND B.DB_SCH_ID = #{dbSchId, jdbcType=VARCHAR}
+		   </if> 
+		   <if test='dbConnTrgLnm != null '>
+		   AND C.DB_CONN_TRG_LNM LIKE ('%' || #{dbConnTrgLnm || jdbcType=VARCHAR} ||'%')
+		   </if> 
+		   <if test='dbcTblNm != null '> 
+		   AND A.DBC_TBL_NM = #{dbcTblNm, jdbcType=VARCHAR}
+		   </if> 
+		   <if test="shdJobNm != null and shdJobNm !='' ">
+		   AND ('[' || G.VRFC_NM || ']' || A.DBC_TBL_NM || '.' || E.DBC_COL_NM)  LIKE ( '%' || #{shdJobNm,jdbcType=VARCHAR} || '%')
+		   </if>
+		   <if test="vrfcTyp != null and vrfcTyp !='' ">
+		   AND G.VRFC_TYP LIKE ( '%' || #{vrfcTyp,jdbcType=VARCHAR} || '%')
+		   </if>
+		 UNION ALL
+		 SELECT F.RULE_REL_ID      AS SHD_JOB_ID
+		     , C.DB_CONN_TRG_PNM
+		     , C.DB_CONN_TRG_ID
+		     , B.DB_SCH_ID
+		     , B.DB_SCH_PNM
+		     , A.DBC_TBL_NM
+		     , A.DBC_TBL_KOR_NM
+		     , E.DBC_COL_NM
+		     , E.DBC_COL_KOR_NM 
+		     , F.VRFC_ID
+		     , F.VRFC_NM
+		     , ('['||F.VRFC_NM,']'|| A.DBC_TBL_NM|| '.'|| E.DBC_COL_NM) AS SHD_JOB_NM
+		     , ('['||F.VRFC_NM,']'|| A.DBC_TBL_NM|| '.'|| E.DBC_COL_NM) AS ETC_JOB_NM    
+		     , 'EX'           AS ETC_JOB_KND_CD
+		     , 'EX'           AS SHD_JOB_KND_CD   
+		     , 'CR'           AS SHD_KND_CD  
+		  FROM WAT_DBC_TBL A
+		       INNER JOIN WAA_DB_SCH B
+		          ON B.EXP_DTM = TO_DATE( '99991231', 'YYYYMMDD')
+		         AND B.DB_SCH_ID = A.DB_SCH_ID  
+		       INNER JOIN WAA_DB_CONN_TRG C
+		          ON C.EXP_DTM = TO_DATE( '99991231', 'YYYYMMDD')
+		         AND C.DB_CONN_TRG_ID = B.DB_CONN_TRG_ID  
+		       LEFT JOIN WAA_EXP_TBL D
+		         ON D.DB_SCH_ID  = A.DB_SCH_ID
+		        AND D.DBC_TBL_NM = A.DBC_TBL_NM		
+		       INNER JOIN WAT_DBC_COL E
+		          ON E.DB_SCH_ID  = A.DB_SCH_ID
+		         AND E.DBC_TBL_NM = A.DBC_TBL_NM       
+		       INNER JOIN WAA_COL_RULE_REL F
+		         ON F.DB_SCH_ID  = A.DB_SCH_ID
+		        AND F.DBC_TBL_NM = A.DBC_TBL_NM
+		        AND F.DBC_COL_NM = E.DBC_COL_NM
+		       INNER JOIN WAA_CD_RULE G
+		         ON G.CD_RULE_ID = F.VRFC_ID 		        
+		 WHERE 1 = 1
+		   AND NVL(D.EXP_YN,'N') = 'N'
+	       AND NOT exists (SELECT 1
+	   			             FROM WAA_EXP_TBL_RULE EXR
+	   			   		    WHERE EXR.REG_TYP IN ('C', 'U')
+	   			    		  AND EXR.DB_SCH_ID = B.DB_SCH_ID
+        					  AND EXR.DB_CONN_TRG_ID = C.DB_CONN_TRG_ID 
+        					  AND A.DBC_TBL_NM LIKE (CASE WHEN (EXR.RELATION = 'F') THEN EXR.EXC_STND_RULE || '_' || '%' 
+													     WHEN (EXR.RELATION = 'B') THEN  '%' || '_' || EXR.EXC_STND_RULE END) 
+		  )
+		   <if test='dbConnTrgId != null and dbConnTrgId != ""'>
+		   AND C.DB_CONN_TRG_ID = #{dbConnTrgId, jdbcType=VARCHAR}
+		   </if> 
+		   <if test='dbConnTrgPnm != null and dbConnTrgPnm != "" '>
+		   AND C.DB_CONN_TRG_PNM LIKE #{dbConnTrgPnm, jdbcType=VARCHAR}
+		   </if> 
+		   <if test='dbSchId != null and dbSchId != "" '>
+		   AND B.DB_SCH_ID = #{dbSchId, jdbcType=VARCHAR}
+		   </if> 
+		   <if test='dbConnTrgLnm != null '>
+		   AND C.DB_CONN_TRG_LNM LIKE ('%'||#{dbConnTrgLnm, jdbcType=VARCHAR}||'%')
+		   </if> 
+		   <if test='dbcTblNm != null '> 
+		   AND A.DBC_TBL_NM = #{dbcTblNm, jdbcType=VARCHAR}
+		   </if> 
+		   <if test="shdJobNm != null and shdJobNm !='' ">
+		   AND ('['||G.VRFC_NM,']'|| A.DBC_TBL_NM|| '.'|| E.DBC_COL_NM)  LIKE ( '%' || #{shdJobNm,jdbcType=VARCHAR} || '%')
+		   </if>
+		   <if test="vrfcTyp != null and vrfcTyp !='' ">
+		   AND 'CD' LIKE ( '%' || #{vrfcTyp,jdbcType=VARCHAR} || '%')
+		   </if>
+		 UNION ALL
+		 SELECT A.PRF_ID      AS SHD_JOB_ID
+		      , C.DB_CONN_TRG_PNM
+		      , C.DB_CONN_TRG_ID
+		      , B.DB_SCH_ID
+		      , B.DB_SCH_PNM
+		      , A.DBC_TBL_NM
+		      , NULL        AS DBC_TBL_KOR_NM
+		      , ''          AS DBC_COL_NM
+		      , ''          AS DBC_COL_KOR_NM 
+		      , ''          AS VRFC_ID
+		      , ''          AS VRFC_NM
+		      , ('[참조무결성]'|| B.DB_SCH_PNM|| '.'|| A.DBC_TBL_NM) AS SHD_JOB_NM
+		      , ('[참조무결성]'|| B.DB_SCH_PNM|| '.'|| A.DBC_TBL_NM) AS ETC_JOB_NM    
+		      , 'EX'        AS ETC_JOB_KND_CD
+		      , 'EX'        AS SHD_JOB_KND_CD   
+		      , 'CR'        AS SHD_KND_CD  
+		   FROM WAM_PRF_MSTR A		        
+		        INNER JOIN WAA_DB_SCH B
+		           ON B.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+		          AND B.DB_SCH_ID = A.DB_SCH_ID
+		        INNER JOIN WAA_DB_CONN_TRG C
+		           ON C.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+		          AND C.DB_CONN_TRG_ID = B.DB_CONN_TRG_ID    
+		  WHERE 1 = 1
+		    AND A.PRF_KND_CD = 'PT01'  
+	       AND NOT exists (SELECT 1
+	   			             FROM WAA_EXP_TBL_RULE EXR
+	   			   		    WHERE EXR.REG_TYP IN ('C', 'U')
+	   			    		  AND EXR.DB_SCH_ID = B.DB_SCH_ID
+        					  AND EXR.DB_CONN_TRG_ID = C.DB_CONN_TRG_ID 
+        					  AND A.DBC_TBL_NM LIKE (CASE WHEN (EXR.RELATION = 'F') THEN EXR.EXC_STND_RULE || '_' || '%' 
+													     WHEN (EXR.RELATION = 'B') THEN  '%' || '_' || EXR.EXC_STND_RULE END) 
+		  )
+		    <if test='dbConnTrgId != null and dbConnTrgId != ""'>
+		   AND C.DB_CONN_TRG_ID = #{dbConnTrgId, jdbcType=VARCHAR}
+		   </if> 
+		   <if test='dbConnTrgPnm != null and dbConnTrgPnm != "" '>
+		   AND C.DB_CONN_TRG_PNM LIKE #{dbConnTrgPnm, jdbcType=VARCHAR}
+		   </if> 
+		   <if test='dbSchId != null and dbSchId != "" '>
+		   AND B.DB_SCH_ID = #{dbSchId, jdbcType=VARCHAR}
+		   </if>
+		   <if test='dbConnTrgLnm != null '>
+		   AND C.DB_CONN_TRG_LNM LIKE ('%'||#{dbConnTrgLnm, jdbcType=VARCHAR}||'%')
+		   </if> 
+		   <if test='dbcTblNm != null '> 
+		   AND A.DBC_TBL_NM = #{dbcTblNm, jdbcType=VARCHAR}
+		   </if> 
+		   <if test="shdJobNm != null and shdJobNm !='' ">
+		   AND A.PRF_NM LIKE ( '%' || #{shdJobNm,jdbcType=VARCHAR} || '%')
+		   </if>   
+		   <if test="vrfcTyp != null and vrfcTyp !='' ">
+		   AND A.PRF_KND_CD = #{vrfcTyp,jdbcType=VARCHAR}
+		   </if>
+		 ORDER BY DB_SCH_ID
+		        , DBC_TBL_NM 		       
+    </select>
+  <delete id="deleteByPrimaryKeySelective" parameterType="kr.wise.dq.criinfo.anatrg.service.WaaColRuleRel" > 
+  	DELETE FROM WAA_COL_RULE_REL
+  	WHERE RULE_REL_ID = #{ruleRelId, jdbcType=VARCHAR}
+  </delete>
+   
+   <delete id="deleteShdJobByPrimaryKeySelective" parameterType="kr.wise.dq.criinfo.anatrg.service.WaaColRuleRel" > 
+  	DELETE FROM WAM_SHD_JOB
+  	WHERE SHD_JOB_ID = #{ruleRelId, jdbcType=VARCHAR}
+  </delete>   
+  
+  <delete id="deleteVrfcNull" parameterType="kr.wise.dq.criinfo.anatrg.service.WaaColRuleRel" > 
+  	DELETE FROM WAA_COL_RULE_REL
+  	 WHERE VRFC_ID IS NULL
+  </delete>   
+</mapper>

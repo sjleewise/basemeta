@@ -1,0 +1,428 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.wise.advisor.prepare.textcluster.service.WadMtcDataMapper">
+  <resultMap id="BaseResultMap" type="kr.wise.advisor.prepare.textcluster.service.WadMtcData">
+    <id column="MTC_ID" jdbcType="VARCHAR" property="mtcId" />
+    <id column="MTC_SNO" jdbcType="DECIMAL" property="mtcSno" />
+    <result column="COL_CNT" jdbcType="DECIMAL" property="colCnt" />
+    <result column="MTC_PRB" jdbcType="DECIMAL" property="mtcPrb" />
+    <result column="SRC_COL_NM1" jdbcType="VARCHAR" property="srcColNm1" />
+    <result column="SRC_COL_NM2" jdbcType="VARCHAR" property="srcColNm2" />
+    <result column="SRC_COL_NM3" jdbcType="VARCHAR" property="srcColNm3" />
+    <result column="SRC_COL_NM4" jdbcType="VARCHAR" property="srcColNm4" />
+    <result column="SRC_COL_NM5" jdbcType="VARCHAR" property="srcColNm5" />
+    <result column="SRC_COL_NM6" jdbcType="VARCHAR" property="srcColNm6" />
+    <result column="SRC_COL_NM7" jdbcType="VARCHAR" property="srcColNm7" />
+    <result column="SRC_COL_NM8" jdbcType="VARCHAR" property="srcColNm8" />
+    <result column="SRC_COL_NM9" jdbcType="VARCHAR" property="srcColNm9" />
+    <result column="SRC_COL_NM10" jdbcType="VARCHAR" property="srcColNm10" />
+    <result column="TGT_COL_NM1" jdbcType="VARCHAR" property="tgtColNm1" />
+    <result column="TGT_COL_NM2" jdbcType="VARCHAR" property="tgtColNm2" />
+    <result column="TGT_COL_NM3" jdbcType="VARCHAR" property="tgtColNm3" />
+    <result column="TGT_COL_NM4" jdbcType="VARCHAR" property="tgtColNm4" />
+    <result column="TGT_COL_NM5" jdbcType="VARCHAR" property="tgtColNm5" />
+    <result column="TGT_COL_NM6" jdbcType="VARCHAR" property="tgtColNm6" />
+    <result column="TGT_COL_NM7" jdbcType="VARCHAR" property="tgtColNm7" />
+    <result column="TGT_COL_NM8" jdbcType="VARCHAR" property="tgtColNm8" />
+    <result column="TGT_COL_NM9" jdbcType="VARCHAR" property="tgtColNm9" />
+    <result column="TGT_COL_NM10" jdbcType="VARCHAR" property="tgtColNm10" />
+    <result column="MTC_SCR" jdbcType="DECIMAL" property="mtcScr" />
+  </resultMap>
+  <resultMap id="ClstResultMap" type="kr.wise.advisor.prepare.textcluster.service.WadClstData">
+    <id column="CLST_ID" jdbcType="VARCHAR" property="clstId" />
+    <id column="CLST_SNO" jdbcType="DECIMAL" property="clstSno" />
+    <result column="COL_CNT" jdbcType="DECIMAL" property="colCnt" />
+    <result column="SRC_NM" jdbcType="VARCHAR" property="srcNm" />
+    
+    <result column="CLST_NM" jdbcType="VARCHAR" property="clstNm" />
+    
+    <result column="CLST_SCR" jdbcType="DECIMAL" property="clstScr" />
+    
+    <result column="CLST_YN" jdbcType="VARCHAR" property="clstYn" />
+    <result column="IBSCHECK" jdbcType="VARCHAR" property="ibsCheck" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    MTC_ID, MTC_SNO, COL_CNT, SRC_COL_NM1, SRC_COL_NM2, SRC_COL_NM3, SRC_COL_NM4, SRC_COL_NM5, 
+    SRC_COL_NM6, SRC_COL_NM7, SRC_COL_NM8, SRC_COL_NM9, SRC_COL_NM10, TGT_COL_NM1, TGT_COL_NM2, 
+    TGT_COL_NM3, TGT_COL_NM4, TGT_COL_NM5, TGT_COL_NM6, TGT_COL_NM7, TGT_COL_NM8, TGT_COL_NM9, 
+    TGT_COL_NM10
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="map" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from WAD_MTC_DATA
+    where MTC_ID = #{mtcId,jdbcType=VARCHAR}
+      and MTC_SNO = #{mtcSno,jdbcType=DECIMAL}
+  </select>
+  
+  <select id="selectListbyId" parameterType="map" resultMap="BaseResultMap">
+  --데이터매칭 결과 데이터 조회 by ID
+  <if test="iPageNo == 0">
+  SELECT A.MTC_ID, A.MTC_SNO, A.COL_CNT, B.MTC_PRB
+     <foreach collection="srccolnms" item="srccol" open="," separator=",">A.${srccol}</foreach>
+     <foreach collection="tgtcolnms" item="tgtcol" open="," separator=",">B.${tgtcol}</foreach>
+	  FROM WAD_MTC_DATA A
+	  JOIN WAD_MTC_TGT_DATA B
+	    ON A.MTC_ID = B.MTC_ID
+	   AND A.MTC_SNO = B.MTC_SNO
+	   AND NVL(B.ANA_DGR, 0) = NVL(A.ANA_DGR, 0)
+	 WHERE A.MTC_SNO = 0
+	   AND A.MTC_ID = #{mtcId,jdbcType=VARCHAR}
+	   AND NVL(A.ANA_DGR, 0) = (SELECT MAX(NVL(ANA_DGR, 0)) AS ANA_DGR FROM WAD_MTC_DATA WHERE MTC_ID = #{mtcId,jdbcType=VARCHAR})
+	UNION ALL
+	</if>
+    SELECT A.MTC_ID, A.MTC_SNO, A.COL_CNT, B.MTC_PRB
+     <foreach collection="srccolnms" item="srccol" open="," separator=",">A.${srccol}</foreach>
+     <foreach collection="tgtcolnms" item="tgtcol" open="," separator=",">B.${tgtcol}</foreach>
+	  FROM WAD_MTC_DATA A
+	  JOIN WAD_MTC_TGT_DATA B
+	    ON A.MTC_ID = B.MTC_ID
+	   AND A.MTC_SNO = B.MTC_SNO
+	   AND NVL(B.ANA_DGR, 0) = NVL(A.ANA_DGR, 0)
+	 WHERE A.MTC_SNO != 0
+	   AND B.TGT_DTL_SNO = 1
+	   AND A.MTC_ID = #{mtcId,jdbcType=VARCHAR}
+	   <![CDATA[
+	   AND (A.MTC_SNO >= #{iPageNo,jdbcType=DECIMAL} AND A.MTC_SNO < #{iPageSize,jdbcType=DECIMAL})
+	   AND NVL(A.ANA_DGR, 0) = (SELECT MAX(NVL(ANA_DGR, 0)) AS ANA_DGR FROM WAD_MTC_DATA WHERE MTC_ID = #{mtcId,jdbcType=VARCHAR})
+	   ]]>
+	 ORDER BY MTC_SNO
+  </select>
+
+  <select id="selectClustList" parameterType="string" resultMap="BaseResultMap">
+  --텍스트 클러스터 결과 데이터 조회 by 컬럼ID
+    SELECT A.MTC_ID, A.MTC_SNO, A.COL_CNT, A.SRC_COL_NM1, B.TGT_COL_NM1, B.MTC_SCR
+	  FROM WAD_MTC_DATA A
+	  JOIN WAD_MTC_TGT_DATA B
+	    ON A.MTC_ID = B.MTC_ID
+	   AND A.MTC_SNO = B.MTC_SNO
+	 WHERE A.MTC_SNO != 0
+	   AND A.MTC_ID = #{mtcId,jdbcType=VARCHAR}
+	 ORDER BY MTC_SNO
+  </select>
+  
+  <select id="selectClstList" parameterType="string" resultMap="ClstResultMap">
+  --텍스트 클러스터 결과 데이터 조회 by 컬럼ID
+    SELECT A.CLST_ID, A.CLST_SNO, A.COL_CNT, A.SRC_NM
+         , A.CLST_NM, A.CLST_SCR, A.CLST_YN
+         , DECODE(A.CLST_YN, 'Y', '1', 'N', '0') AS IBSCHECK
+	  FROM WAD_CLST_DATA A
+	 WHERE A.CLST_SNO != 0
+	   AND A.CLST_ID = #{clstId,jdbcType=VARCHAR}
+	 ORDER BY CLST_SNO
+  </select>
+  
+  <select id="selectListbySno" parameterType="map" resultMap="BaseResultMap">
+  --데이터매칭 결과 데이터 조회 by ID
+  <!-- SELECT A.MTC_ID, A.MTC_SNO, A.COL_CNT, B.MTC_PRB, B.TGT_DTL_SNO
+     <foreach collection="srccolnms" item="srccol" open="," separator=",">A.${srccol}</foreach>
+     <foreach collection="tgtcolnms" item="tgtcol" open="," separator=",">B.${tgtcol}</foreach>
+	  FROM WAD_MTC_DATA A
+	  JOIN WAD_MTC_TGT_DATA B
+	    ON A.MTC_ID = B.MTC_ID
+	   AND A.MTC_SNO = B.MTC_SNO
+	 WHERE A.MTC_SNO = 0
+	   AND A.MTC_ID = #{search.mtcId,jdbcType=VARCHAR}
+	 UNION ALL -->
+    SELECT A.MTC_ID, A.MTC_SNO, A.COL_CNT, B.MTC_PRB, B.TGT_DTL_SNO
+     <foreach collection="srccolnms" item="srccol" open="," separator=",">A.${srccol}</foreach>
+     <foreach collection="tgtcolnms" item="tgtcol" open="," separator=",">B.${tgtcol}</foreach>
+	  FROM WAD_MTC_DATA A
+	  JOIN WAD_MTC_TGT_DATA B
+	    ON A.MTC_ID = B.MTC_ID
+	   AND A.MTC_SNO = B.MTC_SNO
+	 WHERE A.MTC_SNO = #{search.mtcSno,jdbcType=VARCHAR}
+	   AND B.TGT_DTL_SNO != 0
+	   AND A.MTC_ID = #{search.mtcId,jdbcType=VARCHAR}
+	 ORDER BY MTC_SNO, TGT_DTL_SNO
+	 
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="map">
+    delete from WAD_MTC_DATA
+    where MTC_ID = #{mtcId,jdbcType=VARCHAR}
+      and MTC_SNO = #{mtcSno,jdbcType=DECIMAL}
+  </delete>
+  
+  <delete id="deleteByiD" parameterType="string">
+  --데이터매칭 결과 데이터 삭제
+    DELETE FROM WAD_MTC_DATA
+    WHERE MTC_ID = #{mtcId,jdbcType=VARCHAR}
+  </delete>
+  
+  <insert id="insert" parameterType="kr.wise.advisor.prepare.textcluster.service.WadMtcData">
+    insert into WAD_MTC_DATA (MTC_ID, MTC_SNO, COL_CNT, 
+      SRC_COL_NM1, SRC_COL_NM2, SRC_COL_NM3, 
+      SRC_COL_NM4, SRC_COL_NM5, SRC_COL_NM6, 
+      SRC_COL_NM7, SRC_COL_NM8, SRC_COL_NM9, 
+      SRC_COL_NM10, TGT_COL_NM1, TGT_COL_NM2, 
+      TGT_COL_NM3, TGT_COL_NM4, TGT_COL_NM5, 
+      TGT_COL_NM6, TGT_COL_NM7, TGT_COL_NM8, 
+      TGT_COL_NM9, TGT_COL_NM10)
+    values (#{mtcId,jdbcType=VARCHAR}, #{mtcSno,jdbcType=DECIMAL}, #{colCnt,jdbcType=DECIMAL}, 
+      #{srcColNm1,jdbcType=VARCHAR}, #{srcColNm2,jdbcType=VARCHAR}, #{srcColNm3,jdbcType=VARCHAR}, 
+      #{srcColNm4,jdbcType=VARCHAR}, #{srcColNm5,jdbcType=VARCHAR}, #{srcColNm6,jdbcType=VARCHAR}, 
+      #{srcColNm7,jdbcType=VARCHAR}, #{srcColNm8,jdbcType=VARCHAR}, #{srcColNm9,jdbcType=VARCHAR}, 
+      #{srcColNm10,jdbcType=VARCHAR}, #{tgtColNm1,jdbcType=VARCHAR}, #{tgtColNm2,jdbcType=VARCHAR}, 
+      #{tgtColNm3,jdbcType=VARCHAR}, #{tgtColNm4,jdbcType=VARCHAR}, #{tgtColNm5,jdbcType=VARCHAR}, 
+      #{tgtColNm6,jdbcType=VARCHAR}, #{tgtColNm7,jdbcType=VARCHAR}, #{tgtColNm8,jdbcType=VARCHAR}, 
+      #{tgtColNm9,jdbcType=VARCHAR}, #{tgtColNm10,jdbcType=VARCHAR})
+  </insert>
+
+  <insert id="insertClustData" parameterType="kr.wise.advisor.prepare.textcluster.service.WadMtcData">
+    --텍스트 클러스터 추천용어 등록...
+    insert into WAD_MTC_DATA (MTC_ID, MTC_SNO, COL_CNT, SRC_COL_NM1)
+    values (#{mtcId,jdbcType=VARCHAR}, #{mtcSno,jdbcType=DECIMAL}, #{colCnt,jdbcType=DECIMAL}, 
+      #{srcColNm1,jdbcType=VARCHAR} )
+  </insert>
+  
+  <insert id="insertList" parameterType="map">
+  --소스 컬럼 데이터 저장....
+  INSERT INTO WAD_MTC_DATA (MTC_ID, MTC_SNO, COL_CNT
+  <foreach collection="colnms" open="," separator="," item="colnm">${colnm}</foreach>
+  ) VALUES (#{savevo.mtcId,jdbcType=VARCHAR}, #{savevo.mtcSno,jdbcType=DECIMAL}, #{savevo.colCnt,jdbcType=DECIMAL}
+  <foreach collection="colvals" open="," separator="," item="colval">#{colval,jdbcType=VARCHAR}</foreach>
+  )
+  </insert>
+  
+  <insert id="insertSelective" parameterType="kr.wise.advisor.prepare.textcluster.service.WadMtcData">
+    insert into WAD_MTC_DATA
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="mtcId != null">
+        MTC_ID,
+      </if>
+      <if test="mtcSno != null">
+        MTC_SNO,
+      </if>
+      <if test="colCnt != null">
+        COL_CNT,
+      </if>
+      <if test="srcColNm1 != null">
+        SRC_COL_NM1,
+      </if>
+      <if test="srcColNm2 != null">
+        SRC_COL_NM2,
+      </if>
+      <if test="srcColNm3 != null">
+        SRC_COL_NM3,
+      </if>
+      <if test="srcColNm4 != null">
+        SRC_COL_NM4,
+      </if>
+      <if test="srcColNm5 != null">
+        SRC_COL_NM5,
+      </if>
+      <if test="srcColNm6 != null">
+        SRC_COL_NM6,
+      </if>
+      <if test="srcColNm7 != null">
+        SRC_COL_NM7,
+      </if>
+      <if test="srcColNm8 != null">
+        SRC_COL_NM8,
+      </if>
+      <if test="srcColNm9 != null">
+        SRC_COL_NM9,
+      </if>
+      <if test="srcColNm10 != null">
+        SRC_COL_NM10,
+      </if>
+      <if test="tgtColNm1 != null">
+        TGT_COL_NM1,
+      </if>
+      <if test="tgtColNm2 != null">
+        TGT_COL_NM2,
+      </if>
+      <if test="tgtColNm3 != null">
+        TGT_COL_NM3,
+      </if>
+      <if test="tgtColNm4 != null">
+        TGT_COL_NM4,
+      </if>
+      <if test="tgtColNm5 != null">
+        TGT_COL_NM5,
+      </if>
+      <if test="tgtColNm6 != null">
+        TGT_COL_NM6,
+      </if>
+      <if test="tgtColNm7 != null">
+        TGT_COL_NM7,
+      </if>
+      <if test="tgtColNm8 != null">
+        TGT_COL_NM8,
+      </if>
+      <if test="tgtColNm9 != null">
+        TGT_COL_NM9,
+      </if>
+      <if test="tgtColNm10 != null">
+        TGT_COL_NM10,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="mtcId != null">
+        #{mtcId,jdbcType=VARCHAR},
+      </if>
+      <if test="mtcSno != null">
+        #{mtcSno,jdbcType=DECIMAL},
+      </if>
+      <if test="colCnt != null">
+        #{colCnt,jdbcType=DECIMAL},
+      </if>
+      <if test="srcColNm1 != null">
+        #{srcColNm1,jdbcType=VARCHAR},
+      </if>
+      <if test="srcColNm2 != null">
+        #{srcColNm2,jdbcType=VARCHAR},
+      </if>
+      <if test="srcColNm3 != null">
+        #{srcColNm3,jdbcType=VARCHAR},
+      </if>
+      <if test="srcColNm4 != null">
+        #{srcColNm4,jdbcType=VARCHAR},
+      </if>
+      <if test="srcColNm5 != null">
+        #{srcColNm5,jdbcType=VARCHAR},
+      </if>
+      <if test="srcColNm6 != null">
+        #{srcColNm6,jdbcType=VARCHAR},
+      </if>
+      <if test="srcColNm7 != null">
+        #{srcColNm7,jdbcType=VARCHAR},
+      </if>
+      <if test="srcColNm8 != null">
+        #{srcColNm8,jdbcType=VARCHAR},
+      </if>
+      <if test="srcColNm9 != null">
+        #{srcColNm9,jdbcType=VARCHAR},
+      </if>
+      <if test="srcColNm10 != null">
+        #{srcColNm10,jdbcType=VARCHAR},
+      </if>
+      <if test="tgtColNm1 != null">
+        #{tgtColNm1,jdbcType=VARCHAR},
+      </if>
+      <if test="tgtColNm2 != null">
+        #{tgtColNm2,jdbcType=VARCHAR},
+      </if>
+      <if test="tgtColNm3 != null">
+        #{tgtColNm3,jdbcType=VARCHAR},
+      </if>
+      <if test="tgtColNm4 != null">
+        #{tgtColNm4,jdbcType=VARCHAR},
+      </if>
+      <if test="tgtColNm5 != null">
+        #{tgtColNm5,jdbcType=VARCHAR},
+      </if>
+      <if test="tgtColNm6 != null">
+        #{tgtColNm6,jdbcType=VARCHAR},
+      </if>
+      <if test="tgtColNm7 != null">
+        #{tgtColNm7,jdbcType=VARCHAR},
+      </if>
+      <if test="tgtColNm8 != null">
+        #{tgtColNm8,jdbcType=VARCHAR},
+      </if>
+      <if test="tgtColNm9 != null">
+        #{tgtColNm9,jdbcType=VARCHAR},
+      </if>
+      <if test="tgtColNm10 != null">
+        #{tgtColNm10,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.advisor.prepare.textcluster.service.WadMtcData">
+    update WAD_MTC_DATA
+    <set>
+      <if test="colCnt != null">
+        COL_CNT = #{colCnt,jdbcType=DECIMAL},
+      </if>
+      <if test="srcColNm1 != null">
+        SRC_COL_NM1 = #{srcColNm1,jdbcType=VARCHAR},
+      </if>
+      <if test="srcColNm2 != null">
+        SRC_COL_NM2 = #{srcColNm2,jdbcType=VARCHAR},
+      </if>
+      <if test="srcColNm3 != null">
+        SRC_COL_NM3 = #{srcColNm3,jdbcType=VARCHAR},
+      </if>
+      <if test="srcColNm4 != null">
+        SRC_COL_NM4 = #{srcColNm4,jdbcType=VARCHAR},
+      </if>
+      <if test="srcColNm5 != null">
+        SRC_COL_NM5 = #{srcColNm5,jdbcType=VARCHAR},
+      </if>
+      <if test="srcColNm6 != null">
+        SRC_COL_NM6 = #{srcColNm6,jdbcType=VARCHAR},
+      </if>
+      <if test="srcColNm7 != null">
+        SRC_COL_NM7 = #{srcColNm7,jdbcType=VARCHAR},
+      </if>
+      <if test="srcColNm8 != null">
+        SRC_COL_NM8 = #{srcColNm8,jdbcType=VARCHAR},
+      </if>
+      <if test="srcColNm9 != null">
+        SRC_COL_NM9 = #{srcColNm9,jdbcType=VARCHAR},
+      </if>
+      <if test="srcColNm10 != null">
+        SRC_COL_NM10 = #{srcColNm10,jdbcType=VARCHAR},
+      </if>
+      <if test="tgtColNm1 != null">
+        TGT_COL_NM1 = #{tgtColNm1,jdbcType=VARCHAR},
+      </if>
+      <if test="tgtColNm2 != null">
+        TGT_COL_NM2 = #{tgtColNm2,jdbcType=VARCHAR},
+      </if>
+      <if test="tgtColNm3 != null">
+        TGT_COL_NM3 = #{tgtColNm3,jdbcType=VARCHAR},
+      </if>
+      <if test="tgtColNm4 != null">
+        TGT_COL_NM4 = #{tgtColNm4,jdbcType=VARCHAR},
+      </if>
+      <if test="tgtColNm5 != null">
+        TGT_COL_NM5 = #{tgtColNm5,jdbcType=VARCHAR},
+      </if>
+      <if test="tgtColNm6 != null">
+        TGT_COL_NM6 = #{tgtColNm6,jdbcType=VARCHAR},
+      </if>
+      <if test="tgtColNm7 != null">
+        TGT_COL_NM7 = #{tgtColNm7,jdbcType=VARCHAR},
+      </if>
+      <if test="tgtColNm8 != null">
+        TGT_COL_NM8 = #{tgtColNm8,jdbcType=VARCHAR},
+      </if>
+      <if test="tgtColNm9 != null">
+        TGT_COL_NM9 = #{tgtColNm9,jdbcType=VARCHAR},
+      </if>
+      <if test="tgtColNm10 != null">
+        TGT_COL_NM10 = #{tgtColNm10,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where MTC_ID = #{mtcId,jdbcType=VARCHAR}
+      and MTC_SNO = #{mtcSno,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="kr.wise.advisor.prepare.textcluster.service.WadMtcData">
+    update WAD_MTC_DATA
+    set COL_CNT = #{colCnt,jdbcType=DECIMAL},
+      SRC_COL_NM1 = #{srcColNm1,jdbcType=VARCHAR},
+      SRC_COL_NM2 = #{srcColNm2,jdbcType=VARCHAR},
+      SRC_COL_NM3 = #{srcColNm3,jdbcType=VARCHAR},
+      SRC_COL_NM4 = #{srcColNm4,jdbcType=VARCHAR},
+      SRC_COL_NM5 = #{srcColNm5,jdbcType=VARCHAR},
+      SRC_COL_NM6 = #{srcColNm6,jdbcType=VARCHAR},
+      SRC_COL_NM7 = #{srcColNm7,jdbcType=VARCHAR},
+      SRC_COL_NM8 = #{srcColNm8,jdbcType=VARCHAR},
+      SRC_COL_NM9 = #{srcColNm9,jdbcType=VARCHAR},
+      SRC_COL_NM10 = #{srcColNm10,jdbcType=VARCHAR},
+      TGT_COL_NM1 = #{tgtColNm1,jdbcType=VARCHAR},
+      TGT_COL_NM2 = #{tgtColNm2,jdbcType=VARCHAR},
+      TGT_COL_NM3 = #{tgtColNm3,jdbcType=VARCHAR},
+      TGT_COL_NM4 = #{tgtColNm4,jdbcType=VARCHAR},
+      TGT_COL_NM5 = #{tgtColNm5,jdbcType=VARCHAR},
+      TGT_COL_NM6 = #{tgtColNm6,jdbcType=VARCHAR},
+      TGT_COL_NM7 = #{tgtColNm7,jdbcType=VARCHAR},
+      TGT_COL_NM8 = #{tgtColNm8,jdbcType=VARCHAR},
+      TGT_COL_NM9 = #{tgtColNm9,jdbcType=VARCHAR},
+      TGT_COL_NM10 = #{tgtColNm10,jdbcType=VARCHAR}
+    where MTC_ID = #{mtcId,jdbcType=VARCHAR}
+      and MTC_SNO = #{mtcSno,jdbcType=DECIMAL}
+  </update>
+</mapper>

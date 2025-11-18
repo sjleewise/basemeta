@@ -1,0 +1,23 @@
+/* charset 오라클 */
+select parameter, value from nls_database_parameters where parameter = 'NLS_CHARACTERSET'
+/
+
+/* charset Tibero 티베로 */
+select * from database_properties WHERE name ='NLS_CHARACTERSET'
+/
+
+
+/* 사용자 락 여부 */
+SELECT USERNAME, ACCOUNT_STATUS, LOCK_DATE, EXPIRY_DATE FROM DBA_USERS
+
+ALTER USER "계정명 " ACCOUNT UNLOCK;
+
+
+
+/* 비밀번호 만료된 계정 확인 */
+
+SELECT USERNAME, ACCOUNT_STATUS, LOCK_DATE, EXPIRY_DATE FROM DBA_USERS WHERE ACCOUNT_STATUS LIKE '%EXPIRED%';
+
+ALTER USER "계정명" IDENTIFIED BY "패스워드";
+
+

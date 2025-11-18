@@ -1,0 +1,605 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.dq.profile.colefvaana.service.WaqPrfEfvaUserDfMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.dq.profile.colefvaana.service.WaqPrfEfvaUserDfVO"  extends="kr.wise.dq.profile.colefvaana.service.WaqPrfEfvaAnaMapper.BaseResultMap">
+    <id column="RQST_DTL_SNO" property="rqstDtlSno" jdbcType="DECIMAL" />
+    <result column="USER_DF_EFVA" property="userDfEfva" jdbcType="VARCHAR" />
+    <result column="USER_DF_EFVA_NM" property="userDfEfvaNm" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    RQST_NO, RQST_SNO, PRF_ID, RQST_DCD, RVW_STS_CD, RVW_CONTS, VRF_CD, 
+    VRF_RMK, USER_DF_EFVA, USER_DF_EFVA_NM, OBJ_DESCN, OBJ_VERS, REG_TYP_CD, FRS_RQST_DTM, 
+    FRS_RQST_USER_ID, RQST_DTM, RQST_USER_ID, APRV_DTM
+  </sql>
+  
+  <sql id="RQST_COLUMN_LIST" >
+    , T.EFVA_ANA_KND_CD 
+    , T.CD_TBL_DB_CONN_TRG_PNM
+    , T.CD_TBL_DB_CONN_TRG_ID
+    , T.CD_TBL_DB_SCH_PNM
+    , T.CD_TBL_DB_SCH_ID
+    , T.CD_TBL_DBC_TBL_NM
+    , T.CD_TBL_DBC_COL_NM
+    , T.CD_TBL_CD_ID_COL_NM 
+    , T.CD_TBL_CD_ID
+    , T.CD_TBL_ADT_CND_SQL   
+     , T.RQST_DCD
+     <if test='rqstStepCd == "Q" '>
+     , CASE WHEN T.RVW_STS_CD = '2' THEN '2' ELSE '0' END AS RVW_STS_CD
+     </if>
+     <if test='rqstStepCd != "Q" '>
+     , T.RVW_STS_CD
+     </if>
+     ,T.RVW_CONTS
+     ,T.VRF_CD
+     ,T.VRF_RMK
+     ,T.OBJ_DESCN
+     ,T.OBJ_VERS
+     ,T.REG_TYP_CD
+     ,T.FRS_RQST_DTM
+     ,T.FRS_RQST_USER_ID
+     ,T.RQST_DTM
+     ,T.RQST_USER_ID
+     ,T.APRV_DTM
+     ,T.APRV_USER_ID        
+     , (CASE WHEN C.RQST_DTL_SNO IS NULL THEN  T.RQST_SNO ELSE C.RQST_DTL_SNO  END) AS RQST_DTL_SNO
+     , C.USER_DF_EFVA
+     , C.USER_DF_EFVA_NM
+	 , (CASE WHEN M.VRF_CD = '2' THEN '#FF0000' END  ) AS FontColor
+  </sql>
+  
+  <sql id="Insert_Vrf_Sql">
+    INSERT INTO WAQ_RQST_VRF_DTLS
+    (
+        BIZ_DTL_CD
+      , RQST_NO
+	  , RQST_SNO
+	  , VRF_SNO
+	  , RQST_DTL_SNO
+	  , VRF_DTL_CD
+	  , VRF_DTLS	
+    )
+	SELECT #{bizDtlCd} AS BIZ_DTL_CD
+         , RM.RQST_NO
+	     , RM.RQST_SNO
+	     , coalesce(C.VRF_SNO,0) + 1 AS VRF_SNO
+	     , RM.RQST_SNO  AS  RQST_DTL_SNO
+	     , #{vrfDtlCd} AS VRF_DTL_CD
+	     , NULL AS VRF_DTLS
+	  FROM WAQ_PRF_MSTR RM
+	        INNER JOIN WAQ_PRF_EFVA_ANA RT
+	           ON RM.RQST_NO = RT.RQST_NO
+	          AND RM.RQST_SNO = RT.RQST_SNO
+	        LEFT JOIN WAQ_PRF_EFVA_USER_DF RC
+	          ON RM.RQST_NO = RC.RQST_NO
+	         AND RM.RQST_SNO = RC.RQST_SNO
+		    LEFT JOIN (SELECT MAX(VRF_SNO) AS VRF_SNO
+						                       ,RQST_NO
+						                       ,RQST_SNO
+						                       ,RQST_DTL_SNO
+						                 FROM WAQ_RQST_VRF_DTLS A
+						                 WHERE A.BIZ_DTL_CD = #{bizDtlCd}
+						                   AND A.RQST_NO = #{rqstNo}
+						                 GROUP BY RQST_NO, RQST_SNO ,RQST_DTL_SNO
+						                 ) C
+			   ON RM.RQST_NO = C.RQST_NO
+			  AND RM.RQST_SNO = C.RQST_SNO
+			  AND RC.RQST_DTL_SNO = C.RQST_DTL_SNO 
+			 LEFT JOIN WAQ_PRF_DQI_MAP DM
+			   ON DM.PRF_ID = RM.PRF_ID
+	  WHERE RM.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+</sql>
+
+  <delete id="deleteByPrimaryKey" parameterType="kr.wise.dq.profile.colefvaana.service.WaqPrfEfvaUserDfVO" >
+    delete from WAQ_PRF_EFVA_USER_DF
+    where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      and RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+  </delete>
+  
+  <insert id="insertSelective" parameterType="kr.wise.dq.profile.colefvaana.service.WaqPrfEfvaUserDfVO" >
+    insert into WAQ_PRF_EFVA_USER_DF
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+        RQST_NO,
+        RQST_SNO,
+        RQST_DTL_SNO,
+        PRF_NM,
+        USER_DF_EFVA,
+      <if test="prfId != null" >
+        PRF_ID,
+      </if>
+      <if test="rqstDcd != null" >
+        RQST_DCD,
+      </if>
+      <if test="rvwStsCd != null" >
+        RVW_STS_CD,
+      </if>
+      <if test="rvwConts != null" >
+        RVW_CONTS,
+      </if>
+      <if test="vrfCd != null" >
+        VRF_CD,
+      </if>
+      <if test="vrfRmk != null" >
+        VRF_RMK,
+      </if>
+      <if test="userDfEfvaNm != null" >
+        USER_DF_EFVA_NM,
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN,
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS,
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD,
+      </if>
+      <if test="frsRqstDtm != null" >
+        FRS_RQST_DTM,
+      </if>
+      <if test="frsRqstUserId != null" >
+        FRS_RQST_USER_ID,
+      </if>
+      <if test="rqstDtm != null" >
+        RQST_DTM,
+      </if>
+      <if test="rqstUserId != null" >
+        RQST_USER_ID,
+      </if>
+      <if test="aprvDtm != null" >
+        APRV_DTM,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+        #{rqstNo,jdbcType=VARCHAR},
+        (SELECT MAX(RQST_SNO)  FROM WAQ_PRF_MSTR WHERE RQST_NO = #{rqstNo}) ,
+        (SELECT MAX(RQST_SNO)  FROM WAQ_PRF_MSTR WHERE RQST_NO = #{rqstNo}) ,
+        TRIM(UPPER(#{prfNm,jdbcType=VARCHAR} )),
+        #{userDfEfva,jdbcType=VARCHAR},
+      <if test="prfId != null" >
+        #{prfId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDcd != null" >
+        #{rqstDcd,jdbcType=VARCHAR},
+      </if>
+      <if test="rvwStsCd != null" >
+        #{rvwStsCd,jdbcType=VARCHAR},
+      </if>
+      <if test="rvwConts != null" >
+        #{rvwConts,jdbcType=VARCHAR},
+      </if>
+      <if test="vrfCd != null" >
+        #{vrfCd,jdbcType=VARCHAR},
+      </if>
+      <if test="vrfRmk != null" >
+        #{vrfRmk,jdbcType=VARCHAR},
+      </if>
+      
+      <if test="userDfEfvaNm != null" >
+        #{userDfEfvaNm,jdbcType=VARCHAR},
+      </if>
+      <if test="objDescn != null" >
+        #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null" >
+        #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="frsRqstDtm != null" >
+        #{frsRqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="frsRqstUserId != null" >
+        #{frsRqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDtm != null" >
+        #{rqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rqstUserId != null" >
+        #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDtm != null" >
+        #{aprvDtm,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.dq.profile.colefvaana.service.WaqPrfEfvaUserDfVO" >
+    update WAQ_PRF_EFVA_USER_DF
+    <set >
+        PRF_NM = TRIM(UPPER(#{prfNm,jdbcType=VARCHAR} )),
+        USER_DF_EFVA = #{userDfEfva,jdbcType=VARCHAR},
+      <if test="prfId != null" >
+        PRF_ID = #{prfId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDcd != null" >
+        RQST_DCD = #{rqstDcd,jdbcType=VARCHAR},
+      </if>
+      <if test="rvwStsCd != null" >
+        RVW_STS_CD = #{rvwStsCd,jdbcType=VARCHAR},
+      </if>
+      <if test="rvwConts != null" >
+        RVW_CONTS = #{rvwConts,jdbcType=VARCHAR},
+      </if>
+      <if test="vrfCd != null" >
+        VRF_CD = #{vrfCd,jdbcType=VARCHAR},
+      </if>
+      <if test="vrfRmk != null" >
+        VRF_RMK = #{vrfRmk,jdbcType=VARCHAR},
+      </if>
+      
+      <if test="userDfEfvaNm != null" >
+        USER_DF_EFVA_NM = #{userDfEfvaNm,jdbcType=VARCHAR},
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="frsRqstDtm != null" >
+        FRS_RQST_DTM = #{frsRqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="frsRqstUserId != null" >
+        FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDtm != null" >
+        RQST_DTM = #{rqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rqstUserId != null" >
+        RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDtm != null" >
+        APRV_DTM = #{aprvDtm,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      and RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+      and RQST_DTL_SNO = #{rqstDtlSno,jdbcType=DECIMAL}
+  </update>
+
+
+<insert id="chkUserDfReg" parameterType="map" >
+<!--  <include refid="kr.wise.dq.profile.colefvaana.service.WaqPrfEfvaAnaMapper.Insert_Vrf_Sql" /> -->
+ <include refid="Insert_Vrf_Sql" />
+   <![CDATA[ 
+--검증쿼리
+     AND RT.EFVA_ANA_KND_CD  = 'USER'
+     AND RC.USER_DF_EFVA  IS NULL
+   ]]>
+</insert>
+
+  
+<!--  요청서내 중복 -->  
+<insert id="checkDupPrfUser" parameterType="map" >
+<include refid="Insert_Vrf_Sql" />
+	--검증쿼리
+      AND EXISTS (SELECT 1
+			            FROM WAQ_PRF_MSTR M
+			                    INNER JOIN WAQ_PRF_EFVA_ANA T
+			                        ON M.RQST_NO = T.RQST_NO
+			                       AND M.RQST_SNO = T.RQST_SNO
+			                      LEFT OUTER JOIN WAQ_PRF_EFVA_USER_DF C
+			                        ON M.RQST_NO = C.RQST_NO
+			                      AND M.RQST_SNO = C.RQST_SNO
+			            WHERE RM.PRF_NM = M.PRF_NM
+			               AND RM.RQST_NO = M.RQST_NO
+			               AND RM.RQST_SNO != M.RQST_SNO
+			               AND M.REG_TYP_CD IN ('C','U')
+			               AND RT.EFVA_ANA_KND_CD  = 'USER'
+			            <!-- 사용자정의유효값 -->   
+			               AND coalesce(RC.USER_DF_EFVA,'_') = coalesce(C.USER_DF_EFVA,'_')
+<!-- 			               AND coalesce(RC.USER_DF_EFVA_NM,'_') = coalesce(C.USER_DF_EFVA_NM,'_')			                  -->
+                  )
+  </insert>
+  
+<!-- 변경데이터 미존재 --> 
+<insert id="checkNoChg" parameterType="map" >
+  <include refid="Insert_Vrf_Sql" />
+	--검증쿼리
+      AND RM.REG_TYP_CD = 'U'
+      AND EXISTS (SELECT 1
+			            FROM WAM_PRF_MSTR M
+			                    INNER JOIN WAM_PRF_EFVA_ANA T
+			                        ON M.PRF_ID = T.PRF_ID
+			                       AND T.REG_TYP_CD IN ('C','U')
+			                    INNER JOIN WAM_PRF_EFVA_USER_DF C
+			                        ON M.PRF_ID = C.PRF_ID
+			                       AND C.REG_TYP_CD IN ('C','U')
+			                    INNER JOIN WAM_PRF_DQI_MAP D
+			                       ON D.PRF_ID = M.PRF_ID
+			                      AND D.REG_TYP_CD IN ('C', 'U')
+			            WHERE RM.PRF_ID = M.PRF_ID
+			            <!-- 유효값유형 -->
+			               AND coalesce(RT.EFVA_ANA_KND_CD,'_') = coalesce(T.EFVA_ANA_KND_CD,'_')
+			            <!-- 코드테이블정보 -->
+			               AND coalesce(RT.CD_TBL_DB_CONN_TRG_ID,'_') = coalesce(T.CD_TBL_DB_CONN_TRG_ID,'_')
+			               AND coalesce(RT.CD_TBL_DB_SCH_ID,'_') = coalesce(T.CD_TBL_DB_SCH_ID,'_')
+			               AND coalesce(RT.CD_TBL_DBC_TBL_NM,'_') = coalesce(T.CD_TBL_DBC_TBL_NM,'_')
+			               AND coalesce(RT.CD_TBL_DBC_COL_NM,'_') = coalesce(T.CD_TBL_DBC_COL_NM,'_')
+			               AND coalesce(RT.CD_TBL_CD_ID_COL_NM,'_') = coalesce(T.CD_TBL_CD_ID_COL_NM,'_')
+			               AND coalesce(RT.CD_TBL_CD_ID,'_') = coalesce(T.CD_TBL_CD_ID,'_')
+			               AND coalesce(RT.CD_TBL_ADT_CND_SQL,'_') = coalesce(T.CD_TBL_ADT_CND_SQL,'_')
+			            <!-- 사용자정의유효값 -->   
+			               AND coalesce(RC.USER_DF_EFVA,'_') = coalesce(C.USER_DF_EFVA,'_')
+			               AND coalesce(RC.USER_DF_EFVA_NM,'_') = coalesce(C.USER_DF_EFVA_NM,'_')			                 
+			             <!-- 추가조건 -->
+			               AND coalesce(RM.ADT_CND_SQL,'_') = coalesce(M.ADT_CND_SQL,'_')
+			             <!-- 품질지표매핑 -->
+			             AND coalesce(D.DQI_ID,'_') = coalesce(RM.PRF_ID,'_')
+                  )
+</insert>
+  
+  
+ <update id="updateWaqC" parameterType="map">
+   	
+   </update>
+
+<!-- 유효값분석 분석 등록 -->
+   <delete id="deleteWAM" parameterType="map">
+    --WAM 삭제 (등록유형코드가REG_TYP_CD 변경, 삭제일 경우)
+	DELETE FROM WAM_PRF_EFVA_USER_DF A
+	WHERE EXISTS (SELECT 1 
+					     FROM WAQ_PRF_MSTR M
+					             INNER JOIN WAQ_PRF_EFVA_ANA C
+					                 ON M.RQST_NO = C.RQST_NO
+					                AND M.RQST_SNO = C.RQST_SNO 
+					                AND C.EFVA_ANA_KND_CD  = 'USER'
+					             INNER JOIN WAQ_PRF_EFVA_USER_DF B
+					                 ON M.RQST_NO = B.RQST_NO
+					               AND M.RQST_SNO = B.RQST_SNO
+					               AND B.VRF_CD = '1'
+					    WHERE M.RQST_NO = #{rqstNo}
+					      AND M.RVW_STS_CD = '1'
+					      AND M.VRF_CD = '1'
+					      AND M.PRF_ID = A.PRF_ID
+					      AND A.USER_DF_EFVA  = B.USER_DF_EFVA 
+						)
+   </delete>
+   
+   <insert id="insertWAM" parameterType="map">
+   	--WAM 추가 (WAQ 내용을 추가, REG_TYP_CD 가 신규,변경일 경우)
+	INSERT INTO WAM_PRF_EFVA_USER_DF
+	SELECT 
+	<include refid="kr.wise.dq.profile.colefvaana.service.WamPrfEfvaUserDfMapper.Base_Column_List"/>
+	  FROM WAQ_PRF_EFVA_USER_DF A
+	 WHERE EXISTS ( SELECT 1 
+					     FROM WAQ_PRF_MSTR M
+					             INNER JOIN WAQ_PRF_EFVA_ANA C
+					                 ON M.RQST_NO = C.RQST_NO
+					                AND M.RQST_SNO = C.RQST_SNO 
+					                AND C.EFVA_ANA_KND_CD  = 'USER'
+					             INNER JOIN WAQ_PRF_EFVA_USER_DF B
+					                 ON M.RQST_NO = B.RQST_NO
+					                AND M.RQST_SNO = B.RQST_SNO
+					                AND B.VRF_CD = '1'
+					    WHERE M.RQST_NO = #{rqstNo}
+					      AND M.RVW_STS_CD = '1'
+					      AND M.VRF_CD = '1'
+					      AND M.RQST_NO = A.RQST_NO
+					      AND M.RQST_SNO = A.RQST_SNO
+					      AND A.USER_DF_EFVA  = B.USER_DF_EFVA 
+					   )	  
+	   AND A.REG_TYP_CD IN ('C', 'U')
+   </insert>
+   
+   <update id="updateWAH"  parameterType="map">
+   	--WAH 이력 만료...
+	UPDATE WAH_PRF_EFVA_USER_DF A
+	    SET EXP_DTM = SYSDATE
+	WHERE EXISTS (SELECT 1
+	                     FROM WAQ_PRF_MSTR M
+	                              INNER JOIN WAQ_PRF_EFVA_ANA C
+					                 ON M.RQST_NO = C.RQST_NO
+					                AND M.RQST_SNO = C.RQST_SNO 
+					                AND C.EFVA_ANA_KND_CD  = 'USER'
+	                             INNER JOIN WAQ_PRF_EFVA_USER_DF B
+	                                 ON M.RQST_NO = B.RQST_NO
+					               AND M.RQST_SNO = B.RQST_SNO
+					               AND B.VRF_CD = '1'
+					    WHERE M.RQST_NO = #{rqstNo}
+					       AND M.RVW_STS_CD = '1'
+					       AND M.VRF_CD = '1'
+					       AND M.PRF_ID = A.PRF_ID
+					       AND A.USER_DF_EFVA = B.USER_DF_EFVA
+	   				   )
+	AND A.EXP_DTM = STR_TO_DATE('99991231', '%Y%m%d')
+   </update>
+   
+<insert id="insertWAH"  parameterType="map">
+  	--WAH이력 적재...
+	INSERT INTO WAH_PRF_EFVA_USER_DF (
+		 <include refid="kr.wise.dq.profile.colefvaana.service.WamPrfEfvaUserDfMapper.Base_Column_List"/>
+		 ,EXP_DTM
+		 ,STR_DTM
+	)
+	SELECT
+      <include refid="kr.wise.dq.profile.colefvaana.service.WamPrfEfvaUserDfMapper.Base_Column_List"/>
+    , STR_TO_DATE( '9999-12-31', '%Y-%m-%d') AS EXP_DTM
+    , SYSDATE AS STR_DTM 	
+FROM WAQ_PRF_EFVA_USER_DF A
+  WHERE EXISTS ( SELECT 1 
+				     FROM WAQ_PRF_MSTR M
+				             INNER JOIN WAQ_PRF_EFVA_ANA C
+				                 ON M.RQST_NO = C.RQST_NO
+				                AND M.RQST_SNO = C.RQST_SNO 
+				                AND C.EFVA_ANA_KND_CD  = 'USER'
+				             INNER JOIN WAQ_PRF_EFVA_USER_DF B
+				                 ON M.RQST_NO = B.RQST_NO
+				                AND M.RQST_SNO = B.RQST_SNO
+				                AND B.VRF_CD = '1'
+				    WHERE M.RQST_NO = #{rqstNo}
+				      AND M.RVW_STS_CD = '1'
+				      AND M.VRF_CD = '1'
+				      AND M.RQST_NO = A.RQST_NO
+				      AND M.RQST_SNO = A.RQST_SNO
+				      AND A.USER_DF_EFVA = B.USER_DF_EFVA
+				   )	 
+</insert>
+
+  <select id="selectPrfExlPc02Lst" resultMap="BaseResultMap" parameterType="kr.wise.commons.rqstmst.service.WaqMstr" >
+		SELECT <include refid="kr.wise.dq.profile.mstr.service.WaqPrfMstrMapper.PRF_MSTR_RQST_COLUMN_LIST"/>
+		         <include refid="RQST_COLUMN_LIST"/>
+		       ,DQI.DQI_ID
+		       ,DQI.DQI_LNM
+		  FROM WAQ_PRF_MSTR M
+		          INNER JOIN WAQ_PRF_EFVA_ANA T
+		               ON M.RQST_NO = T.RQST_NO
+		             AND M.RQST_SNO = T.RQST_SNO
+		           LEFT OUTER JOIN WAQ_PRF_EFVA_USER_DF C
+		             ON M.RQST_NO = C.RQST_NO
+		            AND M.RQST_SNO = C.RQST_SNO
+		           LEFT OUTER JOIN WAQ_PRF_DQI_MAP DQI
+  		            ON DQI.RQST_NO = M.RQST_NO
+  		           AND DQI.RQST_SNO = M.RQST_SNO
+		 WHERE M.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+  <if test='rqstStepCd == "Q" '>
+  	    AND M.VRF_CD = '1'
+  </if>
+  ORDER BY M.PRF_NM, M.RQST_SNO
+</select>
+
+<select id="getDbcColList" resultMap="BaseResultMap" parameterType="kr.wise.dq.profile.colefvaana.service.WaqPrfEfvaUserDfVO" >
+SELECT A.DB_CONN_TRG_ID
+  		,A.DB_CONN_TRG_LNM
+  		,A.DB_CONN_TRG_PNM
+  		,B.DB_SCH_ID
+  		,B.DB_SCH_LNM
+  		,B.DB_SCH_PNM
+        ,D.DBC_TBL_NM
+  		,D.DBC_COL_NM AS OBJ_NM
+  		<if test="adtCndSql != null and adtCndSql != ''">
+  		,#{adtCndSql,jdbcType=VARCHAR} AS ADT_CND_SQL
+  		</if>
+  	  <if test="efvaAnaKndCd != null and efvaAnaKndCd != '' " >
+  		, #{efvaAnaKndCd,jdbcType=VARCHAR} AS EFVA_ANA_KND_CD
+  	  </if>
+      <if test="cdTblDbConnTrgPnm != null and cdTblDbConnTrgPnm != '' " >
+        ,#{cdTblDbConnTrgPnm,jdbcType=VARCHAR} AS  CD_TBL_DB_CONN_TRG_PNM
+      </if>
+      <if test="cdTblDbSchPnm != null and cdTblDbSchPnm != '' " >
+        ,#{cdTblDbSchPnm,jdbcType=VARCHAR}  AS CD_TBL_DB_SCH_Pnm
+      </if>
+      <if test="cdTblDbConnTrgId != null and cdTblDbConnTrgId != '' " >
+        ,#{cdTblDbConnTrgId,jdbcType=VARCHAR} AS CD_TBL_DB_CONN_TRG_ID
+      </if>
+      <if test="cdTblDbSchId != null and cdTblDbSchId != '' " >
+        ,#{cdTblDbSchId,jdbcType=VARCHAR} AS CD_TBL_DB_SCH_ID
+      </if>
+      <if test="cdTblDbcTblNm != null and cdTblDbcTblNm != '' " >
+        ,#{cdTblDbcTblNm,jdbcType=VARCHAR} AS CD_TBL_DBC_TBL_NM
+      </if>
+      <if test="cdTblDbcColNm != null and cdTblDbcColNm != '' " >
+        ,#{cdTblDbcColNm,jdbcType=VARCHAR}  AS CD_TBL_DBC_COL_NM
+      </if>
+      <if test="cdTblCdIdColNm != null and cdTblCdIdColNm != '' " >
+       , #{cdTblCdIdColNm,jdbcType=VARCHAR} AS CD_TBL_CD_ID_COL_NM
+      </if>
+      <if test="cdTblCdId != null and cdTblCdId != '' " >
+        ,#{cdTblCdId,jdbcType=VARCHAR} AS CD_TBL_CD_ID
+      </if>
+      <if test="cdTblAdtCndSql != null and cdTblAdtCndSql != '' " >
+        ,#{cdTblAdtCndSql,jdbcType=VARCHAR} AS CD_TBL_ADT_CND_SQL
+      </if>
+		<if test="userDfEfva != null and userDfEfva != '' " >
+		 ,#{userDfEfva,jdbcType=VARCHAR}  AS  USER_DF_EFVA
+		</if>
+		<if test="userDfEfvaNm != null and userDfEfvaNm != '' " >
+		  ,#{userDfEfvaNm,jdbcType=VARCHAR}  AS USER_DF_EFVA_NM,
+		</if>
+      
+  		,'I' AS IBS_STATUS
+  		,'CU' AS RQST_DCD
+  		
+    FROM WAA_DB_CONN_TRG A 
+        INNER JOIN WAA_DB_SCH B
+           ON A.DB_CONN_TRG_ID = B.DB_CONN_TRG_ID
+          AND A.REG_TYP_CD IN ('C', 'U')
+          AND A.EXP_DTM = STR_TO_DATE('99991231', '%Y%m%d')
+          AND B.REG_TYP_CD IN ('C', 'U')
+          AND B.EXP_DTM = STR_TO_DATE('99991231', '%Y%m%d')
+        <if test="dbcTblNm != null and dbcTblNm != ''" >
+        INNER JOIN WAT_DBC_TBL C
+           ON B.DB_SCH_ID = C.DB_SCH_ID
+          AND B.DB_CONN_TRG_ID = C.DB_CONN_TRG_ID
+          AND B.REG_TYP_CD IN ('C', 'U')
+          AND B.EXP_DTM = STR_TO_DATE('99991231', '%Y%m%d')
+<!--           AND coalesce(C.REG_TYP, 'C') IN ('C', 'U') -->
+        </if>
+        INNER JOIN WAT_DBC_COL D
+           ON B.DB_SCH_ID = D.DB_SCH_ID
+          <if test="dbcTblNm != null and dbcTblNm != ''" >
+          AND C.DBC_TBL_NM = D.DBC_TBL_NM
+<!--           AND coalesce(C.REG_TYP, 'C') IN ('C', 'U') -->
+          </if>
+          AND B.EXP_DTM = STR_TO_DATE('99991231', '%Y%m%d')
+          AND B.REG_TYP_CD IN ('C', 'U')
+<!--           AND coalesce(D.REG_TYP, 'C') IN ('C', 'U') -->
+  <where>
+  	<if test="dbConnTrgPnm != null">
+  	AND A.DB_CONN_TRG_PNM = #{dbConnTrgPnm,jdbcType=VARCHAR}
+  	</if>
+  	<if test="dbSchPnm != null">
+  	AND B.DB_SCH_PNM = #{dbSchPnm,jdbcType=VARCHAR}
+  	</if>
+  	<if test="dbcTblNm != null and dbcTblNm != ''">
+  	AND D.DBC_TBL_NM LIKE REPLACE(#{dbcTblNm,jdbcType=VARCHAR}, '*', '%')
+  	</if>
+  	<if test="objNm != null">
+  	AND (D.DBC_COL_NM LIKE REPLACE(#{objNm,jdbcType=VARCHAR}, '*', '%') OR D.DBC_COL_KOR_NM LIKE REPLACE(#{objNm,jdbcType=VARCHAR}, '*', '%') )
+  	</if>
+  </where>
+  
+  ORDER BY A.DB_CONN_TRG_ID, B.DB_SCH_ID
+</select>
+
+
+	<!--  select form meta system -->
+  <select id="selectPrfFromMetaPc02Lst" resultMap="BaseResultMap" parameterType="kr.wise.commons.rqstmst.service.WaqMstr" >
+  		--PC02 코드(유효값)분석
+		SELECT 'CU'        AS RQST_DCD -- "요청구분"
+			 , 'I' AS IBS_STATUS
+		     , DB.DB_CONN_TRG_PNM -- "진단대상명"
+		     , SCH.DB_SCH_PNM     -- "스키마명"
+		     , COL.DBC_TBL_NM     -- "테이블명"
+		     , COL.DBC_COL_NM   AS OBJ_NM  -- "컬럼명"
+		     , COL.DBC_COL_KOR_NM -- "컬럼한글명" 
+		     , COL.DATA_TYPE      -- "데이터타입"
+		     , COL.DATA_LEN       -- "데이터길이"
+		     -- SetColProperty("dateFrmCd", 	{"ComboText":"YYYYMMDDHHMISS|YYYYMMDD|YYYYMM|YYYY|%Y-%m-%d HH24:MI:SS","ComboCode":"01|02|03|04|09"});
+		     , 'META' AS EFVA_ANA_KND_CD  -- efvaAnaKndCd -- "유효값유형"
+		  FROM WAA_DB_CONN_TRG DB
+		    INNER JOIN WAA_DB_SCH SCH
+		      ON DB.DB_CONN_TRG_ID = SCH.DB_CONN_TRG_ID
+		     AND DB.EXP_DTM = STR_TO_DATE('99991231', '%Y%m%d')
+		     AND SCH.EXP_DTM = STR_TO_DATE('99991231', '%Y%m%d')
+		    INNER JOIN WAT_DBC_COL COL
+		      ON SCH.DB_SCH_ID = COL.DB_SCH_ID
+		    INNER JOIN WAM_PDM_TBL PTBL
+		      ON PTBL.PDM_TBL_PNM = COL.DBC_TBL_NM
+		    INNER JOIN WAM_PDM_COL PCOL
+		      ON PTBL.PDM_TBL_ID = PCOL.PDM_TBL_ID
+		     AND PCOL.PDM_COL_PNM = RTRIM(COL.DBC_COL_NM,'0123456789')
+		    INNER JOIN WAM_SDITM ITM
+		      ON ITM.SDITM_ID = PCOL.SDITM_ID
+		    INNER JOIN WAM_DMN D
+		      ON  D.DMN_ID = ITM.DMN_ID
+		    AND D.DMN_ID IN (SELECT DMN_ID FROM WAM_CD_VAL)
+		    INNER JOIN WAA_SUBJ SJ
+		       	ON PTBL.SUBJ_ID =SJ.SUBJ_ID 
+		       	AND SJ.EXP_DTM = STR_TO_DATE('99991231', '%Y%m%d')   
+		       	AND ITM.STND_ASRT = SJ.STND_ASRT
+		 WHERE D.DMNG_ID IN (SELECT DMNG_ID FROM WAA_DMNG WHERE DMNG_LNM = '코드' and EXP_DTM = STR_TO_DATE('99991231', '%Y%m%d'))
+		  -- AND COL.DATA_TYPE IN ('VARCHAR2','CHAR')
+		   -- 기등록건 제외
+		   AND (DB.DB_CONN_TRG_ID,SCH.DB_SCH_ID,COL.DBC_TBL_NM,COL.DBC_COL_NM)
+		      NOT IN (SELECT DB_CONN_TRG_ID,DB_SCH_ID,DBC_TBL_NM,OBJ_NM FROM WAM_PRF_MSTR WHERE PRF_KND_CD='PC02') -- 코드분석
+  </select>
+
+
+  
+</mapper>

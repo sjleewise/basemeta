@@ -1,0 +1,45 @@
+/* SYS 유저로 접속하여 아래 스크립트를 실행한다.*/
+ 
+ 
+/* 3개의 Table Space   ex) D:\app\ydkim\oradata\tablespace  m9martdata98, M9INSTALLROLE98 */
+ 
+create tablespace "M9MARTDATA" 
+    datafile '테이블스페이스경로\m9martdata.dbf' size 500m 
+    autoextend on next 10m maxsize unlimited 
+    logging extent management local segment space management auto ;
+ 
+create tablespace "M9MARTINDEX" 
+    datafile '테이블스페이스경로\m9martindex.dbf' size 500m 
+    autoextend on next 10m maxsize unlimited 
+    logging extent management local segment space management auto;
+ 
+create temporary tablespace "M9MARTTEMP"  
+    tempfile '테이블스페이스경로\m9marttemp.dbf' size 500m 
+    autoextend on next 10m maxsize unlimited extent management local uniform size 1m ;
+ 
+ 
+ 
+
+/* Mart Server Admin User 생성 */
+ 
+create user                  MARTADMIN identified by MARTADMIN
+default tablespace         M9MARTDATA
+temporary tablespace     M9MARTTEMP
+quota unlimited on        M9MARTDATA
+quota unlimited on       M9MARTINDEX;
+ 
+ 
+/* 2개의 User Role 및 권한 부여 */
+ 
+CREATE ROLE         M9INSTALLROLE;
+GRANT CREATE SEQUENCE TO M9INSTALLROLE;
+GRANT CREATE TABLE TO M9INSTALLROLE;
+GRANT CREATE VIEW TO M9INSTALLROLE;
+GRANT SELECT ANY DICTIONARY    TO M9INSTALLROLE;
+GRANT CREATE TRIGGER               TO M9INSTALLROLE;
+ 
+CREATE ROLE M9USERROLE;
+GRANT CREATE SESSION              TO M9USERROLE;
+ 
+GRANT M9INSTALLROLE TO MARTADMIN;
+GRANT M9USERROLE TO MARTADMIN; 

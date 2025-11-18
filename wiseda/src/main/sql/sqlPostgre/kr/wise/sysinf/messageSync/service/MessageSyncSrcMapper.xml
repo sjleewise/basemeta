@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.wise.sysinf.messageSync.service.MessageSyncSrcMapper">
+  <resultMap id="MessageCdBaseResultMap" type="kr.wise.sysinf.messageSync.service.MessageCodeVo">
+    <result column="MSG_CD" 	jdbcType="VARCHAR" property="msgCd" />
+    <result column="SYS_DVCD" 	jdbcType="VARCHAR" property="sysDvcd" />
+    <result column="MSG_PTRN_DVCD" 	jdbcType="VARCHAR" property="msgPtrnDvcd" />
+    <result column="MSG_BZWR_DVCD" 	jdbcType="VARCHAR" property="msgBzwrDvcd" />
+    <result column="MSG_CNTN" 	jdbcType="VARCHAR" property="msgCntn" />
+    <result column="USE_YN" 	jdbcType="VARCHAR" property="useYn" />
+    <result column="GAP_STATUS" 	jdbcType="VARCHAR" property="gapStatus" />
+  </resultMap>
+  
+  
+  <delete id ="deleteWatMsgCd">
+  -- 임시 메시지 테이블 삭제
+         DELETE FROM WAT_MSG_CD
+  </delete>
+      
+      
+  <insert id="insertMessageCodeToMeta" parameterType = "kr.wise.sysinf.messageSync.service.MessageCodeVo">
+  	INSERT INTO WAT_MSG_CD(MSG_CD                          
+                          ,SYS_DVCD     
+                          ,MSG_PTRN_DVCD
+                          ,MSG_BZWR_DVCD
+                          ,MSG_CNTN      
+                          ,USE_YN )
+  	  VALUES( 
+  	     #{msgCd   ,jdbcType = VARCHAR}
+        ,#{sysDvcd ,jdbcType = VARCHAR}  
+        ,#{msgPtrnDvcd ,jdbcType = VARCHAR}  
+        ,#{msgBzwrDvcd ,jdbcType = VARCHAR}  
+        ,#{msgCntn ,jdbcType = VARCHAR}  
+        ,#{useYn  ,jdbcType = VARCHAR}         
+  	  )
+  	  </insert>  
+  	  
+  	   <delete id ="deleteWatGapMsgCd">
+         DELETE FROM WAT_GAP_MSG_CD
+      </delete>
+      
+        <insert id="messageCodeGapExec" >
+        INSERT INTO WAT_GAP_MSG_CD
+            SELECT 
+                A.MSG_CD                          
+               ,A.SYS_DVCD     
+               ,A.MSG_PTRN_DVCD
+               ,A.MSG_BZWR_DVCD
+               ,A.MSG_CNTN      
+               ,A.USE_YN       
+               ,'U' AS GAP_STATUS
+           FROM V_MESSAGE_CD_LIST A
+           INNER JOIN WAT_MSG_CD B
+           ON COALESCE(A.MSG_CD,'-') = COALESCE(B.MSG_CD,'-')
+           AND COALESCE(A.SYS_DVCD,'-')= COALESCE(B.SYS_DVCD,'-')
+           AND COALESCE(A.MSG_PTRN_DVCD,'-')= COALESCE(B.MSG_PTRN_DVCD,'-')
+           AND COALESCE(A.MSG_BZWR_DVCD,'-')= COALESCE(B.MSG_BZWR_DVCD,'-')
+           WHERE COALESCE(A.MSG_CNTN      ,'-')   !=    COALESCE(B.MSG_CNTN      ,'-')  
+              OR COALESCE(A.USE_YN      ,'-')   !=    COALESCE(B.USE_YN      ,'-') 
+           UNION ALL
+           SELECT 
+                  A.MSG_CD                  
+                 ,A.SYS_DVCD                
+                 ,A.MSG_PTRN_DVCD           
+                 ,A.MSG_BZWR_DVCD           
+                 ,A.MSG_CNTN                
+                 ,A.USE_YN                  
+                 ,'I' AS GAP_STATUS
+            FROM V_MESSAGE_CD_LIST A
+            LEFT OUTER JOIN WAT_MSG_CD B
+            ON COALESCE(A.MSG_CD,'-') = COALESCE(B.MSG_CD,'-')
+           AND COALESCE(A.SYS_DVCD,'-')= COALESCE(B.SYS_DVCD,'-')
+           AND COALESCE(A.MSG_PTRN_DVCD,'-')= COALESCE(B.MSG_PTRN_DVCD,'-')
+           AND COALESCE(A.MSG_BZWR_DVCD,'-')= COALESCE(B.MSG_BZWR_DVCD,'-')
+           WHERE B.MSG_CD IS NULL
+               UNION ALL
+            SELECT 
+                B.MSG_CD                  
+               ,B.SYS_DVCD                
+               ,B.MSG_PTRN_DVCD           
+               ,B.MSG_BZWR_DVCD           
+               ,B.MSG_CNTN                
+               ,B.USE_YN            
+               ,'D' AS GAP_STATUS
+            FROM V_MESSAGE_CD_LIST A
+            RIGHT OUTER JOIN WAT_MSG_CD B
+            ON COALESCE(A.MSG_CD,'-') = COALESCE(B.MSG_CD,'-')                     
+            AND COALESCE(A.SYS_DVCD,'-')= COALESCE(B.SYS_DVCD,'-')                  
+            AND COALESCE(A.MSG_PTRN_DVCD,'-')= COALESCE(B.MSG_PTRN_DVCD,'-')        
+            AND COALESCE(A.MSG_BZWR_DVCD,'-')= COALESCE(B.MSG_BZWR_DVCD,'-')        
+            WHERE A.MSG_CD IS NULL      
+   	  </insert>
+      
+   
+      <select id="getGapMessageCodeList" resultMap="MessageCdBaseResultMap">
+  	     SELECT * FROM WAT_GAP_MSG_CD
+      </select>
+
+</mapper>
+
+
+
+

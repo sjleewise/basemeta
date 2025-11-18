@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.dq.stnd.service.WdqqStwdCnfgMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.dq.stnd.service.WdqqStwdCnfg" >
+    <id column="BIZ_DTL_CD" property="bizDtlCd" jdbcType="VARCHAR" />
+    <id column="RQST_NO" property="rqstNo" jdbcType="VARCHAR" />
+    <id column="RQST_SNO" property="rqstSno" jdbcType="DECIMAL" />
+    <id column="WD_SNO" property="wdSno" jdbcType="DECIMAL" />
+    <result column="STWD_ID" property="stwdId" jdbcType="VARCHAR" />
+    <result column="STWD_LNM" property="stwdLnm" jdbcType="VARCHAR" />
+    <result column="STWD_PNM" property="stwdPnm" jdbcType="VARCHAR" />
+    <result column="RQST_DCD" property="rqstDcd" jdbcType="VARCHAR" />
+    <result column="VRF_CD" property="vrfCd" jdbcType="VARCHAR" />
+    <result column="VRF_RMK" property="vrfRmk" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    BIZ_DTL_CD, RQST_NO, RQST_SNO, WD_SNO, STWD_ID, STWD_LNM, STWD_PNM, RQST_DCD, VRF_CD, 
+    VRF_RMK
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="map" >
+    select 
+    <include refid="Base_Column_List" />
+    from WAQ_STWD_CNFG
+    where BIZ_DTL_CD = #{bizDtlCd,jdbcType=VARCHAR}
+      and RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      and RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+      and WD_SNO = #{wdSno,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="map" >
+    delete from WAQ_STWD_CNFG
+    where BIZ_DTL_CD = #{bizDtlCd,jdbcType=VARCHAR}
+      and RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      and RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+      and WD_SNO = #{wdSno,jdbcType=DECIMAL}
+  </delete>
+  
+  <delete id="deleteBySno" parameterType="kr.wise.dq.stnd.service.WdqqStwdCnfg" >
+    delete from WAQ_STWD_CNFG
+    where BIZ_DTL_CD = #{bizDtlCd,jdbcType=VARCHAR}
+      and RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      and RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+  </delete>
+  
+  <delete id="deleteWAM" parameterType="string">
+  	DELETE FROM WAM_STWD_CNFG
+	 WHERE OBJ_ID IN (
+			SELECT DMN_ID FROM WDQQ_DMN
+		    WHERE RQST_NO = #{rqstNo}   
+			  AND RVW_STS_CD = '1'
+		)
+  </delete>
+
+  <delete id="deleteWAMItem" parameterType="string">
+  	DELETE FROM WAM_STWD_CNFG
+	 WHERE OBJ_ID IN (
+            SELECT SDITM_ID 
+			  FROM WDQQ_SDITM
+		    WHERE RQST_NO = #{rqstNo}   
+			  AND RVW_STS_CD = '1'
+			  AND APRV_USER_ID != '자동생성'
+		)
+  </delete>
+  
+  <insert id="insertwam2waq" parameterType="map">
+	 INSERT INTO WAQ_STWD_CNFG
+	 SELECT #{reqmst.bizDtlCd}, X.RQST_NO, X.RQST_SNO, B.WD_SNO, B.STWD_ID, C.STWD_LNM, C.STWD_PNM, X.RQST_DCD , NULL, NULL
+	  FROM WDQQ_DMN X
+	  JOIN WDQM_DMN A
+	    ON X.DMN_ID = A.DMN_ID
+	  JOIN WAM_STWD_CNFG B
+	    ON A.DMN_ID = B.OBJ_ID
+	  JOIN WDQM_STWD C
+	    ON B.STWD_ID = C.STWD_ID
+	   AND C.REG_TYP_CD IN ('C', 'U')
+	  WHERE X.RQST_NO = #{reqmst.rqstNo}
+	    AND A.DMN_ID IN --('OBJ_00000001173')
+	  <foreach collection="list" item="item" open="(" separator="," close=")">
+	  	#{item.dmnId}
+	  </foreach>
+	    AND A.REG_TYP_CD IN ('C', 'U')
+  </insert>
+  
+  <insert id="insertWAM" parameterType="string">
+  	INSERT INTO WAM_STWD_CNFG
+  	(
+  	   OBJ_ID    
+	 , WD_SNO    
+	 , STWD_ID   
+	 , RQST_NO   
+	 , RQST_SNO  
+  	)
+	SELECT  A.DMN_ID 
+		  , B.WD_SNO
+		  , C.STWD_ID
+		  , A.RQST_NO
+		  , A.RQST_SNO
+	  FROM WDQQ_DMN A
+	       INNER JOIN WAQ_STWD_CNFG B
+	          ON A.RQST_NO  = B.RQST_NO
+	         AND A.RQST_SNO = B.RQST_SNO
+	         AND B.BIZ_DTL_CD = 'DMN'
+	       INNER JOIN WDQM_STWD C
+	         ON B.STWD_LNM = C.STWD_LNM
+	        AND B.STWD_PNM = C.STWD_PNM
+	        AND C.REG_TYP_CD IN ('C', 'U')
+     WHERE A.RQST_DCD = 'CU'
+	   AND A.RVW_STS_CD = '1'
+	   AND A.RQST_NO = #{rqstNo}   
+  </insert>
+
+  <insert id="insertWAMItem" parameterType="string">
+  	INSERT INTO WAM_STWD_CNFG
+  	(
+  	    OBJ_ID    
+	  , WD_SNO    
+	  , STWD_ID   
+	  , RQST_NO   
+	  , RQST_SNO  
+  	)
+	SELECT  A.SDITM_ID 
+		  , B.WD_SNO
+		  , C.STWD_ID
+		  , A.RQST_NO
+		  , A.RQST_SNO
+	  FROM WDQQ_SDITM A
+	       INNER JOIN WAQ_STWD_CNFG B
+	          ON A.RQST_NO  = B.RQST_NO
+	         AND A.RQST_SNO = B.RQST_SNO
+	         AND B.BIZ_DTL_CD = 'SDITM'
+	       INNER JOIN WDQM_STWD C
+	          ON B.STWD_LNM = C.STWD_LNM
+	         AND B.STWD_PNM = C.STWD_PNM
+	         AND C.REG_TYP_CD IN ('C', 'U')
+	 WHERE A.RQST_DCD = 'CU'
+	   AND A.RVW_STS_CD = '1'
+	   AND A.RQST_NO = #{rqstNo}   
+  </insert>
+  
+  <insert id="insert" parameterType="kr.wise.dq.stnd.service.WdqqStwdCnfg" >
+    insert into WAQ_STWD_CNFG (BIZ_DTL_CD, RQST_NO, RQST_SNO, 
+      WD_SNO, STWD_ID, STWD_LNM, 
+      STWD_PNM, RQST_DCD, VRF_CD, 
+      VRF_RMK)
+    values (#{bizDtlCd,jdbcType=VARCHAR}, #{rqstNo,jdbcType=VARCHAR}, #{rqstSno,jdbcType=DECIMAL}, 
+      #{wdSno,jdbcType=DECIMAL}, #{stwdId,jdbcType=VARCHAR}, #{stwdLnm,jdbcType=VARCHAR}, 
+      #{stwdPnm,jdbcType=VARCHAR}, #{rqstDcd,jdbcType=VARCHAR}, #{vrfCd,jdbcType=VARCHAR}, 
+      #{vrfRmk,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="kr.wise.dq.stnd.service.WdqqStwdCnfg" >
+    <selectKey keyProperty="wdSno" resultType="int" order="BEFORE" statementType="PREPARED">
+    	<include refid="kr.wise.commons.cmm.service.CommonMapper.getNextwdSno"/> 
+<!--   		SELECT NVL(MAX(WD_SNO), 0) + 1 FROM WAQ_STWD_CNFG WHERE BIZ_DTL_CD = #{bizDtlCd,jdbcType=VARCHAR} AND RQST_NO = #{rqstNo,jdbcType=VARCHAR} AND RQST_SNO = #{rqstSno,jdbcType=DECIMAL} -->
+  	</selectKey>
+    insert into WAQ_STWD_CNFG
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="bizDtlCd != null" >
+        BIZ_DTL_CD,
+      </if>
+      <if test="rqstNo != null" >
+        RQST_NO,
+      </if>
+      <if test="rqstSno != null" >
+        RQST_SNO,
+      </if>
+      <if test="wdSno != null" >
+        WD_SNO,
+      </if>
+      <if test="stwdId != null" >
+        STWD_ID,
+      </if>
+      <if test="stwdLnm != null" >
+        STWD_LNM,
+      </if>
+      <if test="stwdPnm != null" >
+        STWD_PNM,
+      </if>
+      <if test="rqstDcd != null" >
+        RQST_DCD,
+      </if>
+      <if test="vrfCd != null" >
+        VRF_CD,
+      </if>
+      <if test="vrfRmk != null" >
+        VRF_RMK,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="bizDtlCd != null" >
+        #{bizDtlCd,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstNo != null" >
+        #{rqstNo,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstSno != null" >
+        #{rqstSno,jdbcType=DECIMAL},
+      </if>
+      <if test="wdSno != null" >
+        #{wdSno,jdbcType=DECIMAL},
+      </if>
+      <if test="stwdId != null" >
+        #{stwdId,jdbcType=VARCHAR},
+      </if>
+      <if test="stwdLnm != null" >
+        #{stwdLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="stwdPnm != null" >
+        #{stwdPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDcd != null" >
+        #{rqstDcd,jdbcType=VARCHAR},
+      </if>
+      <if test="vrfCd != null" >
+        #{vrfCd,jdbcType=VARCHAR},
+      </if>
+      <if test="vrfRmk != null" >
+        #{vrfRmk,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.dq.stnd.service.WdqqStwdCnfg" >
+    update WAQ_STWD_CNFG
+    <set >
+      <if test="stwdId != null" >
+        STWD_ID = #{stwdId,jdbcType=VARCHAR},
+      </if>
+      <if test="stwdLnm != null" >
+        STWD_LNM = #{stwdLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="stwdPnm != null" >
+        STWD_PNM = #{stwdPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDcd != null" >
+        RQST_DCD = #{rqstDcd,jdbcType=VARCHAR},
+      </if>
+      <if test="vrfCd != null" >
+        VRF_CD = #{vrfCd,jdbcType=VARCHAR},
+      </if>
+      <if test="vrfRmk != null" >
+        VRF_RMK = #{vrfRmk,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where BIZ_DTL_CD = #{bizDtlCd,jdbcType=VARCHAR}
+      and RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      and RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+      and WD_SNO = #{wdSno,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="kr.wise.dq.stnd.service.WdqqStwdCnfg" >
+    update WAQ_STWD_CNFG
+    set STWD_ID = #{stwdId,jdbcType=VARCHAR},
+      STWD_LNM = #{stwdLnm,jdbcType=VARCHAR},
+      STWD_PNM = #{stwdPnm,jdbcType=VARCHAR},
+      RQST_DCD = #{rqstDcd,jdbcType=VARCHAR},
+      VRF_CD = #{vrfCd,jdbcType=VARCHAR},
+      VRF_RMK = #{vrfRmk,jdbcType=VARCHAR}
+    where BIZ_DTL_CD = #{bizDtlCd,jdbcType=VARCHAR}
+      and RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      and RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+      and WD_SNO = #{wdSno,jdbcType=DECIMAL}
+  </update>
+</mapper>

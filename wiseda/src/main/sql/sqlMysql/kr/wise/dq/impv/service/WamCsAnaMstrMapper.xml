@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.dq.impv.service.WamCsAnaMstrMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.dq.impv.service.WamCsAnaMstr" >
+    <id column="ANA_JOB_ID" property="anaJobId" jdbcType="VARCHAR" />
+    <id column="ANA_STR_DTM" property="anaStrDtm" jdbcType="TIMESTAMP" />
+    <result column="ANA_KND_CD" property="anaKndCd" jdbcType="VARCHAR" />
+    <result column="CS_ANA_CD" property="csAnaCd" jdbcType="VARCHAR" />
+    <result column="CS_ANA_DTLS" property="csAnaDtls" jdbcType="VARCHAR" />
+    <result column="CS_ANA_STR_DTM" property="csAnaStrDtm" jdbcType="TIMESTAMP" />
+    <result column="CS_ANA_END_DTM" property="csAnaEndDtm" jdbcType="TIMESTAMP" />
+    <result column="IM_PL_CD" property="imPlCd" jdbcType="VARCHAR" />
+    <result column="IM_PL_DTLS" property="imPlDtls" jdbcType="VARCHAR" />
+    <result column="IM_PL_STR_DTM" property="imPlStrDtm" jdbcType="TIMESTAMP" />
+    <result column="IM_PL_END_DTM" property="imPlEndDtm" jdbcType="TIMESTAMP" />
+    <result column="RQST_NO" property="rqstNo" jdbcType="VARCHAR" />
+    <result column="RQST_SNO" property="rqstSno" jdbcType="DECIMAL" />
+    <result column="OBJ_DESCN" property="objDescn" jdbcType="VARCHAR" />
+    <result column="OBJ_VERS" property="objVers" jdbcType="DECIMAL" />
+    <result column="REG_TYP_CD" property="regTypCd" jdbcType="VARCHAR" />
+    <result column="FRS_RQST_DTM" property="frsRqstDtm" jdbcType="TIMESTAMP" />
+    <result column="FRS_RQST_USER_ID" property="frsRqstUserId" jdbcType="VARCHAR" />
+    <result column="RQST_DTM" property="rqstDtm" jdbcType="TIMESTAMP" />
+    <result column="RQST_USER_ID" property="rqstUserId" jdbcType="VARCHAR" />
+    <result column="APRV_DTM" property="aprvDtm" jdbcType="TIMESTAMP" />
+    <result column="APRV_USER_ID" property="aprvUserId" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ANA_JOB_ID, ANA_STR_DTM, ANA_KND_CD, CS_ANA_CD, CS_ANA_DTLS, CS_ANA_STR_DTM, CS_ANA_END_DTM, 
+    IM_PL_CD, IM_PL_DTLS, IM_PL_STR_DTM, IM_PL_END_DTM, RQST_NO, RQST_SNO, OBJ_DESCN, 
+    OBJ_VERS, REG_TYP_CD, FRS_RQST_DTM, FRS_RQST_USER_ID, RQST_DTM, RQST_USER_ID, APRV_DTM, 
+    APRV_USER_ID
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="map" >
+    select 
+    <include refid="Base_Column_List" />
+    from WAM_CS_ANA_MSTR
+    where ANA_JOB_ID = #{anaJobId,jdbcType=VARCHAR}
+      and ANA_STR_DTM = #{anaStrDtm,jdbcType=TIMESTAMP}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="map" >
+    delete from WAM_CS_ANA_MSTR
+    where ANA_JOB_ID = #{anaJobId,jdbcType=VARCHAR}
+      and ANA_STR_DTM = #{anaStrDtm,jdbcType=TIMESTAMP}
+  </delete>
+  <insert id="insert" parameterType="kr.wise.dq.impv.service.WamCsAnaMstr" >
+    insert into WAM_CS_ANA_MSTR (ANA_JOB_ID, ANA_STR_DTM, ANA_KND_CD, 
+      CS_ANA_CD, CS_ANA_DTLS, CS_ANA_STR_DTM, 
+      CS_ANA_END_DTM, IM_PL_CD, IM_PL_DTLS, 
+      IM_PL_STR_DTM, IM_PL_END_DTM, RQST_NO, 
+      RQST_SNO, OBJ_DESCN, OBJ_VERS, 
+      REG_TYP_CD, FRS_RQST_DTM, FRS_RQST_USER_ID, 
+      RQST_DTM, RQST_USER_ID, APRV_DTM, 
+      APRV_USER_ID)
+    values (#{anaJobId,jdbcType=VARCHAR}, #{anaStrDtm,jdbcType=TIMESTAMP}, #{anaKndCd,jdbcType=VARCHAR}, 
+      #{csAnaCd,jdbcType=VARCHAR}, #{csAnaDtls,jdbcType=VARCHAR}, #{csAnaStrDtm,jdbcType=TIMESTAMP}, 
+      #{csAnaEndDtm,jdbcType=TIMESTAMP}, #{imPlCd,jdbcType=VARCHAR}, #{imPlDtls,jdbcType=VARCHAR}, 
+      #{imPlStrDtm,jdbcType=TIMESTAMP}, #{imPlEndDtm,jdbcType=TIMESTAMP}, #{rqstNo,jdbcType=VARCHAR}, 
+      #{rqstSno,jdbcType=DECIMAL}, #{objDescn,jdbcType=VARCHAR}, #{objVers,jdbcType=DECIMAL}, 
+      #{regTypCd,jdbcType=VARCHAR}, #{frsRqstDtm,jdbcType=TIMESTAMP}, #{frsRqstUserId,jdbcType=VARCHAR}, 
+      #{rqstDtm,jdbcType=TIMESTAMP}, #{rqstUserId,jdbcType=VARCHAR}, #{aprvDtm,jdbcType=TIMESTAMP}, 
+      #{aprvUserId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="kr.wise.dq.impv.service.WamCsAnaMstr" >
+    insert into WAM_CS_ANA_MSTR
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="anaJobId != null" >
+        ANA_JOB_ID,
+      </if>
+      <if test="anaStrDtm != null" >
+        ANA_STR_DTM,
+      </if>
+      <if test="anaKndCd != null" >
+        ANA_KND_CD,
+      </if>
+      <if test="csAnaCd != null" >
+        CS_ANA_CD,
+      </if>
+      <if test="csAnaDtls != null" >
+        CS_ANA_DTLS,
+      </if>
+      <if test="csAnaStrDtm != null" >
+        CS_ANA_STR_DTM,
+      </if>
+      <if test="csAnaEndDtm != null" >
+        CS_ANA_END_DTM,
+      </if>
+      <if test="imPlCd != null" >
+        IM_PL_CD,
+      </if>
+      <if test="imPlDtls != null" >
+        IM_PL_DTLS,
+      </if>
+      <if test="imPlStrDtm != null" >
+        IM_PL_STR_DTM,
+      </if>
+      <if test="imPlEndDtm != null" >
+        IM_PL_END_DTM,
+      </if>
+      <if test="rqstNo != null" >
+        RQST_NO,
+      </if>
+      <if test="rqstSno != null" >
+        RQST_SNO,
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN,
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS,
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD,
+      </if>
+      <if test="frsRqstDtm != null" >
+        FRS_RQST_DTM,
+      </if>
+      <if test="frsRqstUserId != null" >
+        FRS_RQST_USER_ID,
+      </if>
+      <if test="rqstDtm != null" >
+        RQST_DTM,
+      </if>
+      <if test="rqstUserId != null" >
+        RQST_USER_ID,
+      </if>
+      <if test="aprvDtm != null" >
+        APRV_DTM,
+      </if>
+      <if test="aprvUserId != null" >
+        APRV_USER_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="anaJobId != null" >
+        #{anaJobId,jdbcType=VARCHAR},
+      </if>
+      <if test="anaStrDtm != null" >
+        #{anaStrDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="anaKndCd != null" >
+        #{anaKndCd,jdbcType=VARCHAR},
+      </if>
+      <if test="csAnaCd != null" >
+        #{csAnaCd,jdbcType=VARCHAR},
+      </if>
+      <if test="csAnaDtls != null" >
+        #{csAnaDtls,jdbcType=VARCHAR},
+      </if>
+      <if test="csAnaStrDtm != null" >
+        #{csAnaStrDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="csAnaEndDtm != null" >
+        #{csAnaEndDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="imPlCd != null" >
+        #{imPlCd,jdbcType=VARCHAR},
+      </if>
+      <if test="imPlDtls != null" >
+        #{imPlDtls,jdbcType=VARCHAR},
+      </if>
+      <if test="imPlStrDtm != null" >
+        #{imPlStrDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="imPlEndDtm != null" >
+        #{imPlEndDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rqstNo != null" >
+        #{rqstNo,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstSno != null" >
+        #{rqstSno,jdbcType=DECIMAL},
+      </if>
+      <if test="objDescn != null" >
+        #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null" >
+        #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="frsRqstDtm != null" >
+        #{frsRqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="frsRqstUserId != null" >
+        #{frsRqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDtm != null" >
+        #{rqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rqstUserId != null" >
+        #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDtm != null" >
+        #{aprvDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aprvUserId != null" >
+        #{aprvUserId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.dq.impv.service.WamCsAnaMstr" >
+    update WAM_CS_ANA_MSTR
+    <set >
+      <if test="anaKndCd != null" >
+        ANA_KND_CD = #{anaKndCd,jdbcType=VARCHAR},
+      </if>
+      <if test="csAnaCd != null" >
+        CS_ANA_CD = #{csAnaCd,jdbcType=VARCHAR},
+      </if>
+      <if test="csAnaDtls != null" >
+        CS_ANA_DTLS = #{csAnaDtls,jdbcType=VARCHAR},
+      </if>
+      <if test="csAnaStrDtm != null" >
+        CS_ANA_STR_DTM = #{csAnaStrDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="csAnaEndDtm != null" >
+        CS_ANA_END_DTM = #{csAnaEndDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="imPlCd != null" >
+        IM_PL_CD = #{imPlCd,jdbcType=VARCHAR},
+      </if>
+      <if test="imPlDtls != null" >
+        IM_PL_DTLS = #{imPlDtls,jdbcType=VARCHAR},
+      </if>
+      <if test="imPlStrDtm != null" >
+        IM_PL_STR_DTM = #{imPlStrDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="imPlEndDtm != null" >
+        IM_PL_END_DTM = #{imPlEndDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rqstNo != null" >
+        RQST_NO = #{rqstNo,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstSno != null" >
+        RQST_SNO = #{rqstSno,jdbcType=DECIMAL},
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="frsRqstDtm != null" >
+        FRS_RQST_DTM = #{frsRqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="frsRqstUserId != null" >
+        FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDtm != null" >
+        RQST_DTM = #{rqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rqstUserId != null" >
+        RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDtm != null" >
+        APRV_DTM = #{aprvDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aprvUserId != null" >
+        APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ANA_JOB_ID = #{anaJobId,jdbcType=VARCHAR}
+      and ANA_STR_DTM = #{anaStrDtm,jdbcType=TIMESTAMP}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="kr.wise.dq.impv.service.WamCsAnaMstr" >
+    update WAM_CS_ANA_MSTR
+    set ANA_KND_CD = #{anaKndCd,jdbcType=VARCHAR},
+      CS_ANA_CD = #{csAnaCd,jdbcType=VARCHAR},
+      CS_ANA_DTLS = #{csAnaDtls,jdbcType=VARCHAR},
+      CS_ANA_STR_DTM = #{csAnaStrDtm,jdbcType=TIMESTAMP},
+      CS_ANA_END_DTM = #{csAnaEndDtm,jdbcType=TIMESTAMP},
+      IM_PL_CD = #{imPlCd,jdbcType=VARCHAR},
+      IM_PL_DTLS = #{imPlDtls,jdbcType=VARCHAR},
+      IM_PL_STR_DTM = #{imPlStrDtm,jdbcType=TIMESTAMP},
+      IM_PL_END_DTM = #{imPlEndDtm,jdbcType=TIMESTAMP},
+      RQST_NO = #{rqstNo,jdbcType=VARCHAR},
+      RQST_SNO = #{rqstSno,jdbcType=DECIMAL},
+      OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      FRS_RQST_DTM = #{frsRqstDtm,jdbcType=TIMESTAMP},
+      FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR},
+      RQST_DTM = #{rqstDtm,jdbcType=TIMESTAMP},
+      RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      APRV_DTM = #{aprvDtm,jdbcType=TIMESTAMP},
+      APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR}
+    where ANA_JOB_ID = #{anaJobId,jdbcType=VARCHAR}
+      and ANA_STR_DTM = #{anaStrDtm,jdbcType=TIMESTAMP}
+  </update>
+</mapper>

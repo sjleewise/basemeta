@@ -1,0 +1,375 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.commons.damgmt.approve.service.WaaRqstAprpMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.commons.damgmt.approve.service.WaaRqstAprp" extends="kr.wise.commons.damgmt.approve.service.WaaRqstBizAprMapper.BaseResultMap" >
+<!--     <result column="BIZ_DCD" property="bizDcd" jdbcType="VARCHAR" /> -->
+<!--     <result column="APR_LVL" property="aprLvl" jdbcType="DECIMAL" /> -->
+    <result column="USER_ID" property="userId" jdbcType="VARCHAR" />
+<!--     <result column="SYS_DCD" property="sysDcd" jdbcType="VARCHAR" /> -->
+<!--     <result column="EXP_DTM" property="expDtm" jdbcType="TIMESTAMP" /> -->
+<!--     <result column="STR_DTM" property="strDtm" jdbcType="TIMESTAMP" /> -->
+<!--     <result column="APR_FRML_CD" property="aprFrmlCd" jdbcType="VARCHAR" /> -->
+<!--     <result column="APRG_ID" property="aprgId" jdbcType="VARCHAR" /> -->
+    <result column="SBS_APRP_ID" property="sbsAprpId" jdbcType="VARCHAR" />
+    <result column="SBS_APRP_NM" property="sbsAprpNm" jdbcType="VARCHAR" />
+    <result column="ABD_DAPR_DCD" property="abdDaprDcd" jdbcType="VARCHAR" />
+    <result column="DAPR_STR_DT" property="daprStrDt" jdbcType="VARCHAR" />
+    <result column="DAPR_END_DT" property="daprEndDt" jdbcType="VARCHAR" />
+<!--     <result column="OBJ_DESCN" property="objDescn" jdbcType="VARCHAR" /> -->
+<!--     <result column="OBJ_VERS" property="objVers" jdbcType="DECIMAL" /> -->
+<!--     <result column="REG_TYP_CD" property="regTypCd" jdbcType="VARCHAR" /> -->
+<!--     <result column="WRIT_DTM" property="writDtm" jdbcType="TIMESTAMP" /> -->
+<!--     <result column="WRIT_USER_ID" property="writUserId" jdbcType="VARCHAR" /> -->
+  </resultMap>
+  
+  <select id="selectRqstApproveList" parameterType="kr.wise.commons.damgmt.approve.service.WaaRqstAprp" resultMap="BaseResultMap">
+  	SELECT A.*
+  		 , A.USER_ID AS APRV_USER_ID
+		 , B.USER_NM AS APRV_USER_NM
+		 , C.USER_NM AS SBS_APRP_NM
+  	  FROM WAA_RQST_APRP A
+<!-- 	  LEFT OUTER JOIN WAA_USER B -->
+	  INNER JOIN WAA_USER B
+	    ON A.USER_ID = B.USER_ID
+	   AND B.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+  	   AND B.REG_TYP_CD IN ('C', 'U')
+	  LEFT OUTER JOIN WAA_USER C
+	    ON A.SBS_APRP_ID = C.USER_ID
+	   AND C.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+  	   AND C.REG_TYP_CD IN ('C', 'U')
+  	<where>
+  	   AND A.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+  	   AND A.REG_TYP_CD IN ('C', 'U')
+  	  <if test="userId != null" >
+       AND A.USER_ID = #{userId,jdbcType=VARCHAR}
+      </if>
+  	  <if test="aprgId != null" >
+       AND A.APRG_ID = #{aprgId,jdbcType=VARCHAR}
+      </if>
+      <if test="aprFrmlCd != null" >
+       AND A.APR_FRML_CD = #{aprFrmlCd,jdbcType=VARCHAR}
+      </if>
+  	   <if test="sysDcd != null" >
+       AND A.SYS_DCD = #{sysDcd,jdbcType=VARCHAR}
+      </if>
+      <if test="bizDcd != null" >
+       AND A.BIZ_DCD = #{bizDcd,jdbcType=VARCHAR}
+      </if>
+  	</where>
+  	ORDER BY A.SYS_DCD, A.BIZ_DCD, A.APR_LVL, A.APR_FRML_CD
+  </select>
+  
+  
+  <select id="selectapprovebyline" parameterType="kr.wise.commons.rqstmst.service.WaqMstr" resultMap="BaseResultMap">
+	SELECT APR_LVL, USER_ID AS APRV_USER_ID, USER_NM AS APRV_USER_NM, APRG_ID, APR_FRML_CD FROM (
+	SELECT 
+		   CASE  WHEN A.APR_FRML_CD = 'D' THEN A.USER_ID ELSE A.APRG_ID END AS USER_ID
+		 , CASE WHEN A.APR_FRML_CD = 'D' THEN B.USER_NM ELSE C.APRG_NM END AS USER_NM
+		 , A.APR_LVL
+		 , A.SYS_DCD
+		 , A.BIZ_DCD
+		 , A.APR_FRML_CD
+		 , A.APRG_ID
+		 , C.APRG_NM
+		 , A.ABD_DAPR_DCD
+		 , A.SBS_APRP_ID
+		 , A.DAPR_STR_DT 
+		 , A.DAPR_END_DT
+<!-- 	SELECT * -->
+	  FROM WAA_RQST_APRP A
+	  JOIN WAA_USER B
+	    ON A.USER_ID = B.USER_ID
+	   AND B.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')
+	   AND B.REG_TYP_CD IN ('C', 'U')
+	  JOIN WAA_APRG C
+	    ON A.APRG_ID = C.APRG_ID
+	   AND C.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')
+	   AND C.REG_TYP_CD IN ('C', 'U')
+	  JOIN WAQ_MSTR M
+	    ON A.BIZ_DCD = M.BIZ_DCD
+	   AND M.RQST_NO =  #{rqstNo}  
+	 WHERE A.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')
+	   AND A.REG_TYP_CD IN ('C', 'U')
+<!-- 	   AND A.BIZ_DCD = 'DIC' -->
+<!-- 	   AND A.SYS_DCD = 'OBJ_00000000006' -->
+<!-- 	   AND A.APR_FRML_CD = 'D' -->
+	
+	) A
+	GROUP BY APR_LVL, USER_ID, USER_NM,  APRG_ID, APR_FRML_CD
+	ORDER BY APR_LVL, USER_NM
+  	
+  </select>
+  
+  
+  <insert id="insert" parameterType="kr.wise.commons.damgmt.approve.service.WaaRqstAprp" >
+    insert into WAA_RQST_APRP (BIZ_DCD, APR_LVL, USER_ID, 
+      SYS_DCD, EXP_DTM, STR_DTM, 
+      APR_FRML_CD, APRG_ID, SBS_APRP_ID, 
+      ABD_DAPR_DCD, DAPR_STR_DT, DAPR_END_DT, 
+      OBJ_DESCN, OBJ_VERS, REG_TYP_CD, 
+      WRIT_DTM, WRIT_USER_ID)
+    values (#{bizDcd,jdbcType=VARCHAR}, #{aprLvl,jdbcType=DECIMAL}, #{userId,jdbcType=VARCHAR}, 
+      #{sysDcd,jdbcType=VARCHAR}, #{expDtm,jdbcType=TIMESTAMP}, #{strDtm,jdbcType=TIMESTAMP}, 
+      #{aprFrmlCd,jdbcType=VARCHAR}, #{aprgId,jdbcType=VARCHAR}, #{sbsAprpId,jdbcType=VARCHAR}, 
+      #{abdDaprDcd,jdbcType=VARCHAR}, #{daprStrDt,jdbcType=VARCHAR}, #{daprEndDt,jdbcType=VARCHAR}, 
+      #{objDescn,jdbcType=VARCHAR}, #{objVers,jdbcType=DECIMAL}, #{regTypCd,jdbcType=VARCHAR}, 
+      #{writDtm,jdbcType=TIMESTAMP}, #{writUserId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertRqstApprove" parameterType="kr.wise.commons.damgmt.approve.service.WaaRqstAprp" >
+    insert into WAA_RQST_APRP
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="bizDcd != null" >
+        BIZ_DCD,
+      </if>
+      <if test="aprLvl != null" >
+        APR_LVL,
+      </if>
+      <if test="userId != null" >
+        USER_ID,
+      </if>
+      <if test="sysDcd != null" >
+        SYS_DCD,
+      </if>
+      <if test="aprFrmlCd != null" >
+        APR_FRML_CD,
+      </if>
+      <if test="aprgId != null" >
+        APRG_ID,
+      </if>
+      <if test="sbsAprpId != null" >
+        SBS_APRP_ID,
+      </if>
+      <if test="abdDaprDcd != null" >
+        ABD_DAPR_DCD,
+      </if>
+      <if test="daprStrDt != null" >
+        DAPR_STR_DT,
+      </if>
+      <if test="daprEndDt != null" >
+        DAPR_END_DT,
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN,
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS,
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD,
+      </if>
+      <if test="writUserId != null" >
+        WRIT_USER_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="bizDcd != null" >
+        #{bizDcd,jdbcType=VARCHAR},
+      </if>
+      <if test="aprLvl != null" >
+        #{aprLvl,jdbcType=DECIMAL},
+      </if>
+      <if test="aprvUserId != null" >
+        #{aprvUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="sysDcd != null" >
+        #{sysDcd,jdbcType=VARCHAR},
+      </if>
+      <if test="aprFrmlCd != null" >
+        #{aprFrmlCd,jdbcType=VARCHAR},
+      </if>
+      <if test="aprgId != null" >
+        #{aprgId,jdbcType=VARCHAR},
+      </if>
+      <if test="sbsAprpId != null" >
+        #{sbsAprpId,jdbcType=VARCHAR},
+      </if>
+      <if test="abdDaprDcd != null" >
+        #{abdDaprDcd,jdbcType=VARCHAR},
+      </if>
+      <if test="daprStrDt != null" >
+        #{daprStrDt,jdbcType=VARCHAR},
+      </if>
+      <if test="daprEndDt != null" >
+        #{daprEndDt,jdbcType=VARCHAR},
+      </if>
+      <if test="objDescn != null" >
+        #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null" >
+        #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="writUserId != null" >
+        #{writUserId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  
+  <insert id="insertRqstApprovebyLine"  parameterType="kr.wise.commons.damgmt.approve.service.WaaRqstAprp" >
+  	--요청서의 결재라인별 결재그룹에 포함된 결재자들을 추가한다...
+	INSERT INTO WAA_RQST_APRP I (BIZ_DCD, APR_LVL, USER_ID, SYS_DCD, APR_FRML_CD, APRG_ID, OBJ_VERS, REG_TYP_CD, WRIT_USER_ID  )
+	
+	SELECT A.BIZ_DCD, A.APR_LVL, C.USER_ID, A.SYS_DCD, A.APR_FRML_CD, A.APRG_ID 
+		, 1, 'C', A.WRIT_USER_ID
+	FROM WAA_RQST_BIZ_APR A
+	JOIN WAA_APRG B
+	  ON A.APRG_ID = B.APRG_ID
+	 AND B.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	 AND B.REG_TYP_CD IN ('C', 'U')
+	JOIN WAA_APRG_USER C
+	  ON B.APRG_ID = C.APRG_ID
+	 AND C.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	 AND C.REG_TYP_CD IN ('C', 'U')
+	LEFT OUTER JOIN WAA_RQST_APRP I
+	  ON A.BIZ_DCD = I.BIZ_DCD
+	 AND A.APR_LVL = I.APR_LVL
+	 --AND A.SYS_DCD = I.SYS_DCD
+	 AND C.USER_ID = I.USER_ID
+	 AND I.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	 AND I.REG_TYP_CD IN ('C', 'U')
+	WHERE 1=1
+	  AND A.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	  AND A.REG_TYP_CD IN ('C', 'U')
+	  AND I.USER_ID IS NULL
+	--TODO  테스트용 조건
+	  --AND A.BIZ_DCD IN ('DIC')
+	  --AND A.APR_LVL = 1
+  </insert>
+  
+  <update id="updateRqstApprove" parameterType="kr.wise.commons.damgmt.approve.service.WaaRqstAprp">
+  	UPDATE WAA_RQST_APRP
+  		<set>
+  		  <if test="sbsAprpId != null" >
+	        SBS_APRP_ID = #{sbsAprpId} ,
+	      </if>
+	      <if test="abdDaprDcd != null" >
+	        ABD_DAPR_DCD = #{abdDaprDcd} ,
+	      </if>
+	      <if test="daprStrDt != null" >
+	        DAPR_STR_DT = #{daprStrDt} ,
+	      </if>
+	      <if test="daprEndDt != null" >
+	        DAPR_END_DT = #{daprEndDt} ,
+	      </if>
+	      <if test="writUserId != null" >
+        	WRIT_USER_ID = #{writUserId},
+      	 </if>
+	      <if test="objDescn != null" >
+        	OBJ_DESCN = #{objDescn},
+      	 </if>
+	        OBJ_VERS = NVL(OBJ_VERS, 0) + 1 ,
+	        REG_TYP_CD = 'U' ,
+	        WRIT_DTM = SYSDATE ,
+  		</set>
+  		<where>
+  			AND BIZ_DCD = #{bizDcd}
+  			AND APR_LVL = #{aprLvl}
+  			AND USER_ID = #{aprvUserId}
+  		<!-- AND SYS_DCD = #{sysDcd} -->
+  			AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	  		AND REG_TYP_CD IN ('C', 'U')
+  		</where>
+  </update>
+  
+  <update id="updateRqstApprovebyLine"  parameterType="kr.wise.commons.damgmt.approve.service.WaaRqstAprp">
+  --결재라인의 결재그룹, 결재방식을 업데이트한다.
+	UPDATE WAA_RQST_APRP I
+		SET (APR_FRML_CD, APRG_ID, OBJ_VERS, REG_TYP_CD, WRIT_DTM, WRIT_USER_ID)
+		= (
+			SELECT A.APR_FRML_CD, A.APRG_ID, NVL(I.OBJ_VERS, 0)+1, 'U', SYSDATE, A.WRIT_USER_ID 
+			  FROM WAA_RQST_BIZ_APR A
+			  JOIN WAA_APRG B
+				ON A.APRG_ID = B.APRG_ID
+			   AND B.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+			   AND B.REG_TYP_CD IN ('C', 'U')
+			  JOIN WAA_APRG_USER C
+				ON B.APRG_ID = C.APRG_ID
+			   AND C.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+			   AND C.REG_TYP_CD IN ('C', 'U')
+			 WHERE A.BIZ_DCD = I.BIZ_DCD
+			   AND A.APR_LVL = I.APR_LVL
+			   AND A.SYS_DCD = I.SYS_DCD
+			   AND C.USER_ID = I.USER_ID
+			   AND A.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+			   AND A.REG_TYP_CD IN ('C', 'U')
+		)
+	WHERE 1=1
+	  AND I.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	  AND I.REG_TYP_CD IN ('C', 'U')
+	  AND EXISTS (
+			SELECT 1 FROM WAA_RQST_BIZ_APR A
+			  JOIN WAA_APRG B
+			    ON A.APRG_ID = B.APRG_ID
+			   AND B.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+			   AND B.REG_TYP_CD IN ('C', 'U')
+			  JOIN WAA_APRG_USER C
+			    ON B.APRG_ID = C.APRG_ID
+			   AND C.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+			   AND C.REG_TYP_CD IN ('C', 'U')
+			 WHERE A.BIZ_DCD = I.BIZ_DCD
+			   AND A.APR_LVL = I.APR_LVL
+			   AND A.SYS_DCD = I.SYS_DCD
+			   AND C.USER_ID = I.USER_ID
+			   AND A.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+			   AND A.REG_TYP_CD IN ('C', 'U')
+	)
+  </update>
+  
+  
+  <delete id="deleteRqstApprove"  parameterType="kr.wise.commons.damgmt.approve.service.WaaRqstAprp">
+  --결재라인에 없는 결재자를 삭제...
+	DELETE FROM WAA_RQST_APRP I
+	WHERE 1=1
+	  AND I.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	  AND I.REG_TYP_CD IN ('C', 'U')
+	  --AND I.BIZ_DCD IN ('DIC')
+	  --AND I.APR_LVL = 1
+	  AND NOT EXISTS (
+			SELECT 1 FROM WAA_RQST_BIZ_APR A
+			  JOIN WAA_APRG B
+			    ON A.APRG_ID = B.APRG_ID
+			   AND B.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+			   AND B.REG_TYP_CD IN ('C', 'U')
+			  JOIN WAA_APRG_USER C
+			    ON B.APRG_ID = C.APRG_ID
+			   AND C.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+			   AND C.REG_TYP_CD IN ('C', 'U')
+			 WHERE A.BIZ_DCD = I.BIZ_DCD
+			   AND A.APR_LVL = I.APR_LVL
+			   AND NVL(A.SYS_DCD,'_') = NVL(I.SYS_DCD,'_')
+			   AND C.USER_ID = I.USER_ID
+			   AND A.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+			   AND A.REG_TYP_CD IN ('C', 'U')
+	)
+  </delete>
+
+
+
+	<select id="checkRequst" parameterType="kr.wise.commons.damgmt.approve.service.MstrAprPrcVO"
+		resultType="java.lang.Integer">
+		SELECT count(*)
+		FROM WAQ_MSTR A,WAA_APR_PRC B
+		WHERE A.RQST_NO = B.RQST_NO
+		AND A.RQST_STEP_CD='Q'
+		AND B.APR_LVL='1'
+		AND B.APRV_DTM IS NULL
+		AND A.RQST_NO=#{rqst_no}
+		AND A.WRIT_USER_ID=#{writ_user_id}
+	</select>
+	
+	<update id="updateRequestCancel" parameterType="java.lang.String">
+		update waq_mstr
+		set RQST_STEP_CD = 'S'
+		where RQST_NO=#{rqst_no}
+	</update>
+
+	<delete id="deleteRqstmapper" parameterType="java.lang.String">
+		DELETE FROM waa_apr_prc
+		where RQST_NO=#{rqst_no}
+	</delete>
+  
+  
+</mapper>

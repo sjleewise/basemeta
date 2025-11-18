@@ -1,0 +1,1504 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.wise.commons.code.service.CodeListMapper">
+  <resultMap id="BaseResultMap" type="kr.wise.commons.code.service.CodeListVo">
+    <result column="CODE_CD" 	jdbcType="VARCHAR" property="codeCd" />
+    <result column="CODE_LNM" 	jdbcType="VARCHAR" property="codeLnm" />
+    <result column="CODE_PNM" 	jdbcType="VARCHAR" property="codePnm" />
+    <result column="UPCODE_CD" 	jdbcType="VARCHAR" property="upcodeCd" />
+    <result column="STND_ASRT" 	jdbcType="VARCHAR" property="stndAsrt" />
+    <result column="DB_LNK" 	jdbcType="VARCHAR" property="dbLnk" />
+  </resultMap>
+  
+  <select id="metaComCodeList" resultMap="BaseResultMap" parameterType="String">
+  	SELECT VALUE AS CODE_CD, VALUE_KNM AS CODE_LNM 
+  	FROM WAA_COMMON_CODE 
+  	WHERE CODE_NAME= #{value}    -- 'BIZ_TYPE' 
+  	AND IS_DELETED = 'N' 
+  	ORDER BY DISPLAY_ORDER
+  </select>
+
+  <select id="dqComCodeList" resultMap="BaseResultMap" parameterType="String">
+		SELECT CODE_VAL AS CODE_CD, CODE_VAL_NM AS CODE_LNM
+		FROM WDQ_COM_CODEVAL 
+		WHERE CODE_ID = #{value} --'ERR_TYPE_CD'
+		AND ORGL_TYPE IN ('C','U')
+		AND XPR_DTTM = STR_TO_DATE('99991231','%Y%m%d')
+		ORDER BY DISP_ORDER
+  </select>
+
+  <select id="ptComCodeList" resultMap="BaseResultMap" parameterType="String">
+  		SELECT CODE_ID, CODE AS CODE_CD, CODE_NM AS CODE_LNM
+  		FROM COMTCCMMNDETAILCODE WHERE CODE_ID = #{value} AND USE_AT='Y'
+  </select>
+  
+  
+  
+  <select id="getProjectCodeList" resultMap="BaseResultMap" parameterType="String">
+  		SELECT PRJ_ID AS CODE_CD, PRJ_NM AS CODE_LNM 
+  		FROM PMSPORJECT 
+		WHERE USE_YN = 'Y' 
+		AND ORGL_TYPE IN ('C', 'U')
+		ORDER BY PRJ_NM
+  </select>
+
+  <!--  공통코드 분류 리스트 전자정부용 -->
+  <select id="getClCodeList" resultMap="BaseResultMap" parameterType="String">
+  		SELECT CL_CODE AS CODE_CD, CL_CODE_NM AS CODE_LNM 
+  		FROM COMTCCMMNCLCODE 
+		-- WHERE USE_YN = 'Y' 
+		-- AND ORGL_TYPE IN ('C', 'U')
+		ORDER BY CL_CODE_NM
+  </select>
+
+  <!--  공통코드 리스트 전자정부용-->
+  <select id="getComCodeList" resultMap="BaseResultMap" parameterType="String">
+        SELECT CODE_ID AS CODE_CD, CODE_ID_NM AS CODE_LNM 
+  		FROM COMTCCMMNCODE 
+		WHERE USE_AT = 'Y' 
+		-- AND ORGL_TYPE IN ('C', 'U')
+		ORDER BY CODE_LNM
+  </select>
+
+  <!--  공통코드 리스트 제품용 -->
+  <select id="getComDcdList" resultMap="BaseResultMap" parameterType="String">
+        SELECT  
+			  COMM_DCD_ID 	AS CODE_CD
+			, COMM_DCD_NM 	AS CODE_LNM
+			, COMM_DCD		AS CODE_PNM
+			, UPP_COMM_DCD_ID AS UPCODE_CD
+		FROM WAA_COMM_DCD
+		WHERE EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+		  AND REG_TYP_CD IN ('C', 'U')
+		ORDER BY COMM_DCD_NM
+  </select>
+  
+  <!-- 시스템 영역 목록성 코드로 조회... -->
+  <select id="getSysareaCodeList" resultMap="BaseResultMap">
+	SELECT 
+		  SYS_AREA_ID 	AS CODE_CD 
+		, SYS_AREA_LNM  AS CODE_LNM
+		, SYS_AREA_PNM  AS CODE_PNM
+	FROM WAA_SYS_AREA
+	WHERE 1=1
+	AND EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	AND REG_TYP_CD IN ('C', 'U')
+	ORDER BY SYS_AREA_LNM
+  </select>
+
+  <!-- 도메인그룹 목록성 코드로 조회... -->
+  <select id="getDmngCodeList" resultMap="BaseResultMap">
+	SELECT 
+		  DMNG_ID	AS CODE_CD 
+		, CONCAT(
+			( SELECT COMM_DTL_CD_NM 
+				FROM WAA_COMM_DTL_CD M
+  	     	   WHERE 1=1
+  	       	     AND M.EXP_DTM = STR_TO_DATE('99991231','%Y%m%d')
+           	     AND M.REG_TYP_CD IN ('C', 'U')
+           	     AND UPPER(M.COMM_DCD_ID) = UPPER((SELECT N.COMM_DCD_ID 
+           	  								         FROM WAA_COMM_DCD N 
+           	  								        WHERE N.COMM_DCD = 'STNDASRT' 
+           	  								          AND N.EXP_DTM = STR_TO_DATE('99991231','%Y%m%d')
+           	  								     ))
+           	  AND M.COMM_DTL_CD = STND_ASRT )
+           	  , '>', DMNG_LNM)  AS CODE_LNM
+    	, DMNG_PNM	AS CODE_PNM
+		, UPP_DMNG_ID AS UPCODE_CD
+		, STND_ASRT 
+	FROM WAA_DMNG
+	WHERE EXP_DTM = STR_TO_DATE('99991231','%Y%m%d')
+	ORDER BY 2
+  </select>
+  
+  <!-- 인포타입 목록성 코드로 조회... -->
+  <select id="getInfoTpCodeList" resultMap="BaseResultMap">
+	SELECT 
+		  INFOTP_ID		AS CODE_CD 
+		, INFOTP_LNM	AS CODE_LNM
+		, INFOTP_LNM	AS CODE_PNM
+		, INFOTP_LNM	AS CODE_PNM
+		, STND_ASRT
+	FROM WAA_INFO_TYPE
+	WHERE EXP_DTM = STR_TO_DATE('99991231','%Y%m%d')
+	ORDER BY INFOTP_LNM
+  </select>
+  
+  <!-- 도메인그룹 인포타입매핑 목록성 코드로 조회... -->
+  <select id="getDmngInfoTpCodeList" resultMap="BaseResultMap">
+    SELECT DMNG_ID		AS CODE_CD 
+         , DMNG_LNM		AS CODE_LNM
+         , DMNG_PNM		AS CODE_PNM
+         , UPP_DMNG_ID	AS UPCODE_CD
+         , ''           AS DATA_TYPE
+         , 0            AS DATA_LEN
+         , 0            AS DATA_SCAL
+         , STND_ASRT
+      FROM WAA_DMNG
+     WHERE EXP_DTM = STR_TO_DATE('99991231','%Y%m%d')
+     UNION ALL
+    SELECT A.INFOTP_ID	AS CODE_CD 
+         , B.INFOTP_LNM	AS CODE_LNM
+         , B.INFOTP_LNM	AS CODE_PNM
+         , A.DMNG_ID	AS UPCODE_CD
+         , B.DATA_TYPE
+         , IFNULL(B.DATA_LEN,0)  AS DATA_LEN  
+         , IFNULL(B.DATA_SCAL,0) AS DATA_SCAL
+         , B.STND_ASRT  
+      FROM WAA_DMNG_INFOTP_MAP A
+           INNER JOIN WAA_INFO_TYPE B
+              ON B.EXP_DTM = STR_TO_DATE('99991231','%Y%m%d')
+             AND B.INFOTP_ID = A.INFOTP_ID  
+     WHERE A.EXP_DTM = STR_TO_DATE('99991231','%Y%m%d')
+     ORDER BY CODE_LNM
+     		, DATA_TYPE
+            , DATA_LEN
+            , DATA_SCAL 
+   <!-- 
+  	SELECT 
+		  DMNG_ID		AS CODE_CD 
+		, DMNG_LNM		AS CODE_LNM
+		, DMNG_PNM		AS CODE_PNM
+		, UPP_DMNG_ID	AS UPCODE_CD
+	FROM WAA_DMNG
+	WHERE EXP_DTM = STR_TO_DATE('99991231','%Y%m%d')
+	UNION ALL
+	SELECT 
+		  A.INFOTP_ID	AS CODE_CD 
+		, B.INFOTP_LNM	AS CODE_LNM
+		, B.INFOTP_LNM	AS CODE_PNM
+		, A.DMNG_ID	AS UPCODE_CD
+	FROM WAA_DMNG_INFOTP_MAP A
+	     INNER JOIN WAA_INFO_TYPE B
+		    ON A.INFOTP_ID = B.INFOTP_ID
+		   AND B.EXP_DTM = STR_TO_DATE('99991231','%Y%m%d')
+	WHERE A.EXP_DTM = STR_TO_DATE('99991231','%Y%m%d')	
+	ORDER BY CODE_LNM
+	-->
+  </select>
+   <!-- 도메인그룹 인포타입매핑 목록성 코드로 조회... -->
+  <select id="getInfoTpCodeListIBS" resultMap="BaseResultMap">
+	SELECT 
+		  A.INFOTP_ID	AS CODE_CD 
+		, B.INFOTP_LNM	AS CODE_LNM
+		, B.INFOTP_LNM	AS CODE_PNM
+		, A.DMNG_ID	AS UPCODE_CD
+		, B.STND_ASRT
+	FROM WAA_DMNG_INFOTP_MAP A
+		INNER JOIN WAA_INFO_TYPE B
+		   ON A.INFOTP_ID = B.INFOTP_ID
+		  AND B.EXP_DTM = STR_TO_DATE('99991231','%Y%m%d')
+		WHERE A.EXP_DTM = STR_TO_DATE('99991231','%Y%m%d')
+	ORDER BY UPCODE_CD, CODE_LNM
+  </select>
+  
+  
+    <select id="getUsergroupCodeList" resultMap="BaseResultMap">
+	SELECT 
+		  USERG_ID 	   AS CODE_CD 
+		, USERG_LNM  AS CODE_LNM
+		, USERG_PNM  AS CODE_PNM
+	FROM WAA_USERG
+	WHERE 1=1
+	AND EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	AND REG_TYP_CD IN ('C', 'U')
+	ORDER BY USERG_LNM
+  </select>
+  
+      <select id="getcateCodeList" resultMap="BaseResultMap">
+ 		 SELECT  
+			COMM_DCD_NM 	AS CODE_LNM
+			, COMM_DCD		AS CODE_CD
+		FROM WAA_COMM_DCD
+		WHERE COMM_DCD like 'BBS%'
+          AND EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+		  AND REG_TYP_CD IN ('C', 'U')
+		ORDER BY CODE_CD
+  </select>
+  
+      <select id="getUsergrouplnmCodeList" resultMap="BaseResultMap">
+	SELECT 
+		  A.USERG_ID 	   AS CODE_CD 
+		, A.USERG_LNM  AS CODE_LNM
+		, A.USERG_PNM  AS CODE_PNM
+	FROM WAA_USERG A
+		INNER JOIN WAA_USER B
+		ON A.USERG_ID = B.USERG_ID
+	WHERE 1=1
+	AND B.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	AND B.REG_TYP_CD IN ('C', 'U')
+	ORDER BY A.USERG_LNM
+  </select>
+  <select id="getDbmsTypVersCodeList" resultMap="BaseResultMap">
+	SELECT A.COMM_DTL_CD AS CODE_CD
+	  ,A.COMM_DTL_CD_NM AS CODE_LNM
+	  ,A.COMM_DTL_CD_ID AS CODE_PNM
+	  ,C.COMM_DTL_CD AS UPCODE_CD
+	FROM WAA_COMM_DTL_CD A
+	INNER JOIN WAA_COMM_DCD B
+       ON A.COMM_DCD_ID = B.COMM_DCD_ID
+      AND B.REG_TYP_CD IN ('C','U')
+      AND B.EXP_DTM = STR_TO_DATE('99991231','%Y%m%d')
+      AND B.COMM_DCD IN ('DBMS_VERS_CD','DBMS_TYP_CD')
+	LEFT OUTER JOIN WAA_COMM_DTL_CD C
+       ON A.UPP_COMM_DTL_CD_ID = C.COMM_DTL_CD_ID
+      AND C.REG_TYP_CD IN ('C','U')
+      AND C.EXP_DTM = STR_TO_DATE('99991231','%Y%m%d')
+	WHERE A.REG_TYP_CD IN ('C','U')
+	  AND A.EXP_DTM = STR_TO_DATE('99991231','%Y%m%d')
+	ORDER BY A.UPP_COMM_DTL_CD_ID DESC, A.COMM_DTL_CD_ID
+  </select>
+  
+  <!-- 결재그룹 코드 리스트 -->
+  <select id="getApproveGroup" resultMap="BaseResultMap">
+	SELECT 
+		  APRG_ID 	AS CODE_CD 
+	    , APRG_NM  AS CODE_LNM
+	FROM WAA_APRG
+	WHERE EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	AND REG_TYP_CD IN ('C', 'U')
+	ORDER BY CODE_LNM
+  </select>
+  <!-- 진단대상 DBMS 코드 리스트  -->
+  <select id="getConnTrgDbms" resultMap="BaseResultMap">
+	  SELECT 
+			  DB_CONN_TRG_ID 	AS CODE_CD 
+		    , DB_CONN_TRG_LNM  AS CODE_LNM
+	        , DB_CONN_TRG_PNM  AS CODE_PNM
+		FROM WAA_DB_CONN_TRG
+		WHERE EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+		AND REG_TYP_CD IN ('C', 'U')
+		ORDER BY CODE_LNM
+  </select>
+  <select id="getAbrTempList" resultMap="BaseResultMap"  parameterType="String">
+	SELECT A.ABR_ID AS CODE_CD
+		 , CONCAT('(' , IFNULL(DATE_FORMAT(STR_DTM, '%Y/%m/%d'), '') , ')' ,
+		   IFNULL(CASE WHEN B.CNT > 0 THEN CONCAT(IFNULL(A.TERM_KNM, '') , ' 외 ' , IFNULL(B.CNT, '') , '건')
+		   ELSE A.TERM_KNM END, '')) AS CODE_LNM
+		 , '' AS CODE_PNM
+	  FROM WAM_STWD_ABR A
+	 INNER JOIN
+	            (
+	             SELECT ABR_ID, COUNT(*) - 1 AS CNT
+	               FROM WAM_STWD_ABR
+	              GROUP BY ABR_ID
+	            ) B
+		ON A.ABR_ID = B.ABR_ID
+	 WHERE A.DTL_SEQ = '1'
+	<if test="value != null">
+		AND A.ORGL_USER = #{value}
+	</if>
+	 ORDER BY A.STR_DTM DESC 
+  </select>
+  
+<!--   
+	TODO:: SubQuery절 GROUP BY 데이터 삽입 후 확인필요
+	표준항목 자동분할 ID 
+-->
+<select id="getDvRqstNoList" resultMap="BaseResultMap"  parameterType="String">
+	
+		SELECT 	A.CODE_CD
+				,  CONCAT('(' , IFNULL(DATE_FORMAT(DV_RQST_DTM, '%Y/%m/%d'), '') , ')' , 
+					IFNULL(CASE WHEN A.CNT > 0 THEN CONCAT(IFNULL(A.DV_ORG_LNM, '') , ' 외 ' , IFNULL(A.CNT, '') , '건')
+					ELSE A.DV_ORG_LNM END, '')) AS CODE_LNM
+				, '' AS CODE_PNM
+   		FROM (
+   				SELECT 	DV_RQST_NO AS CODE_CD
+              			, MAX(DV_ORG_LNM) AS DV_ORG_LNM
+              			, MIN(DV_RQST_DTM) AS DV_RQST_DTM
+              			, COUNT(DISTINCT DV_ORG_LNM) - 1 AS CNT      
+         		FROM ( 
+         				SELECT DV_RQST_NO
+                       			,CONCAT(IFNULL(DIC_ASM_LNM, '') , IFNULL(DMN_LNM, '')) as DIC_ASM_LNM_GB
+                       			,SUBSTR(CONCAT(IFNULL(DIC_ASM_PNM, '') , IFNULL(CASE WHEN DMN_PNM IS NULL THEN '' ELSE CONCAT('_',IFNULL(DMN_PNM, '')) END, '')),2) as DIC_ASM_PNM_GB
+                       			,DMN_LNM
+                       			,DMN_PNM
+                       			,DV_ORG_LNM
+                       			,MIN(DV_RQST_DTM) AS DV_RQST_DTM
+                  		FROM WAP_DV_CAN_ASM
+                		WHERE PRC_CD = 'Y'
+                   		AND DV_SE_CD = 'I' 
+					   <if test="value != null">
+					   AND DV_RQST_USER_ID = #{value}
+					   </if>
+                 		GROUP BY DV_RQST_NO, DIC_ASM_PNM, DIC_ASM_LNM, DMN_PNM, DMN_LNM, DV_ORG_LNM
+					) A 
+        		GROUP BY A.DV_RQST_NO
+			) A  
+		ORDER BY CODE_CD DESC
+		LIMIT 0, 20
+
+  </select>
+<!--   표준도메인 자동분할 ID -->
+<select id="getDvDmnRqstNoList" resultMap="BaseResultMap"  parameterType="String">
+SELECT A.CODE_CD
+       , CONCAT('(' , IFNULL(DATE_FORMAT(DV_RQST_DTM, '%Y/%m/%d'), '') , ')' , 
+             IFNULL(CASE WHEN A.CNT > 0 THEN CONCAT(IFNULL(A.DV_ORG_LNM, '') , ' 외 ' , IFNULL(A.CNT, '') , '건')
+                  ELSE A.DV_ORG_LNM END, '')) AS CODE_LNM
+       , '' AS CODE_PNM
+   FROM (SELECT DV_RQST_NO AS CODE_CD
+              , MAX(DV_ORG_LNM) AS DV_ORG_LNM
+              , MIN(DV_RQST_DTM) AS DV_RQST_DTM
+              , COUNT(DISTINCT DV_ORG_LNM) - 1 AS CNT      
+         FROM ( SELECT DV_RQST_NO
+                     , CONCAT(IFNULL(DIC_ASM_LNM, '') , IFNULL(DMN_LNM, '')) as DIC_ASM_LNM_GB
+                     , SUBSTR(CONCAT(IFNULL(DIC_ASM_PNM, '') , IFNULL(CASE WHEN DMN_PNM IS NULL THEN '' ELSE CONCAT('_',IFNULL(DMN_PNM, '')) END, '')),2) AS DIC_ASM_PNM_GB
+                     , DMN_LNM
+                     , DMN_PNM
+                     , DV_ORG_LNM
+                     , MIN(DV_RQST_DTM) AS DV_RQST_DTM
+                  FROM WAP_DV_CAN_ASM
+                 WHERE PRC_CD = 'Y'
+                   AND DV_SE_CD = 'D' 
+		   <if test="value != null">
+		   AND DV_RQST_USER_ID = #{value}
+		   </if>
+                 GROUP BY DV_RQST_NO, DIC_ASM_PNM, DIC_ASM_LNM, DMN_PNM, DMN_LNM, DV_ORG_LNM) A  
+        GROUP BY A.DV_RQST_NO) A  
+ORDER BY CODE_CD DESC
+  </select>
+<!--   프로파일 실행차수 -->
+  <select id="getAnaDgr" resultMap="BaseResultMap">
+	SELECT 	ANA_DGR AS CODE_CD 
+	    	,CONCAT(IFNULL(ANA_DGR, ''),'차') AS CODE_LNM
+			,'' AS CODE_PNM  
+	FROM WAM_PRF_RESULT
+	WHERE ANA_STR_DTM IS NOT NULL
+	AND ANA_DGR IS NOT NULL
+	GROUP BY ANA_DGR
+  </select>
+	<!-- 실행차수 - 스케줄 관리용(프로파일) -->
+  	<select id="getPrfAnaDgr" resultMap="BaseResultMap">
+		SELECT 	ANA_DGR AS CODE_CD 
+		    	,CONCAT(IFNULL(ANA_DGR, ''),'차') AS CODE_LNM
+				,'' AS CODE_PNM  
+		FROM WAM_PRF_RESULT
+		WHERE ANA_STR_DTM IS NOT NULL
+		AND ANA_DGR IS NOT NULL
+		GROUP BY ANA_DGR
+		UNION ALL
+		SELECT 	IFNULL(MAX(ANA_DGR), 0)+1 AS CODE_CD 
+		    	,IFNULL(MAX(ANA_DGR), 0)+CONCAT(IFNULL(1, ''),'차 (신규차수)') AS CODE_LNM
+				,'' AS CODE_PNM  
+		FROM WAM_PRF_RESULT
+		WHERE ANA_STR_DTM IS NOT NULL
+		AND ANA_DGR IS NOT NULL
+  	</select>
+	<!--   실행차수 - 스케줄 관리용(업무규칙) -->
+  	<select id="getBrAnaDgr" resultMap="BaseResultMap">
+		SELECT ANA_DGR AS CODE_CD 
+		    ,CONCAT(IFNULL(ANA_DGR, ''),'차') AS CODE_LNM
+			,'' AS CODE_PNM  
+		FROM WAM_BR_RESULT
+		WHERE ANA_STR_DTM IS NOT NULL
+		AND ANA_DGR IS NOT NULL
+		GROUP BY ANA_DGR
+		UNION ALL
+		SELECT IFNULL(MAX(ANA_DGR), 0)+1 AS CODE_CD 
+		    ,IFNULL(MAX(ANA_DGR), 0)+CONCAT(IFNULL(1, ''),'차 (신규차수)') AS CODE_LNM
+			,'' AS CODE_PNM  
+		FROM WAM_BR_RESULT
+		WHERE ANA_STR_DTM IS NOT NULL
+		AND ANA_DGR IS NOT NULL
+  	</select>
+  	
+  	<select id="getDbmsDataType" resultMap="BaseResultMap">
+		SELECT 	DBMS_DATA_TYPE_ID AS CODE_CD 
+		    	,DATA_TYPE_NM AS CODE_LNM
+				,'' AS CODE_PNM  
+				,DBMS_TYP_CD AS UPCODE_CD
+		FROM WAA_DBMS_DATA_TYPE
+		WHERE EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+		AND REG_TYP_CD IN ('C', 'U')
+		ORDER BY UPCODE_CD, CODE_LNM
+  	</select>
+  
+  <select id="getDbmsDataTyp" resultMap="BaseResultMap">
+    SELECT 	DBMS_DATA_TYPE_ID AS CODE_CD 
+    		,DATA_TYPE_NM AS CODE_LNM
+			,'' AS CODE_PNM  
+			,DBMS_TYP_CD AS UPCODE_CD
+	FROM WAA_DBMS_DATA_TYPE
+	WHERE EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	AND REG_TYP_CD IN ('C', 'U')
+    UNION ALL
+    SELECT 	A.COMM_DTL_CD AS CODE_CD
+	  		, A.COMM_DTL_CD_NM AS CODE_LNM
+	  		, A.COMM_DTL_CD_ID AS CODE_PNM
+	  		, '' AS UPCODE_CD
+	FROM WAA_COMM_DTL_CD A
+	INNER JOIN WAA_COMM_DCD B ON A.COMM_DCD_ID = B.COMM_DCD_ID
+	AND B.REG_TYP_CD IN ('C','U')
+	AND B.EXP_DTM = STR_TO_DATE('99991231','%Y%m%d')
+	AND B.COMM_DCD IN ('DBMS_TYP_CD')
+	ORDER BY UPCODE_CD, CODE_LNM
+  </select>
+  
+  <select id="getDbSchLnm" resultMap="BaseResultMap">
+  	SELECT 	A.DB_SCH_ID AS CODE_CD
+      		,CONCAT(IFNULL(B.DB_CONN_TRG_LNM, '') , '.' , IFNULL(A.DB_SCH_LNM, '')) AS CODE_LNM
+      		,CONCAT(IFNULL(B.DB_CONN_TRG_PNM, '') , '.' , IFNULL(A.DB_SCH_PNM, '')) AS CODE_PNM
+   	FROM WAA_DB_SCH A INNER JOIN WAA_DB_CONN_TRG B
+    ON A.DB_CONN_TRG_ID = B.DB_CONN_TRG_ID
+    AND A.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+    AND A.REG_TYP_CD IN ('C', 'U')
+    AND B.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+    AND B.REG_TYP_CD IN ('C', 'U')
+
+   	WHERE A.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+   	AND A.REG_TYP_CD IN ('C', 'U')
+   	ORDER BY B.DB_CONN_TRG_LNM, A.DB_SCH_LNM
+  </select>
+  
+  <select id="getDevDbSchLnm" resultMap="BaseResultMap">
+	 	SELECT 	A.DB_SCH_ID AS CODE_CD
+	      		, CONCAT(IFNULL(B.DB_CONN_TRG_LNM, '') , '.' , IFNULL(A.DB_SCH_LNM, '')) AS CODE_LNM
+	      		, CONCAT(IFNULL(B.DB_CONN_TRG_PNM, '') , '.' , IFNULL(A.DB_SCH_PNM, '')) AS CODE_PNM
+	   	FROM WAA_DB_SCH A 	
+	   		 INNER JOIN WAA_DB_CONN_TRG B
+			    ON B.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+			   AND B.REG_TYP_CD IN ('C', 'U')
+			   AND B.DB_CONN_TRG_ID = A.DB_CONN_TRG_ID	 
+	   	WHERE A.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	      AND A.REG_TYP_CD IN ('C', 'U')
+	      AND A.DDL_TRG_DCD = 'D'
+	    ORDER BY B.DB_CONN_TRG_LNM , A.DB_SCH_LNM
+  </select>
+  
+  
+  <!-- TODO:: ORACLE 에서 사용한 START-WITH 구문 MYSQL 버젼으로 변경해야함 -->
+  <select id="getSubjLnm" resultMap="BaseResultMap">
+  <!--
+	SELECT 
+	  CODE_CD
+	  ,CODE_LNM
+	  ,CODE_PNM
+	  ,UPCODE_CD
+	  ,LEVEL
+	FROM
+	(
+		SELECT 
+		  SUBJ.SUBJ_ID AS CODE_CD
+		  ,SUBJ.FULL_PATH AS CODE_LNM
+		  , SUBJ.SUBJ_PNM AS CODE_PNM
+		  , SUBJ.UPP_SUBJ_ID AS UPCODE_CD
+		  , F.LEVEL AS LEVEL
+		FROM
+		 (
+		  SELECT FN_SUBJ_CONNECT_BY() AS id, @level AS level
+		    FROM (SELECT @start_with:= 'R', @id:=@start_with, @level:=0) vars
+		      INNER JOIN WAA_SUBJ A
+		         ON A.EXP_DTM = STR_TO_DATE('9999-12-31','%Y-%m-%D')
+		  	    and A.REG_TYP_CD in ('C','U')
+		     WHERE @id IS NOT NULL
+		  ) F
+		INNER JOIN WAA_SUBJ SUBJ 
+		   ON F.id = SUBJ.SUBJ_ID
+		  and SUBJ.EXP_DTM = STR_TO_DATE('9999-12-31','%Y-%m-%D')
+		  and SUBJ.REG_TYP_CD in ('C','U')
+	) A
+	ORDER BY CODE_LNM, LEVEL
+	-->
+	<![CDATA[
+	select
+		 SUBJ_ID AS CODE_CD
+		,FULL_PATH AS CODE_LNM
+		,SUBJ_PNM AS CODE_PNM
+		,UPP_SUBJ_ID AS UPCODE_CD
+		,SUBJ_LVL AS LEVEL
+	from WAA_SUBJ A
+	where A.EXP_DTM = STR_TO_DATE('9999-12-31','%Y-%m-%D')
+	 and A.REG_TYP_CD in ('C','U')
+	 and A.SUBJ_LVL != 0
+	order by FULL_PATH,SUBJ_LVL
+	]]>
+  </select>
+  
+   <select id="getSubjLvl1" resultMap="BaseResultMap">
+	SELECT A.SUBJ_ID     AS CODE_CD
+	     , A.FULL_PATH   AS CODE_LNM
+	     , A.SUBJ_PNM    AS CODE_PNM
+	     , A.UPP_SUBJ_ID AS UPCODE_CD
+	  FROM WAA_SUBJ A
+	 WHERE A.REG_TYP_CD IN ('C', 'U')
+	   AND A.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	   AND A.SUBJ_LVL = 1     
+     ORDER BY CODE_LNM
+  </select> 
+
+   <select id="getSubjLvl2" resultMap="BaseResultMap">
+	SELECT A.SUBJ_ID     AS CODE_CD
+	     , A.FULL_PATH   AS CODE_LNM
+	     , A.SUBJ_PNM    AS CODE_PNM
+	     , A.UPP_SUBJ_ID AS UPCODE_CD
+	  FROM WAA_SUBJ A
+	 WHERE A.REG_TYP_CD IN ('C', 'U')
+	   AND A.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	   AND A.SUBJ_LVL = 2     
+     ORDER BY CODE_LNM
+  </select> 
+
+   <select id="getSubjLvl3" resultMap="BaseResultMap">
+	SELECT A.SUBJ_ID     AS CODE_CD
+	     , A.FULL_PATH   AS CODE_LNM
+	     , A.SUBJ_PNM    AS CODE_PNM
+	     , A.UPP_SUBJ_ID AS UPCODE_CD
+	  FROM WAA_SUBJ A
+	 WHERE A.REG_TYP_CD IN ('C', 'U')
+	   AND A.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	   AND A.SUBJ_LVL = 3     
+     ORDER BY CODE_LNM
+  </select> 
+  
+  <select id="getConnTrgSch" resultMap="BaseResultMap">
+	  SELECT A.DB_SCH_PNM AS CODE_CD
+	      ,A.DB_SCH_LNM AS CODE_LNM
+	      ,A.DB_SCH_PNM AS CODE_PNM
+	      ,B.DB_CONN_TRG_PNM AS UPCODE_CD
+	  FROM WAA_DB_SCH A INNER JOIN WAA_DB_CONN_TRG B
+	    ON A.DB_CONN_TRG_ID = B.DB_CONN_TRG_ID
+	   AND A.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	   AND A.REG_TYP_CD IN ('C', 'U')
+	   AND B.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	   AND B.REG_TYP_CD IN ('C', 'U')
+	 WHERE A.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	   AND A.REG_TYP_CD IN ('C', 'U')
+	 UNION ALL
+	SELECT A.DB_CONN_TRG_PNM AS CODE_CD
+	      ,A.DB_CONN_TRG_LNM AS CODE_LNM
+	      ,A.DB_CONN_TRG_PNM AS CODE_PNM
+	      ,NULL AS UPCODE_CD
+	  FROM WAA_DB_CONN_TRG A
+	 WHERE A.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	   AND A.REG_TYP_CD IN ('C', 'U')
+     ORDER BY UPCODE_CD, CODE_LNM
+  </select>
+  
+  <select id="getConnTrgSchId" resultMap="BaseResultMap">
+	  SELECT A.DB_SCH_ID AS CODE_CD
+	       , A.DB_SCH_LNM AS CODE_LNM
+	       , A.DB_SCH_PNM AS CODE_PNM
+	       , B.DB_CONN_TRG_ID AS UPCODE_CD
+	    FROM WAA_DB_SCH A INNER JOIN WAA_DB_CONN_TRG B
+	      ON A.DB_CONN_TRG_ID = B.DB_CONN_TRG_ID
+	     AND A.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	     AND A.REG_TYP_CD IN ('C', 'U')
+	     AND B.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	     AND B.REG_TYP_CD IN ('C', 'U')
+	   WHERE A.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	     AND A.REG_TYP_CD IN ('C', 'U')
+	   UNION ALL
+	  SELECT A.DB_CONN_TRG_ID AS CODE_CD
+	       , A.DB_CONN_TRG_LNM AS CODE_LNM
+	       , A.DB_CONN_TRG_PNM AS CODE_PNM
+	       , NULL AS UPCODE_CD
+	    FROM WAA_DB_CONN_TRG A
+	   WHERE A.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	     AND A.REG_TYP_CD IN ('C', 'U')
+       ORDER BY UPCODE_CD, CODE_LNM
+  </select>
+  <select id="getConnTrgSchId2" resultMap="BaseResultMap">
+	  SELECT A.DB_SCH_ID AS CODE_CD
+	       , A.DB_SCH_LNM AS CODE_LNM
+	       , A.DB_SCH_PNM AS CODE_PNM
+	       , B.DB_CONN_TRG_ID AS UPCODE_CD
+	    FROM WAA_DB_SCH A INNER JOIN WAA_DB_CONN_TRG B
+	      ON A.DB_CONN_TRG_ID = B.DB_CONN_TRG_ID
+	     AND A.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	     AND A.REG_TYP_CD IN ('C', 'U')
+	     AND B.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	     AND B.REG_TYP_CD IN ('C', 'U')
+	     AND B.META_MNG_YN ='Y'
+	   WHERE A.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	     AND A.REG_TYP_CD IN ('C', 'U')
+	   UNION ALL
+	  SELECT A.DB_CONN_TRG_ID AS CODE_CD
+	       , A.DB_CONN_TRG_LNM AS CODE_LNM
+	       , A.DB_CONN_TRG_PNM AS CODE_PNM
+	       , '' AS UPCODE_CD
+	    FROM WAA_DB_CONN_TRG A
+	   WHERE A.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	     AND A.REG_TYP_CD IN ('C', 'U')
+	     AND A.META_MNG_YN ='Y'
+       ORDER BY UPCODE_CD, CODE_LNM
+  </select>
+    <select id="getConnTrgSchIdCodeTsf" resultMap="BaseResultMap">
+	  SELECT A.DB_SCH_ID AS CODE_CD
+	       , A.DB_SCH_LNM AS CODE_LNM
+	       , A.DB_SCH_PNM AS CODE_PNM
+	       , B.DB_CONN_TRG_ID AS UPCODE_CD
+	    FROM WAA_DB_SCH A INNER JOIN WAA_DB_CONN_TRG B
+	      ON A.DB_CONN_TRG_ID = B.DB_CONN_TRG_ID
+	     AND A.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	     AND A.REG_TYP_CD IN ('C', 'U')
+	     AND B.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	     AND B.REG_TYP_CD IN ('C', 'U')
+	     AND B.META_MNG_YN ='Y'
+	     AND A.DDL_TRG_YN ='Y'
+         AND A.DDL_TRG_DCD !='D'
+         AND A.CD_SND_TRG_YN ='Y'
+	   WHERE A.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	     AND A.REG_TYP_CD IN ('C', 'U')
+	   UNION ALL
+	  SELECT A.DB_CONN_TRG_ID AS CODE_CD
+	       , A.DB_CONN_TRG_LNM AS CODE_LNM
+	       , A.DB_CONN_TRG_PNM AS CODE_PNM
+	       , '' AS UPCODE_CD
+	    FROM WAA_DB_CONN_TRG A
+	   WHERE A.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	     AND A.REG_TYP_CD IN ('C', 'U')
+	     AND A.META_MNG_YN ='Y'
+	     AND EXISTS (SELECT 1 
+	                 FROM WAA_DB_SCH B 
+	                 WHERE A.DB_CONN_TRG_ID = B.DB_CONN_TRG_ID
+	                 AND B.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	                 AND B.DDL_TRG_YN ='Y'
+                     AND B.DDL_TRG_DCD !='D'
+                     AND B.CD_SND_TRG_YN ='Y'
+                     AND B.REG_TYP_CD IN ('C', 'U')
+	                 )  
+       ORDER BY UPCODE_CD, CODE_LNM
+  </select>
+  
+  
+  <!-- DB간 GAP 분석.... -->
+  <select id="getDbGapSrcSchId" resultMap="BaseResultMap">
+  SELECT A.DB_SCH_ID AS CODE_CD
+       , A.DB_SCH_LNM AS CODE_LNM
+       , A.DB_SCH_PNM AS CODE_PNM
+       , B.DB_CONN_TRG_ID AS UPCODE_CD
+    FROM WAA_DB_MAP M
+         INNER JOIN WAA_DB_SCH A
+            ON M.SRC_DB_SCH_ID = A.DB_SCH_ID
+           AND A.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+           AND A.REG_TYP_CD IN ('C', 'U') 
+         INNER JOIN WAA_DB_CONN_TRG B
+            ON A.DB_CONN_TRG_ID = B.DB_CONN_TRG_ID       
+           AND B.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+           AND B.REG_TYP_CD IN ('C', 'U')
+   WHERE M.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+     AND M.REG_TYP_CD IN ('C', 'U')
+   UNION ALL
+     SELECT B.DB_CONN_TRG_ID AS CODE_CD
+       , B.DB_CONN_TRG_LNM AS CODE_LNM
+       , B.DB_CONN_TRG_PNM AS CODE_PNM
+       , '' AS UPCODE_CD
+    FROM WAA_DB_MAP M
+         INNER JOIN WAA_DB_SCH A
+            ON M.SRC_DB_SCH_ID = A.DB_SCH_ID
+           AND A.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+           AND A.REG_TYP_CD IN ('C', 'U') 
+         INNER JOIN WAA_DB_CONN_TRG B
+            ON A.DB_CONN_TRG_ID = B.DB_CONN_TRG_ID       
+           AND B.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+           AND B.REG_TYP_CD IN ('C', 'U')
+   WHERE M.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+     AND M.REG_TYP_CD IN ('C', 'U')
+   ORDER BY UPCODE_CD, CODE_LNM
+  </select>
+  <select id="getDbGapTgtSchId" resultMap="BaseResultMap">
+  SELECT A.DB_SCH_ID AS CODE_CD
+       , A.DB_SCH_LNM AS CODE_LNM
+       , A.DB_SCH_PNM AS CODE_PNM
+       , B.DB_CONN_TRG_ID AS UPCODE_CD
+    FROM WAA_DB_MAP M
+         INNER JOIN WAA_DB_SCH A
+            ON M.TGT_DB_SCH_ID = A.DB_SCH_ID
+           AND A.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+           AND A.REG_TYP_CD IN ('C', 'U') 
+         INNER JOIN WAA_DB_CONN_TRG B
+            ON A.DB_CONN_TRG_ID = B.DB_CONN_TRG_ID          
+           AND B.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+           AND B.REG_TYP_CD IN ('C', 'U')
+   WHERE M.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+     AND M.REG_TYP_CD IN ('C', 'U')
+   UNION ALL
+     SELECT B.DB_CONN_TRG_ID AS CODE_CD
+       , B.DB_CONN_TRG_LNM AS CODE_LNM
+       , B.DB_CONN_TRG_PNM AS CODE_PNM
+       , '' AS UPCODE_CD
+    FROM WAA_DB_MAP M
+         INNER JOIN WAA_DB_SCH A
+            ON M.TGT_DB_SCH_ID = A.DB_SCH_ID
+           AND A.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+           AND A.REG_TYP_CD IN ('C', 'U') 
+         INNER JOIN WAA_DB_CONN_TRG B
+            ON A.DB_CONN_TRG_ID = B.DB_CONN_TRG_ID       
+           AND B.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+           AND B.REG_TYP_CD IN ('C', 'U')
+   WHERE M.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+     AND M.REG_TYP_CD IN ('C', 'U')
+   ORDER BY UPCODE_CD, CODE_LNM
+  </select>
+  
+  <!-- 프로그램 영향도 언어 타입.... -->
+  <select id="getLangType" resultMap="BaseResultMap">
+  	SELECT LNG_CD AS CODE_CD
+        , LNG_NM  AS CODE_LNM
+  	 FROM WAT_PGM_ASTA_LNG
+ 	ORDER BY LNG_NM
+  </select>
+  <select id="getDmngLowDgr" resultMap="BaseResultMap">
+  	SELECT DMNG_ID AS CODE_CD
+	      ,DMNG_LNM AS CODE_LNM
+	      ,DMNG_PNM AS CODE_PNM
+	      ,STND_ASRT
+	  FROM WAA_DMNG
+	 WHERE 1=1
+	   AND EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	   AND DMNG_LVL = (SELECT BSC_LVL 
+	                     FROM WAA_BSC_LVL
+	                    WHERE BSC_ID = 'DMNG'
+	                      AND EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	                      AND REG_TYP_CD IN ('C', 'U'))
+	 ORDER BY STND_ASRT, DMNG_LNM
+  </select>
+  <select id="getSubjPdmTbl" resultMap="BaseResultMap">
+  	SELECT 
+		  SUBJ_ID		AS CODE_CD 
+		, FULL_PATH		AS CODE_LNM
+		, SUBJ_PNM		AS CODE_PNM
+		, NULL	AS UPCODE_CD
+	FROM WAA_SUBJ
+	WHERE EXP_DTM = STR_TO_DATE('99991231','%Y%m%d')
+	  AND REG_TYP_CD IN ('C', 'U')
+	  AND SUBJ_LVL = (SELECT BSC_LVL-1
+	                    FROM WAA_BSC_LVL
+	                   WHERE BSC_ID = 'SUBJ'
+	                     AND EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	                     AND REG_TYP_CD IN ('C', 'U'))
+	UNION ALL
+	SELECT 
+	      A.PDM_TBL_ID	AS CODE_CD 
+		, A.PDM_TBL_PNM	AS CODE_LNM
+		, A.PDM_TBL_LNM	AS CODE_PNM
+		, A.SUBJ_ID	AS UPCODE_CD
+	 FROM WAM_PDM_TBL A
+	INNER JOIN WAA_SUBJ B
+	   ON A.SUBJ_ID = B.SUBJ_ID
+	  AND B.REG_TYP_CD IN ('C', 'U')
+	  AND B.EXP_DTM = STR_TO_DATE('99991231', '%Y%m%d')
+	  
+    WHERE A.REG_TYP_CD IN ('C', 'U')
+	ORDER BY CODE_LNM
+  </select>
+  <select id="getDbSchForDoubleSelectIBS" resultMap="BaseResultMap">
+  	SELECT DB_SCH_ID AS CODE_CD
+         , DB_SCH_LNM AS CODE_LNM
+         , DB_SCH_PNM AS CODE_PNM
+         , DB_CONN_TRG_ID AS UPCODE_CD
+      FROM WAA_DB_SCH
+     WHERE EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+       AND REG_TYP_CD IN ('C', 'U')
+     ORDER BY UPCODE_CD, CODE_LNM
+  </select>
+  
+  <select id="getDbConnTrgIdInDbRole" resultMap="BaseResultMap">
+  	SELECT DISTINCT DB.DB_CONN_TRG_ID AS CODE_CD
+	     , DB.DB_CONN_TRG_LNM AS CODE_LNM
+	     , DB.DB_CONN_TRG_PNM AS CODE_PNM
+	  FROM WAA_DB_ROLE A
+	 INNER JOIN WAA_DB_CONN_TRG DB
+	    ON A.DB_CONN_TRG_ID = DB.DB_CONN_TRG_ID
+	   AND DB.REG_TYP_CD IN ('C', 'U')
+	   AND DB.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	 WHERE A.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	   AND A.REG_TYP_CD IN ('C', 'U')
+	 ORDER BY CODE_LNM
+  </select>
+  <select id="getRoleNmForDoubleSelectIBS" resultMap="BaseResultMap">
+  	SELECT ROLE_ID AS CODE_CD
+         , ROLE_PNM AS CODE_LNM
+         , ROLE_LNM AS CODE_PNM
+         , DB_CONN_TRG_ID AS UPCODE_CD
+      FROM WAA_DB_ROLE
+     WHERE EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+       AND REG_TYP_CD IN ('C', 'U')
+     ORDER BY UPCODE_CD, CODE_LNM
+  </select>
+  <select id="getDbRoleNm" resultMap="BaseResultMap">
+       SELECT ROLE_ID AS CODE_CD
+	            , ROLE_PNM AS CODE_LNM
+	            , ROLE_LNM AS CODE_PNM
+	            , DB_CONN_TRG_ID AS UPCODE_CD
+	  FROM WAA_DB_ROLE
+	 WHERE REG_TYP_CD IN ('C', 'U')
+	   AND EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	 UNION ALL
+	SELECT DB_CONN_TRG_ID AS CODE_CD
+	     , DB_CONN_TRG_LNM AS CODE_LNM
+	     , DB_CONN_TRG_PNM AS CODE_PNM
+	     , '' AS UPCODE_CD
+	  FROM WAA_DB_CONN_TRG
+	 WHERE REG_TYP_CD IN ('C', 'U')
+	   AND EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+  </select>
+  <select id="getDbSchLnmOnly" resultMap="BaseResultMap">
+  	SELECT DB_SCH_ID AS CODE_CD
+	     , DB_SCH_LNM AS CODE_LNM
+	     , DB_SCH_PNM AS CODE_PNM
+	    
+	  FROM WAA_DB_SCH
+	 WHERE REG_TYP_CD IN ('C', 'U')
+	   AND EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+  </select>
+  
+  <select id="getClSystmTyCode" resultMap="BaseResultMap">
+SELECT A.CD_VAL AS CODE_CD
+       ,A.CD_VAL_NM AS CODE_LNM
+  FROM WAM_CD_VAL A 
+       INNER JOIN WAM_DMN B
+          ON A.DMN_ID = B.DMN_ID
+         AND B.REG_TYP_CD IN ('C', 'U')
+  WHERE B.DMN_PNM = 'CL_SYSTM_TY_CODE'
+    AND B.REG_TYP_CD IN ('C', 'U')
+  </select>
+  
+  <select id="getClSystmTyIemCode" resultMap="BaseResultMap">
+SELECT A.CD_VAL AS CODE_CD
+       ,A.CD_VAL_NM AS CODE_LNM
+  FROM WAM_CD_VAL A 
+       INNER JOIN WAM_DMN B
+          ON A.DMN_ID = B.DMN_ID
+         AND B.REG_TYP_CD IN ('C', 'U')
+  WHERE B.DMN_PNM = 'CL_SYSTM_TY_IEM_CODE'
+    AND B.REG_TYP_CD IN ('C', 'U')
+  </select>
+  
+  <select id="getTblSpacLnm" resultMap="BaseResultMap">
+	SELECT 'TBL' AS CODE_CD
+	     , '테이블' AS CODE_LNM
+	     , NULL AS CODE_PNM
+	     , NULL AS UPCODE_CD
+	  FROM DUAL
+	UNION ALL
+	SELECT 'IDX' AS CODE_CD
+	     , '인덱스' AS CODE_LNM
+	     , NULL AS CODE_PNM
+	     , NULL AS UPCODE_CD
+	  FROM DUAL
+	UNION ALL
+	SELECT DB_TBL_SPAC_PNM AS CODE_CD
+	     , IFNULL(DB_TBL_SPAC_LNM,DB_TBL_SPAC_PNM) AS CODE_LNM
+	     , DB_TBL_SPAC_PNM AS CODE_PNM
+	     , 'TBL' AS UPCODE_CD
+	  FROM WAA_TBL_SPAC
+	 WHERE REG_TYP_CD IN ('C', 'U')
+	   AND EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	   AND TBL_SPAC_TYP_CD = 'T'
+	UNION ALL
+	SELECT DB_TBL_SPAC_PNM AS CODE_CD
+	     , IFNULL(DB_TBL_SPAC_LNM,DB_TBL_SPAC_PNM) AS CODE_LNM
+	     , DB_TBL_SPAC_PNM AS CODE_PNM
+	     , 'IDX' AS UPCODE_CD
+	  FROM WAA_TBL_SPAC
+	 WHERE REG_TYP_CD IN ('C', 'U')
+	   AND EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	   AND TBL_SPAC_TYP_CD = 'I'
+  </select>
+    <select id="getTblSpacPnm" resultMap="BaseResultMap">
+	SELECT  DB_TBL_SPAC_ID AS CODE_CD
+	     , IFNULL(DB_TBL_SPAC_LNM,DB_TBL_SPAC_PNM) AS CODE_LNM
+	     , DB_TBL_SPAC_PNM AS CODE_PNM
+	     , NULL AS UPCODE_CD
+	  FROM WAA_TBL_SPAC
+	 WHERE REG_TYP_CD IN ('C', 'U')
+	   AND EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	   AND TBL_SPAC_TYP_CD = 'T'
+  </select>
+    <select id="getIdxSpacPnm" resultMap="BaseResultMap">
+	SELECT DB_TBL_SPAC_ID AS CODE_CD
+	     , IFNULL(DB_TBL_SPAC_LNM,DB_TBL_SPAC_PNM) AS CODE_LNM
+	     , DB_TBL_SPAC_PNM AS CODE_PNM
+	     , NULL AS UPCODE_CD
+	  FROM WAA_TBL_SPAC
+	 WHERE REG_TYP_CD IN ('C', 'U')
+	   AND EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	   AND TBL_SPAC_TYP_CD = 'I'
+  </select>
+    <!-- 도메인그룹 인포타입매핑 목록성 코드로 조회... -->
+  <select id="getCodeDmngInfoTpCodeList" resultMap="BaseResultMap">
+  	SELECT 
+		  DMNG_ID		AS CODE_CD 
+		, DMNG_LNM		AS CODE_LNM
+		, DMNG_PNM		AS CODE_PNM
+		, UPP_DMNG_ID	AS UPCODE_CD
+	FROM WAA_DMNG
+	WHERE EXP_DTM = STR_TO_DATE('99991231','%Y%m%d')
+	AND CD_DMN_YN ='Y'
+	UNION ALL
+	SELECT 
+		  A.INFOTP_ID	AS CODE_CD 
+		, B.INFOTP_LNM	AS CODE_LNM
+		, B.INFOTP_LNM	AS CODE_PNM
+		, A.DMNG_ID	AS UPCODE_CD
+	FROM WAA_DMNG_INFOTP_MAP A
+		INNER JOIN WAA_INFO_TYPE B
+		   ON A.INFOTP_ID = B.INFOTP_ID
+		  AND B.EXP_DTM = STR_TO_DATE('99991231','%Y%m%d')
+		WHERE A.EXP_DTM = STR_TO_DATE('99991231','%Y%m%d')
+		  AND A.DMNG_ID IN (SELECT DMNG_ID FROM WAA_DMNG
+	                        WHERE EXP_DTM = STR_TO_DATE('99991231','%Y%m%d')
+	                        AND CD_DMN_YN ='Y')
+	ORDER BY CODE_LNM
+  </select>
+  
+   <select id="getDevConnTrgSchId" resultMap="BaseResultMap">
+	  SELECT A.DB_SCH_ID AS CODE_CD
+	       , A.DB_SCH_LNM AS CODE_LNM
+	       , A.DB_SCH_PNM AS CODE_PNM
+	       , B.DB_CONN_TRG_ID AS UPCODE_CD
+	    FROM WAA_DB_SCH A 
+	         INNER JOIN WAA_DB_CONN_TRG B
+		        ON B.DB_CONN_TRG_ID = A.DB_CONN_TRG_ID		     
+		       AND B.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+		       AND B.REG_TYP_CD IN ('C', 'U')
+	   WHERE A.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	     AND A.REG_TYP_CD IN ('C', 'U')
+	     AND A.DDL_TRG_DCD = 'D'
+	   UNION ALL
+	  SELECT A.DB_CONN_TRG_ID AS CODE_CD
+	       , A.DB_CONN_TRG_LNM AS CODE_LNM
+	       , A.DB_CONN_TRG_PNM AS CODE_PNM
+	       , NULL AS UPCODE_CD
+	    FROM WAA_DB_CONN_TRG A
+	   WHERE A.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	     AND A.REG_TYP_CD IN ('C', 'U')
+	     AND EXISTS
+	     (
+	     	SELECT 1
+	          FROM WAA_DB_SCH X
+	          WHERE A.DB_CONN_TRG_ID = X.DB_CONN_TRG_ID
+	            AND X.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	            AND X.REG_TYP_CD IN ('C','U')
+	            AND X.DDL_TRG_DCD = 'D'  
+	     )
+	 
+       ORDER BY UPCODE_CD DESC, CODE_LNM
+  </select>
+  
+  <select id="getDevConnTrgSchId2" resultMap="BaseResultMap">
+	  SELECT A.DB_SCH_ID AS CODE_CD
+	       , A.DB_SCH_LNM AS CODE_LNM
+	       , A.DB_SCH_PNM AS CODE_PNM
+	       , B.DB_CONN_TRG_ID AS UPCODE_CD
+	    FROM WAA_DB_SCH A 
+	         INNER JOIN WAA_DB_CONN_TRG B
+	            ON B.DB_CONN_TRG_ID = A.DB_CONN_TRG_ID
+	           AND B.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	           AND B.REG_TYP_CD IN ('C', 'U')  
+	           AND B.META_MNG_YN = 'Y'
+	   WHERE A.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	     AND A.REG_TYP_CD IN ('C', 'U')
+	     AND A.DDL_TRG_DCD = 'D'
+	   UNION ALL
+	  SELECT A.DB_CONN_TRG_ID AS CODE_CD
+	       , A.DB_CONN_TRG_LNM AS CODE_LNM
+	       , A.DB_CONN_TRG_PNM AS CODE_PNM
+	       , '' AS UPCODE_CD
+	    FROM WAA_DB_CONN_TRG A	         
+	   WHERE A.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	     AND A.REG_TYP_CD IN ('C', 'U')   
+	     AND A.META_MNG_YN = 'Y'
+	     AND EXISTS
+	     (
+	     	SELECT 1
+	     	  FROM WAA_DB_SCH B
+	     	 WHERE A.DB_CONN_TRG_ID = B.DB_CONN_TRG_ID
+	     	   AND B.EXP_DTM = STR_TO_DATE('9999-12-31','%Y-%m-%d')
+	           AND B.DDL_TRG_DCD = 'D'
+	     )
+       ORDER BY UPCODE_CD, CODE_LNM
+  </select>
+  
+  <select id="getchnlTpDtls" resultMap="BaseResultMap">
+		SELECT A.COMM_DTL_CD AS CODE_CD
+			  ,A.COMM_DTL_CD_NM AS CODE_LNM
+			  ,A.COMM_DTL_CD_ID AS CODE_PNM
+			  ,NULL AS UPCODE_CD
+			FROM WAA_COMM_DTL_CD A
+			INNER JOIN WAA_COMM_DCD B
+		       ON A.COMM_DCD_ID = B.COMM_DCD_ID
+		      AND B.REG_TYP_CD IN ('C','U')
+		      AND B.EXP_DTM = STR_TO_DATE('99991231','%Y%m%d')
+		      AND B.COMM_DCD IN ('CHNL_TP_CD')
+		UNION ALL
+		SELECT A.COMM_DTL_CD AS CODE_CD
+			  ,A.COMM_DTL_CD_NM AS CODE_LNM
+			  ,A.COMM_DTL_CD_ID AS CODE_PNM
+			  ,SUBSTR(A.COMM_DTL_CD,1,1) AS UPCODE_CD
+			FROM WAA_COMM_DTL_CD A
+			INNER JOIN WAA_COMM_DCD B
+		       ON A.COMM_DCD_ID = B.COMM_DCD_ID
+		      AND B.REG_TYP_CD IN ('C','U')
+		      AND B.EXP_DTM = STR_TO_DATE('99991231','%Y%m%d')
+		      AND B.COMM_DCD IN ('CHNL_DTL_CD')
+  </select>
+  <select id="getbizDtls" resultMap="BaseResultMap">
+		SELECT A.COMM_DTL_CD AS CODE_CD
+			  ,A.COMM_DTL_CD_NM AS CODE_LNM
+			  ,A.COMM_DTL_CD_ID AS CODE_PNM
+			  ,NULL AS UPCODE_CD
+              ,A.DISP_ORD
+			FROM WAA_COMM_DTL_CD A
+			INNER JOIN WAA_COMM_DCD B
+		       ON A.COMM_DCD_ID = B.COMM_DCD_ID
+		      AND A.REG_TYP_CD IN ('C','U')
+		      AND A.EXP_DTM = STR_TO_DATE('99991231','%Y%m%d')
+		      AND B.REG_TYP_CD IN ('C','U')
+		      AND B.EXP_DTM = STR_TO_DATE('99991231','%Y%m%d')
+		      AND B.COMM_DCD IN ('MSG_TYP')
+		UNION ALL
+		SELECT A.COMM_DTL_CD AS CODE_CD
+			  ,A.COMM_DTL_CD_NM AS CODE_LNM
+			  ,A.COMM_DTL_CD_ID AS CODE_PNM
+			  ,C.COMM_DTL_CD AS UPCODE_CD
+              ,A.DISP_ORD
+			FROM WAA_COMM_DTL_CD A
+			INNER JOIN WAA_COMM_DCD B
+		       ON A.COMM_DCD_ID = B.COMM_DCD_ID
+		      AND A.REG_TYP_CD IN ('C','U')
+		      AND A.EXP_DTM = STR_TO_DATE('99991231','%Y%m%d')
+		      AND B.REG_TYP_CD IN ('C','U')
+		      AND B.EXP_DTM = STR_TO_DATE('99991231','%Y%m%d')
+		      AND B.COMM_DCD IN ('BIZ_DIT')
+            INNER JOIN 
+            (SELECT D.COMM_DTL_CD_ID, D.COMM_DTL_CD FROM WAA_COMM_DCD C
+            INNER JOIN WAA_COMM_DTL_CD D
+               ON C.COMM_DCD_ID = D.COMM_DCD_ID
+              AND D.REG_TYP_CD IN ('C','U')
+		      AND D.EXP_DTM = STR_TO_DATE('99991231','%Y%m%d')
+            WHERE C.REG_TYP_CD IN ('C','U')
+		      AND C.EXP_DTM = STR_TO_DATE('99991231','%Y%m%d')
+              AND C.COMM_DCD IN ('MSG_TYP')
+            ) C
+            ON A.UPP_COMM_DTL_CD_ID = C.COMM_DTL_CD_ID
+            ORDER BY DISP_ORD
+  </select>
+  
+  
+<!--   190425 추가 주제영역권한, 멀티사전 -->
+
+ 
+  <select id="getDmngLowDgrStndAsrtFullPath" resultMap="BaseResultMap">
+  	SELECT DMNG_ID AS CODE_CD
+	      ,FULL_PATH AS CODE_LNM
+	      ,FULL_PATH AS CODE_PNM
+	  FROM WAA_DMNG
+	 WHERE 1=1
+	   AND EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	   AND DMNG_LVL = (SELECT BSC_LVL 
+	                     FROM WAA_BSC_LVL
+	                    WHERE BSC_ID = 'DMNG'
+	                      AND EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	                      AND REG_TYP_CD IN ('C', 'U'))
+	 ORDER BY FULL_PATH
+  </select>
+  
+  
+   <select id="getInfotpStndAsrtFullPath" resultMap="BaseResultMap">
+	SELECT * 
+	FROM (
+			SELECT INFOTP_ID AS CODE_CD 
+					, CONCAT(IFNULL(B.COMM_DTL_CD_NM, ''),'>',IFNULL(A.INFOTP_LNM, ''))	AS CODE_LNM
+					, CONCAT(IFNULL(B.COMM_DTL_CD_NM, ''),'>',IFNULL(A.INFOTP_LNM, ''))	AS CODE_PNM
+					, A.STND_ASRT
+			FROM WAA_INFO_TYPE A
+			INNER JOIN (
+							SELECT	X.COMM_DTL_CD
+                    				, X.COMM_DTL_CD_NM
+            				FROM WAA_COMM_DCD Z
+                    		INNER JOIN WAA_COMM_DTL_CD X
+                      		ON Z.COMM_DCD_ID= X.COMM_DCD_ID
+                      		AND Z.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+            		  		AND Z.REG_TYP_CD IN ('C', 'U')
+                      		AND X.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+            		  		AND X.REG_TYP_CD IN ('C', 'U')
+            				WHERE Z.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+            		  		AND Z.REG_TYP_CD IN ('C', 'U')
+                      		AND Z.COMM_DCD ='STNDASRT'
+						) B
+			ON A.STND_ASRT = B.COMM_DTL_CD       
+     		AND A.EXP_DTM = STR_TO_DATE('99991231','%Y%m%d')          
+			WHERE A.EXP_DTM = STR_TO_DATE('99991231','%Y%m%d')
+		)A
+	ORDER BY CODE_LNM
+  </select>
+  
+  
+  
+<!--   주제영역권한 -->
+  
+    <select id="getSubjLnmByLvl1" resultMap="BaseResultMap">
+	  SELECT A.SUBJ_ID AS CODE_CD
+	       , A.SUBJ_LNM AS CODE_LNM
+	       , A.SUBJ_PNM AS CODE_PNM
+	       , A.SYS_AREA_ID AS UPCODE_CD
+	    FROM WAA_SUBJ A
+	   WHERE A.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	     AND A.REG_TYP_CD IN ('C', 'U')
+	     AND A.SUBJ_LVL = 1
+       ORDER BY SYS_AREA_ID, CODE_LNM, UPCODE_CD 
+  </select>
+  <select id="getSysareaNsubjLnmByLvl1" resultMap="BaseResultMap">
+	       SELECT A.SYS_AREA_ID AS CODE_CD
+	        ,A.SYS_AREA_LNM AS CODE_LNM
+	        ,A.SYS_AREA_PNM AS CODE_PNM
+	        ,''             AS UPCODE_CD
+	  FROM WAA_SYS_AREA A
+      WHERE EXP_DTM = STR_TO_DATE('99991231', '%Y%m%d')
+      AND REG_TYP_CD IN ('C', 'U')      
+	  UNION ALL
+	  SELECT B.SUBJ_ID AS CODE_CD
+	       , B.SUBJ_LNM AS CODE_LNM
+	       , B.SUBJ_PNM AS CODE_PNM
+	       , B.SYS_AREA_ID AS UPCODE_CD
+	    FROM WAA_SUBJ B
+	   WHERE B.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	     AND B.REG_TYP_CD IN ('C', 'U')
+	     AND B.SUBJ_LVL = 1
+       ORDER BY UPCODE_CD, CODE_LNM
+  </select>
+  <select id="getSubjLnmByLvl2" resultMap="BaseResultMap">
+	  SELECT A.SUBJ_ID AS CODE_CD
+	       , A.SUBJ_LNM AS CODE_LNM
+	       , A.SUBJ_PNM AS CODE_PNM
+	       , '' AS UPCODE_CD
+	    FROM WAA_SUBJ A
+	   WHERE A.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	     AND A.REG_TYP_CD IN ('C', 'U')
+	     AND A.SUBJ_LVL = 2
+       ORDER BY SYS_AREA_ID, CODE_LNM, UPCODE_CD 
+  </select>
+  <select id="getSubjLnmByLvl1Pnm" resultMap="BaseResultMap">
+      SELECT A.SUBJ_PNM AS CODE_CD
+	       , A.SUBJ_LNM AS CODE_LNM
+	       , A.SUBJ_PNM AS CODE_PNM
+	       , '' AS UPCODE_CD
+	    FROM WAA_SUBJ A
+	   WHERE A.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	     AND A.REG_TYP_CD IN ('C', 'U')
+	     AND A.SUBJ_LVL = 1       
+       ORDER BY SYS_AREA_ID, CODE_LNM DESC , UPCODE_CD 
+  </select>
+  <select id="getSubjLnmByLvl2Pnm" resultMap="BaseResultMap">
+      SELECT A.SUBJ_PNM AS CODE_CD
+	       , A.SUBJ_LNM AS CODE_LNM
+	       , A.SUBJ_PNM AS CODE_PNM
+	       , '' AS UPCODE_CD
+	    FROM WAA_SUBJ A
+	   WHERE A.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	     AND A.REG_TYP_CD IN ('C', 'U')
+	     AND A.SUBJ_LVL = 2       
+       ORDER BY SYS_AREA_ID, CODE_LNM DESC , UPCODE_CD 
+  </select>
+  
+   <select id="getSubjLnmByLvl3" resultMap="BaseResultMap">
+  	SELECT A.SUBJ_ID AS CODE_CD
+	     , A.FULL_PATH AS CODE_LNM
+	     , A.SUBJ_PNM AS CODE_PNM
+	     , A.UPP_SUBJ_ID AS UPCODE_CD
+	  FROM WAA_SUBJ A
+	 WHERE A.REG_TYP_CD IN ('C', 'U')
+	   AND A.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	   AND A.SUBJ_LVL = 3
+  </select>
+  
+    <select id="getSubjLstByLvl0Lvl1" resultMap="BaseResultMap">
+      /** kr.wise.commons.code.service.CodeListMapper.getSubjLstByLvl0Lvl1 **/    
+      SELECT A.SUBJ_ID AS CODE_CD
+	       , A.FULL_PATH AS CODE_LNM
+	       , A.SUBJ_PNM AS CODE_PNM
+	       , '' AS UPCODE_CD
+	       , SUBJ_LVL
+	    FROM WAA_SUBJ A
+	   WHERE A.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	     AND A.REG_TYP_CD IN ('C', 'U')
+	     AND A.SUBJ_LVL IN ('1','2','3')
+       ORDER BY SYS_AREA_ID, CODE_LNM, UPCODE_CD       
+  </select>
+  
+  <select id="getProdConnTrgSchId" resultMap="BaseResultMap">
+	  SELECT A.DB_SCH_ID AS CODE_CD
+	       , A.DB_SCH_LNM AS CODE_LNM
+	       , A.DB_SCH_PNM AS CODE_PNM
+	       , B.DB_CONN_TRG_ID AS UPCODE_CD
+	    FROM WAA_DB_SCH A 
+	         INNER JOIN WAA_DB_CONN_TRG B
+		        ON B.DB_CONN_TRG_ID = A.DB_CONN_TRG_ID		       
+		       AND B.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+		       AND B.REG_TYP_CD IN ('C', 'U')    
+	   WHERE A.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	     AND A.REG_TYP_CD IN ('C', 'U')
+	     AND A.DDL_TRG_DCD != 'D'
+	   UNION ALL
+	  SELECT A.DB_CONN_TRG_ID AS CODE_CD
+	       , A.DB_CONN_TRG_LNM AS CODE_LNM
+	       , A.DB_CONN_TRG_PNM AS CODE_PNM
+	       , '' AS UPCODE_CD
+	    FROM WAA_DB_CONN_TRG A
+	   WHERE A.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	     AND A.REG_TYP_CD IN ('C', 'U')
+	     AND EXISTS
+	     (
+	     	SELECT 1
+	          FROM WAA_DB_SCH X
+	          WHERE X.DB_CONN_TRG_ID = A.DB_CONN_TRG_ID
+	           AND X.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	           AND X.REG_TYP_CD IN ('C','U')
+	           AND X.DDL_TRG_DCD != 'D'
+	     )
+       ORDER BY UPCODE_CD, CODE_LNM
+  </select>
+      
+  <select id="getConnTrgSchNameSplit" resultMap="BaseResultMap">
+	  SELECT CASE WHEN INSTR(A.DB_SCH_PNM,'.')>0 THEN SUBSTR(A.DB_SCH_PNM,1,INSTR(A.DB_SCH_PNM,'.')-1) ELSE A.DB_SCH_PNM END AS CODE_CD
+	      ,CASE WHEN INSTR(A.DB_SCH_LNM,'.')>0 THEN SUBSTR(A.DB_SCH_LNM,1,INSTR(A.DB_SCH_LNM,'.')-1) ELSE A.DB_SCH_LNM END AS CODE_LNM
+	      ,CASE WHEN INSTR(A.DB_SCH_PNM,'.')>0 THEN SUBSTR(A.DB_SCH_PNM,1,INSTR(A.DB_SCH_PNM,'.')-1) ELSE A.DB_SCH_PNM END AS CODE_PNM
+	      ,B.DB_CONN_TRG_PNM AS UPCODE_CD
+	  FROM WAA_DB_SCH A 
+	  INNER JOIN WAA_DB_CONN_TRG B
+	    ON A.DB_CONN_TRG_ID = B.DB_CONN_TRG_ID
+	   AND A.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	   AND A.REG_TYP_CD IN ('C', 'U')
+	   AND B.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	   AND B.REG_TYP_CD IN ('C', 'U')
+	 WHERE A.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	   AND A.REG_TYP_CD IN ('C', 'U')
+	   AND B.CONN_LOC_CD ='PROD' --운영망만
+	 UNION ALL
+	SELECT A.DB_CONN_TRG_PNM AS CODE_CD
+	      ,A.DB_CONN_TRG_LNM AS CODE_LNM
+	      ,A.DB_CONN_TRG_PNM AS CODE_PNM
+	      ,NULL AS UPCODE_CD
+	  FROM WAA_DB_CONN_TRG A
+	 WHERE A.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	   AND A.REG_TYP_CD IN ('C', 'U')
+	   AND A.CONN_LOC_CD ='PROD' --운영망만
+     ORDER BY UPCODE_CD, CODE_LNM
+  </select> 
+  
+  <select id="getOtlAlgId" resultMap="BaseResultMap">
+  -- 이상값 탐지 알고리즘 코드 조회...
+   SELECT ALG_ID  AS CODE_CD
+         , ALG_LNM AS CODE_LNM
+         , ALG_PNM AS CODE_PNM
+     FROM WAA_ALG
+   WHERE ALG_TYP_CD = 'OD'
+     AND REG_TYP_CD IN ('C', 'U')
+   ORDER BY ALG_ID
+  </select>
+  
+  <select id="getOtlTypCd" resultMap="BaseResultMap">
+  -- 이상값 처리 코드 조회...
+   SELECT A.COMM_DTL_CD AS CODE_CD
+     ,A.COMM_DTL_CD_NM AS CODE_LNM
+     ,A.COMM_DTL_CD_ID AS CODE_PNM
+     ,NULL AS UPCODE_CD
+   FROM WAA_COMM_DTL_CD A
+   INNER JOIN WAA_COMM_DCD B
+       ON A.COMM_DCD_ID = B.COMM_DCD_ID
+      AND B.REG_TYP_CD IN ('C','U')
+      AND B.EXP_DTM = STR_TO_DATE('99991231','%Y%m%d')
+      AND B.COMM_DCD IN ('OTL_TYP_CD')
+   ORDER BY CODE_CD
+  </select>
+  
+  <select id="getOtlDqiMap" resultMap="BaseResultMap">
+  -- 이상값 화면 품질지표 조회...
+   SELECT A.DQI_ID   AS CODE_CD
+        , A.DQI_LNM   AS CODE_LNM
+        , A.UPP_DQI_ID
+   FROM WAM_DQI A
+  WHERE  REG_TYP_CD  IN ('C','U')
+    AND NOT EXISTS (SELECT B.UPP_DQI_ID 
+                FROM WAM_DQI B 
+                WHERE B.UPP_DQI_ID = A.DQI_ID)
+    ORDER BY A.UPP_DQI_ID, A.DQI_ID
+  </select>   
+  
+  <!-- codelist 추가 -->
+  <select id="getOrgCdLvl1" resultMap="BaseResultMap">
+	   SELECT 
+		 	ORG_CD  AS CODE_CD
+        	,ORG_NM AS CODE_LNM
+        	,ORG_NM AS CODE_PNM
+        	,null as UPCODE_CD
+       FROM WAA_ORG
+       WHERE  REG_TYP_CD IN ('C', 'U')
+	   AND EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	   AND IFNULL(UPP_ORG_CD,'') = ''
+  </select>
+  <select id="getOrgCd" resultMap="BaseResultMap">
+	   SELECT 
+		 	ORG_CD  AS CODE_CD
+        	,ORG_NM AS CODE_LNM
+        	,ORG_NM AS CODE_PNM
+        	,UPP_ORG_CD as UPCODE_CD
+       FROM WAA_ORG
+       WHERE  REG_TYP_CD IN ('C', 'U')
+	   AND EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+  </select>
+  <select id="getGiCd" resultMap="BaseResultMap">
+	   SELECT 
+		 	GI_CD  AS CODE_CD
+        	,GI_NM AS CODE_LNM
+        	,GI_NM AS CODE_PNM
+        	,null as UPCODE_CD
+       FROM WAA_GI
+  </select>
+  <select id="getInfoSysCd" resultMap="BaseResultMap">
+	   SELECT 
+		 	 INFO_SYS_CD  AS CODE_CD
+        	,INFO_SYS_NM AS CODE_LNM
+        	,INFO_SYS_NM AS CODE_PNM
+        	,ORG_CD as UPCODE_CD
+       FROM WAA_INFO_SYS
+       WHERE  1=1 
+	   AND EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	   ORDER BY INFO_SYS_NM
+  </select>
+  <select id="getUsergOrgCdList" resultMap="BaseResultMap">
+	SELECT 
+		  A.ORG_CD 	   AS CODE_CD 
+		, B.ORG_NM     AS CODE_LNM
+		, B.UPP_ORG_CD AS UPCODE_CD
+	FROM WAA_USERG A
+	INNER JOIN WAA_ORG B
+	ON  A.ORG_CD = B.ORG_CD
+	AND B.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	AND B.REG_TYP_CD IN ('C', 'U')
+	WHERE 1=1
+	AND A.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	AND A.REG_TYP_CD IN ('C', 'U')
+	GROUP BY A.ORG_CD, B.ORG_NM, B.UPP_ORG_CD
+	ORDER BY B.ORG_NM
+  </select>
+  
+  <select id="selectAuthOrgCdList" resultMap="BaseResultMap" parameterType="kr.wise.commons.cmm.LoginVO">
+	   SELECT ORG_CD  AS CODE_CD
+        	, ORG_NM AS CODE_LNM
+        	, ORG_NM AS CODE_PNM
+        	, UPP_ORG_CD as UPCODE_CD
+         FROM WAA_ORG
+        WHERE REG_TYP_CD IN ('C', 'U')
+	      AND EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	      AND ORG_CD = #{orgCd, jdbcType=VARCHAR}
+	      <!-- <choose>
+	      	<when test='isAdminYn == "Y" ' >
+	      		AND (ORG_CD = #{orgCd} OR UPP_ORG_CD = #{orgCd})
+	      	</when>
+	      	<when test='isSysAdminYn == "Y" ' >
+	      		AND (ORG_CD = #{orgCd} OR UPP_ORG_CD = #{orgCd})
+	      	</when>
+	      	<otherwise>
+	      		AND ORG_CD = #{orgCd}
+	      	</otherwise>
+	      </choose>	    -->
+	    ORDER BY ORG_CD     	    	       
+  </select>
+  
+  <select id="selectInfoSysCdEachList" resultMap="BaseResultMap" parameterType="String">
+	   SELECT INFO_SYS_CD  AS CODE_CD
+        	, INFO_SYS_NM AS CODE_LNM
+        	, INFO_SYS_NM AS CODE_PNM
+        	, ORG_CD as UPCODE_CD
+         FROM WAA_INFO_SYS
+        WHERE EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	      AND ORG_CD = #{orgCd}
+	    ORDER BY INFO_SYS_NM
+  </select>
+    <select id="getDicList" resultMap="BaseResultMap"
+	parameterType="String">
+	SELECT A.CODE_CD
+	   , CONCAT('(', IFNULL(DATE_FORMAT(DIC_RQST_DTM, '%Y/%m/%d'), ''), ' ', IFNULL(A.DIC_ORGN, ''), ') ' 
+	   			, IFNULL(CASE WHEN A.CNT > 0 
+	   				          THEN CONCAT(IFNULL(A.WD_NAME, '') , ' 외 ', IFNULL(A.CNT, ''), '건')
+	              	   	   	  ELSE A.WD_NAME 
+	              		 END, '')) AS CODE_LNM
+	   ,'' AS CODE_PNM
+	   FROM (SELECT DIC_RQST_NO AS CODE_CD
+	              , MAX(WD_NAME) AS WD_NAME
+	              , MIN(DIC_RQST_DTM) AS DIC_RQST_DTM
+	              , COUNT(DISTINCT WD_NAME) - 1 AS CNT  
+	              , MAX(DIC_ORGN) AS DIC_ORGN 
+	         FROM ( SELECT DIC_RQST_NO
+	                     , WD_NAME
+	                     , MIN(DIC_RQST_DTM) AS DIC_RQST_DTM
+	                     , DIC_ORGN 
+	                  FROM WAQ_DIC
+			   		  WHERE DIC_RQST_USER_ID = 'meta'
+	             GROUP BY DIC_RQST_NO, WD_NAME , DIC_ORGN ) A  
+	    GROUP BY A.DIC_RQST_NO) A 
+	ORDER BY CODE_CD DESC
+
+</select>
+
+<!--   등록차수 - 범정부메타용 -->
+  <select id="getMtaDgr" resultMap="BaseResultMap">
+SELECT MTA_DGR AS CODE_CD 
+    ,CONCAT(IFNULL(MTA_DGR, ''), '차') AS CODE_LNM
+	,'' AS CODE_PNM  
+FROM WAM_MTA_EXL
+WHERE MTA_DGR IS NOT NULL
+GROUP BY MTA_DGR
+UNION ALL
+SELECT IFNULL(MAX(MTA_DGR), 0)+1 AS CODE_CD 
+    ,CONCAT(IFNULL(MAX(MTA_DGR), 0)+1, '차 (신규차수)') AS CODE_LNM
+	,'' AS CODE_PNM  
+FROM WAM_MTA_EXL
+WHERE MTA_DGR IS NOT NULL
+  </select>
+  <!--   등록차수 - 범정부메타용 -->
+  <select id="getMtaDgrSel" resultMap="BaseResultMap">
+SELECT MTA_DGR AS CODE_CD 
+    ,CONCAT(IFNULL(MTA_DGR, ''), '차') AS CODE_LNM
+	,'' AS CODE_PNM  
+FROM WAM_MTA_EXL
+WHERE MTA_DGR IS NOT NULL
+GROUP BY MTA_DGR
+  </select>
+  
+  <select id="getWapWordDvList" resultMap="BaseResultMap"  parameterType="String">
+		SELECT A.CODE_CD
+      	   , CONCAT('(', IFNULL(DATE_FORMAT(DV_RQST_DTM, '%Y/%m/%d'), ''), ')' 
+  			       , IFNULL(CASE WHEN A.CNT > 0 
+  				          THEN CONCAT(IFNULL(A.REG_WORD, '') , ' 외 ', IFNULL(A.CNT, ''), '건')
+             	   	   	  ELSE A.REG_WORD 
+             		 END, '')) AS CODE_LNM
+	                  
+	       , '' AS CODE_PNM
+	   FROM (SELECT DV_RQST_NO AS CODE_CD
+	              , MAX(REG_WORD) AS REG_WORD
+	              , MIN(DV_RQST_DTM) AS DV_RQST_DTM
+	              , COUNT(DISTINCT REG_WORD) - 1 AS CNT      
+	         FROM ( SELECT DV_RQST_NO
+	                     , REG_WORD
+	                     , MIN(DV_RQST_DTM) AS DV_RQST_DTM
+	                  FROM WAP_WORD_DV
+			   <if test="value != null">
+			   WHERE DV_RQST_USER_ID = #{value}
+			   </if>
+	                 GROUP BY DV_RQST_NO, REG_WORD) A  
+	        GROUP BY A.DV_RQST_NO) A  
+	ORDER BY CODE_CD DESC
+  </select>
+  
+  <select id="getConnTrgSchIdMdl" resultMap="BaseResultMap">
+     SELECT A.DB_SCH_ID AS CODE_CD
+          , A.DB_SCH_LNM AS CODE_LNM
+          , A.DB_SCH_PNM AS CODE_PNM
+          , B.DB_CONN_TRG_ID AS UPCODE_CD
+       FROM WAA_DB_SCH A 
+            INNER JOIN WAA_DB_CONN_TRG B
+               ON B.DB_CONN_TRG_ID = A.DB_CONN_TRG_ID
+              AND B.EXP_DTM = DATE_FORMAT('9999-12-31', '%Y-%m-%d')
+              AND B.REG_TYP_CD IN ('C', 'U')              
+      WHERE A.EXP_DTM = DATE_FORMAT('9999-12-31', '%Y-%m-%d')
+        AND A.REG_TYP_CD IN ('C', 'U')
+        AND IFNULL(A.CLT_XCL_YN,'N') = 'N'
+       ORDER BY UPCODE_CD, CODE_LNM
+  </select>  
+  
+  
+</mapper>

@@ -1,0 +1,1175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.wise.dq.dqrs.service.DqrsStndMapper">
+  <resultMap id="DqrsSditmResultMap" type="kr.wise.dq.dqrs.service.DqrsSditm" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+    <id column="SDITM_ID" property="sditmId" jdbcType="VARCHAR" />
+    <result column="SDITM_LNM" property="sditmLnm" jdbcType="VARCHAR" />
+    <result column="SDITM_PNM" property="sditmPnm" jdbcType="VARCHAR" />
+    <result column="DB_CONN_TRG_ID" property="dbConnTrgId" jdbcType="VARCHAR" />
+    <result column="DB_CONN_TRG_PNM" property="dbConnTrgPnm" jdbcType="VARCHAR" />
+    <result column="DB_SCH_ID" property="dbSchId" jdbcType="VARCHAR" />
+    <result column="DB_SCH_PNM" property="dbSchPnm" jdbcType="VARCHAR" />
+    <result column="DMN_ID" property="dmnId" jdbcType="VARCHAR" />
+    <result column="DMN_NM" property="dmnNm" jdbcType="VARCHAR" />
+    <result column="OBJ_DESCN" property="objDescn" jdbcType="VARCHAR" />
+    <result column="RQST_DCD" property="rqstDcd" jdbcType="VARCHAR" />
+    <result column="VRF_RMK" property="vrfRmk" jdbcType="VARCHAR" />
+    <result column="DATA_TYPE" property="dataType" jdbcType="VARCHAR" /> 
+    <result column="DATA_LEN" property="dataLen" jdbcType="VARCHAR" /> 
+    <result column="DATA_SCAL" property="dataScal" jdbcType="VARCHAR" /> 
+    <result column="DIC_ORGN" property="dicOrgn" jdbcType="VARCHAR" />
+    <result column="REG_DTM" property="regDtm" jdbcType="VARCHAR" />
+    <result column="REG_USER_ID" property="regUserId" jdbcType="VARCHAR" />
+    <result column="EXC_YN" property="excYn" jdbcType="VARCHAR" />
+	
+	<result column="INFO_SYS_CD" property="infoSysCd" jdbcType="VARCHAR" />
+	<result column="DB_CONN_TRG_ID" property="dbConnTrgId" jdbcType="VARCHAR" />
+	<result column="DB_SCH_ID" property="dbSchId" jdbcType="VARCHAR" />
+	<result column="GOV_YN" property="govYn" jdbcType="VARCHAR" />
+	
+	<result column="SYS_AREA_ID" property="sysAreaId" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <resultMap id="DqrsDmnResultMap" type="kr.wise.dq.dqrs.service.DqrsDmn"  extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+     <id column="DMN_ID" property="dmnId" jdbcType="VARCHAR" />
+    
+    <result column="GOV_YN" property="govYn" jdbcType="VARCHAR" /> 
+    <result column="DB_CONN_TRG_PNM" property="dbConnTrgPnm" jdbcType="VARCHAR" />  <!-- 디비논리명-->
+    <result column="DB_SCH_PNM" property="dbSchPnm" jdbcType="VARCHAR" />  <!-- 스키마 물리명-->
+    <result column="DB_CONN_TRG_ID" property="dbConnTrgId" jdbcType="VARCHAR" />  <!-- 디비논리명-->
+    <result column="DB_SCH_ID" property="dbSchId" jdbcType="VARCHAR" />  <!-- 스키마 물리명-->
+    
+    <result column="UPP_DMNG_NM" property="uppDmngNm" jdbcType="VARCHAR" />  <!-- 도메인 그룹명-->
+    <result column="DMNG_NM" property="dmngNm" jdbcType="VARCHAR" /> <!-- 도메인 분류명-->
+    <result column="DMN_NM" property="dmnNm" jdbcType="VARCHAR" /> <!-- 도메인명 -->
+    
+    <result column="OBJ_DESCN" property="objDescn" jdbcType="VARCHAR" />  <!-- 공통표준도메인설명-->
+    
+    <result column="RQST_DCD" property="rqstDcn" jdbcType="VARCHAR" />  <!-- 요청구분코드-->
+    <result column="VRF_RMK" property="vrfRmk" jdbcType="VARCHAR" />  <!-- 검증결과-->
+    
+    <result column="DATA_TYPE" property="dataType" jdbcType="VARCHAR" />  
+    <result column="DATA_LEN" property="dataLen" jdbcType="INTEGER" />  
+    <result column="DATA_SCAL" property="dataScal" jdbcType="INTEGER" />  
+    
+    <result column="DIC_ORGN" property="dicOrgn" jdbcType="VARCHAR" />  <!-- 출처-->
+    
+    <result column="REG_DTM" property="regDtm" jdbcType="TIMESTAMP" /> <!-- 등록일시-->
+    <result column="REG_USER_ID" property="regUserId" jdbcType="VARCHAR" /> <!-- 등록아이디--> 
+    
+    <result column="EXC_YN" property="excYn" jdbcType="VARCHAR" /> <!-- 엑셀여부-->
+    
+    <result column="SYS_AREA_ID" property="sysAreaId" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <resultMap id="StndGapResultMap" type="kr.wise.dq.dqrs.service.DqrsResult">
+		<id column="GAP_STATUS" property="gapStatus" jdbcType="VARCHAR" />
+	    <result column="SUBJ_LNM"            property="subjLnm"         jdbcType="VARCHAR" />
+	    <result column="PDM_TBL_PNM"         property="pdmTblPnm"       jdbcType="VARCHAR" />
+	    <result column="PDM_TBL_LNM"         property="pdmTblLnm"       jdbcType="VARCHAR" />
+	    <result column="PDM_COL_CNT"         property="pdmColCnt"       jdbcType="VARCHAR" />
+	    <result column="DB_CONN_TRG_LNM"     property="dbConnTrgLnm"    jdbcType="VARCHAR" />
+	    <result column="DB_CONN_TRG_PNM"     property="dbConnTrgPnm"    jdbcType="VARCHAR" />
+	    <result column="DB_SCH_LNM"          property="dbSchLnm"        jdbcType="VARCHAR" />
+	    <result column="DB_SCH_PNM"          property="dbSchPnm"        jdbcType="VARCHAR" />  
+	    <result column="DDL_TBL_PNM"         property="ddlTblPnm"       jdbcType="VARCHAR" />
+	    <result column="DDL_COL_CNT"         property="ddlColCnt"       jdbcType="VARCHAR" />
+	    <result column="PDM_GAP_COL_CNT_DDL" property="pdmGapColCntDdl" jdbcType="VARCHAR" />
+	    <result column="DBC_TBL_NM"          property="dbcTblNm"        jdbcType="VARCHAR" />
+	    <result column="DBC_COL_CNT"         property="dbcColCnt"       jdbcType="VARCHAR" />
+	    <result column="PDM_GAP_COL_CNT_DBC" property="pdmGapColCntDbc" jdbcType="VARCHAR" />
+	    <result column="DDL_GAP_COL_CNT_DBC" property="ddlGapColCntDbc" jdbcType="VARCHAR" />
+	    <result column="DDL_TBL_ERR_DESCN"   property="ddlTblErrDescn"  jdbcType="VARCHAR" />
+	    <result column="DDL_COL_ERR_DESCN"   property="ddlColErrDescn"  jdbcType="VARCHAR" />
+	    <result column="PDM_TBL_ERR_DESCN"   property="pdmTblErrDescn"  jdbcType="VARCHAR" />
+	    <result column="PDM_COL_ERR_DESCN"   property="pdmColErrDescn"  jdbcType="VARCHAR" />
+	    
+	    
+	    <result column="SUBJ_ID"        property="subjId"      jdbcType="VARCHAR" />
+	    <result column="FULL_PATH"      property="fullPath"    jdbcType="VARCHAR" />
+	    <result column="DB_SCH_ID"      property="dbSchId"     jdbcType="VARCHAR" />
+	    <result column="DB_CONN_TRG_ID" property="dbConnTrgId" jdbcType="VARCHAR" />
+	    <result column="SEARCH_BGN_DE"  property="searchBgnDe" jdbcType="VARCHAR" />
+	    <result column="SEARCH_END_DE"  property="searchEndDe" jdbcType="VARCHAR" />
+	    <result column="SEARCH_TYP"     property="searchTyp"   jdbcType="VARCHAR" />
+	    <result column="OBJ_NM"         property="objNm"       jdbcType="VARCHAR" />
+	    <result column="DDL_TBL_ID"     property="ddlTblId"    jdbcType="VARCHAR" />
+	    <result column="PDM_TBL_ID"     property="pdmTblId"    jdbcType="VARCHAR" />
+	    
+	    <result column="PDM_TBL_CNT" property="pdmTblCnt" jdbcType="VARCHAR" />
+	    <result column="GAP_CNT"     property="gapCnt"    jdbcType="VARCHAR" />
+	    <result column="NML_CNT"     property="nmlCnt"    jdbcType="VARCHAR" />
+	    
+	    <result column="PDM_COL_ID"  property="pdmColId"  jdbcType="VARCHAR" />
+	    <result column="PDM_COL_PNM" property="pdmColPnm" jdbcType="VARCHAR" />
+	    <result column="PDM_COL_LNM" property="pdmColLnm" jdbcType="VARCHAR" />
+	    <result column="DDL_COL_ID"  property="ddlColId"  jdbcType="VARCHAR" />
+	    <result column="DDL_COL_PNM" property="ddlColPnm" jdbcType="VARCHAR" />
+	    <result column="DDL_COL_LNM" property="ddlColLnm" jdbcType="VARCHAR" />
+	    
+	    <result column="PDM_COL_ORD" property="pdmColOrd" jdbcType="VARCHAR" />
+	    <result column="PDM_DATA_TYPE" property="pdmDataType" jdbcType="VARCHAR" />
+	    <result column="PDM_DATA_LEN" property="pdmDataLen" jdbcType="VARCHAR" />
+	    <result column="PDM_DATA_SCAL" property="pdmDataScal" jdbcType="VARCHAR" />
+	    <result column="PDM_PK_YN" property="pdmPkYn" jdbcType="VARCHAR" />
+	    <result column="PDM_PK_ORD" property="pdmPkOrd" jdbcType="VARCHAR" />
+	    <result column="PDM_NONUL_YN" property="pdmNonulYn" jdbcType="VARCHAR" />
+	    <result column="PDM_DEFLT_VAL" property="pdmDefltVal" jdbcType="VARCHAR" />
+	    
+	    
+	    <result column="DDL_TBL_LNM" property="ddlTblLnm" jdbcType="VARCHAR" />
+	    <result column="DDL_COL_ORD" property="ddlColOrd" jdbcType="VARCHAR" />
+	    <result column="DDL_DATA_TYPE" property="ddlDataType" jdbcType="VARCHAR" />
+	    <result column="DDL_DATA_LEN" property="ddlDataLen" jdbcType="VARCHAR" />
+	    <result column="DDL_DATA_SCAL" property="ddlDataScal" jdbcType="VARCHAR" />                              
+	    <result column="DDL_PK_YN" property="ddlPkYn" jdbcType="VARCHAR" />
+	    <result column="DDL_PK_ORD" property="ddlPkOrd" jdbcType="VARCHAR" />
+	    <result column="DDL_NONUL_YN" property="ddlNonulYn" jdbcType="VARCHAR" />
+	    <result column="DDL_DEFLT_VAL" property="ddlDefltVal" jdbcType="VARCHAR" />
+	    
+	    <result column="DBC_COL_ORD" property="dbcColOrd" jdbcType="VARCHAR" />
+	    <result column="DBC_DATA_TYPE" property="dbcDataType" jdbcType="VARCHAR" />
+	    <result column="DBC_DATA_LEN" property="dbcDataLen" jdbcType="VARCHAR" />
+	    <result column="DBC_DATA_SCAL" property="dbcDataScal" jdbcType="VARCHAR" />                              
+	    <result column="DBC_PK_YN" property="dbcPkYn" jdbcType="VARCHAR" />
+	    <result column="DBC_PK_ORD" property="dbcPkOrd" jdbcType="VARCHAR" />
+	    <result column="DBC_NONUL_YN" property="dbcNonulYn" jdbcType="VARCHAR" />
+	    <result column="DBC_DEFLT_VAL" property="dbcDefltVal" jdbcType="VARCHAR" />
+	    
+	    
+	    <result column="MART_COL_CNT" property="martColCnt" jdbcType="VARCHAR" />
+	    <result column="MART_TBL_PNM" property="martTblPnm" jdbcType="VARCHAR" />
+	    <result column="MART_TBL_LNM" property="martTblLnm" jdbcType="VARCHAR" />
+	    <result column="MART_COL_PNM" property="martColPnm" jdbcType="VARCHAR" />
+	    <result column="MART_COL_LNM" property="martColLnm" jdbcType="VARCHAR" />
+	    <result column="MART_COL_ORD" property="martColOrd" jdbcType="VARCHAR" />
+	    <result column="MART_DATA_TYPE" property="martDataType" jdbcType="VARCHAR" />
+	    <result column="MART_DATA_LEN" property="martDataLen" jdbcType="VARCHAR" />
+	    <result column="MART_DATA_SCAL" property="martDataScal" jdbcType="VARCHAR" />                              
+	    <result column="MART_PK_YN" property="martPkYn" jdbcType="VARCHAR" />
+	    <result column="MART_PK_ORD" property="martPkOrd" jdbcType="VARCHAR" />
+	    <result column="MART_NONUL_YN" property="martNonulYn" jdbcType="VARCHAR" />
+	    <result column="MART_DEFLT_VAL" property="martDefltVal" jdbcType="VARCHAR" />
+	    
+	    <result column="DB_TSF_SCH_ID" property="dbTsfSchId" jdbcType="VARCHAR" />
+	    <result column="DB_TSF_CONN_TRG_ID" property="dbTsfConnTrgId" jdbcType="VARCHAR" />
+	    <result column="DB_TSF_CONN_TRG_LNM" property="dbTsfConnTrgLnm" jdbcType="VARCHAR" />
+	    <result column="DB_TSF_SCH_LNM" property="dbTsfSchLnm" jdbcType="VARCHAR" />
+	    <result column="DDL_TSF_TBL_ID" property="ddlTsfTblId" jdbcType="VARCHAR" />
+	    <result column="DDL_TSF_TBL_PNM" property="ddlTsfTblPnm" jdbcType="VARCHAR" />
+	    <result column="DDL_TSF_TBL_LNM" property="ddlTsfTblLnm" jdbcType="VARCHAR" />
+	    <result column="DDL_TSF_COL_ORD" property="ddlTsfColOrd" jdbcType="VARCHAR" />
+	    <result column="DDL_TSF_DATA_TYPE" property="ddlTsfDataType" jdbcType="VARCHAR" />
+	    <result column="DDL_TSF_DATA_LEN" property="ddlTsfDataLen" jdbcType="VARCHAR" />
+	    <result column="DDL_TSF_DATA_SCAL" property="ddlTsfDataScal" jdbcType="VARCHAR" />                              
+	    <result column="DDL_TSF_PK_YN" property="ddlTsfPkYn" jdbcType="VARCHAR" />
+	    <result column="DDL_TSF_PK_ORD" property="ddlTsfPkOrd" jdbcType="VARCHAR" />
+	    <result column="DDL_TSF_NONUL_YN" property="ddlTsfNonulYn" jdbcType="VARCHAR" />
+	    <result column="DDL_TSF_DEFLT_VAL" property="ddlTsfDefltVal" jdbcType="VARCHAR" />
+	    <result column="DDL_TSF_COL_CNT" property="ddlTsfColCnt" jdbcType="VARCHAR" />
+	    <result column="DDL_TSF_COL_PNM" property="ddlTsfColPnm" jdbcType="VARCHAR" />
+	    <result column="DDL_TSF_COL_LNM" property="ddlTsfColLnm" jdbcType="VARCHAR" />
+	    
+	    <result column="DB_REAL_SCH_ID" property="dbRealSchId" jdbcType="VARCHAR" />
+	    <result column="DBC_REAL_TBL_NM" property="dbcRealTblNm" jdbcType="VARCHAR" />
+	    <result column="DBC_REAL_COL_PNM" property="dbcRealColPnm" jdbcType="VARCHAR" />
+	    <result column="DBC_REAL_COl_LNM" property="dbcRealColLnm" jdbcType="VARCHAR" />
+	    <result column="DBC_REAL_COL_ORD" property="dbcRealColOrd" jdbcType="VARCHAR" />
+	    <result column="DBC_REAL_DATA_TYPE" property="dbcRealDataType" jdbcType="VARCHAR" />
+	    <result column="DBC_REAL_DATA_LEN" property="dbcRealDataLen" jdbcType="VARCHAR" />
+	    <result column="DBC_REAL_DATA_SCAL" property="dbcRealDataScal" jdbcType="VARCHAR" />                              
+	    <result column="DBC_REAL_PK_YN" property="dbcRealPkYn" jdbcType="VARCHAR" />
+	    <result column="DBC_REAL_PK_ORD" property="dbcRealPkOrd" jdbcType="VARCHAR" />
+	    <result column="DBC_REAL_NONUL_YN" property="dbcRealNonulYn" jdbcType="VARCHAR" />
+	    <result column="DBC_REAL_DEFLT_VAL" property="dbcRealDefltVal" jdbcType="VARCHAR" />
+	    <result column="DBC_REAL_COL_CNT" property="dbcRealColCnt" jdbcType="VARCHAR" />
+	    
+	    <result column="DDL_TRG_DCD"              property="ddlTrgDcd"           jdbcType="VARCHAR" />
+	    <result column="DBC_DB_CONN_TRG_PNM"      property="dbcDbConnTrgPnm"     jdbcType="VARCHAR" />
+	    <result column="DBC_DB_CONN_TRG_LNM"      property="dbcDbConnTrgLnm"     jdbcType="VARCHAR" />
+	    <result column="DBC_DB_SCH_LNM"           property="dbcDbSchLnm"         jdbcType="VARCHAR" />
+	    <result column="DBC_REAL_DB_CONN_TRG_LNM" property="dbcRealDbConnTrgLnm" jdbcType="VARCHAR" />
+	    <result column="DBC_REAL_DB_SCH_LNM"      property="dbcRealDbSchLnm"     jdbcType="VARCHAR" />
+	    
+	    <result column="DBC_COL_PNM" property="dbcColPnm" jdbcType="VARCHAR" />
+	    <result column="DBC_COL_LNM" property="dbcColLnm" jdbcType="VARCHAR" />
+	    
+	    <result column="DBC_TBL_LNM"      property="dbcTblLnm" jdbcType="VARCHAR" />
+	    <result column="DBC_REAL_TBL_LNM" property="dbcRealTblLnm" jdbcType="VARCHAR" />
+	    
+	    <result column="GAP_CONTS"        property="gapConts" jdbcType="VARCHAR" />
+	    
+	    <result column="SDITM_PNM"       property="sditmPnm"      jdbcType="VARCHAR" />
+	    <result column="SDITM_LNM"       property="sditmLnm"      jdbcType="VARCHAR" />    
+	    <result column="SDITM_DATA_TYPE" property="sditmDataType" jdbcType="VARCHAR" />
+	    <result column="SDITM_DATA_LEN"  property="sditmDataLen"  jdbcType="VARCHAR" />
+	    <result column="SDITM_DATA_SCAL" property="sditmDataScal" jdbcType="VARCHAR" />
+	    
+	    <result column="DB_SCH_PNM"      property="dbSchPnm"      jdbcType="VARCHAR" />
+	    <result column="SRC_DB_SCH_ID"   property="srcDbSchId"    jdbcType="VARCHAR" />
+	    <result column="SRC_DB_SCH_PNM"  property="srcDbSchPnm"   jdbcType="VARCHAR" />
+	    <result column="TGT_DB_SCH_ID"   property="tgtDbSchId"    jdbcType="VARCHAR" />
+	    <result column="TGT_DB_SCH_PNM"  property="tgtDbSchPnm"   jdbcType="VARCHAR" />
+	    
+	    <result column="REG_DTM"  property="regDtm"   jdbcType="VARCHAR" />
+	</resultMap>
+
+  <select id="selectDqrsSditmLst" parameterType="kr.wise.dq.dqrs.service.DqrsSditm" resultMap="DqrsSditmResultMap">  	
+	SELECT  X.DB_CONN_TRG_PNM
+	  , X.DB_SCH_PNM
+	  , X.SDITM_LNM
+	  , X.SDITM_PNM
+	  , X.DMN_NM
+	  , X.DATA_TYPE
+	  , X.DATA_LEN
+	  , X.DATA_SCAL
+	  , ( CONCAT( CASE WHEN NULLIF(X.VRF_RMK_LNM, '') IS NULL THEN '' ELSE CONCAT(X.VRF_RMK_LNM, ' ') END
+			   	 ,CASE WHEN NULLIF(X.VRF_RMK_PNM, '') IS NULL THEN '' ELSE CONCAT(X.VRF_RMK_PNM, ' ') END
+			     ,CASE WHEN NULLIF(X.VRF_RMK_DMN, '') IS NULL THEN '' ELSE CONCAT(X.VRF_RMK_DMN, ' ') END
+			     ,COALESCE(NULLIF(X.VRF_RMK_DB, ''),''))
+	    )AS VRF_RMK 
+	  , X.REG_DTM
+	  , X.SDITM_ID
+	  , X.DB_SCH_ID
+	  , X.DB_CONN_TRG_ID
+	  , X.REG_USER_ID
+	  , X.OBJ_DESCN
+	  , (
+	  		CASE 
+	  			WHEN VRF_RMK_LNM IS NOT NULL THEN '#FF0000' 
+	  			WHEN VRF_RMK_PNM IS NOT NULL THEN '#FF0000'
+	  			WHEN VRF_RMK_DMN IS NOT NULL THEN '#FF0000'
+	  			WHEN VRF_RMK_DB IS NOT NULL THEN '#FF0000'
+	  			ELSE '#000000'
+	  			END
+	  	) AS FontColor    
+  	FROM (	  	
+		SELECT GS.SDITM_ID
+	  		 , GS.DB_CONN_TRG_ID
+	  		 , DB.DB_CONN_TRG_PNM
+	  		 , GS.DB_SCH_ID
+	  		 , DB.DB_SCH_PNM
+	  		 , GS.SDITM_LNM
+	  		 , GS.SDITM_PNM
+	  		 , GS.DMN_ID
+	  		 , D.DMN_NM
+	  		 , GS.OBJ_DESCN
+--	  		 , GS.RQST_DCD
+	  		 , (CASE WHEN L.SDITM_LNM = GS.SDITM_LNM THEN '표준용어논리명중복' END) AS VRF_RMK_LNM
+		  	 , (CASE WHEN P.SDITM_PNM = GS.SDITM_PNM THEN '표준용어물리명중복' END) AS VRF_RMK_PNM
+		  	 , (CASE WHEN D.DMN_NM IS NULL THEN '도메인미존재' END) AS VRF_RMK_DMN
+		  	 , (CASE WHEN DB.DB_CONN_TRG_ID IS NULL OR DB.DB_SCH_ID IS NULL THEN '진단대상DB미존재' END) AS VRF_RMK_DB
+	  		 , GS.DATA_TYPE
+	  		 , GS.DATA_LEN
+	  		 , GS.DATA_SCAL
+	  		 , GS.REG_DTM
+	  		 , GS.REG_USER_ID
+	  		 , '#000000' AS FontColor
+	  		 , GS.REG_TYP_CD 
+	  	  FROM WAA_DQRS_SDITM GS
+	  	   INNER  JOIN (
+		  	  SELECT A.DB_CONN_TRG_ID , B.DB_SCH_ID, A.DB_CONN_TRG_PNM, B.DB_SCH_PNM
+		  	  FROM WAA_DB_CONN_TRG A
+		  	  INNER JOIN WAA_DB_SCH B
+		  	    ON B.DB_CONN_TRG_ID = A.DB_CONN_TRG_ID
+	              AND B.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+	              AND B.REG_TYP_CD IN ('C', 'U')              
+	              AND B.CLT_XCL_YN = 'N'
+		      WHERE A.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+		        AND A.REG_TYP_CD IN ('C', 'U')
+	  	 	 ) DB
+	  	 ON DB.DB_CONN_TRG_ID = GS.DB_CONN_TRG_ID
+	  	  AND DB.DB_SCH_ID = GS.DB_SCH_ID
+<!-- 	  	  LEFT OUTER JOIN WAA_DQRS_DMN D -->
+<!-- 		    ON GS.DMN_NM = D.DMN_NM  -->
+<!-- 		   AND D.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD') -->
+<!-- 		   AND GS.DB_CONN_TRG_ID = D.DB_CONN_TRG_ID -->
+<!-- 	  	   AND GS.DB_SCH_ID = D.DB_SCH_ID -->
+		   LEFT OUTER JOIN (
+	  	  		SELECT D.DB_CONN_TRG_ID, D.DB_SCH_ID, D.DMN_NM 
+	  	  		FROM WAA_DQRS_DMN D
+		   		WHERE D.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+		   		GROUP BY D.DB_CONN_TRG_ID, D.DB_SCH_ID, D.DMN_NM 
+		   ) D
+		   ON GS.DMN_NM = D.DMN_NM 
+		   AND GS.DB_CONN_TRG_ID = D.DB_CONN_TRG_ID
+	  	   AND GS.DB_SCH_ID = D.DB_SCH_ID
+	  	  LEFT OUTER JOIN (
+			SELECT B.DB_SCH_ID, B.SDITM_LNM, COUNT(*) 
+			  FROM WAA_DQRS_SDITM B  
+			 WHERE B.REG_TYP_CD IN ('C','U')
+			   AND B.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+			  GROUP BY B.DB_SCH_ID, B.SDITM_LNM 
+			  HAVING COUNT(*) > 1
+			) L
+			ON GS.DB_SCH_ID = L.DB_SCH_ID
+			 AND GS.SDITM_LNM = L.SDITM_LNM
+		  LEFT OUTER JOIN (
+			SELECT E.DB_SCH_ID, E.SDITM_PNM, COUNT(*) 
+			  FROM WAA_DQRS_SDITM E  
+			 WHERE E.REG_TYP_CD IN ('C','U')
+			   AND E.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+			  GROUP BY E.DB_SCH_ID, E.SDITM_PNM HAVING COUNT(*) > 1
+			) P
+			ON GS.DB_SCH_ID = P.DB_SCH_ID
+			  AND GS.SDITM_PNM = P.SDITM_PNM
+	  <where>
+	   		GS.REG_TYP_CD IN('C','U')
+	   		AND GS.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+	   	<if test="sditmLnm != null">
+	   		AND (UPPER(GS.SDITM_LNM) LIKE '%' || UPPER(#{sditmLnm,jdbcType=VARCHAR}) || '%'
+	      	 OR UPPER(GS.SDITM_PNM) LIKE '%' || UPPER(#{sditmLnm,jdbcType=VARCHAR}) || '%')
+	   	</if>
+	   	<if test="dmnNm != null">
+	   		AND UPPER(GS.DMN_NM) LIKE '%' || UPPER(#{dmnNm,jdbcType=VARCHAR}) || '%'
+	   	</if>
+	   	<if test="dataType != null">
+	   		AND UPPER(GS.DATA_TYPE) LIKE '%' || UPPER(#{dataType,jdbcType=VARCHAR}) || '%'
+	   	</if>
+	   	<if test="dbConnTrgId != null">
+	   		AND DB.DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR}
+	   	</if>
+	   	<if test="dbSchId != null">
+	   		AND DB.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+	   	</if>
+	  </where> 
+		) X
+		<where> 1=1
+		<if  test="vrfRmk != null">
+			 <if test="vrfRmk == 1">
+		   		AND VRF_RMK_LNM IS NULL and VRF_RMK_PNM IS NULL and VRF_RMK_DB IS NULL and VRF_RMK_DMN IS NULL
+		   	</if>
+		   	<if test="vrfRmk == 2">
+		   		AND VRF_RMK_DMN IS NOT NULL
+		   	</if>
+		   	<if test="vrfRmk == 3">
+		   		AND VRF_RMK_LNM IS NOT NULL or VRF_RMK_PNM IS NOT NULL
+		   	</if>
+		   	<if test="vrfRmk == 5">
+		   		AND VRF_RMK_DB IS NOT NULL
+		   	</if>
+	   	</if>
+	   	</where>
+  </select>
+  
+  <insert id="insertDqrsSditm" parameterType="kr.wise.dq.dqrs.service.DqrsSditm">
+
+  	INSERT INTO WAA_DQRS_SDITM
+  	<trim prefix="(" suffix=")" suffixOverrides="," >
+  		<if test="sditmId != null">
+  			SDITM_ID,
+  		</if>		
+  		<if test="dbConnTrgId != null">
+  			DB_CONN_TRG_ID,
+  		</if>
+<!--   		<if test="dbConnTrgPnm != null"> -->
+<!--   			DB_CONN_TRG_PNM, -->
+<!--   		</if> -->
+  		<if test="dbSchId != null">
+  			DB_SCH_ID,
+  		</if>
+<!--   		<if test="dbSchPnm != null"> -->
+<!--   			DB_SCH_PNM, -->
+<!--   		</if> -->
+  		<if test="sditmLnm != null">
+  			SDITM_LNM,
+  		</if>
+  		<if test="sditmPnm != null">
+  			SDITM_PNM,
+  		</if>
+  		<if test="dmnId != null">
+  			DMN_ID,
+  		</if>
+  		<if test="dmnNm != null">
+  			DMN_NM,
+  		</if>
+  		<if test="objDescn != null">
+  			OBJ_DESCN,
+  		</if>
+  		<if test="rqstDcd != null">
+  			RQST_DCD,
+  		</if>
+  		<if test="vrfRmk != null">
+  			VRF_RMK,
+  		</if>
+  		<if test="dataType != null">
+  			DATA_TYPE,
+  		</if>
+  		<if test="dataLen != null">
+  			DATA_LEN,
+  		</if>
+  		<if test="dataScal != null">	
+  			DATA_SCAL,
+  		</if>
+  		<if test="dicOrgn != null">
+  			DIC_ORGN,
+  		</if>
+  		<if test="regDtm != null">
+  			REG_DTM,
+  		</if>
+  		<if test="regUserId != null">
+  			REG_USER_ID,
+  		</if>
+<!--   		<if test="excYn != null"> -->
+<!--   			EXC_YN, -->
+<!--   		</if> -->
+  		<if test="govYn != null" >
+        	GOV_YN,
+      	</if>     	
+        	EXP_DTM,    	
+	    <if test="regTypCd != null" >
+	        REG_TYP_CD,
+	    </if>
+	    
+  	</trim>
+  	<trim prefix="values (" suffix=")" suffixOverrides="," >
+   		<if test="sditmId != null">
+  			#{sditmId,jdbcType=VARCHAR},
+  		</if>
+  		<if test="dbConnTrgId != null">
+  			#{dbConnTrgId,jdbcType=VARCHAR},
+  		</if>
+<!--   		<if test="dbConnTrgPnm != null"> -->
+<!--   			#{dbConnTrgPnm,jdbcType=VARCHAR}, -->
+<!--   		</if> 	 -->
+  		<if test="dbSchId != null">
+  			#{dbSchId,jdbcType=VARCHAR},
+  		</if>	
+<!--   		<if test="dbSchPnm != null"> -->
+<!--   			#{dbSchPnm,jdbcType=VARCHAR}, -->
+<!--   		</if> -->
+  		<if test="sditmLnm != null">
+  			#{sditmLnm,jdbcType=VARCHAR},
+  		</if>
+  		<if test="sditmPnm != null">
+  			#{sditmPnm,jdbcType=VARCHAR},
+  		</if>
+  		<if test="dmnId != null">
+  			#{dmnId,jdbcType=VARCHAR},
+  		</if>
+  		<if test="dmnNm != null">
+  			#{dmnNm,jdbcType=VARCHAR},
+  		</if>
+  		<if test="objDescn != null">
+  			#{objDescn,jdbcType=VARCHAR},
+  		</if>
+  		<if test="rqstDcd != null">
+  			#{rqstDcd,jdbcType=VARCHAR},
+  		</if>
+  		<if test="vrfRmk != null">
+  			#{vrfRmk,jdbcType=VARCHAR},
+  		</if>
+  		<if test="dataType != null">
+  			#{dataType,jdbcType=VARCHAR},
+  		</if>
+  		<if test="dataLen != null">
+  			nullif(#{dataLen,jdbcType=VARCHAR}, '')::numeric,
+  		</if>
+  		<if test="dataScal != null">
+  			nullif(#{dataScal,jdbcType=VARCHAR}, '')::numeric,
+  		</if>
+  		<if test="dicOrgn != null">
+  			#{dicOrgn,jdbcType=VARCHAR},
+  		</if>
+  		<if test="regDtm != null">
+  			NOW(),
+  		</if>
+  		<if test="regUserId != null">
+  			#{regUserId,jdbcType=VARCHAR},
+  		</if>
+<!--   		<if test="excYn != null"> -->
+<!--   			#{excYn,jdbcType=VARCHAR}, -->
+<!--   		</if> -->
+  		<if test="govYn != null" >
+        	#{govYn,jdbcType=VARCHAR},
+      	</if>
+      		TO_DATE('99991231', 'YYYYMMDD'),    		
+      	<if test="regTypCd != null" >
+	        #{regTypCd,jdbcType=VARCHAR},
+	    </if> 
+  	</trim>
+  </insert>
+  
+  <delete id="deleteDqrsSditm" parameterType="kr.wise.dq.dqrs.service.DqrsSditm">
+  	UPDATE WAA_DQRS_SDITM A
+	SET EXP_DTM = NOW()
+	<if test="regTypCd != null">
+		, REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR}
+	</if>
+       WHERE A.REG_TYP_CD IN ('C', 'U')
+         AND A.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+         AND A.SDITM_ID = #{sditmId,jdbcType=VARCHAR}
+  </delete>
+  
+  <update id="checkSditmVrfRmk" parameterType="kr.wise.dq.dqrs.service.DqrsSditm">
+  	UPDATE WAA_DQRS_SDITM 
+  	   SET VRF_RMK = NULL
+   <where>
+   	   VRF_RMK IS NOT NULL
+   	<if test="sditmId != null">
+   	   AND SDITM_ID = #{sditmId, jdbcType=VARCHAR}
+   	</if>
+   </where>    
+  </update>
+  
+  <update id="checkDupDqrsSditm" parameterType="kr.wise.dq.dqrs.service.DqrsSditm">
+		UPDATE WAA_DQRS_SDITM A
+		set VRF_RMK = '표준용어 중복'
+		WHERE A.SDITM_ID = #{sditmId, jdbcType=VARCHAR}
+		<![CDATA[and 1  < (]]>
+			select COUNT(*) from WAA_DQRS_SDITM
+			where SDITM_LNM = (
+				SELECT B.SDITM_LNM
+				FROM WAA_DQRS_SDITM B 
+				WHERE B.SDITM_ID = #{sditmId, jdbcType=VARCHAR}
+				AND B.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+				AND B.DB_CONN_TRG_ID = #{dbConnTrgId, jdbcType=VARCHAR}
+				AND B.DB_SCH_ID = #{dbSchId, jdbcType=VARCHAR}
+			)
+		)
+		AND A.DB_CONN_TRG_ID = #{dbConnTrgId, jdbcType=VARCHAR}
+		AND A.DB_SCH_ID = #{dbSchId, jdbcType=VARCHAR}
+  </update>
+  
+  <update id="checkDqrsDmn" parameterType="kr.wise.dq.dqrs.service.DqrsSditm">
+    UPDATE WAA_DQRS_SDITM GS
+	   SET DMN_ID = (SELECT B.DMN_ID 
+	   					 FROM WAA_DQRS_DMN B, WAA_DQRS_SDITM A  					    			
+	   					WHERE A.DMN_NM = B.DMN_NM
+	   					 AND A.DB_CONN_TRG_ID = B.DB_CONN_TRG_ID
+	   					  <if test='govYn != "Y"' >
+	   					 	AND A.DB_SCH_ID = B.DB_SCH_ID
+	   					  </if>
+					      AND B.REG_TYP_CD IN ('C','U')
+					      AND B.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+					      AND A.SDITM_ID = #{sditmId, jdbcType=VARCHAR}
+					      AND A.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+						)
+	 WHERE GS.REG_TYP_CD IN ('C','U')
+	   AND EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+	   AND GS.SDITM_ID = #{sditmId, jdbcType=VARCHAR}
+  </update>
+  
+  <update id="updateNotDmn" parameterType="kr.wise.dq.dqrs.service.DqrsSditm">
+    UPDATE WAA_DQRS_SDITM
+       SET VRF_RMK = '도메인 미존재'
+    <where>
+    	DMN_NM IS NULL
+	   	<if test="sditmId != null">
+	      AND SDITM_ID = #{sditmId, jdbcType=VARCHAR}
+	   	</if>
+   </where> 
+  </update>
+  
+  <update id="updateSditmVrfRmk" parameterType="kr.wise.dq.dqrs.service.DqrsSditm">
+  	UPDATE WAA_DQRS_SDITM
+  	   SET VRF_RMK = '정상'
+   <where>
+     VRF_RMK IS NULL
+	 <if test="sditmId != null">
+       AND SDITM_ID = #{sditmId, jdbcType=VARCHAR}
+	 </if>
+  </where> 
+  </update>
+  
+  
+  
+  
+  <!-- 사용 용도 모르겠는 쿼리 -->
+  <select id="selectInfoSys" resultType="java.util.HashMap">
+  	SELECT A.INFO_SYS_CD  
+         , A.INFO_SYS_NM 
+         , B.ORG_CD       AS UPCODE_CD
+      FROM WAA_INFO_SYS A
+     INNER JOIN WAA_ORG B
+        ON B.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+       AND B.ORG_CD = A.ORG_CD   
+     WHERE A.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')	   
+	 ORDER BY A.INFO_SYS_NM 
+  </select>
+  
+  
+  
+  
+  <!-- 도메인 -->
+  <select id="selectDqrsDmnLst" resultMap="DqrsDmnResultMap" parameterType="kr.wise.dq.dqrs.service.DqrsDmn" >
+    SELECT  X.DB_CONN_TRG_PNM
+         , X.DB_SCH_PNM        
+         , X.UPP_DMNG_NM
+         , X.DMNG_NM
+         , X.DMN_NM        
+         , X.DATA_TYPE
+         , X.DATA_LEN
+         , X.DATA_SCAL
+         , ( CONCAT( CASE WHEN NULLIF(X.VRF_RMK_DMN, '') IS NULL THEN '' ELSE CONCAT(X.VRF_RMK_DMN, ' ') END
+			 		,COALESCE(X.VRF_RMK_DB,''))
+	  		 )AS VRF_RMK 
+	  	 , X.REG_DTM
+         , X.DMN_ID     
+    	 , X.DB_CONN_TRG_ID
+         , X.DB_SCH_ID
+         , X.DIC_ORGN
+         , X.REG_USER_ID
+         , X.OBJ_DESCN
+          , (
+	  		CASE 
+	  			WHEN VRF_RMK_DMN IS NOT NULL THEN '#FF0000'
+	  			WHEN VRF_RMK_DB IS NOT NULL THEN '#FF0000'
+	  			ELSE '#000000'
+	  			END
+	  	) AS FontColor    
+      FROM (         
+	          SELECT GD.DMN_ID     
+	         , GD.DB_CONN_TRG_ID
+	         , DB.DB_CONN_TRG_PNM
+	         , GD.DB_SCH_ID        
+	         , DB.DB_SCH_PNM   
+	         , GD.UPP_DMNG_NM
+	         , GD.DMNG_NM
+	         , GD.DMN_NM   
+	         , GD.DATA_TYPE
+	         , GD.DATA_LEN
+	         , GD.DATA_SCAL
+	         , GD.DIC_ORGN
+	         , GD.REG_DTM
+	         , GD.REG_USER_ID
+	         , GD.OBJ_DESCN
+	         , (CASE WHEN C.DMN_NM IS NOT NULL THEN '도메인명 중복' END) AS VRF_RMK_DMN 
+	         , (CASE WHEN DB.DB_CONN_TRG_ID IS NULL OR DB.DB_SCH_ID IS NULL THEN '진단대상DB미존재' END) AS VRF_RMK_DB
+	         FROM WAA_DQRS_DMN GD
+	      	     INNER JOIN (
+	  	  SELECT A.DB_CONN_TRG_ID , B.DB_SCH_ID, A.DB_CONN_TRG_PNM, B.DB_SCH_PNM
+	  	  FROM WAA_DB_CONN_TRG A
+	  	  INNER JOIN WAA_DB_SCH B
+	  	    ON B.DB_CONN_TRG_ID = A.DB_CONN_TRG_ID
+              AND B.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+              AND B.REG_TYP_CD IN ('C', 'U')              
+              AND B.CLT_XCL_YN = 'N'
+	      WHERE A.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+	        AND A.REG_TYP_CD IN ('C', 'U')
+	  	  ) DB
+	  	   ON DB.DB_CONN_TRG_ID = GD.DB_CONN_TRG_ID
+	  	  AND DB.DB_SCH_ID = GD.DB_SCH_ID
+	  	LEFT OUTER JOIN (
+				      	SELECT B.DB_SCH_ID, B.DMN_NM, COUNT(*) 
+				       	  FROM WAA_DQRS_DMN B 
+				       	 WHERE B.REG_TYP_CD IN ('C','U')
+				   	  	   AND B.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+				   	   	 GROUP BY B.DB_SCH_ID, B.DMN_NM HAVING COUNT(*) > 1
+				   	  	) C
+		ON GD.DB_SCH_ID = C.DB_SCH_ID
+		AND GD.DMN_NM = C.DMN_NM
+	      <where>
+	      	GD.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+	        AND GD.REG_TYP_CD IN ('C','U') 
+	<!-- 	      <if test="vrfRmk != null"> -->
+	<!-- 	         AND GD.VRF_RMK = #{vrfRmk,jdbcType=VARCHAR} -->
+	<!-- 	      </if> -->
+		      <if test="dmngNm != null">
+		         AND GD.DMNG_NM = #{dmngNm,jdbcType=VARCHAR}
+		      </if>
+		      <if test="dmnNm != null">
+		      	 AND (UPPER(GD.DMN_NM) LIKE '%' || UPPER(#{dmnNm,jdbcType=VARCHAR}) || '%')
+		      </if>
+		      <if test="dataType != null">
+		         AND (UPPER(GD.DATA_TYPE) LIKE '%' || UPPER(#{dataType,jdbcType=VARCHAR}) || '%')
+		      </if>
+		      <if test="dbConnTrgId != null">
+		         AND DB.DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR}
+		      </if>
+		      <if test="dbSchId != null">
+		         AND DB.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+		      </if>
+		  </where>
+		) X
+       
+	WHERE 1=1
+	<if  test="vrfRmk != null">
+		 <if test="vrfRmk == 1">
+		 AND VRF_RMK_DMN IS NULL AND VRF_RMK_DB IS NULL
+		 </if>
+		 <if test="vrfRmk == 4">
+		  AND VRF_RMK_DMN IS NOT NULL
+		 </if>
+		 <if test="vrfRmk == 5">
+		 AND VRF_RMK_DB IS NOT NULL 
+		 </if>
+	 </if>
+	
+  </select>
+
+  <insert id="insertDqrsDmn" parameterType="kr.wise.dq.dqrs.service.DqrsDmn" >
+    insert into WAA_DQRS_DMN
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="dmnId != null" >
+        DMN_ID,
+      </if>
+      <if test="govYn != null" >
+        GOV_YN,
+      </if>
+      <if test="dbConnTrgId != null" >
+        DB_CONN_TRG_ID,
+      </if>
+      <if test="dbSchId != null" >
+        DB_SCH_ID,
+      </if>
+      <if test="uppDmngNm != null" >
+        UPP_DMNG_NM,
+      </if>
+      <if test="dmngNm != null" >
+        DMNG_NM,
+      </if>
+       <if test="dmnNm != null" >
+        DMN_NM,
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN,
+      </if>
+      <if test="rqstDcn != null" >
+        RQST_DCD,
+      </if>
+      <if test="vrfRmk != null" >
+        VRF_RMK,
+      </if>
+      <if test="dataType != null" >
+        DATA_TYPE,
+      </if>
+      <if test="dataLen != null" >
+        DATA_LEN,
+      </if>
+      <if test="dataScal != null" >
+        DATA_SCAL,
+      </if>
+      <if test="dicOrgn != null" >
+        DIC_ORGN,
+      </if>
+      <if test="regUserId != null" >
+        REG_USER_ID,
+      </if>
+<!--       <if test="excYn != null" > -->
+<!--         EXC_YN, -->
+<!--       </if> -->
+      	EXP_DTM,
+      <if test="regTypCd != null" >
+	    REG_TYP_CD,
+	  </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="dmnId != null" >
+        #{dmnId,jdbcType=VARCHAR},
+      </if>
+      <if test="govYn != null" >
+        #{govYn,jdbcType=VARCHAR},
+      </if>
+      <if test="dbConnTrgId != null" >
+        #{dbConnTrgId,jdbcType=VARCHAR},
+      </if>
+      <if test="dbSchId != null" >
+        #{dbSchId,jdbcType=VARCHAR},
+      </if>
+      <if test="uppDmngNm != null" >
+        #{uppDmngNm,jdbcType=DATE},
+      </if>
+      <if test="dmngNm != null" >
+        #{dmngNm,jdbcType=VARCHAR},
+      </if>
+      <if test="dmnNm != null" >
+        #{dmnNm,jdbcType=DATE},
+      </if>
+      <if test="objDescn != null" >
+        #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDcn != null" >
+        #{rqstDcn,jdbcType=DATE},
+      </if>
+      <if test="vrfRmk != null" >
+        #{vrfRmk,jdbcType=VARCHAR},
+      </if>
+      <if test="dataType != null" >
+        #{dataType,jdbcType=VARCHAR},
+      </if>
+      <if test="dataLen != null" >
+        nullif(#{dataLen,jdbcType=VARCHAR}, '')::numeric,
+      </if>
+      <if test="dataScal != null" >
+        nullif(#{dataScal,jdbcType=VARCHAR}, '')::numeric,
+      </if>
+      <if test="dicOrgn != null" >
+        #{dicOrgn,jdbcType=VARCHAR},
+      </if>
+      <if test="regUserId != null" >
+        #{regUserId,jdbcType=VARCHAR},
+      </if>
+<!--       <if test="excYn != null" > -->
+<!--         #{excYn,jdbcType=VARCHAR}, -->
+<!--       </if> -->
+      	TO_DATE('99991231', 'YYYYMMDD'),
+      <if test="regTypCd != null" >
+        #{regTypCd,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+	<update id="updateExpDqrsDmn" parameterType="kr.wise.dq.dqrs.service.DqrsDmn" >
+	   UPDATE WAA_DQRS_DMN
+	   SET EXP_DTM = NOW()
+	   <if test="regTypCd != null" >
+	   	,REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR}
+	   </if>
+	   WHERE DMN_ID = #{dmnId, jdbcType=VARCHAR}
+	   AND EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+	</update>
+
+  <update id="checkDmnVrfRmk" parameterType="kr.wise.dq.dqrs.service.DqrsDmn">
+  	UPDATE WAA_DQRS_DMN
+  	   SET VRF_RMK = NULL
+   <where>
+   	   VRF_RMK IS NOT NULL
+   	<if test="dmnId != null">
+   	   AND DMN_ID = #{dmnId, jdbcType=VARCHAR}
+   	</if>
+   </where>    
+  </update>
+  
+  <update id="updateDupDqrsDmn" parameterType="kr.wise.dq.dqrs.service.DqrsDmn">
+ 	UPDATE WAA_DQRS_DMN A
+		set VRF_RMK = '도메인명 중복'
+		WHERE A.DMN_ID = #{dmnId, jdbcType=VARCHAR}
+		<![CDATA[and 1  < (]]>
+			select COUNT(*) from WAA_DQRS_DMN
+			where DMN_NM = (
+				SELECT B.DMN_NM
+				FROM WAA_DQRS_DMN B 
+				WHERE B.DMN_ID = #{dmnId, jdbcType=VARCHAR}
+				AND B.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+				AND B.DB_CONN_TRG_ID = #{dbConnTrgId, jdbcType=VARCHAR}
+				AND B.DB_SCH_ID = #{dbSchId, jdbcType=VARCHAR}
+			)
+		)
+		AND A.DB_CONN_TRG_ID = #{dbConnTrgId, jdbcType=VARCHAR}
+		AND A.DB_SCH_ID = #{dbSchId, jdbcType=VARCHAR}
+  </update>
+  
+
+  
+  
+  
+  
+  
+  <!-- 공통표준 -->
+  <select id="selectDqrsPubSditmLst" parameterType="kr.wise.dq.dqrs.service.DqrsSditm" resultMap="DqrsSditmResultMap">  	
+	SELECT X.SDITM_LNM
+	  , X.SDITM_PNM
+	  , X.DMN_NM
+	  , X.DATA_TYPE
+	  , X.DATA_LEN
+	  , X.DATA_SCAL
+	  , ( CONCAT( CASE WHEN NULLIF(X.VRF_RMK_LNM, '') IS NULL THEN '' ELSE CONCAT(X.VRF_RMK_LNM, ' ') END  
+				 ,CASE WHEN NULLIF(X.VRF_RMK_PNM, '') IS NULL THEN '' ELSE CONCAT(X.VRF_RMK_PNM, ' ') END 
+			     ,CASE WHEN NULLIF(X.VRF_RMK_DMN, '') IS NULL THEN '' ELSE CONCAT(X.VRF_RMK_DMN, ' ') END )
+	    )AS VRF_RMK 
+	  , X.REG_DTM
+	  , X.SDITM_ID
+	  , X.DB_SCH_ID
+	  , X.DB_CONN_TRG_ID
+	  , X.REG_USER_ID
+	  , X.OBJ_DESCN
+	  , X.GOV_YN
+	  , (
+	  		CASE 
+	  			WHEN VRF_RMK_LNM IS NOT NULL THEN '#FF0000' 
+	  			WHEN VRF_RMK_PNM IS NOT NULL THEN '#FF0000'
+	  			WHEN VRF_RMK_DMN IS NOT NULL THEN '#FF0000'
+	  			ELSE '#000000'
+	  			END
+	  	) AS FontColor    
+  	FROM (	  	
+		SELECT GS.SDITM_ID
+	  		 , GS.DB_CONN_TRG_ID
+	  		 , GS.DB_SCH_ID
+	  		 , GS.SDITM_LNM
+	  		 , GS.SDITM_PNM
+	  		 , GS.DMN_ID
+	  		 , D.DMN_NM
+	  		 , GS.OBJ_DESCN
+--	  		 , GS.RQST_DCD
+	  		 , (CASE WHEN L.SDITM_LNM = GS.SDITM_LNM THEN '표준용어논리명중복' END) AS VRF_RMK_LNM
+		  	 , (CASE WHEN P.SDITM_PNM = GS.SDITM_PNM THEN '표준용어물리명중복' END) AS VRF_RMK_PNM
+		  	 , (CASE WHEN D.DMN_NM IS NULL THEN '도메인미존재' END) AS VRF_RMK_DMN
+	  		 , GS.DATA_TYPE
+	  		 , GS.DATA_LEN
+	  		 , GS.DATA_SCAL
+	  		 , GS.REG_DTM
+	  		 , GS.REG_USER_ID
+	  		 , GS.GOV_YN
+	  		 , '#000000' AS FontColor
+	  		 , GS.REG_TYP_CD 
+	  	  FROM WAA_DQRS_SDITM GS
+	  	  LEFT OUTER JOIN (
+	  	  		SELECT D.DB_CONN_TRG_ID, D.DMN_NM
+	  	  		FROM WAA_DQRS_DMN D
+		   		WHERE D.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+		   		GROUP BY D.DB_CONN_TRG_ID, D.DMN_NM 
+		   ) D
+		   ON GS.DMN_NM = D.DMN_NM 
+		   AND GS.DB_CONN_TRG_ID = D.DB_CONN_TRG_ID
+
+	  	  LEFT OUTER JOIN (
+			SELECT B.DB_CONN_TRG_ID, B.SDITM_LNM, COUNT(*) 
+			  FROM WAA_DQRS_SDITM B  
+			 WHERE B.REG_TYP_CD IN ('C','U')
+			   AND B.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+			  GROUP BY B.DB_CONN_TRG_ID, B.SDITM_LNM 
+			  HAVING COUNT(*) > 1
+			) L
+			ON GS.DB_CONN_TRG_ID = L.DB_CONN_TRG_ID
+			 AND GS.SDITM_LNM = L.SDITM_LNM
+		  LEFT OUTER JOIN (
+			SELECT E.DB_CONN_TRG_ID, E.SDITM_PNM, COUNT(*) 
+			  FROM WAA_DQRS_SDITM E  
+			 WHERE E.REG_TYP_CD IN ('C','U')
+			   AND E.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+			  GROUP BY E.DB_CONN_TRG_ID, E.SDITM_PNM HAVING COUNT(*) > 1
+			) P
+			ON GS.DB_CONN_TRG_ID = P.DB_CONN_TRG_ID
+			  AND GS.SDITM_PNM = P.SDITM_PNM
+	  <where>
+	   		GS.REG_TYP_CD IN('C','U')
+	   		AND GS.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+	   	<if test="sditmLnm != null">
+	   		AND (UPPER(GS.SDITM_LNM) LIKE '%' || UPPER(#{sditmLnm,jdbcType=VARCHAR}) || '%'
+	      	 OR UPPER(GS.SDITM_PNM) LIKE '%' || UPPER(#{sditmLnm,jdbcType=VARCHAR}) || '%')
+	   	</if>
+	   	<if test="dmnNm != null">
+	   		AND UPPER(GS.DMN_NM) LIKE '%' || UPPER(#{dmnNm,jdbcType=VARCHAR}) || '%'
+	   	</if>
+	   	<if test="dataType != null">
+	   		AND UPPER(GS.DATA_TYPE) LIKE '%' || UPPER(#{dataType,jdbcType=VARCHAR}) || '%'
+	   	</if>
+	   	<if test="dbConnTrgId != null">
+	   		AND GS.DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR}
+	   	</if>
+	  </where> 
+		) X
+		<where> 1=1
+		<if  test="vrfRmk != null">
+			 <if test="vrfRmk == 1">
+		   		AND VRF_RMK_LNM IS NULL and VRF_RMK_PNM IS NULL and VRF_RMK_DMN IS NULL
+		   	</if>
+		   	<if test="vrfRmk == 2">
+		   		AND VRF_RMK_DMN IS NOT NULL
+		   	</if>
+		   	<if test="vrfRmk == 3">
+		   		AND VRF_RMK_LNM IS NOT NULL or VRF_RMK_PNM IS NOT NULL
+		   	</if>
+	   	</if>
+	   	AND GOV_YN = 'Y'
+	   	</where>
+  </select>
+  
+  <select id="selectDqrsPubDmnLst" resultMap="DqrsDmnResultMap" parameterType="kr.wise.dq.dqrs.service.DqrsDmn" >
+    SELECT X.UPP_DMNG_NM
+         , X.DMNG_NM
+         , X.DMN_NM        
+         , X.DATA_TYPE
+         , X.DATA_LEN
+         , X.DATA_SCAL
+         , ( CASE WHEN NULLIF(X.VRF_RMK_DMN, '') IS NULL THEN '' ELSE CONCAT(X.VRF_RMK_DMN,' ') END )AS VRF_RMK 
+	  	 , X.REG_DTM
+         , X.DMN_ID     
+    	 , X.DB_CONN_TRG_ID
+         , X.DB_SCH_ID
+         , X.DIC_ORGN
+         , X.REG_USER_ID
+         , X.OBJ_DESCN
+         , X.GOV_YN
+          , (
+	  		CASE 
+	  			WHEN VRF_RMK_DMN IS NOT NULL THEN '#FF0000'
+	  			ELSE '#000000'
+	  			END
+	  	) AS FontColor    
+      FROM (         
+	          SELECT GD.DMN_ID     
+	         , GD.DB_CONN_TRG_ID
+	         , GD.DB_SCH_ID        
+	         , GD.UPP_DMNG_NM
+	         , GD.DMNG_NM
+	         , GD.DMN_NM   
+	         , GD.DATA_TYPE
+	         , GD.DATA_LEN
+	         , GD.DATA_SCAL
+	         , GD.DIC_ORGN
+	         , GD.REG_DTM
+	         , GD.REG_USER_ID
+	         , GD.OBJ_DESCN
+	         , GD.GOV_YN
+	         , (CASE WHEN C.DMN_NM IS NOT NULL THEN '도메인명 중복' END) AS VRF_RMK_DMN 
+	         FROM WAA_DQRS_DMN GD
+	  	LEFT OUTER JOIN (
+				      	SELECT B.DB_CONN_TRG_ID, B.DMN_NM, COUNT(*) 
+				       	  FROM WAA_DQRS_DMN B 
+				       	 WHERE B.REG_TYP_CD IN ('C','U')
+				   	  	   AND B.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+				   	   	 GROUP BY B.DB_CONN_TRG_ID, B.DMN_NM HAVING COUNT(*) > 1
+				   	  	) C
+		ON GD.DB_CONN_TRG_ID = C.DB_CONN_TRG_ID
+		AND GD.DMN_NM = C.DMN_NM
+	      <where>
+	      	GD.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+	        AND GD.REG_TYP_CD IN ('C','U') 
+	<!-- 	      <if test="vrfRmk != null"> -->
+	<!-- 	         AND GD.VRF_RMK = #{vrfRmk,jdbcType=VARCHAR} -->
+	<!-- 	      </if> -->
+		      <if test="dmngNm != null">
+		         AND GD.DMNG_NM = #{dmngNm,jdbcType=VARCHAR}
+		      </if>
+		      <if test="dmnNm != null">
+		      	 AND (UPPER(GD.DMN_NM) LIKE '%' || UPPER(#{dmnNm,jdbcType=VARCHAR}) || '%')
+		      </if>
+		      <if test="dataType != null">
+		         AND (UPPER(GD.DATA_TYPE) LIKE '%' || UPPER(#{dataType,jdbcType=VARCHAR}) || '%')
+		      </if>
+		      <if test="dbConnTrgId != null">
+		         AND GD.DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR}
+		      </if>
+		  </where>
+		) X
+       
+	WHERE GOV_YN = 'Y'
+	<if  test="vrfRmk != null">
+		 <if test="vrfRmk == 1">
+		 AND VRF_RMK_DMN IS NULL
+		 </if>
+		 <if test="vrfRmk == 4">
+		  AND VRF_RMK_DMN IS NOT NULL
+		 </if>
+	 </if>
+	
+  </select>
+  
+  
+  <!-- 표준준수 갭 조회 -->
+  <select id="selectDqrsStndColGapLst" resultMap="StndGapResultMap" parameterType="kr.wise.dq.dqrs.service.DqrsResult" fetchSize="1500">
+		SELECT /*+ LEADING(D A) */  
+			 LTRIM(CASE 
+	--		        WHEN B.DBC_COL_KOR_NM IS NULL THEN '컬럼한글명 미존재'
+			        WHEN C.SDITM_LNM IS NULL THEN '용어미존재'
+	--		          WHEN B.DBC_COL_KOR_NM != C.SDITM_LNM THEN '컬럼한글명불일치'
+			          WHEN UPPER(B.DATA_TYPE) != UPPER(D.DATA_TYPE) THEN '데이터타입 불일치'
+			          WHEN COALESCE(B.DATA_LEN, -1) != COALESCE(D.DATA_LEN, -1) THEN '데이터길이 불일치'
+			          WHEN COALESCE(B.DATA_PNT, -1) != COALESCE(D.DATA_SCAL, -1) THEN '데이터소수점 자리수 불일치'
+			         END
+			   )  AS GAP_STATUS
+			  , DB.DB_CONN_TRG_PNM
+			  , DB.DB_CONN_TRG_ID
+			  , SCH.DB_SCH_PNM
+			  , SCH.DB_SCH_ID
+			  , UPPER(A.DBC_TBL_NM)     AS PDM_TBL_PNM
+			  , A.DBC_TBL_KOR_NM        AS PDM_TBL_LNM
+			  , UPPER(B.DBC_COL_NM)     AS PDM_COL_PNM
+			  , B.DBC_COL_KOR_NM        AS PDM_COL_LNM
+			  , UPPER(B.DATA_TYPE)		AS PDM_DATA_TYPE
+			  , B.DATA_LEN				AS PDM_DATA_LEN
+			  , B.DATA_PNT				AS PDM_DATA_SCAL
+			  , C.SDITM_LNM
+			  , UPPER(C.SDITM_PNM)		AS SDITM_PNM
+			  , C.SDITM_ID
+			  , D.DMN_ID
+			  , UPPER(D.DMN_NM)			AS DMN_NM
+	-- 도메인의 데이터타입과 길이를 가져오도록 변경
+			  , UPPER(D.DATA_TYPE)				AS SDITM_DATA_TYPE
+			  , D.DATA_LEN				AS SDITM_DATA_LEN
+			  , D.DATA_SCAL				AS SDITM_DATA_SCAL
+			FROM WAA_DB_CONN_TRG DB
+			 INNER JOIN WAA_DB_SCH SCH
+			   ON SCH.DB_CONN_TRG_ID = DB.DB_CONN_TRG_ID
+			   AND SCH.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+			   AND SCH.REG_TYP_CD IN ('C', 'U')
+			 INNER JOIN WAT_DBC_TBL A
+			   ON A.DB_SCH_ID = SCH.DB_SCH_ID
+			   AND A.DB_CONN_TRG_ID = DB.DB_CONN_TRG_ID
+			INNER JOIN WAT_DBC_COL B
+			  ON B.DBC_TBL_NM = A.DBC_TBL_NM 
+			 AND B.DB_SCH_ID = A.DB_SCH_ID
+			LEFT JOIN WAA_DQRS_SDITM C
+	<!-- 		  ON C.SDITM_PNM = RTRIM(REPLACE(B.DBC_COL_NM,'_0123456789',''))  -->
+			  ON UPPER(C.SDITM_PNM) = UPPER(B.DBC_COL_NM)
+			  AND C.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+			  <if test="sditmDbConnTrgId != null and sditmDbConnTrgId != ''">
+			  	AND C.DB_CONN_TRG_ID = #{sditmDbConnTrgId, jdbcType=VARCHAR}
+			  	AND C.GOV_YN = 'Y'
+			  </if>
+			  <if test="sditmDbConnTrgId == null or sditmDbConnTrgId == ''">
+			  	AND C.DB_CONN_TRG_ID = A.DB_CONN_TRG_ID
+			  </if>
+			LEFT JOIN WAA_DQRS_DMN D
+	--		 ON D.DMN_ID = C.DMN_ID
+			 ON D.DMN_NM = C.DMN_NM
+		     AND D.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+		      <if test="sditmDbConnTrgId != null and sditmDbConnTrgId != ''">
+			  	AND D.DB_CONN_TRG_ID = #{sditmDbConnTrgId, jdbcType=VARCHAR}
+			  	AND D.GOV_YN = 'Y'
+			  </if>
+			  <if test="sditmDbConnTrgId == null or sditmDbConnTrgId == ''">
+			  	AND D.DB_CONN_TRG_ID = C.DB_CONN_TRG_ID
+			  	AND D.DB_SCH_ID = C.DB_SCH_ID
+			  </if>
+		     LEFT JOIN WAA_DQRS_EXP_COL EC
+		        ON EC.DB_SCH_ID  = B.DB_SCH_ID
+				 AND EC.DBC_TBL_NM = B.DBC_TBL_NM   
+				 AND EC.DBC_COL_NM = B.DBC_COL_NM  
+			 LEFT JOIN WAA_DQRS_EXP_TBL EX          
+			  ON EX.DB_SCH_ID  = B.DB_SCH_ID  
+			 AND EX.DBC_TBL_NM = B.DBC_TBL_NM 
+	<!-- 		LEFT OUTER JOIN WAA_INFO_TYPE E -->
+	<!-- 	      ON D.DMN_NM = E.INFOTP_LNM  -->
+			WHERE 1 = 1   
+			  AND DB.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+			  AND EC.DB_SCH_ID IS NULL         
+			AND EC.DBC_TBL_NM IS NULL
+			AND EC.DBC_COL_NM IS NULL	
+			AND COALESCE(EX.EXP_YN,'N')='N'
+	
+		   <if test="dbConnTrgId != null">
+	   	   	  AND A.DB_CONN_TRG_ID = #{dbConnTrgId, jdbcType=VARCHAR}
+		   </if> 
+		   <if test="dbSchId != null">
+	   	   	  AND A.DB_SCH_ID = #{dbSchId, jdbcType=VARCHAR}
+		   </if> 
+		   <if test="gapStatus != null">
+	   	   	  AND A.GAP_STATUS = #{gapStatus, jdbcType=VARCHAR}
+		   </if>     
+		   <if test="pdmTblLnm != null">
+	   	   	   AND UPPER(A.DBC_TBL_NM) LIKE '%' || UPPER(#{pdmTblLnm, jdbcType=VARCHAR}) || '%'
+		   </if>   		           
+		 ORDER BY 
+		 	   A.DBC_TBL_NM
+		     , A.DBC_TBL_KOR_NM
+		     , B.DBC_COL_NM
+		     , B.DBC_COL_KOR_NM
+	</select>
+  
+  
+  
+  <!-- 검층표준관리 일괄삭제  -->
+  <delete id="batchDelDqrsDmn" parameterType="map" >
+ 	DELETE FROM WAA_DQRS_DMN 
+ 	WHERE DB_CONN_TRG_ID = #{allDbms,jdbcType=VARCHAR} 
+ 	  AND DB_SCH_ID 	 = #{allDbmsSchId,jdbcType=VARCHAR} 
+  </delete>
+  
+  <delete id="batchDelDqrsSditm" parameterType="map" >
+ 	DELETE FROM WAA_DQRS_SDITM
+ 	WHERE DB_CONN_TRG_ID = #{allDbms,jdbcType=VARCHAR} 
+ 	  AND DB_SCH_ID 	 = #{allDbmsSchId,jdbcType=VARCHAR} 
+  </delete>
+  
+  <delete id="batchDelDqrsTbl" parameterType="map" >
+ 	DELETE FROM GOV_TBL
+ 	WHERE DB_CONN_TRG_ID = #{allDbms,jdbcType=VARCHAR} 
+ 	  AND DB_SCH_ID 	 = #{allDbmsSchId,jdbcType=VARCHAR} 
+  </delete>
+  <!-- 검층표준관리 일괄삭제 //  -->
+  
+</mapper>

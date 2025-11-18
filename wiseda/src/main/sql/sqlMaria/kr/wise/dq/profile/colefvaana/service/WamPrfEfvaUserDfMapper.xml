@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.dq.profile.colefvaana.service.WamPrfEfvaUserDfMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.dq.profile.colefvaana.service.WamPrfEfvaUserDfVO" extends="kr.wise.dq.profile.colefvaana.service.WamPrfEfvaAnaMapper.BaseResultMap">
+	<!--     <id column="PRF_ID" property="prfId" jdbcType="VARCHAR" /> -->
+    <result column="USER_DF_EFVA" property="userDfEfva" jdbcType="VARCHAR" />
+    <result column="USER_DF_EFVA_NM" property="userDfEfvaNm" jdbcType="VARCHAR" />
+<!--     <result column="RQST_NO" property="rqstNo" jdbcType="VARCHAR" /> -->
+<!--     <result column="RQST_SNO" property="rqstSno" jdbcType="DECIMAL" /> -->
+    <result column="RQST_DTL_SNO" property="rqstDtlSno" jdbcType="DECIMAL" />
+<!--     <result column="OBJ_DESCN" property="objDescn" jdbcType="VARCHAR" /> -->
+<!--     <result column="OBJ_VERS" property="objVers" jdbcType="DECIMAL" /> -->
+<!--     <result column="REG_TYP_CD" property="regTypCd" jdbcType="VARCHAR" /> -->
+<!--     <result column="FRS_RQST_DTM" property="frsRqstDtm" jdbcType="TIMESTAMP" /> -->
+<!--     <result column="FRS_RQST_USER_ID" property="frsRqstUserId" jdbcType="VARCHAR" /> -->
+<!--     <result column="RQST_DTM" property="rqstDtm" jdbcType="TIMESTAMP" /> -->
+<!--     <result column="RQST_USER_ID" property="rqstUserId" jdbcType="VARCHAR" /> -->
+<!--     <result column="APRV_DTM" property="aprvDtm" jdbcType="TIMESTAMP" /> -->
+  </resultMap>
+  <sql id="Base_Column_List" >
+    PRF_ID, USER_DF_EFVA, USER_DF_EFVA_NM, RQST_NO, RQST_SNO, RQST_DTL_SNO, OBJ_DESCN, 
+    OBJ_VERS, REG_TYP_CD, FRS_RQST_DTM, FRS_RQST_USER_ID, RQST_DTM, RQST_USER_ID, APRV_DTM, APRV_USER_ID
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from WAM_PRF_EFVA_USER_DF
+    where PRF_ID = #{prfId,jdbcType=VARCHAR}
+      and REG_TYP_CD IN ('C','U')
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="kr.wise.dq.profile.colefvaana.service.WamPrfEfvaUserDfVO" >
+    delete from WAM_PRF_EFVA_USER_DF
+    where PRF_ID = #{prfId,jdbcType=VARCHAR}
+       and USER_DF_EFVA = #{userDfEfva,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="kr.wise.dq.profile.colefvaana.service.WamPrfEfvaUserDfVO" >
+    insert into WAM_PRF_EFVA_USER_DF (PRF_ID, USER_DF_EFVA, 
+      USER_DF_EFVA_NM, RQST_NO, RQST_SNO, 
+      OBJ_DESCN, OBJ_VERS, REG_TYP_CD, 
+      FRS_RQST_DTM, FRS_RQST_USER_ID, RQST_DTM, 
+      RQST_USER_ID, APRV_DTM)
+    values (#{prfId,jdbcType=VARCHAR}, #{userDfEfva,jdbcType=VARCHAR}, 
+      #{userDfEfvaNm,jdbcType=VARCHAR}, #{rqstNo,jdbcType=VARCHAR}, #{rqstSno,jdbcType=DECIMAL}, 
+      #{objDescn,jdbcType=VARCHAR}, #{objVers,jdbcType=DECIMAL}, #{regTypCd,jdbcType=VARCHAR}, 
+      #{frsRqstDtm,jdbcType=TIMESTAMP}, #{frsRqstUserId,jdbcType=VARCHAR}, #{rqstDtm,jdbcType=TIMESTAMP}, 
+      #{rqstUserId,jdbcType=VARCHAR}, #{aprvDtm,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="kr.wise.dq.profile.colefvaana.service.WamPrfEfvaUserDfVO" >
+    insert into WAM_PRF_EFVA_USER_DF
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+        PRF_ID,
+        USER_DF_EFVA,
+      <if test="userDfEfvaNm != null" >
+        USER_DF_EFVA_NM,
+      </if>
+      <if test="rqstNo != null" >
+        RQST_NO,
+      </if>
+      <if test="rqstSno != null" >
+        RQST_SNO,
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN,
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS,
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD,
+      </if>
+      <if test="frsRqstDtm != null" >
+        FRS_RQST_DTM,
+      </if>
+      <if test="frsRqstUserId != null" >
+        FRS_RQST_USER_ID,
+      </if>
+      <if test="rqstDtm != null" >
+        RQST_DTM,
+      </if>
+      <if test="rqstUserId != null" >
+        RQST_USER_ID,
+      </if>
+      <if test="aprvDtm != null" >
+        APRV_DTM,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+        #{prfId,jdbcType=VARCHAR},
+        #{userDfEfva,jdbcType=VARCHAR},
+      <if test="userDfEfvaNm != null" >
+        #{userDfEfvaNm,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstNo != null" >
+        #{rqstNo,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstSno != null" >
+        #{rqstSno,jdbcType=DECIMAL},
+      </if>
+      <if test="objDescn != null" >
+        #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null" >
+        #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="frsRqstDtm != null" >
+        #{frsRqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="frsRqstUserId != null" >
+        #{frsRqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDtm != null" >
+        #{rqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rqstUserId != null" >
+        #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDtm != null" >
+        #{aprvDtm,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.dq.profile.colefvaana.service.WamPrfEfvaUserDfVO" >
+    update WAM_PRF_EFVA_USER_DF
+    <set >
+      <if test="userDfEfva != null" >
+        USER_DF_EFVA = #{userDfEfva,jdbcType=VARCHAR},
+      </if>
+      <if test="userDfEfvaNm != null" >
+        USER_DF_EFVA_NM = #{userDfEfvaNm,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstNo != null" >
+        RQST_NO = #{rqstNo,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstSno != null" >
+        RQST_SNO = #{rqstSno,jdbcType=DECIMAL},
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="frsRqstDtm != null" >
+        FRS_RQST_DTM = #{frsRqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="frsRqstUserId != null" >
+        FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDtm != null" >
+        RQST_DTM = #{rqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rqstUserId != null" >
+        RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDtm != null" >
+        APRV_DTM = #{aprvDtm,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where PRF_ID = #{prfId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="kr.wise.dq.profile.colefvaana.service.WamPrfEfvaUserDfVO" >
+    update WAM_PRF_EFVA_USER_DF
+    set USER_DF_EFVA = #{userDfEfva,jdbcType=VARCHAR},
+      USER_DF_EFVA_NM = #{userDfEfvaNm,jdbcType=VARCHAR},
+      RQST_NO = #{rqstNo,jdbcType=VARCHAR},
+      RQST_SNO = #{rqstSno,jdbcType=DECIMAL},
+      OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      FRS_RQST_DTM = #{frsRqstDtm,jdbcType=TIMESTAMP},
+      FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR},
+      RQST_DTM = #{rqstDtm,jdbcType=TIMESTAMP},
+      RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      APRV_DTM = #{aprvDtm,jdbcType=TIMESTAMP}
+    where PRF_ID = #{prfId,jdbcType=VARCHAR}
+  </update>
+  
+  <insert id="insertWamPrfPC02UserDf" parameterType="kr.wise.commons.rqstmst.service.WaqMstr" >
+	insert into WAM_PRF_EFVA_USER_DF
+	(<include refid="Base_Column_List" />)
+	select 
+	<include refid="Base_Column_List" />
+	from WAH_PRF_EFVA_USER_DF
+   where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+	 and EXP_DTM = DATE_FORMAT( '99991231', '%Y%m%d')
+	 and REG_TYP_CD in ('C','U')
+  </insert>
+  
+  <insert id="insertWamPrfPC02UserDfByPrfId" parameterType="kr.wise.dq.profile.colefvaana.service.WamPrfEfvaUserDfVO" >
+	insert into WAM_PRF_EFVA_USER_DF
+	(<include refid="Base_Column_List" />)
+	select 
+	<include refid="Base_Column_List" />
+	from WAH_PRF_EFVA_USER_DF
+   where PRF_ID = #{prfId,jdbcType=VARCHAR}
+     and USER_DF_EFVA = #{userDfEfva,jdbcType=VARCHAR}
+	 and EXP_DTM = DATE_FORMAT( '99991231', '%Y%m%d')
+	 and REG_TYP_CD in ('C','U')
+  </insert>
+  
+  
+  <delete id="deleteWamPrfPC02UserDf" parameterType="map" >
+	delete WAM_PRF_EFVA_USER_DF
+	where (PRF_ID) in (select PRF_ID
+						     from WAH_PRF_EFVA_USER_DF
+							where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+							   and EXP_DTM = DATE_FORMAT( '99991231', '%Y%m%d')
+							)
+  </delete>
+  
+  
+</mapper>

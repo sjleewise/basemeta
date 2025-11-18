@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.commons.sysmgmt.basicinfo.service.WaaBscLvlMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.commons.sysmgmt.basicinfo.service.WaaBscLvl" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+    <id column="BSC_ID" property="bscId" jdbcType="VARCHAR" />
+<!--     <id column="EXP_DTM" property="expDtm" jdbcType="TIMESTAMP" /> -->
+    <result column="BSC_LVL" property="bscLvl" jdbcType="DECIMAL" />
+<!--     <result column="STR_DTM" property="strDtm" jdbcType="TIMESTAMP" /> -->
+    <result column="SELECT_BOX_ID" property="selectBoxId" jdbcType="VARCHAR" />
+    <result column="SELECT_BOX_NM" property="selectBoxNm" jdbcType="VARCHAR" />
+<!--     <result column="OBJ_DESCN" property="objDescn" jdbcType="VARCHAR" /> -->
+<!--     <result column="OBJ_VERS" property="objVers" jdbcType="DECIMAL" /> -->
+<!--     <result column="REG_TYP_CD" property="regTypCd" jdbcType="VARCHAR" /> -->
+<!--     <result column="WRIT_DTM" property="writDtm" jdbcType="TIMESTAMP" /> -->
+<!--     <result column="WRIT_USER_ID" property="writUserId" jdbcType="VARCHAR" /> -->
+  </resultMap>
+  <sql id="Base_Column_List" >
+    BSC_ID, EXP_DTM, BSC_LVL, STR_DTM, SELECT_BOX_ID, SELECT_BOX_NM, OBJ_DESCN, OBJ_VERS, REG_TYP_CD, 
+    WRIT_DTM, WRIT_USER_ID
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="map" >
+    select 
+    <include refid="Base_Column_List" />
+    from WAA_BSC_LVL
+    where BSC_ID = #{bscId,jdbcType=VARCHAR}
+      AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+      AND REG_TYP_CD IN ('C', 'U')
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="map" >
+    delete from WAA_BSC_LVL
+    where BSC_ID = #{bscId,jdbcType=VARCHAR}
+      and EXP_DTM = #{expDtm,jdbcType=TIMESTAMP}
+  </delete>
+  <insert id="insert" parameterType="kr.wise.commons.sysmgmt.basicinfo.service.WaaBscLvl" >
+    insert into WAA_BSC_LVL (BSC_ID, EXP_DTM, BSC_LVL, 
+      STR_DTM, SELECT_BOX_ID, OBJ_DESCN, 
+      OBJ_VERS, REG_TYP_CD, WRIT_DTM, 
+      WRIT_USER_ID)
+    values (#{bscId,jdbcType=VARCHAR}, #{expDtm,jdbcType=TIMESTAMP}, #{bscLvl,jdbcType=DECIMAL}, 
+      #{strDtm,jdbcType=TIMESTAMP}, #{selectBoxId,jdbcType=VARCHAR}, #{objDescn,jdbcType=VARCHAR}, 
+      #{objVers,jdbcType=DECIMAL}, #{regTypCd,jdbcType=VARCHAR}, #{writDtm,jdbcType=TIMESTAMP}, 
+      #{writUserId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="kr.wise.commons.sysmgmt.basicinfo.service.WaaBscLvl" >
+    insert into WAA_BSC_LVL
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="bscId != null" >
+        BSC_ID,
+      </if>
+        EXP_DTM,
+      <if test="bscLvl != null" >
+        BSC_LVL,
+      </if>
+        STR_DTM,
+      <if test="selectBoxId != null" >
+        SELECT_BOX_ID,
+      </if>
+      <if test="selectBoxNm != null" >
+        SELECT_BOX_NM,
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN,
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS,
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD,
+      </if>
+        WRIT_DTM,
+      <if test="writUserId != null" >
+        WRIT_USER_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="bscId != null" >
+        #{bscId,jdbcType=VARCHAR},
+      </if>
+	    TO_DATE('9999-12-31', 'YYYY-MM-DD'),
+      <if test="bscLvl != null" >
+        #{bscLvl,jdbcType=DECIMAL},
+      </if>
+      	SYSDATETIME,
+      <if test="selectBoxId != null" >
+        #{selectBoxId,jdbcType=VARCHAR},
+      </if>
+      <if test="selectBoxNm != null" >
+        #{selectBoxNm,jdbcType=VARCHAR},
+      </if>
+      <if test="objDescn != null" >
+        #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null" >
+        #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      	SYSDATETIME,
+      <if test="writUserId != null" >
+        #{writUserId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.commons.sysmgmt.basicinfo.service.WaaBscLvl" >
+    update WAA_BSC_LVL
+    <set >
+      <if test="bscLvl != null" >
+        BSC_LVL = #{bscLvl,jdbcType=DECIMAL},
+      </if>
+      <if test="strDtm != null" >
+        STR_DTM = #{strDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="selectBoxId != null" >
+        SELECT_BOX_ID = #{selectBoxId,jdbcType=VARCHAR},
+      </if>
+      <if test="selectBoxNm != null" >
+        SELECT_BOX_NM = #{selectBoxNm,jdbcType=VARCHAR},
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="writDtm != null" >
+        WRIT_DTM = #{writDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="writUserId != null" >
+        WRIT_USER_ID = #{writUserId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where BSC_ID = #{bscId,jdbcType=VARCHAR}
+      and EXP_DTM = #{expDtm,jdbcType=TIMESTAMP}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="kr.wise.commons.sysmgmt.basicinfo.service.WaaBscLvl" >
+    update WAA_BSC_LVL
+    set BSC_LVL = #{bscLvl,jdbcType=DECIMAL},
+      STR_DTM = #{strDtm,jdbcType=TIMESTAMP},
+      SELECT_BOX_ID = #{selectBoxId,jdbcType=VARCHAR},
+      SELECT_BOX_NM = #{selectBoxNm,jdbcType=VARCHAR},
+      OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      WRIT_DTM = #{writDtm,jdbcType=TIMESTAMP},
+      WRIT_USER_ID = #{writUserId,jdbcType=VARCHAR}
+    where BSC_ID = #{bscId,jdbcType=VARCHAR}
+      and EXP_DTM = #{expDtm,jdbcType=TIMESTAMP}
+  </update>
+  
+  <select id="selectList" parameterType="kr.wise.commons.sysmgmt.basicinfo.service.WaaBscLvl" resultMap="BaseResultMap">
+    SELECT 
+    <include refid="Base_Column_List" />
+    ,(SELECT USER_NM FROM WAA_USER WHERE USER_ID   =  WRIT_USER_ID AND EXP_DTM  =  TO_DATE('9999-12-31', 'YYYY-MM-DD') AND REG_TYP_CD IN ('C','U')) AS WRIT_USER_NM
+    <!-- ,GET_USER_NM(WRIT_USER_ID) AS WRIT_USER_NM -->
+    FROM WAA_BSC_LVL
+    <where> 
+    AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+      AND REG_TYP_CD IN ('C', 'U')
+      <if test="bscId != null">
+      AND BSC_ID = #{bscId,jdbcType=VARCHAR}
+      </if>
+      <if test="bscLvl != null">
+      AND BSC_LVL = #{bscLvl,jdbcType=DECIMAL}
+      </if>
+      
+      
+    </where>
+  </select>
+  
+  <update id="updateExpDtm" parameterType="kr.wise.commons.sysmgmt.basicinfo.service.WaaBscLvl">
+  	UPDATE WAA_BSC_LVL SET
+  		EXP_DTM = SYSDATETIME
+  	WHERE BSC_ID = #{bscId}
+  	  AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+  	  AND REG_TYP_CD IN ('C', 'U')
+  </update>
+  
+  <select id="selectBscId"  parameterType="kr.wise.commons.sysmgmt.basicinfo.service.WaaBscLvl" resultType="int">
+	  	SELECT COUNT(*)
+		  FROM WAA_BSC_LVL A
+		<where> 
+		   AND A.REG_TYP_CD IN ('C', 'U')
+		   AND A.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+		   <if test="bscId != null and bscId != ''" >
+      		AND	BSC_ID = #{bscId,jdbcType=VARCHAR}
+		   </if>
+		</where>
+	         
+	</select>
+  
+</mapper>

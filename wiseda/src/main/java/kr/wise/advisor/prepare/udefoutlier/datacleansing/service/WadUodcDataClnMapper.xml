@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.wise.advisor.prepare.udefoutlier.datacleansing.service.WadUodcDataClnMapper">
+	<resultMap id="BaseResultMap" type="kr.wise.advisor.prepare.udefoutlier.datacleansing.service.WadUodcDataCln" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap" >
+		<id column="UDF_OTL_DTC_ID"      	jdbcType="VARCHAR" property="udfOtlDtcId" />
+		<id column="CRE_COMP_ID"         	jdbcType="VARCHAR" property="creCompId"   />
+		<!-- <result column="RES_PRC_DCD"       	jdbcType="VARCHAR" property="resPrcDcd"    /> -->
+		<result column="ANA_DASE_ID"   		jdbcType="VARCHAR" property="anaDaseId"   />
+		<result column="SRC_ANA_DASE_ID" 	jdbcType="VARCHAR" property="srcAnaDaseId" />
+		<result column="SRC_ANA_DASE_NM" 	jdbcType="VARCHAR" property="srcAnaDaseNm" />
+		<result column="ANA_DASE_NM"		jdbcType="VARCHAR" property="anaDaseNm" />
+	</resultMap>
+	
+	<select id="selectDataClnDetail" parameterType="kr.wise.advisor.prepare.udefoutlier.datacleansing.service.WadUodcDataCln" resultMap="BaseResultMap">
+	   SELECT A.UDF_OTL_DTC_ID
+			, A.CRE_COMP_ID
+			<!-- , A.RES_PRC_DCD -->
+			, A.ANA_DASE_ID
+			, A.SRC_ANA_DASE_ID
+			, B.ANA_DASE_NM
+			, C.ANA_DASE_NM AS SRC_ANA_DASE_NM
+		FROM WAD_UODC_DATA_CLN A
+			 LEFT JOIN WAD_UODC_ANA_DASE B
+				ON B.UDF_OTL_DTC_ID = A.UDF_OTL_DTC_ID
+				AND B.CRE_COMP_ID    = A.CRE_COMP_ID
+			 LEFT JOIN WAD_UODC_ANA_DASE C
+				ON C.ANA_DASE_ID = A.SRC_ANA_DASE_ID 	
+	  WHERE A.UDF_OTL_DTC_ID = #{udfOtlDtcId,jdbcType=VARCHAR}
+		AND A.CRE_COMP_ID = #{creCompId,jdbcType=VARCHAR}
+  </select>
+  
+  <update id="updateDataCln" parameterType="kr.wise.advisor.prepare.udefoutlier.datacleansing.service.WadUodcDataCln" >
+    UPDATE WAD_UODC_DATA_CLN
+		<set>
+			<!-- <if test="resPrcDcd != null">
+				RES_PRC_DCD = #{resPrcDcd,jdbcType=VARCHAR},
+			</if> -->
+			<if test="anaDaseId != null">
+				ANA_DASE_ID = #{anaDaseId,jdbcType=VARCHAR},
+			</if>
+			<if test="srcAnaDaseId != null">
+				SRC_ANA_DASE_ID = #{srcAnaDaseId,jdbcType=VARCHAR},
+			</if>
+			<if test="objDescn != null">
+				OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+			</if>
+			<if test="objVers != null">
+				OBJ_VERS = #{objVers,jdbcType=VARCHAR},
+			</if>
+			<if test="regTypCd != null">
+				REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+			</if>
+			<if test="writUserId != null">
+				WRIT_USER_ID = #{writUserId,jdbcType=VARCHAR},
+			</if>
+			<if test="writDtm != null">
+				WRIT_DTM = #{writDtm,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		WHERE UDF_OTL_DTC_ID = #{udfOtlDtcId,jdbcType=VARCHAR}
+	      AND CRE_COMP_ID    = #{creCompId,jdbcType=VARCHAR}
+  </update>
+  
+  <insert id="insertDataCln" parameterType="kr.wise.advisor.prepare.udefoutlier.datacleansing.service.WadUodcDataCln">
+		INSERT INTO WAD_UODC_DATA_CLN
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="udfOtlDtcId != null">
+				UDF_OTL_DTC_ID,
+			</if>
+			<if test="creCompId != null">
+				CRE_COMP_ID,
+			</if>
+			<!-- <if test="resPrcDcd != null">
+				RES_PRC_DCD,
+			</if> -->
+			<if test="anaDaseId != null">
+				ANA_DASE_ID,
+			</if>
+			<if test="srcAnaDaseId != null">
+				SRC_ANA_DASE_ID,
+			</if>
+			<if test="objDescn != null">
+				OBJ_DESCN,
+			</if>	      
+		        OBJ_VERS,      
+		        REG_TYP_CD,      
+		        WRIT_USER_ID,      
+		        WRIT_DTM 
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="udfOtlDtcId != null">
+				#{udfOtlDtcId,jdbcType=VARCHAR},
+			</if>
+			<if test="creCompId != null">
+				#{creCompId,jdbcType=VARCHAR},
+			</if>
+			<!-- <if test="resPrcDcd != null">
+				#{resPrcDcd,jdbcType=VARCHAR},
+			</if> -->
+			<if test="anaDaseId != null">
+				#{anaDaseId,jdbcType=VARCHAR},
+			</if>
+			<if test="srcAnaDaseId != null">
+				#{srcAnaDaseId,jdbcType=VARCHAR},
+			</if>
+			<if test="objDescn != null">
+				#{objDescn,jdbcType=VARCHAR},
+			</if>
+	        1,
+	       'C',      
+	        #{writUserId,jdbcType=VARCHAR},      
+	        SYSDATE 
+	    </trim>
+	</insert>
+	
+	<delete id="deleteByPrimaryKey" parameterType="map">
+	    delete from WAD_UODC_DATA_CLN
+	    where UDF_OTL_DTC_ID = #{udfOtlDtcId,jdbcType=VARCHAR}
+	      and CRE_COMP_ID = #{creCompId,jdbcType=VARCHAR}
+	</delete>
+	
+	<delete id="deleteByUdfOtlDtcId" parameterType="map">
+	    delete from WAD_UODC_DATA_CLN
+	    where UDF_OTL_DTC_ID = #{udfOtlDtcId,jdbcType=VARCHAR}
+	</delete>
+</mapper>

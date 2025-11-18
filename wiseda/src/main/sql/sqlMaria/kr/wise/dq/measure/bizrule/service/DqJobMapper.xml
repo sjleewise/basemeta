@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.dq.measure.bizrule.service.DqJobMapper" >
+
+    <resultMap id="DqJobResultMap" type="kr.wise.dq.measure.bizrule.service.DqJobVO" >
+        <result column="TOT_CNT"  property="totCnt"  />
+        <result column="OBJ_ID"  property="objId"  />
+        <result column="DBMS_ENM"  property="dbmsEnm"  />
+        <result column="TBL_NM" property="tblNm"  />
+    	<result column="COL_NM"  property="colNm"  />
+    	<result column="BRA_NM"  property="braNm"  />	
+    	<result column="CHASU"  property="chasu"  />
+    	<result column="ANA_ACT_CNT"  property="anaActCnt"  />
+    	<result column="ERR_CNT"  property="errcnt"  />
+    	<result column="ERR_STATUS"  property="errStatus"  />
+    	<result column="IMP_STATUS"  property="impStatus"  />
+    	<result column="USER_KNM"  property="userKnm"  />
+    </resultMap>
+
+	<select id="selectDqJobList" parameterType="kr.wise.dq.measure.bizrule.service.DqJobVO" resultMap="DqJobResultMap">
+		SELECT A.* 
+		FROM (SELECT ROWNUM RN  
+		            ,TB.* 
+		      FROM (SELECT M.BR_ID AS OBJ_ID
+		                  ,B.DB_CONN_TRG_LNM AS DBMS_ENM
+		                  ,M.DBC_TBL_NM AS TBL_NM
+		                  ,M.DBC_COL_NM AS COL_NM
+		                  ,M.BR_NM AS BRA_NM
+		                  ,CASE WHEN R.ANA_DGR IS NULL 
+		                        THEN '미실행' 
+		                        ELSE ''||R.ANA_DGR
+		                        END AS CHASU
+		                        
+                            
+		                  ,FORMAT(R.ANA_CNT, '0')AS ANA_ACT_CNT 
+		                  ,FORMAT(R.ER_CNT, '0')    AS ERR_CNT 
+                         
+		                  ,CASE WHEN R.ER_CNT > 0 
+		                        THEN 
+		                             CASE WHEN E.ER_CNT IS NULL 
+		                                  THEN '등록전'
+		                                  <![CDATA[
+		                                  WHEN R.ER_CNT <> E.ER_CNT
+		                                  ]]>  
+		                                  THEN '등록중'
+		                                  ELSE '완료'
+		                                  END
+		                        ELSE NULL
+		                        END AS ERR_STATUS
+		                  ,CASE WHEN R.ER_CNT > 0 
+		                        THEN 
+		                             CASE WHEN I.IMP_CNT IS NULL 
+		                                  THEN '등록전'
+		                                  <![CDATA[
+		                                  WHEN E.ER_CNT <> I.IMP_CNT 
+		                                  ]]>
+		                                  THEN '등록중'
+		                                  ELSE '완료'
+		                                  END
+		                        ELSE NULL
+		                        END AS IMP_STATUS
+		            FROM WAM_BR_MSTR M INNER JOIN WAA_DB_CONN_TRG B
+				                             ON M.DB_CONN_TRG_ID = B.DB_CONN_TRG_ID
+				                             AND B.EXP_DTM = '99991231' 
+				                             AND B.REG_TYP_CD IN ('C','U')
+		                               LEFT OUTER JOIN (SELECT A.BR_ID
+		                                                      ,A.ANA_CNT
+		                                                      ,A.ER_CNT
+		                                                      ,A.ANA_DGR 
+		                                                      ,A.ANA_STR_DTM
+		                                                FROM WAM_BR_RESULT A
+		                                                WHERE A.ANA_DGR = (SELECT MAX(B.ANA_DGR) 
+		                                                                   FROM WAM_BR_RESULT B
+		                                                                   WHERE A.BR_ID = B.BR_ID
+		                                                                  )
+		                                               )R
+		                                          ON M.BR_ID = R.BR_ID                         
+		                               LEFT OUTER JOIN WAM_IM_ACT_MSTR A                    
+		                                          ON R.BR_ID = A.ANA_JOB_ID                      
+		                                          AND R.ANA_STR_DTM = A.ANA_STR_DTM        
+		                               LEFT OUTER JOIN (SELECT ANA_JOB_ID
+		                                                      ,ANA_STR_DTM
+		                                                      ,COUNT(*) AS ER_CNT 
+		                                                FROM WAM_CS_ANA_CD
+		                                                GROUP BY ANA_JOB_ID, ANA_STR_DTM
+		                                               )E
+		                                          ON A.ANA_JOB_ID = E.ANA_JOB_ID
+		                                          AND A.ANA_STR_DTM = E.ANA_STR_DTM
+		                               LEFT OUTER JOIN (SELECT ANA_STR_DTM
+		                                                      ,ANA_JOB_ID
+		                                                      ,COUNT(*) AS IMP_CNT 
+		                                                FROM WAM_IM_ACT_CD
+		                                                GROUP BY ANA_STR_DTM, ANA_JOB_ID
+		                                               )I   
+		                                          ON A.ANA_JOB_ID = I.ANA_JOB_ID                  
+		                                          AND A.ANA_STR_DTM = I.ANA_STR_DTM  
+		            WHERE M.REG_TYP_CD IN ('C','U')
+		            AND M.BR_CRGP_USER_ID = #{userId}
+		           )TB 
+		           WHERE 1=1
+		           <if test="dbmsEnm != null and dbmsEnm != ''" >
+		             <![CDATA[ AND TB.DBMS_ENM = #{dbmsEnm} ]]> 
+		           </if> 
+		           <if test="tblNm != null and tblNm != ''" >
+		             <![CDATA[ AND TB.TBL_NM LIKE '%' || #{tblNm} || '%' ]]> 
+		           </if> 
+		           <if test="errStatus != null and errStatus != ''" >
+		             <![CDATA[ AND TB.ERR_STATUS = #{errStatus} ]]> 
+		           </if> 
+		           <if test="impStatus != null and impStatus != ''" >
+		             <![CDATA[ AND TB.IMP_STATUS = #{impStatus} ]]> 
+		           </if> 
+		     )A
+    </select>
+
+	<select id="selectDbmsEnmCode" resultMap="DqJobResultMap">
+		SELECT DB_CONN_TRG_PNM AS DBMS_ENM
+		  FROM WAA_DB_CONN_TRG
+		 WHERE EXP_DTM = '99991231'
+           AND REG_TYP_CD IN ('C', 'U')
+		 GROUP BY DB_CONN_TRG_PNM
+    </select>
+	<select id="selectErrStatusImpStatusCode" resultMap="DqJobResultMap">
+		SELECT '등록전'AS ERR_STATUS
+		      ,'등록전'AS IMP_STATUS
+		FROM DUAL
+		UNION ALL
+		SELECT '등록중'AS ERR_STATUS
+		      ,'등록중'AS IMP_STATUS
+		FROM DUAL
+		UNION ALL
+		SELECT '완료'AS ERR_STATUS
+		      ,'완료'AS IMP_STATUS
+		FROM DUAL		
+    </select>
+	
+</mapper>

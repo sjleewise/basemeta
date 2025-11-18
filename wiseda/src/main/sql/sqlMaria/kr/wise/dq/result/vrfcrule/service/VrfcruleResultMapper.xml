@@ -1,0 +1,1349 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.dq.result.vrfcrule.service.VrfcruleResultMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.dq.result.vrfcrule.service.VrfcruleResultVO" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+    <id column="DB_SCH_ID" property="dbSchId" jdbcType="VARCHAR" />
+    <id column="DBC_TBL_NM" property="dbcTblNm" jdbcType="VARCHAR" />
+    <result column="DBC_TBL_KOR_NM" property="dbcTblKorNm" jdbcType="VARCHAR" />
+    <result column="ANA_TRG_YN" property="anaTrgYn" jdbcType="VARCHAR" />
+    <result column="VERS" property="vers" jdbcType="DECIMAL" />
+    <result column="REG_TYP" property="regTyp" jdbcType="VARCHAR" />
+    <result column="REG_DTM" property="regDtm" jdbcType="DATE" />
+    <result column="UPD_DTM" property="updDtm" jdbcType="DATE" />
+    <result column="EXP_DTM" property="expDtm" jdbcType="DATE" />
+    <result column="DESCN" property="descn" jdbcType="VARCHAR" />
+    <result column="DB_CONN_TRG_ID" property="dbConnTrgId" jdbcType="VARCHAR" />
+    
+    <!-- 진단대상테이블현황 -->
+    <result column="TRG_TBL_CNT" property="trgTblCnt" jdbcType="VARCHAR" />
+    <result column="TRG_EXC_CNT" property="trgExcCnt" jdbcType="VARCHAR" />
+    <result column="NT_CLLC_CNT" property="ntCllcCnt" jdbcType="VARCHAR" />
+    <result column="TRG_TBL_RT" property="trgTblRt" jdbcType="VARCHAR" />
+    <result column="TRG_EXC_RT" property="trgExcRt" jdbcType="VARCHAR" />
+    <result column="NT_CLLC_RT" property="ntCllcRt" jdbcType="VARCHAR" />
+    
+    <!-- 진단실행상태 -->
+    <result column="ANA_CML_CNT" property="anaCmlCnt" jdbcType="VARCHAR" />
+    <result column="ANA_RNN_CNT" property="anaRnnCnt" jdbcType="VARCHAR" />
+    <result column="ANA_FAL_CNT" property="anaFalCnt" jdbcType="VARCHAR" />
+    <result column="ANA_CML_RT" property="anaCmlRt" jdbcType="VARCHAR" />
+    <result column="ANA_RNN_RT" property="anaRnnRt" jdbcType="VARCHAR" />
+    <result column="ANA_FAL_RT" property="anaFalRt" jdbcType="VARCHAR" />
+    
+    <!-- 값진단결과 -->
+    <result column="ANA_TRG_COL" property="anaTrgCol" jdbcType="VARCHAR" />
+    <result column="ANA_ERR_COL" property="anaErrCol" jdbcType="VARCHAR" />
+    <result column="ER_CNT" property="erCnt" jdbcType="VARCHAR" />
+    <result column="ERR_RT" property="errRt" jdbcType="VARCHAR" />
+    
+    <!-- 검증룰 -->
+    <result column="KND_CD" property="kndCd" jdbcType="VARCHAR" />
+    <!-- 검증룰명 -->
+    <result column="KND_NM" property="kndNm" jdbcType="VARCHAR" />
+    
+    <!-- 진단대상테이블 -->
+    <result column="ANA_TRG_STATUS" property="anaTrgStatus" jdbcType="VARCHAR" />
+  	<result column="ANA_TRG_RANGE_CON" property="anaTrgRangeCon" jdbcType="VARCHAR" />
+  	<result column="ANA_DTM" property="anaDtm" jdbcType="TIMESTAMP" />
+  	
+  	<!-- 도메인 -->
+  	<result column="VRF_FRM" property="vrfFrm" jdbcType="VARCHAR" />
+  	<result column="ERR_EXC_DATA" property="errExcData" jdbcType="VARCHAR" />
+  	<result column="APRV_DTM" property="aprvDtm" jdbcType="TIMESTAMP" />
+  	<result column="DATA_PTR" property="dataPtr" jdbcType="VARCHAR" />
+  	<result column="DBC_COL_OPN" property="dbcColOpn" jdbcType="VARCHAR" />
+    
+    <!-- 참조무결성 -->
+    <result column="CH_TBL_DBC_TBL_NM" property="chTblDbcTblNm" jdbcType="VARCHAR" />
+  	<result column="CH_TBL_DBC_COL_NM" property="chTblDbcColNm" jdbcType="VARCHAR" />
+  	<result column="REL_COL_SNO" property="relColSno" jdbcType="VARCHAR" />
+  	<result column="PA_TBL_DBC_COL_NM" property="paTblDbcColNm" jdbcType="VARCHAR" />
+  	<result column="PA_TBL_DBC_TBL_NM" property="paTblDbcTblNm" jdbcType="VARCHAR" />
+  	<result column="PA_TBL_ADT_CND_SQL" property="paTblAdtCndSql" jdbcType="VARCHAR" />
+  	
+  	<!-- 필수값완전성 -->
+  	<result column="AONL_YN" property="aonlYn" jdbcType="VARCHAR" />
+    <result column="DBC_COL_NM" property="dbcColNm" jdbcType="VARCHAR" />
+    <result column="DBC_COL_KOR_NM" property="dbcColKorNm" jdbcType="VARCHAR" />
+    <result column="DATA_TYPE" property="dataType" jdbcType="VARCHAR" />
+    <result column="DATA_LEN" property="dataLen" jdbcType="VARCHAR" />
+    
+    <!-- 데이터 중복 -->
+    <result column="COL_SEQ_PNM" property="colSeqPnm" jdbcType="VARCHAR" />
+    <result column="COL_SEQ_LNM" property="colSeqLnm" jdbcType="VARCHAR" />
+    
+    <!-- 업무규칙 -->
+    <result column="BIZ_AREA_LNM" property="bizAreaLnm" jdbcType="VARCHAR" />
+    <result column="BR_ID" property="brId" jdbcType="VARCHAR" />
+    <result column="BR_NM" property="brNm" jdbcType="VARCHAR" />
+    <result column="OBJ_DESCN" property="objDescn" jdbcType="VARCHAR" />
+    <result column="CNT_SQL" property="cntSql" jdbcType="VARCHAR" />
+    <result column="ANA_SQL" property="anaSql" jdbcType="VARCHAR" />
+    <result column="ER_CNT_SQL" property="erCntSql" jdbcType="VARCHAR" />
+    
+    <!-- 진단항목대상정보 -->
+    <result column="ANA_STS_TXT" property="anaStsTxt" jdbcType="VARCHAR" />
+    <result column="ANA_STR_DTM" property="anaStrDtm" jdbcType="TIMESTAMP" />
+
+    <!-- 진단항목오류정보 -->
+    <!-- 관계분석(참조테이블, 참조컬럼) -->
+    <result column="DBC_PA_TBL_NM" property="dbcPaTblNm" jdbcType="VARCHAR" />
+    <result column="DBC_PA_COL_NM" property="dbcPaColNm" jdbcType="VARCHAR" />
+    <result column="OBJ_ID" property="objId" jdbcType="VARCHAR" />
+    <result column="OBJ_DATE" property="objDate" jdbcType="VARCHAR" />
+    <result column="PRF_KND_CD" property="prfKndCd" jdbcType="VARCHAR" />
+    <result column="COL_ERR_RATE" property="colErrRate" jdbcType="VARCHAR" />
+    <result column="ESN_ER_CNT" property="esnErCnt" jdbcType="VARCHAR" />
+    <result column="ANA_CNT" property="anaCnt" jdbcType="VARCHAR" />
+    <result column="ERR_SQL" property="errSql" jdbcType="VARCHAR" />
+    
+    <result column="STR_ANA_DTM" property="strAnaDtm" jdbcType="VARCHAR" />
+    <result column="STR_APRV_DTM" property="strAprvDtm" jdbcType="VARCHAR" />
+    <result column="STR_ANA_STR_DTM" property="strAnaStrDtm" jdbcType="VARCHAR" />
+    
+  </resultMap>
+  <!-- 검증룰종합현황List -->
+  <resultMap id="ResultMap" type="kr.wise.dq.result.service.ResultVO">
+		<result column="UPP_DQI_LNM"  property="uppDqiLnm"  jdbcType="VARCHAR"  />
+		<result column="DQI_LNM"      property="dqiLnm"     jdbcType="VARCHAR"  />
+		
+		<result column="UPP_DQI_LNM"  property="cntName"    jdbcType="VARCHAR"  />
+		<result column="TOT_CNT"      property="totCnt"     jdbcType="VARCHAR"  />	
+		<result column="ERR_CNT"      property="errCnt"     jdbcType="VARCHAR"  />	
+		<result column="ERR_RATE"     property="errRate"    jdbcType="VARCHAR"  />
+		<result column="NO_EXE"       property="noExe"      jdbcType="VARCHAR"  />
+		<result column="COL_CNT"      property="colCnt"     jdbcType="VARCHAR"  />
+		<result column="TBL_CNT"      property="tblCnt"     jdbcType="VARCHAR"  />
+		<result column="SUM_RATE"     property="sumRate"    jdbcType="VARCHAR"  />
+		
+		<result column="ANA_STR_DTM"  property="anaStrDtm"  jdbcType="VARCHAR"  />
+		<result column="ANA_END_DTM"  property="anaEndDtm"  jdbcType="VARCHAR"  />
+		
+		<result column="ERR_SQL"  property="errSql"  jdbcType="CLOB"  />
+		<result column="DBC_TBL_KOR_NM"  property="dbcTblKorNm"  jdbcType="VARCHAR"  />
+		<result column="DBC_COL_KOR_NM"  property="dbcColKorNm"  jdbcType="VARCHAR"  />
+		<result column="PRF_KND_CD"  property="prfKndCd"  jdbcType="VARCHAR"  />
+		<result column="PRF_TYP"  property="prfTyp"  jdbcType="VARCHAR"  />
+		<result column="PRF_NM"  property="prfNm"  jdbcType="VARCHAR"  />
+		<result column="PRF_ID"  property="prfId"  jdbcType="VARCHAR"  />
+		<result column="DATA_TYPE"  property="dataType"  jdbcType="VARCHAR"  />
+		<result column="EXP_YN"  property="expYn"  jdbcType="VARCHAR"  />
+		<result column="EXP_RSN_CNTN"  property="expRsnCntn"  jdbcType="VARCHAR"  />
+		
+		<result column="DB_SCH_PNM"  property="dbSchPnm"  jdbcType="VARCHAR"  />
+		<result column="DB_SCH_LNM"  property="dbSchLnm"  jdbcType="VARCHAR"  />
+		<result column="DBC_TBL_NM"  property="dbcTblNm"  jdbcType="VARCHAR"  />
+		<result column="DBC_COL_NM"  property="dbcColNm"  jdbcType="VARCHAR"  />
+		
+		<result column="STND_RATE"     property="stndRate"    jdbcType="VARCHAR"  />
+		<result column="GOAL"     property="goal"    jdbcType="VARCHAR"  />
+		
+		<result column="OBJ_DESCN"     property="objDescn"    jdbcType="VARCHAR"  />
+		<result column="DATA_LEN"     property="dataLen"    jdbcType="VARCHAR"  />
+		<result column="DATA_SCAL"     property="dataScal"    jdbcType="VARCHAR"  />
+		
+		<result column="VRFC_TYP"     property="vrfcTyp"    jdbcType="VARCHAR"  />
+		<result column="ANA_STS_CD"     property="anaStsCd"    jdbcType="VARCHAR"  />
+		<result column="VRFC_NM"     property="vrfcNm"    jdbcType="VARCHAR"  />
+		<result column="VRFC_RULE"     property="vrfcRule"    jdbcType="VARCHAR"  />
+	</resultMap>
+  
+	
+<select id="selectResultListWithRule" resultMap="ResultMap" parameterType="kr.wise.dq.result.service.ResultVO">
+  SELECT CASE WHEN B.NO = 1 THEN A.UPP_DQI_LNM ELSE '값진단종합결과' END AS UPP_DQI_LNM 
+       , CASE WHEN B.NO = 1 THEN A.DQI_LNM END AS DQI_LNM
+       , SUM(A.TBL_CNT ) AS TBL_CNT    
+	   , SUM(A.COL_CNT ) AS COL_CNT 
+       , SUM(A.ERR_CNT ) AS ERR_CNT 
+         , CASE WHEN MAX(A.TOT_CNT) IS NULL OR MAX(A.TOT_CNT) ='0' THEN CAST(NULL AS INTEGER) 
+       ELSE CAST(IFNULL(ROUND(SUM(A.ERR_CNT ) / NULLIF(SUM(A.TOT_CNT ),0) * 100, 4),0) AS INTEGER) END AS ERR_RATE 
+       , CASE WHEN SUM(A.TOT_CNT) IS NOT NULL THEN IFNULL(SUM(A.TOT_CNT),0) ELSE NULL END AS TOT_CNT 
+       , CASE WHEN  SUM(A.NO_EXE)  IS NOT NULL THEN IFNULL(SUM(A.NO_EXE),0) ELSE NULL END AS NO_EXE 
+  	   , CASE  WHEN SUM(A.SUM_RATE) IS NOT NULL THEN IFNULL(SUM(A.SUM_RATE),0) ELSE NULL END AS SUM_RATE
+  	   , ROUND(100 - (SUM(A.ERR_CNT ) / NULLIF(SUM(A.TOT_CNT ),0) * 100), 4) AS STND_RATE
+  	   , CASE WHEN MAX(A.TOT_CNT) IS NULL OR MAX(A.TOT_CNT) ='0' THEN CAST(NULL AS INTEGER) ELSE MAX(A.GOAL) END AS GOAL
+    FROM (
+  SELECT DQI.UPP_DQI_LNM AS UPP_DQI_LNM
+	   , DQI.DQI_LNM
+	   , S.TBL_CNT
+	   , S.COL_CNT
+       , S.ERR_CNT
+       , S.ERR_RATE
+       , S.TOT_CNT
+       , S.NO_EXE
+  	   , CASE WHEN S.ERR_RATE = '0' THEN 0 ELSE  ROUND(S.ERR_RATE * 100 / SUM(S.ERR_RATE) OVER (),2) END AS SUM_RATE
+  	   , DQI.GOAL
+  	 FROM 
+  	   (SELECT B.DQI_LNM AS UPP_DQI_LNM   
+	         , A.DQI_LNM
+	         , A.GOAL
+	      FROM WAM_DQI A
+	           INNER JOIN WAM_DQI B
+	              ON B.DQI_ID = A.UPP_DQI_ID
+	     WHERE 1 = 1        
+  	   ) DQI
+  	   LEFT JOIN    	    
+  	   (  	   
+	   SELECT UPP_DQI_LNM
+	        , DQI_LNM
+			, COUNT(DISTINCT CONCAT(IFNULL(DB_CONN_TRG_PNM, ''),IFNULL(DB_SCH_PNM, ''),IFNULL(DBC_TBL_NM, ''))) AS TBL_CNT
+			, COUNT(DISTINCT CONCAT(IFNULL(DB_CONN_TRG_PNM, ''),IFNULL(DB_SCH_PNM, ''),IFNULL(DBC_TBL_NM, ''),IFNULL(DBC_COL_NM, ''))) AS COL_CNT
+		    , SUM(ESN_ER_CNT)            AS ERR_CNT
+		    , ROUND((SUM(ESN_ER_CNT) / NULLIF(SUM(ANA_CNT),0)) * 100, 2) AS ERR_RATE
+		    , SUM(ANA_CNT)               AS TOT_CNT
+		    , COUNT(ANA_STR_DTM)         AS NO_EXE
+		    , GOAL
+		FROM (		     
+			  	SELECT A.PRF_ID
+					, U.DQI_LNM   AS UPP_DQI_LNM
+					, DQI.DQI_LNM
+					 , A.ANA_STR_DTM
+				     , D.DB_CONN_TRG_PNM
+				     , C.DB_SCH_PNM   
+				     , B.DBC_TBL_NM AS DBC_TBL_NM
+				     , B.DBC_COL_NM AS DBC_COL_NM
+				     , A.ANA_CNT
+				     , A.ESN_ER_CNT
+				     , IFNULL(ROUND(A.ESN_ER_CNT / CASE A.ANA_CNT WHEN 0 THEN NULL ELSE A.ANA_CNT END * 100, 4),0) AS ER_RATE
+				     , 'PC01' AS PRF_KND_CD
+				     , DQI.GOAL
+				  FROM WAM_PRF_RESULT A
+				       INNER JOIN WAA_COL_RULE_REL B
+				          ON B.RULE_REL_ID = A.PRF_ID
+				       INNER JOIN WAA_DB_SCH C
+				          ON C.EXP_DTM = STR_TO_DATE('9999-12-31','%Y-%m-%d')
+				         AND C.DB_SCH_ID = B.DB_SCH_ID 
+				       INNER JOIN WAA_DB_CONN_TRG D
+				          ON D.EXP_DTM = STR_TO_DATE('9999-12-31','%Y-%m-%d')
+				         AND D.DB_CONN_TRG_ID = C.DB_CONN_TRG_ID   
+				       INNER JOIN WAA_VRFC_RULE E
+				          ON E.EXP_DTM = STR_TO_DATE('9999-12-31','%Y-%m-%d')
+				         AND E.VRFC_ID = B.VRFC_ID 
+				         LEFT JOIN WAM_DQI DQI
+						 ON E.DQI_ID = DQI.DQI_ID 
+						AND DQI.REG_TYP_CD IN ('C', 'U')
+					   LEFT JOIN WAM_DQI U
+						 ON U.DQI_ID = DQI.UPP_DQI_ID
+						AND U.REG_TYP_CD IN ('C', 'U') 
+				       LEFT OUTER JOIN WAT_DBC_COL F
+				       	  ON B.DB_SCH_ID = F.DB_SCH_ID
+				       	 AND B.DBC_TBL_NM = F.DBC_TBL_NM
+				       	 AND B.DBC_COL_NM = F.DBC_COL_NM
+			          LEFT JOIN WAA_EXP_TBL EX          
+						  ON EX.DB_SCH_ID  = B.DB_SCH_ID  
+						 AND EX.DBC_TBL_NM = B.DBC_TBL_NM
+					 WHERE  1 = 1  
+					   AND (A.PRF_ID, A.ANA_STR_DTM) IN (SELECT PRF_ID, MAX(ANA_STR_DTM)
+														   FROM WAM_PRF_RESULT
+														  GROUP BY PRF_ID 
+														 )   
+					    AND IFNULL(EX.EXP_YN,'N')='N' 
+						   AND NOT exists (SELECT 1
+						   			         FROM WAA_EXP_TBL_RULE EXR
+						   			   		WHERE EXR.REG_TYP IN ('C', 'U')
+						   			    	  AND EXR.DB_SCH_ID = B.DB_SCH_ID
+					        				  AND EXR.DB_CONN_TRG_ID = C.DB_CONN_TRG_ID 
+					        				  AND B.DBC_TBL_NM LIKE (CASE WHEN (EXR.RELATION = 'F') THEN CONCAT(IFNULL(EXR.EXC_STND_RULE, '') , '_' , '%') 
+																		 WHEN (EXR.RELATION = 'B') THEN  Concat('%' , '_' , IFNULL(EXR.EXC_STND_RULE, '')) END) 
+							)          
+				   <if test="dbConnTrgId != null and dbConnTrgId != ''" >
+						AND D.DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR}
+					</if>
+					<if test="dbSchId != null and dbSchId != ''" >
+						AND C.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+					</if>
+					<if test="dbSchPnm != null and dbSchPnm != ''" >
+						AND (C.DB_SCH_PNM LIKE CONCAT(CONCAT('%',#{dbSchPnm,jdbcType=VARCHAR}),'%') OR C.DB_SCH_PNM LIKE CONCAT(CONCAT('%',UPPER(#{dbSchPnm,jdbcType=VARCHAR})),'%'))
+					</if>
+					<if test="dbcTblNm != null and dbcTblNm != ''" >
+						AND (B.DBC_TBL_NM LIKE CONCAT(CONCAT('%',#{dbcTblNm,jdbcType=VARCHAR}),'%') OR B.DBC_TBL_NM LIKE CONCAT(CONCAT('%',UPPER(#{dbcTblNm,jdbcType=VARCHAR})),'%'))
+					</if>
+					<if test="dbcColNm != null and dbcColNm != ''" >
+						AND (B.DBC_COL_NM LIKE CONCAT(CONCAT('%',#{dbcColNm,jdbcType=VARCHAR}),'%') OR B.DBC_COL_NM LIKE CONCAT(CONCAT('%',UPPER(#{dbcColNm,jdbcType=VARCHAR})),'%'))
+					</if>
+		UNION ALL
+		SELECT  A.PRF_ID
+		, '유효성' AS UPP_DQI_LNM
+		, '코드' AS DQI_LNM
+		 , A.ANA_STR_DTM
+	     , D.DB_CONN_TRG_PNM
+	     , C.DB_SCH_PNM     
+	     , B.DBC_TBL_NM
+	     , B.DBC_COL_NM
+	     , A.ANA_CNT
+	     , A.ESN_ER_CNT
+	     , IFNULL(ROUND(A.ESN_ER_CNT / CASE A.ANA_CNT WHEN 0 THEN NULL ELSE A.ANA_CNT END * 100, 4),0) AS ER_RATE
+	     , 'PT01' AS PRF_KND_CD
+		, CAST('100' AS INTEGER) AS GOAL
+	  FROM WAM_PRF_RESULT A
+	       INNER JOIN WAA_COL_RULE_REL B
+	          ON B.RULE_REL_ID = A.PRF_ID
+	       INNER JOIN WAA_DB_SCH C
+	          ON C.EXP_DTM = STR_TO_DATE('9999-12-31','%Y-%m-%d')
+	         AND C.DB_SCH_ID = B.DB_SCH_ID 
+	       INNER JOIN WAA_DB_CONN_TRG D
+	          ON D.EXP_DTM = STR_TO_DATE('9999-12-31','%Y-%m-%d')
+	         AND D.DB_CONN_TRG_ID = C.DB_CONN_TRG_ID   
+	       INNER JOIN WAA_CD_RULE E
+	          ON E.CD_RULE_ID = B.VRFC_ID 
+	       LEFT OUTER JOIN WAT_DBC_COL F
+	       	  ON B.DB_SCH_ID = F.DB_SCH_ID
+	       	 AND B.DBC_TBL_NM = F.DBC_TBL_NM
+	       	 AND B.DBC_COL_NM = F.DBC_COL_NM
+          LEFT JOIN WAA_EXP_TBL EX          
+			  ON EX.DB_SCH_ID  = B.DB_SCH_ID  
+			 AND EX.DBC_TBL_NM = B.DBC_TBL_NM
+	 WHERE  1 = 1  
+	   AND (A.PRF_ID, A.ANA_STR_DTM) IN (SELECT PRF_ID, MAX(ANA_STR_DTM)
+	                                       FROM WAM_PRF_RESULT
+	                                      GROUP BY PRF_ID 
+	                                     )
+	   AND IFNULL(EX.EXP_YN,'N')='N' 
+	   AND NOT exists (SELECT 1
+	   			         FROM WAA_EXP_TBL_RULE EXR
+	   			   		WHERE EXR.REG_TYP IN ('C', 'U')
+	   			    	  AND EXR.DB_SCH_ID = B.DB_SCH_ID
+        				  AND EXR.DB_CONN_TRG_ID = C.DB_CONN_TRG_ID 
+        				  AND B.DBC_TBL_NM LIKE (CASE WHEN (EXR.RELATION = 'F') THEN CONCAT(IFNULL(EXR.EXC_STND_RULE, '') , '_' , '%') 
+													 WHEN (EXR.RELATION = 'B') THEN  Concat('%' , '_' , IFNULL(EXR.EXC_STND_RULE, '')) END) 
+		)                                  
+	      <if test="dbConnTrgId != null and dbConnTrgId != ''" >
+			AND D.DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR}
+		</if>
+		<if test="dbSchId != null and dbSchId != ''" >
+			AND C.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+		</if>
+		<if test="dbSchPnm != null and dbSchPnm != ''" >
+			AND (C.DB_SCH_PNM LIKE CONCAT(CONCAT('%',#{dbSchPnm,jdbcType=VARCHAR}),'%') OR C.DB_SCH_PNM LIKE CONCAT(CONCAT('%',UPPER(#{dbSchPnm,jdbcType=VARCHAR})),'%'))
+		</if>
+		<if test="dbcTblNm != null and dbcTblNm != ''" >
+			AND (B.DBC_TBL_NM LIKE CONCAT(CONCAT('%',#{dbcTblNm,jdbcType=VARCHAR}),'%') OR B.DBC_TBL_NM LIKE CONCAT(CONCAT('%',UPPER(#{dbcTblNm,jdbcType=VARCHAR})),'%'))
+		</if>
+		<if test="dbcColNm != null and dbcColNm != ''" >
+			AND (B.DBC_COL_NM LIKE CONCAT(CONCAT('%',#{dbcColNm,jdbcType=VARCHAR}),'%') OR B.DBC_COL_NM LIKE CONCAT(CONCAT('%',UPPER(#{dbcColNm,jdbcType=VARCHAR})),'%'))
+		</if>
+					
+				UNION ALL
+				SELECT A.PRF_ID
+					 , U.DQI_LNM   AS UPP_DQI_LNM
+					 , DQI.DQI_LNM
+					 , A.ANA_STR_DTM
+					 , D.DB_CONN_TRG_PNM
+					 , C.DB_SCH_PNM   
+					 , B.DBC_TBL_NM AS DBC_TBL_NM
+					 , B.OBJ_NM AS DBC_COL_NM
+					 , A.ANA_CNT
+					 , A.ESN_ER_CNT
+					 , ROUND(A.ESN_ER_CNT / NULLIF(A.ANA_CNT,0) * 100, 4) AS ER_RATE
+					 , 'PT01' AS PRF_KND_CD
+					 , DQI.GOAL
+				  FROM WAM_PRF_RESULT A
+					   INNER JOIN WAM_PRF_MSTR B
+						  ON B.REG_TYP_CD IN ('C', 'U')
+						 AND B.PRF_ID = A.PRF_ID
+						 AND B.PRF_KND_CD = 'PT01'
+					   INNER JOIN WAM_PRF_REL_COL COL
+					      ON COL.PRF_ID = B.PRF_ID
+						 AND COL.REG_TYP_CD IN ('C', 'U')
+					   INNER JOIN WAA_DB_SCH C
+						  ON C.EXP_DTM = STR_TO_DATE('99991231', '%Y%m%d')
+						 AND C.REG_TYP_CD IN ('C', 'U')
+						 AND C.DB_SCH_ID = B.DB_SCH_ID 
+						 AND C.DB_SCH_ID = COL.CH_TBL_DBC_SCH_ID
+					   INNER JOIN WAA_DB_CONN_TRG D
+						  ON D.EXP_DTM = STR_TO_DATE('99991231', '%Y%m%d')
+						 AND D.REG_TYP_CD IN ('C', 'U')
+						 AND D.DB_CONN_TRG_ID = C.DB_CONN_TRG_ID
+					   LEFT JOIN WAM_PRF_DQI_MAP E
+						 ON E.PRF_ID = B.PRF_ID
+					   LEFT JOIN WAM_DQI DQI
+						 ON E.DQI_ID = DQI.DQI_ID 
+						AND DQI.REG_TYP_CD IN ('C', 'U')
+					   LEFT JOIN WAM_DQI U
+						 ON U.DQI_ID = DQI.UPP_DQI_ID
+						AND U.REG_TYP_CD IN ('C', 'U') 
+					   LEFT JOIN WAA_EXP_TBL EX          
+						  ON EX.DB_SCH_ID  = B.DB_SCH_ID  
+						 AND EX.DBC_TBL_NM = B.DBC_TBL_NM
+				 WHERE  1 = 1  
+				   AND (A.PRF_ID, A.ANA_STR_DTM) IN (SELECT PRF_ID, MAX(ANA_STR_DTM)
+													   FROM WAM_PRF_RESULT
+													  GROUP BY PRF_ID 
+													 )   
+				    AND IFNULL(EX.EXP_YN,'N')='N' 
+			   AND NOT exists (SELECT 1
+			   			         FROM WAA_EXP_TBL_RULE EXR
+			   			   		WHERE EXR.REG_TYP IN ('C', 'U')
+			   			    	  AND EXR.DB_SCH_ID = B.DB_SCH_ID
+		        				  AND EXR.DB_CONN_TRG_ID = C.DB_CONN_TRG_ID 
+		        				  AND B.DBC_TBL_NM LIKE (CASE WHEN (EXR.RELATION = 'F') THEN CONCAT(IFNULL(EXR.EXC_STND_RULE, '') , '_' , '%') 
+															 WHEN (EXR.RELATION = 'B') THEN  Concat('%' , '_' , IFNULL(EXR.EXC_STND_RULE, '')) END) 
+				)    
+				   <if test="dbConnTrgId != null and dbConnTrgId != ''" >
+						AND D.DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR}
+					</if>
+					<if test="dbSchId != null and dbSchId != ''" >
+						AND C.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+					</if>
+					<if test="dbSchPnm != null and dbSchPnm != ''" >
+						AND (C.DB_SCH_PNM LIKE CONCAT(CONCAT('%',#{dbSchPnm,jdbcType=VARCHAR}),'%') OR C.DB_SCH_PNM LIKE CONCAT(CONCAT('%',UPPER(#{dbSchPnm,jdbcType=VARCHAR})),'%'))
+					</if>
+					<if test="dbcTblNm != null and dbcTblNm != ''" >
+						AND (B.DBC_TBL_NM LIKE CONCAT(CONCAT('%',#{dbcTblNm,jdbcType=VARCHAR}),'%') OR B.DBC_TBL_NM LIKE CONCAT(CONCAT('%',UPPER(#{dbcTblNm,jdbcType=VARCHAR})),'%'))
+					</if>
+					<if test="dbcColNm != null and dbcColNm != ''" >
+						AND (B.OBJ_NM LIKE CONCAT(CONCAT('%',#{dbcColNm,jdbcType=VARCHAR}),'%') OR B.OBJ_NM LIKE CONCAT(CONCAT('%',UPPER(#{dbcColNm,jdbcType=VARCHAR})),'%'))
+					</if>
+			    UNION ALL     
+				SELECT A.BR_ID
+				     , U.DQI_LNM   AS UPP_DQI_LNM
+					 , DQI.DQI_LNM
+					 , A.ANA_STR_DTM
+					 , D.DB_CONN_TRG_PNM
+					 , C.DB_SCH_PNM
+					 , B.DBC_TBL_NM
+					 , B.DBC_COL_NM
+					 , A.ANA_CNT
+					 , A.ER_CNT AS ESN_ER_CNT
+					 , ROUND(A.ER_CNT / NULLIF(A.ANA_CNT,0) * 100, 4) AS ER_RATE
+					 , 'BR' AS PRF_KND_CD
+					 , DQI.GOAL
+				  FROM WAM_BR_RESULT A
+					   INNER JOIN WAM_BR_MSTR B
+						  ON B.BR_ID = A.BR_ID
+						 AND B.REG_TYP_CD IN ('C', 'U')
+					   INNER JOIN WAA_DB_SCH C
+						  ON C.EXP_DTM = STR_TO_DATE('99991231', '%Y%m%d')
+						 AND C.REG_TYP_CD IN ('C', 'U')
+						 AND C.DB_SCH_ID = B.DB_SCH_ID 
+					   INNER JOIN WAA_DB_CONN_TRG D
+						  ON D.EXP_DTM = STR_TO_DATE('99991231', '%Y%m%d')
+						 AND D.REG_TYP_CD IN ('C', 'U')
+						 AND D.DB_CONN_TRG_ID = C.DB_CONN_TRG_ID  
+					   LEFT JOIN WAM_BR_DQI_MAP M
+					     ON M.BR_ID = B.BR_ID	 
+					   LEFT JOIN WAM_DQI DQI
+						 ON DQI.DQI_ID = M.DQI_ID 
+						AND DQI.REG_TYP_CD IN ('C', 'U')
+					   LEFT JOIN WAM_DQI U
+						 ON U.DQI_ID = DQI.UPP_DQI_ID
+						AND U.REG_TYP_CD IN ('C', 'U')
+					   LEFT JOIN WAA_EXP_TBL EX          
+						  ON EX.DB_SCH_ID  = B.DB_SCH_ID  
+						 AND EX.DBC_TBL_NM = B.DBC_TBL_NM 				  
+				 WHERE  1 = 1     
+				   AND (A.BR_ID, A.ANA_STR_DTM) IN (SELECT BR_ID, MAX(ANA_STR_DTM)
+													  FROM WAM_BR_RESULT
+													GROUP BY BR_ID 
+													)
+		            AND IFNULL(EX.EXP_YN,'N')='N' 
+				   AND NOT exists (SELECT 1
+				   			         FROM WAA_EXP_TBL_RULE EXR
+				   			   		WHERE EXR.REG_TYP IN ('C', 'U')
+				   			    	  AND EXR.DB_SCH_ID = B.DB_SCH_ID
+			        				  AND EXR.DB_CONN_TRG_ID = C.DB_CONN_TRG_ID 
+			        				  AND B.DBC_TBL_NM LIKE (CASE WHEN (EXR.RELATION = 'F') THEN CONCAT(IFNULL(EXR.EXC_STND_RULE, '') , '_' , '%') 
+																 WHEN (EXR.RELATION = 'B') THEN  CONCAT('%' , '_' , IFNULL(EXR.EXC_STND_RULE, '')) END) 
+					)      
+					<if test="dbConnTrgId != null and dbConnTrgId != ''" >
+						AND D.DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR}
+					</if>
+					<if test="dbSchId != null and dbSchId != ''" >
+						AND C.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+					</if>
+					<if test="dbSchPnm != null and dbSchPnm != ''" >
+						AND (C.DB_SCH_PNM LIKE CONCAT(CONCAT('%',#{dbSchPnm,jdbcType=VARCHAR}),'%') OR C.DB_SCH_PNM LIKE CONCAT(CONCAT('%',UPPER(#{dbSchPnm,jdbcType=VARCHAR})),'%'))
+					</if>
+					<if test="dbcTblNm != null and dbcTblNm != ''" >
+						AND (B.DBC_TBL_NM LIKE CONCAT(CONCAT('%',#{dbcTblNm,jdbcType=VARCHAR}),'%') OR B.DBC_TBL_NM LIKE CONCAT(CONCAT('%',UPPER(#{dbcTblNm,jdbcType=VARCHAR})),'%'))
+					</if>
+					<if test="dbcColNm != null and dbcColNm != ''" >
+						AND (B.DBC_COL_NM LIKE CONCAT(CONCAT('%',#{dbcColNm,jdbcType=VARCHAR}),'%') OR B.DBC_COL_NM LIKE CONCAT(CONCAT('%',UPPER(#{dbcColNm,jdbcType=VARCHAR})),'%'))
+					</if>                  
+		 ) X
+		 GROUP BY UPP_DQI_LNM
+		        , DQI_LNM
+		        , GOAL
+      ) S
+      ON DQI.DQI_LNM = S.DQI_LNM 		        
+ WHERE 1 = 1
+ ) A
+ LEFT JOIN
+ (SELECT 1 AS NO FROM DUAL
+   UNION
+  SELECT 2 AS NO FROM DUAL 
+ ) B
+ ON 1 = 1
+ WHERE 1 = 1
+ GROUP BY CASE WHEN B.NO = 1 THEN A.UPP_DQI_LNM ELSE '값진단종합결과' END
+        , CASE WHEN B.NO = 1 THEN A.DQI_LNM END     
+        , B.NO
+        , A.GOAL
+  ORDER BY B.NO
+          ,UPP_DQI_LNM
+          ,DQI_LNM
+<!--          , CASE WHEN DQI_LNM = '관계키'  THEN 1 -->
+<!--                 WHEN DQI_LNM = '필수값'  THEN 2 -->
+<!--                 WHEN DQI_LNM = '금액'   THEN 3 -->
+<!--                 WHEN DQI_LNM = '날짜'   THEN 4 -->
+<!--                 WHEN DQI_LNM = '수량'   THEN 5 -->
+<!--                 WHEN DQI_LNM = '여부'   THEN 6 -->
+<!--                 WHEN DQI_LNM = '율'    THEN 7 -->
+<!--                 WHEN DQI_LNM = '코드'   THEN 8 -->
+<!--                 WHEN DQI_LNM = '계산 및 집계'  THEN 9 -->
+<!--                 WHEN DQI_LNM = '시간순서'  THEN 10 -->
+<!--                 WHEN DQI_LNM = '컬럼 간 논리관계'  THEN 11 -->
+<!--                 WHEN DQI_LNM = '명칭'  THEN 12 -->
+<!--                 WHEN DQI_LNM = '번호'  THEN 13 -->
+<!--             END  -->
+ 
+</select>
+
+  <sql id="Base_Column_List" >
+    DB_SCH_ID, DBC_TBL_NM, DBC_TBL_KOR_NM, ANA_TRG_YN, VERS, REG_TYP, REG_DTM, UPD_DTM,EXP_DTM, 
+    DESCN, DB_CONN_TRG_ID
+  </sql>
+  
+    <sql id="Base_Dbc_Col_View">
+     SELECT DISTINCT
+                   CON.DB_CONN_TRG_PNM
+                 , CON.DB_CONN_TRG_LNM 
+                 , CON.DB_CONN_TRG_ID
+                 , SCH.DB_SCH_PNM
+                 , SCH.DB_SCH_LNM
+                 , SCH.DB_SCH_ID
+                 , TBL.DBC_TBL_NM
+                 , TBL.DBC_TBL_KOR_NM
+                 , TBL.SUBJ_ID
+                 , TBL.ANA_DTM
+                 , COL.DBC_COL_NM
+                 , COL.DBC_COL_KOR_NM
+                 , COL.DATA_TYPE  
+                 , COL.DATA_LEN   
+                 , COL.DATA_PNUM  
+                 , COL.DATA_PNT   
+                 , COL.NULL_YN    
+                 , COL.DEFLT_LEN  
+                 , COL.DEFLT_VAL  
+                 , COL.PK_YN      
+                 , COL.ORD        
+                 , COL.PK_ORD     
+                 , COL.COL_DESCN
+                 , CASE WHEN EX.EXP_YN ='Y' OR XXX.DBC_TBL_NM IS NULL THEN    'Y'
+               		WHEN EX.EXP_YN != 'Y' OR XXX.DBC_TBL_NM IS NOT NULL THEN 'N' END AS EXP_YN --  SQLINES DEMO *** 제외임
+                 , EX.EXP_RSN_CNTN 
+                 , CASE WHEN XXX.DBC_TBL_NM IS NULL AND EX.EXP_RSN_CNTN IS NULL  THEN '제외기준룰 적용'
+                	 WHEN EX.EXP_YN ='Y' THEN EX.EXP_RSN_CNTN
+                    ELSE COL.COL_DESCN END AS DESCN
+                 FROM WAT_DBC_TBL TBL
+         LEFT JOIN WAT_DBC_COL COL
+                ON COL.DB_SCH_ID = TBL.DB_SCH_ID
+               AND COL.DBC_TBL_NM = TBL.DBC_TBL_NM
+        INNER JOIN WAA_DB_SCH SCH
+                ON SCH.DB_SCH_ID = TBL.DB_SCH_ID 
+               AND SCH.DB_CONN_TRG_ID = TBL.DB_CONN_TRG_ID
+               AND SCH.EXP_DTM = STR_TO_DATE( '9999-12-31', '%Y-%m-%d')
+        INNER JOIN WAA_DB_CONN_TRG CON
+                ON CON.DB_CONN_TRG_ID = SCH.DB_CONN_TRG_ID
+               AND CON.DB_CONN_TRG_ID = TBL.DB_CONN_TRG_ID
+               AND CON.EXP_DTM = STR_TO_DATE( '9999-12-31', '%Y-%m-%d')
+         LEFT JOIN WAA_EXP_TBL EX          
+           ON EX.DB_SCH_ID  = SCH.DB_SCH_ID  
+          AND EX.DBC_TBL_NM = TBL.DBC_TBL_NM
+      LEFT OUTER JOIN 
+        (SELECT DBC.DB_SCH_ID, DBC.DBC_TBL_NM
+           FROM WAT_DBC_TBL DBC
+            WHERE NOT exists (SELECT 1
+                         FROM WAA_EXP_TBL_RULE EXR
+                         WHERE EXR.REG_TYP IN ('C', 'U')
+                         AND EXR.DB_SCH_ID = DBC.DB_SCH_ID
+                       AND EXR.DB_CONN_TRG_ID = DBC.DB_CONN_TRG_ID 
+                       AND DBC.DBC_TBL_NM LIKE (CASE WHEN (EXR.RELATION = 'F') THEN CONCAT(IFNULL(EXR.EXC_STND_RULE, '') , '_' , '%') 
+                                          WHEN (EXR.RELATION = 'B') THEN  Concat('%' , '_' , IFNULL(EXR.EXC_STND_RULE, '')) END) )
+      ) XXX 
+      ON XXX.DB_SCH_ID = TBL.DB_SCH_ID 
+      AND XXX.DBC_TBL_NM = TBL.DBC_TBL_NM 
+      WHERE 1=1
+      <if test="dbConnTrgId != null and dbConnTrgId != ''" >
+			AND CON.DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR}
+		</if>
+		<if test="dbSchId != null and dbSchId != ''" >
+			AND SCH.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+		</if>
+    </sql>
+    
+  <sql id="Vrfc_View">
+  SELECT M.*
+             , R.ANA_STR_DTM AS "ANA_STR_DTM"
+             , R.ANA_STR_DTM AS "RES_ANA_STR_DTM"
+             , R.ANA_END_DTM AS "RES_ANA_END_DTM"
+             , R.ANA_DGR AS "ANA_DGR"
+             , R.ANA_CNT AS "ANA_CNT"
+             , R.ESN_ER_CNT AS "ESN_ER_CNT"
+             , R.NULL_CNT as "NULL_CNT"
+             , B.DB_CONN_TRG_ID 
+             , R.PRF_ID
+              , M.VRFC_NM  AS PRF_NM
+             , M.DBC_COL_NM AS OBJ_NM
+             , CASE WHEN CD.CD_RULE_ID IS NOT NULL AND G.VRFC_TYP IS NULL THEN 'CD'
+             	ELSE G.VRFC_TYP END AS "KND_CD"       
+             , M.VRFC_NM AS RULE_NM
+			,  M.VRFC_NM AS KND_NM
+			, CASE WHEN CD.CD_RULE_ID IS NOT NULL AND G.VRFC_RULE IS NULL THEN M.VRFC_NM 
+				ELSE G.VRFC_RULE END AS VRF_FRM
+			, CASE WHEN CD.CD_RULE_ID IS NOT NULL AND G.WRIT_DTM IS NULL THEN CD.WRIT_DTM 
+				ELSE G.WRIT_DTM END AS APRV_DTM
+			, 'PC01' AS PRF_KND_CD
+		 	, CASE WHEN EX.EXP_YN ='Y' THEN 'Y'
+               		  ELSE 'N' END AS EXP_YN
+                 , EX.EXP_RSN_CNTN 
+                 --  SQLINES DEMO *** � 삭제 시 상태 코드가 없기 때문에 검증룰 적용하고(id) 분석 시작, 끝이 있는 상태로 변경
+          	, CASE WHEN M.RULE_REL_ID IS NOT NULL AND R.ANA_STR_DTM IS NOT NULL AND R.ANA_END_DTM IS NOT NULL THEN '01' -- 'COMPLETED'
+     			ELSE '03' END AS ANA_STS_CD -- 'FAILED'
+          FROM  
+       (     SELECT R1.*
+                       FROM WAM_PRF_RESULT R1
+                 INNER JOIN (   SELECT PRF_ID, MAX(ANA_STR_DTM) AS "ANA_STR_DTM"
+                                  FROM WAM_PRF_RESULT
+                              GROUP BY PRF_ID) R2 
+                         ON R1.PRF_ID = R2.PRF_ID
+                        AND R1.ANA_STR_DTM = R2.ANA_STR_DTM
+                      WHERE 1 = 1 
+                ) R
+                INNER JOIN WAA_COL_RULE_REL M
+             ON M.RULE_REL_ID = R.PRF_ID
+             INNER JOIN WAA_DB_SCH B                                  
+	           ON B.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')  
+	          AND B.DB_SCH_ID = M.DB_SCH_ID  
+	          -- 검증룰
+	          LEFT JOIN WAA_VRFC_RULE G
+	            ON G.VRFC_ID = M.VRFC_ID
+		        AND G.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+		        AND G.REG_TYP_CD IN ('C', 'U')
+		        -- 코드분석
+			   LEFT JOIN WAA_CD_RULE CD                                 
+	  			 ON CD.CD_RULE_ID = M.VRFC_ID  
+		        INNER JOIN WAA_DB_CONN_TRG C                             
+		           ON C.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')  
+		          AND C.DB_CONN_TRG_ID = B.DB_CONN_TRG_ID                
+		        LEFT JOIN WAA_EXP_TBL EX                                 
+	          	 ON EX.DB_SCH_ID  = M.DB_SCH_ID                         		
+	        	  AND EX.DBC_TBL_NM = M.DBC_TBL_NM   
+             WHERE 1=1
+              <if test="dbConnTrgId != null and dbConnTrgId != ''" >
+			AND C.DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR}
+		</if>
+		<if test="dbSchId != null and dbSchId != ''" >
+			AND B.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+		</if>
+  </sql>
+  
+  <sql id="Vrfc_View_Tot">
+  SELECT  CON.DB_CONN_TRG_ID
+		     , SCH.DB_SCH_ID
+		     , SCH.DB_SCH_PNM
+		     , TBL.DBC_TBL_NM
+		     , COL.DBC_COL_NM
+		     , F.VRFC_NM AS PRF_NM
+		     , CASE WHEN CR.CD_RULE_ID IS NOT NULL AND G.VRFC_TYP IS NULL THEN 'CD'
+		     	ELSE G.VRFC_TYP END AS KND_CD
+		     , CASE WHEN CR.CD_RULE_ID IS NOT NULL AND G.VRFC_RULE IS NULL THEN F.VRFC_NM 
+				ELSE G.VRFC_RULE END AS VRF_FRM
+			 , CASE WHEN CR.CD_RULE_ID IS NOT NULL AND G.WRIT_DTM IS NULL THEN CR.WRIT_DTM 
+				ELSE G.WRIT_DTM END AS APRV_DTM
+             , PM.PRF_ID
+             , R.ANA_STR_DTM
+             , CASE WHEN COL.DATA_LEN IS NULL 
+                     THEN COL.DATA_TYPE
+                     ELSE (CASE WHEN COL.DATA_PNT IS NOT NULL
+                                THEN (CONCAT(IFNULL(COL.DATA_TYPE, ''),'(',IFNULL(COL.DATA_LEN, ''),', ',IFNULL(COL.DATA_PNT, ''),')') )
+                                ELSE (CONCAT(IFNULL(COL.DATA_TYPE, ''),'(',IFNULL(COL.DATA_LEN, ''),')'))
+                                 END )
+                     END AS DATA_TYPE
+             , CASE WHEN F.RULE_REL_ID IS NOT NULL AND R.ANA_STR_DTM IS NOT NULL AND R.ANA_END_DTM IS NOT NULL THEN '01' -- 'COMPLETED'
+             		ELSE '03' END AS ANA_STS_CD -- 'FAILED'
+              , CASE WHEN EX.EXP_YN ='Y' OR XXX.DBC_TBL_NM IS NULL THEN    'Y'
+               WHEN EX.EXP_YN != 'Y' OR XXX.DBC_TBL_NM IS NOT NULL THEN 'N' END AS EXP_YN --  SQLINES DEMO 제외임
+                 , EX.EXP_RSN_CNTN 
+                 , CASE WHEN XXX.DBC_TBL_NM IS NULL AND EX.EXP_RSN_CNTN IS NULL  THEN '제외기준룰 적용'
+                 WHEN EX.EXP_YN ='Y' THEN EX.EXP_RSN_CNTN
+                    ELSE COL.COL_DESCN END AS DESCN
+             		
+		  FROM WAT_DBC_TBL TBL
+		       INNER JOIN WAA_DB_SCH SCH
+		          ON SCH.EXP_DTM = STR_TO_DATE( '99991231', '%Y%m%d')
+		         AND SCH.DB_SCH_ID = TBL.DB_SCH_ID  
+		       INNER JOIN WAA_DB_CONN_TRG CON
+		          ON CON.EXP_DTM = STR_TO_DATE( '99991231', '%Y%m%d')
+		         AND CON.DB_CONN_TRG_ID = SCH.DB_CONN_TRG_ID  
+		       INNER JOIN WAT_DBC_COL COL
+		          ON COL.DB_SCH_ID  = TBL.DB_SCH_ID
+		         AND COL.DBC_TBL_NM = TBL.DBC_TBL_NM       
+		       LEFT JOIN WAA_COL_RULE_REL F
+		         ON F.DB_SCH_ID  = TBL.DB_SCH_ID
+		        AND F.DBC_TBL_NM = TBL.DBC_TBL_NM
+		        AND F.DBC_COL_NM = COL.DBC_COL_NM
+		        
+		       LEFT JOIN WAA_VRFC_RULE G
+		         ON G.VRFC_ID = F.VRFC_ID
+		        AND G.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+		        AND G.REG_TYP_CD IN ('C', 'U')
+		        -- 코드
+        	 LEFT JOIN WAA_CD_RULE CR                            
+			 ON CR.CD_RULE_ID = F.VRFC_ID 
+   
+		      LEFT JOIN 
+		      (SELECT M.DB_CONN_TRG_ID, M.DB_SCH_ID, M.DBC_TBL_NM, M.OBJ_NM, M.PRF_ID
+           	     FROM WAM_PRF_MSTR M            	  
+           	    WHERE M.REG_TYP_CD IN ('C','U')
+           	      AND M.PRF_KND_CD LIKE CONCAT('PC01','%')
+           	       
+				   AND M.DB_CONN_TRG_ID = 'OBJ_00000176032'
+				     
+                 ) PM
+                ON CON.DB_CONN_TRG_ID = PM.DB_CONN_TRG_ID
+			   AND SCH.DB_SCH_ID      = PM.DB_SCH_ID
+			   AND TBL.DBC_TBL_NM     = PM.DBC_TBL_NM
+               AND COL.DBC_COL_NM     = PM.OBJ_NM
+            LEFT OUTER JOIN ( 
+      SELECT R.*
+       FROM WAM_PRF_RESULT R
+                INNER JOIN (SELECT PRF_ID, MAX(ANA_STR_DTM) AS ANA_STR_DTM
+                                  FROM WAM_PRF_RESULT
+                                GROUP BY PRF_ID ) R2
+                    ON R.PRF_ID = R2.PRF_ID
+                   AND R.ANA_STR_DTM = R2.ANA_STR_DTM
+    ) R
+		      ON R.PRF_ID = PM.PRF_ID
+	-- 제외
+		LEFT JOIN WAA_EXP_TBL EX          
+           ON EX.DB_SCH_ID  = SCH.DB_SCH_ID  
+          AND EX.DBC_TBL_NM = TBL.DBC_TBL_NM
+      LEFT OUTER JOIN 
+        (SELECT DBC.DB_SCH_ID, DBC.DBC_TBL_NM
+           FROM WAT_DBC_TBL DBC
+            WHERE NOT exists (SELECT 1
+                         FROM WAA_EXP_TBL_RULE EXR
+                         WHERE EXR.REG_TYP IN ('C', 'U')
+                         AND EXR.DB_SCH_ID = DBC.DB_SCH_ID
+                       AND EXR.DB_CONN_TRG_ID = DBC.DB_CONN_TRG_ID 
+                       AND DBC.DBC_TBL_NM LIKE (CASE WHEN (EXR.RELATION = 'F') THEN CONCAT(IFNULL(EXR.EXC_STND_RULE, '') , '_' , '%') 
+                                          WHEN (EXR.RELATION = 'B') THEN  Concat('%' , '_' , IFNULL(EXR.EXC_STND_RULE, '')) END) )
+	      ) XXX -- SQLINES DEMO 제외대상 아닌애들
+	      ON XXX.DB_SCH_ID = TBL.DB_SCH_ID 
+	      AND XXX.DBC_TBL_NM = TBL.DBC_TBL_NM 
+       WHERE 1=1
+         <if test="dbConnTrgId != null and dbConnTrgId != ''" >
+			AND CON.DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR}
+		</if>
+		<if test="dbSchId != null and dbSchId != ''" >
+			AND SCH.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+		</if>
+		 ORDER BY TBL.DB_SCH_ID
+		        , TBL.DBC_TBL_NM  
+		        , COL.ORD 
+  </sql>
+ 
+  <sql id="Br_View">
+          SELECT   M.BR_ID
+             , M.BR_NM 
+             , M.DBC_TBL_NM
+             , R.ANA_STR_DTM AS "RES_ANA_STR_DTM"
+             , R.ANA_END_DTM AS "RES_ANA_END_DTM"
+             , R.ANA_DGR AS "ANA_DGR"
+             , R.ANA_CNT AS "ANA_CNT"
+             , R.ER_CNT AS "ER_CNT"
+             , BIZ.BIZ_AREA_LNM
+             , BIZ.BIZ_AREA_PNM
+             , BIZ.BIZ_AREA_LVL
+             , BIZ.UPP_BIZ_AREA_ID
+             , M.OBJ_DESCN as "OBJ_DESCN"
+             , R.BR_ID AS RESULT_ID -- RESULT 
+             , M.CNT_SQL 
+       		 , M.ANA_SQL
+       		 , M.ER_CNT_SQL 
+       		 , M.DBC_COL_NM
+       		 , M.DB_CONN_TRG_ID
+       		 , M.DB_SCH_ID
+       		 , CASE WHEN R.BR_ID IS NOT NULL AND R.ANA_STR_DTM IS NOT NULL AND R.ANA_END_DTM IS NOT NULL THEN '01' -- 'COMPLETED'
+             		ELSE '03' END AS ANA_STS_CD -- 'FAILED'
+             , R.ANA_STR_DTM 
+          FROM ( SELECT R1.*
+                       FROM WAM_BR_RESULT R1
+                 INNER JOIN (   SELECT BR_ID, MAX(ANA_STR_DTM) AS "ANA_STR_DTM"
+                                  FROM WAM_BR_RESULT
+                              GROUP BY BR_ID) R2 
+                         ON R1.BR_ID = R2.BR_ID
+                        AND R1.ANA_STR_DTM = R2.ANA_STR_DTM
+                      WHERE 1 = 1 
+                ) R
+    	INNER JOIN WAM_BR_MSTR M
+            ON M.BR_ID = R.BR_ID
+           AND M.REG_TYP_CD IN ('C', 'U')
+    	INNER JOIN WAM_BIZ_AREA BIZ
+            ON M.BIZ_AREA_ID = BIZ.BIZ_AREA_ID
+           AND BIZ.REG_TYP_CD IN ('C', 'U')
+           WHERE R.BR_ID IS NOT NULL
+           
+       <if test="dbConnTrgId != null and dbConnTrgId != ''" >
+			AND M.DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR}
+		</if>
+		<if test="dbSchId != null and dbSchId != ''" >
+			AND M.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+		</if>
+    
+</sql>
+
+  <sql id="Prf_View">
+        
+      SELECT
+            M.PRF_KND_CD
+            , M.DB_SCH_ID
+            , M.DB_CONN_TRG_ID
+            , R.ANA_STR_DTM AS ANA_STR_DTM
+            , M.OBJ_NM  AS OBJ_NM
+            , M.DBC_TBL_NM AS DBC_TBL_NM
+            , R.ANA_STR_DTM AS "RES_ANA_STR_DTM"
+            , R.ANA_END_DTM AS "RES_ANA_END_DTM"
+            , R.ANA_DGR AS "ANA_DGR"
+            , R.ANA_CNT AS "ANA_CNT"
+            , R.ESN_ER_CNT AS "ESN_ER_CNT"
+            , R.NULL_CNT as "NULL_CNT"
+            , CASE WHEN R.PRF_ID IS NOT NULL AND R.ANA_STR_DTM IS NOT NULL AND R.ANA_END_DTM IS NOT NULL THEN '01' -- 'COMPLETED'
+            		ELSE '03' END AS ANA_STS_CD -- 'FAILED'
+            , R.PRF_ID
+         FROM ( SELECT R1.*
+                      FROM WAM_PRF_RESULT R1
+                INNER JOIN (   SELECT PRF_ID, MAX(ANA_STR_DTM) AS "ANA_STR_DTM"
+                                 FROM WAM_PRF_RESULT
+                             GROUP BY PRF_ID) R2 
+                        ON R1.PRF_ID = R2.PRF_ID
+                       AND R1.ANA_STR_DTM = R2.ANA_STR_DTM
+                     WHERE 1 = 1 
+               ) R
+    		INNER JOIN WAM_PRF_MSTR M
+            	ON R.PRF_ID = M.PRF_ID
+           		AND M.REG_TYP_CD IN ('C', 'U')
+           INNER JOIN WAA_DB_SCH B                                  
+          	 ON B.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')  
+          	AND B.DB_SCH_ID = M.DB_SCH_ID                          
+	        INNER JOIN WAA_DB_CONN_TRG C                             
+	           ON C.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')  
+	          AND C.DB_CONN_TRG_ID = M.DB_CONN_TRG_ID                
+	        LEFT JOIN WAA_EXP_TBL EX                                   
+	           ON EX.DB_SCH_ID  = M.DB_SCH_ID                         		
+	          AND EX.DBC_TBL_NM = M.DBC_TBL_NM  
+          WHERE M.PRF_KND_CD = 'PT01'
+             <if test="dbConnTrgId != null and dbConnTrgId != ''" >
+				AND C.DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR}
+			</if>
+	<if test="dbSchId != null and dbSchId != ''" >
+		AND B.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+	</if>
+  </sql>
+  <select id="selectAnaTargetTableStatus" resultMap="BaseResultMap" parameterType="kr.wise.dq.result.vrfcrule.service.VrfcruleResultVO">
+	SELECT CONCAT(IFNULL(FORMAT(BB.TRG_TBL_CNT,0), '') , ' / ' , IFNULL(FORMAT(BB.TRG_TTL_CNT,0), '')) AS TRG_TBL_CNT-- 5
+          , CONCAT(IFNULL(FORMAT(BB.TRG_EXC_CNT,0), '') , ' / ' , IFNULL(FORMAT(BB.TRG_TTL_CNT,0), '')) AS TRG_EXC_CNT -- 3
+          , CONCAT(IFNULL(FORMAT(BB.NT_CLLC_CNT,0), '') , ' / ' , IFNULL(FORMAT(BB.TRG_TTL_CNT,0), '')) AS NT_CLLC_CNT -- 578
+          , CONCAT(IFNULL(FORMAT(ROUND(BB.TRG_TBL_CNT / BB.TRG_TTL_CNT * 100, 2 ),1), '') , '%') AS TRG_TBL_RT
+          , CONCAT(IFNULL(FORMAT(ROUND(BB.TRG_EXC_CNT / BB.TRG_TTL_CNT * 100, 2 ),1), '') , '%') AS TRG_EXC_RT
+          , CONCAT(IFNULL(FORMAT(ROUND(BB.NT_CLLC_CNT / BB.TRG_TTL_CNT * 100, 2 ),1), '') , '%') AS NT_CLLC_RT
+      FROM ( SELECT 
+          		COUNT(*) AS TRG_TTL_CNT
+			  , SUM(CASE WHEN  AA.EXP_YN = 'N' AND AA.CLLC_YN = 'N' THEN 1 ELSE 0 END) AS TRG_TBL_CNT -- SQLINES DEMO *** 이면서 스키마수집한경우
+			  , SUM(CASE WHEN AA.EXP_YN = 'Y'  THEN 1 ELSE 0 END) AS TRG_EXC_CNT -- SQLINES DEMO *** 없이 제외여부 적용
+			  , SUM(CASE WHEN  AA.CLLC_YN = 'Y' THEN 1 ELSE 0 END) AS NT_CLLC_CNT -- SQLINES DEMO *** ��수집 안돌린 테이블/컬럼
+               FROM (SELECT DISTINCT
+                           DBC.DB_SCH_ID
+                          , DBC.DBC_TBL_NM
+                          , DBC.EXP_YN 
+                           , CASE WHEN DBC.DBC_TBL_NM IS NULL THEN 'Y'
+                          ELSE 'N' END AS CLLC_YN -- 수집이면 N
+                FROM (  <include refid="kr.wise.dq.result.vrfcrule.service.VrfcruleResultMapper.Base_Dbc_Col_View" /> 
+                		 ) DBC 
+                    ) AA
+		   ) BB
+  </select>
+  
+  <select id="selectAnaExecuteStatus" resultMap="BaseResultMap" parameterType="kr.wise.dq.result.vrfcrule.service.VrfcruleResultVO">
+SELECT CONCAT(FORMAT(BB.ANA_CML_CNT, 0), ' / ', FORMAT(BB.ANA_CNT, 0)) AS "ANA_CML_CNT"
+         , CONCAT(FORMAT(BB.ANA_RNN_CNT, 0), ' / ', FORMAT(BB.ANA_CNT, 0)) AS "ANA_RNN_CNT"
+         , CONCAT(FORMAT(BB.ANA_FAL_CNT, 0), ' / ', FORMAT(BB.ANA_CNT, 0)) AS "ANA_FAL_CNT"
+         , CONCAT(FORMAT(ROUND(BB.ANA_CML_CNT / ANA_CNT * 100 , 2), 1), '%') AS "ANA_CML_RT"
+         , CONCAT(FORMAT(ROUND(BB.ANA_RNN_CNT / ANA_CNT * 100 , 2), 1), '%') AS "ANA_RNN_RT"
+         , CONCAT(FORMAT(ROUND(BB.ANA_FAL_CNT / ANA_CNT * 100 , 2), 1), '%') AS "ANA_FAL_RT"
+      FROM ( SELECT COUNT(*) AS "ANA_CNT"
+                  , SUM(CASE WHEN AA.ANA_STS_CD = '1' OR AA.ANA_STS_CD = '01' THEN 1 ELSE 0 END) AS "ANA_CML_CNT"
+                  , SUM(CASE WHEN AA.ANA_STS_CD = '2' OR AA.ANA_STS_CD = '02' OR AA.ANA_STS_CD = '5' OR AA.ANA_STS_CD = '05' THEN 1 ELSE 0 END) AS "ANA_RNN_CNT"
+                  , SUM(CASE WHEN AA.ANA_STS_CD = '3' OR AA.ANA_STS_CD = '03' OR AA.ANA_STS_CD = '4' OR AA.ANA_STS_CD = '04' OR AA.ANA_STS_CD = '6' OR AA.ANA_STS_CD = '06' THEN 1 ELSE 0 END) AS "ANA_FAL_CNT"
+               FROM ( SELECT WAR.*
+                          FROM (    SELECT PRF.DB_SCH_ID
+                                         , PRF.DBC_TBL_NM
+                                         , PRF.OBJ_NM AS "DBC_COL_NM"
+                                         , PRF.PRF_ID AS "OBJ_ID"
+                                         , PRF.ANA_STR_DTM AS "ANA_STR_DTM"
+                                         , PRF.PRF_KND_CD AS PRF_KND_CD
+                                         , ANA_STS_CD AS "ANA_STS_CD"
+                                      FROM ( <include refid="kr.wise.dq.result.vrfcrule.service.VrfcruleResultMapper.Vrfc_View" /> ) PRF
+                                      WHERE 1=1
+                        UNION ALL
+                           SELECT PRF.DB_SCH_ID
+                                         , PRF.DBC_TBL_NM
+                                         , PRF.OBJ_NM AS "DBC_COL_NM"
+                                         , PRF.PRF_ID AS "OBJ_ID"
+                                         , PRF.ANA_STR_DTM AS "ANA_STR_DTM"
+                                         , PRF.PRF_KND_CD AS PRF_KND_CD
+                                         , ANA_STS_CD AS "ANA_STS_CD"
+                                      FROM ( <include refid="kr.wise.dq.result.vrfcrule.service.VrfcruleResultMapper.Prf_View" /> ) PRF
+                                      WHERE 1=1
+                                      AND PRF.PRF_KND_CD IN ('PT01')
+                                      
+                                 UNION ALL
+                                  SELECT BR.DB_SCH_ID
+                                       , BR.DBC_TBL_NM
+                                       , BR.DBC_COL_NM
+                                       , BR.BR_ID AS "OBJ_ID"
+                                       , BR.ANA_STR_DTM AS "ANA_STR_DTM"
+                                       , 'BR' AS PRF_KND_CD
+                                       , ANA_STS_CD AS "ANA_STS_CD"
+                                    FROM ( <include refid="kr.wise.dq.result.vrfcrule.service.VrfcruleResultMapper.Br_View" /> ) BR
+                               ) WAR
+                  
+                    ) AA
+           ) BB
+  </select>
+  
+  <select id="selectValAnaResultList" resultMap="BaseResultMap" parameterType="kr.wise.dq.result.vrfcrule.service.VrfcruleResultVO">
+    SELECT  CASE WAR.PRF_KND_CD
+	            WHEN 'YN' THEN '여부'
+	             WHEN 'RNG' THEN '범위'
+	             WHEN 'DTM' THEN '날짜'
+	             WHEN 'CD' THEN '코드'
+	             WHEN 'FRM' THEN '형식'
+	             WHEN 'NN' THEN '필수값' ELSE PRF_KND_CD END
+	           	AS "KND_CD" -- 도메인
+          , Concat('진단대상 컬럼 : ' , IFNULL(FORMAT(COUNT(*), 0), '')) as "ANA_TRG_COL"
+          , Concat('오류발견 컬럼 : ' , IFNULL(FORMAT(SUM(CASE WHEN ER_CNT IS NULL OR ER_CNT = 0 THEN 0 ELSE 1 END), 0), '')) AS "ANA_ERR_COL"
+          , SUM(ANA_CNT) AS "ANA_CNT"
+          , CASE WHEN SUM(ER_CNT) IS NULL THEN 0 ELSE SUM(ER_CNT) END AS "ER_CNT"
+          , CASE 
+             WHEN SUM(ANA_CNT) IS NULL OR SUM(ANA_CNT) = 0 OR  SUM(ER_CNT) IS NULL OR SUM(ER_CNT) = 0 THEN Concat('0.0000' , '%')
+             ELSE CONCAT(IFNULL(FORMAT(TRUNCATE(SUM(ER_CNT) * 100 / CASE SUM(ANA_CNT)  WHEN 0 THEN  1  ELSE SUM(ANA_CNT) END, 4), 4), '') , '%')
+            END AS "ERR_RT"
+          , STR_TO_DATE(MAX(ANA_STR_DTM), '%Y-%m-%d %H:%i:%S') AS "STR_ANA_STR_DTM"      
+       FROM (
+              SELECT DISTINCT
+                     PRF.DB_SCH_ID
+                   , PRF.DBC_TBL_NM
+                   , PRF.OBJ_NM AS "DBC_COL_NM"
+                   , PRF.PRF_ID AS "OBJ_ID"
+                   , PRF.ANA_STR_DTM AS "ANA_STR_DTM"
+                   , PRF.KND_CD AS PRF_KND_CD
+                   , PRF.ANA_CNT AS "ANA_CNT"
+                   , PRF.ESN_ER_CNT AS "ER_CNT"
+                   , PRF.DB_CONN_TRG_ID
+                FROM ( <include refid="kr.wise.dq.result.vrfcrule.service.VrfcruleResultMapper.Vrfc_View" /> ) PRF
+               WHERE ANA_CNT IS NOT NULL
+              
+         	  UNION ALL
+            SELECT DISTINCT
+                     PRF.DB_SCH_ID
+                   , PRF.DBC_TBL_NM
+                   , PRF.OBJ_NM AS "DBC_COL_NM"
+                   , PRF.PRF_ID AS "OBJ_ID"
+                   , PRF.ANA_STR_DTM AS "ANA_STR_DTM"
+                   , '참조무결성' AS PRF_KND_CD
+                   , PRF.ANA_CNT AS "ANA_CNT"
+                   , PRF.ESN_ER_CNT AS "ER_CNT"
+                   , PRF.DB_CONN_TRG_ID
+                FROM ( <include refid="kr.wise.dq.result.vrfcrule.service.VrfcruleResultMapper.Prf_View" /> ) PRF
+                     INNER JOIN  WAM_PRF_REL_TBL T
+                     ON  PRF.PRF_ID = T.PRF_ID
+                    AND  T.REG_TYP_CD IN ('C', 'U')
+             INNER JOIN  WAM_PRF_REL_COL C
+                     ON  PRF.PRF_ID = C.PRF_ID
+                    AND  C.REG_TYP_CD IN ('C', 'U')
+                  WHERE  PRF.PRF_KND_CD= 'PT01'
+           
+         			
+           UNION ALL
+              SELECT DISTINCT
+                     BR.DB_SCH_ID
+                   , BR.DBC_TBL_NM
+                   , BR.DBC_COL_NM
+                   , BR.BR_ID AS "OBJ_ID"
+                   , BR.ANA_STR_DTM AS "ANA_STR_DTM"
+                   , '업무규칙' AS PRF_KND_CD
+                   , BR.ANA_CNT as "ANA_CNT"
+                   , BR.ER_CNT as "ER_CNT"
+                   , BR.DB_CONN_TRG_ID
+                FROM ( <include refid="kr.wise.dq.result.vrfcrule.service.VrfcruleResultMapper.Br_View" /> ) BR
+            ) WAR
+        WHERE 1=1
+           	 <if test="dbConnTrgId != null and dbConnTrgId != ''" >
+				AND WAR.DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR}
+			</if>
+           	<if test="dbSchId != null and dbSchId != ''" >
+				AND WAR.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+			</if>
+  GROUP BY PRF_KND_CD
+  ORDER BY PRF_KND_CD
+  </select>
+  
+   <select id="selectAnaTargetTableList" resultMap="BaseResultMap" parameterType="kr.wise.dq.result.vrfcrule.service.VrfcruleResultVO">
+		SELECT DISTINCT 
+           DBC.DB_SCH_ID as "DB_SCH_ID"
+         , DBC.DBC_TBL_NM as "DBC_TBL_NM"
+         , CASE 
+            WHEN DBC.EXP_YN = 'Y' THEN '제외'
+            ELSE '대상'
+            END AS "ANA_TRG_STATUS"
+         ,  STR_TO_DATE(DBC.ANA_DTM, '%Y-%m-%d %H:%i') AS "ANA_DTM"
+         ,  '' AS "ANA_TRG_RANGE_CON"
+         ,  DBC.DESCN AS "DESCN"    
+         ,  STR_TO_DATE(DBC.ANA_DTM, '%Y-%m-%d %H:%i') AS "STR_ANA_DTM"
+      FROM ( <include refid="kr.wise.dq.result.vrfcrule.service.VrfcruleResultMapper.Base_Dbc_Col_View" /> ) DBC
+     WHERE 1 = 1
+  ORDER BY 1
+  </select>
+  <select id="selectDmnList" resultMap="BaseResultMap" parameterType="kr.wise.dq.result.vrfcrule.service.VrfcruleResultVO" fetchSize="2000">
+    SELECT LST.*
+ 	FROM (SELECT CONCAT(IFNULL(WAR.DB_SCH_PNM, '') , '.' , IFNULL(WAR.DBC_TBL_NM, '')) AS "DBC_TBL_NM" -- 테이블
+            , WAR.DBC_COL_NM AS "DBC_COL_NM" -- 컬럼
+            , WAR.DATA_TYPE AS "DATA_TYPE" -- 데이터타입
+            , CASE
+               WHEN WAR.EXP_YN = 'N' THEN WAR.KND_NM 
+               ELSE ''
+              END AS "KND_NM" -- 검증룰명
+            , CASE
+               WHEN WAR.EXP_YN = 'N' THEN WAR.KND_CD 
+               ELSE ''
+              END AS "KND_CD" -- 도메인
+            , CASE
+               WHEN WAR.EXP_YN = 'N' THEN WAR.VRF_FRM 
+               ELSE ''
+              END AS "VRF_FRM" -- 검증형식
+            , CASE
+               WHEN WAR.EXP_YN = 'Y' THEN  WAR.DATA_PTR 
+               ELSE ''
+              END AS "ERR_EXC_DATA" --  SQLINES DEMO *** 터
+            , CASE
+               WHEN WAR.EXP_YN = 'N' THEN STR_TO_DATE(WAR.APRV_DTM ,'%Y-%m-%d %H:%i') 
+               ELSE ''
+              END AS "STR_APRV_DTM" --  SQLINES DEMO 
+            , WAR.DATA_PTR AS DATA_PTR -- SQLINES DEMO 검증룰 설정 참고를 위해 최대 5건 제공)
+            , WAR.DESCN AS "DBC_COL_OPN" -- 의견
+    	FROM (
+    	    	SELECT PRF.DB_SCH_ID AS DB_SCH_ID
+					   , PRF.DB_SCH_PNM AS DB_SCH_PNM
+                       , PRF.DBC_TBL_NM
+                       , PRF.DBC_COL_NM AS "DBC_COL_NM"
+                       , PRF.PRF_ID AS "OBJ_ID"
+                       , PRF.ANA_STR_DTM AS "ANA_STR_DTM"
+                       , CASE PRF.KND_CD
+				            WHEN 'YN' THEN '여부'
+			             	WHEN 'RNG' THEN '범위'
+	            		 	WHEN 'DTM' THEN '날짜'
+			             	WHEN 'CD' THEN '코드'
+			             	WHEN 'FRM' THEN '형식'
+			             	WHEN 'NN' THEN '필수값' ELSE '' END
+				           	AS "KND_CD" -- 도메인
+                       , PRF.PRF_NM AS "KND_NM" -- 검증룰명
+                       , CASE WHEN PRF.VRF_FRM IS NOT NULL THEN PRF.VRF_FRM
+                       		ELSE PRF.PRF_NM END AS "VRF_FRM" -- 검증형식 범위 
+                       , '' AS "ERR_EXC_DATA" -- SQLINES DEMO 
+                       , PRF.APRV_DTM as "APRV_DTM" --  SQLINES DEMO 
+                       ,VV.DATA_PTR AS DATA_PTR --  SQLINES DEMO 
+                       , PRF.DATA_TYPE AS DATA_TYPE
+                       , PRF.DESCN AS DESCN
+                       , PRF.EXP_YN AS EXP_YN
+                    FROM ( <include refid="kr.wise.dq.result.vrfcrule.service.VrfcruleResultMapper.Vrfc_View_Tot" /> ) PRF
+                  
+          
+		       LEFT JOIN V_RESULT_VAL VV
+		 		  ON PRF.DB_CONN_TRG_ID = VV.DB_CONN_TRG_ID
+					   AND PRF.DB_SCH_ID      = VV.DB_SCH_ID
+					   AND PRF.DBC_TBL_NM     = VV.DBC_TBL_NM
+		               AND PRF.DBC_COL_NM     = VV.OBJ_NM
+               )WAR
+               
+    		ORDER BY WAR.DB_SCH_ID, WAR.DBC_TBL_NM, WAR.DBC_COL_NM
+ 		 
+ 		 )LST
+  </select>
+  
+  <select id="selectRefItegrityList" resultMap="BaseResultMap" parameterType="kr.wise.dq.result.vrfcrule.service.VrfcruleResultVO">
+SELECT CONCAT(IFNULL(GET_DB_SCH_PNM(PRF.DB_SCH_ID), '') , '.' , IFNULL(C.CH_TBL_DBC_TBL_NM, '')) AS "CH_TBL_DBC_TBL_NM"
+         , C.CH_TBL_DBC_COL_NM AS "CH_TBL_DBC_COL_NM"
+         , C.REL_COL_SNO AS "REL_COL_SNO"
+         , C.PA_TBL_DBC_COL_NM AS "PA_TBL_DBC_COL_NM"
+         , CONCAT(IFNULL(GET_DB_SCH_PNM(T.PA_TBL_DBC_SCH_ID), '') , '.' , IFNULL(C.PA_TBL_DBC_TBL_NM, '')) AS "PA_TBL_DBC_TBL_NM"
+         , T.PA_TBL_ADT_CND_SQL AS "PA_TBL_ADT_CND_SQL"
+      FROM (<include refid="kr.wise.dq.result.vrfcrule.service.VrfcruleResultMapper.Prf_View" />) PRF
+INNER JOIN WAM_PRF_REL_TBL T
+        ON PRF.PRF_ID = T.PRF_ID
+       AND T.REG_TYP_CD IN ('C', 'U')
+INNER JOIN WAM_PRF_REL_COL C
+        ON PRF.PRF_ID = C.PRF_ID
+       AND C.REG_TYP_CD IN ('C', 'U')
+     WHERE 1 = 1
+       AND PRF.PRF_KND_CD IN ('PT01')
+       AND EXISTS
+                 (    
+                    SELECT 1 
+                      FROM ( <include refid="kr.wise.dq.result.vrfcrule.service.VrfcruleResultMapper.Base_Dbc_Col_View" /> ) TRG
+                     WHERE 1 = 1
+                       AND TRG.DB_CONN_TRG_ID = C.CH_TBL_DB_CONN_TRG_ID
+                       AND TRG.DB_SCH_ID = C.CH_TBL_DBC_SCH_ID 
+                       AND TRG.DBC_TBL_NM = C.CH_TBL_DBC_TBL_NM
+                       -- AND TRG.EXP_YN = 'N'
+                )
+      AND EXISTS                        
+                (
+                    SELECT 1
+                      FROM ( <include refid="kr.wise.dq.result.vrfcrule.service.VrfcruleResultMapper.Base_Dbc_Col_View" /> ) TRG
+                     WHERE 1 = 1
+                       AND TRG.DB_CONN_TRG_ID = C.PA_TBL_DB_CONN_TRG_ID
+                       AND TRG.DB_SCH_ID = C.PA_TBL_DBC_SCH_ID
+                       AND TRG.DBC_TBL_NM = C.PA_TBL_DBC_TBL_NM
+                       -- AND TRG.EXP_YN = 'N'
+                )
+  </select>
+  
+  
+  <select id="selectBrList" resultMap="BaseResultMap" parameterType="kr.wise.dq.result.vrfcrule.service.VrfcruleResultVO">
+       SELECT BIZ.BIZ_AREA_LNM as "BIZ_AREA_LNM" 	-- 분석영역
+       		, BIZ.BR_ID as "BR_ID" 					-- 업무규칙 ID
+       		, BIZ.BR_NM as "BR_NM" 					-- 업무규칙명
+       		, BIZ.OBJ_DESCN as "OBJ_DESCN" 			-- 설명
+       		, BIZ.DBC_TBL_NM as "DBC_TBL_NM" 		-- 테이블
+       		, BIZ.CNT_SQL as "CNT_SQL" 				-- 대상 전체건수 SQL
+       		, BIZ.ANA_SQL as "ANA_SQL" 				-- 오류 데이터 추출 SQL
+       		, BIZ.ER_CNT_SQL as "ER_CNT_SQL" 		-- 오류데이터별 오류건수 SQL
+             
+        FROM (<include refid="kr.wise.dq.result.vrfcrule.service.VrfcruleResultMapper.Br_View" />) BIZ
+        INNER JOIN ( <include refid="kr.wise.dq.result.vrfcrule.service.VrfcruleResultMapper.Base_Dbc_Col_View" /> ) DBC              
+           ON BIZ.DB_CONN_TRG_ID = DBC.DB_CONN_TRG_ID
+          AND BIZ.DBC_TBL_NM = DBC.DBC_TBL_NM
+          AND BIZ.DBC_COL_NM = DBC.DBC_COL_NM
+          -- AND DBC.EXP_YN = 'Y'
+          
+<!--         LEFT JOIN WAA_EXP_TBL EX           -->
+<!-- 	   ON EX.DB_SCH_ID  = BM.DB_SCH_ID   -->
+<!-- 	  AND EX.DBC_TBL_NM = BM.DBC_TBL_NM -->
+<!--         WHERE BR.ANA_DGR IS NOT NULL -->
+<!--           AND NVL(EX.EXP_YN, 'N') = 'N' -->
+  
+  </select>
+  
+  <select id="selectExcInfoList" resultMap="BaseResultMap" parameterType="kr.wise.dq.result.vrfcrule.service.VrfcruleResultVO">
+	SELECT CONCAT(IFNULL(DBC.DB_SCH_PNM, '') , '.' , IFNULL(DBC.DBC_TBL_NM, '')) AS "DBC_TBL_NM"
+         --  SQLINES DEMO *** INCT DBC.DBC_COL_NM, ', ') AS "DBC_COL_NM"
+         , GROUP_CONCAT(DBC.DBC_COL_NM SEPARATOR ', ') "DBC_COL_NM"  
+         , CASE WAR.KND_CD
+	            WHEN 'YN' THEN '여부'
+	             WHEN 'RNG' THEN '범위'
+	             WHEN 'DTM' THEN '날짜'
+	             WHEN 'CD' THEN '코드'
+	             WHEN 'FRM' THEN '형식'
+	             WHEN 'NN' THEN '필수값' ELSE KND_CD END
+	           	AS "KND_CD" -- 도메인
+         , WAR.KND_NM
+         , WAR.ANA_STS_TXT
+         , STR_TO_DATE(WAR.ANA_STR_DTM, '%Y-%m-%d %H:%i:%S') AS "ANA_STR_DTM"
+         , STR_TO_DATE(WAR.ANA_STR_DTM, '%Y-%m-%d %H:%i:%S') AS "STR_ANA_STR_DTM"
+      FROM (
+                 -- 관계분석
+                 SELECT PRF.DB_SCH_ID AS "DB_SCH_ID"
+                      , CH_TBL_DBC_TBL_NM AS "DBC_TBL_NM"
+                      , CH_TBL_DBC_COL_NM AS "DBC_COL_NM"
+                      , '참조무결성' AS "KND_CD" -- 검증룰 
+                      , PRF.OBJ_NM AS "KND_NM" -- 룰명
+                      , CASE
+                         WHEN PRF.ANA_STS_CD = '01' THEN 'COMPLETED'
+                         WHEN PRF.ANA_STS_CD = '03' OR PRF.ANA_STS_CD = '04' THEN 'FAILED'
+                        END AS "ANA_STS_TXT" -- 실행상태
+                      , PRF.ANA_STR_DTM AS "ANA_STR_DTM" -- 실행일시
+					  , PRF.PRF_ID AS "OBJ_ID"
+                   FROM  ( <include refid="kr.wise.dq.result.vrfcrule.service.VrfcruleResultMapper.Prf_View" /> ) PRF
+                     INNER JOIN  WAM_PRF_REL_TBL T
+                     ON  PRF.PRF_ID = T.PRF_ID
+                    AND  T.REG_TYP_CD IN ('C', 'U')
+             INNER JOIN  WAM_PRF_REL_COL C
+                     ON  PRF.PRF_ID = C.PRF_ID
+                    AND  C.REG_TYP_CD IN ('C', 'U')
+                  WHERE  PRF.PRF_KND_CD= 'PT01'
+             
+              UNION ALL
+                  -- 칼럼
+                 SELECT PRF.DB_SCH_ID
+                      , PRF.DBC_TBL_NM
+                      , PRF.OBJ_NM AS "DBC_COL_NM"
+                      , KND_CD AS "KND_CD" -- 검증룰
+                      , PRF.RULE_NM AS "KND_NM" -- 룰명
+                      , CASE
+                         WHEN PRF.ANA_STS_CD = '01' THEN 'COMPLETED'
+                         WHEN PRF.ANA_STS_CD = '03' OR PRF.ANA_STS_CD = '04' THEN 'FAILED'
+                        END AS "ANA_STS_TXT" -- 실행상태
+                      , PRF.ANA_STR_DTM AS "ANA_STR_DTM" -- 실행일시
+                      , PRF.PRF_ID AS "OBJ_ID" 
+                   FROM ( <include refid="kr.wise.dq.result.vrfcrule.service.VrfcruleResultMapper.Vrfc_View" />
+					) PRF
+					
+              UNION ALL 
+                 -- 업무규칙
+                 SELECT BR.DB_SCH_ID
+                      , BR.DBC_TBL_NM
+                      , BR.DBC_COL_NM
+                      , '업무규칙' AS "KND_CD" -- 검증룰
+                      , BR.BR_NM AS "KND_NM" -- 룰명
+                      , CASE
+                         WHEN BR.ANA_STS_CD = '01' THEN 'COMPLETED'
+                         WHEN BR.ANA_STS_CD = '03' OR BR.ANA_STS_CD = '04' THEN 'FAILED'
+                        END AS "ANA_STS_TXT" -- 실행상태 
+                      , BR.ANA_STR_DTM -- 실행일시
+                      , BR.BR_ID AS "OBJ_ID"
+                 FROM ( <include refid="kr.wise.dq.result.vrfcrule.service.VrfcruleResultMapper.Br_View" /> ) BR
+            ) WAR
+ INNER JOIN (<include refid="kr.wise.dq.result.vrfcrule.service.VrfcruleResultMapper.Base_Dbc_Col_View" />) DBC
+         ON DBC.DB_SCH_ID = WAR.DB_SCH_ID
+        AND DBC.EXP_YN = 'N'
+        AND DBC.DBC_TBL_NM = WAR.DBC_TBL_NM
+        AND DBC.DBC_COL_NM  = WAR.DBC_COL_NM
+    WHERE 1=1
+         AND WAR.OBJ_ID IS NOT NULL
+   GROUP BY DBC.DB_SCH_PNM, DBC.DBC_TBL_NM, WAR.KND_CD, WAR.KND_NM, WAR.ANA_STS_TXT, WAR.ANA_STR_DTM,
+            OBJ_ID
+  </select>
+  
+  <select id="selectPrfInfo" resultMap="BaseResultMap" parameterType="kr.wise.dq.result.vrfcrule.service.VrfcruleResultVO">
+      SELECT CONCAT(IFNULL(DBC.DB_SCH_PNM, '') , '.' , IFNULL(DBC.DBC_TBL_NM, '')) AS "DBC_TBL_NM" -- 테이블
+           , DBC.DBC_TBL_KOR_NM AS "DBC_TBL_KOR_NM" -- 테이블한글명
+           --  SQLINES DEMO *** INCT DBC.DBC_COL_NM, ', ') AS "DBC_COL_NM" --컬럼
+           --  SQLINES DEMO *** INCT DBC.DBC_COL_KOR_NM, ', ') AS "DBC_COL_KOR_NM" --컬럼한글명
+           , GROUP_CONCAT(DBC.DBC_COL_NM SEPARATOR ', ') AS "DBC_COL_NM"  
+           , GROUP_CONCAT(DBC.DBC_COL_KOR_NM SEPARATOR ', ') AS "DBC_COL_KOR_NM"  
+           , CONCAT(IFNULL(GET_DB_SCH_PNM(WAR.PA_DB_SCH_ID), '') , '.' , IFNULL(WAR.PA_DBC_TBL_NM, '')) AS "DBC_PA_TBL_NM" --  SQLINES DEMO *** �테이블)
+           --  SQLINES DEMO *** INCT WAR.PA_DBC_COL_NM, ', ') AS "DBC_PA_COL_NM" --관계분석(참조컬럼)
+           , GROUP_CONCAT(WAR.PA_DBC_COL_NM SEPARATOR ', ') AS "DBC_PA_COL_NM"  
+           , WAR.KND_CD AS "KND_CD" -- 도메인
+           , WAR.KND_NM AS "KND_NM" -- 룰명
+           , CASE 
+              WHEN WAR.ANA_CNT IS NULL THEN '0'
+              ELSE FORMAT(WAR.ANA_CNT, 0)
+             END AS "ANA_CNT" -- 전체건수
+           , CASE 
+              WHEN WAR.ESN_ER_CNT IS NULL THEN '0'
+              ELSE FORMAT(WAR.ESN_ER_CNT, 0)
+             END AS "ESN_ER_CNT" -- 오류건수
+           , CASE WHEN MAX(WAR.ANA_CNT) IS NULL OR MAX(WAR.ANA_CNT) ='0' THEN '0'
+      			 	ELSE CONCAT(IFNULL(ROUND(SUM(WAR.ESN_ER_CNT) / NULLIF(SUM(WAR.ANA_CNT ),0) * 100, 4),0)) END AS COL_ERR_RATE 
+           , WAR.ERR_SQL AS "ERR_SQL" --  SQLINES DEMO *** �출 SQL
+           , WAR.OBJ_ID AS "OBJ_ID"
+           , STR_TO_DATE(WAR.ANA_STR_DTM, '%Y-%m-%d %H:%i:%S') AS "ANA_STR_DTM"
+           , STR_TO_DATE(WAR.ANA_STR_DTM, '%Y-%m-%d %H:%i:%S') AS "STR_ANA_STR_DTM"
+           , STR_TO_DATE(WAR.ANA_STR_DTM, '%Y-%m-%d %H:%i:%S') AS "OBJ_DATE"
+           , CASE WHEN WAR.PRF_KND_CD = 'PC01' THEN 'PT01'ELSE WAR.PRF_KND_CD END AS PRF_KND_CD
+        FROM (
+                    -- 관계분석
+                    SELECT PRF.DB_SCH_ID AS "DB_SCH_ID"
+                         , CH_TBL_DBC_TBL_NM AS "DBC_TBL_NM"
+                         , CH_TBL_DBC_COL_NM AS "DBC_COL_NM"
+                         -- SQLINES DEMO *** 관계분석만 필요)
+                         , T.PA_TBL_DBC_SCH_ID AS "PA_DB_SCH_ID"
+                         , T.PA_TBL_DBC_TBL_NM AS "PA_DBC_TBL_NM"
+                         , C.PA_TBL_DBC_COL_NM AS "PA_DBC_COL_NM"
+                         , PRF.PRF_ID AS "OBJ_ID"
+                         , PRF.ANA_STR_DTM AS "ANA_STR_DTM"
+                         , PRF.PRF_KND_CD AS PRF_KND_CD
+                         , '참조무결성' AS "KND_CD"
+                         , PRF.OBJ_NM AS "KND_NM"
+                         , CONCAT(PRF.ANA_CNT) AS "ANA_CNT" -- 전체건수
+                         , CONCAT(PRF.ESN_ER_CNT) AS "ESN_ER_CNT" -- 오류건수
+                         , CASE 
+                            WHEN PRF.NULL_CNT IS NULL THEN NULL
+                            ELSE CONCAT(ROUND(PRF.NULL_CNT*100/CASE PRF.ANA_CNT WHEN 0 THEN 1 ELSE PRF.ANA_CNT END,2))
+                           END AS COL_ERR_RATE -- 오류추정율
+                         , '' AS "ERR_SQL" -- 오류SQL
+                      FROM ( <include refid="kr.wise.dq.result.vrfcrule.service.VrfcruleResultMapper.Prf_View" /> ) PRF
+                INNER JOIN WAM_PRF_REL_TBL T
+                        ON PRF.PRF_ID = T.PRF_ID
+                       AND T.REG_TYP_CD IN ('C', 'U')
+                INNER JOIN WAM_PRF_REL_COL C
+                        ON T.PRF_ID = C.PRF_ID
+                       AND T.PA_TBL_DBC_TBL_NM = C.PA_TBL_DBC_TBL_NM
+                       AND C.REG_TYP_CD IN ('C', 'U')
+                        
+                     WHERE PRF.PRF_KND_CD= 'PT01'
+                           
+                 UNION ALL
+                    -- 칼럼
+                    SELECT PRF.DB_SCH_ID
+                         , PRF.DBC_TBL_NM
+                         , PRF.OBJ_NM AS "DBC_COL_NM"
+                         -- SQLINES DEMO *** 관계분석만 필요)
+                         , '' AS "PA_DB_SCH_ID"
+                         , '' AS "PA_DBC_TBL_NM"
+                         , '' AS "PA_DBC_COL_NM"
+                         , PRF.PRF_ID AS "OBJ_ID"
+                         , PRF.ANA_STR_DTM AS "ANA_STR_DTM"
+                         , PRF.PRF_KND_CD AS PRF_KND_CD
+                         , PRF.KND_CD AS "KND_CD"
+                         , PRF.KND_NM AS "KND_NM"
+                         , CONCAT(PRF.ANA_CNT) AS "ANA_CNT" -- 전체건수
+                         , CONCAT(PRF.ESN_ER_CNT) AS "ESN_ER_CNT" -- 오류건수
+                         , CASE 
+                            WHEN PRF.ANA_CNT IS NULL THEN NULL
+                            ELSE CONCAT(ROUND(PRF.ESN_ER_CNT*100/CASE PRF.ANA_CNT WHEN 0 THEN 1 ELSE PRF.ANA_CNT END,2))
+                           END AS COL_ERR_RATE -- 오류추정율
+                         , '' AS "ERR_SQL" -- 오류SQL
+                      FROM ( <include refid="kr.wise.dq.result.vrfcrule.service.VrfcruleResultMapper.Vrfc_View" />  ) PRF
+                 LEFT JOIN WAM_PRF_COL_ANA C
+                        ON PRF.PRF_ID = C.PRF_ID
+                       AND C.REG_TYP_CD IN ('C', 'U')
+                     -- WHERE PRF.PRF_KND_CD = 'PC01'
+                       -- AND C.AONL_YN = 'Y'
+                       
+                 UNION ALL 
+                    -- 업무규칙
+                    SELECT BR.DB_SCH_ID
+                         , BR.DBC_TBL_NM
+                         , BR.DBC_COL_NM
+                         -- SQLINES DEMO *** 관계분석만 필요)
+                         , '' AS "PA_DB_SCH_ID"
+                         , '' AS "PA_DBC_TBL_NM"
+                         , '' AS "PA_DBC_COL_NM"
+                         -- 
+                         , BR.BR_ID AS "OBJ_ID"
+                         , BR.ANA_STR_DTM AS "ANA_STR_DTM"
+                         , 'BR' AS PRF_KND_CD
+                         , '업무규칙' AS "KND_CD"
+                         , BR.BR_NM AS "KND_NM"
+                         , CONCAT(BR.ANA_CNT) as ANA_CNT -- 전체건수
+                         , CONCAT(BR.ER_CNT) as ESN_ER_CNT -- 오류건수
+                         , CASE 
+                            WHEN BR.ANA_CNT IS NULL THEN CONCAT(0)
+                            ELSE CONCAT(ROUND(BR.ER_CNT * 100 / CASE BR.ANA_CNT WHEN 0 THEN 1 ELSE BR.ANA_CNT END,2))
+                           END AS "COL_ERR_RATE"
+                         , CONCAT(BR.ANA_SQL) AS "ERR_SQL" -- 오류SQL
+                      FROM ( <include refid="kr.wise.dq.result.vrfcrule.service.VrfcruleResultMapper.Br_View" /> ) BR
+                      ) WAR
+      INNER JOIN (<include refid="kr.wise.dq.result.vrfcrule.service.VrfcruleResultMapper.Base_Dbc_Col_View" />) DBC
+              ON DBC.DB_SCH_ID = WAR.DB_SCH_ID
+             AND DBC.EXP_YN = 'N'
+             AND DBC.DBC_TBL_NM = WAR.DBC_TBL_NM
+             AND DBC.DBC_COL_NM  = WAR.DBC_COL_NM
+         WHERE 1=1
+         AND NOT exists (SELECT 1
+	   			          FROM WAA_EXP_TBL_RULE EXR
+	   			   		 WHERE EXR.REG_TYP IN ('C', 'U')
+	   			    	   AND EXR.DB_SCH_ID = DBC.DB_SCH_ID
+        				   AND EXR.DB_CONN_TRG_ID = DBC.DB_CONN_TRG_ID 
+        				   AND DBC.DBC_TBL_NM LIKE (CASE WHEN (EXR.RELATION = 'F') THEN CONCAT(IFNULL(EXR.EXC_STND_RULE, '') , '_' , '%') 
+							 						  WHEN (EXR.RELATION = 'B') THEN  Concat('%' , '_' , IFNULL(EXR.EXC_STND_RULE, '')) END) 
+		) 
+             AND WAR.OBJ_ID IS NOT NULL
+        GROUP BY DBC.DB_SCH_PNM, DBC.DBC_TBL_NM, DBC.DBC_TBL_KOR_NM, WAR.KND_CD, WAR.KND_NM, WAR.ANA_CNT, WAR.ESN_ER_CNT, 
+                 WAR.COL_ERR_RATE, WAR.ERR_SQL, WAR.OBJ_ID, WAR.ANA_STR_DTM, WAR.PRF_KND_CD, WAR.PA_DB_SCH_ID, WAR.PA_DBC_TBL_NM
+  </select>
+</mapper>

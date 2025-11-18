@@ -1,0 +1,847 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.wise.advisor.prepare.dataset.service.WadAnaVarNstndMapper">
+  <resultMap id="BaseResultMap" type="kr.wise.advisor.prepare.dataset.service.WadAnaVarNstnd" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+    <id column="ANL_VAR_ID" jdbcType="VARCHAR" property="anlVarId" />
+    <result column="DASE_ID" jdbcType="VARCHAR" property="daseId" />
+    <result column="DB_SCH_ID" jdbcType="VARCHAR" property="dbSchId" />
+    <result column="DB_TBL_NM" jdbcType="VARCHAR" property="dbTblNm" />
+    <result column="DB_COL_NM" jdbcType="VARCHAR" property="dbColNm" />
+    <result column="COL_MRP_LNM" jdbcType="VARCHAR" property="colMrpLnm" />
+    <result column="COL_MRP_PNM" jdbcType="VARCHAR" property="colMrpPnm" />
+    <result column="DBMS_TYP_CD" jdbcType="VARCHAR" property="dbmsTypCd" />
+    <result column="DATA_TYPE" jdbcType="VARCHAR" property="dataType" />
+    <result column="DATA_LEN" jdbcType="DECIMAL" property="dataLen" />
+    <result column="DATA_SCAL" jdbcType="DECIMAL" property="dataScal" />
+    
+    <result column="PK_YN" jdbcType="VARCHAR" property="pkYn" />
+    <result column="MAX_LEN" jdbcType="VARCHAR" property="maxLen" />
+    <result column="MIN_LEN" jdbcType="VARCHAR" property="minLen" />
+    <result column="DT_YN" jdbcType="VARCHAR" property="dtYn" />
+    <result column="TEL_YN" jdbcType="VARCHAR" property="telYn" />
+    <result column="SPACE_RT" jdbcType="VARCHAR" property="spaceRt" />
+    <result column="CRLF_YN" jdbcType="VARCHAR" property="crlfYn" />
+    <result column="ALPHA_YN" jdbcType="VARCHAR" property="alphaYn" />
+    <result column="DATA_FMT" jdbcType="VARCHAR" property="dataFmt" />
+    <result column="NUM_YN" jdbcType="VARCHAR" property="numYn" />
+    <result column="HUND_RT" jdbcType="VARCHAR" property="hundRt" />
+    <result column="CNT_RT" jdbcType="VARCHAR" property="cntRt" />
+    <result column="DMNG_NM" jdbcType="VARCHAR" property="dmngNm" />
+    
+    <!-- <result column="VAR_TYPE" jdbcType="VARCHAR" property="varType" />
+    <result column="USE_YN" jdbcType="VARCHAR" property="useYn" />
+    <result column="FPO_YN" jdbcType="VARCHAR" property="fpoYn" />
+    <result column="NMB_YN" jdbcType="VARCHAR" property="nmbYn" />
+    <result column="UNQ_YN" jdbcType="VARCHAR" property="unqYn" />
+    <result column="DT_YN" jdbcType="VARCHAR" property="dtYn" />
+    <result column="TGT_VAR_YN" jdbcType="VARCHAR" property="tgtVarYn" />
+    <result column="DRV_VAR_YN" jdbcType="VARCHAR" property="drvVarYn" />
+    <result column="LEN_CHG_YN" jdbcType="VARCHAR" property="lenChgYn" />
+    <result column="DATA_LEN_EXC_YN" jdbcType="VARCHAR" property="dataLenExcYn" />
+    <result column="DMNG_NM" jdbcType="VARCHAR" property="dmngNm" /> -->
+  </resultMap>
+  <resultMap id="ExtendResultMap" type="kr.wise.advisor.prepare.dataset.service.WadAnaVarNstnd" extends="kr.wise.dq.criinfo.anatrg.service.AnaTrgMapper.BaseResultMap">
+    <id column="ANL_VAR_ID" jdbcType="VARCHAR" property="anlVarId" />
+    <result column="DASE_ID" jdbcType="VARCHAR" property="daseId" />
+    <result column="DB_SCH_ID" jdbcType="VARCHAR" property="dbSchId" />
+    <result column="DB_TBL_NM" jdbcType="VARCHAR" property="dbTblNm" />
+    <result column="DB_COL_NM" jdbcType="VARCHAR" property="dbColNm" />
+    <result column="COL_MRP_LNM" jdbcType="VARCHAR" property="colMrpLnm" />
+    <result column="COL_MRP_PNM" jdbcType="VARCHAR" property="colMrpPnm" />
+    <result column="DBMS_TYP_CD" jdbcType="VARCHAR" property="dbmsTypCd" />
+    <result column="DATA_TYPE" jdbcType="VARCHAR" property="dataType" />
+    <result column="DATA_LEN" jdbcType="DECIMAL" property="dataLen" />
+    <result column="DATA_SCAL" jdbcType="DECIMAL" property="dataScal" />
+    
+    <result column="PK_YN" jdbcType="VARCHAR" property="pkYn" />
+    <result column="MAX_LEN" jdbcType="VARCHAR" property="maxLen" />
+    <result column="MIN_LEN" jdbcType="VARCHAR" property="minLen" />
+    <result column="DT_YN" jdbcType="VARCHAR" property="dtYn" />
+    <result column="TEL_YN" jdbcType="VARCHAR" property="telYn" />
+    <result column="SPACE_RT" jdbcType="VARCHAR" property="spaceRt" />
+    <result column="CRLF_YN" jdbcType="VARCHAR" property="crlfYn" />
+    <result column="ALPHA_YN" jdbcType="VARCHAR" property="alphaYn" />
+    <result column="DATA_FMT" jdbcType="VARCHAR" property="dataFmt" />
+    <result column="NUM_YN" jdbcType="VARCHAR" property="numYn" />
+    <result column="HUND_Rt" jdbcType="VARCHAR" property="hundRt" />
+    <result column="CNT_Rt" jdbcType="VARCHAR" property="cntRt" />
+    <result column="DMNG_NM" jdbcType="VARCHAR" property="dmngNm" />
+    
+    <!-- <result column="VAR_TYPE" jdbcType="VARCHAR" property="varType" />
+    <result column="USE_YN" jdbcType="VARCHAR" property="useYn" />
+    <result column="FPO_YN" jdbcType="VARCHAR" property="fpoYn" />
+    <result column="NMB_YN" jdbcType="VARCHAR" property="nmbYn" />
+    <result column="UNQ_YN" jdbcType="VARCHAR" property="unqYn" />
+    <result column="DT_YN" jdbcType="VARCHAR" property="dtYn" />
+    <result column="TGT_VAR_YN" jdbcType="VARCHAR" property="tgtVarYn" />
+    <result column="DRV_VAR_YN" jdbcType="VARCHAR" property="drvVarYn" />
+    <result column="LEN_CHG_YN" jdbcType="VARCHAR" property="lenChgYn" />
+    <result column="DATA_LEN_EXC_YN" jdbcType="VARCHAR" property="dataLenExcYn" />
+    <result column="DMNG_NM" jdbcType="VARCHAR" property="dmngNm" /> -->
+  </resultMap>
+  <resultMap id="dmnResultMap" type="kr.wise.advisor.prepare.dataset.service.WadAnaVarNstnd" extends="kr.wise.dq.criinfo.anatrg.service.AnaTrgMapper.BaseResultMap">
+    <id column="ANL_VAR_ID" jdbcType="VARCHAR" property="anlVarId" />
+    <result column="DASE_ID"         jdbcType="VARCHAR" property="daseId" />
+    <result column="DB_SCH_ID"       jdbcType="VARCHAR" property="dbSchId" />
+    <result column="DB_TBL_NM"       jdbcType="VARCHAR" property="dbTblNm" />
+    <result column="DB_COL_NM"       jdbcType="VARCHAR" property="dbColNm" />
+    <result column="COL_MRP_LNM"     jdbcType="VARCHAR" property="colMrpLnm" />
+    <result column="COL_MRP_PNM"     jdbcType="VARCHAR" property="colMrpPnm" />
+    <result column="DBMS_TYP_CD"     jdbcType="VARCHAR" property="dbmsTypCd" />
+    <result column="DATA_TYPE"       jdbcType="VARCHAR" property="dataType" />
+    <result column="DATA_LEN"        jdbcType="DECIMAL" property="dataLen" />
+    <result column="DATA_SCAL"       jdbcType="DECIMAL" property="dataScal" />
+    
+    <result column="PK_YN" jdbcType="VARCHAR" property="pkYn" />
+    <result column="MAX_LEN" jdbcType="VARCHAR" property="maxLen" />
+    <result column="MIN_LEN" jdbcType="VARCHAR" property="minLen" />
+    <result column="DT_YN" jdbcType="VARCHAR" property="dtYn" />
+    <result column="TEL_YN" jdbcType="VARCHAR" property="telYn" />
+    <result column="SPACE_RT" jdbcType="VARCHAR" property="spaceRt" />
+    <result column="CRLF_YN" jdbcType="VARCHAR" property="crlfYn" />
+    <result column="ALPHA_YN" jdbcType="VARCHAR" property="alphaYn" />
+    <result column="DATA_FMT" jdbcType="VARCHAR" property="dataFmt" />
+    <result column="NUM_YN" jdbcType="VARCHAR" property="numYn" />
+    <result column="HUND_RT" jdbcType="VARCHAR" property="hundRt" />
+    <result column="CNT_RT" jdbcType="VARCHAR" property="cntRt" />
+    <result column="DMNG_NM" jdbcType="VARCHAR" property="dmngNm" />
+    
+   <!--  <result column="VAR_TYPE"        jdbcType="VARCHAR" property="varType" />
+    <result column="USE_YN"          jdbcType="VARCHAR" property="useYn" />
+    <result column="FPO_YN"          jdbcType="VARCHAR" property="fpoYn" />
+    <result column="NMB_YN"          jdbcType="VARCHAR" property="nmbYn" />
+    <result column="UNQ_YN"          jdbcType="VARCHAR" property="unqYn" />
+    <result column="DT_YN"           jdbcType="VARCHAR" property="dtYn" />
+    <result column="TGT_VAR_YN"      jdbcType="VARCHAR" property="tgtVarYn" />
+    <result column="DRV_VAR_YN"      jdbcType="VARCHAR" property="drvVarYn" />
+    <result column="LEN_CHG_YN"      jdbcType="VARCHAR" property="lenChgYn" />
+    <result column="DATA_LEN_EXC_YN" jdbcType="VARCHAR" property="dataLenExcYn" />
+    <result column="DMNG_NM"         jdbcType="VARCHAR" property="dmngNm" /> -->
+    <result column="DMN_PDT"         jdbcType="VARCHAR" property="dmnPdt" />
+    <result column="DMN_PRB"         jdbcType="VARCHAR" property="dmnPrb" />
+    <result column="PRF_ID"          jdbcType="VARCHAR" property="prfId" />
+    <result column="HISTO_YN"        jdbcType="VARCHAR" property="histoYn" />
+    <result column="OTL_ADD_CND"     jdbcType="VARCHAR" property="otlAddCnd" />
+    <result column="ANA_VAR_CHK"     jdbcType="VARCHAR" property="anaVarChk" />
+    <result column="VAR_SNO"         jdbcType="DECIMAL" property="varSno" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ANL_VAR_ID, DASE_ID, DB_SCH_ID, DB_TBL_NM, DB_COL_NM, COL_MRP_LNM, COL_MRP_PNM, DATA_TYPE, DBMS_TYP_CD, DATA_LEN, DATA_SCAL,
+    PK_YN, MAX_LEN, MIN_LEN, DT_YN, TEL_YN, SPACE_RT, CRLF_YN, ALPHA_YN, DATA_FMT, 
+    NUM_YN, HUND_RT, CNT_RT, OBJ_DESCN, OBJ_VERS, REG_TYP_CD, WRIT_DTM, WRIT_USER_ID
+  </sql>
+  
+  <sql id="Data_Type_Map">
+	SELECT A.DATA_TYPE_MAPRU_ID
+		, A.MAPRU_NM
+		, A.LGC_DATA_TYPE
+		, NVL(A.MIN_VAL, -1) AS MIN_VAL
+		, CASE WHEN A.CND_CD = 'U' THEN 4000 ELSE TO_NUMBER(NVL(A.MAX_VAL, -1)) END AS MAX_VAL
+		, A.CND_CD
+		, B.DATA_TYPE_NM
+		, B.DBMS_TYP_CD 
+	  FROM WAA_DATA_TYPE_MAPRU A 
+	  JOIN WAA_DBMS_DATA_TYPE B
+	    ON A.DBMS_DATA_TYPE_ID = B.DBMS_DATA_TYPE_ID
+	   AND B.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')
+	   AND B.REG_TYP_CD IN ('C', 'U')
+	 WHERE A.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')
+	   AND A.REG_TYP_CD IN ('C', 'U')
+  </sql>
+  
+  <sql id="getPrfResultMaxAnaStrDtm" >
+      SELECT R.*
+<!--                , CASE WHEN R.ANA_CNT = 0 THEN 0 ELSE ROUND(R.ER_CNT*100/R.ANA_CNT,2) END AS ERR_RATE -->
+       FROM WAM_PRF_RESULT R
+       INNER JOIN (SELECT PRF_ID, MAX(ANA_STR_DTM) AS ANA_STR_DTM
+                         FROM WAM_PRF_RESULT
+                       GROUP BY PRF_ID ) R2
+           ON R.PRF_ID = R2.PRF_ID
+          AND R.ANA_STR_DTM = R2.ANA_STR_DTM
+  </sql>
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from WAD_ANA_VAR_NSTND
+    where ANL_VAR_ID = #{anlVarId,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="selectDmnPdtListbyDs" parameterType="kr.wise.advisor.prepare.dataset.service.WadAnaVarNstnd" resultMap="dmnResultMap">
+  --변수목록조회 by 데이터셋...
+    SELECT DB.DB_CONN_TRG_ID 
+         , DB.DB_CONN_TRG_PNM
+		 ,DB.DB_CONN_TRG_LNM
+		 ,S.DB_SCH_ID
+		 ,S.DB_SCH_PNM
+		 ,S.DB_SCH_LNM
+		 ,T.DBC_TBL_NM
+		 ,T.DBC_TBL_KOR_NM
+		 ,T.SUBJ_ID
+		 ,C.DBC_COL_NM
+		 ,C.DBC_COL_NM AS OBJ_NM
+		 ,C.DBC_COL_KOR_NM
+         ,V.DATA_TYPE
+		 ,C.DATA_LEN
+		 ,C.DATA_PNT
+		 ,C.NULL_YN
+		 ,C.DEFLT_VAL
+		 ,C.PK_YN
+		 ,C.ORD 
+		 ,C.PK_ORD
+		 , V.ANL_VAR_ID
+		 , VS.VAR_TYPE
+		 , V.DMNG_NM
+		 <!-- , V.TGT_VAR_YN -타겟여부
+         , V.DRV_VAR_YN -파생여부  -->
+		 , DS.DASE_ID  
+		 , CASE WHEN VH.ANL_VAR_ID IS NULL THEN 'N' ELSE 'Y' END AS HISTO_YN  
+		 , CASE WHEN V.ANL_VAR_ID IS NULL THEN '#FF0000' 
+                <!-- WHEN V.DMNG_NM IS NULL THEN '#0000FF' -->
+                ELSE NULL END AS FontColor
+		 , DP.DMNG_LNM AS DMN_PDT
+		 , NVL(DP.DMN_PRB, 0) * 100 AS DMN_PRB 
+		 --, '명칭' AS DMN_PDT
+		 , M.PRF_ID
+		 , V.OBJ_DESCN   
+	FROM WAA_DB_CONN_TRG DB
+	INNER JOIN WAA_DB_SCH S
+	   ON DB.DB_CONN_TRG_ID = S.DB_CONN_TRG_ID
+	  AND S.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+	  AND S.REG_TYP_CD IN ('C','U')
+	INNER JOIN WAT_DBC_TBL T
+	   ON DB.DB_CONN_TRG_ID = T.DB_CONN_TRG_ID
+	  AND S.DB_SCH_ID = T.DB_SCH_ID
+	INNER JOIN WAT_DBC_COL C
+	   ON S.DB_SCH_ID = C.DB_SCH_ID
+	  AND T.DBC_TBL_NM = C.DBC_TBL_NM
+	 LEFT OUTER JOIN WAM_PRF_MSTR M
+	   ON T.DB_CONN_TRG_ID = M.DB_CONN_TRG_ID
+	  AND C.DB_SCH_ID = M.DB_SCH_ID
+	  AND C.DBC_TBL_NM = M.DBC_TBL_NM
+      AND C.DBC_COL_NM = M.OBJ_NM
+      AND M.REG_TYP_CD IN ('C', 'U')
+      AND M.PRF_KND_CD = 'PC01' 
+	 LEFT OUTER JOIN WAD_DATA_SET_NSTND DS
+	   ON T.DB_SCH_ID = DS.DB_SCH_ID
+	  AND T.DBC_TBL_NM = DS.DB_TBL_NM
+	 LEFT OUTER JOIN WAD_ANA_VAR_NSTND V
+	   ON V.DB_SCH_ID = C.DB_SCH_ID
+	  AND V.DB_TBL_NM = C.DBC_TBL_NM
+	  AND V.DB_COL_NM = C.DBC_COL_NM
+	 LEFT OUTER JOIN (
+	 	SELECT * FROM (             
+					    SELECT ANL_VAR_ID
+					         , DMNG_LNM
+					         , DMN_PRB
+					         , RANK() OVER(PARTITION BY ANL_VAR_ID ORDER BY DMN_PRB DESC ) AS RNK
+					    FROM WAD_DMN_PDT_NSTND
+					) WHERE RNK = 1 
+	 ) DP
+	   ON DP.ANL_VAR_ID = V.ANL_VAR_ID
+	 LEFT OUTER JOIN WAD_VAR_SUM VS
+       ON V.ANL_VAR_ID = VS.ANL_VAR_ID
+     LEFT OUTER JOIN (
+        SELECT ANL_VAR_ID FROM WAD_VAR_HST 
+         GROUP BY ANL_VAR_ID 
+     ) VH
+       ON V.ANL_VAR_ID = VH.ANL_VAR_ID  
+	WHERE DB.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+	  AND DB.REG_TYP_CD IN ('C','U')
+	  AND S.DB_SCH_ID = #{schDbSchId, jdbcType=VARCHAR}
+	  AND T.DBC_TBL_NM  = #{schDbcTblNm, jdbcType=VARCHAR} 
+	ORDER BY S.DB_SCH_ID, T.DBC_TBL_NM, C.ORD 
+  </select>
+  <select id="selectVarListbyOutlier" parameterType="kr.wise.advisor.prepare.outlier.service.WadOtlDtc" resultMap="dmnResultMap">
+  --변수목록조회 by 데이터셋...
+    SELECT DB.DB_CONN_TRG_ID 
+         , DB.DB_CONN_TRG_PNM
+		 ,DB.DB_CONN_TRG_LNM
+		 ,S.DB_SCH_ID
+		 ,S.DB_SCH_PNM
+		 ,S.DB_SCH_LNM
+		 ,T.DBC_TBL_NM
+		 ,T.DBC_TBL_KOR_NM
+		 ,T.SUBJ_ID
+		 ,C.DBC_COL_NM
+		 ,C.DBC_COL_NM AS OBJ_NM
+		 ,C.DBC_COL_KOR_NM
+         ,V.DATA_TYPE
+		 ,C.DATA_LEN
+		 ,C.DATA_PNT
+		 ,C.NULL_YN
+		 ,C.DEFLT_VAL
+		 ,C.PK_YN
+		 ,C.ORD 
+		 ,C.PK_ORD
+		 , V.ANL_VAR_ID
+		 , VS.VAR_TYPE<!-- 
+		 , V.DMNG_NM
+		 , V.TGT_VAR_YN -타겟여부
+         , V.DRV_VAR_YN -파생여부  -->
+		 , DS.DASE_ID  
+		 , CASE WHEN VH.ANL_VAR_ID IS NULL THEN 'N' ELSE 'Y' END AS HISTO_YN  
+		 , CASE WHEN VS.ANL_VAR_ID IS NULL THEN '#FF0000' 
+                <!-- WHEN V.DMNG_NM IS NULL THEN '#0000FF' -->
+                ELSE NULL END AS FontColor
+		 , DP.DMNG_LNM AS DMN_PDT
+		 , NVL(DP.DMN_PRB, 0) * 100 AS DMN_PRB 
+		 --, '명칭' AS DMN_PDT
+		 , M.PRF_ID
+		 , V.OBJ_DESCN   
+	FROM WAA_DB_CONN_TRG DB
+	INNER JOIN WAA_DB_SCH S
+	   ON DB.DB_CONN_TRG_ID = S.DB_CONN_TRG_ID
+	  AND S.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+	  AND S.REG_TYP_CD IN ('C','U')
+	INNER JOIN WAT_DBC_TBL T
+	   ON DB.DB_CONN_TRG_ID = T.DB_CONN_TRG_ID
+	  AND S.DB_SCH_ID = T.DB_SCH_ID
+	INNER JOIN WAT_DBC_COL C
+	   ON S.DB_SCH_ID = C.DB_SCH_ID
+	  AND T.DBC_TBL_NM = C.DBC_TBL_NM
+	 LEFT OUTER JOIN WAM_PRF_MSTR M
+	   ON T.DB_CONN_TRG_ID = M.DB_CONN_TRG_ID
+	  AND C.DB_SCH_ID = M.DB_SCH_ID
+	  AND C.DBC_TBL_NM = M.DBC_TBL_NM
+      AND C.DBC_COL_NM = M.OBJ_NM
+      AND M.REG_TYP_CD IN ('C', 'U')
+      AND M.PRF_KND_CD = 'PC01' 
+	 JOIN WAD_DATA_SET_NSTND DS
+	   ON T.DB_SCH_ID = DS.DB_SCH_ID
+	  AND T.DBC_TBL_NM = DS.DB_TBL_NM
+	 JOIN WAD_ANA_VAR_NSTND V
+	   ON V.DB_SCH_ID = C.DB_SCH_ID
+	  AND V.DB_TBL_NM = C.DBC_TBL_NM
+	  AND V.DB_COL_NM = C.DBC_COL_NM
+	 JOIN WAD_OTL_VAL OV
+	   ON V.ANL_VAR_ID = OV.ANL_VAR_ID 
+	 LEFT OUTER JOIN (
+	 	SELECT * FROM (             
+					    SELECT ANL_VAR_ID
+					         , DMNG_LNM
+					         , DMN_PRB
+					         , RANK() OVER(PARTITION BY ANL_VAR_ID ORDER BY DMN_PRB DESC ) AS RNK
+					    FROM WAD_DMN_PDT_NSTND             
+					) WHERE RNK = 1 
+	 ) DP
+	   ON DP.ANL_VAR_ID = V.ANL_VAR_ID
+	 LEFT OUTER JOIN WAD_VAR_SUM VS
+       ON V.ANL_VAR_ID = VS.ANL_VAR_ID
+     LEFT OUTER JOIN (
+        SELECT ANL_VAR_ID FROM WAD_VAR_HST 
+         GROUP BY ANL_VAR_ID 
+     ) VH
+       ON V.ANL_VAR_ID = VH.ANL_VAR_ID  
+	WHERE DB.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+	  AND DB.REG_TYP_CD IN ('C','U')
+	  AND OV.OTL_DTC_ID = #{otlDtcId,jdbcType=VARCHAR}
+	ORDER BY OV.VAR_SNO 
+  </select>
+  <select id="selectVarListbyOtl" parameterType="kr.wise.advisor.prepare.outlier.service.WadOtlDtc" resultMap="dmnResultMap">
+  --변수목록조회 by 데이터셋...
+    SELECT DB.DB_CONN_TRG_ID 
+         , DB.DB_CONN_TRG_PNM
+		 ,DB.DB_CONN_TRG_LNM
+		 ,S.DB_SCH_ID
+		 ,S.DB_SCH_PNM
+		 ,S.DB_SCH_LNM
+		 ,T.DBC_TBL_NM
+		 ,T.DBC_TBL_KOR_NM
+		 ,T.SUBJ_ID
+		 ,C.DBC_COL_NM
+		 ,C.DBC_COL_NM AS OBJ_NM
+		 ,C.DBC_COL_KOR_NM
+         ,V.DATA_TYPE
+		 ,C.DATA_LEN
+		 ,C.DATA_PNT
+		 ,C.NULL_YN
+		 ,C.DEFLT_VAL
+		 ,C.PK_YN
+		 ,C.ORD 
+		 ,C.PK_ORD
+		 , V.ANL_VAR_ID
+		 , V.VAR_TYPE
+		 <!-- , V.DMNG_NM
+		 , V.TGT_VAR_YN -타겟여부
+         , V.DRV_VAR_YN -파생여부  -->
+		 , DS.DASE_ID  
+		 , OV.VAR_SNO
+		 , OV.OTL_ADD_CND
+		 , CASE WHEN OV.ANL_VAR_ID IS NOT NULL THEN '#0000FF' 
+                ELSE NULL END AS FontColor
+		 , OV.ANA_VAR_CHK AS ibsCheck
+		 , DP.DMNG_LNM AS DMN_PDT
+		 , NVL(DP.DMN_PRB, 0) * 100 AS DMN_PRB 
+		 --, '명칭' AS DMN_PDT
+		 --, M.PRF_ID
+		 , V.OBJ_DESCN   
+	FROM WAA_DB_CONN_TRG DB
+	INNER JOIN WAA_DB_SCH S
+	   ON DB.DB_CONN_TRG_ID = S.DB_CONN_TRG_ID
+	  AND S.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+	  AND S.REG_TYP_CD IN ('C','U')
+	INNER JOIN WAT_DBC_TBL T
+	   ON DB.DB_CONN_TRG_ID = T.DB_CONN_TRG_ID
+	  AND S.DB_SCH_ID = T.DB_SCH_ID
+	INNER JOIN WAT_DBC_COL C
+	   ON S.DB_SCH_ID = C.DB_SCH_ID
+	  AND T.DBC_TBL_NM = C.DBC_TBL_NM
+	 LEFT OUTER JOIN WAD_DATA_SET_NSTND DS
+	   ON T.DB_SCH_ID = DS.DB_SCH_ID
+	  AND T.DBC_TBL_NM = DS.DB_TBL_NM
+	 LEFT OUTER JOIN WAD_ANA_VAR_NSTND V
+	   ON V.DB_SCH_ID = C.DB_SCH_ID
+	  AND V.DB_TBL_NM = C.DBC_TBL_NM
+	  AND V.DB_COL_NM = C.DBC_COL_NM
+	 LEFT OUTER JOIN WAD_OTL_VAL OV
+	   ON V.ANL_VAR_ID = OV.ANL_VAR_ID
+	  AND OV.OTL_DTC_ID = #{otlDtcId,jdbcType=VARCHAR} 
+	 LEFT OUTER JOIN (
+	 	SELECT * FROM (             
+					    SELECT ANL_VAR_ID
+					         , DMNG_LNM
+					         , DMN_PRB
+					         , RANK() OVER(PARTITION BY ANL_VAR_ID ORDER BY DMN_PRB DESC ) AS RNK
+					    FROM WAD_DMN_PDT_NSTND             
+					) WHERE RNK = 1 
+	 ) DP
+	   ON DP.ANL_VAR_ID = V.ANL_VAR_ID
+	WHERE DB.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+	  AND DB.REG_TYP_CD IN ('C','U')
+	  AND S.DB_SCH_ID = #{dbSchId, jdbcType=VARCHAR}
+	  AND DS.DASE_ID  = #{daseId, jdbcType=VARCHAR}
+	  
+	ORDER BY C.ORD 
+  </select>
+
+  <select id="selectVarListbydsid" parameterType="kr.wise.advisor.prepare.dataset.service.WadDataSetNstnd" resultMap="ExtendResultMap">
+  --변수목록조회 by 데이터셋 id
+    SELECT DB.DB_CONN_TRG_ID 
+         , DB.DB_CONN_TRG_PNM
+		 ,DB.DB_CONN_TRG_LNM
+		 ,S.DB_SCH_ID
+		 ,S.DB_SCH_PNM
+		 ,S.DB_SCH_LNM
+		 ,T.DBC_TBL_NM
+		 ,T.DBC_TBL_KOR_NM
+		 ,T.SUBJ_ID
+		 ,C.DBC_COL_NM
+		 ,C.DBC_COL_NM AS OBJ_NM
+		 ,C.DBC_COL_KOR_NM
+         ,V.DATA_TYPE
+		 ,C.DATA_LEN
+		 ,C.DATA_PNT
+		 ,C.NULL_YN
+		 ,C.DEFLT_VAL
+		 ,C.PK_YN
+		 ,C.ORD 
+		 ,C.PK_ORD
+		 , V.ANL_VAR_ID
+		 , V.DB_TBL_NM
+		 , V.DB_COL_NM
+		 , V.OBJ_DESCN  
+		 , VS.VAR_TYPE
+		 , V.DMNG_NM 
+		 , DS.DASE_ID
+		 , CASE WHEN VS.ANL_VAR_ID IS NOT NULL THEN 'U' ELSE 'I' END AS IBS_STATUS   
+	FROM WAA_DB_CONN_TRG DB
+	INNER JOIN WAA_DB_SCH S
+	   ON DB.DB_CONN_TRG_ID = S.DB_CONN_TRG_ID
+	  AND S.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+	  AND S.REG_TYP_CD IN ('C','U')
+	INNER JOIN WAT_DBC_TBL T
+	   ON DB.DB_CONN_TRG_ID = T.DB_CONN_TRG_ID
+	  AND S.DB_SCH_ID = T.DB_SCH_ID
+	INNER JOIN WAT_DBC_COL C
+	   ON S.DB_SCH_ID = C.DB_SCH_ID
+	  AND T.DBC_TBL_NM = C.DBC_TBL_NM
+	 JOIN WAD_DATA_SET_NSTND DS
+	   ON T.DB_SCH_ID = DS.DB_SCH_ID
+	  AND T.DBC_TBL_NM = DS.DB_TBL_NM
+	 JOIN WAD_ANA_VAR_NSTND V
+	   ON V.DB_SCH_ID = C.DB_SCH_ID
+	  AND V.DB_TBL_NM = C.DBC_TBL_NM
+	  AND V.DB_COL_NM = C.DBC_COL_NM
+	 LEFT OUTER JOIN WAD_VAR_SUM VS
+	   ON V.ANL_VAR_ID = VS.ANL_VAR_ID 
+	WHERE DB.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+	  AND DB.REG_TYP_CD IN ('C','U')
+	  AND DS.DASE_ID = #{daseId, jdbcType=VARCHAR}
+	   
+	ORDER BY S.DB_SCH_ID, T.DBC_TBL_NM, C.ORD 
+  </select>
+  
+  <select id="selectListbyDslist" parameterType="java.util.List" resultMap="BaseResultMap">
+  --변수목록 조회 by 데이터셋 목록
+  SELECT V.ANL_VAR_ID
+	     , CASE WHEN V.ANL_VAR_ID IS NOT NULL THEN 'U' ELSE 'I' END AS IBS_STATUS
+	     , DS.DASE_ID
+	     , S.DB_SCH_ID
+		 , S.DB_SCH_PNM
+		 , S.DB_SCH_LNM
+		 , T.DBC_TBL_NM AS DB_TBL_NM
+		 , C.DBC_COL_NM AS DB_COL_NM
+		 , RTRIM(C.DBC_COL_KOR_NM, '_0123456789') AS COL_MRP_LNM
+	     , RTRIM(C.DBC_COL_NM, '_0123456789')     AS COL_MRP_PNM
+		 , DB.DBMS_TYP_CD
+		 , C.DATA_TYPE
+		 , NVL(C.DATA_LEN,0) AS DATA_LEN
+		 , NVL(C.DATA_PNT,0) AS DATA_SCAL
+		 , C.ORD 
+	     , C.PK_YN
+	FROM WAA_DB_CONN_TRG DB
+	INNER JOIN WAA_DB_SCH S
+	   ON DB.DB_CONN_TRG_ID = S.DB_CONN_TRG_ID
+	  AND S.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+	  AND S.REG_TYP_CD IN ('C','U')
+	INNER JOIN WAT_DBC_TBL T
+	   ON DB.DB_CONN_TRG_ID = T.DB_CONN_TRG_ID
+	  AND S.DB_SCH_ID = T.DB_SCH_ID
+	INNER JOIN WAT_DBC_COL C
+	   ON S.DB_SCH_ID = C.DB_SCH_ID
+	  AND T.DBC_TBL_NM = C.DBC_TBL_NM
+	 JOIN WAD_DATA_SET_NSTND DS
+	   ON T.DB_SCH_ID = DS.DB_SCH_ID
+	  AND T.DBC_TBL_NM = DS.DB_TBL_NM
+	 LEFT OUTER JOIN WAD_ANA_VAR_NSTND V
+	   ON V.DB_SCH_ID = C.DB_SCH_ID
+	  AND V.DB_TBL_NM = C.DBC_TBL_NM
+	  AND V.DB_COL_NM = C.DBC_COL_NM 
+	WHERE DB.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+	  AND DB.REG_TYP_CD IN ('C','U')
+	  --AND DS.DB_SCH_ID = ''
+	  AND DS.DASE_ID IN 
+     <foreach collection="list" item="item" open="(" separator="," close=")">
+	  	#{item.daseId}
+	 </foreach>
+	ORDER BY S.DB_SCH_ID, T.DBC_TBL_NM, C.ORD
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from WAD_ANA_VAR
+    where ANL_VAR_ID = #{anlVarId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="kr.wise.advisor.prepare.dataset.service.WadAnaVarNstnd">
+    insert into WAD_ANA_VAR_NSTND (ANL_VAR_ID, DASE_ID, DB_SCH_ID, 
+      DB_TBL_NM, DB_COL_NM, COL_MRP_LNM, 
+      COL_MRP_PNM, DATA_TYPE, PK_YN, MAX_LEN,
+	  MIN_LEN, DT_YN, TEL_YN, SPACE_RT, CRLF_YN,
+	  ALPHA_YN, DATA_FMT, NUM_YN, HUND_RT, CNT_RT,
+	  OBJ_DESCN, OBJ_VERS, REG_TYP_CD, WRIT_DTM, WRIT_USER_ID
+      )
+    values (#{anlVarId,jdbcType=VARCHAR}, #{daseId,jdbcType=VARCHAR}, #{dbSchId,jdbcType=VARCHAR}, 
+      #{dbTblNm,jdbcType=VARCHAR}, #{dbColNm,jdbcType=VARCHAR}, #{colMrpLnm,jdbcType=VARCHAR}, 
+      #{colMrpPnm,jdbcType=VARCHAR}, #{dataType,jdbcType=VARCHAR}, #{pkYn,jdbcType=VARCHAR}, 
+      #{maxLen,jdbcType=VARCHAR}, #{minLen,jdbcType=VARCHAR}, #{dtYn,jdbcType=VARCHAR}, 
+      #{telYn,jdbcType=VARCHAR}, #{spaceRt,jdbcType=VARCHAR}, #{crlfYn,jdbcType=VARCHAR}, 
+      #{alphaYn,jdbcType=VARCHAR}, #{dataFmt,jdbcType=VARCHAR}, #{numYn,jdbcType=VARCHAR}, 
+      #{hundRt,jdbcType=VARCHAR}, #{cntRt,jdbcType=VARCHAR}, #{objDescn,jdbcType=VARCHAR}, #{objVers,jdbcType=DECIMAL}, 
+      #{regTypCd,jdbcType=VARCHAR}, #{writDtm,jdbcType=TIMESTAMP}, #{writUserId,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="kr.wise.advisor.prepare.dataset.service.WadAnaVarNstnd">
+    insert into WAD_ANA_VAR_NSTND
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+        ANL_VAR_ID,
+        DASE_ID,
+        DB_SCH_ID,
+        DB_TBL_NM,
+        DB_COL_NM,
+        COL_MRP_LNM,
+        COL_MRP_PNM,
+        DATA_TYPE,
+        DBMS_TYP_CD,
+        DATA_LEN,
+        DATA_SCAL, 
+      <if test="pkYn != null">
+        PK_YN,
+      </if>
+      <if test="maxLen != null">
+        MAX_LEN,
+      </if>
+      <if test="minLen != null">
+        MIN_LEN,
+      </if>
+      <if test="dtYn != null">
+        DT_YN,
+      </if>
+      <if test="telYn != null">
+        TEL_YN,
+      </if>
+      <if test="spaceRt != null">
+        SPACE_RT,
+      </if>
+      <if test="crlfYn != null">
+        CRLF_YN,
+      </if>
+      <if test="alphaYn != null">
+        ALPHA_YN,
+      </if>
+      <if test="dataFmt != null">
+        DATA_FMT,
+      </if>
+      <if test="numYn != null">
+        NUM_YN,
+      </if>
+      <if test="hundRt != null">
+        HUND_RT,
+      </if>
+      <if test="cntRt != null">
+        CNT_RT,
+      </if>
+      <if test="objDescn != null">
+        OBJ_DESCN,
+      </if>
+        OBJ_VERS,
+        REG_TYP_CD,
+        WRIT_DTM,
+      <if test="writUserId != null">
+        WRIT_USER_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+        #{anlVarId,jdbcType=VARCHAR},
+        #{daseId,jdbcType=VARCHAR},
+        #{dbSchId,jdbcType=VARCHAR},
+        #{dbTblNm,jdbcType=VARCHAR},
+        #{dbColNm,jdbcType=VARCHAR},
+        #{colMrpLnm,jdbcType=VARCHAR},
+        #{colMrpPnm,jdbcType=VARCHAR},
+        #{dataType,jdbcType=VARCHAR},
+        #{dbmsTypCd,jdbcType=VARCHAR},
+        #{dataLen,jdbcType=DECIMAL},
+        #{dataScal,jdbcType=DECIMAL},
+      <if test="pkYn != null">
+        #{pkYn,jdbcType=VARCHAR},
+      </if>
+      <if test="maxLen != null">
+        #{maxLen,jdbcType=VARCHAR},
+      </if>
+      <if test="minLen != null">
+        #{minLen,jdbcType=VARCHAR},
+      </if>
+      <if test="dtYn != null">
+        #{dtYn,jdbcType=VARCHAR},
+      </if>
+      <if test="telYn != null">
+        #{telYn,jdbcType=VARCHAR},
+      </if>
+      <if test="spaceRt != null">
+        #{spaceRt,jdbcType=VARCHAR},
+      </if>
+      <if test="crlfYn != null">
+        #{crlfYn,jdbcType=VARCHAR},
+      </if>
+      <if test="alphaYn != null">
+        #{alphaYn,jdbcType=VARCHAR},
+      </if>
+      <if test="dataFmt != null">
+        #{dataFmt,jdbcType=VARCHAR},
+      </if>
+      <if test="numYn != null">
+        #{numYn,jdbcType=VARCHAR},
+      </if>
+      <if test="hundRt != null">
+        #{hundRt,jdbcType=VARCHAR},
+      </if>
+      <if test="cntRt != null">
+        #{cntRt,jdbcType=VARCHAR},
+      </if>
+      <if test="objDescn != null">
+        #{objDescn,jdbcType=VARCHAR},
+      </if>
+        1,
+        #{regTypCd,jdbcType=VARCHAR},
+        SYSDATE,
+      <if test="writUserId != null">
+        #{writUserId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.advisor.prepare.dataset.service.WadAnaVarNstnd">
+    update WAD_ANA_VAR_NSTND
+    <set>
+        DASE_ID = #{daseId,jdbcType=VARCHAR},
+        DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR},
+        DB_TBL_NM = #{dbTblNm,jdbcType=VARCHAR},
+        DB_COL_NM = #{dbColNm,jdbcType=VARCHAR},
+        COL_MRP_LNM = #{colMrpLnm,jdbcType=VARCHAR},
+        COL_MRP_PNM = #{colMrpPnm,jdbcType=VARCHAR},
+        DATA_TYPE = #{dataType,jdbcType=VARCHAR},
+        DBMS_TYP_CD = #{dbmsTypCd,jdbcType=VARCHAR},
+        DATA_LEN = #{dataLen,jdbcType=DECIMAL},
+        DATA_SCAL = #{dataScal,jdbcType=DECIMAL},
+      <if test="pkYn != null">
+        PK_YN = #{pkYn,jdbcType=VARCHAR},
+      </if>
+      <if test="maxLen != null">
+        MAX_LEN = #{maxLen,jdbcType=VARCHAR},
+      </if>
+      <if test="minLen != null">
+        MIN_LEN = #{minLen,jdbcType=VARCHAR},
+      </if>
+      <if test="dtYn != null">
+        DT_YN = #{dtYn,jdbcType=VARCHAR},
+      </if>
+      <if test="telYn != null">
+        TEL_YN = #{telYn,jdbcType=VARCHAR},
+      </if>
+      <if test="spaceRt != null">
+        SPACE_RT = #{spaceRt,jdbcType=VARCHAR},
+      </if>
+      <if test="crlfYn != null">
+        CRLF_YN = #{crlfYn,jdbcType=VARCHAR},
+      </if>
+      <if test="alphaYn != null">
+        ALPHA_YN = #{alphaYn,jdbcType=VARCHAR},
+      </if>
+      <if test="dataFmt != null">
+        DATA_FMT = #{dataFmt,jdbcType=VARCHAR},
+      </if>
+      <if test="numYn != null">
+        NUM_YN = #{numYn,jdbcType=VARCHAR},
+      </if>
+      <if test="hundRt != null">
+        HUND_RT = #{hundRt,jdbcType=VARCHAR},
+      </if>
+      <if test="cntRt != null">
+        CNT_RT = #{cntRt,jdbcType=VARCHAR},
+      </if>
+      <if test="objDescn != null">
+        OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      </if>
+        OBJ_VERS = NVL(OBJ_VERS, 0)+1,
+        REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+        WRIT_DTM = SYSDATE,
+      <if test="writUserId != null">
+        WRIT_USER_ID = #{writUserId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ANL_VAR_ID = #{anlVarId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="kr.wise.advisor.prepare.dataset.service.WadAnaVarNstnd">
+    update WAD_ANA_VAR_NSTND
+    set DASE_ID = #{daseId,jdbcType=VARCHAR},
+      DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR},
+      DB_TBL_NM = #{dbTblNm,jdbcType=VARCHAR},
+      DB_COL_NM = #{dbColNm,jdbcType=VARCHAR},
+      COL_MRP_LNM = #{colMrpLnm,jdbcType=VARCHAR},
+      COL_MRP_PNM = #{colMrpPnm,jdbcType=VARCHAR},
+      DATA_TYPE = #{dataType,jdbcType=VARCHAR},
+      PK_YN = #{pkYn,jdbcType=VARCHAR},
+      MAX_LEN = #{maxLen,jdbcType=VARCHAR},
+      MIN_LEN = #{minLen,jdbcType=VARCHAR},
+      DT_YN = #{dtYn,jdbcType=VARCHAR},
+      TEL_YN = #{telYn,jdbcType=VARCHAR},
+      SPACE_RT = #{spaceRt,jdbcType=VARCHAR},
+      CRLF_YN = #{crlfYn,jdbcType=VARCHAR},
+      ALPHA_YN = #{alphaYn,jdbcType=VARCHAR},
+      DATA_FMT = #{dataFmt,jdbcType=VARCHAR},
+      NUM_YN = #{numYn,jdbcType=VARCHAR},
+      HUND_RT = #{hundRt,jdbcType=VARCHAR},
+      CNT_RT = #{cntRt,jdbcType=VARCHAR},
+      OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      WRIT_DTM = #{writDtm,jdbcType=TIMESTAMP},
+      WRIT_USER_ID = #{writUserId,jdbcType=VARCHAR}
+    where ANL_VAR_ID = #{anlVarId,jdbcType=VARCHAR}
+  </update>
+  
+  <update id="updateDataTypeMap" parameterType="string">
+  --도메인판변 데이터타입 업데이트 by rqstNo
+	UPDATE WAD_ANA_VAR X
+	     SET DATA_TYPE = (
+	         SELECT LGC_DATA_TYPE FROM (
+	           <include refid="Data_Type_Map" />
+	           ) E WHERE 1=1
+	                 AND X.DBMS_TYP_CD = E.DBMS_TYP_CD
+		             AND UPPER(X.DATA_TYPE)   = UPPER(E.DATA_TYPE_NM)
+		             AND NVL(X.DATA_LEN, -1) BETWEEN NVL(E.MIN_VAL,-1) AND NVL(E.MAX_VAL,-1) 
+	     
+	     )
+	   WHERE DASE_ID IN (
+	   	SELECT DASE_ID FROM WAD_DATA_SET WHERE RQST_NO = #{value} 
+	   )
+  </update>
+  
+  <update id="updatefloatYn" parameterType="string">
+  --도메이판별 전처리 : 여부 업데이트...
+    UPDATE WAD_ANA_VAR X
+    <![CDATA[
+	   SET FPO_YN = CASE WHEN DATA_TYPE = 'NUMBER' AND NVL(DATA_SCAL , 0) > 0 THEN 'Y' ELSE 'N' END
+	     , NMB_YN = CASE WHEN DATA_TYPE = 'NUMBER' THEN 'Y' ELSE 'N' END
+	     , DT_YN = CASE WHEN DATA_TYPE IN ('DATE', 'TIMESTAMP') THEN 'Y' ELSE 'N' END
+	     , DATA_LEN_EXC_YN = CASE WHEN DATA_TYPE IN ('BLOB', 'CLOB') OR NVL(DATA_LEN, 0) > 200 THEN 'Y' ELSE 'N' END
+    ]]>
+	 WHERE DASE_ID IN (
+	   	SELECT DASE_ID FROM WAD_DATA_SET WHERE RQST_NO = #{value} 
+	   )
+  </update>
+  
+  <update id="updatelenchgYn" parameterType="string">
+  --도메이판별 전처리 : 길이변경 여부 업데이트...
+	UPDATE WAD_ANA_VAR X
+	   SET LEN_CHG_YN = (
+	                    SELECT CASE WHEN NVL(R.MIN_LEN,0) = NVL(R.MAX_LEN, 0) THEN 'N' ELSE 'Y' END AS LEN_CHG_YN
+	                      FROM WAD_ANA_VAR V
+	                      LEFT OUTER JOIN WAM_PRF_MSTR M
+	                        ON V.DB_SCH_ID  = M.DB_SCH_ID   
+	                       AND V.DB_TBL_NM = M.DBC_TBL_NM  
+	                       AND V.DB_COL_NM = M.OBJ_NM
+	                      LEFT OUTER JOIN (<include refid="getPrfResultMaxAnaStrDtm"/>) R
+	                        ON R.PRF_ID = M.PRF_ID 
+	                     WHERE M.PRF_KND_CD= 'PC01'
+	                       AND V.DASE_ID IN (
+	                        SELECT DASE_ID FROM WAD_DATA_SET WHERE RQST_NO = #{value} 
+	                       )
+	                       AND X.ANL_VAR_ID = V.ANL_VAR_ID  
+	   )
+	   
+	 WHERE DASE_ID IN (
+	   	SELECT DASE_ID FROM WAD_DATA_SET WHERE RQST_NO = #{value} 
+	   )
+  </update>
+  
+  <update id="updateNstndDmnResult" parameterType="kr.wise.advisor.prepare.dataset.service.WadAnaVarNstnd">
+  --도메인판별 최종결과 업데이트...
+  UPDATE WAD_ANA_VAR_NSTND
+  <set>
+	 	 DMNG_NM = #{dmngNm,jdbcType=VARCHAR},
+	     WRIT_DTM = SYSDATE,
+      	 WRIT_USER_ID = #{writUserId,jdbcType=VARCHAR},
+  </set> 
+   WHERE ANL_VAR_ID = #{anlVarId,jdbcType=VARCHAR}
+  </update>
+
+  <update id="updateAnaVarNstnd" parameterType="java.lang.String" >
+      UPDATE WAD_ANA_VAR_NSTND T
+	  	 SET (MAX_LEN, MIN_LEN, DT_YN, TEL_YN, SPACE_RT, CRLF_YN, ALPHA_YN, DATA_FMT, NUM_YN, HUND_RT, CNT_RT)
+	  	      = (SELECT MAX_LEN, MIN_LEN, DATE_YN, TEL_YN, SPACE_RT, CRLF_YN, ALPHA_YN, DATA_FMT, NUM_YN, HUND_RT, CNT_RT
+	  	           FROM WAM_PRF_RESULT A
+	  	                INNER JOIN WAM_PRF_MSTR B
+	  	                   ON B.PRF_ID = A.PRF_ID
+	  	          WHERE B.DB_SCH_ID  = T.DB_SCH_ID
+	  	            AND B.DBC_TBL_NM = T.DB_TBL_NM
+	  	            AND B.OBJ_NM     = T.DB_COL_NM 
+	  	            AND (A.PRF_ID, A.ANA_STR_DTM) IN (SELECT PRF_ID, MAX(ANA_STR_DTM)
+	  	                                                FROM WAM_PRF_RESULT
+	  	                                               GROUP BY PRF_ID 
+	  	                                              ) 
+	  	         ) 
+	    WHERE T.DASE_ID IN ( SELECT DASE_ID 
+							   FROM WAD_DATA_SET_NSTND 
+							  WHERE RQST_NO = #{value} 
+						   )
+	      AND EXISTS (SELECT 1
+                        FROM WAM_PRF_RESULT A
+                             INNER JOIN WAM_PRF_MSTR B
+                                ON B.PRF_ID = A.PRF_ID
+                       WHERE B.DB_SCH_ID  = T.DB_SCH_ID
+                         AND B.DBC_TBL_NM = T.DB_TBL_NM
+                         AND B.OBJ_NM     = T.DB_COL_NM 
+	                  ) 	  	 
+  </update>
+	
+</mapper>

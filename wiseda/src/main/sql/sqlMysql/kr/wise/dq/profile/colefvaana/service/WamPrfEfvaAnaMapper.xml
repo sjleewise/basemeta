@@ -1,0 +1,445 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.dq.profile.colefvaana.service.WamPrfEfvaAnaMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.dq.profile.colefvaana.service.WamPrfEfvaAnaVO"  extends="kr.wise.dq.profile.mstr.service.WamPrfMstrMapper.BaseResultMap" >
+    <id column="PRF_ID" property="prfId" jdbcType="VARCHAR" />
+    <result column="EFVA_ANA_KND_CD" property="efvaAnaKndCd" jdbcType="VARCHAR" />
+    <result column="CD_TBL_DB_CONN_TRG_ID" property="cdTblDbConnTrgId" jdbcType="VARCHAR" />
+    <result column="CD_TBL_DB_SCH_ID" property="cdTblDbSchId" jdbcType="VARCHAR" />
+    <result column="CD_TBL_DBC_TBL_NM" property="cdTblDbcTblNm" jdbcType="VARCHAR" />
+    <result column="CD_TBL_DBC_COL_NM" property="cdTblDbcColNm" jdbcType="VARCHAR" />
+    <result column="CD_TBL_CD_ID_COL_NM" property="cdTblCdIdColNm" jdbcType="VARCHAR" />
+    <result column="CD_TBL_CD_ID" property="cdTblCdId" jdbcType="VARCHAR" />
+    <result column="CD_TBL_ADT_CND_SQL" property="cdTblAdtCndSql" jdbcType="VARCHAR" />    
+    <result column="CD_TBL_DB_CONN_TRG_LNM" property="cdTblDbConnTrgLdm" jdbcType="VARCHAR" />
+    <result column="CD_TBL_DB_SCH_LNM" property="cdTblDbSchLdm" jdbcType="VARCHAR" />
+    <result column="CD_TBL_DB_SCH_PNM" property="cdTblDbSchPdm" jdbcType="VARCHAR" />
+    <result column="CD_TBL_DBC_TBL_KNM" property="cdTblDbcTblKorNm" jdbcType="VARCHAR" />
+    <result column="CD_TBL_DBC_COL_KNM" property="cdTblDbcColKorNm" jdbcType="VARCHAR" />
+    <result column="CD_TBL_CD_ID_COL_KNM" property="cdTblCdIdColKorNm" jdbcType="VARCHAR" />
+    
+    <result column="DQI_ID" property="dqiId" jdbcType="VARCHAR" />
+	<result column="DQI_LNM" property="dqiLnm" jdbcType="VARCHAR" />
+           
+    <!-- <result column="RQST_NO" property="rqstNo" jdbcType="VARCHAR" />
+    <result column="RQST_SNO" property="rqstSno" jdbcType="DECIMAL" />
+    <result column="OBJ_DESCN" property="objDescn" jdbcType="VARCHAR" />
+    <result column="OBJ_VERS" property="objVers" jdbcType="DECIMAL" />
+    <result column="REG_TYP_CD" property="regTypCd" jdbcType="VARCHAR" />
+    <result column="FRS_RQST_DTM" property="frsRqstDtm" jdbcType="TIMESTAMP" />
+    <result column="FRS_RQST_USER_ID" property="frsRqstUserId" jdbcType="VARCHAR" />
+    <result column="RQST_DTM" property="rqstDtm" jdbcType="TIMESTAMP" />
+    <result column="RQST_USER_ID" property="rqstUserId" jdbcType="VARCHAR" />
+    <result column="APRV_DTM" property="aprvDtm" jdbcType="TIMESTAMP" />
+    <result column="APRV_USER_ID" property="aprvUserId" jdbcType="VARCHAR" /> -->
+  </resultMap>
+     <resultMap id="PC02_ResultMap" type="kr.wise.dq.profile.mstr.service.WamPrfMstrCommonVO">
+    <id column="DB_SCH_ID" property="dbSchId" jdbcType="VARCHAR" />
+    <result column="DB_CONN_TRG_ID" property="dbConnTrgId" jdbcType="VARCHAR" />
+    <result column="DB_CONN_TRG_LNM" property="dbConnTrgLnm" jdbcType="VARCHAR" />
+    <result column="ANA_DGR" property="anaDgr" jdbcType="VARCHAR" />
+    <result column="ANA_STR_DTM" property="anaStrDtm" jdbcType="DATE" />
+    <result column="DB_SCH_LNM" property="dbSchLnm" jdbcType="VARCHAR" />
+    <result column="DBC_TBL_NM" property="dbcTblNm" jdbcType="VARCHAR" />
+    <result column="DBC_TBL_KOR_NM" property="dbcTblKorNm" jdbcType="VARCHAR" />
+    <result column="ORD" property="ord" jdbcType="VARCHAR" />
+    <result column="DBC_COL_NM" property="dbcColNm" jdbcType="VARCHAR" />
+    <result column="DBC_COL_KOR_NM" property="dbcColKorNm" jdbcType="VARCHAR" />
+    <result column="ANA_CNT" property="anaCnt" jdbcType="VARCHAR" />
+    <result column="ESN_ER_CNT" property="esnErCnt" jdbcType="VARCHAR" />
+    <result column="PRF_ID" property="prfId" jdbcType="VARCHAR" />
+    <result column="SHD_JOB_ID" property="shdJobId" jdbcType="VARCHAR" />
+    <result column="ETC_JOB_NM" property="etcJobNm" jdbcType="VARCHAR" />
+    <result column="COL_ERR_RATE" property="colErrRate" jdbcType="VARCHAR" />
+    <result column="DPMO" property="dpmo" jdbcType="VARCHAR" />
+    <result column="SIGMA" property="sigma" jdbcType="VARCHAR" />
+    <result column="EFVA_ANA_KND_CD" property="efvaAnaKndCd" jdbcType="VARCHAR" />
+    <result column="USER_DF_EFVA" property="userDfEfva" jdbcType="VARCHAR" />
+    <result column="CD_TBL_DBC_TBL_NM" property="cdTblDbcTblNm" jdbcType="VARCHAR" />
+    <result column="CD_TBL_DBC_COL_NM" property="cdTblDbcColNm" jdbcType="VARCHAR" />
+    <result column="CD_TBL_CD_ID_COL_NM" property="cdTblCdIdColNm" jdbcType="VARCHAR" />
+    <result column="CD_TBL_CD_ID" property="cdTblCdId" jdbcType="VARCHAR" />
+    <result column="CD_TBL_ADT_CND_SQL" property="cdTblAdtCndSql" jdbcType="VARCHAR" />
+    
+    <result column="DQI_ID" property="dqiId" jdbcType="VARCHAR" />
+	<result column="DQI_LNM" property="dqiLnm" jdbcType="VARCHAR" />
+	
+	<result column="STND_RATE" property="stndRate" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    PRF_ID, EFVA_ANA_KND_CD, CD_TBL_DB_CONN_TRG_ID, CD_TBL_DB_SCH_ID, CD_TBL_DBC_TBL_NM, 
+    CD_TBL_DBC_COL_NM, CD_TBL_CD_ID_COL_NM, CD_TBL_CD_ID, CD_TBL_ADT_CND_SQL, RQST_NO, 
+    RQST_SNO, OBJ_DESCN, OBJ_VERS, REG_TYP_CD, FRS_RQST_DTM, FRS_RQST_USER_ID, RQST_DTM, 
+    RQST_USER_ID, APRV_DTM, APRV_USER_ID
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >  
+ 	select <include refid="kr.wise.dq.profile.mstr.service.WamPrfMstrMapper.wam_prf_mstr_Column_List"/>
+           ,A.EFVA_ANA_KND_CD 
+           ,A.CD_TBL_DB_CONN_TRG_ID 
+           ,GET_TRG_DB_PNM(A.CD_TBL_DB_CONN_TRG_ID) AS CD_TBL_DB_CONN_TRG_LNM
+           ,A.CD_TBL_DB_SCH_ID 
+           ,GET_DB_SCH_LNM(A.CD_TBL_DB_SCH_ID)  AS CD_TBL_DB_SCH_LNM
+           ,GET_DB_SCH_PNM(A.CD_TBL_DB_SCH_ID)  AS CD_TBL_DB_SCH_PNM
+           ,A.CD_TBL_DBC_TBL_NM 
+           ,GET_DBC_TBL_KNM(A.CD_TBL_DB_SCH_ID, A.CD_TBL_DB_CONN_TRG_ID, A.CD_TBL_DBC_TBL_NM) AS CD_TBL_DBC_TBL_KNM
+           ,A.CD_TBL_DBC_COL_NM 
+           ,GET_DBC_COL_KNM(A.CD_TBL_DB_SCH_ID, A.CD_TBL_DBC_TBL_NM, A.CD_TBL_DBC_COL_NM) AS CD_TBL_DBC_COL_KNM
+           ,A.CD_TBL_CD_ID_COL_NM 
+           ,GET_DBC_COL_KNM(A.CD_TBL_DB_SCH_ID, A.CD_TBL_DBC_TBL_NM, A.CD_TBL_CD_ID_COL_NM) AS CD_TBL_CD_ID_COL_KNM
+           ,A.CD_TBL_CD_ID 
+           ,A.CD_TBL_ADT_CND_SQL 
+    from WAM_PRF_MSTR M
+           INNER JOIN WAM_PRF_EFVA_ANA A
+               ON M.PRF_ID = A.PRF_ID
+    <include refid="kr.wise.dq.profile.mstr.service.WamPrfMstrMapper.wam_prf_mstr_dqi_join" />
+   where M.PRF_ID = #{prfId,jdbcType=VARCHAR}
+     and M.REG_TYP_CD IN ('C','U')     
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from WAM_PRF_EFVA_ANA
+    where PRF_ID = #{prfId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="kr.wise.dq.profile.colefvaana.service.WamPrfEfvaAnaVO" >
+    insert into WAM_PRF_EFVA_ANA (PRF_ID, EFVA_ANA_KND_CD, CD_TBL_DB_CONN_TRG_ID, 
+      CD_TBL_DB_SCH_ID, CD_TBL_DBC_TBL_NM, CD_TBL_DBC_COL_NM, 
+      CD_TBL_CD_ID_COL_NM, CD_TBL_CD_ID, CD_TBL_ADT_CND_SQL, 
+      RQST_NO, RQST_SNO, OBJ_DESCN, 
+      OBJ_VERS, REG_TYP_CD, FRS_RQST_DTM, 
+      FRS_RQST_USER_ID, RQST_DTM, RQST_USER_ID, 
+      APRV_DTM, APRV_USER_ID)
+    values (#{prfId,jdbcType=VARCHAR}, #{efvaAnaKndCd,jdbcType=VARCHAR}, #{cdTblDbConnTrgId,jdbcType=VARCHAR}, 
+      #{cdTblDbSchId,jdbcType=VARCHAR}, #{cdTblDbcTblNm,jdbcType=VARCHAR}, #{cdTblDbcColNm,jdbcType=VARCHAR}, 
+      #{cdTblCdIdColNm,jdbcType=VARCHAR}, #{cdTblCdId,jdbcType=VARCHAR}, #{cdTblAdtCndSql,jdbcType=VARCHAR}, 
+      #{rqstNo,jdbcType=VARCHAR}, #{rqstSno,jdbcType=DECIMAL}, #{objDescn,jdbcType=VARCHAR}, 
+      #{objVers,jdbcType=DECIMAL}, #{regTypCd,jdbcType=VARCHAR}, #{frsRqstDtm,jdbcType=TIMESTAMP}, 
+      #{frsRqstUserId,jdbcType=VARCHAR}, #{rqstDtm,jdbcType=TIMESTAMP}, #{rqstUserId,jdbcType=VARCHAR}, 
+      #{aprvDtm,jdbcType=TIMESTAMP}, #{aprvUserId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="kr.wise.dq.profile.mstr.service.WamPrfMstrVO" >
+    insert into WAM_PRF_EFVA_ANA
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+        PRF_ID,
+        EFVA_ANA_KND_CD,
+      <if test="wamPrfEfvaAnaVO.cdTblDbConnTrgId != null" >
+        CD_TBL_DB_CONN_TRG_ID,
+      </if>
+      <if test="wamPrfEfvaAnaVO.cdTblDbSchId != null" >
+        CD_TBL_DB_SCH_ID,
+      </if>
+      <if test="wamPrfEfvaAnaVO.cdTblDbcTblNm != null" >
+        CD_TBL_DBC_TBL_NM,
+      </if>
+      <if test="wamPrfEfvaAnaVO.cdTblDbcColNm != null" >
+        CD_TBL_DBC_COL_NM,
+      </if>
+      <if test="wamPrfEfvaAnaVO.cdTblCdIdColNm != null" >
+        CD_TBL_CD_ID_COL_NM,
+      </if>
+      <if test="wamPrfEfvaAnaVO.cdTblCdId != null" >
+        CD_TBL_CD_ID,
+      </if>
+      <if test="wamPrfEfvaAnaVO.cdTblAdtCndSql != null" >
+        CD_TBL_ADT_CND_SQL,
+      </if>
+      <if test="rqstNo != null" >
+        RQST_NO,
+      </if>
+      <if test="rqstSno != null" >
+        RQST_SNO,
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN,
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS,
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD,
+      </if>
+      <if test="frsRqstDtm != null" >
+        FRS_RQST_DTM,
+      </if>
+      <if test="frsRqstUserId != null" >
+        FRS_RQST_USER_ID,
+      </if>
+      <if test="rqstDtm != null" >
+        RQST_DTM,
+      </if>
+      <if test="rqstUserId != null" >
+        RQST_USER_ID,
+      </if>
+      <if test="aprvDtm != null" >
+        APRV_DTM,
+      </if>
+      <if test="aprvUserId != null" >
+        APRV_USER_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+        #{prfId,jdbcType=VARCHAR},
+        #{wamPrfEfvaAnaVO.efvaAnaKndCd,jdbcType=VARCHAR},
+      <if test="wamPrfEfvaAnaVO.cdTblDbConnTrgId != null" >
+        #{wamPrfEfvaAnaVO.cdTblDbConnTrgId,jdbcType=VARCHAR},
+      </if>
+      <if test="wamPrfEfvaAnaVO.cdTblDbSchId != null" >
+        #{wamPrfEfvaAnaVO.cdTblDbSchId,jdbcType=VARCHAR},
+      </if>
+      <if test="wamPrfEfvaAnaVO.cdTblDbcTblNm != null" >
+        #{wamPrfEfvaAnaVO.cdTblDbcTblNm,jdbcType=VARCHAR},
+      </if>
+      <if test="wamPrfEfvaAnaVO.cdTblDbcColNm != null" >
+        #{wamPrfEfvaAnaVO.cdTblDbcColNm,jdbcType=VARCHAR},
+      </if>
+      <if test="wamPrfEfvaAnaVO.cdTblCdIdColNm != null" >
+        #{wamPrfEfvaAnaVO.cdTblCdIdColNm,jdbcType=VARCHAR},
+      </if>
+      <if test="wamPrfEfvaAnaVO.cdTblCdId != null" >
+        #{wamPrfEfvaAnaVO.cdTblCdId,jdbcType=VARCHAR},
+      </if>
+      <if test="wamPrfEfvaAnaVO.cdTblAdtCndSql != null" >
+        #{wamPrfEfvaAnaVO.cdTblAdtCndSql,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstNo != null" >
+        #{rqstNo,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstSno != null" >
+        #{rqstSno,jdbcType=DECIMAL},
+      </if>
+      <if test="objDescn != null" >
+        #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null" >
+        #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="frsRqstDtm != null" >
+        #{frsRqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="frsRqstUserId != null" >
+        #{frsRqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDtm != null" >
+        #{rqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rqstUserId != null" >
+        #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDtm != null" >
+        #{aprvDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aprvUserId != null" >
+        #{aprvUserId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.dq.profile.colefvaana.service.WamPrfEfvaAnaVO" >
+    update WAM_PRF_EFVA_ANA
+    <set >
+      <if test="efvaAnaKndCd != null" >
+        EFVA_ANA_KND_CD = #{efvaAnaKndCd,jdbcType=VARCHAR},
+      </if>
+      <if test="cdTblDbConnTrgId != null" >
+        CD_TBL_DB_CONN_TRG_ID = #{cdTblDbConnTrgId,jdbcType=VARCHAR},
+      </if>
+      <if test="cdTblDbSchId != null" >
+        CD_TBL_DB_SCH_ID = #{cdTblDbSchId,jdbcType=VARCHAR},
+      </if>
+      <if test="cdTblDbcTblNm != null" >
+        CD_TBL_DBC_TBL_NM = #{cdTblDbcTblNm,jdbcType=VARCHAR},
+      </if>
+      <if test="cdTblDbcColNm != null" >
+        CD_TBL_DBC_COL_NM = #{cdTblDbcColNm,jdbcType=VARCHAR},
+      </if>
+      <if test="cdTblCdIdColNm != null" >
+        CD_TBL_CD_ID_COL_NM = #{cdTblCdIdColNm,jdbcType=VARCHAR},
+      </if>
+      <if test="cdTblCdId != null" >
+        CD_TBL_CD_ID = #{cdTblCdId,jdbcType=VARCHAR},
+      </if>
+      <if test="cdTblAdtCndSql != null" >
+        CD_TBL_ADT_CND_SQL = #{cdTblAdtCndSql,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstNo != null" >
+        RQST_NO = #{rqstNo,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstSno != null" >
+        RQST_SNO = #{rqstSno,jdbcType=DECIMAL},
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="frsRqstDtm != null" >
+        FRS_RQST_DTM = #{frsRqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="frsRqstUserId != null" >
+        FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDtm != null" >
+        RQST_DTM = #{rqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rqstUserId != null" >
+        RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDtm != null" >
+        APRV_DTM = #{aprvDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aprvUserId != null" >
+        APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where PRF_ID = #{prfId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="kr.wise.dq.profile.colefvaana.service.WamPrfEfvaAnaVO" >
+    update WAM_PRF_EFVA_ANA
+    set EFVA_ANA_KND_CD = #{efvaAnaKndCd,jdbcType=VARCHAR},
+      CD_TBL_DB_CONN_TRG_ID = #{cdTblDbConnTrgId,jdbcType=VARCHAR},
+      CD_TBL_DB_SCH_ID = #{cdTblDbSchId,jdbcType=VARCHAR},
+      CD_TBL_DBC_TBL_NM = #{cdTblDbcTblNm,jdbcType=VARCHAR},
+      CD_TBL_DBC_COL_NM = #{cdTblDbcColNm,jdbcType=VARCHAR},
+      CD_TBL_CD_ID_COL_NM = #{cdTblCdIdColNm,jdbcType=VARCHAR},
+      CD_TBL_CD_ID = #{cdTblCdId,jdbcType=VARCHAR},
+      CD_TBL_ADT_CND_SQL = #{cdTblAdtCndSql,jdbcType=VARCHAR},
+      RQST_NO = #{rqstNo,jdbcType=VARCHAR},
+      RQST_SNO = #{rqstSno,jdbcType=DECIMAL},
+      OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      FRS_RQST_DTM = #{frsRqstDtm,jdbcType=TIMESTAMP},
+      FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR},
+      RQST_DTM = #{rqstDtm,jdbcType=TIMESTAMP},
+      RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      APRV_DTM = #{aprvDtm,jdbcType=TIMESTAMP},
+      APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR}
+    where PRF_ID = #{prfId,jdbcType=VARCHAR}
+  </update>
+  
+  <insert id="insertWamPrfPC02" parameterType="kr.wise.commons.rqstmst.service.WaqMstr" >
+	insert into WAM_PRF_EFVA_ANA
+	(<include refid="Base_Column_List" />)
+	select 
+	<include refid="Base_Column_List" />
+	from WAH_PRF_EFVA_ANA
+   where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+	 and EXP_DTM = STR_TO_DATE('99991231', '%Y%m%d')
+	 and REG_TYP_CD in ('C','U')
+  </insert>
+  
+  <insert id="insertWamPrfPC02ByPrfId" parameterType="java.lang.String" >
+	insert into WAM_PRF_EFVA_ANA
+	(<include refid="Base_Column_List" />)
+	select 
+	<include refid="Base_Column_List" />
+	from WAH_PRF_EFVA_ANA
+   where PRF_ID = #{prfId,jdbcType=VARCHAR}
+	 and EXP_DTM = STR_TO_DATE('99991231', '%Y%m%d')
+	 and REG_TYP_CD in ('C','U')
+  </insert>
+  
+  <select id="profileListCodeAna" resultMap="PC02_ResultMap" parameterType="kr.wise.dq.profile.mstr.service.WamPrfMstrCommonVO" > 
+      SELECT  /*+ USE_NL(TRG S M R T C PR) */       
+		<include refid="kr.wise.dq.profile.mstr.service.WamPrfMstrMapper.wam_prf_mstr_common_List"/>
+			,CASE WHEN R.ANA_CNT IS NULL THEN NULL        
+			         ELSE CONCAT(ROUND(R.ESN_ER_CNT*100/DECODE(R.ANA_CNT,0,1,R.ANA_CNT),2))
+			       END AS COL_ERR_RATE
+			, CASE WHEN R.ANA_CNT IS NULL THEN CONCAT(100)         
+	    	         ELSE CONCAT(ROUND(100-(R.ESN_ER_CNT*100/DECODE(R.ANA_CNT,0,1,R.ANA_CNT)),2))
+	    	       END AS STND_RATE
+		 	, CONCAT(ROUND(WDQ_FC_DPMO(R.ESN_ER_CNT,R.ANA_CNT), 2)) AS DPMO                  
+			, CONCAT(ROUND(WDQ_FC_SIGMA(WDQ_FC_DPMO(R.ESN_ER_CNT,R.ANA_CNT)), 2)) AS SIGMA  
+			, PR.EFVA_ANA_KND_CD	
+			, PR.CD_TBL_DBC_TBL_NM     --코드테이블명
+			, PR.CD_TBL_DBC_COL_NM     --코드값컬럼명
+			, PR.CD_TBL_CD_ID_COL_NM   --코드테이블코드ID컬럼명
+			, PR.CD_TBL_CD_ID          --코드테이블코드ID
+			, PR.CD_TBL_ADT_CND_SQL    --코드테이블추가조건
+			, M.PRF_ID                 --프로파일ID 
+			, M.PRF_ID AS SHD_JOB_ID 			
+			, '['|| GET_CMCD_DTL_NM('PRF_KND_CD', M.PRF_KND_CD) ||'] ' ||M.DBC_TBL_NM ||'.'|| M.OBJ_NM AS ETC_JOB_NM
+			, (CASE WHEN R.ESN_ER_CNT IS NULL THEN NULL
+		                      ELSE (CASE WHEN R.ESN_ER_CNT = '0' THEN  NULL
+		                                     ELSE '#FF0000'
+		                                     END  )
+		                       END  ) AS FontColor                
+		FROM WAA_DB_CONN_TRG TRG
+		     INNER JOIN WAA_DB_SCH S
+		        ON S.DB_CONN_TRG_ID = TRG.DB_CONN_TRG_ID 
+		       AND S.EXP_DTM = STR_TO_DATE( '9999-12-31', '%Y-%m-%d')
+		       AND S.REG_TYP_CD IN ('C', 'U')
+		     INNER JOIN  WAM_PRF_MSTR M
+		        ON M.DB_SCH_ID = S.DB_SCH_ID  		            
+		       AND M.REG_TYP_CD IN ('C','U')				       
+		     LEFT JOIN WAM_PRF_RESULT R 
+               ON R.PRF_ID = M.PRF_ID	 
+              AND (R.PRF_ID, R.ANA_STR_DTM) IN 
+                           (SELECT PRF_ID, MAX(ANA_STR_DTM) AS ANA_STR_DTM
+                              FROM WAM_PRF_RESULT                             
+                             WHERE 1 = 1                              
+                             <if test='anaDgr != "" and anaDgr != null ' >                          
+                               AND ANA_DGR = #{anaDgr,jdbcType=DECIMAL}   
+                             </if>                           
+                             GROUP BY PRF_ID 
+                           )  		      	  
+		     INNER JOIN WAT_DBC_TBL T
+		        ON T.DB_SCH_ID  = S.DB_SCH_ID  
+		       AND T.DBC_TBL_NM = M.DBC_TBL_NM 
+		     INNER JOIN  WAT_DBC_COL C
+		        ON C.DB_SCH_ID  = S.DB_SCH_ID  
+		       AND C.DBC_TBL_NM = M.DBC_TBL_NM  
+		       AND C.DBC_COL_NM = M.OBJ_NM  
+		     LEFT JOIN  WAM_PRF_EFVA_ANA PR
+		       ON PR.PRF_ID = M.PRF_ID  
+		      AND PR.REG_TYP_CD IN ('C','U') 		    
+		WHERE 1 = 1     
+		  AND TRG.EXP_DTM = STR_TO_DATE( '9999-12-31', '%Y-%m-%d')
+		  AND TRG.REG_TYP_CD IN ('C', 'U')  
+		  AND M.PRF_KND_CD= 'PC02' 		
+		      
+		  <if test='dbConnTrgId != "" and dbConnTrgId != null ' >
+		    AND TRG.DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR}
+		  </if>	      
+		  <if test='dbSchId != null ' >
+		    AND S.DB_SCH_ID =#{dbSchId,jdbcType=VARCHAR}
+		  </if>	
+		  <choose>
+		  	<when test='schRegYn == "Y" '>
+		  		AND R.PRF_ID IS NOT  NULL
+		  	</when>
+		  	<when test='schRegYn == "N" '>
+		  		 AND R.PRF_ID IS NULL
+		  	</when>
+		  </choose>      		  
+		  <if test='schRegYn == "N" ' >
+		    AND R.PRF_ID IS NULL
+		  </if>
+		  <if test='dbcTblNm != "" and dbcTblNm != null ' >
+		    AND (    T.DBC_TBL_NM LIKE  UPPER(  '%'|| #{dbcTblNm,jdbcType=VARCHAR} || '%' )
+		          OR T.DBC_TBL_KOR_NM LIKE  UPPER(  '%'|| #{dbcTblNm,jdbcType=VARCHAR} || '%' )
+		        )
+		  </if>
+		  <if test='dbcColNm != "" and dbcColNm != null ' >
+		    AND (    C.DBC_COL_NM LIKE UPPER( '%'|| #{dbcColNm,jdbcType=VARCHAR} || '%' )
+		          OR C.DBC_COL_KOR_NM LIKE UPPER( '%'|| #{dbcColNm,jdbcType=VARCHAR} || '%' )
+		        )
+		  </if>
+		  <if test='anaDgr != "" and anaDgr != null ' >
+		    AND R.ANA_DGR =#{anaDgr,jdbcType=DECIMAL}
+		   </if>
+		   <if test='prfId != "" and prfId != null '>
+		    AND M.PRF_ID = #{prfId, jdbcType=VARCHAR}
+		  </if>
+		ORDER BY R.ANA_DGR
+		       , S.DB_SCH_ID 
+		       , M.DBC_TBL_NM 
+		       , C.DBC_COL_NM   
+ </select>  
+  
+</mapper>

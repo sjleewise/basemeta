@@ -1,0 +1,1079 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.meta.mta.service.WaqMtaColMapper">
+  <resultMap id="BaseResultMap" type="kr.wise.meta.mta.service.WaqMtaCol" extends = "kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+  	<id column="RQST_NO" property="rqstNo" jdbcType="VARCHAR" />
+	<id column="RQST_SNO" property="rqstSno" jdbcType="DECIMAL" />
+	<id column="RQST_DTL_SNO"        property="rqstDtlSno" jdbcType="DECIMAL" />
+	<result column="MTA_COL_ID"      property="mtaColId" jdbcType="VARCHAR" />
+	<result column="MTA_COL_PNM"     property="mtaColPnm" jdbcType="VARCHAR" />
+	<result column="MTA_COL_LNM"     property="mtaColLnm" jdbcType="VARCHAR" />
+	<result column="MTA_TBL_ID"      property="mtaTblId" jdbcType="VARCHAR" />
+	<result column="MTA_TBL_PNM"     property="mtaTblPnm" jdbcType="VARCHAR" />
+	<result column="COL_REL_ENTY_NM" property="colRelEntyNm" jdbcType="VARCHAR" />
+	<result column="COL_REL_ATTR_NM" property="colRelAttrNm" jdbcType="VARCHAR" />
+	<result column="COL_ORD"         property="colOrd"       jdbcType="DECIMAL" />
+	<result column="PK_YN"           property="pkYn"         jdbcType="VARCHAR" />
+	<result column="PK_ORD"          property="pkOrd"        jdbcType="DECIMAL" />
+	<result column="FK_YN"           property="fkYn"         jdbcType="VARCHAR" />
+	<result column="DATA_TYPE"       property="dataType"     jdbcType="VARCHAR" />
+	<result column="DATA_LEN"        property="dataLen"      jdbcType="VARCHAR" />
+	<result column="DATA_SCAL"       property="dataScal"     jdbcType="DECIMAL" />
+	<result column="DATA_FMT"        property="dataFmt"      jdbcType="VARCHAR" />
+	<result column="NONUL_YN"        property="nonulYn"      jdbcType="VARCHAR" />
+	<result column="DEFLT_VAL"       property="defltVal"     jdbcType="VARCHAR" />
+	<result column="CONST_CND"       property="constCnd"     jdbcType="VARCHAR" />
+	<result column="OPEN_YN"         property="openYn"       jdbcType="VARCHAR" />
+	<result column="PRSN_INFO_YN"    property="prsnInfoYn"   jdbcType="VARCHAR" />
+	<result column="ENC_TRG_YN"      property="encTrgYn"     jdbcType="VARCHAR" />
+	<result column="PRI_RSN"         property="priRsn"       jdbcType="VARCHAR" />
+	<result column="PRI_RSN_CD_NM"   property="priRsnCdNm"   jdbcType="VARCHAR" />
+	<result column="REG_STATUS"      property="regStatus"    jdbcType="VARCHAR" />
+	<result column="RQST_STEP_CD"    property="rqstStepCd"   jdbcType="VARCHAR" />
+	<result column="OBJ_DESCN_COL"   property="objDescnCol"  jdbcType="VARCHAR" />
+  </resultMap>
+  <!-- 전체 컬럼정보  -->
+  <sql id="Base_Column_List" >
+      RQST_NO, RQST_SNO, RQST_DTL_SNO, MTA_COL_ID, MTA_COL_PNM, MTA_COL_LNM
+	, RQST_DCD, VRF_CD, VRF_RMK, MTA_TBL_ID, MTA_TBL_PNM, COL_REL_ENTY_NM, COL_REL_ATTR_NM
+	, COL_ORD, PK_YN, PK_ORD, FK_YN, DATA_TYPE, DATA_LEN, DATA_SCAL, DATA_FMT, NONUL_YN
+	, DEFLT_VAL, CONST_CND, OPEN_YN, PRSN_INFO_YN, ENC_TRG_YN, PRI_RSN, OBJ_DESCN, OBJ_VERS
+	, REG_TYP_CD, FRS_RQST_USER_ID, FRS_RQST_DTM, RQST_USER_ID, RQST_DTM, APRV_USER_ID, APRV_DTM
+  </sql>
+	
+<insert id="insertByRqstSno" parameterType="kr.wise.meta.mta.service.WaqMtaTbl">
+    <!-- 테이블 추가시 WAM에 존재하는 컬럼 추가한다. -->
+    
+  	INSERT /* WaqMtaColMapper.insertByRqstSno */
+  		INTO WAQ_MTA_COL(
+	      RQST_NO, RQST_SNO, RQST_DTL_SNO, MTA_COL_ID, MTA_COL_PNM, MTA_COL_LNM, RQST_DCD, MTA_TBL_ID
+		, MTA_TBL_PNM, COL_REL_ENTY_NM, COL_REL_ATTR_NM, COL_ORD
+		, PK_YN, PK_ORD, FK_YN, DATA_TYPE, DATA_LEN, DATA_SCAL, DATA_FMT
+		, NONUL_YN, DEFLT_VAL, OBJ_DESCN, OBJ_VERS, REG_TYP_CD, FRS_RQST_USER_ID
+		, FRS_RQST_DTM, RQST_USER_ID, RQST_DTM, CONST_CND, OPEN_YN, PRSN_INFO_YN
+		, ENC_TRG_YN, PRI_RSN, FULL_PATH
+	)
+	SELECT B.RQST_NO, B.RQST_SNO
+		, (SELECT IFNULL(MAX(RQST_DTL_SNO), 0) 
+	           FROM WAQ_MTA_COL 
+	          WHERE RQST_NO = #{rqstNo} 
+	            AND RQST_SNO = #{rqstSno} 
+	         ) + ROWNUM AS RQST_DTL_SNO
+		, C.MTA_COL_ID, C.MTA_COL_PNM, C.MTA_COL_LNM, 'CU' AS RQST_DCD
+		, C.MTA_TBL_ID
+		, A.MTA_TBL_PNM
+		, C.COL_REL_ENTY_NM
+		, C.COL_REL_ATTR_NM
+		, C.COL_ORD
+		, IFNULL(C.PK_YN,'N')
+		, C.PK_ORD
+		, C.FK_YN
+		, C.DATA_TYPE
+		, C.DATA_LEN
+		, C.DATA_SCAL
+		, DATA_FMT
+		, IFNULL(C.NONUL_YN,'N')
+		, C.DEFLT_VAL
+		, C.OBJ_DESCN
+		, C.OBJ_VERS
+		, C.REG_TYP_CD
+		, C.FRS_RQST_USER_ID
+		, C.FRS_RQST_DTM
+		, B.RQST_USER_ID
+		, NOW()
+		, C.CONST_CND
+		, C.OPEN_YN
+		, C.PRSN_INFO_YN
+		, C.ENC_TRG_YN
+		, C.PRI_RSN
+		, C.FULL_PATH
+    FROM WAM_MTA_TBL A 
+	     INNER JOIN WAQ_MTA_TBL B
+	       ON A.MTA_TBL_ID = B.MTA_TBL_ID
+	     INNER JOIN WAM_MTA_COL C
+	       ON A.MTA_TBL_ID = C.MTA_TBL_ID
+	WHERE B.RQST_NO = #{rqstNo}
+	  AND B.RQST_SNO = #{rqstSno}
+  </insert>	
+
+  <delete id="deleteByrqstSno" parameterType="kr.wise.meta.mta.service.WaqMtaTbl">
+    DELETE /* WaqMtaColMapper.deleteByrqstSno */
+    FROM WAQ_MTA_COL
+    WHERE RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      AND RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+  </delete>
+  
+  <select id="selectMtaColRqstList" parameterType="kr.wise.commons.rqstmst.service.WaqMstr" resultMap="BaseResultMap">
+  SELECT /* WaqMtaColMapper.selectMtaColRqstList */
+  		RQST_NO, RQST_SNO, RQST_DTL_SNO, MTA_COL_ID, MTA_COL_PNM, MTA_COL_LNM, RQST_DCD, VRF_CD, VRF_RMK, MTA_TBL_ID, MTA_TBL_PNM, COL_REL_ENTY_NM
+	  , COL_REL_ATTR_NM, COL_ORD, PK_YN, PK_ORD, FK_YN, DATA_TYPE, DATA_LEN, DATA_SCAL, DATA_FMT, NONUL_YN, DEFLT_VAL, CONST_CND, OPEN_YN
+	  , PRSN_INFO_YN, ENC_TRG_YN, PRI_RSN
+	  , OBJ_DESCN
+	  , OBJ_DESCN AS OBJ_DESCN_COL
+	  , OBJ_VERS
+	  , REG_TYP_CD
+	  , FRS_RQST_USER_ID
+	  , FRS_RQST_DTM, RQST_USER_ID, RQST_DTM, APRV_USER_ID, APRV_DTM, RQST_USER_NM 
+	  , CASE WHEN VRF_CD = '2'       THEN '#FF0000'
+	         WHEN REG_STATUS = 'ERR' THEN '#FF0000' 
+	         ELSE CASE WHEN REG_STATUS = 'OK' THEN '#0000FF'  END 
+	     END AS FontColor
+	  , REG_STATUS
+  FROM
+  (SELECT 
+	      A.RQST_NO
+		, A.RQST_SNO
+		, A.RQST_DTL_SNO
+		, A.MTA_COL_ID
+		, A.MTA_COL_PNM
+		, A.MTA_COL_LNM
+		, A.RQST_DCD
+		, A.VRF_CD
+		, A.VRF_RMK
+		, A.MTA_TBL_ID
+		, A.MTA_TBL_PNM
+		, A.COL_REL_ENTY_NM
+		, A.COL_REL_ATTR_NM
+		, A.COL_ORD
+		, A.PK_YN
+		, A.PK_ORD
+		, A.FK_YN
+		, A.DATA_TYPE
+		, A.DATA_LEN
+		, A.DATA_SCAL
+		, A.DATA_FMT
+		, A.NONUL_YN
+		, A.DEFLT_VAL
+		, A.CONST_CND
+		, A.OPEN_YN
+		, A.PRSN_INFO_YN
+		, A.ENC_TRG_YN
+		, A.PRI_RSN
+		, A.OBJ_DESCN
+		, A.OBJ_VERS
+		, A.REG_TYP_CD
+		, A.FRS_RQST_USER_ID
+		, A.FRS_RQST_DTM
+		, A.RQST_USER_ID
+		, A.RQST_DTM
+		, A.APRV_USER_ID
+		, A.APRV_DTM
+<!--    		, CASE WHEN A.VRF_CD = '2' THEN '#FF0000' ELSE CASE WHEN A.VRF_CD = '5' THEN '#0000FF'  END END AS FontColor -->
+  		, U.USER_NM AS RQST_USER_NM
+  		, CASE WHEN DTLS.RQST_NO IS NULL THEN 'OK' ELSE 'ERR' END REG_STATUS
+  	FROM WAQ_MTA_COL A
+  	JOIN WAQ_MTA_TBL B
+  	  ON A.RQST_NO = B.RQST_NO
+  	 AND A.RQST_SNO = B.RQST_SNO
+  	LEFT OUTER JOIN WAA_USER U
+  	  ON A.RQST_USER_ID = U.USER_ID
+  	 AND U.REG_TYP_CD IN ('C', 'U')
+  	 AND U.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+  	LEFT JOIN 
+  	(SELECT BIZ_DTL_CD
+  	      , RQST_NO
+  	      , RQST_SNO
+  	      , RQST_DTL_SNO
+  	      , MAX(VRF_DTL_CD) AS VRF_DTL_CD 
+  	   FROM WAQ_RQST_VRF_DTLS
+  	  WHERE RQST_NO = #{rqstNo}
+  	    AND BIZ_DTL_CD = 'COL'  	 
+  	    AND VRF_DTL_CD = 'MTA01'    
+  	  GROUP BY BIZ_DTL_CD
+	  	     , RQST_NO
+	  	     , RQST_SNO
+	  	     , RQST_DTL_SNO	  	      
+  	 )  DTLS
+  	  ON DTLS.BIZ_DTL_CD = 'COL'
+     AND DTLS.RQST_NO      = A.RQST_NO
+     AND DTLS.RQST_SNO     = A.RQST_SNO
+     AND DTLS.RQST_DTL_SNO = A.RQST_DTL_SNO
+     AND DTLS.VRF_DTL_CD = 'MTA01'
+  	WHERE A.RQST_NO = #{rqstNo}
+  	<if test='rqstSno != null'>
+      AND A.RQST_SNO = #{rqstSno}
+  	</if>
+  	)
+  	ORDER BY RQST_SNO, COL_ORD
+  </select>
+  
+  <insert id="insertSelective" parameterType="kr.wise.meta.mta.service.WaqMtaCol" >
+  	<selectKey keyProperty="rqstDtlSno" resultType="int" order="BEFORE" statementType="PREPARED">
+  		SELECT 	/* WaqMtaColMapper.insertSelective */
+  				IFNULL(MAX(RQST_DTL_SNO), 0) + 1 
+  		  FROM WAQ_MTA_COL 
+  		 WHERE RQST_NO  = #{rqstNo,jdbcType=VARCHAR} 
+  		   AND RQST_SNO = #{rqstSno,jdbcType=VARCHAR}
+  	</selectKey>
+    insert into WAQ_MTA_COL
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+		<if test="rqstNo != null">
+		  RQST_NO,
+		</if>
+		<if test="rqstSno != null">
+		  RQST_SNO,
+		</if>
+		<if test="rqstDtlSno != null">
+		  RQST_DTL_SNO,
+		</if>
+		<if test="mtaColId != null">
+		  MTA_COL_ID,
+		</if>
+		<if test="mtaColPnm != null">
+		  MTA_COL_PNM,
+		</if>
+		<if test="mtaColLnm != null">
+		  MTA_COL_LNM,
+		</if>
+		<if test="rqstDcd != null">
+		  RQST_DCD,
+		</if>
+		<if test="vrfCd != null">
+		  VRF_CD,
+		</if>
+		<if test="vrfRmk != null">
+		  VRF_RMK,
+		</if>
+		<if test="mtaTblId != null">
+		  MTA_TBL_ID,
+		</if>
+		<if test="mtaTblPnm != null">
+		  MTA_TBL_PNM,
+		</if>
+		<if test="colRelEntyNm != null">
+		  COL_REL_ENTY_NM,
+		</if>
+		<if test="colRelAttrNm != null">
+		  COL_REL_ATTR_NM,
+		</if>
+		<if test="colOrd != null">
+		  COL_ORD,
+		</if>
+		<if test="pkYn != null">
+		  PK_YN,
+		</if>
+		<if test="pkOrd != null">
+		  PK_ORD,
+		</if>
+		<if test="fkYn != null">
+		  FK_YN,
+		</if>
+		<if test="dataType != null">
+		  DATA_TYPE,
+		</if>
+		<if test="dataLen != null">
+		  DATA_LEN,
+		</if>
+		<if test="dataScal != null">
+		  DATA_SCAL,
+		</if>
+		<if test="dataFmt != null">
+		  DATA_FMT,
+		</if>
+		<if test="nonulYn != null">
+		  NONUL_YN,
+		</if>
+		<if test="defltVal != null">
+		  DEFLT_VAL,
+		</if>
+		<if test="constCnd != null">
+		  CONST_CND,
+		</if>
+		<if test="openYn != null">
+		  OPEN_YN,
+		</if>
+		<if test="prsnInfoYn != null">
+		  PRSN_INFO_YN,
+		</if>
+		<if test="encTrgYn != null">
+		  ENC_TRG_YN,
+		</if>
+		<if test="priRsn != null">
+		  PRI_RSN,
+		</if>
+		<if test="objDescnCol != null">
+		  OBJ_DESCN,
+		</if>
+		  OBJ_VERS,
+		<if test="regTypCd != null">
+		  REG_TYP_CD,
+		</if>
+		<if test="frsRqstUserId != null">
+		  FRS_RQST_USER_ID,
+		</if>
+		  FRS_RQST_DTM,
+		<if test="rqstUserId != null">
+		  RQST_USER_ID,
+		</if>
+		  RQST_DTM,
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      	<if test="rqstNo != null">
+		  #{rqstNo,jdbcType=VARCHAR},
+		</if>
+		<if test="rqstSno != null">
+		  #{rqstSno,jdbcType=DECIMAL},
+		</if>
+		<if test="rqstDtlSno != null">
+		  #{rqstDtlSno,jdbcType=DECIMAL},
+		</if>
+		<if test="mtaColId != null">
+		  #{mtaColId,jdbcType=VARCHAR},
+		</if>
+		<if test="mtaColPnm != null">
+		  #{mtaColPnm,jdbcType=VARCHAR},
+		</if>
+		<if test="mtaColLnm != null">
+		  REPLACE(REPLACE(#{mtaColLnm,jdbcType=VARCHAR}, ' ', ''), '	',''),
+		</if>
+		<if test="rqstDcd != null">
+		  #{rqstDcd,jdbcType=VARCHAR},
+		</if>
+		<if test="vrfCd != null">
+		  #{vrfCd,jdbcType=VARCHAR},
+		</if>
+		<if test="vrfRmk != null">
+		  #{vrfRmk,jdbcType=VARCHAR},
+		</if>
+		<if test="mtaTblId != null">
+		  #{mtaTblId,jdbcType=VARCHAR},
+		</if>
+		<if test="mtaTblPnm != null">
+		  #{mtaTblPnm,jdbcType=VARCHAR},
+		</if>
+		<if test="colRelEntyNm != null">
+		  #{colRelEntyNm,jdbcType=VARCHAR},
+		</if>
+		<if test="colRelAttrNm != null">
+		  #{colRelAttrNm,jdbcType=VARCHAR},
+		</if>
+		<if test="colOrd != null">
+		  #{colOrd,jdbcType=DECIMAL},
+		</if>
+		<if test="pkYn != null">
+		  #{pkYn,jdbcType=VARCHAR},
+		</if>
+		<if test="pkOrd != null">
+		  #{pkOrd,jdbcType=DECIMAL},
+		</if>
+		<if test="fkYn != null">
+		  #{fkYn,jdbcType=VARCHAR},
+		</if>
+		<if test="dataType != null">
+		  #{dataType,jdbcType=VARCHAR},
+		</if>
+		<if test="dataLen != null">
+		  #{dataLen,jdbcType=DECIMAL},
+		</if>
+		<if test="dataScal != null">
+		  #{dataScal,jdbcType=DECIMAL},
+		</if>
+		<if test="dataFmt != null">
+		  #{dataFmt,jdbcType=VARCHAR},
+		</if>
+		<if test="nonulYn != null">
+		  #{nonulYn,jdbcType=VARCHAR},
+		</if>
+		<if test="defltVal != null">
+		  #{defltVal,jdbcType=VARCHAR},
+		</if>
+		<if test="constCnd != null">
+		  #{constCnd,jdbcType=VARCHAR},
+		</if>
+		<if test="openYn != null">
+		  #{openYn,jdbcType=VARCHAR},
+		</if>
+		<if test="prsnInfoYn != null">
+		  #{prsnInfoYn,jdbcType=VARCHAR},
+		</if>
+		<if test="encTrgYn != null">
+		  #{encTrgYn,jdbcType=VARCHAR},
+		</if>
+		<if test="priRsn != null">
+		  #{priRsn,jdbcType=VARCHAR},
+		</if>
+		<if test="objDescnCol != null">
+		  #{objDescnCol,jdbcType=VARCHAR},
+		</if>
+		  #{objVers,jdbcType=DECIMAL},
+		<if test="regTypCd != null">
+		  #{regTypCd,jdbcType=VARCHAR},
+		</if>
+		<if test="frsRqstUserId != null">
+		  #{frsRqstUserId,jdbcType=VARCHAR},
+		</if>
+		  NOW(),
+		<if test="rqstUserId != null">
+		  #{rqstUserId,jdbcType=VARCHAR},
+		</if>
+		  NOW(),
+    </trim>
+  </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.meta.mta.service.WaqMtaCol" >
+    update /* WaqMtaColMapper.updateByPrimaryKeySelective */
+    	WAQ_MTA_COL
+    <set >
+      <if test="mtaColId != null">
+        MTA_COL_ID = #{mtaColId,jdbcType=VARCHAR},
+      </if>
+        MTA_COL_PNM = #{mtaColPnm,jdbcType=VARCHAR},
+        MTA_COL_LNM = REPLACE(REPLACE(#{mtaColLnm,jdbcType=VARCHAR}, ' ', ''), '	',''),
+      <if test="rqstDcd != null">
+        RQST_DCD = #{rqstDcd,jdbcType=VARCHAR},
+      </if>
+      <if test="vrfCd != null">
+        VRF_CD = #{vrfCd,jdbcType=VARCHAR},
+      </if>
+      <if test="vrfRmk != null">
+        VRF_RMK = #{vrfRmk,jdbcType=VARCHAR},
+      </if>
+      <if test="mtaTblId != null">
+        MTA_TBL_ID = #{mtaTblId,jdbcType=VARCHAR},
+      </if>
+      <if test="mtaTblPnm != null">
+        MTA_TBL_PNM = #{mtaTblPnm,jdbcType=VARCHAR},
+      </if>
+        COL_REL_ENTY_NM = #{colRelEntyNm,jdbcType=VARCHAR},
+        COL_REL_ATTR_NM = #{colRelAttrNm,jdbcType=VARCHAR},
+        COL_ORD      = #{colOrd,jdbcType=DECIMAL},
+        PK_YN        = #{pkYn,jdbcType=VARCHAR},
+        PK_ORD       = #{pkOrd,jdbcType=DECIMAL},
+        FK_YN        = #{fkYn,jdbcType=VARCHAR},
+        DATA_TYPE    = #{dataType,jdbcType=VARCHAR},
+        DATA_LEN     = #{dataLen,jdbcType=DECIMAL},
+        DATA_SCAL    = #{dataScal,jdbcType=DECIMAL},
+        DATA_FMT     = #{dataFmt,jdbcType=VARCHAR},
+        NONUL_YN     = #{nonulYn,jdbcType=VARCHAR},
+        DEFLT_VAL    = #{defltVal,jdbcType=VARCHAR},
+        CONST_CND    = #{constCnd,jdbcType=VARCHAR},
+        OPEN_YN      = #{openYn,jdbcType=VARCHAR},
+        PRSN_INFO_YN = #{prsnInfoYn,jdbcType=VARCHAR},
+        ENC_TRG_YN   = #{encTrgYn,jdbcType=VARCHAR},
+        PRI_RSN      = #{priRsn,jdbcType=VARCHAR},
+        OBJ_DESCN    = #{objDescnCol,jdbcType=VARCHAR},
+      <if test="objVers != null">
+        OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null">
+        REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="frsRqstUserId != null">
+        FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="frsRqstDtm != null">
+        FRS_RQST_DTM = NOW(),
+      </if>
+      <if test="rqstUserId != null">
+        RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+        RQST_DTM = NOW(),
+    </set>
+    where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      and RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+      and RQST_DTL_SNO = #{rqstDtlSno,jdbcType=DECIMAL}
+  </update>
+  
+  	<select id="selectWaqC" parameterType="map" resultMap="BaseResultMap">
+	<!-- 신규 적재 대상 추출 -->
+	SELECT 	/* WaqMtaColMapper.selectWaqC */
+			B.* 
+	  FROM WAQ_MTA_TBL A
+	       INNER JOIN WAQ_MTA_COL B
+	          ON A.RQST_NO = B.RQST_NO
+             AND A.RQST_SNO = B.RQST_SNO
+   	 WHERE A.RQST_NO = #{rqstNo}
+   	   AND A.RVW_STS_CD = '1'  --승인
+   	   AND A.RQST_DCD = 'CU'
+       AND B.REG_TYP_CD = 'C'
+       AND B.VRF_CD = '1' --등록가능
+	</select>
+	
+	<update id="updateidByKey" parameterType="kr.wise.meta.mta.service.WaqMtaCol">
+     <!-- 신규 적재 대상 ID 업데이트 -->
+     UPDATE /* WaqMtaColMapper.updateidByKey */
+     		WAQ_MTA_COL 
+        SET MTA_COL_ID = #{mtaColId,jdbcType=VARCHAR}
+  	  WHERE RQST_NO       = #{rqstNo,jdbcType=VARCHAR}
+        AND RQST_SNO     = #{rqstSno,jdbcType=DECIMAL}
+        AND RQST_DTL_SNO = #{rqstDtlSno}
+	</update>
+	
+	<update id="updateWaqCUD" parameterType="map">
+   	--WAQ ID, VERS 등을 업데이트...
+   	UPDATE 	/* WaqMtaColMapper.updateWaqCUD */
+   			WAQ_MTA_COL A
+   	   SET (MTA_COL_ID, MTA_TBL_ID,  OBJ_VERS, FRS_RQST_DTM, FRS_RQST_USER_ID) = (
+   	   		SELECT
+   	   			  D.MTA_COL_ID
+   	   			, B.MTA_TBL_ID
+   	   			, IFNULL(D.OBJ_VERS, 0) + 1 AS OBJ_VERS
+				, D.FRS_RQST_DTM
+				, D.FRS_RQST_USER_ID
+			  FROM WAQ_MTA_TBL B
+	      	       INNER JOIN WAM_MTA_COL D
+	      	         ON B.MTA_TBL_ID = D.MTA_TBL_ID
+	      	 WHERE B.RQST_NO = A.RQST_NO
+			   AND B.RQST_SNO = A.RQST_SNO
+			   AND D.MTA_COL_PNM = A.MTA_COL_PNM
+			   AND B.RVW_STS_CD = '1' --승인대상만...
+   	   	   )
+	WHERE A.RQST_NO = #{rqstNo}
+	  AND A.VRF_CD = '1' --등록가능
+	  AND EXISTS (
+	  	  SELECT 1
+	  		FROM WAQ_MTA_TBL B
+	      	     INNER JOIN WAM_MTA_COL D
+	      	        ON B.MTA_TBL_ID = D.MTA_TBL_ID
+	      	 WHERE B.RQST_NO = A.RQST_NO
+			   AND B.RQST_SNO = A.RQST_SNO
+			   AND D.MTA_COL_PNM = A.MTA_COL_PNM 
+			   AND B.RVW_STS_CD = '1' --승인대상만...
+	  )   	   
+   	</update>
+   	
+   <update id="updateWaqId" parameterType="map">
+   --주제영역 ID, 테이블 ID 업데이트...
+   	UPDATE 	/* WaqMtaColMapper.updateWaqId */
+   			WAQ_MTA_COL X 
+   	   SET (MTA_TBL_ID, APRV_DTM, APRV_USER_ID) = (
+		SELECT A.MTA_TBL_ID, NOW(), A.APRV_USER_ID
+		  FROM	WAQ_MTA_TBL A 
+	     WHERE A.RQST_NO = X.RQST_NO
+	       AND A.RQST_SNO = X.RQST_SNO
+	       AND A.RVW_STS_CD = '1' --승인대상만...	
+	) 
+	WHERE X.RQST_NO = #{rqstNo}
+	  AND X.VRF_CD = '1' --등록가능
+   </update>
+   
+   <delete id="deleteWAM" parameterType="map">
+    --WAM 삭제 (등록유형코드가REG_TYP_CD 변경, 삭제일 경우)
+	DELETE /* WaqMtaColMapper.deleteWAM */
+	FROM WAM_MTA_COL A
+	 WHERE 1 = 1 
+	   AND EXISTS (SELECT 1 
+	                 FROM WAQ_MTA_TBL B 
+	                      INNER JOIN WAQ_MTA_COL C
+	                          ON B.RQST_NO  = C.RQST_NO
+	                         AND B.RQST_SNO = C.RQST_SNO
+	                WHERE B.RQST_NO = #{rqstNo}
+	                  AND B.MTA_TBL_ID  = A.MTA_TBL_ID
+	                  AND C.MTA_COL_ID  = A.MTA_COL_ID
+	                  AND C.MTA_COL_PNM = A.MTA_COL_PNM
+	                  AND B.RVW_STS_CD = '1' 
+	                  AND C.VRF_CD     = '1' 
+	             )
+   </delete>
+
+   <sql id="wam_col_list">
+	   , A.MTA_COL_PNM, A.MTA_COL_LNM, A.MTA_TBL_ID, A.COL_REL_ENTY_NM, A.COL_REL_ATTR_NM, A.COL_ORD, A.PK_YN, A.PK_ORD
+	   , A.FK_YN, A.DATA_TYPE, A.DATA_LEN, A.DATA_SCAL, A.DATA_FMT, A.NONUL_YN, A.DEFLT_VAL, A.CONST_CND, A.OPEN_YN
+	   , A.PRSN_INFO_YN, A.ENC_TRG_YN, A.PRI_RSN, A.RQST_NO, A.RQST_SNO, A.RQST_DTL_SNO, A.OBJ_DESCN, A.OBJ_VERS, A.REG_TYP_CD
+	   , A.FRS_RQST_DTM, A.FRS_RQST_USER_ID, A.RQST_DTM, A.RQST_USER_ID, A.APRV_DTM, A.APRV_USER_ID
+   </sql>
+   
+   <sql id="wam_ins_col_list">
+	   , MTA_COL_PNM, MTA_COL_LNM, MTA_TBL_ID, COL_REL_ENTY_NM, COL_REL_ATTR_NM, COL_ORD, PK_YN, PK_ORD
+	   , FK_YN, DATA_TYPE, DATA_LEN, DATA_SCAL, DATA_FMT, NONUL_YN, DEFLT_VAL, CONST_CND, OPEN_YN
+	   , PRSN_INFO_YN, ENC_TRG_YN, PRI_RSN, RQST_NO, RQST_SNO, RQST_DTL_SNO, OBJ_DESCN, OBJ_VERS, REG_TYP_CD
+	   , FRS_RQST_DTM, FRS_RQST_USER_ID, RQST_DTM, RQST_USER_ID, APRV_DTM, APRV_USER_ID
+   </sql>
+   
+   <insert id="insertWAM" parameterType="map">
+   	--WAM 추가 (WAQ 내용을 추가, REG_TYP_CD 가 신규,변경일 경우)
+	INSERT 	/* WaqMtaColMapper.insertByRqstSno */
+			INTO WAM_MTA_COL
+	(
+	   MTA_COL_ID
+	   <include refid="wam_ins_col_list"/>
+	)
+	SELECT A.MTA_COL_ID
+	      <include refid="wam_col_list"/>
+	  FROM WAQ_MTA_COL A
+	       INNER JOIN WAQ_MTA_TBL B 
+	          ON A.RQST_NO  = B.RQST_NO
+	         AND A.RQST_SNO = B.RQST_SNO
+	 WHERE A.RQST_NO = #{rqstNo}
+	   AND A.VRF_CD = '1'
+	   AND A.REG_TYP_CD IN ('C', 'U')
+	   AND B.RVW_STS_CD = '1'
+   </insert>   	
+
+  <select id="selectMtaColDetail" resultMap="BaseResultMap" parameterType="kr.wise.meta.mta.service.WaqMtaCol" >
+    select /* WaqMtaColMapper.selectMtaColDetail */
+    <include refid="Base_Column_List" />
+     <!-- 비공개사유 코드명-->
+    , (	SELECT B.COMM_DTL_CD_NM
+          FROM WAA_COMM_DCD A
+               INNER JOIN WAA_COMM_DTL_CD B
+                  ON A.COMM_DCD_ID = B.COMM_DCD_ID
+                 AND B.EXP_DTM  =  STR_TO_DATE('9999-12-31', '%Y-%m-%d')  
+                 AND B.REG_TYP_CD IN ('C','U')
+         WHERE A.COMM_DCD = 'NOPEN_RSN_CD'
+           AND A.EXP_DTM  =  STR_TO_DATE('9999-12-31', '%Y-%m-%d')  
+           AND A.REG_TYP_CD IN ('C','U') 
+           AND B.COMM_DTL_CD = COL.PRI_RSN) PRI_RSN_CD_NM
+    from WAQ_MTA_COL COL
+    where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      and RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+      and RQST_DTL_SNO = #{rqstDtlSno,jdbcType=DECIMAL}
+  </select>
+
+
+  <!-- 검증로직 시작 -->
+  <update id="updateRqstDcdbyTable" parameterType="java.lang.String" >
+  <!-- 테이블 삭제요청이 DD 일 경우 컬럼도 동일하게 처리 -->
+  UPDATE /* WaqMtaColMapper.updateRqstDcdbyTable */
+  		WAQ_MTA_COL A
+     SET A.RQST_DCD = 'DD'
+   WHERE A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+     AND EXISTS (SELECT 1 
+     			   FROM WAQ_MTA_TBL B
+     			  WHERE B.RQST_NO  = A.RQST_NO
+     			    AND B.RQST_SNO = A.RQST_SNO
+     			    AND B.RQST_DCD = 'DD'
+                )
+  </update>
+  
+  <!-- <update id="updateCheckInit" parameterType="java.lang.String" >
+    UPDATE WAQ_MTA_COL A
+       SET (A.REG_TYP_CD, A.MTA_COL_ID) = 
+                     (SELECT CASE WHEN A.RQST_DCD = 'DD' THEN 'D' ELSE CASE WHEN MAX(B.MTA_COL_ID) IS NULL THEN 'C' ELSE 'U' END END
+                           , MAX(B.MTA_COL_ID) AS MTA_COL_ID 
+                        FROM WAM_MTA_COL B
+                             INNER JOIN WAM_MTA_TBL C
+                                ON C.MTA_TBL_ID = B.MTA_TBL_ID
+                               AND C.REG_TYP_CD IN ('C','U')
+                             INNER JOIN WAQ_MTA_TBL D
+                                ON C.ORG_CD   = D.ORG_CD
+                               AND C.INFO_SYS_CD = D.INFO_SYS_CD
+                               AND C.DB_CONN_TRG_ID = D.DB_CONN_TRG_ID
+                               AND C.MTA_TBL_PNM = D.MTA_TBL_PNM
+                        WHERE B.REG_TYP_CD IN ('C','U')
+                          AND B.MTA_COL_PNM = A.MTA_COL_PNM 
+                          AND D.RQST_NO  = A.RQST_NO
+                          AND D.RQST_SNO = A.RQST_SNO
+                          )
+        , A.VRF_CD = '4'     
+    WHERE A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+  </update> -->
+  
+  <update id="updateCheckInit" parameterType="java.lang.String" >
+    UPDATE 	/* WaqMtaColMapper.updateCheckInit */
+    		WAQ_MTA_COL A
+       SET (A.REG_TYP_CD, A.MTA_COL_ID) = 
+                     (SELECT CASE WHEN A.RQST_DCD = 'DD' THEN 'D' ELSE CASE WHEN MAX(B.MTA_COL_ID) IS NULL THEN 'C' ELSE 'U' END END
+                           , MAX(B.MTA_COL_ID) AS MTA_COL_ID
+                        FROM WAM_MTA_COL B
+                             INNER JOIN WAM_MTA_TBL C
+                                ON C.MTA_TBL_ID = B.MTA_TBL_ID 
+                             INNER JOIN WAQ_MTA_TBL D
+                                ON D.DB_SCH_ID   = C.DB_SCH_ID
+                               AND D.MTA_TBL_PNM = C.MTA_TBL_PNM  
+                        WHERE D.RQST_NO     = A.RQST_NO
+                          AND D.RQST_SNO    = A.RQST_SNO
+                          AND B.MTA_COL_PNM = A.MTA_COL_PNM 
+                          )
+        , A.VRF_CD = '4'     
+    WHERE A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+  </update>
+  
+  <insert id="insertnoWaqdelCol" parameterType="kr.wise.meta.mta.service.WaqMtaCol" >
+       <!-- erd에서 삭제된 대상은 삭제로 요청 -->
+         INSERT /* WaqMtaColMapper.insertnoWaqdelCol */
+         		INTO WAQ_MTA_COL 
+         (	  RQST_NO, RQST_SNO, RQST_DTL_SNO, MTA_COL_ID, MTA_COL_PNM, MTA_COL_LNM
+			, RQST_DCD, VRF_CD, VRF_RMK, MTA_TBL_ID, MTA_TBL_PNM, COL_REL_ENTY_NM, COL_REL_ATTR_NM
+			, COL_ORD, PK_YN, PK_ORD, FK_YN, DATA_TYPE, DATA_LEN, DATA_SCAL, DATA_FMT, NONUL_YN
+			, DEFLT_VAL, CONST_CND, OPEN_YN, PRSN_INFO_YN, ENC_TRG_YN, PRI_RSN, OBJ_DESCN, OBJ_VERS
+			, REG_TYP_CD, FRS_RQST_USER_ID, FRS_RQST_DTM, RQST_USER_ID, RQST_DTM
+         )
+         SELECT X.RQST_NO
+        	  , X.RQST_SNO		
+        	  , X.RQST_DTL_SNO + X.RNUM AS RQST_DTL_SNO   
+              , X.MTA_COL_ID
+              , X.MTA_COL_PNM
+              , X.MTA_COL_LNM
+        	  , X.RQST_DCD
+        	  , X.VRF_CD
+        	  , X.VRF_RMK
+           	  , X.MTA_TBL_ID
+           	  , X.MTA_TBL_PNM
+           	  , X.COL_REL_ENTY_NM
+           	  , X.COL_REL_ATTR_NM
+           	  , X.COL_ORD
+           	  , X.PK_YN
+           	  , X.PK_ORD
+           	  , X.FK_YN
+           	  , X.DATA_TYPE
+           	  , X.DATA_LEN
+           	  , X.DATA_SCAL
+           	  , X.DATA_FMT
+           	  , X.NONUL_YN
+           	  , X.DEFLT_VAL
+           	  , X.CONST_CND
+           	  , X.OPEN_YN
+           	  , X.PRSN_INFO_YN
+           	  , X.ENC_TRG_YN
+           	  , X.PRI_RSN
+           	  , X.OBJ_DESCN
+           	  , X.OBJ_VERS+1 AS OBJ_VERS
+           	  , X.REG_TYP_CD
+           	  , X.FRS_RQST_USER_ID
+           	  , X.FRS_RQST_DTM
+           	  , X.RQST_USER_ID
+           	  , X.RQST_DTM
+           FROM (
+                 SELECT C.RQST_NO
+         		      , C.RQST_SNO		
+         			  , (SELECT MAX(E.RQST_DTL_SNO) 
+         		           FROM WAQ_MTA_COL E 
+         		          WHERE E.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+         		            AND E.RQST_SNO = C.RQST_SNO
+         		        )  AS RQST_DTL_SNO		
+         		      , ROWNUM AS RNUM        
+         		      , B.MTA_COL_ID
+         		      , B.MTA_COL_PNM
+         		      , B.MTA_COL_LNM
+         			  , 'DD'  AS RQST_DCD
+         			  , 1     AS VRF_CD
+         			  , NULL AS VRF_RMK 
+         			  , B.MTA_TBL_ID
+         			  , C.MTA_TBL_PNM
+         			  , B.COL_REL_ENTY_NM
+         			  , B.COL_REL_ATTR_NM
+         			  , B.COL_ORD, B.PK_YN, B.PK_ORD, B.FK_YN, B.DATA_TYPE, B.DATA_LEN, B.DATA_SCAL, B.DATA_FMT, B.NONUL_YN
+         			  , B.DEFLT_VAL, B.CONST_CND, B.OPEN_YN, B.PRSN_INFO_YN, B.ENC_TRG_YN, B.PRI_RSN
+         			  , B.OBJ_DESCN
+         			  , B.OBJ_VERS + 1 AS OBJ_VERS
+         			  , 'D'  AS REG_TYP_CD
+         			  , C.FRS_RQST_USER_ID, C.FRS_RQST_DTM
+         			  , C.RQST_USER_ID, C.RQST_DTM
+         	       FROM WAM_MTA_TBL A
+         	    	    INNER JOIN WAQ_MTA_TBL C
+         	    	       ON C.ORG_CD         = A.ORG_CD
+         	    	      AND C.INFO_SYS_CD    = A.INFO_SYS_CD
+         	    	      AND C.DB_SCH_ID      = A.DB_SCH_ID
+         	    	      AND C.MTA_TBL_PNM    = A.MTA_TBL_PNM
+         	    	    INNER JOIN WAM_MTA_COL B
+         	    	       ON B.MTA_TBL_ID = A.MTA_TBL_ID  
+         	    	    LEFT JOIN WAQ_MTA_COL D
+         	    	      ON D.RQST_NO     = C.RQST_NO
+         	    	     AND D.RQST_SNO    = C.RQST_SNO
+         	    	     AND D.MTA_TBL_PNM = C.MTA_TBL_PNM
+         	    	     AND D.MTA_COL_PNM = B.MTA_COL_PNM 		       
+         	     WHERE C.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+         	       AND D.MTA_COL_PNM IS NULL 
+           )  X		  
+        
+  </insert>
+  
+  
+  <update id="updateTblPnmbyRqstSno" parameterType="string">
+  	<!-- 테이블 물리명 업데이트... -->
+  	UPDATE 	/* WaqMtaColMapper.updateTblPnmbyRqstSno */
+  			WAQ_MTA_COL A
+  	   SET MTA_TBL_PNM = ( 
+  	   					   SELECT MAX(MTA_TBL_PNM) FROM WAQ_MTA_TBL B
+  	                        WHERE B.RQST_NO = A.RQST_NO
+  	                          AND B.RQST_SNO = A.RQST_SNO
+  	   					 )
+  	
+     WHERE A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+       AND A.MTA_TBL_PNM IS NULL
+  </update>
+  
+  <!-- 컬럼순서 재정비  -->
+  <update id="updateColOrd" parameterType="string">
+  	 UPDATE /* WaqMtaColMapper.updateColOrd */
+  	 		WAQ_MTA_COL C 
+	    SET C.COL_ORD = (                                                     
+	           SELECT AA.COL_ORD                                                               
+	             FROM                                                                             
+	             (                                                                                
+	                 SELECT A.RQST_NO
+	                      , A.RQST_SNO
+	                      , A.RQST_DTL_SNO
+	                      , A.MTA_TBL_PNM, A.MTA_COL_PNM                                                              		
+	                      , RANK() OVER(PARTITION BY A.RQST_NO, A.RQST_SNO, A.MTA_TBL_PNM ORDER BY A.COL_ORD, A.MTA_COL_PNM) AS COL_ORD  
+	                   FROM WAQ_MTA_COL A                                            
+	                  WHERE A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}                                           
+	                    AND IFNULL(A.REG_TYP_CD,'X') !='D'                        
+	             ) AA                                                                              
+	            WHERE 1 = 1                                                                        
+	              AND AA.RQST_NO      = C.RQST_NO
+	              AND AA.RQST_SNO     = C.RQST_SNO   
+	              AND AA.RQST_DTL_SNO = C.RQST_DTL_SNO                                                     
+	              AND AA.MTA_TBL_PNM  = C.MTA_TBL_PNM                                                        
+	              AND AA.MTA_COL_PNM  = C.MTA_COL_PNM
+	              AND ROWNUM = 1
+	       )                                                                                      
+	 WHERE C.RQST_NO = #{rqstNo,jdbcType=VARCHAR}                                              
+	   AND IFNULL(C.REG_TYP_CD, 'X') != 'D'	
+  </update>
+  
+  <insert id="checkMtaColItem" parameterType="map">
+  
+  	/* WaqMtaColMapper.checkMtaColItem */
+  	
+  	<include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSnoSql"/>
+	<!-- 검증쿼리 : 메타데이터 컬럼 관리항목 (MTA01) -->
+	  AND A.REG_TYP_CD IN ('C','U')
+ 	  AND (    IFNULL(A.MTA_COL_LNM, '')  = '' 
+ 	        OR IFNULL(A.NONUL_YN, '')     = '' 
+			OR IFNULL(A.DATA_TYPE, '')    = ''
+			OR IFNULL(A.PK_YN, '')        = ''
+			OR IFNULL(A.OBJ_DESCN, '')    = ''
+			OR IFNULL(A.OPEN_YN, '')      = ''
+			OR IFNULL(A.PRSN_INFO_YN, '') = ''
+			OR IFNULL(A.ENC_TRG_YN, '')   = ''  			 		
+        )
+  </insert>
+  
+  <insert id="checkNopenRsn" parameterType="map">
+  
+  	/* WaqMtaColMapper.checkNopenRsn */
+  	
+  	<include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSnoSql"/>
+	<!-- 검증쿼리 : 메타데이터 컬럼 관리항목 (MTA01) -->
+	  AND REG_TYP_CD IN ('C','U')
+	  AND EXISTS (SELECT 1
+	                FROM WAQ_MTA_TBL X
+	               WHERE X.RQST_NO  = A.RQST_NO
+	                 AND X.RQST_SNO = A.RQST_SNO
+	                 AND X.OPEN_RSN_CD = '02'    
+	                 AND A.OPEN_YN != 'N'
+	                 AND IFNULL(A.PRI_RSN,'') = ''   
+	              )
+  </insert>
+  
+  <insert id="checkDupCol" parameterType="map">
+  
+  	/* WaqMtaColMapper.checkDupCol */
+  	
+  	<include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSnoSql"/>
+	<!-- 검증쿼리 : 중복 컬럼(PC001) -->
+    AND EXISTS (SELECT 1
+                  FROM WAQ_MTA_COL D
+                 WHERE A.RQST_NO     = D.RQST_NO
+                   AND A.RQST_SNO    = D.RQST_SNO
+                   AND A.MTA_COL_PNM = D.MTA_COL_PNM                 
+                   AND A.RQST_DTL_SNO != D.RQST_DTL_SNO 
+               )
+  </insert>
+  
+  <insert id="checkDupColLnm" parameterType="map">
+  
+  	/* WaqMtaColMapper.checkDupColLnm */
+  	
+  	<include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSnoSql"/>
+	<!-- 검증쿼리 : 중복 컬럼(PC001) -->
+    AND EXISTS (SELECT 1
+                  FROM WAQ_MTA_COL D
+                 WHERE A.RQST_NO     = D.RQST_NO
+                   AND A.RQST_SNO    = D.RQST_SNO
+                   AND A.MTA_COL_LNM = D.MTA_COL_LNM                 
+                   AND A.RQST_DTL_SNO != D.RQST_DTL_SNO 
+               )
+  </insert>
+  
+  <insert id="checkNotChgData" parameterType="map">
+  
+  	/* WaqMtaColMapper.checkNotChgData */
+  	
+<!--   	<include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSnoSql"/> -->
+  	<include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.updateVrfNotChg"/>
+	<!-- 검증쿼리 : 변경사항 없을경우 (PC000) -->
+      AND A.REG_TYP_CD = 'U'
+      AND EXISTS (SELECT 1
+            FROM WAM_MTA_TBL D 
+                 INNER JOIN WAM_MTA_COL E
+                    ON D.MTA_TBL_ID = E.MTA_TBL_ID
+                 INNER JOIN WAQ_MTA_TBL F
+                    ON F.MTA_TBL_ID = D.MTA_TBL_ID    
+           WHERE F.RQST_NO     = A.RQST_NO
+             AND F.RQST_SNO    = A.RQST_SNO           
+             AND E.MTA_COL_PNM = A.MTA_COL_PNM 
+             AND IFNULL(A.MTA_COL_LNM, '')  = IFNULL(E.MTA_COL_LNM, '')            
+			 AND IFNULL(A.DATA_TYPE, '')    = IFNULL(E.DATA_TYPE, '')
+			 AND IFNULL(A.DATA_LEN, '')      = IFNULL(E.DATA_LEN, '')			              
+			 AND IFNULL(A.NONUL_YN, '')     = IFNULL(E.NONUL_YN, '')			
+	  	     AND IFNULL(A.PK_YN, '_')        = IFNULL(E.PK_YN, '') 			 
+			 AND NOT EXISTS (SELECT 1 
+			                   FROM WAQ_RQST_VRF_DTLS V 
+			                  WHERE V.RQST_NO      = A.RQST_NO 
+			                    AND V.RQST_SNO     = A.RQST_SNO 
+			                    AND V.RQST_DTL_SNO = A.RQST_DTL_SNO
+			                    AND V.VRF_DTL_CD != 'MTA01'
+			                 )
+          )
+  </insert>
+  <!-- 메타데이터등록 요청건 삭제 -->
+   <delete id="deleteByPrimaryKey" parameterType="kr.wise.meta.mta.service.WaqMtaCol" >
+   delete /* WaqMtaColMapper.deleteByPrimaryKey */
+   from WAQ_MTA_COL
+   where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+     and RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+     and RQST_DTL_SNO = #{rqstDtlSno,jdbcType=DECIMAL}
+ </delete>
+ 
+ <insert id="insertByWatRqstSno" parameterType="kr.wise.meta.mta.service.WaqMtaTbl">
+    
+  	INSERT 	/* WaqMtaColMapper.insertByWatRqstSno */
+  			INTO WAQ_MTA_COL
+  	(
+	      RQST_NO, RQST_SNO, RQST_DTL_SNO, MTA_COL_ID, MTA_COL_PNM, MTA_COL_LNM, RQST_DCD, MTA_TBL_ID
+		, MTA_TBL_PNM, COL_REL_ENTY_NM, COL_REL_ATTR_NM, COL_ORD
+		, PK_YN, PK_ORD, FK_YN, DATA_TYPE, DATA_LEN, DATA_SCAL, DATA_FMT
+		, NONUL_YN, DEFLT_VAL, OBJ_DESCN, OBJ_VERS, REG_TYP_CD, FRS_RQST_USER_ID
+		, FRS_RQST_DTM, RQST_USER_ID, RQST_DTM, CONST_CND, OPEN_YN, PRSN_INFO_YN
+		, ENC_TRG_YN, PRI_RSN 		
+		, FULL_PATH 
+	)
+	SELECT B.RQST_NO, B.RQST_SNO
+		, (SELECT IFNULL(MAX(RQST_DTL_SNO), 0) 
+	           FROM WAQ_MTA_COL 
+	          WHERE RQST_NO = #{rqstNo} 
+	            AND RQST_SNO = #{rqstSno} 
+	       ) + ROWNUM AS RQST_DTL_SNO
+		, D.MTA_COL_ID AS MTA_COL_ID
+		, C.DBC_COL_NM                         AS MTA_COL_PNM
+		, IFNULL(D.MTA_COL_LNM, C.DBC_COL_KOR_NM) AS MTA_COL_LNM
+		, 'CU' AS RQST_DCD
+		, D.MTA_TBL_ID      AS MTA_TBL_ID
+		, A.DBC_TBL_NM      AS MTA_TBL_PNM
+		, D.COL_REL_ENTY_NM AS COL_REL_ENTY_NM
+		, D.COL_REL_ATTR_NM AS COL_REL_ATTR_NM
+		, C.ORD             AS COL_ORD
+		, IFNULL(C.PK_YN,'N')
+		, C.PK_ORD
+		, C.FK_YN
+		, C.DATA_TYPE
+		, CASE WHEN C.DATA_TYPE IN ('NUMBER','NUMERIC') THEN C.DATA_LEN ||','|| C.DATA_PNT  
+		<!-- C.DATA_LEN에서  TO_CHAR(C.DATA_LEN) 변경-->
+		       ELSE TO_CHAR(C.DATA_LEN)
+		   END AS DATA_LEN    
+		, C.DATA_PNT AS DATA_SCAL
+		, D.DATA_FMT AS DATA_FMT
+		, (CASE WHEN C.NULL_YN = 'N' THEN 'Y' ELSE 'N' END) AS NONUL_YN 		        
+		, C.DEFLT_VAL
+		, D.OBJ_DESCN AS OBJ_DESCN
+		, 1  AS OBJ_VERS
+		, '' AS REG_TYP_CD
+		, '' AS FRS_RQST_USER_ID
+		, B.FRS_RQST_DTM
+		, B.RQST_USER_ID
+		, NOW()
+		, D.CONST_CND    AS CONST_CND
+		, (CASE WHEN D.OPEN_YN IS NULL THEN 
+		             CASE WHEN B.OPEN_RSN_CD = '01' THEN 'Y'
+		                  WHEN B.OPEN_RSN_CD = '02' THEN 'N'
+		              END    
+		        ELSE D.OPEN_YN   
+		    END)  AS OPEN_YN
+		, D.PRSN_INFO_YN AS PRSN_INFO_YN
+		, D.ENC_TRG_YN   AS ENC_TRG_YN
+		, CASE WHEN IFNULL(D.PRI_RSN,'') = '' THEN '00' ELSE D.PRI_RSN END        AS PRI_RSN		
+		, D.FULL_PATH    AS FULL_PATH
+    FROM WAT_DBC_TBL A 
+	     INNER JOIN WAQ_MTA_TBL B
+	        ON B.DB_SCH_ID   = A.DB_SCH_ID
+	       AND B.MTA_TBL_PNM = A.DBC_TBL_NM
+	     INNER JOIN WAT_DBC_COL C
+	        ON C.DB_SCH_ID   = A.DB_SCH_ID
+	       AND C.DBC_TBL_NM  = A.DBC_TBL_NM
+	     LEFT JOIN WAM_MTA_COL D
+	       ON D.MTA_TBL_ID  = B.MTA_TBL_ID	    
+	      AND D.MTA_COL_PNM = C.DBC_COL_NM    
+    WHERE 1 = 1	
+	  AND B.RQST_NO  = #{rqstNo}
+	  AND B.RQST_SNO = #{rqstSno}
+  </insert>
+  
+  <select id="selectPopMtaColRqstDetail" parameterType="kr.wise.meta.mta.service.WaqMtaCol"  resultMap="BaseResultMap">
+    
+  	SELECT 	/* WaqMtaColMapper.selectPopMtaColRqstDetail */
+  			C.RQST_NO
+  	     , C.RQST_SNO
+  	     , C.RQST_DTL_SNO
+  	     , C.MTA_COL_ID
+  	     , C.MTA_COL_PNM
+  	     , C.MTA_COL_LNM
+	     , C.RQST_DCD
+	     , C.VRF_CD
+	     , C.VRF_RMK
+	     , C.MTA_TBL_ID
+	     , C.MTA_TBL_PNM
+	     , C.COL_REL_ENTY_NM
+	     , C.COL_REL_ATTR_NM
+	     , C.COL_ORD
+	     , C.PK_YN
+	     , C.PK_ORD
+	     , C.FK_YN
+	     , C.DATA_TYPE
+	     , C.DATA_LEN
+	     , C.DATA_SCAL
+	     , C.DATA_FMT
+	     , C.NONUL_YN
+	     , C.DEFLT_VAL
+	     , C.CONST_CND
+	     , C.OPEN_YN
+	     , C.PRSN_INFO_YN
+	     , C.ENC_TRG_YN
+	     , C.PRI_RSN
+	     , C.OBJ_DESCN
+	     , C.OBJ_VERS
+	     , C.REG_TYP_CD
+	     , C.FRS_RQST_USER_ID
+	     , C.FRS_RQST_DTM
+	     , C.RQST_USER_ID
+	     , C.RQST_DTM
+	     , C.APRV_USER_ID
+	     , C.APRV_DTM
+	     , M.RQST_STEP_CD
+         , (	SELECT B.COMM_DTL_CD_NM
+               FROM WAA_COMM_DCD A
+                    INNER JOIN WAA_COMM_DTL_CD B
+                       ON A.COMM_DCD_ID = B.COMM_DCD_ID
+                      AND B.EXP_DTM  =  STR_TO_DATE('9999-12-31', '%Y-%m-%d')  
+                      AND B.REG_TYP_CD IN ('C','U')
+              WHERE A.COMM_DCD = 'NOPEN_RSN_CD'
+                AND A.EXP_DTM  =  STR_TO_DATE('9999-12-31', '%Y-%m-%d')  
+                AND A.REG_TYP_CD IN ('C','U') 
+                AND B.COMM_DTL_CD = C.PRI_RSN
+            ) AS PRI_RSN_CD_NM
+     FROM WAQ_MTA_COL C
+          LEFT JOIN WAQ_MSTR M
+            ON M.RQST_NO = C.RQST_NO 
+    WHERE C.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      and C.RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+      and C.RQST_DTL_SNO = #{rqstDtlSno,jdbcType=DECIMAL}
+  </select>		
+  
+  <update id="updatePrsnInfo" parameterType="kr.wise.meta.mta.service.WaqMtaCol" >
+  	UPDATE 	/* WaqMtaColMapper.updatePrsnInfo */
+  			WAQ_MTA_COL
+  	   SET OPEN_YN      =  #{openYn,jdbcType=VARCHAR}
+  	     , PRSN_INFO_YN =  #{prsnInfoYn,jdbcType=VARCHAR}
+  	     , ENC_TRG_YN   =  #{encTrgYn,jdbcType=VARCHAR}
+  	     , PRI_RSN      =  #{priRsn,jdbcType=VARCHAR}
+     WHERE 1 = 1
+       AND RQST_NO      = #{rqstNo,jdbcType=VARCHAR}
+       AND RQST_SNO     = #{rqstSno,jdbcType=DECIMAL}
+       AND RQST_DTL_SNO = #{rqstDtlSno,jdbcType=DECIMAL}
+  </update>
+  
+  <select id="checkMtaColNm" parameterType="kr.wise.meta.mta.service.WaqMtaCol" resultType="java.lang.Integer">
+  	SELECT /* WaqMtaColMapper.checkMtaColNm */
+  		COUNT(1) CNT 
+  	FROM 
+  		WAQ_MTA_COL 
+  	WHERE 
+  		RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+  		AND RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+  		AND RQST_DTL_SNO != #{rqstDtlSno,jdbcType=DECIMAL}
+  		AND MTA_COL_LNM = #{mtaColLnm,jdbcType=DECIMAL}
+  </select>
+  
+</mapper>

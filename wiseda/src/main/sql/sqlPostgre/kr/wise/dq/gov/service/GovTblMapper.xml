@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.dq.gov.service.GovTblMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.dq.gov.service.GovTblVO" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap" >
+    <id 	column="COL_ID"        		property="colId"	jdbcType="VARCHAR" />
+    <result column="TBL_LNM"        		property="tblLnm"	jdbcType="VARCHAR" />
+    <result column="TBL_PNM"        		property="tblPnm"	jdbcType="VARCHAR" />
+    <result column="TBL_ID"        		property="tblId"		jdbcType="VARCHAR" />
+    <result column="COL_LNM" 			property="colLnm"		jdbcType="VARCHAR" />
+    <result column="COL_PNM" 			property="colPnm"		jdbcType="VARCHAR" />
+    <result column="SYS_AREA_ID"    	property="sysAreaId"	jdbcType="VARCHAR" />
+    <result column="DB_CONN_TRG_ID"		property="dbConnTrgId"	jdbcType="VARCHAR" />
+    <result column="DB_SCH_ID" 			property="dbSchId"			jdbcType="VARCHAR" />
+    <result column="SUBJ_ALL_PATH" 		property="subjAllPath"		jdbcType="VARCHAR" />
+    <result column="OBJ_DESCN" 		    property="objDescn" 		jdbcType="VARCHAR" />
+    <result column="DATA_TYPE" 		    property="dataType" 		jdbcType="VARCHAR" />
+    <result column="PRECISION" 		    property="precision" 		jdbcType="VARCHAR" />
+    <result column="DATA_LEN" 		    property="dataLen" 		jdbcType="VARCHAR" />
+    <result column="SCAL" 			    property="scal" 		jdbcType="VARCHAR" />
+    <result column="NULL_YN" 		    property="nullYn" 		jdbcType="VARCHAR" />
+    <result column="PK_YN" 			    property="pkYn" 		jdbcType="VARCHAR" />
+    <result column="PK_ORD" 		    property="pkOrd" 		jdbcType="VARCHAR" />
+    <result column="FK_YN" 			    property="fkYn" 		jdbcType="VARCHAR" />
+    <result column="WRIT_DTM" 		    property="writDtm" 		jdbcType="VARCHAR" />
+    <result column="WRIT_USER_ID" 	    property="writUserId" 		jdbcType="VARCHAR" />
+    <result column="VRF_RMK" 		    property="vrfRmk" 		jdbcType="VARCHAR" />
+    <result column="DIC_ORGN" 		    property="dicOrgn" 		jdbcType="VARCHAR" />
+    <result column="EXP_DTM" 		    property="expDtm" 		jdbcType="VARCHAR" />
+    <result column="DB_CONN_TRG_LNM" 		    property="dbConnTrgLnm" 		jdbcType="VARCHAR" />
+    <result column="SYS_AREA_LNM" 		    property="sysAreaLnm" 		jdbcType="VARCHAR" />
+    <result column="DB_SCH_LNM" 		    property="dbSchLnm" 		jdbcType="VARCHAR" />
+    <result column="DB_CONN_TRG_PNM" 		    property="dbConnTrgPnm" 		jdbcType="VARCHAR" />
+    <result column="SYS_AREA_PNM" 		    property="sysAreaPnm" 		jdbcType="VARCHAR" />
+    <result column="DB_SCH_PNM" 		    property="dbSchPnm" 		jdbcType="VARCHAR" />
+    <result column="COL_ORD" 		    property="colOrd" 		jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+		  TBL_ID        
+	 	, TBL_LNM  	
+	  	, TBL_PNM  	       
+		, COL_ID        
+		, COL_LNM 		
+		, SYS_AREA_ID   
+		, DB_CONN_TRG_ID
+		, DB_SCH_ID 	
+		, SUBJ_ALL_PATH 
+		, OBJ_DESCN 	
+		, DATA_TYPE 	
+		, PRECISION 	
+		, DATA_LEN 		
+		, SCAL 			
+		, NULL_YN 		
+		, PK_YN 		
+		, PK_ORD 		
+		, FK_YN 		
+		, WRIT_DTM 		
+		, WRIT_USER_ID 	
+		, VRF_RMK 		
+		, DIC_ORGN 		
+		, EXP_DTM
+		, DB_CONN_TRG_LNM
+		, SYS_AREA_LNM
+		, DB_SCH_LNM
+		, DB_CONN_TRG_PNM
+		, SYS_AREA_PNM
+		, DB_SCH_PNM
+		, COL_ORD
+  </sql>
+  
+  <select id="selectGovTblList" parameterType="kr.wise.dq.gov.service.GovTblVO" resultMap="BaseResultMap" >
+	SELECT A.TBL_ID        	
+		 , A.TBL_LNM  	
+		 , A.TBL_PNM  	      	
+		 , A.COL_ID        	
+		 , A.COL_LNM 		
+		 , A.COL_PNM 		
+		 , A.DB_CONN_TRG_ID	
+		 , A.DB_SCH_ID 		
+		 , A.OBJ_DESCN 		
+		 , A.DATA_TYPE 		
+		 , A.PRECISION 		
+		 , A.DATA_LEN 		
+		 , A.SCAL 			
+		 , A.NULL_YN 		
+		 , A.PK_YN 			
+		 , A.PK_ORD 		
+		 , A.FK_YN 			
+		 , A.WRIT_DTM 		
+		 , A.WRIT_USER_ID 	
+		 , A.VRF_RMK 		
+		 , A.DIC_ORGN 		
+		 , A.EXP_DTM
+		 , A.COL_ORD
+     	 , GET_USER_NM(A.WRIT_USER_ID) AS WRIT_USER_NM
+	  FROM GOV_TBL A
+	 INNER JOIN WAA_USER U
+		ON A.WRIT_USER_ID = U.USER_ID
+	   AND U.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	   AND U.REG_TYP_CD IN ('C', 'U')
+  	<where>
+	   AND A.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')
+	   <if test="tblPnm != null" >
+	   	AND (UPPER(A.TBL_LNM) LIKE UPPER( '%' || #{tblPnm,jdbcType=VARCHAR} || '%')
+					OR UPPER(A.TBL_PNM) LIKE UPPER( '%' || #{tblPnm,jdbcType=VARCHAR} || '%') )
+		</if>
+		<if test="colPnm != null" >
+			AND (UPPER(A.COL_LNM) LIKE UPPER( '%' || #{colPnm,jdbcType=VARCHAR} || '%' )
+					OR UPPER(A.COL_PNM) LIKE UPPER( '%' || #{colPnm,jdbcType=VARCHAR} || '%' ) )
+		</if>
+      	<if test="dbConnTrgId != null">
+   		AND A.DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR}
+   	</if>
+   	<if test="dbSchId != null">
+   		AND A.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+   	</if>
+	</where>
+	 ORDER BY A.DB_CONN_TRG_ID, A.DB_SCH_ID, A.TBL_PNM, A.COL_ORD
+           
+  </select>
+
+  <select id="selectGovTblDetail" resultMap="BaseResultMap"  parameterType="kr.wise.dq.gov.service.GovTblVO" >
+    SELECT A.TBL_ID        	
+		  , A.TBL_LNM        	
+		  , A.COL_ID        	
+		  , A.COL_LNM 		
+		  , A.COL_PNM 		
+		  , A.SYS_AREA_ID    
+		  , A.DB_CONN_TRG_ID	
+		  , A.DB_SCH_ID 		
+		  , A.SUBJ_ALL_PATH 	
+		  , A.OBJ_DESCN 		
+		  , A.DATA_TYPE 		
+		  , A.PRECISION 		
+		  , A.DATA_LEN 		
+		  , A.SCAL 			
+		  , A.NULL_YN 		
+		  , A.PK_YN 			
+		  , A.PK_ORD 		
+		  , A.FK_YN 			
+		  , A.WRIT_DTM 		
+		  , A.WRIT_USER_ID 	
+		  , A.VRF_RMK 		
+		  , A.DIC_ORGN 
+		  , A.COL_ORD 
+		, A.DB_CONN_TRG_LNM
+		, A.SYS_AREA_LNM
+		, A.DB_SCH_LNM
+		, A.DB_CONN_TRG_PNM
+		, A.SYS_AREA_PNM
+		, A.DB_SCH_PNM
+       FROM GOV_TBL A
+     WHERE 1=1
+       AND A.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')
+       AND A.TBL_ID = #{tblId,jdbcType=VARCHAR}
+  </select>
+
+  
+    <update id="updateExpDtm" parameterType="kr.wise.dq.gov.service.GovTblVO">
+  	UPDATE GOV_TBL SET
+  		EXP_DTM = NOW()
+  	WHERE COL_ID = #{colId}
+  	  AND EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')
+  </update>
+  
+  <delete id="deleteByPrimaryKey" parameterType="kr.wise.dq.gov.service.GovTblVO" >
+    DELETE FROM GOV_TBL
+     WHERE COL_ID = #{colId,jdbcType=VARCHAR}
+  </delete>
+  
+  
+  <insert id="insertGovTbl" parameterType="kr.wise.dq.gov.service.GovTblVO" >
+    INSERT INTO GOV_TBL
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="colId != null" >     
+		COL_ID  
+		, EXP_DTM
+	  </if>
+	  <if test="dbConnTrgId != null" >       
+		, DB_CONN_TRG_ID       
+	  </if>
+	  <if test="dbSchId != null" >       
+		, DB_SCH_ID    
+	  </if>
+      <if test="tblLnm != null" >       
+		, TBL_LNM        
+	  </if>
+      <if test="tblPnm != null" >       
+		, TBL_PNM        
+		  </if>
+      <if test="tblId != null" >
+        , TBL_ID 
+      </if>
+      <if test="colLnm != null" >     
+		, COL_LNM
+		  </if>
+      <if test="colPnm != null" >     
+		, COL_PNM 		
+		  </if>
+      <if test="objDescn != null" >     
+		, OBJ_DESCN 	
+		  </if>
+      <if test="dataType != null" >     
+		, DATA_TYPE 	
+		  </if>
+      <if test="precision != null" >     
+		, PRECISION 	
+		  </if>
+      <if test="dataLen != null" >     
+		, DATA_LEN 		
+		  </if>
+      <if test="scal != null" >     
+		, SCAL 			
+		  </if>
+      <if test="nullYn != null" >     
+		, NULL_YN 		
+		  </if>
+      <if test="pkYn != null" >     
+		, PK_YN 		
+		  </if>
+      <if test="pkOrd != null" >     
+		, PK_ORD 		
+		  </if>
+      <if test="colOrd != null" >     
+		, COL_ORD 		
+		  </if>
+      <if test="fkYn != null" >     
+		, FK_YN 		
+		  </if>
+      <if test="writUserId != null" >     
+		, WRIT_USER_ID 	
+		  </if>
+      <if test="vrfRmk != null" >     
+		, VRF_RMK 		
+		  </if>
+      <if test="dicOrgn != null" >     
+		, DIC_ORGN 		
+		  </if>
+      <if test="dbConnTrgPnm != null" >     
+		, DB_CONN_TRG_PNM 
+		, DB_CONN_TRG_LNM 		
+		  </if>
+      <if test="dbSchPnm != null" >     
+		, DB_SCH_PNM
+		, DB_SCH_LNM	
+		  </if>
+      <if test="sysAreaPnm != null" >     
+		, SYS_AREA_PNM 
+		, SYS_AREA_LNM 
+		  </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+     <if test="colId != null" >
+         #{colId,jdbcType=VARCHAR}
+         , TO_DATE( '9999-12-31', 'YYYY-MM-DD')
+      <if test="dbConnTrgId != null" >       
+		, #{dbConnTrgId,jdbcType=VARCHAR}
+	  </if>
+	  <if test="dbSchId != null" >       
+		, #{dbSchId,jdbcType=VARCHAR} 
+	  </if>
+      </if>
+      <if test="tblLnm != null" >       
+		, #{tblLnm,jdbcType=VARCHAR}    
+	  </if>
+      <if test="tblPnm != null" >       
+		, #{tblPnm,jdbcType=VARCHAR}    
+		  </if>
+      <if test="tblId != null" >     
+		, #{tblId,jdbcType=VARCHAR}     
+		  </if>
+      <if test="colLnm != null" >     
+		, #{colLnm,jdbcType=VARCHAR}	
+		  </if>
+      <if test="colPnm != null" >     
+		, #{colPnm,jdbcType=VARCHAR}	
+		  </if>
+      <if test="objDescn != null" >     
+		, #{objDescn,jdbcType=VARCHAR}	
+		  </if>
+      <if test="dataType != null" >     
+		, #{dataType,jdbcType=VARCHAR}	
+		  </if>
+      <if test="precision != null" >     
+		, #{precision,jdbcType=VARCHAR}	
+		  </if>
+      <if test="dataLen != null" >     
+		, #{dataLen,jdbcType=VARCHAR}	
+		  </if>
+      <if test="scal != null" >     
+		, #{scal,jdbcType=VARCHAR}			
+		  </if>
+      <if test="nullYn != null" >     
+		, #{nullYn,jdbcType=VARCHAR}		
+		  </if>
+      <if test="pkYn != null" >     
+		, #{pkYn,jdbcType=VARCHAR}		
+		  </if>
+      <if test="pkOrd != null" >     
+		, #{pkOrd,jdbcType=VARCHAR}	
+		  </if>
+      <if test="colOrd != null" >     
+		, #{colOrd,jdbcType=VARCHAR}	
+		  </if>
+      <if test="fkYn != null" >     
+		, #{fkYn,jdbcType=VARCHAR}	
+		  </if>
+      <if test="writUserId != null" >     
+		, #{writUserId,jdbcType=VARCHAR} 	
+		  </if>
+      <if test="vrfRmk != null" >     
+		, #{vrfRmk,jdbcType=VARCHAR}		
+		  </if>
+      <if test="dicOrgn != null" >     
+		, #{dicOrgn,jdbcType=VARCHAR}	
+		  </if>
+       <if test="dbConnTrgPnm != null" >     
+		, #{dbConnTrgPnm,jdbcType=VARCHAR}
+		, (SELECT DB_CONN_TRG_LNM FROM WAA_DB_CONN_TRG
+			WHERE DB_CONN_TRG_PNM =#{dbConnTrgPnm,jdbcType=VARCHAR}
+			AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+			GROUP BY DB_CONN_TRG_LNM)	
+		  </if>
+      <if test="dbSchPnm != null" >     
+		, #{dbSchPnm,jdbcType=VARCHAR}
+		, (SELECT DB_SCH_LNM FROM WAA_DB_SCH
+		WHERE DB_SCH_PNM =#{dbSchPnm,jdbcType=VARCHAR}
+			AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+		GROUP BY DB_SCH_LNM)
+		  </if>
+      <if test="sysAreaPnm != null" >     
+		, #{sysAreaPnm,jdbcType=VARCHAR}
+		, (SELECT SYS_AREA_LNM FROM WAA_SYS_AREA
+			WHERE SYS_AREA_PNM = #{sysAreaPnm,jdbcType=VARCHAR}
+			GROUP BY SYS_AREA_LNM )			
+		  </if>
+    </trim>
+  </insert>
+    
+  
+</mapper>

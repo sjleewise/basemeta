@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.meta.pdmrel.service.WaePdmRelColMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.meta.model.service.WaqPdmCol" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+    <id column="RQST_NO" property="rqstNo" jdbcType="VARCHAR" />
+    <id column="RQST_SNO" property="rqstSno" jdbcType="DECIMAL" />
+    <id column="RQST_DTL_SNO" property="rqstDtlSno" jdbcType="DECIMAL" />
+    <result column="PDM_COL_ID" property="pdmColId" jdbcType="VARCHAR" />
+    <result column="PDM_COL_PNM" property="pdmColPnm" jdbcType="VARCHAR" />
+    <result column="PDM_COL_LNM" property="pdmColLnm" jdbcType="VARCHAR" />
+    <result column="BF_PDM_COL_PNM" property="bfPdmColPnm" jdbcType="VARCHAR" />
+
+    <result column="PDM_TBL_ID" property="pdmTblId" jdbcType="VARCHAR" />
+    <result column="PDM_TBL_PNM" property="pdmTblPnm" jdbcType="VARCHAR" />
+    <result column="MDL_LNM" property="mdlLnm" jdbcType="VARCHAR" />
+    <result column="UPP_SUBJ_LNM" property="uppSubjLnm" jdbcType="VARCHAR" />
+    <result column="SUBJ_ID" property="subjId" jdbcType="VARCHAR" />
+    <result column="SUBJ_LNM" property="subjLnm" jdbcType="VARCHAR" />
+    <result column="SDITM_ID" property="sditmId" jdbcType="VARCHAR" />
+    <result column="COL_ORD" property="colOrd" jdbcType="DECIMAL" />
+    <result column="DATA_TYPE" property="dataType" jdbcType="VARCHAR" />
+    <result column="DATA_LEN" property="dataLen" jdbcType="DECIMAL" />
+    <result column="DATA_SCAL" property="dataScal" jdbcType="DECIMAL" />
+    <result column="PK_YN" property="pkYn" jdbcType="VARCHAR" />
+    <result column="PK_ORD" property="pkOrd" jdbcType="DECIMAL" />
+    <result column="NONUL_YN" property="nonulYn" jdbcType="VARCHAR" />
+    <result column="DEFLT_VAL" property="defltVal" jdbcType="VARCHAR" />
+    <result column="ENC_YN" property="encYn" jdbcType="VARCHAR" /> 
+  </resultMap>
+
+  <insert id="insertSelective" parameterType="kr.wise.meta.pdmrel.service.WaePdmRelCol" >
+  	
+    INSERT INTO WAE_PDM_REL_COL
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+        RQST_NO,
+       
+      <if test="pdmRelColId != null" >
+        PDM_REL_COL_ID,
+      </if>  
+      <if test="pdmRelPnm != null" >
+        PDM_REL_PNM,
+      </if>
+      <if test="pdmRelLnm != null" >
+        PDM_REL_LNM,
+      </if>
+      <if test="pdmRelId != null" >
+        PDM_REL_ID,
+      </if>      
+                     
+      <if test="vrfCd != null" >
+        VRF_CD,
+      </if>
+      <if test="vrfRmk != null" >
+        VRF_RMK,
+      </if>
+      <if test="rqstDcd != null" >
+        RQST_DCD,
+      </if>
+      <if test="relTypCd != null" >
+        REL_TYP_CD,
+      </if>
+      <if test="crdTypCd != null" >
+        CRD_TYP_CD,
+      </if>
+      <if test="paOptTypCd != null" >
+        PA_OPT_TYP_CD,
+      </if>
+      <if test="paSubjId != null" >
+        PA_SUBJ_ID,
+      </if>
+      <if test="paFullPath != null" >
+        PA_FULL_PATH,
+      </if>
+      <if test="paTblId != null" >
+        PA_ENTY_ID,
+      </if>  
+      <if test="paTblPnm != null" >
+        PA_TBL_PNM,
+      </if>      
+      <if test="paColPnm != null" >
+        PA_COL_PNM,
+      </if>      
+      
+      <if test="chSubjId != null" >
+        CH_SUBJ_ID,
+      </if>
+      <if test="chFullPath != null" >
+        CH_FULL_PATH,
+      </if>
+      <if test="chTblId != null" >
+        CH_ENTY_ID,
+      </if>   
+      <if test="chTblPnm != null" >
+        CH_TBL_PNM,
+      </if>   
+      <if test="chColPnm != null" >
+        CH_COL_PNM,
+      </if>     
+             
+      <if test="objDescn != null" >
+        OBJ_DESCN,
+      </if>
+        OBJ_VERS,
+      <if test="regTypCd != null" >
+        REG_TYP_CD,
+      </if>
+        FRS_RQST_DTM,
+        FRS_RQST_USER_ID,
+        RQST_DTM,
+      <if test="rqstUserId != null" >
+        RQST_USER_ID,
+      </if>
+      <if test="aprvDtm != null" >
+        APRV_DTM,
+      </if>
+      <if test="aprvUserId != null" >
+        APRV_USER_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+        #{rqstNo,jdbcType=VARCHAR},
+       
+      <if test="pdmRelColId != null" >
+        #{pdmRelColId,jdbcType=VARCHAR},
+      </if>     
+      <if test="pdmRelPnm != null" >
+        #{pdmRelPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="pdmRelLnm != null" >
+        #{pdmRelLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="pdmRelId != null" >
+        #{pdmRelId,jdbcType=VARCHAR},
+      </if> 
+                
+      <if test="vrfCd != null" >
+        #{vrfCd,jdbcType=VARCHAR},
+      </if>
+      <if test="vrfRmk != null" >
+        #{vrfRmk,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDcd != null" >
+        #{rqstDcd,jdbcType=VARCHAR},
+      </if>
+      <if test="relTypCd != null" >
+        #{relTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="crdTypCd != null" >
+        #{crdTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="paOptTypCd != null" >
+        #{paOptTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="paSubjId != null" >
+        #{paSubjId,jdbcType=VARCHAR},
+      </if>
+      <if test="paFullPath != null" >
+        #{paFullPath,jdbcType=VARCHAR},
+      </if>
+      <if test="paTblId != null" >
+        #{paTblId,jdbcType=VARCHAR},
+      </if>            
+      <if test="paTblPnm != null" >
+        #{paTblPnm,jdbcType=VARCHAR},
+      </if>      
+      <if test="paColPnm != null" >
+        #{paColPnm,jdbcType=VARCHAR},
+      </if>  
+            
+      <if test="chSubjId != null" >
+        #{chSubjId,jdbcType=VARCHAR},
+      </if>
+      <if test="chFullPath != null" >
+        #{chFullPath,jdbcType=VARCHAR},
+      </if>
+      <if test="chTblId != null" >
+        #{chTblId,jdbcType=VARCHAR},
+      </if> 
+       <if test="chTblPnm != null" >
+        #{chTblPnm,jdbcType=VARCHAR},
+      </if>   
+      <if test="chColPnm != null" >
+        #{chColPnm,jdbcType=VARCHAR}, 
+      </if>  
+           
+      <if test="objDescn != null" >
+        #{objDescn,jdbcType=VARCHAR},
+      </if>
+	    1,
+      <if test="regTypCd != null" >
+        #{regTypCd,jdbcType=VARCHAR},
+      </if>
+        SYSDATE,
+        #{frsRqstUserId,jdbcType=VARCHAR},
+        SYSDATE,
+      <if test="rqstUserId != null" >
+        #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDtm != null" >
+        #{aprvDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aprvUserId != null" >
+        #{aprvUserId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <delete id="deleteByRqstNo" parameterType="kr.wise.commons.rqstmst.service.WaqMstr">
+  	 DELETE FROM WAE_PDM_REL_COL
+  	  WHERE RQST_NO = #{rqstNo, jdbcType=VARCHAR}
+  </delete>
+  
+  <insert id="insertWaqPdmRelForWae" parameterType="kr.wise.meta.pdmrel.service.WaePdmRelCol">
+    
+  	INSERT INTO WAQ_PDM_REL_MST
+  	(
+	     RQST_NO
+	   , RQST_SNO  
+	   , RQST_DTL_SNO	     
+	   , PDM_REL_PNM
+	   , PDM_REL_LNM
+	   , PA_FULL_PATH
+	   , PA_TBL_PNM
+	   , REL_TYP_CD 
+  	   , CRD_TYP_CD 
+       , PA_OPT_TYP_CD 
+	   , CH_FULL_PATH
+	   , CH_TBL_PNM	   	      
+	   , RQST_DCD	      	      	      
+	   , OBJ_VERS
+	   , FRS_RQST_DTM
+	   , FRS_RQST_USER_ID
+	   , RQST_DTM
+	   , RQST_USER_ID
+	)
+	SELECT RQST_NO
+	      , 1  AS RQST_SNO
+	      , (SELECT NVL(MAX(RQST_DTL_SNO), 0) 
+	           FROM WAQ_PDM_REL_MST 
+	          WHERE RQST_NO = #{rqstNo, jdbcType=VARCHAR}
+	         ) + ROWNUM AS RQST_DTL_SNO	     
+	      , PDM_REL_PNM
+	      , PDM_REL_LNM
+	      , PA_FULL_PATH
+	      , PA_TBL_PNM
+	      , REL_TYP_CD 
+  		  , CRD_TYP_CD 
+          , PA_OPT_TYP_CD 
+	      , CH_FULL_PATH
+	      , CH_TBL_PNM	   	      
+	      , 'CU' AS RQST_DCD	      	      	      
+	      , 1       AS OBJ_VERS
+	      , SYSDATE AS FRS_RQST_DTM
+	      , #{frsRqstUserId, jdbcType=VARCHAR} AS FRS_RQST_USER_ID
+	      , SYSDATE AS RQST_DTM
+	      , #{rqstUserId, jdbcType=VARCHAR} AS RQST_USER_ID
+	  FROM (
+	        SELECT A.RQST_NO	      	     
+	             , A.PDM_REL_PNM
+	             , A.PDM_REL_LNM
+	             , A.PA_FULL_PATH
+	             , A.PA_TBL_PNM
+	             , MAX(A.REL_TYP_CD)    AS REL_TYP_CD 
+  			     , MAX(A.CRD_TYP_CD)    AS CRD_TYP_CD 
+                 , MAX(A.PA_OPT_TYP_CD) AS PA_OPT_TYP_CD 
+	             , MAX(A.CH_FULL_PATH)   AS CH_FULL_PATH
+	             , MAX(A.CH_TBL_PNM)   AS CH_TBL_PNM	              	      	              
+	          FROM WAE_PDM_REL_COL A 	      
+	         WHERE A.RQST_NO = #{rqstNo, jdbcType=VARCHAR}
+	         GROUP BY A.RQST_NO	      	     
+	                , A.PDM_REL_PNM
+	                , A.PDM_REL_LNM
+	                , A.PA_FULL_PATH
+	                , A.PA_TBL_PNM
+	  )
+  </insert>
+  
+   <insert id="insertWaqPdmRelColForWae" parameterType="kr.wise.meta.pdmrel.service.WaePdmRelCol">
+    
+  	INSERT INTO WAQ_PDM_REL_COL 
+  	(
+	    RQST_NO
+      , RQST_SNO 
+      , RQST_DTL_SNO
+      , RQST_DTL_DTL_SNO         
+      , PDM_REL_PNM 	
+      , PDM_REL_LNM         
+      , RQST_DCD	      	      	      
+      , OBJ_VERS
+      , FRS_RQST_DTM
+      , FRS_RQST_USER_ID
+      , RQST_DTM
+      , RQST_USER_ID
+      , PA_FULL_PATH
+	  , PA_TBL_PNM	 
+	  , PA_COL_PNM
+      , CH_FULL_PATH
+	  , CH_TBL_PNM	 
+	  , CH_COL_PNM
+	  , OBJ_DESCN	          
+	)
+	SELECT A.RQST_NO
+         , B.RQST_SNO 
+         , B.RQST_DTL_SNO
+         , (SELECT NVL(MAX(RQST_DTL_DTL_SNO), 0) 
+              FROM WAQ_PDM_REL_COL 
+             WHERE RQST_NO = #{rqstNo, jdbcType=VARCHAR}
+            ) + ROWNUM AS RQST_DTL_SNO         
+         , A.PDM_REL_PNM 	
+         , A.PDM_REL_LNM         
+         , 'CU' AS RQST_DCD	      	      	      
+         , 1       AS OBJ_VERS
+         , SYSDATE AS FRS_RQST_DTM
+         , #{frsRqstUserId, jdbcType=VARCHAR} AS FRS_RQST_USER_ID
+         , SYSDATE AS RQST_DTM
+         , #{rqstUserId, jdbcType=VARCHAR} AS RQST_USER_ID
+         , A.PA_FULL_PATH
+	     , A.PA_TBL_PNM	 
+	     , A.PA_COL_PNM
+         , A.CH_FULL_PATH
+	     , A.CH_TBL_PNM	 
+	     , A.CH_COL_PNM
+	     , A.OBJ_DESCN	     
+      FROM WAE_PDM_REL_COL A     
+           INNER JOIN WAQ_PDM_REL_MST B
+              ON B.RQST_NO     = A.RQST_NO
+             AND B.PDM_REL_PNM = A.PDM_REL_PNM
+             AND B.PA_FULL_PATH = A.PA_FULL_PATH
+             AND B.PA_TBL_PNM = A.PA_TBL_PNM         
+     WHERE A.RQST_NO = #{rqstNo, jdbcType=VARCHAR}
+  </insert>
+ 
+</mapper>
+
+

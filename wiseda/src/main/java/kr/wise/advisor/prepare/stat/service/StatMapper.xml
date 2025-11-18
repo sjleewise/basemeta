@@ -1,0 +1,552 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.wise.advisor.prepare.stat.service.StatMapper">
+	<resultMap id="BaseResultMap" type="kr.wise.advisor.prepare.stat.service.StatVo" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+	    <result column="PRF_ID" jdbcType="VARCHAR" property="prfId" />
+	    <result column="PRF_NM" jdbcType="VARCHAR" property="prfNm" />
+	    <result column="BR_ID" jdbcType="VARCHAR" property="brId" />
+	    <result column="BR_NM" jdbcType="VARCHAR" property="brNm" />
+	    <result column="OTL_DTC_ID" jdbcType="VARCHAR" property="otlDtcId" />
+	    <result column="DBC_TBL_NM" jdbcType="VARCHAR" property="dbcTblNm" />
+	    <result column="ANA_DGR" jdbcType="DECIMAL" property="anaDgr" />
+	    <result column="DBC_COL_NM" jdbcType="VARCHAR" property="dbcColNm" />
+	    <result column="PRF_KND_NM" jdbcType="VARCHAR" property="prfKndNm" />
+	    <result column="ANA_CNT" jdbcType="DECIMAL" property="anaCnt" />
+	    <result column="ESN_ER_CNT" jdbcType="DECIMAL" property="esnErCnt" />
+	    <result column="ER_CNT" jdbcType="DECIMAL" property="erCnt" />
+	    <result column="DB_COL_NM" jdbcType="VARCHAR" property="dbColNm" />
+	    <result column="OTL_NM" jdbcType="VARCHAR" property="otlNm" />
+	    <result column="ER_RATE" jdbcType="DECIMAL" property="erRate" />
+	    <result column="DBC_TBL_KOR_NM" jdbcType="VARCHAR" property="dbcTblKorNm" />
+	    <result column="DBC_COL_KOR_NM" jdbcType="VARCHAR" property="dbcColKorNm" />
+	    <result column="CLST_CNT" jdbcType="DECIMAL" property="clstCnt" />
+	    <result column="MTC_ID" jdbcType="VARCHAR" property="mtcId" />
+	    <result column="SRC_DBC_TBL_NM" jdbcType="VARCHAR" property="srcDbcTblNm" />
+	    <result column="TGT_DBC_TBL_NM" jdbcType="VARCHAR" property="tgtDbcTblNm" />
+	    <result column="SRC_DBC_COL_NM" jdbcType="VARCHAR" property="srcDbcColNm" />
+	    <result column="TGT_DBC_COL_NM" jdbcType="VARCHAR" property="tgtDbcColNm" />
+	    <result column="SRC_DBC_TBL_KOR_NM" jdbcType="VARCHAR" property="srcDbcTblKorNm" />
+	    <result column="TGT_DBC_TBL_KOR_NM" jdbcType="VARCHAR" property="tgtDbcTblKorNm" />
+	    <result column="SRC_DBC_COL_KOR_NM" jdbcType="VARCHAR" property="srcDbcColKorNm" />
+	    <result column="TGT_DBC_COL_KOR_NM" jdbcType="VARCHAR" property="tgtDbcColKorNm" />
+	    <result column="CLST_ID" jdbcType="VARCHAR" property="clstId" />
+	    <result column="CLST_NM" jdbcType="VARCHAR" property="clstNm" />
+	    <result column="MTC_SNO" jdbcType="DECIMAL" property="mtcSno" />
+	    <result column="CLST_SNO" jdbcType="DECIMAL" property="clstSno" />
+	    <result column="VAR_CNT" jdbcType="DECIMAL" property="varCnt" />
+	    <result column="MTCH_NM" jdbcType="VARCHAR" property="mtchNm" />
+ 	</resultMap>
+ 	
+	<sql id="Base_Column_List">
+	    PRF_ID, DBC_TBL_NM, ANA_DGR, DBC_COL_NM, PRF_KND_NM, ANA_CNT, ESN_ER_CNT,
+	    BR_ID, ER_CNT, OTL_DTC_ID, DB_COL_NM, OTL_NM, ER_RATE
+	</sql>
+	
+	<select id="selectProfStatList" parameterType="map" resultMap="BaseResultMap">
+		SELECT A.PRF_ID
+			 , A.PRF_NM
+		     , A.DBC_TBL_NM
+		     , T.DBC_TBL_KOR_NM
+		     , B.ANA_DGR    --차수 
+		     , CASE WHEN A.PRF_KND_CD = 'PT01' THEN C.DBC_COL_NM ELSE A.OBJ_NM END AS DBC_COL_NM
+		     , D.DBC_COL_KOR_NM
+		     , GET_CMCD_DTL_NM('PRF_KND_CD',A.PRF_KND_CD) AS PRF_KND_NM
+		     , B.ANA_CNT   --분석총건수
+		     , B.ESN_ER_CNT
+		     , ROUND(CASE WHEN B.ANA_CNT > 0 THEN ((B.ESN_ER_CNT / B.ANA_CNT)  * 100) ELSE 0 END, 3) AS ER_RATE --오류율
+		  FROM WAM_PRF_MSTR A
+	       INNER JOIN WAM_PRF_RESULT B
+	          ON B.PRF_ID = A.PRF_ID 
+	        LEFT JOIN
+	        (SELECT A.PRF_ID
+	              , LISTAGG(B.CH_TBL_DBC_COL_NM) WITHIN GROUP (ORDER BY B.REL_COL_SNO) AS DBC_COL_NM
+	           FROM WAM_PRF_REL_TBL A
+	                INNER JOIN WAM_PRF_REL_COL B
+	                   ON B.PRF_ID = A.PRF_ID
+	          GROUP BY A.PRF_ID 
+	         ) C
+	         ON C.PRF_ID = A.PRF_ID
+	        LEFT JOIN WAA_DB_SCH S
+	          ON S.DB_SCH_ID = A.DB_SCH_ID
+	         AND S.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+	         AND S.REG_TYP_CD IN ('C','U')
+	        INNER JOIN WAT_DBC_TBL T
+	         ON T.DBC_TBL_NM = A.DBC_TBL_NM
+	        INNER JOIN WAT_DBC_COL D
+	         ON (D.DBC_COL_NM = C.DBC_COL_NM OR D.DBC_COL_NM = A.OBJ_NM)
+	         AND D.DBC_TBL_NM = T.DBC_TBL_NM                             
+		 WHERE 1 = 1     
+		   AND A.PRF_KND_CD NOT IN ('PC01')
+		   AND (B.PRF_ID, B.ANA_STR_DTM) IN (SELECT PRF_ID, MAX(ANA_STR_DTM)
+		                                       FROM WAM_PRF_RESULT
+		                                      GROUP BY PRF_ID
+		                                     )
+		   AND B.ANA_CNT != 0
+		   <if test="schDbConnTrgId != null and schDbConnTrgId != ''">
+		    AND A.DB_CONN_TRG_ID = #{schDbConnTrgId, jdbcType=VARCHAR}
+		    </if>
+		    <if test="schDbSchId != null and schDbSchId != '' ">
+		    AND S.DB_SCH_ID = #{schDbSchId, jdbcType=VARCHAR}
+		    </if>
+		    <if test="schDbSchNm != null and schDbSchNm != '' ">
+		    AND (S.DB_SCH_PNM LIKE '%'||#{schDbSchNm, jdbcType=VARCHAR}||'%' OR  S.DB_SCH_LNM  LIKE '%'||#{schDbSchNm, jdbcType=VARCHAR}||'%' )
+		    </if>
+		    <if test="schDbcTblNm != null and schDbcTblNm != '' ">
+		    AND (T.DBC_TBL_NM LIKE '%'|| UPPER(#{schDbcTblNm, jdbcType=VARCHAR}) ||'%' OR  T.DBC_TBL_KOR_NM LIKE '%'||#{schDbcTblNm, jdbcType=VARCHAR}||'%' )
+		    </if>
+		    <if test="schDbcColNm != null and schDbcColNm != '' ">
+		    AND (UPPER(C.DBC_COL_NM) LIKE '%'|| UPPER(#{schDbcColNm, jdbcType=VARCHAR}) ||'%' )
+		    </if>
+		 ORDER BY A.DBC_TBL_NM
+		        , A.OBJ_NM    
+		        , A.PRF_KND_CD  
+	</select>
+	
+	<select id="selectBrStatList" parameterType="map" resultMap="BaseResultMap">
+		SELECT A.BR_ID
+			 , A.BR_NM
+		     , A.DBC_TBL_NM
+		     , D.DBC_TBL_KOR_NM
+		     , A.DBC_COL_NM
+		     , E.DBC_COL_KOR_NM
+		     , B.ANA_DGR    --차수      
+		     , B.ANA_CNT   --분석총건수
+		     , B.ER_CNT
+		     , ROUND(CASE WHEN B.ANA_CNT > 0 THEN ((B.ER_CNT / B.ANA_CNT)  * 100) ELSE 0 END, 3) AS ER_RATE --오류율
+		  FROM WAM_BR_MSTR A
+		       INNER JOIN WAM_BR_RESULT B
+		         ON B.BR_ID = A.BR_ID
+		       INNER JOIN WAA_DB_SCH C
+		         ON C.DB_CONN_TRG_ID = A.DB_CONN_TRG_ID
+		         AND C.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+		         AND C.REG_TYP_CD IN ('C','U')
+		       LEFT JOIN WAT_DBC_TBL D
+		         ON D.DBC_TBL_NM = A.DBC_TBL_NM
+		         AND D.DB_SCH_ID = C.DB_SCH_ID
+		       LEFT JOIN WAT_DBC_COL E
+		         ON E.DBC_TBL_NM = D.DBC_TBL_NM
+		         AND E.DB_SCH_ID = C.DB_SCH_ID
+		         AND E.DBC_COL_NM = A.DBC_COL_NM
+		 WHERE 1 = 1        
+		   AND (B.BR_ID, B.ANA_STR_DTM) IN (SELECT BR_ID, MAX(ANA_STR_DTM)
+		                                       FROM WAM_BR_RESULT
+		                                      GROUP BY BR_ID
+		                                     )
+		   AND B.ANA_CNT != 0
+			<if test="schDbConnTrgId != null and schDbConnTrgId != ''">
+		    AND A.DB_CONN_TRG_ID = #{schDbConnTrgId, jdbcType=VARCHAR}
+		    </if>
+		    <if test="schDbSchId != null and schDbSchId != '' ">
+		    AND C.DB_SCH_ID = #{schDbSchId, jdbcType=VARCHAR}
+		    </if>
+		    <if test="schDbSchNm != null and schDbSchNm != '' ">
+		    AND (C.DB_SCH_PNM LIKE '%'||#{schDbSchNm, jdbcType=VARCHAR}||'%' OR  C.DB_SCH_LNM  LIKE '%'||#{schDbSchNm, jdbcType=VARCHAR}||'%' )
+		    </if>
+		    <if test="schDbcTblNm != null and schDbcTblNm != '' ">
+		    AND (A.DBC_TBL_NM LIKE '%'|| UPPER(#{schDbcTblNm, jdbcType=VARCHAR}) ||'%' OR  D.DBC_TBL_KOR_NM LIKE '%'||#{schDbcTblNm, jdbcType=VARCHAR}||'%' )
+		    </if>
+		    <if test="schDbcColNm != null and schDbcColNm != '' ">
+		    AND (UPPER(A.DBC_COL_NM) LIKE '%'|| UPPER(#{schDbcColNm, jdbcType=VARCHAR}) ||'%' )
+		    </if>
+		 ORDER BY A.DBC_TBL_NM
+		        , A.DBC_COL_NM
+	</select>
+	
+	<select id="selectOtlStatList" parameterType="map" resultMap="BaseResultMap">
+		SELECT A.OTL_DTC_ID
+		     , B.ANA_DGR    --차수 
+		     , D.DASE_PNM AS DBC_TBL_NM
+		     , T.DBC_TBL_KOR_NM
+		     , D.DB_COL_NM 
+		     , E.DBC_COL_KOR_NM    
+		     , A.OTL_NM
+		     , B.ANA_CNT   --분석총건수
+		     , B.ESN_ER_CNT
+		     , ROUND(CASE WHEN B.ANA_CNT > 0 THEN B.ESN_ER_CNT / B.ANA_CNT  * 100 ELSE 0 END, 3) AS ER_RATE --오류율
+		  FROM WAD_OTL_DTC A
+		       INNER JOIN WAD_OTL_RESULT B
+		          ON B.OTL_DTC_ID = A.OTL_DTC_ID    
+		       LEFT JOIN WAD_OTL_VAL C
+		          ON C.OTL_DTC_ID = A.OTL_DTC_ID
+		       LEFT JOIN
+		       (SELECT A.ANL_VAR_ID
+		             , B.DASE_PNM
+		             , A.DB_COL_NM
+		             , A.DB_SCH_ID
+		          FROM WAD_ANA_VAR A
+		               INNER JOIN WAD_DATA_SET B
+		                  ON B.DASE_ID = A.DASE_ID
+		        ) D
+		        ON D.ANL_VAR_ID = C.ANL_VAR_ID    
+		       INNER JOIN WAT_DBC_TBL T
+		        ON T.DBC_TBL_NM = D.DASE_PNM
+		         AND T.DB_SCH_ID = D.DB_SCH_ID
+		       INNER JOIN WAT_DBC_COL E
+		        ON E.DBC_COL_NM = D.DB_COL_NM
+		         AND E.DBC_TBL_NM = T.DBC_TBL_NM
+		       LEFT JOIN WAA_DB_SCH S
+		        ON S.DB_SCH_ID = T.DB_SCH_ID
+		         AND S.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+		         AND S.REG_TYP_CD IN ('C','U')
+		 WHERE 1 = 1        
+		   AND (B.OTL_DTC_ID, B.ANA_STR_DTM) IN (SELECT OTL_DTC_ID, MAX(ANA_STR_DTM)
+		                                           FROM WAD_OTL_RESULT
+		                                          GROUP BY OTL_DTC_ID
+		                                        )
+		   AND B.ANA_CNT != 0
+			<if test="schDbConnTrgId != null and schDbConnTrgId != ''">
+		    AND T.DB_CONN_TRG_ID = #{schDbConnTrgId, jdbcType=VARCHAR}
+		    </if>
+		    <if test="schDbSchId != null and schDbSchId != '' ">
+		    AND S.DB_SCH_ID = #{schDbSchId, jdbcType=VARCHAR}
+		    </if>
+		    <if test="schDbSchNm != null and schDbSchNm != '' ">
+		    AND (S.DB_SCH_PNM LIKE '%'||#{schDbSchNm, jdbcType=VARCHAR}||'%' OR  S.DB_SCH_LNM  LIKE '%'||#{schDbSchNm, jdbcType=VARCHAR}||'%' )
+		    </if>
+		    <if test="schDbcTblNm != null and schDbcTblNm != '' ">
+		    AND (UPPER(D.DASE_PNM) LIKE '%'|| UPPER(#{schDbcTblNm, jdbcType=VARCHAR}) ||'%' )
+		    </if>
+		    <if test="schDbcColNm != null and schDbcColNm != '' ">
+		    AND (UPPER(D.DB_COL_NM) LIKE '%'|| UPPER(#{schDbcColNm, jdbcType=VARCHAR}) ||'%' )
+		    </if>
+		 ORDER BY D.DASE_PNM
+		        , D.DB_COL_NM 
+	</select>
+	
+	<select id="selectProfStatDtl" parameterType="map" resultMap="BaseResultMap">
+		SELECT A.PRF_ID
+			 , A.PRF_NM
+		     , A.DBC_TBL_NM
+		     , T.DBC_TBL_KOR_NM
+		     , B.ANA_DGR    --차수 
+		     , CASE WHEN A.PRF_KND_CD = 'PT01' THEN C.DBC_COL_NM ELSE A.OBJ_NM END AS DBC_COL_NM
+		     , D.DBC_COL_KOR_NM
+		     , GET_CMCD_DTL_NM('PRF_KND_CD',A.PRF_KND_CD) AS PRF_KND_NM
+		     , B.ANA_CNT   --분석총건수
+		     , B.ESN_ER_CNT
+		     , ROUND(CASE WHEN B.ANA_CNT > 0 THEN ((B.ESN_ER_CNT / B.ANA_CNT)  * 100) ELSE 0 END, 3) AS ER_RATE --오류율
+		  FROM WAM_PRF_MSTR A
+	       INNER JOIN WAM_PRF_RESULT B
+	          ON B.PRF_ID = A.PRF_ID 
+	        LEFT JOIN
+	        (SELECT A.PRF_ID
+	              , LISTAGG(B.CH_TBL_DBC_COL_NM) WITHIN GROUP (ORDER BY B.REL_COL_SNO) AS DBC_COL_NM
+	           FROM WAM_PRF_REL_TBL A
+	                INNER JOIN WAM_PRF_REL_COL B
+	                   ON B.PRF_ID = A.PRF_ID
+	          GROUP BY A.PRF_ID 
+	         ) C
+	         ON C.PRF_ID = A.PRF_ID
+	        LEFT JOIN WAA_DB_SCH S
+	          ON S.DB_SCH_ID = A.DB_SCH_ID
+	         AND S.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+	         AND S.REG_TYP_CD IN ('C','U')
+	        INNER JOIN WAT_DBC_TBL T
+	         ON T.DBC_TBL_NM = A.DBC_TBL_NM
+	        INNER JOIN WAT_DBC_COL D
+	         ON (D.DBC_COL_NM = C.DBC_COL_NM OR D.DBC_COL_NM = A.OBJ_NM)
+	         AND D.DBC_TBL_NM = T.DBC_TBL_NM                              
+		 WHERE 1 = 1     
+		   AND A.PRF_KND_CD NOT IN ('PC01')
+		   <if test="schDbConnTrgId != null and schDbConnTrgId != ''">
+		    AND DB.DB_CONN_TRG_ID = #{schDbConnTrgId, jdbcType=VARCHAR}
+		    </if>
+		    <if test="schDbSchId != null and schDbSchId != '' ">
+		    AND S.DB_SCH_ID = #{schDbSchId, jdbcType=VARCHAR}
+		    </if>
+		    <if test="schDbSchNm != null and schDbSchNm != '' ">
+		    AND (S.DB_SCH_PNM LIKE '%'||#{schDbSchNm, jdbcType=VARCHAR}||'%' OR  S.DB_SCH_LNM  LIKE '%'||#{schDbSchNm, jdbcType=VARCHAR}||'%' )
+		    </if>
+		    <if test="schDbcTblNm != null and schDbcTblNm != '' ">
+		    AND (T.DBC_TBL_NM LIKE '%'|| UPPER(#{schDbcTblNm, jdbcType=VARCHAR}) ||'%' OR  T.DBC_TBL_KOR_NM LIKE '%'||#{schDbcTblNm, jdbcType=VARCHAR}||'%' )
+		    </if>
+		    <if test="schDbcColNm != null and schDbcColNm != '' ">
+		    AND (UPPER(C.DBC_COL_NM) LIKE '%'|| UPPER(#{schDbcColNm, jdbcType=VARCHAR}) ||'%' )
+		    </if>
+		    AND (A.PRF_ID = #{prfId, jdbcType=VARCHAR} )
+		 ORDER BY A.DBC_TBL_NM
+		        , A.OBJ_NM    
+		        , A.PRF_KND_CD  
+	</select>
+	
+	<select id="selectBrStatDtl" parameterType="map" resultMap="BaseResultMap">
+		SELECT A.BR_ID
+			 , A.BR_NM
+		     , A.DBC_TBL_NM
+		     , D.DBC_TBL_KOR_NM
+		     , A.DBC_COL_NM
+		     , E.DBC_COL_KOR_NM
+		     , B.ANA_DGR    --차수      
+		     , B.ANA_CNT   --분석총건수
+		     , B.ER_CNT
+		     , ROUND(CASE WHEN B.ANA_CNT > 0 THEN ((B.ER_CNT / B.ANA_CNT)  * 100) ELSE 0 END, 3) AS ER_RATE --오류율
+		  FROM WAM_BR_MSTR A
+		       INNER JOIN WAM_BR_RESULT B
+		         ON B.BR_ID = A.BR_ID
+		       INNER JOIN WAA_DB_SCH C
+		         ON C.DB_CONN_TRG_ID = A.DB_CONN_TRG_ID
+		         AND C.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+		         AND C.REG_TYP_CD IN ('C','U')
+		       LEFT JOIN WAT_DBC_TBL D
+		         ON D.DBC_TBL_NM = A.DBC_TBL_NM
+		         AND D.DB_SCH_ID = C.DB_SCH_ID
+		       LEFT JOIN WAT_DBC_COL E
+		         ON E.DBC_TBL_NM = D.DBC_TBL_NM
+		         AND E.DB_SCH_ID = C.DB_SCH_ID
+		         AND E.DBC_COL_NM = A.DBC_COL_NM
+		 WHERE 1 = 1
+			<if test="schDbConnTrgId != null and schDbConnTrgId != ''">
+		    AND A.DB_CONN_TRG_ID = #{schDbConnTrgId, jdbcType=VARCHAR}
+		    </if>
+		    <if test="schDbSchId != null and schDbSchId != '' ">
+		    AND C.DB_SCH_ID = #{schDbSchId, jdbcType=VARCHAR}
+		    </if>
+		    <if test="schDbSchNm != null and schDbSchNm != '' ">
+		    AND (C.DB_SCH_PNM LIKE '%'||#{schDbSchNm, jdbcType=VARCHAR}||'%' OR  C.DB_SCH_LNM  LIKE '%'||#{schDbSchNm, jdbcType=VARCHAR}||'%' )
+		    </if>
+		    <if test="schDbcTblNm != null and schDbcTblNm != '' ">
+		    AND (A.DBC_TBL_NM LIKE '%'|| UPPER(#{schDbcTblNm, jdbcType=VARCHAR}) ||'%' OR  D.DBC_TBL_KOR_NM LIKE '%'||#{schDbcTblNm, jdbcType=VARCHAR}||'%' )
+		    </if>
+		    <if test="schDbcColNm != null and schDbcColNm != '' ">
+		    AND (UPPER(A.DBC_COL_NM) LIKE '%'|| UPPER(#{schDbcColNm, jdbcType=VARCHAR}) ||'%' )
+		    </if>
+		    AND (A.BR_ID = #{brId, jdbcType=VARCHAR} )
+		 ORDER BY A.DBC_TBL_NM
+		        , A.DBC_COL_NM
+	</select>
+	
+	<select id="selectOtlStatDtl" parameterType="map" resultMap="BaseResultMap">
+		SELECT A.OTL_DTC_ID
+		     , B.ANA_DGR    --차수 
+		     , D.DASE_PNM AS DBC_TBL_NM
+		     , T.DBC_TBL_KOR_NM
+		     , D.DB_COL_NM 
+		     , E.DBC_COL_KOR_NM    
+		     , A.OTL_NM
+		     , B.ANA_CNT   --분석총건수
+		     , B.ESN_ER_CNT
+		     , ROUND(CASE WHEN B.ANA_CNT > 0 THEN B.ESN_ER_CNT / B.ANA_CNT  * 100 ELSE 0 END, 3) AS ER_RATE --오류율
+		  FROM WAD_OTL_DTC A
+		       INNER JOIN WAD_OTL_RESULT B
+		          ON B.OTL_DTC_ID = A.OTL_DTC_ID    
+		       LEFT JOIN WAD_OTL_VAL C
+		          ON C.OTL_DTC_ID = A.OTL_DTC_ID
+		       LEFT JOIN
+		       (SELECT A.ANL_VAR_ID
+		             , B.DASE_PNM
+		             , A.DB_COL_NM
+		             , A.DB_SCH_ID
+		          FROM WAD_ANA_VAR A
+		               INNER JOIN WAD_DATA_SET B
+		                  ON B.DASE_ID = A.DASE_ID
+		        ) D
+		        ON D.ANL_VAR_ID = C.ANL_VAR_ID    
+		       INNER JOIN WAT_DBC_TBL T
+		        ON T.DBC_TBL_NM = D.DASE_PNM
+		         AND T.DB_SCH_ID = D.DB_SCH_ID
+		       INNER JOIN WAT_DBC_COL E
+		        ON E.DBC_COL_NM = D.DB_COL_NM
+		         AND E.DBC_TBL_NM = T.DBC_TBL_NM
+		       LEFT JOIN WAA_DB_SCH S
+		        ON S.DB_SCH_ID = T.DB_SCH_ID
+		         AND S.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+		         AND S.REG_TYP_CD IN ('C','U')
+		 WHERE 1 = 1
+			<if test="schDbConnTrgId != null and schDbConnTrgId != ''">
+		    AND T.DB_CONN_TRG_ID = #{schDbConnTrgId, jdbcType=VARCHAR}
+		    </if>
+		    <if test="schDbSchId != null and schDbSchId != '' ">
+		    AND S.DB_SCH_ID = #{schDbSchId, jdbcType=VARCHAR}
+		    </if>
+		    <if test="schDbSchNm != null and schDbSchNm != '' ">
+		    AND (S.DB_SCH_PNM LIKE '%'||#{schDbSchNm, jdbcType=VARCHAR}||'%' OR  S.DB_SCH_LNM  LIKE '%'||#{schDbSchNm, jdbcType=VARCHAR}||'%' )
+		    </if>
+		    <if test="schDbcTblNm != null and schDbcTblNm != '' ">
+		    AND (UPPER(D.DASE_PNM) LIKE '%'|| UPPER(#{schDbcTblNm, jdbcType=VARCHAR}) ||'%' )
+		    </if>
+		    <if test="schDbcColNm != null and schDbcColNm != '' ">
+		    AND (UPPER(D.DB_COL_NM) LIKE '%'|| UPPER(#{schDbcColNm, jdbcType=VARCHAR}) ||'%' )
+		    </if>
+		    AND (A.OTL_DTC_ID = #{otlDtcId, jdbcType=VARCHAR} )
+		 ORDER BY D.DASE_PNM
+		        , D.DB_COL_NM 
+	</select>
+	
+	<select id="selectClstStatList" parameterType="map" resultMap="BaseResultMap">
+		SELECT 	 DISTINCT
+		         C.DASE_PNM AS DBC_TBL_NM,
+		         F.DBC_TBL_KOR_NM,
+		         C.DB_COL_NM,
+		         G.DBC_COL_KOR_NM,
+		         COUNT (DISTINCT A.SRC_NM) OVER (PARTITION BY A.CLST_ID) AS ANA_CNT,
+		         COUNT (DISTINCT A.CLST_NM) OVER (PARTITION BY A.CLST_ID) AS CLST_CNT,
+		         A.CLST_ID
+		    FROM WAD_CLST_DATA A
+		         INNER JOIN
+		         (SELECT A.ANL_VAR_ID,
+		                 B.DASE_PNM,
+		                 A.DB_COL_NM,
+		                 A.DB_SCH_ID
+		            FROM WAD_ANA_VAR A
+		                 INNER JOIN WAD_DATA_SET B
+		                    ON     B.DASE_ID = A.DASE_ID
+		                       AND A.REG_TYP_CD IN ('C', 'U')
+		                       AND B.REG_TYP_CD IN ('C', 'U')) C
+		            ON C.ANL_VAR_ID = A.CLST_ID
+		         INNER JOIN WAA_DB_SCH D
+		            ON     D.DB_SCH_ID = C.DB_SCH_ID
+		               AND D.EXP_DTM = TO_DATE ('99991231', 'YYYYMMDD')
+		               AND D.REG_TYP_CD IN ('C', 'U')
+		         INNER JOIN WAT_DBC_TBL F
+		            ON F.DB_SCH_ID = C.DB_SCH_ID AND F.DBC_TBL_NM = C.DASE_PNM AND F.DB_SCH_ID = D.DB_SCH_ID
+		         INNER JOIN WAT_DBC_COL G
+		            ON G.DBC_TBL_NM = F.DBC_TBL_NM AND G.DBC_COL_NM = C.DB_COL_NM
+		   WHERE A.CLST_SNO != 0
+		     <if test="schDbConnTrgId != null and schDbConnTrgId != ''">
+		     AND F.DB_CONN_TRG_ID = #{schDbConnTrgId, jdbcType=VARCHAR}
+		     </if>
+		     <if test="schDbSchId != null and schDbSchId != '' ">
+		     AND D.DB_SCH_ID = #{schDbSchId, jdbcType=VARCHAR}
+		     </if>
+		     <if test="schDbSchNm != null and schDbSchNm != '' ">
+		     AND (D.DB_SCH_PNM LIKE '%'||#{schDbSchNm, jdbcType=VARCHAR}||'%' OR  D.DB_SCH_LNM  LIKE '%'||#{schDbSchNm, jdbcType=VARCHAR}||'%' )
+		     </if>
+		     <if test="schDbcTblNm != null and schDbcTblNm != '' ">
+		     AND (UPPER(C.DASE_PNM) LIKE '%'|| UPPER(#{schDbcTblNm, jdbcType=VARCHAR}) ||'%' )
+		     </if>
+		     <if test="schDbcColNm != null and schDbcColNm != '' ">
+		     AND (UPPER(C.DB_COL_NM) LIKE '%'|| UPPER(#{schDbcColNm, jdbcType=VARCHAR}) ||'%' )
+		     </if>
+		   ORDER BY A.CLST_ID
+	</select>
+	
+	<select id="selectMtchStatList" parameterType="map" resultMap="BaseResultMap">
+		SELECT   A.MTC_ID
+		  	   , A.SRC_DB_CONN_TRG_ID
+		  	   , A.SRC_DBC_SCH_ID
+		  	   , A.SRC_DBC_TBL_NM
+		  	   , E.DBC_TBL_KOR_NM AS SRC_DBC_TBL_KOR_NM
+		  	   , A.TGT_DB_CONN_TRG_ID
+		  	   , A.TGT_DBC_SCH_ID
+		  	   , A.TGT_DBC_TBL_NM
+		  	   , F.DBC_TBL_KOR_NM AS TGT_DBC_TBL_KOR_NM
+		  	   , B.MTC_COL_SNO 
+		  	   , B.SRC_DBC_COL_NM
+		  	   , G.DBC_COL_KOR_NM AS SRC_DBC_COL_KOR_NM
+		  	   , B.TGT_DBC_COL_NM
+		  	   , H.DBC_COL_KOR_NM AS TGT_DBC_COL_KOR_NM
+		  	   , C.CNT AS ANA_CNT
+		    FROM WAD_DATA_MTC_TBL A
+		    JOIN WAD_DATA_MTC_COL B
+		      ON A.MTC_ID = B.MTC_ID
+		    LEFT JOIN (
+		        SELECT DISTINCT COUNT(*) OVER(PARTITION BY A.MTC_ID) CNT
+		        , A.MTC_ID
+		          FROM WAD_MTC_DATA A
+		          JOIN WAD_MTC_TGT_DATA B
+		            ON A.MTC_ID = B.MTC_ID
+		           AND A.MTC_SNO = B.MTC_SNO
+		         WHERE A.MTC_SNO != 0
+		           AND B.TGT_DTL_SNO = 1
+		        ) C
+			  ON C.MTC_ID = A.MTC_ID
+			  AND C.MTC_ID = B.MTC_ID
+			LEFT JOIN WAA_DB_SCH D
+		      ON D.DB_SCH_ID = A.SRC_DBC_SCH_ID
+		      AND D.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+		      AND D.REG_TYP_CD IN ('C','U')
+		    LEFT JOIN WAT_DBC_TBL E
+		      ON E.DB_SCH_ID = D.DB_SCH_ID
+		      AND E.DBC_TBL_NM = A.SRC_DBC_TBL_NM
+		    LEFT JOIN WAT_DBC_TBL F
+		      ON F.DB_SCH_ID = D.DB_SCH_ID
+		      AND F.DBC_TBL_NM = A.TGT_DBC_TBL_NM
+		    LEFT JOIN WAT_DBC_COL G
+		      ON G.DBC_TBL_NM = E.DBC_TBL_NM
+		      AND G.DBC_COL_NM = B.SRC_DBC_COL_NM
+		    LEFT JOIN WAT_DBC_COL H
+		      ON H.DBC_TBL_NM = F.DBC_TBL_NM
+		      AND H.DBC_COL_NM = B.TGT_DBC_COL_NM
+			WHERE 1=1
+			<if test="schDbConnTrgId != null and schDbConnTrgId != ''">
+		    AND (A.SRC_DB_CONN_TRG_ID = #{schDbConnTrgId, jdbcType=VARCHAR} OR A.TGT_DB_CONN_TRG_ID = #{schDbConnTrgId, jdbcType=VARCHAR})
+		    </if>
+		    <if test="schDbSchId != null and schDbSchId != '' ">
+		    AND (A.SRC_DBC_SCH_ID = #{schDbSchId, jdbcType=VARCHAR} OR A.TGT_DBC_SCH_ID = #{schDbSchId, jdbcType=VARCHAR})
+		    </if>
+		    <if test="schDbSchNm != null and schDbSchNm != '' ">
+		    AND (D.DB_SCH_PNM LIKE '%'||#{schDbSchNm, jdbcType=VARCHAR}||'%' OR  D.DB_SCH_LNM  LIKE '%'||#{schDbSchNm, jdbcType=VARCHAR}||'%' )
+		    </if>
+		    <if test="schDbcTblNm != null and schDbcTblNm != '' ">
+		    AND (A.SRC_DBC_TBL_NM LIKE '%'|| UPPER(#{schDbcTblNm, jdbcType=VARCHAR}) ||'%' OR A.TGT_DBC_TBL_NM LIKE '%'|| UPPER(#{schDbcTblNm, jdbcType=VARCHAR}) ||'%' )
+		    </if>
+		    <if test="schDbcColNm != null and schDbcColNm != '' ">
+		    AND (B.SRC_DBC_COL_NM LIKE '%'|| UPPER(#{schDbcColNm, jdbcType=VARCHAR}) ||'%' OR B.TGT_DBC_COL_NM LIKE '%'|| UPPER(#{schDbcColNm, jdbcType=VARCHAR}) ||'%' )
+		    </if>
+	</select>
+	
+	<select id="selectClstStatDtl" parameterType="map" resultMap="BaseResultMap">
+		SELECT CLST_NM
+		      ,SUM(COL_CNT) AS ANA_CNT
+      		  ,COUNT(*) AS VAR_CNT
+		  FROM WAD_CLST_DATA
+		 WHERE CLST_SNO != 0
+		   AND CLST_ID = #{clstId, jdbcType=VARCHAR}
+		 GROUP BY CLST_NM
+		 ORDER BY ANA_CNT DESC
+	</select>
+	
+	<select id="selectMtchStatDtl" parameterType="map" resultMap="BaseResultMap">
+		<![CDATA[
+		SELECT   COUNT(CASE WHEN B.MTC_PRB = 100 THEN 1 END) AS VAR_CNT
+		        ,'100%' AS MTCH_NM
+		  FROM WAD_MTC_DATA A
+		  JOIN WAD_MTC_TGT_DATA B
+		    ON A.MTC_ID = B.MTC_ID
+		   AND A.MTC_SNO = B.MTC_SNO
+		 WHERE A.MTC_SNO != 0
+		   AND B.TGT_DTL_SNO = 1
+		   AND A.MTC_ID = #{mtcId, jdbcType=VARCHAR}
+		UNION ALL
+		SELECT   COUNT(CASE WHEN B.MTC_PRB < 100 AND B.MTC_PRB >= 90 THEN 1 END) AS VAR_CNT
+		        ,'90이상~100미만' AS MTCH_NM
+		  FROM WAD_MTC_DATA A
+		  JOIN WAD_MTC_TGT_DATA B
+		    ON A.MTC_ID = B.MTC_ID
+		   AND A.MTC_SNO = B.MTC_SNO
+		 WHERE A.MTC_SNO != 0
+		   AND B.TGT_DTL_SNO = 1
+		   AND A.MTC_ID = #{mtcId, jdbcType=VARCHAR}
+		UNION ALL
+		SELECT   COUNT(CASE WHEN B.MTC_PRB < 90 AND B.MTC_PRB >= 80 THEN 1 END) AS VAR_CNT
+		        ,'80이상~90미만' AS MTCH_NM
+		  FROM WAD_MTC_DATA A
+		  JOIN WAD_MTC_TGT_DATA B
+		    ON A.MTC_ID = B.MTC_ID
+		   AND A.MTC_SNO = B.MTC_SNO
+		 WHERE A.MTC_SNO != 0
+		   AND B.TGT_DTL_SNO = 1
+		   AND A.MTC_ID = #{mtcId, jdbcType=VARCHAR}
+		UNION ALL
+		SELECT   COUNT(CASE WHEN B.MTC_PRB < 80 AND B.MTC_PRB >= 70 THEN 1 END) AS VAR_CNT
+		        ,'70이상~80미만' AS MTCH_NM
+		  FROM WAD_MTC_DATA A
+		  JOIN WAD_MTC_TGT_DATA B
+		    ON A.MTC_ID = B.MTC_ID
+		   AND A.MTC_SNO = B.MTC_SNO
+		 WHERE A.MTC_SNO != 0
+		   AND B.TGT_DTL_SNO = 1
+		   AND A.MTC_ID = #{mtcId, jdbcType=VARCHAR}
+		UNION ALL
+		SELECT   COUNT(CASE WHEN B.MTC_PRB < 70 THEN 1 END) AS VAR_CNT
+		        ,'70미만' AS MTCH_NM
+		  FROM WAD_MTC_DATA A
+		  JOIN WAD_MTC_TGT_DATA B
+		    ON A.MTC_ID = B.MTC_ID
+		   AND A.MTC_SNO = B.MTC_SNO
+		 WHERE A.MTC_SNO != 0
+		   AND B.TGT_DTL_SNO = 1
+		   AND A.MTC_ID = #{mtcId, jdbcType=VARCHAR}
+		   ]]>
+	</select>
+</mapper>

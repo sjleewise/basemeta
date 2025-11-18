@@ -1,0 +1,452 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.meta.report.service.RqstReportMapper">
+<resultMap id="BaseResultMap" type="kr.wise.meta.report.service.RqstReportVO">
+	 <result column="STND_ASRT" property="stndAsrt" jdbcType="VARCHAR" />
+	 <result column="BIZ_DCD" property="bizDcd" jdbcType="VARCHAR" />
+	 <result column="TOT" property="rqstTot" jdbcType="VARCHAR" />
+	 <result column="APRV_CNT" property="aprvCnt" jdbcType="VARCHAR" />
+	 <result column="RJCT_CNT" property="rjctCnt" jdbcType="VARCHAR" />
+	 
+	 <result column="STA_DTM" property="staDtm" jdbcType="VARCHAR" />
+	 <result column="DDL" property="ddlCnt" jdbcType="VARCHAR" />
+	 <result column="DFC" property="dfcCnt" jdbcType="VARCHAR" />
+	 <result column="TOT" property="tot" jdbcType="VARCHAR" />
+	 <result column="TOT_DISP" property="totDisp" jdbcType="VARCHAR" />
+	 <result column="DDL_CNT" property="ddlCnt" jdbcType="VARCHAR" />
+	 <result column="DDL_IDX_CNT" property="ddlIdxCnt" jdbcType="VARCHAR" />
+	 <result column="DFC_CNT" property="dfcCnt" jdbcType="VARCHAR" />
+	 <result column="TOT_CNT" property="tot" jdbcType="VARCHAR" />
+	 <result column="DDL_CNT_DISP" property="ddlCntDisp" jdbcType="VARCHAR" />
+	 <result column="DDL_IDX_CNT_DISP" property="ddlIdxCntDisp" jdbcType="VARCHAR" />
+<!-- 	 <result column="DFC_CNT_DISP" property="dfcCntDisp" jdbcType="VARCHAR" /> -->
+	 <result column="TOT_CNT_DISP" property="totDisp" jdbcType="VARCHAR" />
+	 <result column="T_DDL_CNT" property="tDdlCnt" jdbcType="VARCHAR" />
+	 <result column="T_DDL_IDX_CNT" property="tDdlIdxCnt" jdbcType="VARCHAR" />
+	 <result column="TDDL" property="tDdlCnt" jdbcType="VARCHAR" />
+	 <result column="TDFC" property="tDfcCnt" jdbcType="VARCHAR" />
+	 <result column="TTOT" property="tTot" jdbcType="VARCHAR" />
+	 <result column="T_TOT" property="tTot" jdbcType="VARCHAR" />
+	 
+	 <result column="DATAMODEL_NM" property="datamodelNm" jdbcType="VARCHAR" />
+	 <result column="PRIMARY_SUBJ_NM" property="primarySubjNm" jdbcType="VARCHAR" />
+	 <result column="SYS_AREA_LNM" property="sysAreaLnm" jdbcType="VARCHAR" />
+	 <result column="FULL_PATH" property="fullPath" jdbcType="VARCHAR" />
+	 <result column="INS_CNT" property="insCnt" jdbcType="VARCHAR" />
+	 <result column="UPD_CNT" property="updCnt" jdbcType="VARCHAR" />
+	 <result column="DEL_CNT" property="delCnt" jdbcType="VARCHAR" />
+	 
+	 <result column="DEPT_ID" property="deptId" jdbcType="VARCHAR" />
+	 <result column="PARENT_DEPT_NM" property="deptNm" jdbcType="VARCHAR" />
+	 <result column="PART_ID" property="partId" jdbcType="VARCHAR" />
+	 <result column="PART_NM" property="partNm" jdbcType="VARCHAR" />
+	 <result column="ETC_CNT" property="etcCnt" jdbcType="VARCHAR" />
+	 
+	 <result column="DBSERVER_NM" property="dbConnTrgLnm"  jdbcType="VARCHAR" />
+	 <result column="TOT_CNT" property="tot" 		   jdbcType="VARCHAR" />
+	 <result column="TBL_INS_CNT" property="tblInsCnt" jdbcType="VARCHAR" />
+	 <result column="TBL_UPD_CNT" property="tblUpdCnt" jdbcType="VARCHAR" />
+	 <result column="TBL_DEL_CNT" property="tblDelCnt" jdbcType="VARCHAR" />
+	 <result column="IDX_INS_CNT" property="idxInsCnt" jdbcType="VARCHAR" />
+	 <result column="IDX_UPD_CNT" property="idxUpdCnt" jdbcType="VARCHAR" />
+	 <result column="IDX_DEL_CNT" property="idxDelCnt" jdbcType="VARCHAR" />
+	 <result column="TRI_CNT" property="triCnt" 	   jdbcType="VARCHAR" />
+	 <result column="SYM_CNT" property="symCnt" 	   jdbcType="VARCHAR" />
+	 <result column="PROC_CNT" property="procCnt"  	   jdbcType="VARCHAR" />
+	 <result column="FUNC_CNT" property="funcCnt" 	   jdbcType="VARCHAR" />
+	 <result column="PART_CNT" property="partCnt" 	   jdbcType="VARCHAR" />
+
+	
+	 <!-- 메인화면 요청현황 차트용(yeonho) -->	
+	 <result column="RQST_CNT" property="rqstCnt" 	   jdbcType="VARCHAR" />
+	 <result column="RQST_APRV_CNT" property="rqstAprvCnt" 	   jdbcType="VARCHAR" />
+	 <result column="RQST_RJCT_CNT" property="rqstRjctCnt" 	   jdbcType="VARCHAR" />
+	  
+</resultMap>
+
+<select id="getPeriodRqst" resultMap="BaseResultMap" parameterType="kr.wise.meta.report.service.RqstReportVO">
+		-- 승인+자동승인  AS APRV_CNT , 반려 AS RJCT_CNT
+		
+	 SELECT /* RqstReportMapper.getPeriodRqst */
+	 		A.BIZ_DCD, 
+	      COUNT(*) AS TOT
+	      ,SUM(CASE WHEN C.RVW_STS_CD = '1' THEN 1 WHEN C.RVW_STS_CD = '3' THEN 1  ELSE 0 END) AS APRV_CNT  
+	      ,SUM(CASE WHEN C.RVW_STS_CD = '2' THEN 1 ELSE 0 END) AS RJCT_CNT      							
+	  FROM WAQ_MSTR A
+	    INNER JOIN (SELECT B.RQST_NO,IFNULL(B.RVW_STS_CD, 3) AS RVW_STS_CD
+	                                           FROM WAA_APR_PRC B
+	                       WHERE B.APR_LVL = ( SELECT MAX(D.APR_LVL)
+	                                           FROM WAA_APR_PRC D
+	                                           WHERE D.RQST_NO = B.RQST_NO
+	                                          )
+	                    ) C
+	     ON A.RQST_NO = C.RQST_NO
+	  WHERE 1=1
+	  AND A.RQST_STEP_CD ='A'
+	  <if test="dtmDs == 1 ">
+	  <![CDATA[
+	    AND STR_TO_DATE(A.APRV_DTM, '%Y-%m-%d') >= CONCAT(subStr(STR_TO_DATE(NOW(),'%Y-%m-%d'),1,4) , '-01-01')
+  		AND STR_TO_DATE(A.APRV_DTM, '%Y-%m-%d') <= CONCAT(subStr(STR_TO_DATE(NOW(),'%Y-%m-%d'),1,4) , '-03-31')
+  		]]>
+	  </if>
+	   <if test="dtmDs == 2 ">
+	  <![CDATA[
+	    AND STR_TO_DATE(A.APRV_DTM, '%Y-%m-%d') >= CONCAT(subStr(STR_TO_DATE(NOW(),'%Y-%m-%d'),1,4) , '-04-01')
+  		AND STR_TO_DATE(A.APRV_DTM, '%Y-%m-%d') <= CONCAT(subStr(STR_TO_DATE(NOW(),'%Y-%m-%d'),1,4) , '-06-30')
+  		]]>
+	  </if>
+	   <if test="dtmDs == 3 ">
+	  <![CDATA[
+	    AND STR_TO_DATE(A.APRV_DTM, '%Y-%m-%d') >= CONCAT(subStr(STR_TO_DATE(NOW(),'%Y-%m-%d'),1,4) , '-07-01')
+  		AND STR_TO_DATE(A.APRV_DTM, '%Y-%m-%d') <= CONCAT(subStr(STR_TO_DATE(NOW(),'%Y-%m-%d'),1,4) , '-09-30')
+  		]]>
+	  </if>
+	   <if test="dtmDs == 4 ">
+	  <![CDATA[
+	    AND STR_TO_DATE(A.APRV_DTM, '%Y-%m-%d') >= CONCAT(subStr(STR_TO_DATE(NOW(),'%Y-%m-%d'),1,4) , '-10-01')
+  		AND STR_TO_DATE(A.APRV_DTM, '%Y-%m-%d') <= CONCAT(subStr(STR_TO_DATE(NOW(),'%Y-%m-%d'),1,4) , '-12-31')
+  		]]>
+	  </if>
+	  
+	  <if test="searchBgnDe != null and searchBgnDe != '' " >
+	  <![CDATA[ AND STR_TO_DATE(A.APRV_DTM, '%Y-%m-%d') >= #{searchBgnDe,jdbcType=VARCHAR}   ]]>
+	  </if>
+	  <if test="searchEndDe != null and searchEndDe != '' " >
+	  <![CDATA[	 AND STR_TO_DATE(A.APRV_DTM, '%Y-%m-%d') <= #{searchEndDe,jdbcType=VARCHAR}  ]]>
+	  </if>
+	
+	  GROUP BY A.BIZ_DCD
+	
+</select>
+<select id="getDdlRqstPeriod" resultMap="BaseResultMap" parameterType="kr.wise.meta.report.service.RqstReportVO">
+	-- DFC는 기타오브젝트
+	 SELECT /* RqstReportMapper.getDdlRqstPeriod */
+	 	STA_DTM
+     , CONCAT(DDL_RQST_CNT , '(' , DDL_CNT , ')' ) AS DDL_CNT_DISP
+     , DDL_RQST_CNT AS DDL_CNT
+     , CONCAT(DDL_IDX_RQST_CNT , '(' , DDL_IDX_CNT , ')' ) AS DDL_IDX_CNT_DISP
+     , DDL_IDX_RQST_CNT AS DDL_IDX_CNT
+     , CONCAT( (DDL_RQST_CNT + DDL_IDX_RQST_CNT) , '(' ,  (DDL_CNT + DDL_IDX_CNT) , ')' ) AS TOT_DISP
+     , DDL_RQST_CNT + DDL_IDX_RQST_CNT AS TOT
+     , DDL_PRC_CNT AS T_DDL_CNT
+     , DDL_IDX_PRC_CNT AS T_DDL_IDX_CNT
+     , DDL_PRC_CNT + DDL_IDX_PRC_CNT AS T_TOT
+  FROM (
+
+        SELECT CONCAT(DATE_FORMAT(A.APRV_DTM, '%Y') , '년' , DATE_FORMAT(A.APRV_DTM, '%m') , '월') AS STA_DTM
+             , IFNULL(SUM(DDLC.CNT), 0) AS DDL_RQST_CNT   -- DDL요청서 갯수
+             , IFNULL(SUM(B.DDL_CNT), 0) AS DDL_CNT          -- DDL테이블 갯수
+             , IFNULL(SUM(DDXC.CNT), 0) AS DDL_IDX_RQST_CNT   -- DDL인덱스 요청서 갯수
+             , IFNULL(SUM(C.DDL_IDX_CNT), 0) AS DDL_IDX_CNT   -- DDL인덱스 갯수
+             , IFNULL(SUM(DDLHC.DDL_CNT), 0) AS DDL_PRC_CNT    -- DDL테이블 요청처리갯수
+             , IFNULL(SUM(DDXHC.DDL_CNT), 0) AS DDL_IDX_PRC_CNT -- DDL인덱스 요청처리갯수
+          FROM WAQ_MSTR A
+          LEFT OUTER JOIN (
+                      SELECT RQST_NO
+                           , COUNT(1) AS CNT
+                        FROM WAQ_MSTR
+                       WHERE BIZ_DCD = 'DDL'
+                         AND RQST_STEP_CD = 'A'
+                       GROUP BY RQST_NO
+                    ) DDLC
+            ON A.RQST_NO = DDLC.RQST_NO
+          LEFT OUTER JOIN (
+                      SELECT RQST_NO
+                           , COUNT(1) AS CNT
+                        FROM WAQ_MSTR
+                       WHERE BIZ_DCD = 'DDX'
+                         AND RQST_STEP_CD = 'A'
+                       GROUP BY RQST_NO
+                    ) DDXC
+            ON A.RQST_NO = DDXC.RQST_NO
+          LEFT OUTER JOIN (
+                      SELECT RQST_NO
+                           , COUNT(1) AS DDL_CNT
+                        FROM WAQ_DDL_TBL
+                       GROUP BY RQST_NO
+                    ) B
+            ON A.RQST_NO = B.RQST_NO
+          LEFT OUTER JOIN (
+                      SELECT RQST_NO
+                           , COUNT(1) AS DDL_IDX_CNT
+                        FROM WAQ_DDL_IDX
+                       GROUP BY RQST_NO
+                    ) C
+            ON A.RQST_NO = C.RQST_NO
+          LEFT OUTER JOIN (
+                            SELECT RQST_NO
+                                 , COUNT(1) AS DDL_CNT
+                              FROM WAH_DDL_TBL
+                             WHERE PRC_DT IS NOT NULL
+                               AND EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+                             GROUP BY RQST_NO
+                          ) DDLHC
+            ON A.RQST_NO = DDLHC.RQST_NO
+          LEFT OUTER JOIN (
+                            SELECT RQST_NO
+                                 , COUNT(1) AS DDL_CNT
+                              FROM WAH_DDL_IDX
+                             WHERE PRC_DT IS NOT NULL
+                               AND EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+                             GROUP BY RQST_NO
+                          ) DDXHC
+            ON A.RQST_NO = DDXHC.RQST_NO
+         WHERE A.APRV_DTM IS NOT NULL
+         
+        <if test="searchBgnDe != null and searchBgnDe != '' " >
+		<![CDATA[ AND STR_TO_DATE(A.APRV_DTM, '%Y-%m-%d') >= #{searchBgnDe,jdbcType=VARCHAR}   ]]>
+		</if>
+		<if test="searchEndDe != null and searchEndDe != '' " >
+		<![CDATA[	 AND STR_TO_DATE(A.APRV_DTM, '%Y-%m-%d') <= #{searchEndDe,jdbcType=VARCHAR}  ]]>
+		</if>
+         GROUP BY CONCAT(DATE_FORMAT(A.APRV_DTM, '%Y') , '년' , DATE_FORMAT(A.APRV_DTM, '%m') , '월')  
+         
+         
+         
+       ) A
+   ORDER BY STA_DTM
+    
+
+</select>
+
+<select id="getDdlRqstBiz" resultMap="BaseResultMap" parameterType="kr.wise.meta.report.service.RqstReportVO">
+        SELECT 	/* RqstReportMapper.getDdlRqstBiz */
+        		A.STND_ASRT 
+        	 , A.SYS_AREA_LNM
+		     , A.FULL_PATH
+		     , COUNT(1) AS TOT_CNT
+		     , SUM(CASE WHEN A.REG_TYP_CD = 'C' THEN 1 ELSE 0 END) AS INS_CNT
+		     , SUM(CASE WHEN A.REG_TYP_CD = 'U' THEN 1 ELSE 0 END) AS UPD_CNT
+		     , SUM(CASE WHEN A.REG_TYP_CD = 'D' THEN 1 ELSE 0 END) AS DEL_CNT
+		  FROM (
+		        SELECT DT.REG_TYP_CD
+		        	 , SU.STND_ASRT
+		             , SU.FULL_PATH
+		             , SA.SYS_AREA_LNM
+		          FROM WAM_DDL_TBL DT
+		         INNER JOIN WAM_PDM_TBL PT 
+		            ON DT.PDM_TBL_ID = PT.PDM_TBL_ID
+		           AND DT.STND_ASRT = PT.STND_ASRT
+		         INNER JOIN WAA_SUBJ SU
+		            ON PT.SUBJ_ID = SU.SUBJ_ID
+		           AND PT.STND_ASRT = SU.STND_ASRT
+		           AND SU.REG_TYP_CD IN ('C', 'U')
+		           AND SU.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+		         INNER JOIN WAA_SYS_AREA SA
+		            ON SU.SYS_AREA_ID = SA.SYS_AREA_ID
+		           AND SU.STND_ASRT = SA.STND_ASRT
+		           AND SA.REG_TYP_CD IN ('C', 'U')
+		           AND SA.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+		         <if test="searchBgnDe != null and searchBgnDe != '' " >
+				  	<![CDATA[ AND DT.APRV_DTM >= STR_TO_DATE(#{searchBgnDe,jdbcType=VARCHAR}, '%Y-%m-%d')   ]]>
+				  </if>
+				  <if test="searchEndDe != null and searchEndDe != '' " >
+				  	<![CDATA[ AND DT.APRV_DTM <= STR_TO_DATE(#{searchEndDe,jdbcType=VARCHAR}, '%Y-%m-%d')  ]]>
+				  </if>
+		        UNION ALL
+		        SELECT DI.REG_TYP_CD
+		        	 , SU.STND_ASRT
+		             , SU.FULL_PATH
+		             , SA.SYS_AREA_LNM
+		          FROM WAM_DDL_IDX DI
+		         INNER JOIN WAM_DDL_TBL DT
+		            ON DI.DDL_TBL_ID = DT.DDL_TBL_ID
+		           AND DI.STND_ASRT = DT.STND_ASRT
+		         INNER JOIN WAM_PDM_TBL PT
+		            ON DT.PDM_TBL_ID = PT.PDM_TBL_ID
+		           AND DT.STND_ASRT = PT.STND_ASRT 
+		         INNER JOIN WAA_SUBJ SU
+		            ON PT.SUBJ_ID = SU.SUBJ_ID
+		           AND PT.STND_ASRT = SU.STND_ASRT
+		           AND SU.REG_TYP_CD IN ('C', 'U')
+		           AND SU.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+		         INNER JOIN WAA_SYS_AREA SA
+		            ON SU.SYS_AREA_ID = SA.SYS_AREA_ID
+		           AND SU.STND_ASRT = SA.STND_ASRT
+		           AND SA.REG_TYP_CD IN ('C', 'U')
+		           AND SA.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+		         <if test="searchBgnDe != null and searchBgnDe != '' " >
+				  	<![CDATA[ AND DI.APRV_DTM >= STR_TO_DATE(#{searchBgnDe,jdbcType=VARCHAR}, '%Y-%m-%d')   ]]>
+				  </if>
+				  <if test="searchEndDe != null and searchEndDe != '' " >
+				  	<![CDATA[ AND DI.APRV_DTM <= STR_TO_DATE(#{searchEndDe,jdbcType=VARCHAR}, '%Y-%m-%d')  ]]>
+				  </if>
+		       ) A
+		 GROUP BY STND_ASRT, SYS_AREA_LNM, FULL_PATH
+		 ORDER BY STND_ASRT, SYS_AREA_LNM, FULL_PATH
+	             
+</select>
+<select id="getDdlRqstDept" resultMap="BaseResultMap" parameterType="kr.wise.meta.report.service.RqstReportVO">
+-- 기타요청서(기타오브젝트)없음 ETC로 우선가정
+ SELECT   	/* RqstReportMapper.getDdlRqstDept */
+ 			IFNULL(A.DEPT_ID,'9999999') AS DEPT_ID 
+        , IFNULL(A.DEPT_NM,'외부개발팀') AS PARENT_DEPT_NM
+        , IFNULL(A.PART_ID,'9999999') AS PART_ID
+        , IFNULL(A.PART_NM,'외부개발팀') AS PART_NM
+        , SUM(1) AS TOT_CNT 
+        , SUM(CASE WHEN B.OBJECT_TYPE != 'ETC' AND B.REG_TYP_CD = 'C' THEN 1 ELSE 0 END) AS INS_CNT
+        , SUM(CASE WHEN B.OBJECT_TYPE != 'ETC' AND B.REG_TYP_CD = 'U' THEN 1 ELSE 0 END) AS UPD_CNT
+        , SUM(CASE WHEN B.OBJECT_TYPE != 'ETC' AND B.REG_TYP_CD = 'D' THEN 1 ELSE 0 END) AS DEL_CNT
+        , SUM(CASE WHEN B.OBJECT_TYPE = 'ETC' THEN 1 ELSE 0 END) ETC_CNT
+  FROM (  
+      SELECT   A.DEPT_ID AS PART_ID
+            , A.DEPT_NM AS PART_NM
+            , B.DEPT_ID AS DEPT_ID
+            , B.DEPT_NM AS DEPT_NM
+       FROM WAA_DEPT A
+      INNER JOIN  WAA_DEPT B
+         ON A.UPP_DEPT_ID = B.DEPT_ID
+        AND B.EXP_DTM = STR_TO_DATE('9999-12-31','%Y-%m-%d')
+        AND B.REG_TYP_CD IN ('C','U')
+      WHERE A.EXP_DTM = STR_TO_DATE('9999-12-31','%Y-%m-%d')
+        AND A.REG_TYP_CD IN ('C','U')
+        AND SUBSTR(A.DEPT_ID,1,2) = '00'
+<![CDATA[ AND A.DEPT_LVL = '3'     ]]>
+       ) A RIGHT OUTER JOIN (
+                SELECT   B.DEPT_ID AS PART_ID
+                      , A.REG_TYP_CD
+                      , 'TABLE' AS OBJECT_TYPE
+                 FROM WAM_DDL_TBL A 
+                 LEFT OUTER JOIN (    
+                        SELECT DEPT_ID,USER_ID
+                          FROM WAA_USER 
+                         WHERE EXP_DTM = STR_TO_DATE('9999-12-31','%Y-%m-%d') 
+                           AND REG_TYP_CD IN('C','U')
+                             ) B
+                   ON IFNULL(A.RQST_USER_ID,A.FRS_RQST_USER_ID) = B.USER_ID
+                WHERE 1=1
+                  AND EXISTS (SELECT 1 FROM WAQ_MSTR C WHERE C.RQST_NO = A.RQST_NO )
+                <if test="searchBgnDe != null and searchBgnDe != '' " >
+				<![CDATA[ AND STR_TO_DATE(A.APRV_DTM, '%Y-%m-%d') >= #{searchBgnDe,jdbcType=VARCHAR}   ]]>
+				</if>
+				<if test="searchEndDe != null and searchEndDe != '' " >
+				<![CDATA[	 AND STR_TO_DATE(A.APRV_DTM, '%Y-%m-%d') <= #{searchEndDe,jdbcType=VARCHAR}  ]]>
+				</if>
+                  
+            UNION ALL
+            
+               SELECT  B.DEPT_ID AS PART_ID
+                      , A.REG_TYP_CD
+                      , 'TABLE' AS OBJECT_TYPE
+                 FROM WAM_DDL_IDX A 
+                 LEFT OUTER JOIN (    
+                        SELECT DEPT_ID,USER_ID
+                          FROM WAA_USER 
+                         WHERE EXP_DTM = STR_TO_DATE('9999-12-31','%Y-%m-%d') 
+                           AND REG_TYP_CD IN('C','U')
+                             ) B
+                   ON IFNULL(A.RQST_USER_ID,A.FRS_RQST_USER_ID) = B.USER_ID
+                WHERE 1=1
+                  AND EXISTS (SELECT 1 FROM WAQ_MSTR C WHERE C.RQST_NO = A.RQST_NO )
+                <if test="searchBgnDe != null and searchBgnDe != '' " >
+				<![CDATA[ AND STR_TO_DATE(A.APRV_DTM, '%Y-%m-%d') >= #{searchBgnDe,jdbcType=VARCHAR}   ]]>
+				</if>
+				<if test="searchEndDe != null and searchEndDe != '' " >
+				<![CDATA[	 AND STR_TO_DATE(A.APRV_DTM, '%Y-%m-%d') <= #{searchEndDe,jdbcType=VARCHAR}  ]]>
+				</if>
+                  ) B
+    ON A.PART_ID = B.PART_ID
+ 	GROUP BY  A.DEPT_ID, A.DEPT_NM, A.PART_ID, A.PART_NM
+ 	ORDER BY PARENT_DEPT_NM, PART_NM 
+
+
+</select>
+
+<select id="getDdlRqstDb" resultMap="BaseResultMap" parameterType="kr.wise.meta.report.service.RqstReportVO">
+ SELECT /* RqstReportMapper.getDdlRqstDb */
+ 		STND_ASRT,
+       DBSERVER_NM,
+       COUNT(1) AS TOT_CNT,
+       SUM(CASE WHEN OBJECT_TYPE ='TABLE' AND REG_TYP_CD = 'C' THEN 1 ELSE 0 END) AS TBL_INS_CNT,
+       SUM(CASE WHEN OBJECT_TYPE ='TABLE' AND REG_TYP_CD = 'U' THEN 1 ELSE 0 END) AS TBL_UPD_CNT,
+       SUM(CASE WHEN OBJECT_TYPE ='TABLE' AND REG_TYP_CD = 'D' THEN 1 ELSE 0 END) AS TBL_DEL_CNT,
+       SUM(CASE WHEN OBJECT_TYPE ='INDEX' AND REG_TYP_CD = 'C' THEN 1 ELSE 0 END) AS IDX_INS_CNT,
+       SUM(CASE WHEN OBJECT_TYPE ='INDEX' AND REG_TYP_CD = 'U' THEN 1 ELSE 0 END) AS IDX_UPD_CNT,
+       SUM(CASE WHEN OBJECT_TYPE ='INDEX' AND REG_TYP_CD = 'D' THEN 1 ELSE 0 END) AS IDX_DEL_CNT,
+       SUM(CASE WHEN OBJECT_TYPE ='TRIGER' THEN 1 ELSE 0 END) AS TRI_CNT,
+       SUM(CASE WHEN OBJECT_TYPE ='SYNONYM' THEN 1 ELSE 0 END) AS SYM_CNT,
+       SUM(CASE WHEN OBJECT_TYPE ='PROC' THEN 1 ELSE 0 END) AS PROC_CNT,
+       SUM(CASE WHEN OBJECT_TYPE ='FUNC' THEN 1 ELSE 0 END) AS FUNC_CNT,
+       SUM(CASE WHEN OBJECT_TYPE ='PARTITION' THEN 1 ELSE 0 END) AS PART_CNT,
+       SUM(CASE WHEN OBJECT_TYPE ='ETC' THEN 1 ELSE 0 END) AS ETC_CNT
+       
+FROM (
+         SELECT 'TABLE' AS OBJECT_TYPE
+                , DB.DB_CONN_TRG_LNM AS DBSERVER_NM
+                , A.REG_TYP_CD
+                , A.STND_ASRT
+           FROM WAM_DDL_TBL A
+           		LEFT OUTER JOIN WAA_DB_SCH SCH
+           					 ON A.DB_SCH_ID = SCH.DB_SCH_ID
+           					AND A.STND_ASRT = SCH.STND_ASRT
+           					AND SCH.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+           					AND SCH.REG_TYP_CD IN ('C','U')
+           		LEFT OUTER JOIN WAA_DB_CONN_TRG DB
+           					 ON SCH.DB_CONN_TRG_ID = DB.DB_CONN_TRG_ID
+           					AND SCH.STND_ASRT = DB.STND_ASRT 
+           					AND DB.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+           					AND DB.REG_TYP_CD IN ('C','U')
+           					 
+          WHERE 1=1
+            AND EXISTS (SELECT 1 FROM WAQ_MSTR B WHERE B.RQST_NO = A.RQST_NO)
+            <if test="searchBgnDe != null and searchBgnDe != '' " >
+				<![CDATA[ AND STR_TO_DATE(A.APRV_DTM, '%Y-%m-%d') >= #{searchBgnDe,jdbcType=VARCHAR}   ]]>
+			</if>
+			<if test="searchEndDe != null and searchEndDe != '' " >
+				<![CDATA[	 AND STR_TO_DATE(A.APRV_DTM, '%Y-%m-%d') <= #{searchEndDe,jdbcType=VARCHAR}  ]]>
+			</if>
+
+        UNION ALL
+        SELECT   'INDEX' AS OBJECT_TYPE
+                    , DB.DB_CONN_TRG_LNM AS DBSERVER_NM
+                    , A.REG_TYP_CD
+                    , A.STND_ASRT
+               FROM WAM_DDL_IDX A 
+               		LEFT OUTER JOIN WAM_DDL_TBL B
+                 				 ON A.DDL_TBL_ID = B.DDL_TBL_ID
+                		   		AND A.STND_ASRT = B.STND_ASRT
+                	LEFT OUTER JOIN WAA_DB_SCH SCH
+	           					 ON B.DB_SCH_ID = SCH.DB_SCH_ID
+	           					AND B.STND_ASRT = SCH.STND_ASRT
+	           					AND SCH.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	           					AND SCH.REG_TYP_CD IN ('C','U')
+           			LEFT OUTER JOIN WAA_DB_CONN_TRG DB
+	           					 ON SCH.DB_CONN_TRG_ID = DB.DB_CONN_TRG_ID
+	           					AND SCH.STND_ASRT = DB.STND_ASRT 
+	           					AND DB.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	           					AND DB.REG_TYP_CD IN ('C','U')
+                		   
+              WHERE 1=1
+                AND EXISTS (SELECT 1 FROM WAQ_MSTR B WHERE B.RQST_NO = A.RQST_NO)
+                <if test="searchBgnDe != null and searchBgnDe != '' " >
+					<![CDATA[ AND STR_TO_DATE(A.APRV_DTM, '%Y-%m-%d') >= #{searchBgnDe,jdbcType=VARCHAR}   ]]>
+				</if>
+				<if test="searchEndDe != null and searchEndDe != '' " >
+					<![CDATA[	 AND STR_TO_DATE(A.APRV_DTM, '%Y-%m-%d') <= #{searchEndDe,jdbcType=VARCHAR}  ]]>
+				</if>
+  ) TBL
+WHERE 1=1
+GROUP BY STND_ASRT, DBSERVER_NM
+</select>
+
+<select id="getRqstStatusList" parameterType="kr.wise.meta.report.service.RqstReportVO" resultMap="BaseResultMap">
+	SELECT /* RqstReportMapper.getRqstStatusList */
+		   COUNT(*) AS RQST_CNT   
+		 , SUM(CASE WHEN C.RVW_STS_CD = '1' THEN 1 WHEN C.RVW_STS_CD = '3' THEN 1  ELSE 0 END) AS RQST_APRV_CNT  
+		 , SUM(CASE WHEN C.RVW_STS_CD = '2' THEN 1 ELSE 0 END) + SUM(CASE WHEN C.RVW_STS_CD = '0' THEN 1 ELSE 0 END) AS RQST_RJCT_CNT     							
+	  FROM WAQ_MSTR A
+	 INNER JOIN (SELECT B.RQST_NO
+	  						, IFNULL(B.RVW_STS_CD, 3) AS RVW_STS_CD
+		                 FROM WAA_APR_PRC B
+		                WHERE B.APR_LVL = ( SELECT MAX(D.APR_LVL)
+		                                      FROM WAA_APR_PRC D
+		                                     WHERE D.RQST_NO = B.RQST_NO
+		                                  )
+		              ) C
+		ON A.RQST_NO = C.RQST_NO
+	 WHERE 1=1
+	   AND A.RQST_STEP_CD ='A'
+</select>
+</mapper>
+
+

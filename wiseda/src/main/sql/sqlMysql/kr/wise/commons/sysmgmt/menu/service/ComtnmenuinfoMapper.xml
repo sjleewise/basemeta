@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.commons.sysmgmt.menu.service.ComtnmenuinfoMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.commons.sysmgmt.menu.service.Comtnmenuinfo" >
+    <id column="MENU_NO" property="menuNo" jdbcType="DECIMAL" />
+    <result column="MENU_NM" property="menuNm" jdbcType="VARCHAR" />
+    <result column="PROGRM_FILE_NM" property="progrmFileNm" jdbcType="VARCHAR" />
+    <result column="UPPER_MENU_NO" property="upperMenuNo" jdbcType="DECIMAL" />
+    <result column="MENU_ORDR" property="menuOrdr" jdbcType="DECIMAL" />
+    <result column="MENU_DC" property="menuDc" jdbcType="VARCHAR" />
+    <result column="RELATE_IMAGE_PATH" property="relateImagePath" jdbcType="VARCHAR" />
+    <result column="RELATE_IMAGE_NM" property="relateImageNm" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    MENU_NO, MENU_NM, PROGRM_FILE_NM, UPPER_MENU_NO, MENU_ORDR, MENU_DC, RELATE_IMAGE_PATH, 
+    RELATE_IMAGE_NM
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.math.BigDecimal" >
+    select 
+    <include refid="Base_Column_List" />
+    from COMTNMENUINFO
+    where MENU_NO = #{menuNo,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.math.BigDecimal" >
+    delete from COMTNMENUINFO
+    where MENU_NO = #{menuNo,jdbcType=DECIMAL}
+  </delete>
+  <insert id="insert" parameterType="kr.wise.commons.sysmgmt.menu.service.Comtnmenuinfo" >
+    insert into COMTNMENUINFO (MENU_NO, MENU_NM, PROGRM_FILE_NM, 
+      UPPER_MENU_NO, MENU_ORDR, MENU_DC, 
+      RELATE_IMAGE_PATH, RELATE_IMAGE_NM)
+    values (#{menuNo,jdbcType=DECIMAL}, #{menuNm,jdbcType=VARCHAR}, #{progrmFileNm,jdbcType=VARCHAR}, 
+      #{upperMenuNo,jdbcType=DECIMAL}, #{menuOrdr,jdbcType=DECIMAL}, #{menuDc,jdbcType=VARCHAR}, 
+      #{relateImagePath,jdbcType=VARCHAR}, #{relateImageNm,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="kr.wise.commons.sysmgmt.menu.service.Comtnmenuinfo" >
+    insert into COMTNMENUINFO
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="menuNo != null" >
+        MENU_NO,
+      </if>
+      <if test="menuNm != null" >
+        MENU_NM,
+      </if>
+      <if test="progrmFileNm != null" >
+        PROGRM_FILE_NM,
+      </if>
+      <if test="upperMenuNo != null" >
+        UPPER_MENU_NO,
+      </if>
+      <if test="menuOrdr != null" >
+        MENU_ORDR,
+      </if>
+      <if test="menuDc != null" >
+        MENU_DC,
+      </if>
+      <if test="relateImagePath != null" >
+        RELATE_IMAGE_PATH,
+      </if>
+      <if test="relateImageNm != null" >
+        RELATE_IMAGE_NM,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="menuNo != null" >
+        #{menuNo,jdbcType=DECIMAL},
+      </if>
+      <if test="menuNm != null" >
+        #{menuNm,jdbcType=VARCHAR},
+      </if>
+      <if test="progrmFileNm != null" >
+        #{progrmFileNm,jdbcType=VARCHAR},
+      </if>
+      <if test="upperMenuNo != null" >
+        #{upperMenuNo,jdbcType=DECIMAL},
+      </if>
+      <if test="menuOrdr != null" >
+        #{menuOrdr,jdbcType=DECIMAL},
+      </if>
+      <if test="menuDc != null" >
+        #{menuDc,jdbcType=VARCHAR},
+      </if>
+      <if test="relateImagePath != null" >
+        #{relateImagePath,jdbcType=VARCHAR},
+      </if>
+      <if test="relateImageNm != null" >
+        #{relateImageNm,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.commons.sysmgmt.menu.service.Comtnmenuinfo" >
+    update COMTNMENUINFO
+    <set >
+      <if test="menuNm != null" >
+        MENU_NM = #{menuNm,jdbcType=VARCHAR},
+      </if>
+      <if test="progrmFileNm != null" >
+        PROGRM_FILE_NM = #{progrmFileNm,jdbcType=VARCHAR},
+      </if>
+      <if test="upperMenuNo != null" >
+        UPPER_MENU_NO = #{upperMenuNo,jdbcType=DECIMAL},
+      </if>
+      <if test="menuOrdr != null" >
+        MENU_ORDR = #{menuOrdr,jdbcType=DECIMAL},
+      </if>
+      <if test="menuDc != null" >
+        MENU_DC = #{menuDc,jdbcType=VARCHAR},
+      </if>
+      <if test="relateImagePath != null" >
+        RELATE_IMAGE_PATH = #{relateImagePath,jdbcType=VARCHAR},
+      </if>
+      <if test="relateImageNm != null" >
+        RELATE_IMAGE_NM = #{relateImageNm,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where MENU_NO = #{menuNo,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="kr.wise.commons.sysmgmt.menu.service.Comtnmenuinfo" >
+    update COMTNMENUINFO
+    set MENU_NM = #{menuNm,jdbcType=VARCHAR},
+      PROGRM_FILE_NM = #{progrmFileNm,jdbcType=VARCHAR},
+      UPPER_MENU_NO = #{upperMenuNo,jdbcType=DECIMAL},
+      MENU_ORDR = #{menuOrdr,jdbcType=DECIMAL},
+      MENU_DC = #{menuDc,jdbcType=VARCHAR},
+      RELATE_IMAGE_PATH = #{relateImagePath,jdbcType=VARCHAR},
+      RELATE_IMAGE_NM = #{relateImageNm,jdbcType=VARCHAR}
+    where MENU_NO = #{menuNo,jdbcType=DECIMAL}
+  </update>
+</mapper>

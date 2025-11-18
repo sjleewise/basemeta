@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.sysinf.prism.service.PrismResearchDtlMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.sysinf.prism.service.PrismResearchDtl" >
+    <id column="RESEARCH_ID" property="researchId" jdbcType="VARCHAR" />
+    <result column="RESEARCH_NAME" property="researchName" jdbcType="VARCHAR" />
+    <result column="ORGAN_NAME" property="organName" jdbcType="VARCHAR" />
+    <result column="DEPT_NAME" property="deptName" jdbcType="VARCHAR" />
+    <result column="DEPT_PHONE" property="deptPhone" jdbcType="VARCHAR" />
+    <result column="BRM_BIZNM" property="brmBiznm" jdbcType="VARCHAR" />
+    <result column="BRM_BIZID" property="brmBizid" jdbcType="VARCHAR" />
+    <result column="RESEARCH_START_DATE" property="researchStartDate" jdbcType="VARCHAR" />
+    <result column="RESEARCH_END_DATE" property="researchEndDate" jdbcType="VARCHAR" />
+    <result column="RESEARCH_ORGAN_NAME" property="researchOrganName" jdbcType="VARCHAR" />
+    <result column="RESEARCHER_NAME" property="researcherName" jdbcType="VARCHAR" />
+    <result column="CONTRACT_DATE" property="contractDate" jdbcType="VARCHAR" />
+    <result column="CONTRACT_TYPE" property="contractType" jdbcType="VARCHAR" />
+    <result column="CONTRACT_COST" property="contractCost" jdbcType="VARCHAR" />
+    <result column="AR_FILE_NAME" property="arFileName" jdbcType="VARCHAR" />
+    <result column="AR_FILE_SIZE" property="arFileSize" jdbcType="VARCHAR" />
+    <result column="UT_FILE_NAME" property="utFileName" jdbcType="VARCHAR" />
+    <result column="UT_FILE_SIZE" property="utFileSize" jdbcType="VARCHAR" />
+    <result column="KOGL_OPEN_YN" property="koglOpenYn" jdbcType="VARCHAR" />
+    <result column="KOGL_BIZ_YN" property="koglBizYn" jdbcType="VARCHAR" />
+    <result column="KOGL_UPDATE_YN" property="koglUpdateYn" jdbcType="VARCHAR" />
+    <result column="KOGL_CONTENT" property="koglContent" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="kr.wise.sysinf.prism.service.PrismResearchDtl" extends="BaseResultMap" >
+    <result column="RESEARCH_OUTLINE" property="researchOutline" jdbcType="CLOB" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    RESEARCH_ID, RESEARCH_NAME, ORGAN_NAME, DEPT_NAME, DEPT_PHONE, BRM_BIZNM, BRM_BIZID, 
+    RESEARCH_START_DATE, RESEARCH_END_DATE, RESEARCH_ORGAN_NAME, RESEARCHER_NAME, CONTRACT_DATE, 
+    CONTRACT_TYPE, CONTRACT_COST, AR_FILE_NAME, AR_FILE_SIZE, UT_FILE_NAME, UT_FILE_SIZE, 
+    KOGL_OPEN_YN, KOGL_BIZ_YN, KOGL_UPDATE_YN, KOGL_CONTENT
+  </sql>
+  <sql id="Blob_Column_List" >
+    RESEARCH_OUTLINE
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String" >
+    select /* PrismResearchDtlMapper.selectByPrimaryKey */
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from PRISM_RESEARCH_DTL
+    where RESEARCH_ID = #{researchId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete /* PrismResearchDtlMapper.deleteByPrimaryKey */
+    from PRISM_RESEARCH_DTL
+    where RESEARCH_ID = #{researchId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="kr.wise.sysinf.prism.service.PrismResearchDtl" >
+    insert /* PrismResearchDtlMapper.insert */
+    	into PRISM_RESEARCH_DTL (RESEARCH_ID, RESEARCH_NAME, ORGAN_NAME, 
+      DEPT_NAME, DEPT_PHONE, BRM_BIZNM, 
+      BRM_BIZID, RESEARCH_START_DATE, RESEARCH_END_DATE, 
+      RESEARCH_ORGAN_NAME, RESEARCHER_NAME, CONTRACT_DATE, 
+      CONTRACT_TYPE, CONTRACT_COST, AR_FILE_NAME, 
+      AR_FILE_SIZE, UT_FILE_NAME, UT_FILE_SIZE, 
+      KOGL_OPEN_YN, KOGL_BIZ_YN, KOGL_UPDATE_YN, 
+      KOGL_CONTENT, RESEARCH_OUTLINE)
+    values (#{researchId,jdbcType=VARCHAR}, #{researchName,jdbcType=VARCHAR}, #{organName,jdbcType=VARCHAR}, 
+      #{deptName,jdbcType=VARCHAR}, #{deptPhone,jdbcType=VARCHAR}, #{brmBiznm,jdbcType=VARCHAR}, 
+      #{brmBizid,jdbcType=VARCHAR}, #{researchStartDate,jdbcType=VARCHAR}, #{researchEndDate,jdbcType=VARCHAR}, 
+      #{researchOrganName,jdbcType=VARCHAR}, #{researcherName,jdbcType=VARCHAR}, #{contractDate,jdbcType=VARCHAR}, 
+      #{contractType,jdbcType=VARCHAR}, #{contractCost,jdbcType=VARCHAR}, #{arFileName,jdbcType=VARCHAR}, 
+      #{arFileSize,jdbcType=VARCHAR}, #{utFileName,jdbcType=VARCHAR}, #{utFileSize,jdbcType=VARCHAR}, 
+      #{koglOpenYn,jdbcType=VARCHAR}, #{koglBizYn,jdbcType=VARCHAR}, #{koglUpdateYn,jdbcType=VARCHAR}, 
+      #{koglContent,jdbcType=VARCHAR}, #{researchOutline,jdbcType=CLOB})
+  </insert>
+
+
+  <insert id="insertResearchDetail" parameterType="kr.wise.sysinf.prism.service.ResearchDetail" >
+    insert /* PrismResearchDtlMapper.insertResearchDetail */
+    	into PRISM_RESEARCH_DTL (RESEARCH_ID, RESEARCH_NAME, ORGAN_NAME, 
+      DEPT_NAME, DEPT_PHONE, BRM_BIZNM, 
+      BRM_BIZID, RESEARCH_START_DATE, RESEARCH_END_DATE, 
+      RESEARCH_ORGAN_NAME, RESEARCHER_NAME, CONTRACT_DATE, 
+      CONTRACT_TYPE, CONTRACT_COST, --AR_FILE_NAME, 
+      --AR_FILE_SIZE, UT_FILE_NAME, UT_FILE_SIZE, 
+      KOGL_OPEN_YN, KOGL_BIZ_YN, KOGL_UPDATE_YN, 
+      KOGL_CONTENT, RESEARCH_OUTLINE)
+    values (#{research.researchID,jdbcType=VARCHAR}, #{research.researchName,jdbcType=VARCHAR}, #{research.organName,jdbcType=VARCHAR}, 
+      #{research.chargePersonDepartment,jdbcType=VARCHAR}, #{research.chargePersonPhoneNo,jdbcType=VARCHAR}, #{research.brmBizName,jdbcType=VARCHAR}, 
+      #{research.brmBizId,jdbcType=VARCHAR}, #{research.researchStartDate,jdbcType=VARCHAR}, #{research.researchEndDate,jdbcType=VARCHAR}, 
+      #{contract.researchOrganName,jdbcType=VARCHAR}, #{contract.researcherName,jdbcType=VARCHAR}, #{contract.contractDate,jdbcType=VARCHAR}, 
+      #{contract.contractType,jdbcType=VARCHAR}, #{contract.contractCost,jdbcType=VARCHAR}, 
+      #{kogl.koglOpenYn,jdbcType=VARCHAR}, #{kogl.koglBusinessYn,jdbcType=VARCHAR}, #{kogl.koglWorkUpdateYn,jdbcType=VARCHAR}, 
+      #{kogl.koglContent,jdbcType=VARCHAR}, #{research.researchOutline,jdbcType=CLOB})
+  </insert>
+
+  <insert id="insertSelective" parameterType="kr.wise.sysinf.prism.service.PrismResearchDtl" >
+    insert /* PrismResearchDtlMapper.insertSelective */
+    	into PRISM_RESEARCH_DTL
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="researchId != null" >
+        RESEARCH_ID,
+      </if>
+      <if test="researchName != null" >
+        RESEARCH_NAME,
+      </if>
+      <if test="organName != null" >
+        ORGAN_NAME,
+      </if>
+      <if test="deptName != null" >
+        DEPT_NAME,
+      </if>
+      <if test="deptPhone != null" >
+        DEPT_PHONE,
+      </if>
+      <if test="brmBiznm != null" >
+        BRM_BIZNM,
+      </if>
+      <if test="brmBizid != null" >
+        BRM_BIZID,
+      </if>
+      <if test="researchStartDate != null" >
+        RESEARCH_START_DATE,
+      </if>
+      <if test="researchEndDate != null" >
+        RESEARCH_END_DATE,
+      </if>
+      <if test="researchOrganName != null" >
+        RESEARCH_ORGAN_NAME,
+      </if>
+      <if test="researcherName != null" >
+        RESEARCHER_NAME,
+      </if>
+      <if test="contractDate != null" >
+        CONTRACT_DATE,
+      </if>
+      <if test="contractType != null" >
+        CONTRACT_TYPE,
+      </if>
+      <if test="contractCost != null" >
+        CONTRACT_COST,
+      </if>
+      <if test="arFileName != null" >
+        AR_FILE_NAME,
+      </if>
+      <if test="arFileSize != null" >
+        AR_FILE_SIZE,
+      </if>
+      <if test="utFileName != null" >
+        UT_FILE_NAME,
+      </if>
+      <if test="utFileSize != null" >
+        UT_FILE_SIZE,
+      </if>
+      <if test="koglOpenYn != null" >
+        KOGL_OPEN_YN,
+      </if>
+      <if test="koglBizYn != null" >
+        KOGL_BIZ_YN,
+      </if>
+      <if test="koglUpdateYn != null" >
+        KOGL_UPDATE_YN,
+      </if>
+      <if test="koglContent != null" >
+        KOGL_CONTENT,
+      </if>
+      <if test="researchOutline != null" >
+        RESEARCH_OUTLINE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="researchId != null" >
+        #{researchId,jdbcType=VARCHAR},
+      </if>
+      <if test="researchName != null" >
+        #{researchName,jdbcType=VARCHAR},
+      </if>
+      <if test="organName != null" >
+        #{organName,jdbcType=VARCHAR},
+      </if>
+      <if test="deptName != null" >
+        #{deptName,jdbcType=VARCHAR},
+      </if>
+      <if test="deptPhone != null" >
+        #{deptPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="brmBiznm != null" >
+        #{brmBiznm,jdbcType=VARCHAR},
+      </if>
+      <if test="brmBizid != null" >
+        #{brmBizid,jdbcType=VARCHAR},
+      </if>
+      <if test="researchStartDate != null" >
+        #{researchStartDate,jdbcType=VARCHAR},
+      </if>
+      <if test="researchEndDate != null" >
+        #{researchEndDate,jdbcType=VARCHAR},
+      </if>
+      <if test="researchOrganName != null" >
+        #{researchOrganName,jdbcType=VARCHAR},
+      </if>
+      <if test="researcherName != null" >
+        #{researcherName,jdbcType=VARCHAR},
+      </if>
+      <if test="contractDate != null" >
+        #{contractDate,jdbcType=VARCHAR},
+      </if>
+      <if test="contractType != null" >
+        #{contractType,jdbcType=VARCHAR},
+      </if>
+      <if test="contractCost != null" >
+        #{contractCost,jdbcType=VARCHAR},
+      </if>
+      <if test="arFileName != null" >
+        #{arFileName,jdbcType=VARCHAR},
+      </if>
+      <if test="arFileSize != null" >
+        #{arFileSize,jdbcType=VARCHAR},
+      </if>
+      <if test="utFileName != null" >
+        #{utFileName,jdbcType=VARCHAR},
+      </if>
+      <if test="utFileSize != null" >
+        #{utFileSize,jdbcType=VARCHAR},
+      </if>
+      <if test="koglOpenYn != null" >
+        #{koglOpenYn,jdbcType=VARCHAR},
+      </if>
+      <if test="koglBizYn != null" >
+        #{koglBizYn,jdbcType=VARCHAR},
+      </if>
+      <if test="koglUpdateYn != null" >
+        #{koglUpdateYn,jdbcType=VARCHAR},
+      </if>
+      <if test="koglContent != null" >
+        #{koglContent,jdbcType=VARCHAR},
+      </if>
+      <if test="researchOutline != null" >
+        #{researchOutline,jdbcType=CLOB},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.sysinf.prism.service.PrismResearchDtl" >
+    update /* PrismResearchDtlMapper.updateByPrimaryKeySelective */
+    	PRISM_RESEARCH_DTL
+    <set >
+      <if test="researchName != null" >
+        RESEARCH_NAME = #{researchName,jdbcType=VARCHAR},
+      </if>
+      <if test="organName != null" >
+        ORGAN_NAME = #{organName,jdbcType=VARCHAR},
+      </if>
+      <if test="deptName != null" >
+        DEPT_NAME = #{deptName,jdbcType=VARCHAR},
+      </if>
+      <if test="deptPhone != null" >
+        DEPT_PHONE = #{deptPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="brmBiznm != null" >
+        BRM_BIZNM = #{brmBiznm,jdbcType=VARCHAR},
+      </if>
+      <if test="brmBizid != null" >
+        BRM_BIZID = #{brmBizid,jdbcType=VARCHAR},
+      </if>
+      <if test="researchStartDate != null" >
+        RESEARCH_START_DATE = #{researchStartDate,jdbcType=VARCHAR},
+      </if>
+      <if test="researchEndDate != null" >
+        RESEARCH_END_DATE = #{researchEndDate,jdbcType=VARCHAR},
+      </if>
+      <if test="researchOrganName != null" >
+        RESEARCH_ORGAN_NAME = #{researchOrganName,jdbcType=VARCHAR},
+      </if>
+      <if test="researcherName != null" >
+        RESEARCHER_NAME = #{researcherName,jdbcType=VARCHAR},
+      </if>
+      <if test="contractDate != null" >
+        CONTRACT_DATE = #{contractDate,jdbcType=VARCHAR},
+      </if>
+      <if test="contractType != null" >
+        CONTRACT_TYPE = #{contractType,jdbcType=VARCHAR},
+      </if>
+      <if test="contractCost != null" >
+        CONTRACT_COST = #{contractCost,jdbcType=VARCHAR},
+      </if>
+      <if test="arFileName != null" >
+        AR_FILE_NAME = #{arFileName,jdbcType=VARCHAR},
+      </if>
+      <if test="arFileSize != null" >
+        AR_FILE_SIZE = #{arFileSize,jdbcType=VARCHAR},
+      </if>
+      <if test="utFileName != null" >
+        UT_FILE_NAME = #{utFileName,jdbcType=VARCHAR},
+      </if>
+      <if test="utFileSize != null" >
+        UT_FILE_SIZE = #{utFileSize,jdbcType=VARCHAR},
+      </if>
+      <if test="koglOpenYn != null" >
+        KOGL_OPEN_YN = #{koglOpenYn,jdbcType=VARCHAR},
+      </if>
+      <if test="koglBizYn != null" >
+        KOGL_BIZ_YN = #{koglBizYn,jdbcType=VARCHAR},
+      </if>
+      <if test="koglUpdateYn != null" >
+        KOGL_UPDATE_YN = #{koglUpdateYn,jdbcType=VARCHAR},
+      </if>
+      <if test="koglContent != null" >
+        KOGL_CONTENT = #{koglContent,jdbcType=VARCHAR},
+      </if>
+      <if test="researchOutline != null" >
+        RESEARCH_OUTLINE = #{researchOutline,jdbcType=CLOB},
+      </if>
+    </set>
+    where RESEARCH_ID = #{researchId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="kr.wise.sysinf.prism.service.PrismResearchDtl" >
+    update /* PrismResearchDtlMapper.updateByPrimaryKeyWithBLOBs */
+    	PRISM_RESEARCH_DTL
+    set RESEARCH_NAME = #{researchName,jdbcType=VARCHAR},
+      ORGAN_NAME = #{organName,jdbcType=VARCHAR},
+      DEPT_NAME = #{deptName,jdbcType=VARCHAR},
+      DEPT_PHONE = #{deptPhone,jdbcType=VARCHAR},
+      BRM_BIZNM = #{brmBiznm,jdbcType=VARCHAR},
+      BRM_BIZID = #{brmBizid,jdbcType=VARCHAR},
+      RESEARCH_START_DATE = #{researchStartDate,jdbcType=VARCHAR},
+      RESEARCH_END_DATE = #{researchEndDate,jdbcType=VARCHAR},
+      RESEARCH_ORGAN_NAME = #{researchOrganName,jdbcType=VARCHAR},
+      RESEARCHER_NAME = #{researcherName,jdbcType=VARCHAR},
+      CONTRACT_DATE = #{contractDate,jdbcType=VARCHAR},
+      CONTRACT_TYPE = #{contractType,jdbcType=VARCHAR},
+      CONTRACT_COST = #{contractCost,jdbcType=VARCHAR},
+      AR_FILE_NAME = #{arFileName,jdbcType=VARCHAR},
+      AR_FILE_SIZE = #{arFileSize,jdbcType=VARCHAR},
+      UT_FILE_NAME = #{utFileName,jdbcType=VARCHAR},
+      UT_FILE_SIZE = #{utFileSize,jdbcType=VARCHAR},
+      KOGL_OPEN_YN = #{koglOpenYn,jdbcType=VARCHAR},
+      KOGL_BIZ_YN = #{koglBizYn,jdbcType=VARCHAR},
+      KOGL_UPDATE_YN = #{koglUpdateYn,jdbcType=VARCHAR},
+      KOGL_CONTENT = #{koglContent,jdbcType=VARCHAR},
+      RESEARCH_OUTLINE = #{researchOutline,jdbcType=CLOB}
+    where RESEARCH_ID = #{researchId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="kr.wise.sysinf.prism.service.PrismResearchDtl" >
+    update /* PrismResearchDtlMapper.updateByPrimaryKey */
+    	PRISM_RESEARCH_DTL
+    set RESEARCH_NAME = #{researchName,jdbcType=VARCHAR},
+      ORGAN_NAME = #{organName,jdbcType=VARCHAR},
+      DEPT_NAME = #{deptName,jdbcType=VARCHAR},
+      DEPT_PHONE = #{deptPhone,jdbcType=VARCHAR},
+      BRM_BIZNM = #{brmBiznm,jdbcType=VARCHAR},
+      BRM_BIZID = #{brmBizid,jdbcType=VARCHAR},
+      RESEARCH_START_DATE = #{researchStartDate,jdbcType=VARCHAR},
+      RESEARCH_END_DATE = #{researchEndDate,jdbcType=VARCHAR},
+      RESEARCH_ORGAN_NAME = #{researchOrganName,jdbcType=VARCHAR},
+      RESEARCHER_NAME = #{researcherName,jdbcType=VARCHAR},
+      CONTRACT_DATE = #{contractDate,jdbcType=VARCHAR},
+      CONTRACT_TYPE = #{contractType,jdbcType=VARCHAR},
+      CONTRACT_COST = #{contractCost,jdbcType=VARCHAR},
+      AR_FILE_NAME = #{arFileName,jdbcType=VARCHAR},
+      AR_FILE_SIZE = #{arFileSize,jdbcType=VARCHAR},
+      UT_FILE_NAME = #{utFileName,jdbcType=VARCHAR},
+      UT_FILE_SIZE = #{utFileSize,jdbcType=VARCHAR},
+      KOGL_OPEN_YN = #{koglOpenYn,jdbcType=VARCHAR},
+      KOGL_BIZ_YN = #{koglBizYn,jdbcType=VARCHAR},
+      KOGL_UPDATE_YN = #{koglUpdateYn,jdbcType=VARCHAR},
+      KOGL_CONTENT = #{koglContent,jdbcType=VARCHAR}
+    where RESEARCH_ID = #{researchId,jdbcType=VARCHAR}
+  </update>
+</mapper>

@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.meta.stts.service.StndSttsMapper" >
+
+  <resultMap id="BaseResultMap" type="kr.wise.commons.sysmgmt.basicinfo.service.WaaBscLvl" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+    <id column="BSC_ID" property="bscId" jdbcType="VARCHAR" />
+    <result column="BSC_LVL" property="bscLvl" jdbcType="DECIMAL" />
+    <result column="SELECT_BOX_ID" property="selectBoxId" jdbcType="VARCHAR" />
+    <result column="SELECT_BOX_NM" property="selectBoxNm" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <resultMap id="standardList" type="kr.wise.portal.dashboard.service.StandardChartVO" >
+        <result column="SUBJ_ID" 	property="subjId"  />
+        <result column="SUBJ_NM" 	property="subjNm"  />
+        <result column="CNT" 		property="cnt"  />
+    	<result column="CNT_Y"  	property="cntY"  />
+    	<result column="CNT_N"  	property="cntN"  />
+    	<result column="STDRATE"  	property="stdRate"  />
+  </resultMap>
+    
+   <resultMap id="ListResultMap" type="kr.wise.meta.subjarea.service.WaaSubj" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+    <id column="SUBJ_ID" property="subjId" jdbcType="VARCHAR" />
+    <result column="SUBJ_LNM"     property="subjLnm"    jdbcType="VARCHAR" />
+    <result column="SUBJ_PNM"     property="subjPnm"    jdbcType="VARCHAR" />
+    <result column="SUBJ_ABR_NM"  property="subjAbrNm"  jdbcType="VARCHAR" />
+    <result column="UPP_SUBJ_ID"  property="uppSubjId"  jdbcType="VARCHAR" />
+    <result column="UPP_SUBJ_NM"  property="uppSubjNm"  jdbcType="VARCHAR" />
+    <result column="SUBJ_LVL"     property="subjLvl"    jdbcType="DECIMAL" />
+    <result column="SUBJ_LVL"     property="Level"      jdbcType="DECIMAL" />
+    <result column="STD_APL_YN"   property="stdAplYn"   jdbcType="VARCHAR" />
+    <result column="LECY_DCD"     property="lecyDcd"    jdbcType="VARCHAR" />
+    <result column="SYS_AREA_ID"  property="sysAreaId"  jdbcType="VARCHAR" />
+    <result column="SYS_AREA_LNM" property="sysAreaLnm" jdbcType="VARCHAR" />
+    <result column="DBMS_TYP_CD"  property="dbmsTypCd"  jdbcType="VARCHAR" /> 
+    
+    <result column="REA_TBL_CNT" property="reaTblCnt" jdbcType="VARCHAR" />
+    <result column="NO_STD_TBL_CNT" property="noStdTblCnt" jdbcType="VARCHAR" />
+    
+  </resultMap>
+    
+   <sql id="Base_Column_List" >
+    BSC_ID, EXP_DTM, BSC_LVL, STR_DTM, SELECT_BOX_ID, SELECT_BOX_NM, OBJ_DESCN, OBJ_VERS, REG_TYP_CD, 
+    WRIT_DTM, WRIT_USER_ID
+  </sql>
+  
+    <sql id="SelectSql" >
+    SELECT SUBJ_ID     
+			, EXP_DTM     
+			, STR_DTM     
+			, SUBJ_LNM
+			, SUBJ_PNM
+			, SUBJ_ABR_NM     
+			, UPP_SUBJ_ID 
+			, SUBJ_LVL
+			, STD_APL_YN
+			, LECY_DCD    
+			, OBJ_DESCN   
+			, OBJ_VERS    
+			, REG_TYP_CD  
+			, WRIT_DTM    
+			, WRIT_USER_ID
+			, SYS_AREA_ID
+			, FULL_PATH 
+            , UPP_SUBJ_ID||SUBJ_ID AS ORDER_COLUMN   
+            , DBMS_TYP_CD          
+   FROM WAA_SUBJ
+  WHERE SUBJ_LVL = #{item}
+    AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+    AND REG_TYP_CD  IN ('C','U')
+  </sql>
+  
+   <select id="selectSttsStandardChart" resultMap="standardList">
+    
+   <![CDATA[
+	 SELECT A.SUBJ_ROOT_NM AS SUBJ_NM
+          , SUM(CNT)       AS CNT
+          , SUM(A.CNT_Y)   AS CNT_Y
+          , SUM(A.CNT_N)   AS CNT_N
+          , ROUND((SUM(A.CNT_Y) / SUM(A.CNT)*100),1) AS STDRATE
+       FROM (
+              SELECT REGEXP_SUBSTR(A.FULL_PATH,'[^>]+',1,2) AS SUBJ_ROOT_NM
+                   , A.SUBJ_ID                   
+                   , A.CNT
+                   , A.CNT_Y
+                   , A.CNT_N
+                FROM (SELECT T.SUBJ_ID AS SUBJ_ID
+                           , T.FULL_PATH                          
+                           , SUM(1) AS CNT
+                           , SUM(CASE WHEN T.STD_APL_YN  = 'Y' THEN 1 END) AS CNT_Y
+                           , SUM(CASE WHEN T.STD_APL_YN  = 'N' OR STD_APL_YN IS NULL THEN 1 END) AS CNT_N
+                        FROM WAM_PDM_TBL T
+                             INNER JOIN V_WAA_SUBJ S
+                                ON T.SUBJ_ID = S.SUBJ_ID
+                       WHERE T.REG_TYP_CD IN ('C','U')
+                       GROUP BY T.SUBJ_ID
+                              , T.FULL_PATH 
+                    ) A
+            ) A 
+      GROUP BY A.SUBJ_ROOT_NM
+    	]]>
+    </select>
+    
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="map" >
+    select 
+    <include refid="Base_Column_List" />
+    from WAA_BSC_LVL
+    where BSC_ID = #{bscId,jdbcType=VARCHAR}
+      AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+      AND REG_TYP_CD IN ('C', 'U')
+  </select>
+  
+  <select id="selectMetaStsList" resultMap="ListResultMap" parameterType="kr.wise.meta.subjarea.service.WaaSubj" >
+  	  SELECT  A.SUBJ_ID     
+		, A.EXP_DTM     
+		, A.STR_DTM     
+		, A.SUBJ_LNM
+		, A.SUBJ_PNM
+		, A.SUBJ_ABR_NM
+		, A.UPP_SUBJ_ID 
+		, A.SUBJ_LVL
+		, A.STD_APL_YN  
+		, A.LECY_DCD  
+		, A.OBJ_DESCN   
+		, A.OBJ_VERS    
+		, A.REG_TYP_CD  
+		, A.WRIT_DTM    
+		, A.WRIT_USER_ID
+		, A.SYS_AREA_ID
+		, A.FULL_PATH 
+		, B.SUBJ_LNM AS UPP_SUBJ_NM
+	    , (SELECT USER_NM FROM WAA_USER WHERE USER_ID = A.WRIT_USER_ID AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD') AND REG_TYP_CD IN ('C','U')) AS WRIT_USER_NM
+	    , T.REA_TBL_CNT
+	    , T.NO_STD_TBL_CNT
+	    , T.NO_STD_SUBJ_ID 	    
+	  FROM (
+<!-- 	  		collection = 전달받은 인자값 -->
+<!-- 	  		item   = 전달받은 인자값을 다른이름으로 대체  -->
+<!-- 	  		open 해당 구문이 시작할떄  -->
+<!-- 	  		lose 해당구문이 끝날떄 -->
+<!-- 			separator  한번 이상 반복할때 반복되는 사이에  해당 문을 넣어줌 -->
+	  		<foreach collection="lvlList" item="item" index="index" open="" separator="UNION ALL" close="">
+				<include refid="SelectSql" />	      
+			</foreach>
+	       ) A
+	      INNER JOIN WAA_SYS_AREA C
+	         ON A.SYS_AREA_ID = C.SYS_AREA_ID
+	        AND C.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	        AND C.REG_TYP_CD IN ('C','U')
+	       LEFT OUTER JOIN WAA_SUBJ B
+	         ON A.UPP_SUBJ_ID = B.SUBJ_ID
+	        AND B.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	        AND B.REG_TYP_CD IN ('C','U')
+	        
+	       LEFT OUTER JOIN (SELECT COUNT(1) AS REA_TBL_CNT
+	                             , SUM(CASE WHEN STD_APL_YN = 'N' THEN 1 END ) AS NO_STD_TBL_CNT
+	                             , SUBJ_ID AS NO_STD_SUBJ_ID
+	                          FROM WAM_PDM_TBL
+	                         WHERE REG_TYP_CD IN ('C', 'U')
+	                         GROUP BY SUBJ_ID )T
+        ON A.SUBJ_ID = T.NO_STD_SUBJ_ID
+  	<where>
+		AND A.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')
+  		AND A.REG_TYP_CD IN ('C', 'U')
+      <if test="subjLnm != null" >
+        AND (A.FULL_PATH LIKE '%' || #{subjLnm,jdbcType=VARCHAR} || '%'
+        	OR A.FULL_PATH LIKE '%' || UPPER(#{subjLnm,jdbcType=VARCHAR}) || '%')
+      </if>
+      
+      <if test="subjAbrNm != null" >
+        AND A.SUBJ_ABR_NM = #{subjAbrNm,jdbcType=VARCHAR}
+      </if>
+      <if test="uppSubjId != null" >
+        AND A.UPP_SUBJ_ID = #{uppSubjId,jdbcType=VARCHAR}
+      </if>
+      <if test="subjLvl != null" >
+        AND A.SUBJ_LVL = #{subjLvl,jdbcType=DECIMAL}
+      </if>
+      <if test="stdAplYn != null" >
+        AND A.STD_APL_YN = #{stdAplYn,jdbcType=VARCHAR}
+      </if>
+      <if test="lecyDcd != null" >
+        AND C.LECY_DCD = #{lecyDcd,jdbcType=VARCHAR}   
+      </if>
+      <if test="sysAreaId != null" >
+       AND  A.SYS_AREA_ID = #{sysAreaId,jdbcType=VARCHAR}
+      </if>
+      <if test="subjId != null">
+      	AND A.SUBJ_ID = #{subjId,jdbcType=VARCHAR}
+      </if>
+  	</where>
+		ORDER BY A.SYS_AREA_ID, A.FULL_PATH, A.SUBJ_LVL
+  </select>
+  
+</mapper>

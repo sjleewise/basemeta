@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.wise.advisor.prepare.udefoutlier.usrdef.service.WadUodcUsrdefMapper">
+	<resultMap id="BaseResultMap" type="kr.wise.advisor.prepare.udefoutlier.usrdef.service.WadUodcUsrdef" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap" >
+		<id column="UDF_OTL_DTC_ID"      jdbcType="VARCHAR"   property="udfOtlDtcId" />
+		<id column="CRE_COMP_ID"         jdbcType="VARCHAR"   property="creCompId" />
+		<result column="USER_DEF_SCRT_CONTS"     jdbcType="CLOB"   property="userDefScrtConts" />
+	</resultMap>
+	
+	<select id="selectDetailInfo" parameterType="kr.wise.advisor.prepare.udefoutlier.usrdef.service.WadUodcUsrdef" resultMap="BaseResultMap">
+		SELECT	USER_DEF_SCRT_CONTS
+		FROM	WAD_UODC_USR_DEF_MDL
+		WHERE	UDF_OTL_DTC_ID	= #{udfOtlDtcId,jdbcType=VARCHAR}
+			AND	CRE_COMP_ID		= #{creCompId,jdbcType=VARCHAR}
+	</select>
+	
+	<update id="updateUsrdef" parameterType="kr.wise.advisor.prepare.udefoutlier.usrdef.service.WadUodcUsrdef">
+		UPDATE WAD_UODC_USR_DEF_MDL
+		<set>
+			<if test="userDefScrtConts != null">
+				USER_DEF_SCRT_CONTS = #{userDefScrtConts,jdbcType=CLOB},
+			</if>
+			<if test="objDescn != null">
+				OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+			</if>
+			<if test="objVers != null">
+				OBJ_VERS = #{objVers,jdbcType=VARCHAR},
+			</if>
+			<if test="regTypCd != null">
+				REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+			</if>
+			<if test="writUserId != null">
+				WRIT_USER_ID = #{writUserId,jdbcType=VARCHAR},
+			</if>
+			<if test="writDtm != null">
+				WRIT_DTM = #{writDtm,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		WHERE UDF_OTL_DTC_ID = #{udfOtlDtcId,jdbcType=VARCHAR}
+	      AND CRE_COMP_ID    = #{creCompId,jdbcType=VARCHAR}
+	</update>
+	
+	<insert id="insertUsrdef" parameterType="kr.wise.advisor.prepare.udefoutlier.usrdef.service.WadUodcUsrdef">
+		INSERT INTO WAD_UODC_USR_DEF_MDL
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="udfOtlDtcId != null">
+				UDF_OTL_DTC_ID,
+			</if>
+			<if test="creCompId != null">
+				CRE_COMP_ID,
+			</if>
+			<if test="userDefScrtConts != null">
+				USER_DEF_SCRT_CONTS,
+			</if>
+			<if test="objDescn != null">
+				OBJ_DESCN,
+			</if>	      
+		        OBJ_VERS,      
+		        REG_TYP_CD,      
+		        WRIT_USER_ID,      
+		        WRIT_DTM 
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="udfOtlDtcId != null">
+				#{udfOtlDtcId,jdbcType=VARCHAR},
+			</if>
+			<if test="creCompId != null">
+				#{creCompId,jdbcType=VARCHAR},
+			</if>
+			<if test="userDefScrtConts != null">
+				#{userDefScrtConts,jdbcType=CLOB},
+			</if>
+			<if test="objDescn != null">
+				#{objDescn,jdbcType=VARCHAR},
+			</if>
+	        1,
+	       'C',      
+	        #{writUserId,jdbcType=VARCHAR},      
+	        SYSDATE 
+	    </trim>
+	</insert>
+	
+	<delete id="deleteByPrimaryKey" parameterType="map">
+	    delete from WAD_UODC_USR_DEF_MDL
+	    where UDF_OTL_DTC_ID = #{udfOtlDtcId,jdbcType=VARCHAR}
+	      and CRE_COMP_ID = #{creCompId,jdbcType=VARCHAR}
+	</delete>
+	
+	<delete id="deleteByUdfOtlDtcId" parameterType="map">
+	    delete from WAD_UODC_USR_DEF_MDL
+	    where UDF_OTL_DTC_ID = #{udfOtlDtcId,jdbcType=VARCHAR}
+	</delete>
+</mapper>

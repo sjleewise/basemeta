@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.wise.advisor.prepare.udefoutlier.script.WadUodLnkMapper">
+  
+  <resultMap id="BaseResultMap" type="kr.wise.advisor.prepare.udefoutlier.script.WadUodLnk"  extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap" >
+    <id column="UDF_OTL_DTC_ID" jdbcType="VARCHAR"   property="udfOtlDtcId" />
+    <result column="LNK_SNO"    jdbcType="VARCHAR"   property="lnkSno"   />
+    <result column="LNK_FROM"   jdbcType="VARCHAR"   property="lnkFrom"  />      
+    <result column="LNK_TO"     jdbcType="VARCHAR"   property="lnkTo"    />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    UDF_OTL_DTC_ID, LNK_SNO, LNK_FROM, LNK_TO, OBJ_DESCN, OBJ_VERS, REG_TYP_CD, WRIT_DTM, WRIT_USER_ID
+  </sql>
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from WAD_UOD_LNK
+    where UDF_OTL_DTC_ID = #{udfOtlDtcId,jdbcType=VARCHAR}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from WAD_UOD_LNK
+    where UDF_OTL_DTC_ID = #{udfOtlDtcId,jdbcType=VARCHAR}
+  </delete>
+  
+  <insert id="insert" parameterType="kr.wise.advisor.prepare.udefoutlier.script.WadUodLnk">
+    insert into WAD_UOD_LNK (UDF_OTL_DTC_ID, UDF_OTL_DTC_NM, OBJ_DESCN, 
+      OBJ_VERS, REG_TYP_CD, WRIT_DTM, 
+      WRIT_USER_ID)
+    values (#{udfOtlDtcId,jdbcType=VARCHAR}, #{udfOtlDtcNm,jdbcType=VARCHAR}, #{objDescn,jdbcType=VARCHAR}, 
+      #{objVers,jdbcType=DECIMAL}, #{regTypCd,jdbcType=VARCHAR}, #{writDtm,jdbcType=TIMESTAMP}, 
+      #{writUserId,jdbcType=VARCHAR})
+  </insert>
+  
+  <insert id="insertSelective" parameterType="kr.wise.advisor.prepare.udefoutlier.script.WadUodLnk">
+    insert into WAD_UOD_LNK
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="udfOtlDtcId != null">
+        UDF_OTL_DTC_ID,
+      </if>
+      <if test="lnkSno != null">
+        LNK_SNO,
+      </if>
+      <if test="lnkFrom != null">
+        LNK_FROM,
+      </if>
+      <if test="lnkTo != null">
+        LNK_TO,
+      </if>
+      
+      <if test="objDescn != null">
+        OBJ_DESCN,
+      </if>
+     
+        OBJ_VERS,      
+        REG_TYP_CD,      
+        WRIT_DTM,
+        
+      <if test="writUserId != null">
+        WRIT_USER_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="udfOtlDtcId != null">
+        #{udfOtlDtcId,jdbcType=VARCHAR},
+      </if>     
+      <if test="lnkSno != null">
+        #{lnkSno,jdbcType=VARCHAR},
+      </if>
+      <if test="lnkFrom != null">
+        #{lnkFrom,jdbcType=VARCHAR},
+      </if>
+      <if test="lnkTo != null">
+        #{lnkTo,jdbcType=VARCHAR},
+      </if>
+      
+      <if test="objDescn != null">
+        #{objDescn,jdbcType=VARCHAR},
+      </if>
+      1,
+      'C',
+      SYSDATE,
+      <if test="writUserId != null">
+        #{writUserId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.advisor.prepare.udefoutlier.script.WadUodLnk">
+    update WAD_UOD_LNK
+    <set>
+      <if test="udfOtlDtcNm != null">
+        UDF_OTL_DTC_NM = #{udfOtlDtcNm,jdbcType=VARCHAR},
+      </if>
+      <if test="objDescn != null">
+        OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null">
+        OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null">
+        REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="writDtm != null">
+        WRIT_DTM = #{writDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="writUserId != null">
+        WRIT_USER_ID = #{writUserId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where UDF_OTL_DTC_ID = #{udfOtlDtcId,jdbcType=VARCHAR}
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="kr.wise.advisor.prepare.udefoutlier.script.WadUodLnk">
+    update WAD_UOD_LNK
+    set UDF_OTL_DTC_NM = #{udfOtlDtcNm,jdbcType=VARCHAR},
+      OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      WRIT_DTM = #{writDtm,jdbcType=TIMESTAMP},
+      WRIT_USER_ID = #{writUserId,jdbcType=VARCHAR}
+    where UDF_OTL_DTC_ID = #{udfOtlDtcId,jdbcType=VARCHAR}
+  </update>
+  
+ 
+  <select id="selectUodLnkList"  parameterType="java.lang.String" resultMap="BaseResultMap">
+    SELECT DISTINCT
+           UDF_OTL_DTC_ID
+	     , LEVEL
+	     , LNK_FROM
+	     , LNK_TO
+      FROM ( 
+			SELECT UDF_OTL_DTC_ID
+			     , LNK_SNO
+			     , LNK_FROM
+			     , LNK_TO
+			  FROM WAD_UOD_LNK A
+			 WHERE A.UDF_OTL_DTC_ID = #{udfOtlDtcId,jdbcType=VARCHAR}
+     ) A			 
+	 CONNECT BY PRIOR A.LNK_TO = A.LNK_FROM 
+	   START WITH A.LNK_FROM IN (SELECT CRE_COMP_ID
+	                               FROM WAD_UOD_CRE_COMP
+	                              WHERE UDF_OTL_DTC_ID = #{udfOtlDtcId,jdbcType=VARCHAR}
+	                                AND COMP_ID = 'DataImp' 
+	                             )
+	 ORDER BY LEVEL                             
+  </select>
+ 
+ <select id="selectUodLnkCompList"  parameterType="java.lang.String" resultMap="BaseResultMap">
+    SELECT A.UDF_OTL_DTC_ID
+	     , A.LNK_SNO
+	     , A.LNK_FROM
+	     , A.LNK_TO
+	     , B.CRE_COMP_ID
+	     , B.COMP_ID
+	   FROM WAD_UOD_LNK A
+	        LEFT JOIN WAD_UOD_CRE_COMP B
+	          ON B.UDF_OTL_DTC_ID = A.UDF_OTL_DTC_ID
+	         AND B.CRE_COMP_ID    = A.LNK_FROM
+	 WHERE 1 = 1 
+	   AND A.UDF_OTL_DTC_ID = #{udfOtlDtcId,jdbcType=VARCHAR} 	   
+  </select>
+ 
+  <select id="selectUodLnkCompDetail"  parameterType="java.lang.String" resultMap="BaseResultMap">
+    SELECT A.UDF_OTL_DTC_ID
+	     , A.LNK_SNO
+	     , A.LNK_FROM
+	     , A.LNK_TO
+	     , B.CRE_COMP_ID
+	     , B.COMP_ID
+	   FROM WAD_UOD_LNK A
+	        LEFT JOIN WAD_UOD_CRE_COMP B
+	          ON B.UDF_OTL_DTC_ID = A.UDF_OTL_DTC_ID
+	         AND B.CRE_COMP_ID    = A.LNK_FROM
+	 WHERE 1 = 1 
+	   AND A.UDF_OTL_DTC_ID = #{udfOtlDtcId,jdbcType=VARCHAR}
+	   <if test="lnkFrom != null">
+         AND A.LNK_FROM = #{lnkFrom,jdbcType=VARCHAR}
+       </if>
+       <if test="lnkTo != null">
+         AND A.LNK_TO = #{lnkTo,jdbcType=VARCHAR}
+       </if>
+  </select>
+  
+  <select id="selectUodLnkCompFrom"  parameterType="java.lang.String" resultMap="BaseResultMap">
+    SELECT A.UDF_OTL_DTC_ID
+	     , A.LNK_SNO
+	     , A.LNK_FROM
+	     , A.LNK_TO
+	     , B.CRE_COMP_ID
+	     , B.COMP_ID
+	   FROM WAD_UOD_LNK A
+	        LEFT JOIN WAD_UOD_CRE_COMP B
+	          ON B.UDF_OTL_DTC_ID = A.UDF_OTL_DTC_ID
+	         AND B.CRE_COMP_ID    = A.LNK_FROM
+	 WHERE 1 = 1 
+	   AND A.UDF_OTL_DTC_ID = #{udfOtlDtcId,jdbcType=VARCHAR}
+	   AND A.LNK_FROM       = #{lnkFrom,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="selectUodLnkCompTo"  parameterType="java.lang.String" resultMap="BaseResultMap">
+    SELECT A.UDF_OTL_DTC_ID
+	     , A.LNK_SNO
+	     , A.LNK_FROM
+	     , A.LNK_TO
+	     , B.CRE_COMP_ID
+	     , B.COMP_ID
+	   FROM WAD_UOD_LNK A
+	        LEFT JOIN WAD_UOD_CRE_COMP B
+	          ON B.UDF_OTL_DTC_ID = A.UDF_OTL_DTC_ID
+	         AND B.CRE_COMP_ID    = A.LNK_FROM
+	 WHERE 1 = 1 
+	   AND A.UDF_OTL_DTC_ID = #{udfOtlDtcId,jdbcType=VARCHAR}
+	   AND A.LNK_TO         = #{lnkTo,jdbcType=VARCHAR}
+  </select>
+  
+</mapper>

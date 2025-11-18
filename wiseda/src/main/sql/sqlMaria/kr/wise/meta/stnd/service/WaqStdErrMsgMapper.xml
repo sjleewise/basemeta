@@ -1,0 +1,801 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.meta.stnd.service.WaqStdErrMsgMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.meta.stnd.service.WaqStdErrMsg" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+    <id column="RQST_NO" property="rqstNo" jdbcType="VARCHAR" />
+    <id column="RQST_SNO" property="rqstSno" jdbcType="DECIMAL" />
+    <result column="STD_ERR_MSG_ID" property="stdErrMsgId" jdbcType="VARCHAR" />
+    <result column="STD_ERR_MSG_LNM" property="stdErrMsgLnm" jdbcType="VARCHAR" />
+    <result column="STD_ERR_MSG_PNM" property="stdErrMsgPnm" jdbcType="VARCHAR" />
+    <result column="ERR_TLG_LAN_DSCD" property="errTlgLanDscd" jdbcType="VARCHAR" />
+    <result column="ERR_TP_CD" property="errTpCd" jdbcType="VARCHAR" />
+    <result column="MSG_DIT" property="msgDit" jdbcType="VARCHAR" />
+    <result column="STD_ERR_CD_YN" property="stdErrCdYn" jdbcType="VARCHAR" />
+    <result column="ACTN_CD" property="actnCd" jdbcType="VARCHAR" />
+    <result column="ERR_CD" property="errCd" jdbcType="VARCHAR" />
+    <result column="ISD_ERR_CAS_CTS" property="isdErrCasCts" jdbcType="VARCHAR" />
+    <result column="ISD_ERR_ACTN_CTS" property="isdErrActnCts" jdbcType="VARCHAR" />
+    <result column="OSD_ERR_CAS_CTS" property="osdErrCasCts" jdbcType="VARCHAR" />
+    <result column="OSD_ERR_ACTN_CTS" property="osdErrActnCts" jdbcType="VARCHAR" />
+    <result column="ERR_CD_APL_DT" property="errCdAplDt" jdbcType="VARCHAR" />
+    <result column="STSY_ERR_CD" property="stsyErrCd" jdbcType="VARCHAR" />
+    <result column="TSK_DMN" property="tskDmn" jdbcType="VARCHAR" />
+    <result column="MNG_USER" property="mngUser" jdbcType="VARCHAR" />
+    <result column="MSG_TYP" property="msgTyp" jdbcType="VARCHAR" />
+    <result column="BIZ_DIT" property="bizDit" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    RQST_NO, RQST_SNO, STD_ERR_MSG_ID, STD_ERR_MSG_LNM, STD_ERR_MSG_PNM, RQST_DCD, RVW_STS_CD, 
+    RVW_CONTS, VRF_CD, VRF_RMK, OBJ_DESCN, OBJ_VERS, REG_TYP_CD, FRS_RQST_DTM, FRS_RQST_USER_ID, 
+    RQST_DTM, RQST_USER_ID, APRV_DTM, APRV_USER_ID, ERR_TLG_LAN_DSCD, ERR_TP_CD, MSG_DIT, 
+    STD_ERR_CD_YN, ACTN_CD, ERR_CD, ISD_ERR_CAS_CTS, ISD_ERR_ACTN_CTS, OSD_ERR_CAS_CTS, 
+    OSD_ERR_ACTN_CTS, ERR_CD_APL_DT, STSY_ERR_CD, TSK_DMN, MNG_USER, BIZ_DIT, MSG_TYP
+  </sql>
+  <sql id="waq_col_list" >
+    RQST_NO, RQST_SNO, STD_ERR_MSG_ID, STD_ERR_MSG_LNM, STD_ERR_MSG_PNM, RQST_DCD, RVW_STS_CD, 
+    RVW_CONTS, VRF_CD, VRF_RMK, OBJ_DESCN, OBJ_VERS, REG_TYP_CD, FRS_RQST_DTM, FRS_RQST_USER_ID, 
+    RQST_DTM, RQST_USER_ID, APRV_DTM, APRV_USER_ID, ERR_TLG_LAN_DSCD, ERR_TP_CD, MSG_DIT, 
+    STD_ERR_CD_YN, ACTN_CD, ERR_CD, ISD_ERR_CAS_CTS, ISD_ERR_ACTN_CTS, OSD_ERR_CAS_CTS, 
+    OSD_ERR_ACTN_CTS, ERR_CD_APL_DT, STSY_ERR_CD, TSK_DMN, MNG_USER, BIZ_DIT, MSG_TYP
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="map" >
+    select /* WaqStdErrMsgMapper.selectByPrimaryKey */
+    <include refid="Base_Column_List" />
+    from WAQ_STD_ERR_MSG
+    where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      and RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="map" >
+    delete /* WaqStdErrMsgMapper.deleteByPrimaryKey */
+    from WAQ_STD_ERR_MSG
+    where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      and RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+  </delete>
+  <insert id="insert" parameterType="kr.wise.meta.stnd.service.WaqStdErrMsg" >
+    insert /* WaqStdErrMsgMapper.insert */
+    into WAQ_STD_ERR_MSG (RQST_NO, RQST_SNO, STD_ERR_MSG_ID, 
+      STD_ERR_MSG_LNM, STD_ERR_MSG_PNM, RQST_DCD, 
+      RVW_STS_CD, RVW_CONTS, VRF_CD, 
+      VRF_RMK, OBJ_DESCN, OBJ_VERS, 
+      REG_TYP_CD, FRS_RQST_DTM, FRS_RQST_USER_ID, 
+      RQST_DTM, RQST_USER_ID, APRV_DTM, 
+      APRV_USER_ID, ERR_TLG_LAN_DSCD, ERR_TP_CD, 
+      MSG_DIT, STD_ERR_CD_YN, ACTN_CD, 
+      ERR_CD, ISD_ERR_CAS_CTS, ISD_ERR_ACTN_CTS, 
+      OSD_ERR_CAS_CTS, OSD_ERR_ACTN_CTS, ERR_CD_APL_DT, 
+      STSY_ERR_CD, TSK_DMN, MNG_USER, BIZ_DIT, MSG_TYP
+      )
+    values (#{rqstNo,jdbcType=VARCHAR}, #{rqstSno,jdbcType=DECIMAL}, #{stdErrMsgId,jdbcType=VARCHAR}, 
+      #{stdErrMsgLnm,jdbcType=VARCHAR}, #{stdErrMsgPnm,jdbcType=VARCHAR}, #{rqstDcd,jdbcType=VARCHAR}, 
+      #{rvwStsCd,jdbcType=VARCHAR}, #{rvwConts,jdbcType=VARCHAR}, #{vrfCd,jdbcType=VARCHAR}, 
+      #{vrfRmk,jdbcType=VARCHAR}, #{objDescn,jdbcType=VARCHAR}, #{objVers,jdbcType=DECIMAL}, 
+      #{regTypCd,jdbcType=VARCHAR}, #{frsRqstDtm,jdbcType=TIMESTAMP}, #{frsRqstUserId,jdbcType=VARCHAR}, 
+      #{rqstDtm,jdbcType=TIMESTAMP}, #{rqstUserId,jdbcType=VARCHAR}, #{aprvDtm,jdbcType=TIMESTAMP}, 
+      #{aprvUserId,jdbcType=VARCHAR}, #{errTlgLanDscd,jdbcType=VARCHAR}, #{errTpCd,jdbcType=VARCHAR}, 
+      #{msgDit,jdbcType=VARCHAR}, #{stdErrCdYn,jdbcType=VARCHAR}, #{actnCd,jdbcType=VARCHAR}, 
+      #{errCd,jdbcType=VARCHAR}, #{isdErrCasCts,jdbcType=VARCHAR}, #{isdErrActnCts,jdbcType=VARCHAR}, 
+      #{osdErrCasCts,jdbcType=VARCHAR}, #{osdErrActnCts,jdbcType=VARCHAR}, #{errCdAplDt,jdbcType=VARCHAR}, 
+      #{stsyErrCd,jdbcType=VARCHAR}, #{tskDmn,jdbcType=VARCHAR}, #{mngUser,jdbcType=VARCHAR},
+      #{bizDit,jdbcType=VARCHAR}, #{msgTyp,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="kr.wise.meta.stnd.service.WaqStdErrMsg" >
+    <selectKey keyProperty="rqstSno" resultType="int" statementType="PREPARED" order="BEFORE">
+  		SELECT IFNULL(MAX(RQST_SNO), 0) + 1 FROM WAQ_STD_ERR_MSG WHERE RQST_NO = #{rqstNo}
+  	</selectKey>
+    insert /* WaqStdErrMsgMapper.insertSelective */
+    into WAQ_STD_ERR_MSG
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="rqstNo != null" >
+        RQST_NO,
+      </if>
+      <if test="rqstSno != null" >
+        RQST_SNO,
+      </if>
+      <if test="stdErrMsgId != null" >
+        STD_ERR_MSG_ID,
+      </if>
+      <if test="stdErrMsgLnm != null" >
+        STD_ERR_MSG_LNM,
+      </if>
+      <if test="stdErrMsgPnm != null" >
+        STD_ERR_MSG_PNM,
+      </if>
+      <if test="rqstDcd != null" >
+        RQST_DCD,
+      </if>
+      <if test="rvwStsCd != null" >
+        RVW_STS_CD,
+      </if>
+      <if test="rvwConts != null" >
+        RVW_CONTS,
+      </if>
+      <if test="vrfCd != null" >
+        VRF_CD,
+      </if>
+      <if test="vrfRmk != null" >
+        VRF_RMK,
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN,
+      </if>
+        OBJ_VERS,
+      <if test="regTypCd != null" >
+        REG_TYP_CD,
+      </if>
+        FRS_RQST_DTM,
+      <if test="frsRqstUserId != null" >
+        FRS_RQST_USER_ID,
+      </if>
+      <if test="rqstDtm != null" >
+        RQST_DTM,
+      </if>
+      <if test="rqstUserId != null" >
+        RQST_USER_ID,
+      </if>
+      <if test="aprvDtm != null" >
+        APRV_DTM,
+      </if>
+      <if test="aprvUserId != null" >
+        APRV_USER_ID,
+      </if>
+      <if test="errTlgLanDscd != null" >
+        ERR_TLG_LAN_DSCD,
+      </if>
+      <if test="errTpCd != null" >
+        ERR_TP_CD,
+      </if>
+      <if test="msgDit != null" >
+        MSG_DIT,
+      </if>
+      <if test="stdErrCdYn != null" >
+        STD_ERR_CD_YN,
+      </if>
+      <if test="actnCd != null" >
+        ACTN_CD,
+      </if>
+      <if test="errCd != null" >
+        ERR_CD,
+      </if>
+      <if test="isdErrCasCts != null" >
+        ISD_ERR_CAS_CTS,
+      </if>
+      <if test="isdErrActnCts != null" >
+        ISD_ERR_ACTN_CTS,
+      </if>
+      <if test="osdErrCasCts != null" >
+        OSD_ERR_CAS_CTS,
+      </if>
+      <if test="osdErrActnCts != null" >
+        OSD_ERR_ACTN_CTS,
+      </if>
+      <if test="errCdAplDt != null" >
+        ERR_CD_APL_DT,
+      </if>
+      <if test="stsyErrCd != null" >
+        STSY_ERR_CD,
+      </if>
+      <if test="tskDmn != null" >
+        TSK_DMN,
+      </if>
+      <if test="mngUser != null" >
+        MNG_USER,
+      </if>
+      <if test="bizDit != null" >
+        BIZ_DIT,
+      </if>
+      <if test="msgTyp != null" >
+        MSG_TYP,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="rqstNo != null" >
+        #{rqstNo,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstSno != null" >
+        #{rqstSno,jdbcType=DECIMAL},
+      </if>
+      <if test="stdErrMsgId != null" >
+        #{stdErrMsgId,jdbcType=VARCHAR},
+      </if>
+      <if test="stdErrMsgLnm != null" >
+        #{stdErrMsgLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="stdErrMsgPnm != null" >
+        #{stdErrMsgPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDcd != null" >
+        #{rqstDcd,jdbcType=VARCHAR},
+      </if>
+      <if test="rvwStsCd != null" >
+        #{rvwStsCd,jdbcType=VARCHAR},
+      </if>
+      <if test="rvwConts != null" >
+        #{rvwConts,jdbcType=VARCHAR},
+      </if>
+      <if test="vrfCd != null" >
+        #{vrfCd,jdbcType=VARCHAR},
+      </if>
+      <if test="vrfRmk != null" >
+        #{vrfRmk,jdbcType=VARCHAR},
+      </if>
+      <if test="objDescn != null" >
+        #{objDescn,jdbcType=VARCHAR},
+      </if>
+        1,
+      <if test="regTypCd != null" >
+        #{regTypCd,jdbcType=VARCHAR},
+      </if>
+		NOW(),
+      <if test="frsRqstUserId != null" >
+        #{frsRqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDtm != null" >
+        #{rqstDtm,jdbcType=TIMESTAMP},
+      </if>        
+      <if test="rqstUserId != null" >
+        #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDtm != null" >
+        #{aprvDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aprvUserId != null" >
+        #{aprvUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="errTlgLanDscd != null" >
+        #{errTlgLanDscd,jdbcType=VARCHAR},
+      </if>
+      <if test="errTpCd != null" >
+        #{errTpCd,jdbcType=VARCHAR},
+      </if>
+      <if test="msgDit != null" >
+        #{msgDit,jdbcType=VARCHAR},
+      </if>
+      <if test="stdErrCdYn != null" >
+        #{stdErrCdYn,jdbcType=VARCHAR},
+      </if>
+      <if test="actnCd != null" >
+        #{actnCd,jdbcType=VARCHAR},
+      </if>
+      <if test="errCd != null" >
+        #{errCd,jdbcType=VARCHAR},
+      </if>
+      <if test="isdErrCasCts != null" >
+        #{isdErrCasCts,jdbcType=VARCHAR},
+      </if>
+      <if test="isdErrActnCts != null" >
+        #{isdErrActnCts,jdbcType=VARCHAR},
+      </if>
+      <if test="osdErrCasCts != null" >
+        #{osdErrCasCts,jdbcType=VARCHAR},
+      </if>
+      <if test="osdErrActnCts != null" >
+        #{osdErrActnCts,jdbcType=VARCHAR},
+      </if>
+      <if test="errCdAplDt != null" >
+      	TO_CHAR(TO_DATE(#{errCdAplDt,jdbcType=VARCHAR},'%Y-%m-%d'),'%Y-%m-%d'),
+      </if>
+      <if test="stsyErrCd != null" >
+        #{stsyErrCd,jdbcType=VARCHAR},
+      </if>
+      <if test="tskDmn != null" >
+        #{tskDmn,jdbcType=VARCHAR},
+      </if>
+      <if test="mngUser != null" >
+        #{mngUser,jdbcType=VARCHAR},
+      </if>
+      <if test="bizDit != null" >
+        #{bizDit,jdbcType=VARCHAR},
+      </if>
+      <if test="msgTyp != null" >
+        #{msgTyp,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.meta.stnd.service.WaqStdErrMsg" >
+    update /* WaqStdErrMsgMapper.updateByPrimaryKeySelective */
+    WAQ_STD_ERR_MSG
+    <set >
+      <if test="stdErrMsgId != null" >
+        STD_ERR_MSG_ID = #{stdErrMsgId,jdbcType=VARCHAR},
+      </if>
+      <if test="stdErrMsgLnm != null" >
+        STD_ERR_MSG_LNM = #{stdErrMsgLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="stdErrMsgPnm != null" >
+        STD_ERR_MSG_PNM = #{stdErrMsgPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDcd != null" >
+        RQST_DCD = #{rqstDcd,jdbcType=VARCHAR},
+      </if>
+      <if test="rvwStsCd != null" >
+        RVW_STS_CD = #{rvwStsCd,jdbcType=VARCHAR},
+      </if>
+      <if test="rvwConts != null" >
+        RVW_CONTS = #{rvwConts,jdbcType=VARCHAR},
+      </if>
+      <if test="vrfCd != null" >
+        VRF_CD = #{vrfCd,jdbcType=VARCHAR},
+      </if>
+      <if test="vrfRmk != null" >
+        VRF_RMK = #{vrfRmk,jdbcType=VARCHAR},
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="frsRqstDtm != null" >
+        FRS_RQST_DTM = #{frsRqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="frsRqstUserId != null" >
+        FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDtm != null" >
+        RQST_DTM = #{rqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rqstUserId != null" >
+        RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDtm != null" >
+        APRV_DTM = #{aprvDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aprvUserId != null" >
+        APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="errTlgLanDscd != null" >
+        ERR_TLG_LAN_DSCD = #{errTlgLanDscd,jdbcType=VARCHAR},
+      </if>
+      <if test="errTpCd != null" >
+        ERR_TP_CD = #{errTpCd,jdbcType=VARCHAR},
+      </if>
+      <if test="msgDit != null" >
+        MSG_DIT = #{msgDit,jdbcType=VARCHAR},
+      </if>
+      <if test="stdErrCdYn != null" >
+        STD_ERR_CD_YN = #{stdErrCdYn,jdbcType=VARCHAR},
+      </if>
+      <if test="actnCd != null" >
+        ACTN_CD = #{actnCd,jdbcType=VARCHAR},
+      </if>
+      <if test="errCd != null" >
+        ERR_CD = #{errCd,jdbcType=VARCHAR},
+      </if>
+      <if test="isdErrCasCts != null" >
+        ISD_ERR_CAS_CTS = #{isdErrCasCts,jdbcType=VARCHAR},
+      </if>
+      <if test="isdErrActnCts != null" >
+        ISD_ERR_ACTN_CTS = #{isdErrActnCts,jdbcType=VARCHAR},
+      </if>
+      <if test="osdErrCasCts != null" >
+        OSD_ERR_CAS_CTS = #{osdErrCasCts,jdbcType=VARCHAR},
+      </if>
+      <if test="osdErrActnCts != null" >
+        OSD_ERR_ACTN_CTS = #{osdErrActnCts,jdbcType=VARCHAR},
+      </if>
+      <if test="errCdAplDt != null" >
+        ERR_CD_APL_DT = #{errCdAplDt,jdbcType=VARCHAR},
+      </if>
+      <if test="stsyErrCd != null" >
+        STSY_ERR_CD = #{stsyErrCd,jdbcType=VARCHAR},
+      </if>
+      <if test="tskDmn != null" >
+        TSK_DMN = #{tskDmn,jdbcType=VARCHAR},
+      </if>
+      <if test="mngUser != null" >
+        MNG_USER = #{mngUser,jdbcType=VARCHAR},
+      </if>
+      <if test="bizDit != null" >
+        BIZ_DIT = #{bizDit,jdbcType=VARCHAR},
+      </if>
+      <if test="msgTyp != null" >
+        MSG_TYP = #{msgTyp,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      and RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="kr.wise.meta.stnd.service.WaqStdErrMsg" >
+    update /* WaqStdErrMsgMapper.updateByPrimaryKey */
+    WAQ_STD_ERR_MSG
+    set STD_ERR_MSG_ID = #{stdErrMsgId,jdbcType=VARCHAR},
+      STD_ERR_MSG_LNM = #{stdErrMsgLnm,jdbcType=VARCHAR},
+      STD_ERR_MSG_PNM = #{stdErrMsgPnm,jdbcType=VARCHAR},
+      RQST_DCD = #{rqstDcd,jdbcType=VARCHAR},
+      RVW_STS_CD = #{rvwStsCd,jdbcType=VARCHAR},
+      RVW_CONTS = #{rvwConts,jdbcType=VARCHAR},
+      VRF_CD = #{vrfCd,jdbcType=VARCHAR},
+      VRF_RMK = #{vrfRmk,jdbcType=VARCHAR},
+      OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      FRS_RQST_DTM = #{frsRqstDtm,jdbcType=TIMESTAMP},
+      FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR},
+      RQST_DTM = #{rqstDtm,jdbcType=TIMESTAMP},
+      RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      APRV_DTM = #{aprvDtm,jdbcType=TIMESTAMP},
+      APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR},
+      ERR_TLG_LAN_DSCD = #{errTlgLanDscd,jdbcType=VARCHAR},
+      ERR_TP_CD = #{errTpCd,jdbcType=VARCHAR},
+      MSG_DIT = #{msgDit,jdbcType=VARCHAR},
+      STD_ERR_CD_YN = #{stdErrCdYn,jdbcType=VARCHAR},
+      ACTN_CD = #{actnCd,jdbcType=VARCHAR},
+      ERR_CD = #{errCd,jdbcType=VARCHAR},
+      ISD_ERR_CAS_CTS = #{isdErrCasCts,jdbcType=VARCHAR},
+      ISD_ERR_ACTN_CTS = #{isdErrActnCts,jdbcType=VARCHAR},
+      OSD_ERR_CAS_CTS = #{osdErrCasCts,jdbcType=VARCHAR},
+      OSD_ERR_ACTN_CTS = #{osdErrActnCts,jdbcType=VARCHAR},
+      ERR_CD_APL_DT = #{errCdAplDt,jdbcType=VARCHAR},
+      STSY_ERR_CD = #{stsyErrCd,jdbcType=VARCHAR},
+      TSK_DMN = #{tskDmn,jdbcType=VARCHAR},
+      MNG_USER = #{mngUser,jdbcType=VARCHAR},
+      BIZ_DIT = #{bizDit,jdbcType=VARCHAR},
+      MSG_TYP = #{msgTyp,jdbcType=VARCHAR}
+    where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      and RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+  </update>
+  
+  <select id="selectMsgRqstDetail" parameterType="kr.wise.meta.stnd.service.WaqStdErrMsg" resultMap="BaseResultMap">
+    SELECT /* WaqStdErrMsgMapper.selectMsgRqstDetail */
+    	A.*
+	  FROM WAQ_STD_ERR_MSG A
+	 WHERE A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+	   AND A.RQST_SNO = #{rqstSno,jdbcType=DECIMAL} 
+  </select>
+  
+    <select id="selectMsgRqstListbyMst" parameterType="kr.wise.commons.rqstmst.service.WaqMstr" resultMap="BaseResultMap">
+  	SELECT	/* WaqStdErrMsgMapper.selectMsgRqstListbyMst */
+  	 A.RQST_NO, A.RQST_SNO, 
+  	 A.STD_ERR_MSG_ID, A.STD_ERR_MSG_LNM, A.STD_ERR_MSG_PNM,
+  	 A.RQST_DCD, 
+    A.RVW_CONTS, A.VRF_RMK, A.VRF_CD,  
+    A.OBJ_DESCN, A.OBJ_VERS, A.REG_TYP_CD, A.FRS_RQST_DTM, 
+    A.FRS_RQST_USER_ID, A.RQST_DTM, A.RQST_USER_ID, A.APRV_DTM, A.APRV_USER_ID
+  	 <if test='rqstStepCd == "Q" '>
+     , CASE WHEN A.RVW_STS_CD = '2' THEN '2' ELSE '0' END AS RVW_STS_CD
+     </if>
+     <if test='rqstStepCd != "Q" '>
+     , A.RVW_STS_CD
+     </if>
+     , CASE WHEN A.VRF_CD = '2' THEN '#FF0000' END AS FontColor
+     , U.USER_NM AS RQST_USER_NM
+	 , A.ERR_TLG_LAN_DSCD, A.ERR_TP_CD, A.MSG_DIT, A.STD_ERR_CD_YN, A.ACTN_CD, A.ERR_CD, A.ISD_ERR_CAS_CTS, A.ISD_ERR_ACTN_CTS, A.OSD_ERR_CAS_CTS, A.OSD_ERR_ACTN_CTS, A.ERR_CD_APL_DT, A.STSY_ERR_CD, A.TSK_DMN, A.MNG_USER, A.BIZ_DIT, A.MSG_TYP
+  	  FROM WAQ_STD_ERR_MSG A
+  	  LEFT OUTER JOIN WAA_USER U
+  	    ON A.RQST_USER_ID = U.USER_ID
+  	   AND U.REG_TYP_CD IN ('C', 'U')
+  	   AND U.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+  	 WHERE A.RQST_NO = #{rqstNo}
+  	<if test='rqstStepCd == "Q" or rqstStepCd == "A" '>
+    	AND A.VRF_CD = '1'
+    </if>
+  	 ORDER BY A.RQST_SNO
+  </select>
+  
+  <select id="selectwamlist" parameterType="map" resultMap="BaseResultMap">
+  		SELECT /* WaqStdErrMsgMapper.selectwamlist */
+  			((SELECT IFNULL(MAX(RQST_SNO), 0) FROM WAQ_STD_ERR_MSG WHERE RQST_NO = #{reqmst.rqstNo}) + ROWNUM) AS RQST_SNO
+  		  , 'I' AS IBS_STATUS
+		  , A.STD_ERR_MSG_ID, A.STD_ERR_MSG_LNM, A.STD_ERR_MSG_PNM 
+		  , #{reqmst.rqstDcd} AS RQST_DCD
+		  , A.OBJ_DESCN, A.OBJ_VERS
+		  , A.ERR_TLG_LAN_DSCD, A.ERR_TP_CD, A.MSG_DIT
+		  , A.STD_ERR_CD_YN, A.ACTN_CD, ERR_CD, A.ISD_ERR_CAS_CTS, A.ISD_ERR_ACTN_CTS, A.OSD_ERR_CAS_CTS
+		  , A.OSD_ERR_ACTN_CTS, A.ERR_CD_APL_DT, A.STSY_ERR_CD, A.TSK_DMN, A.MNG_USER, A.BIZ_DIT, A.MSG_TYP
+	  FROM WAM_STD_ERR_MSG A
+	  WHERE A.STD_ERR_MSG_ID IN 
+	  <foreach collection="list" item="item" open="(" separator="," close=")">
+	  	#{item.stdErrMsgId}
+	  </foreach>
+	    AND A.REG_TYP_CD IN ('C', 'U')  
+  </select>
+  
+  
+    <!-- 검증로직  -->
+   <update id="updateCheckInit" parameterType="java.lang.String" >
+    UPDATE /* WaqStdErrMsgMapper.updateCheckInit */
+    	WAQ_STD_ERR_MSG A
+    SET A.REG_TYP_CD = (SELECT CASE WHEN A.RQST_DCD = 'DD' THEN 'D' ELSE CASE WHEN MAX(B.STD_ERR_MSG_ID ) IS NULL THEN 'C' ELSE 'U' END END
+                          FROM WAM_STD_ERR_MSG B
+                         WHERE B.REG_TYP_CD IN ('C','U')
+                           AND B.STD_ERR_MSG_ID = A.STD_ERR_MSG_ID
+                           --AND CASE WHEN A.STD_ERR_MSG_ID IS NULL THEN A.ERR_CD  ELSE A.STD_ERR_MSG_ID  END = CASE WHEN A.STD_ERR_MSG_ID IS NULL THEN B.ERR_CD  ELSE B.STD_ERR_MSG_ID  END 
+                           )
+       ,A.VRF_CD = '4'
+    WHERE A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+  </update> 
+  
+   <update id="updateErrCd" parameterType="java.lang.String" >
+	UPDATE /* WaqStdErrMsgMapper.updateErrCd */
+		WAQ_STD_ERR_MSG A
+	SET ERR_CD = IFNULL((SELECT ERR_CD
+                  FROM(SELECT C.MSG_TYP||C.MSG_DIT||C.BIZ_DIT ||LPAD(MAX(SUBSTR(M.ERR_CD, 6,9))+RANK() OVER (PARTITION BY C.MSG_TYP,C.MSG_DIT,C.BIZ_DIT ORDER BY C.RQST_SNO) , 4, '0') AS ERR_CD, C.RQST_SNO
+			    FROM (SELECT MAX(ERR_CD) ERR_CD, B.MSG_TYP,B.MSG_DIT,B.BIZ_DIT 
+				FROM WAQ_STD_ERR_MSG B
+				WHERE B.REG_TYP_CD IN ('C','U')
+				AND   B.VRF_CD = '1'
+				AND B.ERR_CD IS NOT NULL
+				GROUP BY B.MSG_TYP,B.MSG_DIT,B.BIZ_DIT) M
+                INNER JOIN WAQ_STD_ERR_MSG C
+                ON M.MSG_TYP = C.MSG_TYP
+                AND M.MSG_DIT = C.MSG_DIT
+                AND M.BIZ_DIT = C.BIZ_DIT
+                AND C.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+                GROUP BY C.MSG_TYP,C.MSG_DIT,C.BIZ_DIT, C.RQST_SNO	) Q
+                WHERE A.RQST_SNO = Q.RQST_SNO
+                ),A.MSG_TYP||A.MSG_DIT||A.BIZ_DIT||'0001')
+	WHERE A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+	AND A.REG_TYP_CD = 'C'
+	AND EXISTS (SELECT 1 FROM WAQ_STD_ERR_MSG D WHERE  A.ERR_CD = D.ERR_CD AND A.RQST_NO != D.RQST_NO 
+				UNION ALL
+				SELECT 1 FROM WAQ_STD_ERR_MSG E WHERE  A.RQST_NO = E.RQST_NO AND A.RQST_SNO = E.RQST_SNO AND E.MSG_TYP||E.MSG_DIT||E.BIZ_DIT != SUBSTR(E.ERR_CD,1,5) 
+				) 
+  </update> 
+  
+  <insert id="checkRequestMsg" parameterType="map">
+  
+  	/* WaqStdErrMsgMapper.checkRequestMsg */
+  	
+  	<include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSql"/>
+	--검증쿼리 : 등록요청 중인 메시지 존재....(MS012)
+	AND EXISTS (
+    		SELECT 1 FROM WAQ_MSTR E
+             INNER JOIN WAQ_STD_ERR_MSG D
+             	ON E.RQST_NO = D.RQST_NO
+             WHERE E.RQST_NO != #{rqstNo}
+               AND E.RQST_STEP_CD = 'Q'
+               AND A.ERR_CD = D.ERR_CD
+			   AND IFNULL(D.RVW_STS_CD, 0) != '2'
+               ) 
+  </insert>
+
+  <insert id="checkDupMsg" parameterType="map">
+  
+  	/* WaqStdErrMsgMapper.checkDupMsg */
+  	
+  	<include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSql"/>
+  	--검증쿼리 메시지코드 중복
+    AND EXISTS (SELECT 1
+             FROM WAQ_STD_ERR_MSG D
+             WHERE A.RQST_NO = D.RQST_NO
+               AND A.ERR_CD = D.ERR_CD
+<!--                메시지 코드가  유니크 해야 한다. -->
+               AND A.RQST_SNO != D.RQST_SNO)
+  </insert>
+
+  <insert id="checkNotExistMsg" parameterType="map">
+  
+  	/* WaqStdErrMsgMapper.checkNotExistMsg */
+  	
+  	<include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSql"/>
+  	--검증쿼리 존재하지 않는 메시지
+      AND A.RQST_DCD = 'DD'
+      AND NOT EXISTS (SELECT 1
+                  FROM WAM_STD_ERR_MSG D
+                  WHERE A.ERR_CD = D.ERR_CD
+                    AND D.REG_TYP_CD IN ('C', 'U'))      
+  </insert>
+  
+  
+  
+
+   <insert id="checkLenMsg" parameterType="map">
+   
+   	/* WaqStdErrMsgMapper.checkLenMsg */
+   	
+  	<include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSql"/>
+  	--검증쿼리 MS003 길이체크 (9)
+      AND A.RQST_DCD = 'CU'
+      AND LENGTH(A.ERR_CD) != 9      
+  </insert>
+  <insert id="checkMsgCdNameMache" parameterType="map">
+  
+  	/* WaqStdErrMsgMapper.checkMsgCdNameMache */
+  	
+  	<include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSql"/>
+  	--검증쿼리 MS010 메시지코드 명명규칙 체크
+      AND A.RQST_DCD = 'CU'
+      AND SUBSTR(A.ERR_CD,1,5) != A.MSG_TYP||A.MSG_DIT||A.BIZ_DIT
+  </insert>
+  <insert id="checkMsgCdNamecheck" parameterType="map">
+  
+  	/* WaqStdErrMsgMapper.checkMsgCdNamecheck */
+  	
+  	<include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSql"/>
+  	--검증쿼리 MS011 메시지코드 명명규칙 체크
+      AND A.RQST_DCD = 'CU'
+      AND A.MSG_TYP = 'D' 
+      AND A.BIZ_DIT != 'COR'
+  </insert>
+  <insert id="checkMsgCdName" parameterType="map">
+  
+  	/* WaqStdErrMsgMapper.checkMsgCdName */
+  	
+  	<include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSql"/>
+  	--검증쿼리 MS004 메시지코드 명명규칙 체크
+      AND A.RQST_DCD = 'CU'
+      AND (SUBSTR(A.MSG_CD,1,1) != 'M'
+           OR SUBSTR(A.MSG_CD,2,1) NOT IN ('I','E','Q' )
+           OR SUBSTR(A.MSG_CD,3,2) NOT IN (SELECT B.comm_dtl_cd		AS CODE_CD			
+                                       	    FROM WAA_COMM_DCD A
+                                       	    LEFT OUTER JOIN WAA_COMM_DTL_CD B
+                                       	    ON A.COMM_DCD_ID = B.COMM_DCD_ID
+                                       	    AND B.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+                                       	    AND B.REG_TYP_CD IN ('C', 'U')
+                                       	    WHERE A.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+                                       	    AND A.REG_TYP_CD IN ('C', 'U')
+                                            and COMM_DCD = 'BIZ_DIV_CD'
+                                       	    )
+           OR REGEXP_REPLACE(SUBSTR(A.MSG_CD,5,4),'\d','9')!='9999')
+  </insert>
+ 
+  <insert id="checkNotChgData" parameterType="map">
+  
+  	/* WaqStdErrMsgMapper.checkNotChgData */
+  	
+  	<include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSql"/>
+  	--검증쿼리
+      AND A.REG_TYP_CD = 'U'
+      AND EXISTS (SELECT 1
+             FROM WAM_STD_ERR_MSG D
+            WHERE A.ERR_CD = D.ERR_CD
+			  AND IFNULL(A.STD_ERR_MSG_LNM , '')   	= IFNULL(D.STD_ERR_MSG_LNM    , '')
+			  AND IFNULL(A.STD_ERR_MSG_PNM , '')   	= IFNULL(D.STD_ERR_MSG_PNM    , '')
+			  AND IFNULL(A.ERR_TLG_LAN_DSCD    , '')  = IFNULL(D.ERR_TLG_LAN_DSCD    , '')
+			  AND IFNULL(A.ERR_TP_CD,  '')   			= IFNULL(D.ERR_TP_CD    , '')
+			  AND IFNULL(A.MSG_DIT, '')   			= IFNULL(D.MSG_DIT    , '')
+		      AND IFNULL(A.STD_ERR_CD_YN, '')   		= IFNULL(D.STD_ERR_CD_YN    , '')
+		      AND IFNULL(A.ACTN_CD, '')   			= IFNULL(D.ACTN_CD    , '')
+		      AND IFNULL(A.ISD_ERR_CAS_CTS, '')   	= IFNULL(D.ISD_ERR_CAS_CTS    , '')
+		      AND IFNULL(A.ISD_ERR_ACTN_CTS, '')   	= IFNULL(D.ISD_ERR_ACTN_CTS    , '')
+		      AND IFNULL(A.OSD_ERR_CAS_CTS, '')   	= IFNULL(D.OSD_ERR_CAS_CTS    , '')
+		      AND IFNULL(A.OSD_ERR_ACTN_CTS, '')   	= IFNULL(D.OSD_ERR_ACTN_CTS    , '')
+		      AND IFNULL(A.ERR_CD_APL_DT, '')   		= IFNULL(D.ERR_CD_APL_DT    , '')
+		      AND IFNULL(A.STSY_ERR_CD, '')   		= IFNULL(D.STSY_ERR_CD    , '')
+		      AND IFNULL(A.TSK_DMN, '')   			= IFNULL(D.TSK_DMN    , '')
+		      AND IFNULL(A.MNG_USER, '')   			= IFNULL(D.MNG_USER    , '')
+		      AND IFNULL(A.BIZ_DIT, '')   			= IFNULL(D.BIZ_DIT    , '')
+		      AND IFNULL(A.MSG_TYP, '')   			= IFNULL(D.MSG_TYP    , '')
+              AND D.REG_TYP_CD IN ('C','U')
+      )    
+  </insert>
+  
+  <!-- 결재처리 -->
+  <update id="updatervwStsCd" parameterType="kr.wise.meta.stnd.service.WaqStdErrMsg">
+  	UPDATE /* WaqStdErrMsgMapper.updatervwStsCd */
+  		WAQ_STD_ERR_MSG
+  	<set>
+  	    RVW_STS_CD 	= #{rvwStsCd} , 
+  		RVW_CONTS 	= #{rvwConts} , 
+  		APRV_DTM	= NOW() ,
+  		APRV_USER_ID = #{aprvUserId} ,
+  	</set>
+    WHERE RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      AND RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+      AND VRF_CD = '1'
+      AND IFNULL(RVW_STS_CD, '_') != '2'
+ 
+  </update>
+  
+  <!-- 적재 SQL -->
+  <!--   적재쿼리 
+    selectWaqC
+    
+	int updateWaqCUD(@Param("rqstNo") String rqstNo);
+	int updateWaqC(@Param("rqstNo") String rqstNo);
+	int deleteWAM(@Param("rqstNo") String rqstNo);
+	int insertWAM(@Param("rqstNo") String rqstNo);
+	int updateWAH(@Param("rqstNo") String rqstNo);
+	int insertWAH(@Param("rqstNo") String rqstNo);
+	
+-->
+
+   <sql id="wam_col">
+    STD_ERR_MSG_LNM, STD_ERR_MSG_PNM, RQST_NO, RQST_SNO, OBJ_DESCN, OBJ_VERS, 
+    REG_TYP_CD, FRS_RQST_DTM, FRS_RQST_USER_ID, RQST_DTM, RQST_USER_ID, APRV_DTM, APRV_USER_ID, 
+    ERR_TLG_LAN_DSCD, ERR_TP_CD, MSG_DIT, STD_ERR_CD_YN, ACTN_CD, ERR_CD, ISD_ERR_CAS_CTS, 
+    ISD_ERR_ACTN_CTS, OSD_ERR_CAS_CTS, OSD_ERR_ACTN_CTS, ERR_CD_APL_DT, STSY_ERR_CD, 
+    TSK_DMN, MNG_USER, BIZ_DIT, MSG_TYP
+   </sql>
+   
+  <select id="selectWaqC" parameterType="map" resultMap="BaseResultMap">
+   	SELECT /* WaqStdErrMsgMapper.selectWaqC */
+   		* FROM WAQ_STD_ERR_MSG
+   	WHERE RQST_NO = #{rqstNo}
+   	  AND RVW_STS_CD = '1'  --승인
+   	  AND REG_TYP_CD = 'C'  	
+  </select>
+  
+  <update id="updateidByKey" parameterType="kr.wise.meta.stnd.service.WaqStdErrMsg">
+   	UPDATE 	/* WaqStdErrMsgMapper.updateidByKey */
+   			WAQ_STD_ERR_MSG SET STD_ERR_MSG_ID = #{stdErrMsgId,jdbcType=VARCHAR}
+  	 WHERE RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+       AND RQST_SNO = #{rqstSno,jdbcType=DECIMAL} 
+  
+  </update>
+  
+    <update id="updateWaqCUD" parameterType="map">
+   	--WAQ ID, VERS 등을 업데이트...
+	UPDATE /* WaqStdErrMsgMapper.updateWaqCUD */
+		WAQ_STD_ERR_MSG A
+	SET (STD_ERR_MSG_ID, OBJ_VERS, FRS_RQST_DTM, FRS_RQST_USER_ID) = (
+	    SELECT 
+	          B.STD_ERR_MSG_ID AS STD_ERR_MSG_ID
+	        , IFNULL(B.OBJ_VERS, 0) + 1 AS OBJ_VERS
+	        , B.FRS_RQST_DTM
+	        , B.FRS_RQST_USER_ID
+	    FROM WAM_STD_ERR_MSG B
+	    WHERE B.ERR_CD = A.ERR_CD
+	      AND B.REG_TYP_CD IN ('C', 'U')
+	)
+	WHERE A.RQST_NO = #{rqstNo}
+	--AND A.VRF_CD = '1' 		--등록가능
+	AND A.RVW_STS_CD = '1'  --승인
+	AND EXISTS (
+		SELECT 1
+		  FROM WAM_STD_ERR_MSG B
+		 WHERE B.ERR_CD = A.ERR_CD
+	       AND B.REG_TYP_CD IN ('C', 'U')
+	)
+   </update>
+   
+
+   
+   <delete id="deleteWAM" parameterType="map">
+    --WAM 삭제 (등록유형코드가REG_TYP_CD 변경, 삭제일 경우)
+	DELETE /* WaqStdErrMsgMapper.deleteWAM */
+	FROM WAM_STD_ERR_MSG A
+	WHERE EXISTS (
+	    SELECT 1 FROM WAQ_STD_ERR_MSG B
+	     WHERE B.RQST_NO = #{rqstNo}
+	       AND B.RVW_STS_CD = '1'
+	       AND B.ERR_CD = A.ERR_CD
+	)
+   </delete>
+   
+   <insert id="insertWAM" parameterType="map">
+   	--WAM 추가 (WAQ 내용을 추가, REG_TYP_CD 가 신규,변경일 경우)
+	INSERT /* WaqStdErrMsgMapper.insertWAM */
+		INTO WAM_STD_ERR_MSG 
+	SELECT 
+		A.STD_ERR_MSG_ID, 
+	<include refid="wam_col"/>
+	 FROM WAQ_STD_ERR_MSG A
+	WHERE A.RQST_NO = #{rqstNo}
+	  AND A.RVW_STS_CD = '1'
+	  AND A.REG_TYP_CD IN ('C', 'U')
+   </insert>
+   
+   <update id="updateWAH"  parameterType="map">
+   	--WAH 이력 만료...
+	UPDATE /* WaqStdErrMsgMapper.updateWAH */
+		WAH_STD_ERR_MSG A
+	SET EXP_DTM = NOW()
+	WHERE EXISTS (
+	    SELECT 1 FROM WAQ_STD_ERR_MSG B
+	    WHERE B.RQST_NO = #{rqstNo}
+	    AND B.RVW_STS_CD = '1'
+	    AND B.ERR_CD = A.ERR_CD
+	    )
+	AND EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+   </update>
+   
+   <insert id="insertWAH"  parameterType="map">
+   	--WAH이력 적재...
+	INSERT /* WaqStdErrMsgMapper.insertWAH */
+		INTO WAH_STD_ERR_MSG
+	SELECT
+	    A.STD_ERR_MSG_ID 
+	    , STR_TO_DATE('9999-12-31', '%Y-%m-%d') AS EXP_DTM
+	    , NOW() AS STR_DTM 
+	    ,
+	<include refid="wam_col"/>
+	 FROM WAQ_STD_ERR_MSG A
+	WHERE A.RQST_NO = #{rqstNo}
+	  AND A.RVW_STS_CD = '1'
+   </insert>  
+</mapper>

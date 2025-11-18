@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.meta.effect.service.OlapMapper" >
+
+
+<resultMap id="OlapReportResultMap" type="kr.wise.meta.effect.service.OlapVO" >    
+    <result column="PRJ_ID" 	property="prjId" 	jdbcType="VARCHAR" />
+    <result column="PRJ_NM" 	property="prjNm" 	jdbcType="VARCHAR" />
+    <result column="ORGL_DTTM" 	property="orglDttm" 	jdbcType="VARCHAR" />
+    <result column="UPDT_DTTM" 	property="updtDttm" 	jdbcType="VARCHAR" />
+    <result column="DESCRIPTION" 	property="description" 	jdbcType="VARCHAR" />
+    <result column="REPORT_NM" 	property="reportNm" 	jdbcType="VARCHAR" />
+</resultMap>
+	
+	
+	<select id="selectOlapReportList" parameterType="kr.wise.meta.effect.service.OlapVO" resultMap="OlapReportResultMap">
+	SELECT /* OlapMapper.selectOlapReportList */
+		A.OBJ_ID AS PRJ_ID                                  
+     , A.OBJ_KNM AS PRJ_NM  
+     , A.XPR_DTTM                                                                                                                                                                                      
+     , A.ORGL_TYPE                                     
+     , TO_CHAR( A.ORGL_DTTM, '%Y-%m-%d') AS ORGL_DTTM
+     , A.ORGL_USER                                     
+     , TO_CHAR( A.UPDT_DTTM, '%Y-%m-%d') AS UPDT_DTTM
+     , A.UPDT_USER                                     
+     , A.MNG_USER                                      
+     , A.REQUEST_ID                                    
+     , A.DEFINITION                                    
+     , A.DESCRIPTION                                   
+     , A.NOTE                                          
+     , A.REMARKS                                       
+     , A.IMP_CD                                        
+     , A.IMP_NM                                        
+     , A.SVR_NM                                        
+	 FROM WAT_MOLA010R A                                   
+	WHERE A.XPR_DTTM = STR_TO_DATE('9999-12-31','%Y-%m-%d')
+	  AND A.ORGL_TYPE IN ('C', 'U')                      
+	ORDER BY A.OBJ_KNM	
+	</select>
+	
+	
+	<select id="selectOlapReportDetailList" parameterType="kr.wise.meta.effect.service.OlapVO" resultMap="OlapReportResultMap">
+	SELECT /* OlapMapper.selectOlapReportDetailList */
+		A.OBJ_ID
+      , A.XPR_DTTM
+      , A.OBJ_NM
+      , RTRIM(A.OBJ_KNM) AS REPORT_NM
+      , A.OBJ_ENM
+      , A.IS_DELETED
+      , A.VERSION
+      , A.ORGL_TYPE
+      , TO_CHAR( A.ORGL_DTTM, '%Y-%m-%d') AS ORGL_DTTM
+      , A.ORGL_USER
+      , TO_CHAR( A.UPDT_DTTM, '%Y-%m-%d') AS UPDT_DTTM
+      , A.UPDT_USER
+      , A.MNG_USER
+      , A.REQUEST_ID
+      , A.File_NM
+      , A.FILE_ORG_CONT
+      , A.DB_NM
+      , A.PROJ_NM
+      , A.OLA_PRJ_ID
+      , A.DEFINITION
+      , A.DESCRIPTION
+      , A.NOTE
+      , A.REMARKS
+      , A.IMP_CD
+      , A.IMP_NM
+      , A.SVR_NM
+      , B.OBJ_ID AS PRJ_ID
+      , A.OBJ_ID AS RPT_ID
+      , B.OBJ_KNM AS PRJ_NM
+	   FROM WAT_MOLA020R A, WAT_MOLA010R B
+		WHERE A.XPR_DTTM = STR_TO_DATE('9999-12-31','%Y-%m-%d')
+		  AND B.XPR_DTTM = STR_TO_DATE('9999-12-31','%Y-%m-%d')
+		  AND A.ORGL_TYPE IN ('C', 'U')
+		  AND B.ORGL_TYPE IN ('C', 'U')
+		  AND A.OLA_PRJ_ID = B.OBJ_ID
+		  <if test="prjId != null">AND B.OBJ_ID = #{prjId}</if>			
+	    ORDER BY B.OBJ_KNM, A.OBJ_KNM	
+	</select>
+		
+
+</mapper>

@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.meta.admin.service.WaaInfoSysMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.meta.admin.service.WaaInfoSys" extends="kr.wise.commons.user.service.WaaUsergMapper.BaseResultMap" >
+    <id column="ORG_CD" property="orgCd" jdbcType="VARCHAR" />
+	<result column="INFO_SYS_CD" property="infoSysCd" jdbcType="VARCHAR" />
+	<result column="INFO_SYS_NM" property="infoSysNm" jdbcType="VARCHAR" />
+	<result column="REL_LAW" property="relLaw" jdbcType="VARCHAR" />
+	<result column="CONST_PURP" property="constPurp" jdbcType="VARCHAR" />
+	<result column="CONST_YY" property="constYy" jdbcType="VARCHAR" />
+<!-- 	<result column="TOT_INV_BDGT" property="totInvBdgt" jdbcType="DECIMAL" />
+	<result column="OPER_BDGT" property="operBdgt" jdbcType="DECIMAL" /> -->
+	<result column="OPER_DEPT_NM" property="operDeptNm" jdbcType="VARCHAR" />
+	<result column="CRG_USER_NM" property="crgUserNm" jdbcType="VARCHAR" />
+	<result column="CRG_TEL_NO" property="crgTelNo" jdbcType="VARCHAR" />
+	<result column="CRG_EMAIL_ADDR" property="crgEmailAddr" jdbcType="VARCHAR" />
+	<result column="ORG_NM" property="orgNm" jdbcType="VARCHAR" />
+	
+	<result column="INFO_SYS_CNT" property="infoSysCnt" jdbcType="DECIMAL" />
+	<result column="USER_INFO_SYS_CNT" property="userInfoSysCnt" jdbcType="DECIMAL" />
+  </resultMap>
+  
+  <select id="selectList"  parameterType="kr.wise.meta.admin.service.WaaInfoSys" resultMap="BaseResultMap">
+	SELECT 
+			  A.ORG_CD
+			, B.ORG_NM
+			, A.INFO_SYS_CD
+			, A.EXP_DTM
+			, A.STR_DTM
+			, A.INFO_SYS_NM
+			, A.OBJ_DESCN
+			, A.OBJ_VERS
+			, A.WRIT_USER_ID
+			, A.WRIT_DTM
+			, A.REL_LAW
+			, A.CONST_PURP
+			, A.CONST_YY
+			, A.OPER_DEPT_NM
+			, A.CRG_USER_NM
+			, A.CRG_TEL_NO
+			, A.CRG_EMAIL_ADDR 
+	FROM	WAA_INFO_SYS A 
+	INNER JOIN (
+			SELECT ORG_CD, ORG_NM, UPP_ORG_CD, FULL_PATH 
+        	FROM WAA_ORG
+        	WHERE REG_TYP_CD IN ('C','U')
+        	  AND EXP_DTM = TO_DATE('9999-12-31','YYYY-MM-DD')
+        	  <choose>
+			  	<when test="orgCd != null">
+			  	<!-- adminYn != null and orgCd != null 이면 조회조건에 orgCd없이 전체 조회라 강제로 생성 -->
+			  	<if test='adminYn == null or ( adminYn != null and adminYn == "N")'>
+		        	AND ORG_CD = #{orgCd, jdbcType=VARCHAR}
+			  	</if> 
+			  	</when>			  	
+			  </choose>
+	) B 
+	ON A.ORG_CD = B.ORG_CD
+
+	<where>
+  	<if test="infoSysCd != null" >
+  		AND	A.INFO_SYS_CD LIKE '%' || REPLACE(#{infoSysCd,jdbcType=VARCHAR}, '_', '#_') || '%' ESCAPE '#'
+  	</if>
+  	<if test="infoSysNm != null" >
+  		AND	UPPER(A.INFO_SYS_NM) LIKE '%' || REPLACE(UPPER(#{infoSysNm,jdbcType=VARCHAR}), '_', '#_') || '%' ESCAPE '#'
+  	</if>
+  	<if test="constYy != null" >
+  		AND	A.CONST_YY LIKE '%' || REPLACE(#{constYy,jdbcType=VARCHAR}, '_', '#_') || '%' ESCAPE '#'
+  	</if>
+  	<if test="crgUserNm != null" >
+  		AND	UPPER(A.CRG_USER_NM) LIKE '%' || REPLACE(UPPER(#{crgUserNm,jdbcType=VARCHAR}), '_', '#_') || '%' ESCAPE '#'
+  	</if>
+    <if test="orgCd == null and orgNm != null" >
+  		AND	B.FULL_PATH LIKE '%' || REPLACE(#{orgNm,jdbcType=VARCHAR}, '_', '#_') || '%' ESCAPE '#'
+  	</if>
+  	AND A.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	</where>
+	<!-- 최근등록일 -->
+	ORDER BY A.STR_DTM DESC
+	<!-- ORDER BY B.ORG_NM, A.INFO_SYS_CD -->
+  </select>
+  
+  <!-- 신규등록  정보시스템코드는 임시 -->
+  <insert id="insertSelective" parameterType="kr.wise.meta.admin.service.WaaInfoSys" keyProperty="infoSysCd">
+	<selectKey keyProperty="infoSysCd" resultType="string" statementType="PREPARED" order="BEFORE">
+		SELECT COALESCE(MAX(ORG_CD)||'_'||LPAD( (COALESCE(CAST(MAX(CAST(SUBSTRING(INFO_SYS_CD,POSITION('_' IN INFO_SYS_CD)+1,3) AS TEXT)) AS INTEGER),0) + 1)::TEXT, 3, '0'::TEXT), #{orgCd, jdbcType=VARCHAR}||'_001') AS infoSysCd
+		FROM WAA_INFO_SYS
+		WHERE ORG_CD = #{orgCd, jdbcType=VARCHAR}
+		AND INFO_SYS_CD NOT LIKE '%\_M%' ESCAPE '\'
+  	</selectKey>
+  	insert into WAA_INFO_SYS
+  	<trim prefix="(" suffix=")" suffixOverrides="," >
+  		<if test="orgCd != null">
+  		  ORG_CD
+		</if>
+		, INFO_SYS_CD
+		, EXP_DTM
+		, STR_DTM
+		<if test="infoSysNm != null">
+		, INFO_SYS_NM
+		</if>
+		<if test="objDescn != null" >
+        , OBJ_DESCN
+      	</if>
+		, OBJ_VERS
+      	<if test="writUserId != null" >
+        , WRIT_USER_ID
+      	</if>
+		, WRIT_DTM
+		<if test="relLaw != null">
+		, REL_LAW
+		</if>
+		<if test="constPurp != null">
+		, CONST_PURP
+		</if>
+		<if test="constYy != null">
+		, CONST_YY
+		</if>
+<!-- 		<if test="totInvBdgt != null">
+		, TOT_INV_BDGT
+		</if>
+		<if test="operBdgt != null">
+		, OPER_BDGT
+		</if> -->
+		<if test="operDeptNm != null">
+		, OPER_DEPT_NM
+		</if>
+		<if test="crgUserNm != null">
+		, CRG_USER_NM
+		</if>
+		<if test="crgTelNo != null">
+		, CRG_TEL_NO
+		</if>
+		<if test="crgEmailAddr != null">
+		, CRG_EMAIL_ADDR
+ 		</if> 
+  	</trim>
+  	<trim prefix="values (" suffix=")" suffixOverrides="," >
+  		<if test="orgCd != null">
+  		  #{orgCd,jdbcType=VARCHAR}
+		</if>
+  		, #{infoSysCd,jdbcType=VARCHAR}
+		, TO_DATE('9999-12-31', 'YYYY-MM-DD')
+		, NOW()
+		<if test="infoSysNm != null">
+		, #{infoSysNm,jdbcType=VARCHAR}
+		</if>
+		<if test="objDescn != null" >
+		, #{objDescn,jdbcType=VARCHAR}
+      	</if>
+		, 1
+      	<if test="writUserId != null" >
+		, #{writUserId,jdbcType=VARCHAR}
+      	</if>
+		, NOW()
+		<if test="relLaw != null">
+		, #{relLaw,jdbcType=VARCHAR}
+		</if>
+		<if test="constPurp != null">
+		, #{constPurp,jdbcType=VARCHAR}
+		</if>
+		<if test="constYy != null">
+		, #{constYy,jdbcType=VARCHAR}
+		</if>
+<!-- 		<if test="totInvBdgt != null">
+		, #{totInvBdgt,jdbcType=DECIMAL}
+		</if>
+		<if test="operBdgt != null">
+		, #{operBdgt,jdbcType=DECIMAL}
+		</if> -->
+		<if test="operDeptNm != null">
+		, #{operDeptNm,jdbcType=VARCHAR}
+		</if>
+		<if test="crgUserNm != null">
+		, #{crgUserNm,jdbcType=VARCHAR}
+		</if>
+		<if test="crgTelNo != null">
+		, #{crgTelNo,jdbcType=VARCHAR}
+		</if>
+		<if test="crgEmailAddr != null">
+		, #{crgEmailAddr,jdbcType=VARCHAR}
+		</if>
+  	</trim>
+  </insert>
+  
+  <update id="updateWaaInfoSys" parameterType="kr.wise.meta.admin.service.WaaInfoSys" >
+    UPDATE WAA_INFO_SYS 
+    SET   INFO_SYS_NM = #{infoSysNm,jdbcType=VARCHAR}
+        , OBJ_DESCN = #{objDescn,jdbcType=VARCHAR}
+        , OBJ_VERS = #{objVers,jdbcType=DECIMAL}
+        , WRIT_USER_ID = #{writUserId,jdbcType=VARCHAR}
+        , WRIT_DTM = NOW()
+        , REL_LAW = #{relLaw,jdbcType=VARCHAR}
+        , CONST_PURP = #{constPurp,jdbcType=VARCHAR}
+        , CONST_YY = #{constYy,jdbcType=VARCHAR}
+<!--         , TOT_INV_BDGT = #{totInvBdgt,jdbcType=DECIMAL}
+        , OPER_BDGT = #{operBdgt,jdbcType=DECIMAL} -->
+        , OPER_DEPT_NM = #{operDeptNm,jdbcType=VARCHAR}
+        , CRG_USER_NM = #{crgUserNm,jdbcType=VARCHAR}
+        , CRG_TEL_NO = #{crgTelNo,jdbcType=VARCHAR}
+        , CRG_EMAIL_ADDR = #{crgEmailAddr,jdbcType=VARCHAR}
+    WHERE ORG_CD = #{orgCd,jdbcType=VARCHAR}
+    AND INFO_SYS_CD = #{infoSysCd,jdbcType=VARCHAR}
+    AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+    </update>
+    
+
+    <!-- 삭제 -->
+    <update id="updateExpDtm" parameterType="kr.wise.meta.admin.service.WaaInfoSys" >
+	    UPDATE WAA_INFO_SYS 
+	    SET EXP_DTM = NOW()<!-- , REG_TYP_CD = 'D' -->
+	    WHERE ORG_CD = #{orgCd,jdbcType=VARCHAR}
+	    AND INFO_SYS_CD = #{infoSysCd,jdbcType=VARCHAR}
+	    AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+    </update>
+    <select id="selectListApi"  parameterType="map" resultMap="BaseResultMap">
+	SELECT 
+			  A.ORG_CD
+			, B.ORG_NM
+			, A.INFO_SYS_CD
+			, A.INFO_SYS_NM
+			, A.REL_LAW
+			, A.OPER_DEPT_NM  
+			, A.CRG_USER_NM   
+			, A.CRG_TEL_NO    
+			, A.CRG_EMAIL_ADDR
+	     FROM WAA_INFO_SYS A  
+	          INNER JOIN 
+	          (
+	            SELECT ORG_CD, ORG_NM, UPP_ORG_CD 
+                    FROM WAA_ORG
+                   WHERE REG_TYP_CD IN ('C','U')
+                     AND EXP_DTM = TO_DATE('9999-12-31','YYYY-MM-DD')
+	             <if test="orgCd != null" >
+                     	START WITH ORG_CD = #{orgCd,jdbcType=VARCHAR}
+	             		CONNECT BY PRIOR ORG_CD = UPP_ORG_CD
+  	             </if>
+	          ) B 
+	          ON A.ORG_CD = B.ORG_CD
+	
+	<where>
+  	<if test="infoSysCd != null" >
+  		AND	A.INFO_SYS_CD LIKE '%' || REPLACE(#{infoSysCd,jdbcType=VARCHAR}, '_', '#_') || '%' ESCAPE '#'
+  	</if>
+  	<if test="infoSysNm != null" >
+  		AND	A.INFO_SYS_NM LIKE '%' || REPLACE(#{infoSysNm,jdbcType=VARCHAR}, '_', '#_') || '%' ESCAPE '#'
+  	</if>
+    <if test="orgNm != null" >
+  		AND	B.ORG_NM LIKE '%' || REPLACE(#{orgNm,jdbcType=VARCHAR}, '_', '#_') || '%' ESCAPE '#'
+  	</if>
+  	AND A.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	</where>
+  </select>
+
+	<select id="getDicInfoSysList"  parameterType="kr.wise.meta.admin.service.WaaInfoSys" resultMap="BaseResultMap">
+		SELECT 
+				DISTINCT(INFO_SYS_CD)
+		  	  , INFO_SYS_NM
+		  	  , ORG_CD
+		  FROM	WAA_INFO_SYS
+		<where>
+		<if test="infoSysCd != null" >
+  		AND	INFO_SYS_CD = #{infoSysCd,jdbcType=VARCHAR}
+  		</if>
+		<if test="orgCd != null" >
+  		AND	ORG_CD = #{orgCd,jdbcType=VARCHAR}
+  		</if>
+	  	AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+		</where>
+		ORDER BY INFO_SYS_NM
+  </select>
+  
+  <select id="selectInfoSysInfoDetail"  parameterType="map" resultMap="BaseResultMap">
+	SELECT 
+			  A.ORG_CD
+			, B.ORG_NM
+			, A.INFO_SYS_CD
+			, A.EXP_DTM
+			, A.STR_DTM
+			, A.INFO_SYS_NM
+			, A.OBJ_DESCN
+			, A.OBJ_VERS
+			, A.WRIT_USER_ID
+			, A.WRIT_DTM
+			, A.REL_LAW
+			, A.CONST_PURP
+			, A.CONST_YY
+            , A.OPER_DEPT_NM
+            , A.CRG_USER_NM
+            , A.CRG_TEL_NO    
+            , A.CRG_EMAIL_ADDR
+	     FROM WAA_INFO_SYS A 
+	          INNER JOIN 
+	          (
+  	            SELECT X.ORG_CD, X.ORG_NM, X.UPP_ORG_CD
+  	            FROM WAA_ORG X
+  	            WHERE X.REG_TYP_CD IN ('C', 'U')
+  	              AND X.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+  	             <if test="orgCd != null" >
+  	              AND X.ORG_CD = #{orgCd,jdbcType=VARCHAR}
+  	             </if>
+  	              AND X.UPP_ORG_CD IS NULL
+  	              
+  	            UNION ALL
+  	            
+  	            SELECT Y.ORG_CD, Y.ORG_NM, Y.UPP_ORG_CD
+  	            FROM WAA_ORG Y
+  	            INNER JOIN WAA_ORG Z
+  	            ON Y.UPP_ORG_CD = Z.ORG_CD
+  	              AND Y.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+  	             <if test="orgCd != null" >
+  	              AND Y.ORG_CD = #{orgCd,jdbcType=VARCHAR}
+  	             </if>
+  	            WHERE Z.REG_TYP_CD IN ('C', 'U')
+  	            AND Z.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	          ) B 
+	          ON A.ORG_CD = B.ORG_CD 	
+	<where>
+  	<if test="infoSysCd != null" >
+  		AND	A.INFO_SYS_CD LIKE '%' || REPLACE(#{infoSysCd,jdbcType=VARCHAR}, '_', '#_') || '%' ESCAPE '#'
+  	</if>
+  	AND A.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	</where>
+  </select>
+  
+  <!--  -->
+  <select id="selectInfoSysDupCheck"  parameterType="kr.wise.meta.admin.service.WaaInfoSys" resultMap="BaseResultMap">
+	SELECT COUNT(A.INFO_SYS_CD) INFO_SYS_CNT   
+		, COUNT(*) USER_INFO_SYS_CNT
+	FROM WAA_INFO_SYS A 		
+	WHERE A.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	AND A.ORG_CD = #{orgCd,jdbcType=VARCHAR}
+	AND REPLACE(LOWER(INFO_SYS_NM), ' ', '') = REPLACE(LOWER(#{infoSysNm,jdbcType=VARCHAR}), ' ', '')	
+  </select>
+</mapper>

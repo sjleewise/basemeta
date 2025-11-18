@@ -1,0 +1,1717 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.meta.ddl.service.WaqDdlTblMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.meta.ddl.service.WaqDdlTbl" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap" >
+    <id column="RQST_NO" property="rqstNo" jdbcType="VARCHAR" />
+    <id column="RQST_SNO" property="rqstSno" jdbcType="DECIMAL" />
+    <result column="DDL_TBL_ID"      property="ddlTblId"     jdbcType="VARCHAR" />
+    <result column="DDL_TBL_PNM"     property="ddlTblPnm"    jdbcType="VARCHAR" />
+    <result column="DDL_TBL_LNM"     property="ddlTblLnm"    jdbcType="VARCHAR" />
+    <result column="BF_DDL_TBL_PNM"  property="bfDdlTblPnm"  jdbcType="VARCHAR" />
+    <result column="DB_CONN_TRG_ID"  property="dbConnTrgId"  jdbcType="VARCHAR" />
+    <result column="DB_CONN_TRG_PNM" property="dbConnTrgPnm" jdbcType="VARCHAR" />
+    <result column="DB_SCH_ID"       property="dbSchId"      jdbcType="VARCHAR" />
+    <result column="DB_SCH_PNM"      property="dbSchPnm"     jdbcType="VARCHAR" />
+    <result column="TBL_SPAC_ID"     property="tblSpacId"    jdbcType="VARCHAR" />
+    <result column="TBL_SPAC_PNM"    property="tblSpacPnm"   jdbcType="VARCHAR" />
+    <result column="TBL_CHG_TYP_CD"  property="tblChgTypCd"  jdbcType="VARCHAR" />
+    <result column="PDM_TBL_ID"      property="pdmTblId"     jdbcType="VARCHAR" />
+    <result column="FULL_PATH"       property="fullPath"     jdbcType="VARCHAR" />
+    <result column="DDL_TRG_DCD"     property="ddlTrgDcd"    jdbcType="VARCHAR" />
+    
+    <result column="SRC_DDL_TRG_DCD"     property="srcDdlTrgDcd"    jdbcType="VARCHAR" />
+    <result column="SRC_DB_CONN_TRG_PNM" property="srcDbConnTrgPnm" jdbcType="VARCHAR" />
+    <result column="SRC_DB_SCH_PNM"      property="srcDbSchPnm"     jdbcType="VARCHAR" />
+    <result column="SRC_DB_SCH_ID"       property="srcDbSchId"      jdbcType="VARCHAR" />
+   
+    <result column="TGT_DDL_TRG_DCD"      property="tgtDdlTrgDcd"    jdbcType="VARCHAR" />
+    <result column="TGT_DB_CONN_TRG_ID"   property="tgtDbConnTrgId"  jdbcType="VARCHAR" />
+    <result column="TGT_DB_CONN_TRG_PNM"  property="tgtDbConnTrgPnm" jdbcType="VARCHAR" />
+    <result column="TGT_DB_SCH_PNM"       property="tgtDbSchPnm"     jdbcType="VARCHAR" />
+    <result column="TGT_DB_SCH_ID"        property="tgtDbSchId"      jdbcType="VARCHAR" />
+    <result column="PDM_RQST_NO"          property="pdmRqstNo"       jdbcType="VARCHAR" />   
+       
+    <result column="OBJ_DCD"             property="objDcd"          jdbcType="VARCHAR" />
+    <result column="DDL_IDX_PNM"         property="ddlIdxPnm"       jdbcType="VARCHAR" />
+    <result column="UK_IDX_YN"           property="ukIdxYn"         jdbcType="VARCHAR" />
+    <result column="PART_TBL_YN"         property="partTblYn"     	jdbcType="VARCHAR" />
+        
+<!--     <result column="SCRT_INFO" property="scrtInfo" jdbcType="CLOB" /> -->
+  </resultMap>
+  
+  <resultMap id="ResultMapWithBLOBs" type="kr.wise.meta.ddl.service.WaqDdlTbl" extends="BaseResultMap" >
+    <result column="SCRT_INFO" property="scrtInfo" jdbcType="CLOB" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    RQST_NO, RQST_SNO, DDL_TBL_ID, DDL_TBL_PNM, DDL_TBL_LNM, BF_DDL_TBL_PNM, RQST_DCD, 
+    RVW_STS_CD, RVW_CONTS, VRF_CD, VRF_RMK, DB_CONN_TRG_PNM, DB_SCH_ID, DB_SCH_PNM, 
+    TBL_SPAC_ID, TBL_SPAC_PNM, TBL_CHG_TYP_CD, PDM_TBL_ID, OBJ_DESCN, OBJ_VERS, REG_TYP_CD, 
+    FRS_RQST_DTM, FRS_RQST_USER_ID, RQST_DTM, RQST_USER_ID, APRV_DTM, APRV_USER_ID, PART_TBL_YN
+  </sql>
+
+  <sql id="waq_Column_List" >
+      A.RQST_NO, A.RQST_SNO
+    , A.DDL_TBL_ID, A.DDL_TBL_PNM, A.DDL_TBL_LNM, A.BF_DDL_TBL_PNM
+    , A.RQST_DCD
+    , A.REG_TYP_CD     
+    , A.RVW_CONTS
+    , A.VRF_CD
+    , A.VRF_RMK  
+    , A.DB_CONN_TRG_PNM
+    , A.DB_SCH_ID
+    , A.DB_SCH_PNM
+    , A.TBL_SPAC_ID, A.TBL_SPAC_PNM, A.TBL_CHG_TYP_CD
+    , A.PDM_TBL_ID
+    , A.OBJ_DESCN, A.OBJ_VERS
+    , A.FRS_RQST_DTM
+    , A.FRS_RQST_USER_ID
+    , A.RQST_DTM
+    , A.RQST_USER_ID
+    , A.APRV_DTM
+    , A.APRV_USER_ID
+    , A.DDL_TRG_DCD
+    , A.SRC_DDL_TRG_DCD
+    , A.SRC_DB_CONN_TRG_PNM
+    , A.SRC_DB_SCH_PNM
+    , A.SRC_DB_SCH_ID
+    , A.TGT_DDL_TRG_DCD     
+    , A.TGT_DB_CONN_TRG_PNM
+    , A.TGT_DB_SCH_PNM
+    , A.TGT_DB_SCH_ID
+    , A.PART_TBL_YN
+  </sql>
+
+  <sql id="Blob_Column_List" >
+    SCRT_INFO
+  </sql>
+ 
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="map" >
+  
+  	/* WaqDdlTblMapper.selectByPrimaryKey */
+  	
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from WAQ_DDL_TBL
+    where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      and RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+      
+  </select>
+  
+  <select id="selectDdlTblVrfCdList" resultMap="BaseResultMap" parameterType="kr.wise.commons.rqstmst.service.WaqMstr" >
+  
+  	/* WaqDdlTblMapper.selectDdlTblVrfCdList */
+  	
+   SELECT A.RQST_NO
+        , A.RQST_SNO
+        , A.DDL_TBL_PNM
+     FROM WAQ_DDL_TBL A
+    WHERE A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      AND A.VRF_CD = '1'
+      
+  </select>
+ 
+ <!-- DDL 테이블 요청서 리스트 조회 -->
+  <select id="selectDdlListbyMst" parameterType="kr.wise.commons.rqstmst.service.WaqMstr" resultMap="BaseResultMap" >
+  
+  	/* WaqDdlTblMapper.selectDdlListbyMst */
+  	
+  	SELECT 
+    <include refid="waq_Column_List"/>
+    <if test='rqstStepCd == "Q" '>
+     , CASE WHEN A.RVW_STS_CD = '2' THEN '2' ELSE '0' END AS RVW_STS_CD
+     </if>
+     <if test='rqstStepCd != "Q" '>
+     , A.RVW_STS_CD
+     </if>
+     , B.FULL_PATH
+     , CASE WHEN A.VRF_CD = '2' THEN '#FF0000' ELSE CASE WHEN A.VRF_CD = '5' THEN '#0000FF'  END END AS FontColor 
+
+     , GET_USER_NM(A.RQST_USER_ID) AS RQST_USER_NM  
+    FROM WAQ_DDL_TBL A
+	    LEFT JOIN WAH_PDM_TBL B
+	      ON B.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	     AND B.PDM_TBL_ID = A.PDM_TBL_ID	    
+    WHERE A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+    <if test='rqstStepCd == "Q" or rqstStepCd == "A" '>
+    	AND A.VRF_CD = '1'
+    </if>
+    ORDER BY A.RQST_SNO
+
+  </select>
+  
+  <!-- DDL 테이블 요청서 리스트 조회 -->
+  <select id="selectDdlTsfTblRqstList" parameterType="kr.wise.commons.rqstmst.service.WaqMstr" resultMap="BaseResultMap" >
+  
+  	/* WaqDdlTblMapper.selectDdlTsfTblRqstList */
+
+  	SELECT 
+	    <include refid="waq_Column_List"/>
+	    <if test='rqstStepCd == "Q" '>
+	     , CASE WHEN A.RVW_STS_CD = '2' THEN '2' ELSE '0' END AS RVW_STS_CD
+	     </if>
+	     <if test='rqstStepCd != "Q" '>
+	     , A.RVW_STS_CD
+	     </if> 	     
+	     , CASE WHEN A.VRF_CD = '2' THEN '#FF0000' ELSE CASE WHEN A.VRF_CD = '5' THEN '#0000FF'  END END AS FontColor  
+	     , GET_USER_NM(A.RQST_USER_ID) AS RQST_USER_NM
+	     , C.DB_CONN_TRG_PNM AS SRC_DB_CONN_TRG_PNM
+	     , B.DB_SCH_PNM      AS SRC_DB_SCH_PNM
+	     , E.DB_CONN_TRG_ID  AS TGT_DB_CONN_TRG_ID 
+	     , E.DB_CONN_TRG_PNM AS TGT_DB_CONN_TRG_PNM
+	     , D.DB_SCH_PNM      AS TGT_DB_SCH_PNM
+	     , 'TBL'             AS OBJ_DCD 
+     FROM WAQ_DDL_TBL A	      
+	      LEFT JOIN WAA_DB_SCH B
+	        ON B.EXP_DTM = STR_TO_DATE('9999-12-31','%Y-%m-%d')
+	       AND B.DB_SCH_ID = A.SRC_DB_SCH_ID
+	      LEFT JOIN WAA_DB_CONN_TRG C
+	        ON C.EXP_DTM = STR_TO_DATE('9999-12-31','%Y-%m-%d')   
+	       AND C.DB_CONN_TRG_ID = B.DB_CONN_TRG_ID
+	      LEFT JOIN WAA_DB_SCH D
+	        ON D.EXP_DTM = STR_TO_DATE('9999-12-31','%Y-%m-%d')
+	       AND D.DB_SCH_ID = A.TGT_DB_SCH_ID
+	      LEFT JOIN WAA_DB_CONN_TRG E
+	        ON E.EXP_DTM = STR_TO_DATE('9999-12-31','%Y-%m-%d')
+	       AND E.DB_CONN_TRG_ID = D.DB_CONN_TRG_ID
+    WHERE A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+    <if test='rqstStepCd == "Q" or rqstStepCd == "A" '>
+    	AND A.VRF_CD = '1'
+    </if>
+    ORDER BY A.RQST_SNO  	  	
+  </select>
+  
+  <!-- DDL 테이블 요청서 상세조회 -->
+  <select id="selectDdlTblDetail" parameterType="kr.wise.meta.ddl.service.WaqDdlTbl" resultMap="ResultMapWithBLOBs">
+  
+  	/* WaqDdlTblMapper.selectDdlTblDetail */
+
+  	SELECT  <include refid="waq_Column_List" />        	  
+      	 , 'TBL' AS OBJ_DCD  
+      	 , B.FULL_PATH 
+      	 , C.DB_CONN_TRG_ID      	
+      FROM WAQ_DDL_TBL A 
+	       LEFT JOIN WAH_PDM_TBL B
+	         ON B.EXP_DTM = STR_TO_DATE('9999-12-31','%Y-%m-%d')
+	        AND B.PDM_TBL_ID = A.PDM_TBL_ID
+	       LEFT JOIN WAA_DB_SCH C
+	         ON C.EXP_DTM = STR_TO_DATE('9999-12-31','%Y-%m-%d')
+	        AND C.REG_TYP_CD IN ('C','U') 
+	        AND C.DB_SCH_ID = A.DB_SCH_ID     	    	       
+	       LEFT JOIN WAA_DB_CONN_TRG D
+	         ON D.EXP_DTM = STR_TO_DATE('9999-12-31','%Y-%m-%d')
+	        AND D.REG_TYP_CD IN ('C','U') 
+	        AND D.DB_CONN_TRG_ID = C.DB_CONN_TRG_ID   
+     WHERE A.RQST_NO  = #{rqstNo,jdbcType=VARCHAR}  
+       AND A.RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+
+  </select>
+  
+  <!-- DDL 테이블 추가대상 조회... -->
+  <select id="selectpdmtbllist" parameterType="map" resultMap="BaseResultMap">
+  
+  	/* WaqDdlTblMapper.selectpdmtbllist */
+
+   	 SELECT 'I' AS IBS_STATUS
+		  , A.PDM_TBL_ID
+		  , A.PDM_TBL_PNM AS DDL_TBL_PNM
+		  , A.PDM_TBL_LNM AS DDL_TBL_LNM
+		  , #{reqmst.rqstDcd,jdbcType=VARCHAR} AS RQST_DCD 
+		  , A.OBJ_DESCN
+		  , A.FULL_PATH
+		  , #{reqmst.dbSchId,jdbcType=VARCHAR}      AS DB_SCH_ID
+		  , #{reqmst.dbConnTrgPnm,jdbcType=VARCHAR} AS DB_CONN_TRG_PNM  
+		  , 'D' AS DDL_TRG_DCD
+	   FROM WAM_PDM_TBL A		  
+	  WHERE 'CU' = #{reqmst.rqstDcd,jdbcType=VARCHAR}
+	    AND A.PDM_TBL_ID IN 
+	  <foreach collection="list" item="item" open="(" separator="," close=")">
+	  	 #{item.pdmTblId} 
+	  </foreach>
+
+  </select>
+  
+   <select id="selectdelddltbllist" parameterType="map" resultMap="BaseResultMap">
+   
+   	/* WaqDdlTblMapper.selectdelddltbllist */
+   	
+   	 SELECT 'I' AS IBS_STATUS
+		  , A.PDM_TBL_ID
+		  , A.DDL_TBL_PNM AS DDL_TBL_PNM
+		  , A.DDL_TBL_LNM AS DDL_TBL_LNM
+		  , #{reqmst.rqstDcd,jdbcType=VARCHAR} AS RQST_DCD 
+		  , A.OBJ_DESCN
+		  , '' AS FULL_PATH
+		  , #{reqmst.dbSchId,jdbcType=VARCHAR} AS DB_SCH_ID 
+		  , 'D' AS DDL_TRG_DCD
+	   FROM WAM_DDL_TBL A
+	  WHERE 'DD' = #{reqmst.rqstDcd,jdbcType=VARCHAR}
+	    AND A.DDL_TRG_DCD = 'D'
+	    AND A.DB_SCH_ID   = #{reqmst.dbSchId,jdbcType=VARCHAR}
+	    AND A.DDL_TBL_PNM IN 
+	  <foreach collection="list" item="item" open="(" separator="," close=")">
+	  	#{item.pdmTblPnm}
+	  </foreach>
+	  
+   </select>
+  
+  <!-- DDL 테이블 추가대상 조회... -->
+  <select id="selectTsfDdlTblList" parameterType="map" resultMap="BaseResultMap">
+  
+  	/* WaqDdlTblMapper.selectTsfDdlTblList */
+
+   	 SELECT  'I' AS IBS_STATUS
+		  , '' AS DDL_TBL_ID
+		  , 'TBL' AS OBJ_DCD
+		  , #{reqmst.tgtDbSchId,jdbcType=VARCHAR}  AS DB_SCH_ID 
+		  , #{reqmst.tgtDbSchPnm,jdbcType=VARCHAR} AS DB_SCH_PNM
+		  , A.DDL_TBL_PNM AS DDL_TBL_PNM
+		  , A.DDL_TBL_LNM AS DDL_TBL_LNM
+		  , ''            AS DDL_IDX_PNM
+		  , ''            AS DDL_IDX_LNM
+		  , ''            AS UK_IDX_YN
+		  , D.DDL_TRG_DCD AS DDL_TRG_DCD 
+		  , #{reqmst.rqstDcd,jdbcType=VARCHAR} AS RQST_DCD  
+		  , A.PDM_TBL_ID
+		  , A.OBJ_DESCN		  
+		  , B.DDL_TRG_DCD      AS SRC_DDL_TRG_DCD 
+		  , B.DB_SCH_ID        AS SRC_DB_SCH_ID
+		  , B.DB_SCH_PNM       AS SRC_DB_SCH_PNM		 
+		  , C.DB_CONN_TRG_PNM  AS SRC_DB_CONN_TRG_PNM 
+		  , D.DDL_TRG_DCD      AS TGT_DDL_TRG_DCD
+		  , D.DB_SCH_ID        AS TGT_DB_SCH_ID 
+		  , D.DB_SCH_PNM       AS TGT_DB_SCH_PNM
+		  , E.DB_CONN_TRG_PNM AS TGT_DB_CONN_TRG_PNM
+		  , A.PART_TBL_YN 
+	   FROM WAM_DDL_TBL A  
+	        INNER JOIN WAA_DB_SCH B
+	          ON B.EXP_DTM = STR_TO_DATE('9999-12-31','%Y-%m-%d')         
+	         AND B.DB_SCH_ID = A.DB_SCH_ID         
+	       INNER JOIN WAA_DB_CONN_TRG C
+	          ON C.EXP_DTM = STR_TO_DATE('9999-12-31','%Y-%m-%d') 
+	         AND C.DB_CONN_TRG_ID = B.DB_CONN_TRG_ID
+	       INNER JOIN WAA_DB_SCH D
+	          ON D.EXP_DTM = STR_TO_DATE('9999-12-31','%Y-%m-%d')         
+	         AND D.DB_SCH_ID = #{reqmst.tgtDbSchId,jdbcType=VARCHAR}
+	       INNER JOIN WAA_DB_CONN_TRG E
+	          ON E.EXP_DTM = STR_TO_DATE('9999-12-31','%Y-%m-%d') 
+	         AND E.DB_CONN_TRG_ID = D.DB_CONN_TRG_ID      
+	  WHERE 1 = 1
+	    AND A.DDL_TBL_ID IN 
+	 <foreach collection="list" item="item" open="(" separator="," close=")">
+	  	#{item.ddlTblId}
+	 </foreach> 
+	
+  </select>
+  
+  <!--DDL 테이블 추가대상 조회... -->
+  <select id="selectPdmToDdlTbl" parameterType="map" resultMap="BaseResultMap" >
+  
+  		/* WaqDdlTblMapper.selectPdmToDdlTbl */
+
+   		SELECT 'I' AS IBS_STATUS
+   		     , E.DB_CONN_TRG_ID
+   		     , E.DB_CONN_TRG_PNM
+   		     , D.DB_SCH_ID
+   		     , D.DB_SCH_PNM
+   		     , A.PDM_TBL_PNM AS DDL_TBL_PNM  
+   		     , A.PDM_TBL_LNM AS DDL_TBL_LNM
+   		     , A.FULL_PATH
+   		     , A.PDM_TBL_ID
+   		     , A.PDM_TBL_PNM
+   		     , A.PDM_TBL_LNM
+		     , A.RQST_DCD     AS RQST_DCD
+		     , A.SUBJ_ID		     
+		     , A.CRG_USER_ID
+		     , GET_USER_NM(A.CRG_USER_ID) AS CRG_USER_NM
+		     , A.OBJ_DESCN		  
+		     , 'D'        AS DDL_TRG_DCD 
+		     , A.RQST_NO  AS PDM_RQST_NO  
+		  FROM WAQ_PDM_TBL A
+			   LEFT JOIN WAA_SUBJ S
+			     ON A.SUBJ_ID = S.SUBJ_ID
+			    AND S.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+			    AND S.REG_TYP_CD IN ('C', 'U')
+			   LEFT JOIN WAA_SUBJ_DB_SCH_MAP C
+			     ON C.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+			    AND C.SUBJ_ID = S.UPP_SUBJ_ID
+			   LEFT JOIN WAA_DB_SCH D
+			     ON D.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+			    AND D.DB_SCH_ID = C.DB_SCH_ID
+			   LEFT JOIN WAA_DB_CONN_TRG E
+			     ON E.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+			    AND E.DB_CONN_TRG_ID = D.DB_CONN_TRG_ID		  		  
+		  WHERE A.VRF_CD     = '1'
+		    AND A.RVW_STS_CD = '1'
+		    AND A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}	     
+  </select>
+ 
+  <delete id="deleteByrqstSno" parameterType="kr.wise.meta.ddl.service.WaqDdlTbl" >
+  
+  	/* WaqDdlTblMapper.deleteByrqstSno */
+  	
+    delete from WAQ_DDL_TBL
+    where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      and RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+      
+  </delete>
+  
+  <insert id="insert" parameterType="kr.wise.meta.ddl.service.WaqDdlTbl" >
+  
+  	/* WaqDdlTblMapper.insert */
+  	
+    insert into WAQ_DDL_TBL (RQST_NO, RQST_SNO, DDL_TBL_ID, 
+      DDL_TBL_PNM, DDL_TBL_LNM, BF_DDL_TBL_PNM, 
+      RQST_DCD, RVW_STS_CD, RVW_CONTS, 
+      VRF_CD, VRF_RMK, DB_CONN_TRG_PNM, 
+      DB_SCH_ID, DB_SCH_PNM, TBL_SPAC_ID, 
+      TBL_SPAC_PNM, TBL_CHG_TYP_CD, PDM_TBL_ID, 
+      OBJ_DESCN, OBJ_VERS, REG_TYP_CD, 
+      FRS_RQST_DTM, FRS_RQST_USER_ID, RQST_DTM, 
+      RQST_USER_ID, APRV_DTM, APRV_USER_ID, 
+      SCRT_INFO)
+    values (#{rqstNo,jdbcType=VARCHAR}, #{rqstSno,jdbcType=DECIMAL}, #{ddlTblId,jdbcType=VARCHAR}, 
+      #{ddlTblPnm,jdbcType=VARCHAR}, #{ddlTblLnm,jdbcType=VARCHAR}, #{bfDdlTblPnm,jdbcType=VARCHAR}, 
+      #{rqstDcd,jdbcType=VARCHAR}, #{rvwStsCd,jdbcType=VARCHAR}, #{rvwConts,jdbcType=VARCHAR}, 
+      #{vrfCd,jdbcType=VARCHAR}, #{vrfRmk,jdbcType=VARCHAR}, #{dbConnTrgPnm,jdbcType=VARCHAR}, 
+      #{dbSchId,jdbcType=VARCHAR}, #{dbSchPnm,jdbcType=VARCHAR}, #{tblSpacId,jdbcType=VARCHAR}, 
+      #{tblSpacPnm,jdbcType=VARCHAR}, #{tblChgTypCd,jdbcType=VARCHAR}, #{pdmTblId,jdbcType=VARCHAR}, 
+      #{objDescn,jdbcType=VARCHAR}, #{objVers,jdbcType=DECIMAL}, #{regTypCd,jdbcType=VARCHAR}, 
+      #{frsRqstDtm,jdbcType=TIMESTAMP}, #{frsRqstUserId,jdbcType=VARCHAR}, #{rqstDtm,jdbcType=TIMESTAMP}, 
+      #{rqstUserId,jdbcType=VARCHAR}, #{aprvDtm,jdbcType=TIMESTAMP}, #{aprvUserId,jdbcType=VARCHAR}, 
+      #{scrtInfo,jdbcType=CLOB})
+      
+  </insert>
+  
+  <insert id="insertSelective" parameterType="kr.wise.meta.ddl.service.WaqDdlTbl" >
+  
+  	/* WaqDdlTblMapper.insertSelective */
+  	
+  	<selectKey keyProperty="rqstSno" resultType="int" statementType="PREPARED" order="BEFORE">
+	<!--   		<include refid="kr.wise.commons.cmm.service.CommonMapper.getNextrqstSno"/> -->
+		SELECT IFNULL(MAX(RQST_SNO), 0) + 1 AS RQST_NO FROM WAQ_DDL_TBL WHERE RQST_NO = #{rqstNo}
+  	</selectKey>
+    insert into WAQ_DDL_TBL
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+        RQST_NO,
+        RQST_SNO,
+      <if test="ddlTblId != null" >
+        DDL_TBL_ID,
+      </if>
+      <if test="ddlTblPnm != null" >
+        DDL_TBL_PNM,
+      </if>
+      <if test="ddlTblLnm != null" >
+        DDL_TBL_LNM,
+      </if>
+      <if test="bfDdlTblPnm != null" >
+        BF_DDL_TBL_PNM,
+      </if>
+      <if test="rqstDcd != null" >
+        RQST_DCD,
+      </if>
+      <if test="rvwStsCd != null" >
+        RVW_STS_CD,
+      </if>
+      <if test="rvwConts != null" >
+        RVW_CONTS,
+      </if>
+      <if test="vrfCd != null" >
+        VRF_CD,
+      </if>
+      <if test="vrfRmk != null" >
+        VRF_RMK,
+      </if>
+      <if test="dbConnTrgPnm != null" >
+        DB_CONN_TRG_PNM,
+      </if>
+      <if test="dbSchId != null" >
+        DB_SCH_ID,
+      </if>
+      <if test="dbSchPnm != null" >
+        DB_SCH_PNM,
+      </if>
+      <if test="tblSpacId != null" >
+        TBL_SPAC_ID,
+      </if>
+      <if test="tblSpacPnm != null" >
+        TBL_SPAC_PNM,
+      </if>
+      <if test="tblChgTypCd != null" >
+        TBL_CHG_TYP_CD,
+      </if>
+      <if test="pdmTblId != null" >
+        PDM_TBL_ID,
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN,
+      </if>
+        OBJ_VERS,
+      <if test="regTypCd != null" >
+        REG_TYP_CD,
+      </if>
+        FRS_RQST_DTM,
+      <if test="frsRqstUserId != null" >
+        FRS_RQST_USER_ID,
+      </if>
+        RQST_DTM,
+      <if test="rqstUserId != null" >
+        RQST_USER_ID,
+      </if>
+        DDL_TRG_DCD,                
+       <if test="srcDdlTrgDcd != null" >
+        SRC_DDL_TRG_DCD,
+      </if>
+       <if test="srcDbSchId != null" >
+        SRC_DB_SCH_ID,
+      </if>
+      <if test="srcDbSchPnm != null" >
+        SRC_DB_SCH_PNM,
+      </if>
+      <if test="srcDbConnTrgPnm != null" >
+        SRC_DB_CONN_TRG_PNM,
+      </if>
+      <if test="tgtDdlTrgDcd != null" >
+        TGT_DDL_TRG_DCD,
+      </if>
+       <if test="tgtDbSchId != null" >
+        TGT_DB_SCH_ID,
+      </if>
+      <if test="tgtDbSchPnm != null" >
+        TGT_DB_SCH_PNM,
+      </if>
+      <if test="tgtDbConnTrgPnm != null" >
+        TGT_DB_CONN_TRG_PNM,
+      </if>
+      <if test="pdmRqstNo != null" >
+        PDM_RQST_NO,
+      </if>  
+      <if test="partTblYn != null" >
+        PART_TBL_YN,
+      </if>  
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+        #{rqstNo,jdbcType=VARCHAR},
+        #{rqstSno,jdbcType=DECIMAL},
+      <if test="ddlTblId != null" >
+        #{ddlTblId,jdbcType=VARCHAR},
+      </if>
+      <if test="ddlTblPnm != null" >
+        #{ddlTblPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="ddlTblLnm != null" >
+        #{ddlTblLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="bfDdlTblPnm != null" >
+        #{bfDdlTblPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDcd != null" >
+        #{rqstDcd,jdbcType=VARCHAR},
+      </if>
+      <if test="rvwStsCd != null" >
+        #{rvwStsCd,jdbcType=VARCHAR},
+      </if>
+      <if test="rvwConts != null" >
+        #{rvwConts,jdbcType=VARCHAR},
+      </if>
+      <if test="vrfCd != null" >
+        #{vrfCd,jdbcType=VARCHAR},
+      </if>
+      <if test="vrfRmk != null" >
+        #{vrfRmk,jdbcType=VARCHAR},
+      </if>
+      <if test="dbConnTrgPnm != null" >
+        #{dbConnTrgPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="dbSchId != null" >
+        #{dbSchId,jdbcType=VARCHAR},
+      </if>
+      <if test="dbSchPnm != null" >
+        #{dbSchPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="tblSpacId != null" >
+        #{tblSpacId,jdbcType=VARCHAR},
+      </if>
+      <if test="tblSpacPnm != null" >
+        #{tblSpacPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="tblChgTypCd != null" >
+        #{tblChgTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="pdmTblId != null" >
+        #{pdmTblId,jdbcType=VARCHAR},
+      </if>
+      <if test="objDescn != null" >
+        #{objDescn,jdbcType=VARCHAR},
+      </if>
+        1 ,
+      <if test="regTypCd != null" >
+        #{regTypCd,jdbcType=VARCHAR},
+      </if>
+        NOW() ,
+      <if test="frsRqstUserId != null" >
+        #{frsRqstUserId,jdbcType=VARCHAR},
+      </if>
+        NOW() ,
+      <if test="rqstUserId != null" >
+        #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+       #{ddlTrgDcd,jdbcType=VARCHAR},
+      <if test="srcDdlTrgDcd != null" >
+        #{srcDdlTrgDcd,jdbcType=VARCHAR},
+      </if>
+       <if test="srcDbSchId != null" >
+        #{srcDbSchId,jdbcType=VARCHAR},
+      </if>
+      <if test="srcDbSchPnm != null" >
+        #{srcDbSchPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="srcDbConnTrgPnm != null" >
+        #{srcDbConnTrgPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="tgtDdlTrgDcd != null" >
+        #{tgtDdlTrgDcd,jdbcType=VARCHAR},
+      </if>
+       <if test="tgtDbSchId != null" >
+        #{tgtDbSchId,jdbcType=VARCHAR},
+      </if>
+      <if test="tgtDbSchPnm != null" >
+        #{tgtDbSchPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="tgtDbConnTrgPnm != null" >
+        #{tgtDbConnTrgPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="pdmRqstNo != null" >
+        #{pdmRqstNo,jdbcType=VARCHAR},
+      </if>  
+      <if test="partTblYn != null" >
+        #{partTblYn,jdbcType=VARCHAR},
+      </if>  
+    </trim>
+  </insert>
+  
+  <!-- DDL 스크립트 업데이트... -->
+  <update id="updateDdlScriptWaq" parameterType="kr.wise.meta.ddl.service.WaqDdlTbl">
+  
+  	/* WaqDdlTblMapper.updateDdlScriptWaq */
+
+  	UPDATE WAQ_DDL_TBL
+  	   SET SCRT_INFO = #{scrtInfo,jdbcType=VARCHAR}
+  	 WHERE RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+       AND RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+       
+  </update>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.meta.ddl.service.WaqDdlTbl" >
+  
+  	/* WaqDdlTblMapper.updateByPrimaryKeySelective */
+  	
+    update WAQ_DDL_TBL
+    <set >
+      <if test="ddlTblId != null" >
+        DDL_TBL_ID = #{ddlTblId,jdbcType=VARCHAR},
+      </if>
+      <if test="ddlTblPnm != null" >
+        DDL_TBL_PNM = #{ddlTblPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="ddlTblLnm != null" >
+        DDL_TBL_LNM = #{ddlTblLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="bfDdlTblPnm != null" >
+        BF_DDL_TBL_PNM = #{bfDdlTblPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDcd != null" >
+        RQST_DCD = #{rqstDcd,jdbcType=VARCHAR},
+      </if>
+      <if test="rvwStsCd != null" >
+        RVW_STS_CD = #{rvwStsCd,jdbcType=VARCHAR},
+      </if>
+      <if test="rvwConts != null" >
+        RVW_CONTS = #{rvwConts,jdbcType=VARCHAR},
+      </if>
+      <if test="vrfCd != null" >
+        VRF_CD = #{vrfCd,jdbcType=VARCHAR},
+      </if>
+      <if test="vrfRmk != null" >
+        VRF_RMK = #{vrfRmk,jdbcType=VARCHAR},
+      </if>
+      <if test="dbConnTrgPnm != null" >
+        DB_CONN_TRG_PNM = #{dbConnTrgPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="dbSchId != null" >
+        DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR},
+      </if>
+      <if test="dbSchPnm != null" >
+        DB_SCH_PNM = #{dbSchPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="tblSpacId != null" >
+        TBL_SPAC_ID = #{tblSpacId,jdbcType=VARCHAR},
+      </if>
+      <if test="tblSpacPnm != null" >
+        TBL_SPAC_PNM = #{tblSpacPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="tblChgTypCd != null" >
+        TBL_CHG_TYP_CD = #{tblChgTypCd,jdbcType=VARCHAR},
+      </if>        
+      <if test="objDescn != null" >
+        OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      </if>
+        RQST_DTM = NOW() ,
+      <if test="rqstUserId != null" >
+        RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+      
+      <if test="ddlTrgDcd != null" >
+        DDL_TRG_DCD = #{ddlTrgDcd,jdbcType=VARCHAR},
+      </if>
+      <if test="srcDdlTrgDcd != null" >
+        SRC_DDL_TRG_DCD = #{srcDdlTrgDcd,jdbcType=VARCHAR},
+      </if>
+      <if test="srcDbSchId != null" >
+        SRC_DB_SCH_ID = #{srcDbSchId,jdbcType=VARCHAR},
+      </if>
+      <if test="srcDbSchPnm != null" >
+        SRC_DB_SCH_PNM = #{srcDbSchPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="srcDbConnTrgPnm != null" >
+        SRC_DB_CONN_TRG_PNM = #{srcDbConnTrgPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="tgtDdlTrgDcd != null" >
+        TGT_DDL_TRG_DCD = #{tgtDdlTrgDcd,jdbcType=VARCHAR},
+      </if>
+      <if test="tgtDbSchId != null" >
+        TGT_DB_SCH_ID = #{tgtDbSchId,jdbcType=VARCHAR},
+      </if>
+      <if test="tgtDbSchPnm != null" >
+        TGT_DB_SCH_PNM = #{tgtDbSchPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="tgtDbConnTrgPnm != null" >
+        TGT_DB_CONN_TRG_PNM = #{tgtDbConnTrgPnm,jdbcType=VARCHAR},   
+      </if>           
+      <if test="partTblYn != null" >
+        PART_TBL_YN = #{partTblYn,jdbcType=VARCHAR},   
+      </if>           
+    </set>
+    where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      and RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+      
+  </update>
+  
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="kr.wise.meta.ddl.service.WaqDdlTbl" >
+  
+  	/* WaqDdlTblMapper.updateByPrimaryKeyWithBLOBs */
+  	
+    update WAQ_DDL_TBL
+    set DDL_TBL_ID = #{ddlTblId,jdbcType=VARCHAR},
+      DDL_TBL_PNM = #{ddlTblPnm,jdbcType=VARCHAR},
+      DDL_TBL_LNM = #{ddlTblLnm,jdbcType=VARCHAR},
+      BF_DDL_TBL_PNM = #{bfDdlTblPnm,jdbcType=VARCHAR},
+      RQST_DCD = #{rqstDcd,jdbcType=VARCHAR},
+      RVW_STS_CD = #{rvwStsCd,jdbcType=VARCHAR},
+      RVW_CONTS = #{rvwConts,jdbcType=VARCHAR},
+      VRF_CD = #{vrfCd,jdbcType=VARCHAR},
+      VRF_RMK = #{vrfRmk,jdbcType=VARCHAR},
+      DB_CONN_TRG_PNM = #{dbConnTrgPnm,jdbcType=VARCHAR},
+      DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR},
+      DB_SCH_PNM = #{dbSchPnm,jdbcType=VARCHAR},
+      TBL_SPAC_ID = #{tblSpacId,jdbcType=VARCHAR},
+      TBL_SPAC_PNM = #{tblSpacPnm,jdbcType=VARCHAR},
+      TBL_CHG_TYP_CD = #{tblChgTypCd,jdbcType=VARCHAR},
+      PDM_TBL_ID = #{pdmTblId,jdbcType=VARCHAR},
+      OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      FRS_RQST_DTM = #{frsRqstDtm,jdbcType=TIMESTAMP},
+      FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR},
+      RQST_DTM = #{rqstDtm,jdbcType=TIMESTAMP},
+      RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      APRV_DTM = #{aprvDtm,jdbcType=TIMESTAMP},
+      APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR},
+      PART_TBL_YN = #{partTblYn,jdbcType=VARCHAR}
+    where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      and RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+      
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="kr.wise.meta.ddl.service.WaqDdlTbl" >
+  
+  	/* WaqDdlTblMapper.updateByPrimaryKey */
+  	
+    update WAQ_DDL_TBL
+    set DDL_TBL_ID = #{ddlTblId,jdbcType=VARCHAR},
+      DDL_TBL_PNM = #{ddlTblPnm,jdbcType=VARCHAR},
+      DDL_TBL_LNM = #{ddlTblLnm,jdbcType=VARCHAR},
+      BF_DDL_TBL_PNM = #{bfDdlTblPnm,jdbcType=VARCHAR},
+      RQST_DCD = #{rqstDcd,jdbcType=VARCHAR},
+      RVW_STS_CD = #{rvwStsCd,jdbcType=VARCHAR},
+      RVW_CONTS = #{rvwConts,jdbcType=VARCHAR},
+      VRF_CD = #{vrfCd,jdbcType=VARCHAR},
+      VRF_RMK = #{vrfRmk,jdbcType=VARCHAR},
+      DB_CONN_TRG_PNM = #{dbConnTrgPnm,jdbcType=VARCHAR},
+      DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR},
+      DB_SCH_PNM = #{dbSchPnm,jdbcType=VARCHAR},
+      TBL_SPAC_ID = #{tblSpacId,jdbcType=VARCHAR},
+      TBL_SPAC_PNM = #{tblSpacPnm,jdbcType=VARCHAR},
+      TBL_CHG_TYP_CD = #{tblChgTypCd,jdbcType=VARCHAR},
+      PDM_TBL_ID = #{pdmTblId,jdbcType=VARCHAR},
+      OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      FRS_RQST_DTM = #{frsRqstDtm,jdbcType=TIMESTAMP},
+      FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR},
+      RQST_DTM = #{rqstDtm,jdbcType=TIMESTAMP},
+      RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      APRV_DTM = #{aprvDtm,jdbcType=TIMESTAMP},
+      APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR},
+      PART_TBL_YN = #{partTblYn,jdbcType=VARCHAR}
+    where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      and RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+      
+  </update>
+  
+  <!-- 검증로직 시작 -->
+  <!-- 요청구분 업데이트 -->
+  <update id="updateCheckInit" parameterType="string">
+  
+  	/* WaqDdlTblMapper.updateCheckInit */
+  	
+<!-- 
+    UPDATE WAQ_DDL_TBL A
+       SET (A.REG_TYP_CD, A.DDL_TBL_ID) = (
+    
+    					SELECT CASE WHEN A.RQST_DCD = 'DD' THEN 'D' ELSE CASE WHEN MAX(B.DDL_TBL_ID ) IS NULL THEN 'C' ELSE 'U' END END     						
+    						,  MAX(B.DDL_TBL_ID)
+                          FROM WAM_DDL_TBL B 
+	                           INNER JOIN WAA_DB_SCH C
+	                              ON B.DB_SCH_ID = C.DB_SCH_ID
+	                             AND C.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+						   	     AND C.REG_TYP_CD IN ('C', 'U')
+						   	   INNER JOIN WAA_DB_CONN_TRG D
+						   	      ON D.DB_CONN_TRG_ID = C.DB_CONN_TRG_ID
+						   	     AND D.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+						   	     AND D.REG_TYP_CD IN ('C', 'U')
+                         WHERE B.DDL_TBL_PNM     = A.DDL_TBL_PNM                          
+                           AND C.DB_SCH_PNM      = A.DB_SCH_PNM
+                           AND D.DB_CONN_TRG_PNM = A.DB_CONN_TRG_PNM
+                       )
+       , A.VRF_CD = '4'
+    WHERE A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+-->
+UPDATE WAQ_DDL_TBL A
+  LEFT JOIN WAA_DB_CONN_TRG D
+    ON D.DB_CONN_TRG_PNM = A.DB_CONN_TRG_PNM
+   AND D.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+   AND D.REG_TYP_CD IN ('C', 'U')
+  LEFT JOIN WAA_DB_SCH C
+    ON C.DB_CONN_TRG_ID = D.DB_CONN_TRG_ID
+   AND C.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+   AND C.REG_TYP_CD IN ('C', 'U')
+   AND C.DB_SCH_PNM = A.DB_SCH_PNM
+  LEFT JOIN WAM_DDL_TBL B
+    ON B.DB_SCH_ID = C.DB_SCH_ID
+   AND B.DDL_TBL_PNM = A.DDL_TBL_PNM
+
+   SET A.REG_TYP_CD = CASE WHEN A.RQST_DCD = 'DD' THEN 'D' ELSE CASE WHEN B.DDL_TBL_ID IS NULL THEN 'C' ELSE 'U' END END
+    	, A.DDL_TBL_ID = B.DDL_TBL_ID 
+    	, A.VRF_CD = '4' 
+
+ WHERE A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+ 
+  </update>
+  
+  <!-- PDM_TBL_ID 업데이트 -->
+  <update id="updatePdmTblId" parameterType="string">
+
+  </update>
+  
+  <!-- 주제영역별 DBMS 스키마 업데이트 : 매핑대상만 업데이트한다. (DBMS명이 없는 경우만...) -->
+  <update id="updateDbschema" parameterType="string">
+  
+  	/* WaqDdlTblMapper.updateDbschema */
+  	
+<!-- 
+  UPDATE WAQ_DDL_TBL X
+   SET (DB_CONN_TRG_PNM, DB_SCH_PNM ) = (
+                                            SELECT 
+                                                      D.DB_CONN_TRG_PNM
+                                                    , C.DB_SCH_PNM
+                                            FROM  WAA_SUBJ_DB_SCH_MAP A 
+                                            INNER JOIN WAA_DB_SCH C  	
+                                                ON A.DB_SCH_ID = C.DB_SCH_ID
+                                                AND A.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+                                                AND A.REG_TYP_CD IN ('C', 'U')
+                                                AND C.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+                                                AND C.REG_TYP_CD IN ('C', 'U')
+                                            INNER JOIN WAA_DB_CONN_TRG D
+                                                ON D.DB_CONN_TRG_ID = C.DB_CONN_TRG_ID
+                                                AND D.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+                                                AND D.REG_TYP_CD IN ('C', 'U')
+                                            INNER JOIN WAM_PDM_TBL T
+                                               ON A.SUBJ_ID = T.SUBJ_ID
+                                            WHERE T.PDM_TBL_ID = X.PDM_TBL_ID
+   )
+ WHERE X.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+   
+   AND (X.DB_SCH_PNM IS NULL OR X.DB_CONN_TRG_PNM IS NULL)
+   AND ( SELECT COUNT(*) FROM  WAA_SUBJ_DB_SCH_MAP A 
+                        INNER JOIN WAM_PDM_TBL T
+                        ON A.SUBJ_ID = T.SUBJ_ID
+                        AND A.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+                        AND A.REG_TYP_CD IN ('C', 'U')
+                        WHERE T.PDM_TBL_ID = X.PDM_TBL_ID
+                        GROUP BY T.PDM_TBL_ID
+        ) = 1 
+        -->
+UPDATE WAQ_DDL_TBL X
+ INNER JOIN WAM_PDM_TBL T
+    ON T.PDM_TBL_ID = X.PDM_TBL_ID
+ INNER JOIN WAA_SUBJ_DB_SCH_MAP A
+    ON A.SUBJ_ID = T.SUBJ_ID
+   AND A.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+   AND A.REG_TYP_CD IN ('C', 'U')
+ INNER JOIN WAA_DB_SCH C  	
+    ON A.DB_SCH_ID = C.DB_SCH_ID
+   AND C.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+   AND C.REG_TYP_CD IN ('C', 'U')
+ INNER JOIN WAA_DB_CONN_TRG D
+    ON D.DB_CONN_TRG_ID = C.DB_CONN_TRG_ID
+   AND D.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+   AND D.REG_TYP_CD IN ('C', 'U')
+                                                
+   SET X.DB_CONN_TRG_PNM = D.DB_CONN_TRG_PNM
+	  , X.DB_SCH_PNM = C.DB_SCH_PNM
+                                            
+ WHERE X.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+   
+   AND (X.DB_SCH_PNM IS NULL OR X.DB_CONN_TRG_PNM IS NULL)
+   AND ( SELECT COUNT(*) FROM  WAA_SUBJ_DB_SCH_MAP A 
+                        INNER JOIN WAM_PDM_TBL T
+                        ON A.SUBJ_ID = T.SUBJ_ID
+                        AND A.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+                        AND A.REG_TYP_CD IN ('C', 'U')
+                        WHERE T.PDM_TBL_ID = X.PDM_TBL_ID
+                        GROUP BY T.PDM_TBL_ID
+        ) = 1 
+  </update>
+  
+  <update id="updateDbmsId" parameterType="string">
+  
+  /* WaqDdlTblMapper.updateDbmsId */
+  
+  UPDATE WAQ_DDL_TBL A
+     SET DB_SCH_ID =  (
+     		SELECT DB_SCH_ID 
+     		  FROM WAA_DB_SCH C 
+	     		   INNER JOIN WAA_DB_CONN_TRG D
+					 ON D.DB_CONN_TRG_ID = C.DB_CONN_TRG_ID
+				    AND D.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+				    AND D.REG_TYP_CD IN ('C', 'U')
+			 WHERE C.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+			   AND C.REG_TYP_CD IN ('C', 'U')
+			   AND C.DB_SCH_PNM   = A.DB_SCH_PNM
+               AND D.DB_CONN_TRG_PNM = A.DB_CONN_TRG_PNM
+     )
+   WHERE A.DB_SCH_ID IS NULL 
+     AND A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+     
+  </update>
+  
+  <!-- 테이블 스페이스 ID 업데이트 -->
+  <update id="updateDbmsPnm" parameterType="string">
+  
+  	/* WaqDdlTblMapper.updateDbmsPnm */
+  	
+<!-- 
+	  UPDATE WAQ_DDL_TBL A
+	     SET (DB_CONN_TRG_PNM, DB_SCH_PNM) = (
+	     			SELECT C.DB_CONN_TRG_PNM, B.DB_SCH_PNM  
+	     			  FROM WAA_DB_SCH B 
+	     			       INNER JOIN WAA_DB_CONN_TRG C 
+	     			          ON C.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+				   	         AND C.REG_TYP_CD IN ('C', 'U')
+				   	         AND C.DB_CONN_TRG_ID = B.DB_CONN_TRG_ID
+				   	 WHERE B.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+				   	   AND B.REG_TYP_CD IN ('C', 'U')
+				   	   AND B.DB_SCH_ID = A.DB_SCH_ID				   	   
+	     	)
+	     
+	   WHERE A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+	     AND EXISTS (SELECT 1
+	     			  FROM WAA_DB_SCH B 
+	     			       INNER JOIN WAA_DB_CONN_TRG C 
+	     			          ON C.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+				   	         AND C.REG_TYP_CD IN ('C', 'U')
+				   	         AND C.DB_CONN_TRG_ID = B.DB_CONN_TRG_ID
+				   	 WHERE B.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+				   	   AND B.REG_TYP_CD IN ('C', 'U')
+				   	   AND B.DB_SCH_ID = A.DB_SCH_ID	
+	                )
+-->
+UPDATE WAQ_DDL_TBL A
+ INNER JOIN WAA_DB_SCH B
+    ON B.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+   AND B.REG_TYP_CD IN ('C', 'U')
+   AND B.DB_SCH_ID = A.DB_SCH_ID
+ INNER JOIN WAA_DB_CONN_TRG C 
+    ON C.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+   AND C.REG_TYP_CD IN ('C', 'U')
+   AND C.DB_CONN_TRG_ID = B.DB_CONN_TRG_ID
+   
+   SET A.DB_CONN_TRG_PNM = C.DB_CONN_TRG_PNM
+	  , A.DB_SCH_PNM = B.DB_SCH_PNM
+	     
+   WHERE A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+     AND EXISTS (SELECT 1
+     			  FROM WAA_DB_SCH B 
+     			       INNER JOIN WAA_DB_CONN_TRG C 
+     			          ON C.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+			   	         AND C.REG_TYP_CD IN ('C', 'U')
+			   	         AND C.DB_CONN_TRG_ID = B.DB_CONN_TRG_ID
+			   	 WHERE B.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+			   	   AND B.REG_TYP_CD IN ('C', 'U')
+			   	   AND B.DB_SCH_ID = A.DB_SCH_ID	
+                )
+  </update>
+  
+  <!-- 	테이블 스페이스 ID 업데이트 -->
+  <update id="updateTblSpaceId" parameterType="string">
+  
+  	/* WaqDdlTblMapper.updateTblSpaceId */
+  	
+<!-- 
+	  <![CDATA[
+	  UPDATE WAQ_DDL_TBL A
+	     SET (TBL_SPAC_ID, TBL_SPAC_PNM) = (
+	     			SELECT C.DB_TBL_SPAC_ID  
+	     			     , C.DB_TBL_SPAC_PNM 
+	     			  FROM WAA_DB_SCH B 		     			   
+	     			       INNER JOIN WAA_TBL_SPAC C
+	     			          ON C.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	     			         AND C.REG_TYP_CD IN ('C', 'U') 
+                             AND C.DB_CONN_TRG_ID = B.DB_CONN_TRG_ID
+                             AND C.DB_TBL_SPAC_ID = B.DB_TBL_SPAC_ID
+				   	 WHERE B.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+				   	   AND B.REG_TYP_CD IN ('C', 'U')
+				   	   AND B.DB_SCH_ID = A.DB_SCH_ID	    				   	     
+	     	) 	     
+	   WHERE A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}	     
+	     AND EXISTS ( SELECT 1
+	     		 	    FROM WAA_DB_SCH B 		     			   
+	     		 	        INNER JOIN WAA_TBL_SPAC C
+	     		 	           ON C.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	     		 	          AND C.REG_TYP_CD IN ('C', 'U') 
+                              AND C.DB_CONN_TRG_ID = B.DB_CONN_TRG_ID
+                              AND C.DB_TBL_SPAC_ID = B.DB_TBL_SPAC_ID
+				       WHERE B.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+				         AND B.REG_TYP_CD IN ('C', 'U')
+				         AND B.DB_SCH_ID = A.DB_SCH_ID	    				   	     
+	     	        ) 
+	     ]]>	
+-->
+UPDATE WAQ_DDL_TBL A
+ INNER JOIN WAA_DB_SCH B
+	 ON B.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+   AND B.REG_TYP_CD IN ('C', 'U')
+   AND B.DB_SCH_ID = A.DB_SCH_ID
+ INNER JOIN WAA_TBL_SPAC C
+    ON C.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+   AND C.REG_TYP_CD IN ('C', 'U') 
+   AND C.DB_CONN_TRG_ID = B.DB_CONN_TRG_ID
+   AND C.DB_TBL_SPAC_ID = B.DB_TBL_SPAC_ID
+   
+	SET  A.TBL_SPAC_ID = C.DB_TBL_SPAC_ID  
+		, A.TBL_SPAC_PNM = C.DB_TBL_SPAC_PNM
+       
+	   WHERE A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}	     
+	     AND EXISTS ( SELECT 1
+	     		 	    FROM WAA_DB_SCH B 		     			   
+	     		 	        INNER JOIN WAA_TBL_SPAC C
+	     		 	           ON C.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	     		 	          AND C.REG_TYP_CD IN ('C', 'U') 
+                              AND C.DB_CONN_TRG_ID = B.DB_CONN_TRG_ID
+                              AND C.DB_TBL_SPAC_ID = B.DB_TBL_SPAC_ID
+				       WHERE B.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+				         AND B.REG_TYP_CD IN ('C', 'U')
+				         AND B.DB_SCH_ID = A.DB_SCH_ID	    				   	     
+				       LIMIT 0,1   	   
+	     	        )
+  </update>
+  
+  <!-- 테이블 스페이스 ID 업데이트 -->
+  <update id="updateIdxTblSpaceId" parameterType="string">
+  
+  	/* WaqDdlTblMapper.updateIdxTblSpaceId */
+  	
+<!-- 
+	  <![CDATA[
+	  UPDATE WAQ_DDL_IDX A
+	     SET (IDX_SPAC_ID, IDX_SPAC_PNM) = (
+	     			SELECT C.DB_TBL_SPAC_ID  
+	     			     , C.DB_TBL_SPAC_PNM 
+	     			  FROM WAA_DB_SCH B 		     			   
+	     			       INNER JOIN WAA_TBL_SPAC C
+	     			          ON C.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	     			         AND C.REG_TYP_CD IN ('C', 'U')                              
+                             AND C.DB_TBL_SPAC_ID = B.DB_IDX_SPAC_ID
+				   	 WHERE B.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+				   	   AND B.REG_TYP_CD IN ('C', 'U')
+				   	   AND B.DB_SCH_ID = A.DB_SCH_ID	    				   	     
+	     	) 	     
+	   WHERE A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}	     
+	     AND EXISTS ( SELECT 1 
+	     			    FROM WAA_DB_SCH B 		     			   
+	     			         INNER JOIN WAA_TBL_SPAC C
+	     			            ON C.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	     			           AND C.REG_TYP_CD IN ('C', 'U')                                 
+                               AND C.DB_TBL_SPAC_ID = B.DB_IDX_SPAC_ID
+				   	   WHERE B.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+				   	     AND B.REG_TYP_CD IN ('C', 'U')
+				   	     AND B.DB_SCH_ID = A.DB_SCH_ID	    				   	     
+	     	        ) 
+	     ]]>	
+-->
+UPDATE WAQ_DDL_IDX A
+ INNER JOIN WAA_DB_SCH B 
+    ON B.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+   AND B.REG_TYP_CD IN ('C', 'U')
+   AND B.DB_SCH_ID = A.DB_SCH_ID
+ INNER JOIN WAA_TBL_SPAC C
+    ON C.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+   AND C.REG_TYP_CD IN ('C', 'U')                              
+   AND C.DB_TBL_SPAC_ID = B.DB_IDX_SPAC_ID  
+   
+   SET  A.IDX_SPAC_ID = C.DB_TBL_SPAC_ID
+		, A.IDX_SPAC_PNM = C.DB_TBL_SPAC_PNM
+   
+	   WHERE A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}	     
+	     AND EXISTS ( SELECT 1 
+	     			    FROM WAA_DB_SCH B 		     			   
+	     			         INNER JOIN WAA_TBL_SPAC C
+	     			            ON C.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	     			           AND C.REG_TYP_CD IN ('C', 'U')                                 
+                               AND C.DB_TBL_SPAC_ID = B.DB_IDX_SPAC_ID
+				   	   WHERE B.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+				   	     AND B.REG_TYP_CD IN ('C', 'U')
+				   	     AND B.DB_SCH_ID = A.DB_SCH_ID	   	     
+				   	   LIMIT 0,1 
+	     	        )
+	     	        
+  </update>
+  
+  <!-- 테이블변경 유형코드 업데이트(TBL_CHG_TYP_CD-DRP) : 업데이트 대상 컬럼의 포지션 변경이 있는 경우 DROP로 업데이트 -->
+  <update id="updateDropTableCd" parameterType="string">
+  
+  /* WaqDdlTblMapper.updateDropTableCd */
+
+  UPDATE WAQ_DDL_TBL X
+     SET TBL_CHG_TYP_CD = 'DRP'
+     
+   WHERE RQST_NO = #{rqstNo}
+     AND REG_TYP_CD = 'U'
+     AND EXISTS (
+     			SELECT 1 FROM WAM_DDL_TBL A
+     			  JOIN WAQ_DDL_TBL C
+     			    ON C.DB_SCH_ID = A.DB_SCH_ID
+     			   AND C.DDL_TBL_PNM = A.DDL_TBL_PNM
+<!--                    AND C.DDL_TBL_LNM = A.DDL_TBL_LNM -->
+                   AND C.RQST_NO = #{rqstNo}
+                  JOIN WAM_DDL_COL D
+                    ON A.DDL_TBL_ID = D.DDL_TBL_ID
+                   AND D.REG_TYP_CD in ('C','U')
+     			  JOIN WAQ_DDL_COL B
+     			    ON B.RQST_NO = C.RQST_NO
+                   AND B.RQST_SNO = C.RQST_SNO
+                   AND B.DDL_COL_PNM = D.DDL_COL_PNM
+<!--                    AND B.DDL_COL_LNM = D.DDL_COL_LNM -->
+     			 WHERE B.COL_ORD != D.COL_ORD
+     			   AND B.REG_TYP_CD = 'U'
+     			   AND X.RQST_NO = C.RQST_NO
+     			   AND X.RQST_SNO = C.RQST_SNO
+     )
+     
+  </update>
+  
+  <update id="updateInitTblChgTypCd" parameterType="string">
+  
+  	/* WaqDdlTblMapper.updateInitTblChgTypCd */
+  	
+  	UPDATE WAQ_DDL_TBL X
+       SET TBL_CHG_TYP_CD = ''      
+     WHERE RQST_NO = #{rqstNo}
+
+  </update>
+
+<!--  테이블변경 유형코드 업데이트(TBL_CHG_TYP_CD-DRP) : 업데이트 대상 컬럼의 포지션 변경이 있는 경우 DROP로 업데이트 -->
+<!--  마지막 컬럼순번에 신규로 추가 됐을경우 ALTER 문이 나와야 하는데 DROP AND CREATE 문 생성됨 -->
+  <update id="updateDropTableCd2" parameterType="string">
+
+	/* WaqDdlTblMapper.updateDropTableCd2 */
+	
+  <![CDATA[
+  UPDATE WAQ_DDL_TBL X
+     SET TBL_CHG_TYP_CD = 'DRP'      
+   WHERE RQST_NO = #{rqstNo}
+     AND REG_TYP_CD = 'U'
+     AND EXISTS (
+     			SELECT 1 
+     			  FROM WAQ_DDL_COL A 
+                 WHERE A.REG_TYP_CD = 'C'
+                   AND A.RQST_NO  = X.RQST_NO
+                   AND A.RQST_SNO = X.RQST_SNO
+                   AND A.COL_ORD < (SELECT MAX(COL_ORD) 
+                                      FROM WAQ_DDL_COL
+                                     WHERE RQST_NO  = X.RQST_NO
+                                       AND RQST_SNO = X.RQST_SNO
+                                       AND REG_TYP_CD = 'U'
+                                    )
+     )
+   ]]>
+
+  </update>
+  
+  <!--  테이블변경 유형코드 업데이트(TBL_CHG_TYP_CD-DRP) : 업데이트 대상 컬럼의 포지션 변경이 있는 경우 DROP로 업데이트 -->
+  <!--  마지막 컬럼순번에 신규로 추가 됐을경우 ALTER 문이 나와야 하는데 DROP AND CREATE 문 생성됨 -->
+  <update id="updateDropTableCd3" parameterType="string">
+  
+  	/* WaqDdlTblMapper.updateDropTableCd3 */
+
+  <![CDATA[
+  		UPDATE WAQ_DDL_TBL C 
+		   SET C.TBL_CHG_TYP_CD = 'DRP'
+		 WHERE C.RQST_NO = #{rqstNo}
+		   AND C.REG_TYP_CD ='U'                                                            
+		   AND EXISTS  (SELECT 1                                                                        
+		                  FROM WAQ_DDL_COL B                                                       
+		                       INNER JOIN                                                                      
+		                       (                                                                               
+		                          SELECT F.DDL_COL_ID		                               
+		                               , RANK() OVER(PARTITION BY F.DDL_TBL_ID ORDER BY F.COL_ORD) AS COL_ORD
+		                            FROM WAQ_DDL_COL A                                                
+		                                 INNER JOIN WAM_DDL_COL F                                                
+		                                    ON A.DDL_TBL_ID  = F.DDL_TBL_ID
+		                                   AND A.DDL_COL_PNM = F.DDL_COL_PNM   
+		                           WHERE A.RQST_NO = #{rqstNo}                                       
+		                             AND A.REG_TYP_CD NOT IN ('C','D')                            
+		                      )D                                                                              
+		                      ON B.DDL_COL_ID = D.DDL_COL_ID                                                          
+		                     AND B.COL_ORD != D.COL_ORD                                                     
+		                    WHERE B.RQST_NO  = C.RQST_NO
+		                      AND B.RQST_SNO = C.RQST_SNO
+		                      AND B.RQST_NO = #{rqstNo}                                               
+		               )                                                       
+   ]]>  
+  </update>
+  
+  <update id="updateDropTablePkChg" parameterType="string">
+  
+  	/* WaqDdlTblMapper.updateDropTablePkChg */
+  
+  <![CDATA[
+        UPDATE WAQ_DDL_TBL A
+		   SET A.TBL_CHG_TYP_CD = 'DRP'
+		 WHERE A.RQST_NO = #{rqstNo}
+		   AND A.REG_TYP_CD ='U'                                                            
+		   AND EXISTS  (SELECT 1                                                                        
+		                  FROM WAQ_DDL_COL B  
+		                       LEFT JOIN WAM_DDL_COL C
+		                         ON C.DDL_COL_ID = B.DDL_COL_ID                                                 		                                                            
+		                 WHERE B.RQST_NO  = A.RQST_NO
+		                   AND B.RQST_SNO = A.RQST_SNO 
+		                   AND (B.PK_YN = 'Y' OR C.PK_YN = 'Y')
+		                   AND B.VRF_CD = '1'
+		                   AND B.REG_TYP_CD IN ('C','U','D')                                            
+		               )               		                                                   
+   ]]>  
+  </update>
+  
+  <!-- 테이블 커멘트 변경 여부 -->
+  <update id="updateTblCmmtChgYn" parameterType="string">
+  
+  	/* WaqDdlTblMapper.updateTblCmmtChgYn */
+
+  <![CDATA[
+        UPDATE WAQ_DDL_TBL A
+		   SET A.TBL_CMMT_UPD_YN = 'Y'
+		 WHERE A.RQST_NO = #{rqstNo}
+		   AND A.REG_TYP_CD ='U'                                                            
+		   AND EXISTS  (SELECT 1                                                                        
+		                  FROM WAM_DDL_TBL X  		                                                                        		                                                            
+		                 WHERE X.DDL_TBL_ID = A.DDL_TBL_ID
+		                   AND IFNULL(X.DDL_TBL_LNM,'_') != IFNULL(A.DDL_TBL_LNM,'_')                                      
+		               )               		                                                   
+   ]]>  
+  </update>
+  
+  <!-- 테이블변경 유형코드 업데이트(TBL_CHG_TYP_CD-DRP) : ALTER 업데이트... -->
+  <update id="updateAlterTableCd" parameterType="string">
+  
+  	/* WaqDdlTblMapper.updateAlterTableCd */
+
+    UPDATE WAQ_DDL_TBL X
+     SET TBL_CHG_TYP_CD = 'ALT'
+     
+   WHERE RQST_NO = #{rqstNo}
+     AND REG_TYP_CD = 'U'
+<!--      AND TBL_CHG_TYP_CD IS NULL -->
+     AND TBL_CHG_TYP_CD =''
+     
+  </update>
+  
+  <!--  검증쿼리 : 요청서내 중복(DT001) -->
+  <insert id="checkDupTbl" parameterType="map">
+  
+  	/* WaqDdlTblMapper.checkDupTbl */
+  	
+  	<include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSql"/>
+
+    AND EXISTS (SELECT 1
+             FROM WAQ_DDL_TBL D
+             WHERE A.RQST_NO = D.RQST_NO
+               AND A.DDL_TBL_PNM = D.DDL_TBL_PNM
+          --     AND A.DDL_TBL_LNM = D.DDL_TBL_LNM
+               AND A.DB_CONN_TRG_PNM	= D.DB_CONN_TRG_PNM
+               AND A.DB_SCH_PNM = D.DB_SCH_PNM
+               AND A.RQST_SNO != D.RQST_SNO)
+  </insert>
+ 
+  <!-- 검증쿼리 : 삭제대상 테이블 미존재(DT002) -->
+  <insert id="checkNotExistTbl" parameterType="map">
+  
+  	/* WaqDdlTblMapper.checkNotExistTbl */
+  	
+  	<include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSql"/>
+
+      AND A.RQST_DCD = 'DD'
+      AND NOT EXISTS (SELECT 1
+                  FROM WAM_DDL_TBL D
+                  WHERE A.DDL_TBL_PNM = D.DDL_TBL_PNM
+               	--	AND A.DDL_TBL_LNM = D.DDL_TBL_LNM
+               		AND A.DB_SCH_ID  = D.DB_SCH_ID
+                    AND D.REG_TYP_CD IN ('C', 'U'))  
+  </insert>
+
+  <!-- 검증쿼리 : DBMS 스키마 ID 미존재 (DT003) -->
+  <insert id="checkNonDbmsID" parameterType="map">
+  
+  	/* WaqDdlTblMapper.checkNonDbmsID */
+  	
+	<include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSql"/>
+
+	  AND A.DB_SCH_ID IS NULL
+  </insert>  
+  
+ <!--  검증쿼리 : 요청중인 테이블 (DT004) --> 
+ <insert id="checkRequestTbl" parameterType="map">
+ 
+ 	/* WaqDdlTblMapper.checkRequestTbl */
+ 	
+  	<include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSql"/>
+
+    AND EXISTS (
+    		SELECT 1 FROM WAQ_MSTR E
+             INNER JOIN WAQ_DDL_TBL D
+             	ON E.RQST_NO = D.RQST_NO
+             WHERE E.RQST_NO != #{rqstNo}
+               AND E.RQST_STEP_CD = 'Q'
+               AND A.DDL_TBL_PNM = D.DDL_TBL_PNM
+           --   AND A.DDL_TBL_LNM = D.DDL_TBL_LNM
+               AND A.DB_CONN_TRG_PNM	= D.DB_CONN_TRG_PNM
+               AND A.DB_SCH_PNM = D.DB_SCH_PNM
+			   AND IFNULL(D.RVW_STS_CD, 0) != '2'
+               )
+  </insert>
+  
+  <!-- 검증쿼리 : PDM TBL 미존재 (DT005) -->
+  <insert id="checkNonPdmTbl" parameterType="map">
+  
+  	/* WaqDdlTblMapper.checkNonPdmTbl */
+
+  	<include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSql"/>
+  	AND A.PDM_TBL_ID IS NULL
+  	
+  </insert>   
+  
+  
+  <!-- 	검증쿼리 : 변경일 때 변경된 데이터가 없을 경우 (DT000) -->
+  <insert id="checkNotChgData" parameterType="map">
+  
+  	/* WaqDdlTblMapper.checkNotChgData */
+  	
+	  <!-- <include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSql"/>  -->
+	  
+	  <include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.updateVrfNotChg"/>
+
+      AND A.REG_TYP_CD = 'U'
+      AND EXISTS (
+      		SELECT 1 
+      		  FROM WAM_DDL_TBL D
+      		 WHERE A.DDL_TBL_PNM = D.DDL_TBL_PNM               
+               AND A.DB_SCH_ID   = D.DB_SCH_ID
+               AND IFNULL(A.DDL_TBL_LNM,'')  = IFNULL(D.DDL_TBL_LNM,'')
+               -- AND IFNULL(A.TBL_SPAC_ID, '_') = IFNULL(D.TBL_SPAC_ID, '_')
+      		   -- AND IFNULL(A.OBJ_DESCN, '_')   = IFNULL(D.OBJ_DESCN, '_')
+      		   -- AND IFNULL(A.PDM_TBL_ID, '_')  = IFNULL(D.PDM_TBL_ID, '_')
+      		   
+      		)
+      AND NOT EXISTS (
+      		SELECT 1 FROM WAQ_DDL_COL D
+      		 WHERE D.RQST_NO = A.RQST_NO
+               AND D.RQST_SNO = A.RQST_SNO
+               AND D.VRF_CD = '1'
+      		)
+      AND NOT EXISTS (
+      		SELECT 1 FROM WAQ_DDL_IDX D
+      		 WHERE D.RQST_NO = A.RQST_NO
+               AND D.RQST_SNO = A.RQST_SNO
+               AND D.VRF_CD = '1'
+      		)		
+      AND NOT EXISTS (
+      		SELECT 1 FROM WAQ_DDL_REL D
+      		 WHERE D.RQST_NO = A.RQST_NO
+               AND D.RQST_SNO = A.RQST_SNO
+               AND D.VRF_CD = '1'
+      		)
+  </insert>
+  
+  <!-- 	검증쿼리 : 컬럼, 관계 오류가 있을 경우 체크 (DT999) -->
+  <insert id="checkColErr" parameterType="map">
+  
+  	/* WaqDdlTblMapper.checkColErr */
+  	
+	  <include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSql"/>
+
+	  AND EXISTS (
+	  			SELECT 1 FROM WAQ_DDL_COL D
+	  			 WHERE A.RQST_NO = D.RQST_NO
+	  			   AND A.RQST_SNO = D.RQST_SNO
+	  			   AND D.VRF_CD = '2'
+	  			   AND EXISTS ( SELECT 1 FROM WAQ_RQST_VRF_DTLS E
+	  			   			     WHERE D.RQST_NO 	  = E.RQST_NO
+	  			   			       AND D.RQST_SNO 	  = E.RQST_SNO
+	  			   			       AND D.RQST_DTL_SNO = E.RQST_DTL_SNO
+	  			   			       AND E.VRF_DTL_CD NOT IN ('DC000', 'DR000')
+	  			   ) 
+	  	)
+	  AND EXISTS (
+	  			SELECT 1 FROM WAQ_DDL_REL D
+	  			 WHERE A.RQST_NO = D.RQST_NO
+	  			   AND A.RQST_SNO = D.RQST_SNO
+	  			   AND D.VRF_CD = '2'
+	  			   AND EXISTS ( SELECT 1 FROM WAQ_RQST_VRF_DTLS E
+	  			   			     WHERE D.RQST_NO 	  = E.RQST_NO
+	  			   			       AND D.RQST_SNO 	  = E.RQST_SNO
+	  			   			       AND D.RQST_DTL_SNO = E.RQST_DTL_SNO
+	  			   			       AND E.VRF_DTL_CD NOT IN ('DC000', 'DR000')
+	  			   ) 
+	  	)
+  </insert>
+  
+  <!-- 승인/반려 업데이트 -->
+  <update id="updatervwStsCd" parameterType="kr.wise.meta.ddl.service.WaqDdlTbl" >
+  
+  	/* WaqDdlTblMapper.updatervwStsCd */
+  	
+  	UPDATE WAQ_DDL_TBL
+  	<set>
+  	    RVW_STS_CD 	= #{rvwStsCd} , 
+  		RVW_CONTS 	= #{rvwConts} , 
+  		APRV_DTM	= NOW() ,
+  		APRV_USER_ID = #{aprvUserId} ,
+  	</set>
+    WHERE RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      AND RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+      AND VRF_CD = '1'
+      AND IFNULL(RVW_STS_CD, '_') != '2'
+      
+  </update>  
+  
+  <!-- 적재 SQL -->
+  <!--   적재쿼리 
+    selectWaqC
+    
+	int updateWaqCUD(@Param("rqstNo") String rqstNo);
+	int updateWaqC(@Param("rqstNo") String rqstNo);
+	int deleteWAM(@Param("rqstNo") String rqstNo);
+	int insertWAM(@Param("rqstNo") String rqstNo);
+	int updateWAH(@Param("rqstNo") String rqstNo);
+	int insertWAH(@Param("rqstNo") String rqstNo);
+-->  
+
+   <sql id="wam_col">
+    , DDL_TBL_PNM, DDL_TBL_LNM, DB_SCH_ID, TBL_SPAC_ID, PDM_TBL_ID, SCRT_INFO, RQST_NO
+    , RQST_SNO, OBJ_DESCN, OBJ_VERS, REG_TYP_CD, FRS_RQST_DTM, FRS_RQST_USER_ID, RQST_DTM
+    , RQST_USER_ID, APRV_DTM, APRV_USER_ID
+    , DDL_TRG_DCD
+    , SRC_DDL_TRG_DCD       
+	, SRC_DB_CONN_TRG_PNM   
+	, SRC_DB_SCH_ID         
+	, SRC_DB_SCH_PNM        
+	, TGT_DDL_TRG_DCD       
+	, TGT_DB_CONN_TRG_PNM   
+	, TGT_DB_SCH_ID         
+	, TGT_DB_SCH_PNM     
+	, PDM_RQST_NO    
+	, TBL_CMMT_UPD_YN
+	, PART_TBL_YN
+   </sql>
+
+   <!-- 신규 적재 대상 추출 -->
+   <select id="selectWaqC" parameterType="map" resultMap="BaseResultMap">
+   
+   /* WaqDdlTblMapper.selectWaqC */
+
+   	SELECT * FROM WAQ_DDL_TBL
+   	WHERE RQST_NO = #{rqstNo}
+   	  AND RVW_STS_CD = '1'  -- 승인
+   	  AND REG_TYP_CD = 'C'
+   </select>  
+   
+   <!-- 신규 적재 대상 ID 업데이트 -->
+   <update id="updateidByKey" parameterType="kr.wise.meta.ddl.service.WaqDdlTbl">
+   
+   	/* WaqDdlTblMapper.updateidByKey */
+
+     UPDATE WAQ_DDL_TBL SET DDL_TBL_ID = #{ddlTblId,jdbcType=VARCHAR}
+  	 WHERE RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+       AND RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+   </update>
+   
+   <!--WAQ ID, VERS 등을 업데이트... -->
+   <update id="updateWaqCUD" parameterType="map">
+   
+   	/* WaqDdlTblMapper.updateWaqCUD */
+   	
+<!-- 
+	UPDATE WAQ_DDL_TBL A
+	SET (DDL_TBL_ID, OBJ_VERS, FRS_RQST_DTM, FRS_RQST_USER_ID) = (
+	    SELECT 
+	          B.DDL_TBL_ID AS DDL_TBL_ID
+	        , IFNULL(B.OBJ_VERS, 0) + 1 AS OBJ_VERS
+	        , B.FRS_RQST_DTM
+	        , B.FRS_RQST_USER_ID
+	    FROM WAM_DDL_TBL B
+	    WHERE B.DDL_TBL_PNM = A.DDL_TBL_PNM
+	      AND B.DB_SCH_ID = A.DB_SCH_ID
+	)
+	WHERE A.RQST_NO = #{rqstNo}
+	AND A.RVW_STS_CD = '1'
+	AND EXISTS (
+		SELECT 1 FROM WAM_DDL_TBL B
+	     WHERE B.DDL_TBL_PNM = A.DDL_TBL_PNM
+	       AND B.DB_SCH_ID = A.DB_SCH_ID
+	)
+ -->
+ UPDATE WAQ_DDL_TBL A
+ INNER JOIN WAM_DDL_TBL B
+    ON B.DDL_TBL_PNM = A.DDL_TBL_PNM
+   AND B.DB_SCH_ID = A.DB_SCH_ID
+  
+   SET A.DDL_TBL_ID = B.DDL_TBL_ID
+		, A.OBJ_VERS  = IFNULL(B.OBJ_VERS, 0) + 1
+		, A.FRS_RQST_DTM = B.FRS_RQST_DTM
+		, A.FRS_RQST_USER_ID = B.FRS_RQST_USER_ID
+
+ WHERE A.RQST_NO = #{rqstNo}
+	AND A.RVW_STS_CD = '1'
+	AND EXISTS (
+		SELECT 1 FROM WAM_DDL_TBL B
+	     WHERE B.DDL_TBL_PNM = A.DDL_TBL_PNM
+	       AND B.DB_SCH_ID = A.DB_SCH_ID
+	)
+ 
+   </update>
+   
+   <!-- WAM 삭제 (등록유형코드가REG_TYP_CD 변경, 삭제일 경우) -->
+   <delete id="deleteWAM" parameterType="map">
+   
+   	/* WaqDdlTblMapper.deleteWAM */
+   	
+<!-- 
+	DELETE A FROM WAM_DDL_TBL A
+	WHERE EXISTS (
+	    SELECT 1 FROM WAQ_DDL_TBL B
+	     WHERE B.RQST_NO = #{rqstNo}
+	       AND B.RVW_STS_CD = '1'  
+	       AND B.DDL_TBL_ID = A.DDL_TBL_ID
+	       AND B.STND_ASRT = A.STND_ASRT
+	)
+-->
+
+	DELETE A FROM WAM_DDL_TBL A
+	 INNER JOIN WAQ_DDL_TBL B
+	    ON B.DDL_TBL_ID = A.DDL_TBL_ID
+	 WHERE B.RQST_NO = #{rqstNo}
+	   AND B.RVW_STS_CD = '1'
+	   
+   </delete>   
+
+   <!-- WAM 추가 (WAQ 내용을 추가, REG_TYP_CD 가 신규,변경일 경우) -->
+   <insert id="insertWAM" parameterType="map">
+   
+   	/* WaqDdlTblMapper.insertWAM */
+
+	INSERT INTO WAM_DDL_TBL 
+	(DDL_TBL_ID 
+	  <include refid="wam_col"/>
+	)
+	SELECT DDL_TBL_ID 	
+	      <include refid="wam_col"/>	
+	 FROM WAQ_DDL_TBL A
+	WHERE A.RQST_NO = #{rqstNo}
+	  AND A.RVW_STS_CD = '1'
+	  AND A.REG_TYP_CD IN ('C', 'U')
+   </insert>  
+   
+   <!-- WAH 이력 만료... -->
+   <update id="updateWAH"  parameterType="map">
+   
+   	/* WaqDdlTblMapper.updateWAH */
+   	
+<!-- 
+	UPDATE WAH_DDL_TBL A
+	   SET EXP_DTM = NOW()
+	 WHERE EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	   AND REG_TYP_CD IN ('C','U')
+	   AND EXISTS (
+				   SELECT 1 
+				     FROM WAQ_DDL_TBL B
+				    WHERE B.RQST_NO = #{rqstNo}
+				      AND B.RVW_STS_CD = '1'	      
+				      AND B.DDL_TBL_ID = A.DDL_TBL_ID 
+				      AND B.STND_ASRT = A.STND_ASRT
+				    )
+-->
+	UPDATE WAH_DDL_TBL A
+	 INNER JOIN WAQ_DDL_TBL B
+	    ON B.DDL_TBL_ID = A.DDL_TBL_ID 
+	   SET A.EXP_DTM = NOW()
+	 WHERE A.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	   AND A.REG_TYP_CD IN ('C','U')
+	   AND B.RQST_NO = #{rqstNo}
+	   AND B.RVW_STS_CD = '1'
+   </update>  
+
+   <!-- WAH이력 적재... -->
+   <insert id="insertWAH"  parameterType="map">
+   
+   	/* WaqDdlTblMapper.insertWAH */
+
+	INSERT INTO WAH_DDL_TBL (DDL_TBL_ID, EXP_DTM, STR_DTM <include refid="wam_col"/>)
+	SELECT
+	    A.DDL_TBL_ID AS DDL_TBL_ID
+	    , STR_TO_DATE('9999-12-31', '%Y-%m-%d') AS EXP_DTM
+	    , NOW() AS STR_DTM 
+	
+	<include refid="wam_col"/>
+   
+	 FROM WAQ_DDL_TBL A
+	WHERE A.RQST_NO = #{rqstNo}
+	  AND A.RVW_STS_CD = '1'
+   </insert>    
+   
+   <update id="updatervwStsCdIdx" parameterType="kr.wise.meta.ddl.service.WaqDdlTbl" >
+   
+   	/* WaqDdlTblMapper.updatervwStsCdIdx */
+   	
+   <!--
+  	UPDATE WAQ_DDL_IDX A
+  	   SET (RVW_STS_CD, RQST_USER_ID, RQST_DTM, APRV_USER_ID, APRV_DTM) = 
+  	                    (SELECT X.RVW_STS_CD
+  	                          , X.RQST_USER_ID, X.RQST_DTM
+  	                          , X.APRV_USER_ID, X.APRV_DTM
+  	                       FROM WAQ_DDL_TBL X
+  	                      WHERE X.RQST_NO = A.RQST_NO
+  	                        AND X.RQST_SNO = A.RQST_SNO 
+  	                    )    	  	 
+     WHERE RQST_NO = #{rqstNo,jdbcType=VARCHAR}      
+    -->
+UPDATE WAQ_DDL_IDX A
+ INNER JOIN WAQ_DDL_TBL X
+    ON X.RQST_NO = A.RQST_NO
+  	AND X.RQST_SNO = A.RQST_SNO 
+  	
+  	SET A.RVW_STS_CD = X.RVW_STS_CD
+	  , A.RQST_USER_ID = X.RQST_USER_ID
+	  , A.RQST_DTM = X.RQST_DTM
+	  , A.APRV_USER_ID = X.APRV_USER_ID
+	  , A.APRV_DTM = X.APRV_DTM
+     	  	 
+ WHERE A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+  </update>   
+  
+  <!-- 개발DDL 테스트DDL반영여부     -->
+  <update id="updateDevDdlTstReflYn" parameterType="kr.wise.meta.ddl.service.WaqDdlTbl" >
+  
+  	/* WaqDdlTblMapper.updateDevDdlTstReflYn */
+
+	UPDATE WAM_DDL_TBL
+	   SET TST_REFL_YN = 'Y' 
+	 WHERE DDL_TRG_DCD = 'D'   
+	   AND (DB_SCH_ID, DDL_TBL_PNM) IN 
+	                     (SELECT SRC_DB_SCH_ID, DDL_TBL_PNM
+	                        FROM WAQ_DDL_TBL
+	                       WHERE RQST_NO = #{rqstNo,jdbcType=VARCHAR}   
+	                         AND RVW_STS_CD = '1'
+	                         AND DDL_TRG_DCD = 'T'
+	                     )     	
+  </update>   
+  
+  <!-- 개발DDL 운영DDL반영여부        		 -->
+  <update id="updateDevDdlOprReflYn" parameterType="kr.wise.meta.ddl.service.WaqDdlTbl" >
+  
+  	/* WaqDdlTblMapper.updateDevDdlOprReflYn */
+
+	UPDATE WAM_DDL_TBL
+	   SET OPR_REFL_YN = 'Y'
+	 WHERE DDL_TRG_DCD = 'D'   
+	   AND (DB_SCH_ID, DDL_TBL_PNM) IN 
+	                     (SELECT SRC_DB_SCH_ID, DDL_TBL_PNM
+	                        FROM WAQ_DDL_TBL
+	                       WHERE RQST_NO = #{rqstNo,jdbcType=VARCHAR}    
+	                         AND RVW_STS_CD  = '1'
+	                         AND DDL_TRG_DCD = 'R'
+	                     )  
+  </update>   
+  
+  <!-- 테스트DDL 운영DDL 반영여부 update -->    
+  <update id="updateTstDdlOprReflYn" parameterType="kr.wise.meta.ddl.service.WaqDdlTbl" >
+  
+  	/* WaqDdlTblMapper.updateTstDdlOprReflYn */
+
+	UPDATE WAM_DDL_TBL
+	   SET OPR_REFL_YN = 'Y'
+	 WHERE DDL_TRG_DCD = 'T'   
+	   AND (DB_SCH_ID, DDL_TBL_PNM) IN 
+	                     (SELECT SRC_DB_SCH_ID, DDL_TBL_PNM
+	                        FROM WAQ_DDL_TBL
+	                       WHERE RQST_NO = #{rqstNo,jdbcType=VARCHAR}    
+	                         AND RVW_STS_CD  = '1'
+	                         AND DDL_TRG_DCD = 'R'
+	                     )  
+  </update>   
+      
+      <update id="updateDropTableCd4" parameterType="string">
+  -- 컬럼 데이터타입 길이 줄어들면 DRP,CRT로 변경
+  		UPDATE WAQ_DDL_TBL C 
+		   SET C.TBL_CHG_TYP_CD = 'DRP'
+		 WHERE C.RQST_NO = #{rqstNo}
+		   AND C.REG_TYP_CD ='U'                                                            
+		   AND EXISTS (SELECT 1
+  				FROM WAQ_DDL_COL A
+  				JOIN WAM_DDL_COL B
+  				  ON A.DDL_COL_ID = B.DDL_COL_ID
+  			   WHERE A.RQST_NO = C.RQST_NO
+  			     AND A.RQST_SNO = C.RQST_SNO
+  			     AND A.DATA_TYPE = B.DATA_TYPE
+  			     AND coalesce(A.DATA_LEN,0) != coalesce(B.DATA_LEN,0)
+  			   )
+  </update>
+</mapper>

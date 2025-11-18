@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.wise.admin.ai.algorithm.service.WaaAlgArgMapper">
+  <resultMap id="BaseResultMap" type="kr.wise.admin.ai.algorithm.service.WaaAlgArg" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+    <id column="ALG_ID" jdbcType="VARCHAR" property="algId" />
+    <id column="ALG_ARG_ID" jdbcType="VARCHAR" property="algArgId" />
+    <result column="ARG_LNM" jdbcType="VARCHAR" property="argLnm" />
+    <result column="ARG_PNM" jdbcType="VARCHAR" property="argPnm" />
+    <result column="ARG_DATA_TYPE" jdbcType="VARCHAR" property="argDataType" />
+    <result column="ARG_DEFLT_VAL" jdbcType="VARCHAR" property="argDefltVal" />
+    <result column="ARG_VAL" jdbcType="VARCHAR" property="argVal" />
+    <result column="MIN_VAL" jdbcType="VARCHAR" property="minVal" />
+    <result column="MAX_VAL" jdbcType="VARCHAR" property="maxVal" />
+    <result column="DISP_ORD" jdbcType="DECIMAL" property="dispOrd" />
+    <result column="USE_YN" jdbcType="VARCHAR" property="useYn" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ALG_ID, ALG_ARG_ID, ARG_LNM, ARG_PNM, ARG_DATA_TYPE, ARG_DEFLT_VAL, MIN_VAL, MAX_VAL, 
+    DISP_ORD, USE_YN, OBJ_DESCN, OBJ_VERS, REG_TYP_CD, WRIT_DTM, WRIT_USER_ID
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="map" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from WAA_ALG_ARG
+    where ALG_ID = #{algId,jdbcType=VARCHAR}
+      and ALG_ARG_ID = #{algArgId,jdbcType=VARCHAR}
+  </select>
+  <select id="selectArgListbyId" parameterType="kr.wise.admin.ai.algorithm.service.WaaAlg" resultMap="BaseResultMap">
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM WAA_ALG_ARG
+    WHERE ALG_ID = #{algId,jdbcType=VARCHAR}
+    ORDER BY DISP_ORD
+  </select>
+  
+  <select id="selectArgListbyDtcId" parameterType="kr.wise.advisor.prepare.outlier.service.WadOtlResult" resultMap="BaseResultMap">
+  --outlier 탐지 ID별 알고리즘 인수
+  	SELECT A.ALG_ID, A.ALG_ARG_ID, A.ARG_LNM, A.ARG_PNM, A.ARG_DATA_TYPE
+  		 , CASE WHEN B.ARG_VAL IS NULL THEN A.ARG_DEFLT_VAL ELSE B.ARG_VAL END AS ARG_DEFLT_VAL
+  		 , A.MIN_VAL, A.MAX_VAL, A.DISP_ORD, A.USE_YN
+  	  FROM WAA_ALG_ARG A
+  	  LEFT OUTER JOIN WAD_OTL_ARG B
+  	    ON B.OTL_DTC_ID = #{otlDtcId,jdbcType=VARCHAR} 
+  	   AND B.ALG_ARG_ID = A.ALG_ARG_ID
+  	   AND B.REG_TYP_CD IN ('C', 'U') 
+    WHERE A.ALG_ID = #{otlAlgId,jdbcType=VARCHAR}
+      AND A.REG_TYP_CD IN ('C', 'U')
+    ORDER BY A.DISP_ORD
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="map">
+    delete from WAA_ALG_ARG
+    where ALG_ID = #{algId,jdbcType=VARCHAR}
+      and ALG_ARG_ID = #{algArgId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByalgId" parameterType="string">
+    DELETE FROM WAA_ALG_ARG
+    WHERE ALG_ID = #{algId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="kr.wise.admin.ai.algorithm.service.WaaAlgArg">
+    insert into WAA_ALG_ARG (ALG_ID, ALG_ARG_ID, ARG_LNM, 
+      ARG_PNM, ARG_DATA_TYPE, ARG_DEFLT_VAL, 
+      MIN_VAL, MAX_VAL, DISP_ORD, 
+      USE_YN, OBJ_DESCN, OBJ_VERS, 
+      REG_TYP_CD, WRIT_DTM, WRIT_USER_ID
+      )
+    values (#{algId,jdbcType=VARCHAR}, #{algArgId,jdbcType=VARCHAR}, #{argLnm,jdbcType=VARCHAR}, 
+      #{argPnm,jdbcType=VARCHAR}, #{argDataType,jdbcType=VARCHAR}, #{argDefltVal,jdbcType=VARCHAR}, 
+      #{minVal,jdbcType=VARCHAR}, #{maxVal,jdbcType=VARCHAR}, #{dispOrd,jdbcType=DECIMAL}, 
+      #{useYn,jdbcType=VARCHAR}, #{objDescn,jdbcType=VARCHAR}, 1, 
+      #{regTypCd,jdbcType=VARCHAR}, SYSDATE, #{writUserId,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="kr.wise.admin.ai.algorithm.service.WaaAlgArg">
+    insert into WAA_ALG_ARG
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="algId != null">
+        ALG_ID,
+      </if>
+      <if test="algArgId != null">
+        ALG_ARG_ID,
+      </if>
+      <if test="argLnm != null">
+        ARG_LNM,
+      </if>
+      <if test="argPnm != null">
+        ARG_PNM,
+      </if>
+      <if test="argDataType != null">
+        ARG_DATA_TYPE,
+      </if>
+      <if test="argDefltVal != null">
+        ARG_DEFLT_VAL,
+      </if>
+      <if test="minVal != null">
+        MIN_VAL,
+      </if>
+      <if test="maxVal != null">
+        MAX_VAL,
+      </if>
+      <if test="dispOrd != null">
+        DISP_ORD,
+      </if>
+      <if test="useYn != null">
+        USE_YN,
+      </if>
+      <if test="objDescn != null">
+        OBJ_DESCN,
+      </if>
+      <if test="objVers != null">
+        OBJ_VERS,
+      </if>
+      <if test="regTypCd != null">
+        REG_TYP_CD,
+      </if>
+      <if test="writDtm != null">
+        WRIT_DTM,
+      </if>
+      <if test="writUserId != null">
+        WRIT_USER_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="algId != null">
+        #{algId,jdbcType=VARCHAR},
+      </if>
+      <if test="algArgId != null">
+        #{algArgId,jdbcType=VARCHAR},
+      </if>
+      <if test="argLnm != null">
+        #{argLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="argPnm != null">
+        #{argPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="argDataType != null">
+        #{argDataType,jdbcType=VARCHAR},
+      </if>
+      <if test="argDefltVal != null">
+        #{argDefltVal,jdbcType=VARCHAR},
+      </if>
+      <if test="minVal != null">
+        #{minVal,jdbcType=VARCHAR},
+      </if>
+      <if test="maxVal != null">
+        #{maxVal,jdbcType=VARCHAR},
+      </if>
+      <if test="dispOrd != null">
+        #{dispOrd,jdbcType=DECIMAL},
+      </if>
+      <if test="useYn != null">
+        #{useYn,jdbcType=VARCHAR},
+      </if>
+      <if test="objDescn != null">
+        #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null">
+        #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null">
+        #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="writDtm != null">
+        #{writDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="writUserId != null">
+        #{writUserId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.admin.ai.algorithm.service.WaaAlgArg">
+    update WAA_ALG_ARG
+    <set>
+      <if test="argLnm != null">
+        ARG_LNM = #{argLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="argPnm != null">
+        ARG_PNM = #{argPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="argDataType != null">
+        ARG_DATA_TYPE = #{argDataType,jdbcType=VARCHAR},
+      </if>
+      <if test="argDefltVal != null">
+        ARG_DEFLT_VAL = #{argDefltVal,jdbcType=VARCHAR},
+      </if>
+      <if test="minVal != null">
+        MIN_VAL = #{minVal,jdbcType=VARCHAR},
+      </if>
+      <if test="maxVal != null">
+        MAX_VAL = #{maxVal,jdbcType=VARCHAR},
+      </if>
+      <if test="dispOrd != null">
+        DISP_ORD = #{dispOrd,jdbcType=DECIMAL},
+      </if>
+      <if test="useYn != null">
+        USE_YN = #{useYn,jdbcType=VARCHAR},
+      </if>
+      <if test="objDescn != null">
+        OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null">
+        OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null">
+        REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="writDtm != null">
+        WRIT_DTM = #{writDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="writUserId != null">
+        WRIT_USER_ID = #{writUserId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ALG_ID = #{algId,jdbcType=VARCHAR}
+      and ALG_ARG_ID = #{algArgId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="kr.wise.admin.ai.algorithm.service.WaaAlgArg">
+    update WAA_ALG_ARG
+    set ARG_LNM = #{argLnm,jdbcType=VARCHAR},
+      ARG_PNM = #{argPnm,jdbcType=VARCHAR},
+      ARG_DATA_TYPE = #{argDataType,jdbcType=VARCHAR},
+      ARG_DEFLT_VAL = #{argDefltVal,jdbcType=VARCHAR},
+      MIN_VAL = #{minVal,jdbcType=VARCHAR},
+      MAX_VAL = #{maxVal,jdbcType=VARCHAR},
+      DISP_ORD = #{dispOrd,jdbcType=DECIMAL},
+      USE_YN = #{useYn,jdbcType=VARCHAR},
+      OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      OBJ_VERS = NVL(OBJ_VERS, 0) + 1,
+      REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      WRIT_DTM = SYSDATE,
+      WRIT_USER_ID = #{writUserId,jdbcType=VARCHAR}
+    where ALG_ID = #{algId,jdbcType=VARCHAR}
+      and ALG_ARG_ID = #{algArgId,jdbcType=VARCHAR}
+  </update>
+</mapper>

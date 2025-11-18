@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.dq.criinfo.anatrg.service.WaaDbSchMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.dq.criinfo.anatrg.service.WaaDbSch" >
+    <id column="DB_SCH_ID" property="dbSchId" jdbcType="VARCHAR" />
+<!--     <result column="EXP_DTM" property="expDtm" jdbcType="DATE" /> -->
+<!--     <result column="STR_DTM" property="strDtm" jdbcType="DATE" /> -->
+    <result column="DB_SCH_PNM" property="dbSchPnm" jdbcType="VARCHAR" />
+    <result column="DB_SCH_LNM" property="dbSchLnm" jdbcType="VARCHAR" />
+    <result column="DB_CONN_TRG_ID" property="dbConnTrgId" jdbcType="VARCHAR" />
+    <result column="DDL_TRG_YN" property="ddlTrgYn" jdbcType="VARCHAR" />
+    <result column="CLT_XCL_YN" property="cltXclYn" jdbcType="VARCHAR" />
+    <result column="DDL_TRG_DCD" property="ddlTrgDcd" jdbcType="VARCHAR" />
+    <result column="CD_SND_TRG_YN" property="cdSndTrgYn" jdbcType="VARCHAR" />
+    <result column="CD_AUTO_SND_YN" property="cdAutoSndYn" jdbcType="VARCHAR" />
+    <result column="OBJ_DESCN" property="objDescn" jdbcType="VARCHAR" />
+    <result column="OBJ_VERS" property="objVers" jdbcType="DECIMAL" />
+    <result column="REG_TYP_CD" property="regTypCd" jdbcType="VARCHAR" />
+    <result column="WRIT_DTM" property="writDtm" jdbcType="DATE" />
+    <result column="WRIT_USER_ID" property="writUserId" jdbcType="VARCHAR" />
+    <result column="DB_CONN_TRG_PNM" property="dbConnTrgPnm" jdbcType="VARCHAR" />
+    <result column="DB_CONN_TRG_LNM" property="dbConnTrgLnm" jdbcType="VARCHAR" />
+    <result column="WRIT_USER_NM" property="writUserNm" jdbcType="VARCHAR" />
+<!--     <result column="WRIT_USER_NM" property="writUserNm" jdbcType="VARCHAR" /> -->
+<!--     <result column="WRIT_USER_NM" property="writUserNm" jdbcType="VARCHAR" /> -->
+    <result column="DBMS_TYP_CD" jdbcType="VARCHAR" property="dbmsTypCd" />
+    <result column="DBMS_VERS_CD" jdbcType="VARCHAR" property="dbmsVersCd" />
+    <result column="DB_TBL_SPAC_PNM" jdbcType="VARCHAR" property="dbTblSpacPnm" />
+    <result column="DB_TBL_SPAC_ID" jdbcType="VARCHAR" property="dbTblSpacId" />
+    <result column="DB_IDX_SPAC_ID" jdbcType="VARCHAR" property="dbIdxSpacId" />
+    <result column="DB_IDX_SPAC_PNM" jdbcType="VARCHAR" property="dbIdxSpacPnm" />
+    
+    <result column="DMN_PDT_YN" jdbcType="VARCHAR" property="dmnPdtYn" />
+    <result column="COL_PRF_YN" jdbcType="VARCHAR" property="colPrfYn" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+   	DB_SCH_ID, EXP_DTM, STR_DTM, DB_SCH_PNM, DB_SCH_LNM, DB_CONN_TRG_ID, DDL_TRG_YN, CLT_XCL_YN, DDL_TRG_DCD, CD_SND_TRG_YN
+   	CD_AUTO_SND_YN, OBJ_DESCN, OBJ_VERS, REG_TYP_CD, WRIT_DTM, WRIT_USER_ID, DB_TBL_SPAC_IC, DB_IDX_SPAC_ID
+  </sql>
+  
+<select id="selectList" resultMap="BaseResultMap" parameterType="kr.wise.dq.criinfo.anatrg.service.WaaDbSch">		
+ SELECT
+        A.*
+       ,B.DB_CONN_TRG_PNM AS DB_CONN_TRG_PNM
+       ,B.DB_CONN_TRG_LNM AS DB_CONN_TRG_LNM
+       ,GET_USER_NM(A.WRIT_USER_ID) AS WRIT_USER_NM
+       ,GET_TBL_SPAC_PNM(A.DB_TBL_SPAC_ID) AS DB_TBL_SPAC_PNM
+       ,GET_TBL_SPAC_PNM(A.DB_IDX_SPAC_ID) AS DB_IDX_SPAC_PNM
+ FROM WAA_DB_SCH A 
+ INNER JOIN WAA_DB_CONN_TRG B
+ 	ON A.DB_CONN_TRG_ID = B.DB_CONN_TRG_ID 
+   AND B.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')
+   AND B.REG_TYP_CD IN ('C', 'U')
+	  <where>
+  		AND A.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')
+  		AND A.REG_TYP_CD IN ('C', 'U')
+      <if test="dbConnTrgId != null"  >
+        AND A.DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR}
+      </if>
+      <if test="dbSchLnm != null"  >
+        AND (A.DB_SCH_LNM LIKE '%' || #{dbSchLnm,jdbcType=VARCHAR} || '%'
+        	OR A.DB_SCH_LNM LIKE '%' || UPPER(#{dbSchLnm,jdbcType=VARCHAR}) || '%'
+        	OR A.DB_SCH_PNM LIKE '%' || #{dbSchLnm,jdbcType=VARCHAR} || '%'
+        	OR A.DB_SCH_PNM LIKE '%' || UPPER(#{dbSchLnm,jdbcType=VARCHAR}) || '%')
+      </if>
+      </where>
+  </select>
+  
+  <select id="selectListByFK" resultMap="BaseResultMap" parameterType="java.lang.String">		
+ SELECT
+        A.*
+       ,B.DB_CONN_TRG_PNM AS DB_CONN_TRG_PNM
+       ,B.DB_CONN_TRG_LNM AS DB_CONN_TRG_LNM
+       ,GET_USER_NM(A.WRIT_USER_ID) AS WRIT_USER_NM
+       ,GET_TBL_SPAC_PNM(A.DB_TBL_SPAC_ID) AS DB_TBL_SPAC_PNM
+       ,GET_TBL_SPAC_PNM(A.DB_IDX_SPAC_ID) AS DB_IDX_SPAC_PNM
+ FROM WAA_DB_SCH A 
+ INNER JOIN WAA_DB_CONN_TRG B
+ 	ON A.DB_CONN_TRG_ID = B.DB_CONN_TRG_ID
+   AND B.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')
+   AND B.REG_TYP_CD IN ('C', 'U')
+	  <where>
+  		AND A.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')
+  		AND A.REG_TYP_CD IN ('C', 'U')
+        AND A.DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR}
+      </where>
+  </select>
+  <select id="selectSchemaList" resultMap="BaseResultMap" parameterType="kr.wise.dq.criinfo.anatrg.service.WaaDbSch">		
+ SELECT
+        A.*
+       ,B.DB_CONN_TRG_PNM AS DB_CONN_TRG_PNM
+       ,B.DB_CONN_TRG_LNM AS DB_CONN_TRG_LNM
+       ,GET_USER_NM(A.WRIT_USER_ID) AS WRIT_USER_NM
+       ,B.DBMS_TYP_CD
+       ,B.DBMS_VERS_CD
+       ,C.DB_TBL_SPAC_PNM
+       ,C.DB_TBL_SPAC_ID
+  FROM WAA_DB_SCH A 
+ INNER JOIN WAA_DB_CONN_TRG B
+ 	ON A.DB_CONN_TRG_ID = B.DB_CONN_TRG_ID
+   AND B.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')
+   AND B.REG_TYP_CD IN ('C', 'U')
+  LEFT OUTER JOIN WAA_TBL_SPAC C
+    ON B.DB_CONN_TRG_ID = C.DB_CONN_TRG_ID
+   AND A.DB_TBL_SPAC_ID = C.DB_TBL_SPAC_ID
+   AND C.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')
+   AND C.REG_TYP_CD IN ('C', 'U')
+   <if test="tblSpacTypCd != null">
+   AND C.TBL_SPAC_TYP_CD = #{tblSpacTypCd}
+   </if>
+	  <where>
+  		AND A.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')
+  		AND A.REG_TYP_CD IN ('C', 'U')
+  		AND A.DDL_TRG_YN = 'Y'
+        <if test="dbConnTrgPnm != null">
+        	AND (UPPER(B.DB_CONN_TRG_PNM) LIKE '%'||UPPER(#{dbConnTrgPnm})||'%' OR UPPER(B.DB_CONN_TRG_LNM) LIKE '%'||UPPER(#{dbConnTrgPnm})||'%')
+        </if>
+        <if test="dbmsTypCd != null">
+        	AND B.DBMS_TYP_CD = #{dbmsTypCd}
+        </if>
+        <if test="dbSchPnm != null">
+        	AND (UPPER(A.DB_SCH_PNM) LIKE '%'||UPPER(#{dbSchPnm})||'%' OR UPPER(A.DB_SCH_LNM) LIKE '%'||UPPER(#{dbSchPnm})||'%')
+        </if>
+        <if test="ddlTrgDcd != null and ddlTrgDcd != ''">
+            AND A.DDL_TRG_DCD = #{ddlTrgDcd,jdbcType=VARCHAR}
+        </if>
+      </where>
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    SELECT 
+    	   A.*
+         , B.DB_CONN_TRG_PNM AS DB_CONN_TRG_PNM
+         , B.DB_CONN_TRG_LNM AS DB_CONN_TRG_LNM
+         , GET_USER_NM(A.WRIT_USER_ID) AS WRIT_USER_NM
+      FROM WAA_DB_SCH A 
+	 INNER JOIN WAA_DB_CONN_TRG B
+		ON A.DB_CONN_TRG_ID = B.DB_CONN_TRG_ID
+	   AND B.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+       AND B.REG_TYP_CD IN ('C', 'U') 
+     WHERE A.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+       AND A.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+       AND A.REG_TYP_CD IN ('C', 'U')
+  </select>
+  
+  <update id="updateExpDtm" parameterType="java.lang.String">
+  	UPDATE WAA_DB_SCH SET
+  		EXP_DTM = SYSDATE
+  	WHERE DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+  	  AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+  	  AND REG_TYP_CD IN ('C', 'U')
+  </update>
+  
+  <insert id="insertSelective" parameterType="kr.wise.dq.criinfo.anatrg.service.WaaDbSch">
+  	INSERT INTO WAA_DB_SCH
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="dbSchId != null">
+        DB_SCH_ID,
+      </if>
+        EXP_DTM,
+        STR_DTM,
+      <if test="dbSchPnm != null">
+        DB_SCH_PNM,
+      </if>
+      <if test="dbSchLnm != null">
+        DB_SCH_LNM,
+      </if>
+      <if test="dbConnTrgId != null">
+        DB_CONN_TRG_ID,
+      </if>
+      <if test="ddlTrgYn != null">
+        DDL_TRG_YN,
+      </if>
+      <if test="cltXclYn != null">
+        CLT_XCL_YN,
+      </if>
+      <if test="ddlTrgDcd != null">
+        DDL_TRG_DCD,
+      </if>
+      <if test="cdSndTrgYn != null">
+        CD_SND_TRG_YN,
+      </if>
+      <if test="cdAutoSndYn != null">
+        CD_AUTO_SND_YN,
+      </if>
+      <if test="objDescn != null">
+        OBJ_DESCN,
+      </if>
+      <if test="objVers != null">
+        OBJ_VERS,
+      </if>
+      <if test="regTypCd != null">
+        REG_TYP_CD,
+      </if>
+        WRIT_DTM,
+      <if test="writUserId != null">
+        WRIT_USER_ID,
+      </if>
+       <if test="dbTblSpacId != null">
+        DB_TBL_SPAC_ID,
+      </if>
+       <if test="dbIdxSpacId != null">
+        DB_IDX_SPAC_ID,
+      </if>
+      <if test="dmnPdtYn != null">
+        DMN_PDT_YN,
+      </if>
+      <if test="colPrfYn != null">
+        COL_PRF_YN,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="dbSchId != null">
+        #{dbSchId,jdbcType=VARCHAR},
+      </if>
+        TO_DATE('9999-12-31', 'YYYY-MM-DD'),
+        SYSDATE,
+      <if test="dbSchPnm != null">
+        #{dbSchPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="dbSchLnm != null">
+        #{dbSchLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="dbConnTrgId != null">
+        #{dbConnTrgId,jdbcType=VARCHAR},
+      </if>
+      <if test="ddlTrgYn != null">
+        #{ddlTrgYn,jdbcType=VARCHAR},
+      </if>
+      <if test="cltXclYn != null">
+        #{cltXclYn,jdbcType=VARCHAR},
+      </if>
+      <if test="ddlTrgDcd != null">
+        #{ddlTrgDcd,jdbcType=VARCHAR},
+      </if>
+      <if test="cdSndTrgYn != null">
+        #{cdSndTrgYn,jdbcType=VARCHAR},
+      </if>
+      <if test="cdAutoSndYn != null">
+        #{cdAutoSndYn,jdbcType=VARCHAR},
+      </if>
+      <if test="objDescn != null">
+        #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null">
+        #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null">
+        #{regTypCd,jdbcType=VARCHAR},
+      </if>
+        SYSDATE,
+      <if test="writUserId != null">
+        #{writUserId,jdbcType=VARCHAR},
+      </if>
+        <if test="dbTblSpacId != null">
+         #{dbTblSpacId,jdbcType=VARCHAR},
+      </if>
+       <if test="dbIdxSpacId != null">
+        #{dbIdxSpacId,jdbcType=VARCHAR},
+      </if>
+      <if test="dmnPdtYn != null">
+        #{dmnPdtYn,jdbcType=VARCHAR},
+      </if>
+      <if test="colPrfYn != null">
+        #{colPrfYn,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <select id="selectDevSubjSchemaList" resultMap="BaseResultMap" parameterType="kr.wise.dq.criinfo.anatrg.service.WaaDbSch">		
+	 SELECT A.*
+	       , B.DB_CONN_TRG_PNM AS DB_CONN_TRG_PNM
+	       , B.DB_CONN_TRG_LNM AS DB_CONN_TRG_LNM
+	       , GET_USER_NM(A.WRIT_USER_ID) AS WRIT_USER_NM
+	       , B.DBMS_TYP_CD
+	       , B.DBMS_VERS_CD
+	       , C.DB_TBL_SPAC_PNM
+	   FROM WAA_DB_SCH A 
+	 	    INNER JOIN WAA_DB_CONN_TRG B
+		   	   ON B.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')
+		      AND B.REG_TYP_CD IN ('C', 'U')
+		      AND B.DB_CONN_TRG_ID = A.DB_CONN_TRG_ID 
+		    LEFT JOIN WAA_TBL_SPAC C
+		      ON C.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')
+		     AND C.TBL_SPAC_TYP_CD = 'T'	  		
+		     AND C.DB_TBL_SPAC_ID = A.DB_TBL_SPAC_ID 	 	  		     
+		WHERE 1 = 1
+	  	  AND A.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')
+	  	  AND A.REG_TYP_CD IN ('C', 'U')	  	  
+	  	  AND A.DDL_TRG_DCD = 'D'    
+	  	  AND EXISTS (SELECT 1
+	  	                FROM WAA_SUBJ_DB_SCH_MAP X
+	  	                     INNER JOIN WAA_SUBJ Y
+	  	                        ON Y.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')
+	  	                       AND Y.SUBJ_ID = X.SUBJ_ID	  	                     
+	  	               WHERE X.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')
+	  	                 AND X.DB_SCH_ID = A.DB_SCH_ID
+	  	                 AND Y.SUBJ_ID = #{subjId,jdbcType=VARCHAR}
+	  	                 
+	  	              )
+	  	  
+	      <if test="dbConnTrgPnm != null">
+	        	AND (B.DB_CONN_TRG_PNM LIKE '%'||UPPER(#{dbConnTrgPnm})||'%' OR B.DB_CONN_TRG_LNM LIKE '%'||UPPER(#{dbConnTrgPnm})||'%')
+	      </if>
+	      <if test="dbmsTypCd != null">
+	        	AND B.DBMS_TYP_CD = #{dbmsTypCd}
+	      </if>
+	      <if test="dbSchPnm != null">
+	        	AND (A.DB_SCH_PNM LIKE '%'||UPPER(#{dbSchPnm})||'%' OR A.DB_SCH_LNM LIKE '%'||UPPER(#{dbSchPnm})||'%')
+	      </if>	     
+  </select>
+  
+  <select id="selectBySchPnm" resultMap="BaseResultMap" parameterType="java.lang.String">
+  	SELECT *
+  	  FROM WAA_DB_SCH A
+  	  	INNER JOIN WAA_DB_CONN_TRG B
+  	  		    ON A.DB_CONN_TRG_ID = B.DB_CONN_TRG_ID
+  	  		   AND B.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+  	  		   AND B.REG_TYP_CD IN ('C', 'U')
+  	 WHERE A.DB_SCH_PNM = #{dbSchPnm, jdbcType=VARCHAR}
+  	   AND A.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+  	   AND A.REG_TYP_CD IN ('C', 'U')
+	   AND B.DB_CONN_TRG_ID = #{dbConnTrgId, jdbcType=VARCHAR}
+  </select>
+  
+</mapper>

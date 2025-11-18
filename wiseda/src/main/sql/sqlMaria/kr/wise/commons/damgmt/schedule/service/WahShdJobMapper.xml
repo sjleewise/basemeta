@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.commons.damgmt.schedule.service.WahShdJobMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.commons.damgmt.schedule.service.WahShdJob" >
+    <id column="SHD_ID" property="shdId" jdbcType="VARCHAR" />
+    <id column="SHD_JOB_ID" property="shdJobId" jdbcType="VARCHAR" />
+    <id column="SHD_JOB_SNO" property="shdJobSno" jdbcType="DECIMAL" />
+    <id column="EXP_DTM" property="expDtm" jdbcType="TIMESTAMP" />
+    <result column="STR_DTM" property="strDtm" jdbcType="TIMESTAMP" />
+    <result column="RQST_NO" property="rqstNo" jdbcType="VARCHAR" />
+    <result column="RQST_SNO" property="rqstSno" jdbcType="DECIMAL" />
+    <result column="OBJ_DESCN" property="objDescn" jdbcType="VARCHAR" />
+    <result column="OBJ_VERS" property="objVers" jdbcType="DECIMAL" />
+    <result column="REG_TYP_CD" property="regTypCd" jdbcType="VARCHAR" />
+    <result column="FRS_RQST_DTM" property="frsRqstDtm" jdbcType="TIMESTAMP" />
+    <result column="FRS_RQST_USER_ID" property="frsRqstUserId" jdbcType="VARCHAR" />
+    <result column="RQST_DTM" property="rqstDtm" jdbcType="TIMESTAMP" />
+    <result column="RQST_USER_ID" property="rqstUserId" jdbcType="VARCHAR" />
+    <result column="APRV_DTM" property="aprvDtm" jdbcType="TIMESTAMP" />
+    <result column="APRV_USER_ID" property="aprvUserId" jdbcType="VARCHAR" />
+    <result column="ETC_JOB_DTLS" property="etcJobDtls" jdbcType="VARCHAR" />
+    <result column="ETC_JOB_NM" property="etcJobNm" jdbcType="VARCHAR" />
+    <result column="ETC_JOB_KND_CD" property="etcJobKndCd" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    SHD_ID, SHD_JOB_ID, SHD_JOB_SNO, EXP_DTM, STR_DTM, RQST_NO, RQST_SNO, OBJ_DESCN, 
+    OBJ_VERS, REG_TYP_CD, FRS_RQST_DTM, FRS_RQST_USER_ID, RQST_DTM, RQST_USER_ID, APRV_DTM, 
+    APRV_USER_ID
+  </sql>
+  
+  <insert id="insertSelective" parameterType="kr.wise.commons.damgmt.schedule.service.WamShdJob" >
+    insert into WAH_SHD_JOB
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+        SHD_ID,
+        SHD_JOB_ID,
+        SHD_JOB_SNO,
+        EXP_DTM,
+        STR_DTM,
+      <if test="rqstNo != null" >
+        RQST_NO,
+      </if>
+      <if test="rqstSno != null" >
+        RQST_SNO,
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN,
+      </if>
+        OBJ_VERS,
+        REG_TYP_CD,
+      <if test="frsRqstDtm != null" >
+        FRS_RQST_DTM,
+      </if>
+      <if test="frsRqstUserId != null" >
+        FRS_RQST_USER_ID,
+      </if>
+      <if test="rqstDtm != null" >
+        RQST_DTM,
+      </if>
+      <if test="rqstUserId != null" >
+        RQST_USER_ID,
+      </if>
+      <if test="aprvDtm != null" >
+        APRV_DTM,
+      </if>
+      <if test="aprvUserId != null" >
+        APRV_USER_ID,
+      </if>
+      <if test="shdJobNm != null" >
+        ETC_JOB_NM,
+      </if>
+      <if test="shdJobDtls != null" >
+        ETC_JOB_DTLS,
+      </if>
+      <if test="shdJobKndCd != null" >
+        ETC_JOB_KND_CD,
+      </if>
+    </trim>
+    <trim prefix="SELECT" suffix=" FROM DUAL" suffixOverrides="," >
+        #{shdId,jdbcType=VARCHAR},
+        #{shdJobId,jdbcType=VARCHAR},
+       (SELECT IFNULL(MAX(SHD_JOB_SNO), 0) + 1 FROM  WAM_SHD_JOB WHERE SHD_ID = #{shdId,jdbcType=VARCHAR} ),
+        STR_TO_DATE('99991231','%Y%m%d'),
+        NOW(),
+      <if test="rqstNo != null" >
+        #{rqstNo,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstSno != null" >
+        #{rqstSno,jdbcType=DECIMAL},
+      </if>
+      <if test="objDescn != null" >
+        #{objDescn,jdbcType=VARCHAR},
+      </if>
+      (SELECT IFNULL(MAX(OBJ_VERS), 0) + 1 FROM  WAH_SHD_JOB WHERE SHD_ID = #{shdId,jdbcType=VARCHAR}  and SHD_JOB_ID = #{shdJobId,jdbcType=VARCHAR} ),
+<!--         #{objVers,jdbcType=VARCHAR}, -->
+        #{regTypCd,jdbcType=VARCHAR},
+      <if test="frsRqstDtm != null" >
+        #{frsRqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="frsRqstUserId != null" >
+        #{frsRqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDtm != null" >
+        #{rqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rqstUserId != null" >
+        #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDtm != null" >
+        #{aprvDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aprvUserId != null" >
+        #{aprvUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="shdJobNm != null" >
+        #{shdJobNm,jdbcType=VARCHAR}, 
+      </if>
+      <if test="shdJobDtls != null" >
+        #{shdJobDtls,jdbcType=VARCHAR},
+      </if>
+      <if test="shdJobKndCd != null" >
+        #{shdJobKndCd,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+
+</mapper>

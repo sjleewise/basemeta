@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.meta.aocd.service.PusAocdMapper">
+<resultMap id="BaseResultMap" type="kr.wise.meta.aocd.service.PusAocdVO">
+	 <result column="STWD_ID" property="stwdId" jdbcType="VARCHAR" />
+	 <result column="STWD_LNM" property="stwdLnm" jdbcType="VARCHAR" />
+	 <result column="STWD_PNM" property="stwdPnm" jdbcType="VARCHAR" />
+	 <result column="ENG_MEAN" property="engMean" jdbcType="VARCHAR" />
+	 <result column="OBJ_DESCN" property="objDescn" jdbcType="VARCHAR" />
+	 <result column="DOMN_NUM" property="domnNumCnt" jdbcType="VARCHAR" />
+	 <result column="ITEM_NUM" property="itemNumCnt" jdbcType="VARCHAR" />
+	 <result column="ENTY_NUM" property="entyNumCnt" jdbcType="VARCHAR" />
+	 <result column="TOTL_NUM" property="totlNumCnt" jdbcType="VARCHAR" />
+	 
+	 <result column="DMN_LNM" property="dmnLnm" jdbcType="VARCHAR" />
+	 <result column="DMN_PNM" property="dmnPnm" jdbcType="VARCHAR" />
+	 <result column="DMN_ID" property="dmnId" jdbcType="VARCHAR" />
+	 <result column="DOMN_DESC" property="domnDesc" jdbcType="VARCHAR" />
+	 <result column="STWD_NUM" property="stwdNumCnt" jdbcType="VARCHAR" />
+	 <result column="INFOTYPE_NUM" property="infotypeNumCnt" jdbcType="VARCHAR" />
+	 
+	 <result column="SDITM_ID" property="sditmId" jdbcType="VARCHAR" />
+	 <result column="SDITM_LNM" property="sditmLnm" jdbcType="VARCHAR" />
+	 <result column="SDITM_PNM" property="sditmPnm" jdbcType="VARCHAR" />
+	 <result column="ITEM_DESC" property="itemDesc" jdbcType="VARCHAR" />
+	 
+	 <result column="SYS_NM" property="sysNm" jdbcType="VARCHAR" />
+	 <result column="DATAMODEL_NM" property="datamodelNm" jdbcType="VARCHAR" />
+	 <result column="PRIMARY_SUBJ_NM" property="primarySubjNm" jdbcType="VARCHAR" />
+	 <result column="SUBJ_NM" property="subjNm" jdbcType="VARCHAR" />
+	 <result column="SUBJ_ID" property="subjId" jdbcType="VARCHAR" />
+	 <result column="PDM_TBL_LNM" property="pdmTblLnm" jdbcType="VARCHAR" />
+	 <result column="PDM_TBL_PNM" property="pdmTblPnm" jdbcType="VARCHAR" />
+	 <result column="PDM_TBL_ID" property="pdmTblId" jdbcType="VARCHAR" />
+	 <result column="COL_TOT_CNT" property="colTotCnt" jdbcType="VARCHAR" />
+	 <result column="DDL_CNT" property="ddlCnt" jdbcType="VARCHAR" />
+	 <result column="DBC_CNT" property="dbcCnt" jdbcType="VARCHAR" />
+	 <result column="STND_ASRT" property="stndAsrt" jdbcType="VARCHAR" />
+	 
+	 <result column="OBJ_TYPE" property="objType" jdbcType="VARCHAR" />
+	 <result column="OBJ_PNM" property="objPnm" jdbcType="VARCHAR" />
+	 <result column="OBJ_LNM" property="objLnm" jdbcType="VARCHAR" />
+	 <result column="DB_SCH_PNM" property="dbSchPnm" jdbcType="VARCHAR" />
+	
+</resultMap>
+<select id="getStndWordPusAocd" resultMap="BaseResultMap" parameterType="kr.wise.meta.aocd.service.PusAocdVO">
+		---TEST --복합어 생략
+		SELECT    S.STWD_ID
+		        , S.STWD_LNM
+		        , S.STWD_PNM
+		        , S.ENG_MEAN
+		        , S.OBJ_DESCN
+		        , COALESCE(A.DOMN_NUM,0) AS DOMN_NUM
+		        , COALESCE(B.ITEM_NUM,0) AS ITEM_NUM
+		        , COALESCE(C.ENTY_NUM,0) AS ENTY_NUM
+		        --, COALESCE(A.DOMN_NUM,0)+COALESCE(B.ITEM_NUM,0)+COALESCE(C.ENTY_NUM,0) AS TOTL_NUM
+		        , COALESCE(A.DOMN_NUM,0)+COALESCE(B.ITEM_NUM,0) AS TOTL_NUM
+		FROM WAM_STWD S
+		LEFT OUTER JOIN (SELECT COUNT(STWD_ID) AS DOMN_NUM, STWD_ID, OBJ_TYPE
+		                   FROM V_WAM_STWD
+		                  WHERE OBJ_TYPE = '5'
+		                  GROUP BY STWD_ID, OBJ_TYPE ) A
+		  ON S.STWD_ID = A.STWD_ID
+		LEFT OUTER JOIN (SELECT COUNT(STWD_ID) AS ITEM_NUM, STWD_ID, OBJ_TYPE
+		                   FROM V_WAM_STWD
+		                  WHERE OBJ_TYPE = '3'
+		                  GROUP BY STWD_ID, OBJ_TYPE ) B
+		  ON S.STWD_ID = B.STWD_ID
+		LEFT OUTER JOIN (SELECT COUNT(STWD_ID) AS ENTY_NUM, STWD_ID, OBJ_TYPE
+		                   FROM V_WAM_STWD
+		                  WHERE OBJ_TYPE = '10'
+		                  GROUP BY STWD_ID, OBJ_TYPE ) C
+		  ON S.STWD_ID = C.STWD_ID
+		WHERE 1=1
+		<if test="stndAsrt != null and stndAsrt != '' ">
+		  AND STND_ASRT = #{stndAsrt,jdbcType=VARCHAR}
+		</if>
+		  AND S.REG_TYP_CD IN ('C', 'U')
+		<if test="stndNm != null and stndNm != '' ">
+		  AND( ( S.STWD_LNM LIKE '%' || #{stndNm,jdbcType=VARCHAR} ||'%' OR S.STWD_LNM LIKE '%' || UPPER( #{stndNm,jdbcType=VARCHAR}) ||'%' ) 
+		  OR(S.STWD_PNM LIKE '%' || #{stndNm,jdbcType=VARCHAR} ||'%' OR S.STWD_PNM LIKE '%' || UPPER( #{stndNm,jdbcType=VARCHAR}) ||'%' )
+		  )
+		</if>
+		<if test="objDescn != null and objDescn != '' ">
+		  AND( S.OBJ_DESCN LIKE '%' || #{objDescn,jdbcType=VARCHAR} ||'%' OR S.OBJ_DESCN LIKE '%' || UPPER( #{objDescn,jdbcType=VARCHAR}) ||'%' ) 
+		</if>
+		<choose>
+			<when test="orderby == 1 ">
+			ORDER BY TOTL_NUM 
+			</when>
+			<when test="orderby == 2 ">
+			ORDER BY DOMN_NUM 
+			</when>
+			<when test="orderby == 3 ">
+			ORDER BY ITEM_NUM 
+			</when>
+			<otherwise></otherwise>
+		</choose>
+		<choose>
+			<when test="asc == 'asc' ">
+			ASC
+			</when>
+			<when test="asc == 'desc' ">
+			DESC
+			</when>
+		</choose>
+		
+</select>
+
+<select id="getDmnPusAocd" resultMap="BaseResultMap" parameterType="kr.wise.meta.aocd.service.PusAocdVO">
+		   SELECT   A.DMN_LNM AS DMN_LNM
+				  , A.DMN_ID AS DMN_ID
+				  , A.DMN_PNM AS DMN_PNM
+				  , A.OBJ_DESCN AS DOMN_DESC 
+                  , COALESCE(B.STWD_NUM,0) AS STWD_NUM
+                  , COALESCE(C.INFOTYPE_NUM,0) AS INFOTYPE_NUM
+                  , COALESCE(D.ITEM_NUM,0) AS ITEM_NUM
+                  , COALESCE(E.ENTY_NUM,0) AS ENTY_NUM
+                  , COALESCE(B.STWD_NUM,0)+COALESCE(D.ITEM_NUM,0)+ COALESCE(C.INFOTYPE_NUM,0) + COALESCE(E.ENTY_NUM,0) AS TOTL_NUM
+             FROM WAM_DMN A
+             LEFT OUTER JOIN 
+             (SELECT COUNT(OF_DOMAIN) AS STWD_NUM,OF_DOMAIN, OBJ_TYPE
+                FROM V_WAM_DOMAIN_PUS_AOCD
+               WHERE OBJ_TYPE = '2'
+               GROUP BY OF_DOMAIN, OBJ_TYPE ) B
+               ON A.DMN_ID = B.OF_DOMAIN
+             LEFT OUTER JOIN
+             (SELECT COUNT(OF_DOMAIN) AS INFOTYPE_NUM, OF_DOMAIN, OBJ_TYPE
+			    FROM V_WAM_DOMAIN_PUS_AOCD
+			   WHERE OBJ_TYPE = '21'
+			   GROUP BY OF_DOMAIN, OBJ_TYPE ) C
+               ON A.DMN_ID = C.OF_DOMAIN
+             LEFT OUTER JOIN 
+			 (SELECT COUNT(OF_DOMAIN) AS ITEM_NUM, OF_DOMAIN, OBJ_TYPE
+			    FROM V_WAM_DOMAIN_PUS_AOCD
+			   WHERE OBJ_TYPE = '3'
+			   GROUP BY OF_DOMAIN, OBJ_TYPE) D
+			   ON A.DMN_ID = D.OF_DOMAIN
+             LEFT OUTER JOIN
+			 (SELECT COUNT(OF_DOMAIN) AS ENTY_NUM, OF_DOMAIN, OBJ_TYPE
+			    FROM V_WAM_DOMAIN_PUS_AOCD
+			   WHERE OBJ_TYPE = '10'
+			   GROUP BY OF_DOMAIN, OBJ_TYPE) E
+			   ON A.DMN_ID = E.OF_DOMAIN
+			WHERE 1=1
+			<if test="stndAsrt != null and stndAsrt != '' ">
+			  AND STND_ASRT = #{stndAsrt,jdbcType=VARCHAR}
+			</if>
+			  AND A.REG_TYP_CD IN ('C', 'U')
+			<if test="dmnLnm != null and dmnLnm != '' ">
+			  AND( ( A.DMN_LNM LIKE '%' || #{dmnLnm,jdbcType=VARCHAR} ||'%' OR A.DMN_LNM LIKE '%' || UPPER( #{dmnLnm,jdbcType=VARCHAR}) ||'%' ) 
+			  OR(A.DMN_PNM LIKE '%' || #{dmnLnm,jdbcType=VARCHAR} ||'%' OR A.DMN_PNM LIKE '%' || UPPER( #{dmnLnm,jdbcType=VARCHAR}) ||'%' )
+			  )
+			</if>
+			<if test="domnDesc != null and domnDesc != '' ">
+			  AND( A.OBJ_DESCN LIKE '%' || #{domnDesc,jdbcType=VARCHAR} ||'%' OR A.OBJ_DESCN LIKE '%' || UPPER( #{domnDesc,jdbcType=VARCHAR}) ||'%' ) 
+			</if>
+			<choose>
+				<when test="orderby == 1 ">
+				ORDER BY TOTL_NUM 
+				</when>
+				<otherwise>ORDER BY A.DMN_LNM</otherwise>
+			</choose>
+			<choose>
+				<when test="asc == 'asc' ">
+				ASC
+				</when>
+				<when test="asc == 'desc' ">
+				DESC
+				</when>
+			</choose>
+</select>
+
+<select id="getItmPusAocd" resultMap="BaseResultMap" parameterType="kr.wise.meta.aocd.service.PusAocdVO">
+
+	SELECT   S.SDITM_ID AS SDITM_ID
+		   , S.SDITM_LNM AS SDITM_LNM
+	       , S.SDITM_PNM AS SDITM_PNM
+		   , S.OBJ_DESCN AS ITEM_DESC
+	       , COALESCE(A.STWD_NUM,0) AS STWD_NUM
+	       , COALESCE(B.DOMN_NUM,0) AS DOMN_NUM
+		   , COALESCE(C.INFOTYPE_NUM,0) AS INFOTYPE_NUM
+		   , COALESCE(D.ENTY_NUM,0) AS ENTY_NUM
+		   , COALESCE(A.STWD_NUM,0)+COALESCE(B.DOMN_NUM,0)+COALESCE(C.INFOTYPE_NUM,0)+COALESCE(D.ENTY_NUM,0) AS TOTL_NUM
+	  FROM WAM_SDITM S
+	  LEFT OUTER JOIN 
+	  (SELECT COUNT(OF_DATAELEMENT) AS STWD_NUM, OF_DATAELEMENT, OBJ_TYPE
+	     FROM V_WAM_SDITM_PUS_AOCD
+		WHERE OBJ_TYPE = '2'
+		GROUP BY OF_DATAELEMENT, OBJ_TYPE ) A
+	   ON S.SDITM_ID = A.OF_DATAELEMENT
+	  LEFT OUTER JOIN
+	  (SELECT COUNT(OF_DATAELEMENT) AS DOMN_NUM, OF_DATAELEMENT, OBJ_TYPE
+		 FROM V_WAM_SDITM_PUS_AOCD
+	    WHERE OBJ_TYPE = '5'
+		GROUP BY OF_DATAELEMENT, OBJ_TYPE) B
+	   ON S.SDITM_ID = B.OF_DATAELEMENT
+	  LEFT OUTER JOIN
+	  (SELECT COUNT(OF_DATAELEMENT) AS INFOTYPE_NUM, OF_DATAELEMENT, OBJ_TYPE
+		 FROM V_WAM_SDITM_PUS_AOCD
+		WHERE OBJ_TYPE = '21'
+	    GROUP BY OF_DATAELEMENT, OBJ_TYPE) C
+		ON S.SDITM_ID = C.OF_DATAELEMENT
+	  LEFT OUTER JOIN
+	  (SELECT COUNT(OF_DATAELEMENT) AS ENTY_NUM, OF_DATAELEMENT, OBJ_TYPE
+		 FROM V_WAM_SDITM_PUS_AOCD
+	    WHERE OBJ_TYPE = '10'
+	    GROUP BY OF_DATAELEMENT, OBJ_TYPE) D
+		ON S.SDITM_ID = D.OF_DATAELEMENT
+	  WHERE 1=1
+		<if test="stndAsrt != null and stndAsrt != '' ">
+		  AND STND_ASRT = #{stndAsrt,jdbcType=VARCHAR}
+		</if>
+	    AND S.REG_TYP_CD IN('C','U')
+	    <if test="sditmLnm != null and sditmLnm != '' ">
+			  AND( ( S.SDITM_LNM LIKE '%' || #{sditmLnm,jdbcType=VARCHAR} ||'%' OR S.SDITM_LNM LIKE '%' || UPPER( #{sditmLnm,jdbcType=VARCHAR}) ||'%' ) 
+			  OR(S.SDITM_PNM LIKE '%' || #{sditmLnm,jdbcType=VARCHAR} ||'%' OR S.SDITM_PNM LIKE '%' || UPPER( #{sditmLnm,jdbcType=VARCHAR}) ||'%' )
+			  )
+		</if>
+		<if test="itemDesc != null and itemDesc != '' ">
+			  AND( S.OBJ_DESCN LIKE '%' || #{itemDesc,jdbcType=VARCHAR} ||'%' OR S.OBJ_DESCN LIKE '%' || UPPER( #{itemDesc,jdbcType=VARCHAR}) ||'%' ) 
+		</if>
+		<choose>
+				<when test="orderby == 1 ">
+				ORDER BY TOTL_NUM 
+				</when>
+				<otherwise>ORDER BY S.SDITM_LNM </otherwise>
+			</choose>
+			<choose>
+				<when test="asc == 'asc' ">
+				ASC
+				</when>
+				<when test="asc == 'desc' ">
+				DESC
+				</when>
+			</choose>
+</select>
+
+<select id="getTblPusAocd" resultMap="BaseResultMap" parameterType="kr.wise.meta.aocd.service.PusAocdVO">
+		SELECT    
+				<!-- 시스템명 + 주제영역depth2일때 -->
+<!-- 				  SUBSTR(A.FULL_PATH ,0,INSTR4(A.FULL_PATH, '>',1,1)-1 ) AS SYS_NM -->
+<!-- 				, SUBSTR(A.FULL_PATH,INSTR4(A.FULL_PATH, '>',1,1)+1,INSTR4(A.FULL_PATH, '>',1,2)-INSTR4(A.FULL_PATH, '>',1,1)-1 ) AS DATAMODEL_NM -->
+<!-- 			    , SUBSTR(A.FULL_PATH,INSTR4(A.FULL_PATH, '>',1,2)+1 ) AS SUBJ_NM -->
+				  SPLIT_PART(A.FULL_PATH, '>', 1) AS SYS_NM
+				, SPLIT_PART(A.FULL_PATH, '>', 2) AS DATAMODEL_NM
+				, SUBSTR(A.FULL_PATH, POSITION(SPLIT_PART(A.FULL_PATH, '>', 2) IN A.FULL_PATH) + LENGTH(SPLIT_PART(A.FULL_PATH, '>', 2))+1) AS SUBJ_NM
+			    
+			    <!-- 시스템명 + 주제영역depth3일때 -->
+			    <!-- SUBSTR(A.FULL_PATH ,0,INSTR4(A.FULL_PATH, '>',1,1)-1 ) AS SYS_NM
+			    , SUBSTR(A.FULL_PATH,INSTR4(A.FULL_PATH, '>',1,1)+1,INSTR4(A.FULL_PATH, '>',1,2)-INSTR4(A.FULL_PATH, '>',1,1)-1 ) AS DATAMODEL_NM
+				, SUBSTR(A.FULL_PATH,INSTR4(A.FULL_PATH, '>',1,2)+1,INSTR4(A.FULL_PATH, '>',1,3)-INSTR4(A.FULL_PATH, '>',1,2)-1 ) AS PRIMARY_SUBJ_NM
+			    , SUBSTR(A.FULL_PATH,INSTR4(A.FULL_PATH, '>',1,3)+1 ) AS SUBJ_NM -->
+			    
+		        , A.SUBJ_ID
+		        , A.PDM_TBL_LNM
+		        , A.PDM_TBL_PNM
+		        , A.PDM_TBL_ID
+		        , COALESCE(B.COL_TOT_CNT,'0') AS COL_TOT_CNT
+		        , (SELECT COUNT(*) FROM WAM_DDL_TBL C WHERE C.REG_TYP_CD IN ('C','U') AND C.PDM_TBL_ID = A.PDM_TBL_ID) AS DDL_CNT
+        		, (SELECT COUNT(*) FROM WAT_DBC_TBL C WHERE C.PDM_TBL_ID   = A.PDM_TBL_ID) AS DBC_CNT
+<!--         		, (SELECT COUNT(*) FROM WAT_DBC_TBL C WHERE COALESCE(C.REG_TYP, 'C') IN ('C','U') AND C.PDM_TBL_ID   = A.PDM_TBL_ID) AS DBC_CNT -->
+        		, (SELECT COUNT(*) FROM WAM_DDL_TBL C WHERE C.REG_TYP_CD IN ('C','U') AND C.PDM_TBL_ID = A.PDM_TBL_ID) +
+          	      (SELECT COUNT(*) FROM WAT_DBC_TBL C WHERE C.PDM_TBL_ID   = A.PDM_TBL_ID) AS TOTL_NUM
+<!--           	      (SELECT COUNT(*) FROM WAT_DBC_TBL C WHERE COALESCE(C.REG_TYP, 'C') IN ('C','U') AND C.PDM_TBL_ID   = A.PDM_TBL_ID) AS TOTL_NUM -->
+		  FROM WAM_PDM_TBL A
+		  LEFT OUTER JOIN 
+		  ( SELECT COUNT(A.PDM_TBL_ID) AS COL_TOT_CNT,A.PDM_TBL_ID, A.PDM_TBL_LNM
+		            , A.PDM_TBL_PNM
+		      FROM WAM_PDM_TBL A
+		     INNER JOIN WAM_PDM_COL B
+		        ON A.PDM_TBL_ID = B.PDM_TBL_ID
+		       AND B.REG_TYP_CD IN ('C','U')
+		     WHERE 1=1
+		       AND A.REG_TYP_CD IN ('C','U')
+		     GROUP BY A.PDM_TBL_ID, A.PDM_TBL_LNM
+		            , A.PDM_TBL_PNM
+		  ) B
+		  ON A.PDM_TBL_ID = B.PDM_TBL_ID
+		 WHERE 1=1
+		  AND A.REG_TYP_CD IN('C','U')
+		 <if test="fullPath != null and fullPath != '' ">
+			AND FULL_PATH  LIKE '%' || #{fullPath,jdbcType=VARCHAR} || '%'
+		</if>
+		 <if test="pdmTblLnm != null and pdmTblLnm != '' ">
+			  AND( ( A.PDM_TBL_LNM LIKE '%' || #{pdmTblLnm,jdbcType=VARCHAR} ||'%' OR A.PDM_TBL_LNM LIKE '%' || UPPER( #{pdmTblLnm,jdbcType=VARCHAR}) ||'%' ) 
+			  OR(A.PDM_TBL_PNM LIKE '%' || #{pdmTblLnm,jdbcType=VARCHAR} ||'%' OR A.PDM_TBL_PNM LIKE '%' || UPPER( #{pdmTblLnm,jdbcType=VARCHAR}) ||'%' )
+			  )
+		</if>
+		<choose>
+				<when test="orderby == 1 ">
+				ORDER BY TOTL_NUM 
+				</when>
+				<otherwise>ORDER BY A.PDM_TBL_PNM </otherwise>
+			</choose>
+			<choose>
+				<when test="asc == 'asc' ">
+				ASC
+				</when>
+				<when test="asc == 'desc' ">
+				DESC
+				</when>
+			</choose>
+</select>
+
+<select id="getTblPusAocdWhereused" resultMap="BaseResultMap" parameterType="kr.wise.meta.aocd.service.PusAocdVO">
+		SELECT DISTINCT
+		       'DDL' AS OBJ_TYPE
+		      ,DDL.PDM_TBL_ID AS PDM_TBL_ID
+		      ,DDL.DDL_TBL_LNM AS OBJ_LNM
+		      ,DDL.DDL_TBL_PNM AS OBJ_PNM
+		      ,SCH.DB_SCH_PNM AS DB_SCH_PNM
+		  FROM WAA_DB_CONN_TRG DB
+		 INNER JOIN WAA_DB_SCH SCH
+		    ON SCH.DB_CONN_TRG_ID = DB.DB_CONN_TRG_ID
+		   AND SCH.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+		   AND SCH.REG_TYP_CD IN ('C', 'U')
+		 INNER JOIN WAM_DDL_TBL DDL
+		    ON DDL.DB_SCH_ID = SCH.DB_SCH_ID
+		   AND DDL.REG_TYP_CD IN ('C','U')
+		 INNER JOIN WAM_PDM_TBL PDM
+		    ON PDM.PDM_TBL_ID = DDL.PDM_TBL_ID
+		   AND PDM.REG_TYP_CD IN ('C','U')
+		   AND PDM.PDM_TBL_ID = #{pdmTblId, jdbcType=VARCHAR}
+		UNION ALL
+		SELECT DISTINCT
+		       'DBC' AS OBJ_TYPE
+		      ,TBL.PDM_TBL_ID AS PDM_TBL_ID
+		      ,TBL.DBC_TBL_KOR_NM AS OBJ_LNM
+		      ,TBL.DBC_TBL_NM AS OBJ_PNM
+		      ,SCH.DB_SCH_PNM AS DB_SCH_PNM
+		  FROM WAA_DB_CONN_TRG DB
+		 INNER JOIN WAA_DB_SCH SCH
+		    ON SCH.DB_CONN_TRG_ID = DB.DB_CONN_TRG_ID
+		   AND SCH.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+		   AND SCH.REG_TYP_CD IN ('C', 'U')
+		 INNER JOIN WAT_DBC_TBL TBL
+		    ON TBL.DB_SCH_ID = SCH.DB_SCH_ID
+		 INNER JOIN WAM_PDM_TBL PDM
+		    ON PDM.PDM_TBL_ID = TBL.PDM_TBL_ID
+		   AND PDM.REG_TYP_CD IN ('C','U')
+		   AND PDM.PDM_TBL_ID = #{pdmTblId, jdbcType=VARCHAR}
+<!-- 		 <if test="fullPath != null and fullPath != '' "> -->
+<!-- 			AND FULL_PATH  LIKE '%' || #{fullPath,jdbcType=VARCHAR} || '%' -->
+<!-- 		</if> -->
+<!-- 		 <if test="pdmTblLnm != null and pdmTblLnm != '' "> -->
+<!-- 			  AND( ( A.PDM_TBL_LNM LIKE '%' || #{pdmTblLnm,jdbcType=VARCHAR} ||'%' OR A.PDM_TBL_LNM LIKE '%' || UPPER( #{pdmTblLnm,jdbcType=VARCHAR}) ||'%' )  -->
+<!-- 			  OR(A.PDM_TBL_PNM LIKE '%' || #{pdmTblLnm,jdbcType=VARCHAR} ||'%' OR A.PDM_TBL_PNM LIKE '%' || UPPER( #{pdmTblLnm,jdbcType=VARCHAR}) ||'%' ) -->
+<!-- 			  ) -->
+<!-- 		</if> -->
+<!-- 		<choose> -->
+<!-- 				<when test="orderby == 1 "> -->
+<!-- 				ORDER BY TOTL_NUM  -->
+<!-- 				</when> -->
+<!-- 				<otherwise>ORDER BY A.PDM_TBL_PNM </otherwise> -->
+<!-- 			</choose> -->
+<!-- 			<choose> -->
+<!-- 				<when test="asc == 'asc' "> -->
+<!-- 				ASC -->
+<!-- 				</when> -->
+<!-- 				<when test="asc == 'desc' "> -->
+<!-- 				DESC -->
+<!-- 				</when> -->
+<!-- 			</choose> -->
+</select>
+
+</mapper>

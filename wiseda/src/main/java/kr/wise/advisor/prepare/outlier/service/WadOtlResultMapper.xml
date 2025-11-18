@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.wise.advisor.prepare.outlier.service.WadOtlResultMapper">
+  <resultMap id="BaseResultMap" type="kr.wise.advisor.prepare.outlier.service.WadOtlResult" >
+    <result column="OTL_DTC_ID"  jdbcType="VARCHAR" property="otlDtcId" />
+    <result column="ANA_STR_DTM" jdbcType="TIMESTAMP" property="anaStrDtm" />
+    <result column="ANA_END_DTM" jdbcType="TIMESTAMP" property="anaEndDtm" />
+    <result column="ANL_VAR_ID"  jdbcType="VARCHAR"   property="anlVarId" />
+    <result column="ANA_DGR"     jdbcType="DECIMAL"   property="anaDgr" />
+    <result column="ANA_CNT"     jdbcType="DECIMAL"   property="anaCnt" />
+    <result column="ESN_ER_CNT"  jdbcType="DECIMAL"   property="esnErCnt" />
+    <result column="ANA_LOG_ID"  jdbcType="VARCHAR"   property="anaLogId" />
+    <result column="ANA_USER_ID" jdbcType="VARCHAR"   property="anaUserId" />
+    <result column="ANA_TIME"    jdbcType="VARCHAR"   property="anaTime" />
+    <result column="OTL_ALG_ID"  jdbcType="VARCHAR"   property="otlAlgId" />
+    <result column="ALG_LNM"     jdbcType="VARCHAR"   property="algLnm" />
+    <result column="ALG_PNM"     jdbcType="VARCHAR"   property="algPnm" />
+    <result column="ALG_TYP_CD"  jdbcType="VARCHAR"   property="algTypCd" />
+    <result column="DASE_ID"     jdbcType="VARCHAR"   property="daseId" />
+    <result column="OTL_NM"      jdbcType="VARCHAR"   property="otlNm" />
+    <result column="DQI_ID"      jdbcType="VARCHAR"   property="dqiId" />
+    <result column="DQI_LNM"      jdbcType="VARCHAR"   property="dqiLnm" />
+  </resultMap>
+  
+  <select id="selectResultbyId" parameterType="kr.wise.advisor.prepare.outlier.service.WadOtlDtc" resultMap="BaseResultMap">
+  --이상값 탐지 결고 조회....
+    SELECT A.OTL_DTC_ID, A.DASE_ID, A.OTL_ALG_ID 
+	     , B.ALG_ID, B.ALG_LNM, B.ALG_PNM, B.ALG_TYP_CD 
+         , R.ANA_STR_DTM, R.ANA_END_DTM 
+	     , R.ANA_DGR , R.ANA_CNT, R.ESN_ER_CNT, R.ANA_USER_ID , R.ANA_LOG_ID 
+         , (R.ANA_STR_DTM-R.ANA_END_DTM) * (24*60*60)  AS ANA_TIME
+         , A.OTL_NM
+         , DQI.DQI_ID
+         , DQI.DQI_LNM
+	  FROM WAD_OTL_DTC A
+      JOIN WAA_ALG B
+	    ON A.OTL_ALG_ID = B.ALG_ID
+	  LEFT OUTER JOIN  (
+            SELECT OTL_DTC_ID
+                 , MAX(ANA_STR_DTM) AS ANA_STR_DTM
+                 , MAX(ANA_END_DTM) AS ANA_END_DTM
+                 , MAX(ANA_DGR)     AS ANA_DGR
+                 , SUM(ANA_CNT)     AS ANA_CNT
+                 , SUM(ESN_ER_CNT)  AS ESN_ER_CNT
+                 , MAX(ANA_LOG_ID)  AS ANA_LOG_ID
+                 , MAX(ANA_USER_ID) AS ANA_USER_ID
+              FROM WAD_OTL_RESULT 
+              WHERE ANA_END_DTM IN (SELECT MAX(ANA_END_DTM) FROM WAD_OTL_RESULT GROUP BY OTL_DTC_ID)
+              GROUP BY OTL_DTC_ID
+        ) R
+        ON A.OTL_DTC_ID = R.OTL_DTC_ID
+      LEFT OUTER JOIN (SELECT A.OTL_DTC_ID
+						       ,LISTAGG(B.DQI_LNM, ',') WITHIN GROUP (ORDER BY A.DQI_ID) AS DQI_LNM
+						       ,LISTAGG(B.DQI_ID, ',') WITHIN GROUP (ORDER BY A.DQI_ID) AS DQI_ID
+						  FROM WAM_OTL_DQI_MAP A
+						       INNER JOIN WAM_DQI B
+						          ON A.DQI_ID = B.DQI_ID
+						 GROUP BY A.OTL_DTC_ID ) DQI
+         ON A.OTL_DTC_ID = DQI.OTL_DTC_ID
+	 WHERE A.DASE_ID = #{daseId,jdbcType=VARCHAR}
+     ORDER BY R.ANA_STR_DTM   
+  </select>
+  
+  
+  <delete id="deletebyDtcId" parameterType="string">
+  --이상값탐지 결과 삭제 by dtcid
+  DELETE FROM WAD_OTL_RESULT
+   WHERE OTL_DTC_ID = #{otlDtcId,jdbcType=VARCHAR}
+  </delete>
+  
+  <insert id="insert" parameterType="kr.wise.advisor.prepare.outlier.service.WadOtlResult">
+    insert into WAD_OTL_RESULT (OTL_DTC_ID, ANA_STR_DTM, ANA_END_DTM, 
+      ANL_VAR_ID, ANA_DGR, ANA_CNT, 
+      ESN_ER_CNT, ANA_LOG_ID, ANA_USER_ID, 
+      ANA_TIME)
+    values (#{otlDtcId,jdbcType=VARCHAR}, #{anaStrDtm,jdbcType=TIMESTAMP}, #{anaEndDtm,jdbcType=TIMESTAMP}, 
+      #{anlVarId,jdbcType=VARCHAR}, #{anaDgr,jdbcType=DECIMAL}, #{anaCnt,jdbcType=DECIMAL}, 
+      #{esnErCnt,jdbcType=DECIMAL}, #{anaLogId,jdbcType=VARCHAR}, #{anaUserId,jdbcType=VARCHAR}, 
+      #{anaTime,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="kr.wise.advisor.prepare.outlier.service.WadOtlResult">
+    insert into WAD_OTL_RESULT
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+        OTL_DTC_ID,
+        ANA_STR_DTM,
+        ANA_END_DTM,
+        ANL_VAR_ID,
+      <if test="anaDgr != null">
+        ANA_DGR,
+      </if>
+      <if test="anaCnt != null">
+        ANA_CNT,
+      </if>
+      <if test="esnErCnt != null">
+        ESN_ER_CNT,
+      </if>
+      <if test="anaLogId != null">
+        ANA_LOG_ID,
+      </if>
+        ANA_USER_ID,
+      <if test="anaTime != null">
+        ANA_TIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+        #{otlDtcId,jdbcType=VARCHAR},
+        SYSDATE,
+        SYSDATE,
+        #{anlVarId,jdbcType=VARCHAR},
+      <if test="anaDgr != null">
+        #{anaDgr,jdbcType=DECIMAL},
+      </if>
+      <if test="anaCnt != null">
+        #{anaCnt,jdbcType=DECIMAL},
+      </if>
+      <if test="esnErCnt != null">
+        #{esnErCnt,jdbcType=DECIMAL},
+      </if>
+      <if test="anaLogId != null">
+        #{anaLogId,jdbcType=VARCHAR},
+      </if>
+        #{anaUserId,jdbcType=VARCHAR},
+      <if test="anaTime != null">
+        #{anaTime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="kr.wise.advisor.prepare.outlier.service.WadOtlResult">
+  --이상값탐지결과 업데이트 
+  UPDATE WAD_OTL_RESULT
+     <set>
+     	ANA_STR_DTM = SYSDATE,
+     	ANA_END_DTM = SYSDATE,
+      <if test="anaDgr != null">
+        ANA_DGR = #{anaDgr,jdbcType=DECIMAL},
+      </if>
+      <if test="anaCnt != null">
+        ANA_CNT = #{anaCnt,jdbcType=DECIMAL},
+      </if>
+      <if test="esnErCnt != null">
+        ESN_ER_CNT = #{esnErCnt,jdbcType=DECIMAL},
+      </if>
+      <if test="anaLogId != null">
+        ANA_LOG_ID = #{anaLogId,jdbcType=VARCHAR},
+      </if>
+     </set>
+   WHERE OTL_DTC_ID = #{otlDtcId,jdbcType=VARCHAR}
+     AND ANL_VAR_ID = #{anlVarId,jdbcType=VARCHAR}
+  </update>
+  
+  <delete id="deleteByresvo" parameterType="kr.wise.advisor.prepare.outlier.service.WadOtlResult">
+  --이상값 탐지 결과 삭제 by id
+  DELETE FROM WAD_OTL_RESULT
+   WHERE OTL_DTC_ID = #{otlDtcId,jdbcType=VARCHAR}
+     AND ANL_VAR_ID = #{anlVarId,jdbcType=VARCHAR}
+  </delete>
+</mapper>

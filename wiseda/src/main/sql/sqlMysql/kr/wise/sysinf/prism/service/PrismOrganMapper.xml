@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.sysinf.prism.service.PrismOrganMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.sysinf.prism.service.PrismOrgan" >
+    <id column="ORGAN_ID" property="organId" jdbcType="VARCHAR" />
+    <result column="ORGAN_NAME" property="organName" jdbcType="VARCHAR" />
+    <result column="ORGAN_TYPE" property="organType" jdbcType="VARCHAR" />
+    <result column="ORGAN_LEVEL" property="organLevel" jdbcType="VARCHAR" />
+    <result column="AGGR_YN" property="aggrYn" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <resultMap id="OraResResultMap" type="kr.wise.sysinf.prism.service.PrismOrgan" >
+    <id column="ORGAN_ID" property="organId" jdbcType="VARCHAR" />
+    <result column="ORGAN_NAME" property="organName" jdbcType="VARCHAR" />
+    <collection property="reslist" column="ORGAN_NAME" javaType="arraylist" ofType="kr.wise.sysinf.prism.service.PrismResearchMst" select="kr.wise.sysinf.prism.service.PrismResearchMstMapper.selectByOrgan">
+    </collection>
+  </resultMap>
+
+
+  <sql id="Base_Column_List" >
+    ORGAN_ID, ORGAN_NAME, ORGAN_TYPE, ORGAN_LEVEL, AGGR_YN
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select /* PrismOrganMapper.selectByPrimaryKey */
+    <include refid="Base_Column_List" />
+    from PRISM_ORGAN
+    where ORGAN_ID = #{organId,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="selectList" resultMap="BaseResultMap"  >
+	--프리즘 기관 리스트 조회
+    SELECT /* PrismOrganMapper.selectByPrimaryKey */
+    <include refid="Base_Column_List" />
+    FROM PRISM_ORGAN
+	ORDER BY ORGAN_ID
+  </select>
+
+  <select id="selectOrganListbyNew" resultMap="BaseResultMap"  >
+	--프리즘 과제목록에는 있으나 과제상세는 없는 기관리스트
+	SELECT 	/* PrismOrganMapper.selectOrganListbyNew */
+			DISTINCT A.ORGAN_ID, A.ORGAN_NAME
+	  FROM PRISM_ORGAN A
+	  JOIN PRISM_RESEARCH_MST B
+	    ON A.ORGAN_NAME = B.ORGAN_NAME
+	  LEFT OUTER JOIN PRISM_RESEARCH_DTL C
+	    ON B.RESEARCH_ID = C.RESEARCH_ID
+	 WHERE C.RESEARCH_ID IS NULL
+	 ORDER BY 1
+  </select>
+
+  <select id="selectOrganListbyNewReport" resultMap="BaseResultMap"  >
+	--프리즘 리포트목록에는 있으나 리포트상세는 없는 기관리스트
+	SELECT 	/* PrismOrganMapper.selectOrganListbyNewReport */
+			DISTINCT A.ORGAN_ID, A.ORGAN_NAME
+	  FROM PRISM_ORGAN A
+	  JOIN PRISM_RESEARCH_MST B
+	    ON A.ORGAN_NAME = B.ORGAN_NAME
+      JOIN PRISM_REPORT_MST C
+        ON B.RESEARCH_ID = C.RESEARCH_ID
+	  LEFT OUTER JOIN PRISM_REPORT_DTL D
+	    ON C.RESEARCH_ID = D.RESEARCH_ID
+       AND C.SEQ_NO = D.SEQ_NO
+	 WHERE D.RESEARCH_ID IS NULL
+	 ORDER BY 1
+  </select>
+
+  <select id="selectOrganResList" resultMap="OraResResultMap"  >
+	--프리즘 기관별 과제목록정보 조회
+    SELECT /* PrismOrganMapper.selectOrganResList */
+    	ORGAN_ID, ORGAN_NAME
+    FROM PRISM_ORGAN
+	ORDER BY ORGAN_ID
+  </select>
+  
+<!--   <select id="selectOrgResearchList" resultMap="OrgResResultMap">
+    프리즘 기관별 과제 목록 리스트 조회
+  SELECT A.ORGAN_ID
+       , A.ORGAN_NAME
+       , B.RESEARCH_ID
+       , B.RESEARCH_NAME
+       , B.RESEARCH_ORGAN_NAME
+       , B.SUBMITTED_DATE
+       , B.UPDATE_OPTION
+  FROM PRISM_ORGAN A
+  JOIN PRISM_RESEARCH_MST B
+    ON A.ORGAN_NAME = B.ORGAN_NAME
+  
+  </select> -->
+  
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete /* PrismOrganMapper.deleteByPrimaryKey */
+    from PRISM_ORGAN
+    where ORGAN_ID = #{organId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="kr.wise.sysinf.prism.service.PrismOrgan" >
+    insert /* PrismOrganMapper.insert */
+    	into PRISM_ORGAN (ORGAN_ID, ORGAN_NAME, ORGAN_TYPE, 
+      ORGAN_LEVEL)
+    values (#{organId,jdbcType=VARCHAR}, #{organName,jdbcType=VARCHAR}, #{organType,jdbcType=VARCHAR}, 
+      #{organLevel,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="kr.wise.sysinf.prism.service.PrismOrgan" >
+    insert /* PrismOrganMapper.insertSelective */
+    	into PRISM_ORGAN
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="organId != null" >
+        ORGAN_ID,
+      </if>
+      <if test="organName != null" >
+        ORGAN_NAME,
+      </if>
+      <if test="organType != null" >
+        ORGAN_TYPE,
+      </if>
+      <if test="organLevel != null" >
+        ORGAN_LEVEL,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="organId != null" >
+        #{organId,jdbcType=VARCHAR},
+      </if>
+      <if test="organName != null" >
+        #{organName,jdbcType=VARCHAR},
+      </if>
+      <if test="organType != null" >
+        #{organType,jdbcType=VARCHAR},
+      </if>
+      <if test="organLevel != null" >
+        #{organLevel,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.sysinf.prism.service.PrismOrgan" >
+    update /* PrismOrganMapper.updateByPrimaryKeySelective */
+    	PRISM_ORGAN
+    <set >
+      <if test="organName != null" >
+        ORGAN_NAME = #{organName,jdbcType=VARCHAR},
+      </if>
+      <if test="organType != null" >
+        ORGAN_TYPE = #{organType,jdbcType=VARCHAR},
+      </if>
+      <if test="organLevel != null" >
+        ORGAN_LEVEL = #{organLevel,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ORGAN_ID = #{organId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="kr.wise.sysinf.prism.service.PrismOrgan" >
+    update /* PrismOrganMapper.updateByPrimaryKey */
+    	PRISM_ORGAN
+    set ORGAN_NAME = #{organName,jdbcType=VARCHAR},
+      ORGAN_TYPE = #{organType,jdbcType=VARCHAR},
+      ORGAN_LEVEL = #{organLevel,jdbcType=VARCHAR}
+    where ORGAN_ID = #{organId,jdbcType=VARCHAR}
+  </update>
+</mapper>

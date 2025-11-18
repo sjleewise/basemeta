@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.wise.advisor.prepare.summary.service.WadVarHstMapper">
+  <resultMap id="BaseResultMap" type="kr.wise.advisor.prepare.summary.service.WadVarHst" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+    <id column="ANL_VAR_ID" jdbcType="VARCHAR" property="anlVarId" />
+    <id column="HST_SNO" jdbcType="DECIMAL" property="hstSno" />
+    <result column="SCT_VAL" jdbcType="DECIMAL" property="sctVal" />
+    <result column="SCT_NM" jdbcType="VARCHAR" property="sctNm" />
+    <result column="SCT_STR_VAL" jdbcType="DECIMAL" property="sctStrVal" />
+    <result column="SCT_END_VAL" jdbcType="DECIMAL" property="sctEndVal" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ANL_VAR_ID, HST_SNO, SCT_VAL, SCT_NM, SCT_STR_VAL, SCT_END_VAL, OBJ_DESCN, OBJ_VERS, 
+    REG_TYP_CD, WRIT_DTM, WRIT_USER_ID
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="map" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from WAD_VAR_HST
+    where ANL_VAR_ID = #{anlVarId,jdbcType=VARCHAR}
+      and HST_SNO = #{hstSno,jdbcType=DECIMAL}
+  </select>
+  
+  <select id="selectHistoListbyId" parameterType="kr.wise.advisor.prepare.dataset.service.WadAnaVar" resultMap="BaseResultMap">
+  --변수 히스토그램  조회 by 변수ID ...
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM WAD_VAR_HST
+    WHERE ANL_VAR_ID = #{anlVarId,jdbcType=VARCHAR}
+    ORDER BY HST_SNO
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="map">
+    delete from WAD_VAR_HST
+    where ANL_VAR_ID = #{anlVarId,jdbcType=VARCHAR}
+      and HST_SNO = #{hstSno,jdbcType=DECIMAL}
+  </delete>
+  <delete id="deleteByvarId" parameterType="string">
+    DELETE FROM WAD_VAR_HST
+    WHERE ANL_VAR_ID = #{anlVarId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="kr.wise.advisor.prepare.summary.service.WadVarHst">
+    insert into WAD_VAR_HST (ANL_VAR_ID, HST_SNO, SCT_VAL, 
+      SCT_NM, SCT_STR_VAL, SCT_END_VAL, 
+      OBJ_DESCN, OBJ_VERS, REG_TYP_CD, 
+      WRIT_DTM, WRIT_USER_ID)
+    values (#{anlVarId,jdbcType=VARCHAR}, #{hstSno,jdbcType=DECIMAL}, #{sctVal,jdbcType=DECIMAL}, 
+      #{sctNm,jdbcType=VARCHAR}, #{sctStrVal,jdbcType=DECIMAL}, #{sctEndVal,jdbcType=DECIMAL}, 
+      #{objDescn,jdbcType=VARCHAR}, #{objVers,jdbcType=DECIMAL}, #{regTypCd,jdbcType=VARCHAR}, 
+      #{writDtm,jdbcType=TIMESTAMP}, #{writUserId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="kr.wise.advisor.prepare.summary.service.WadVarHst">
+    insert into WAD_VAR_HST
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="anlVarId != null">
+        ANL_VAR_ID,
+      </if>
+      <if test="hstSno != null">
+        HST_SNO,
+      </if>
+      <if test="sctVal != null">
+        SCT_VAL,
+      </if>
+      <if test="sctNm != null">
+        SCT_NM,
+      </if>
+      <if test="sctStrVal != null">
+        SCT_STR_VAL,
+      </if>
+      <if test="sctEndVal != null">
+        SCT_END_VAL,
+      </if>
+      <if test="objDescn != null">
+        OBJ_DESCN,
+      </if>
+        OBJ_VERS,
+        REG_TYP_CD,
+        WRIT_DTM,
+        WRIT_USER_ID,
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="anlVarId != null">
+        #{anlVarId,jdbcType=VARCHAR},
+      </if>
+      <if test="hstSno != null">
+        #{hstSno,jdbcType=DECIMAL},
+      </if>
+      <if test="sctVal != null">
+        #{sctVal,jdbcType=DECIMAL},
+      </if>
+      <if test="sctNm != null">
+        #{sctNm,jdbcType=VARCHAR},
+      </if>
+      <if test="sctStrVal != null">
+        #{sctStrVal,jdbcType=DECIMAL},
+      </if>
+      <if test="sctEndVal != null">
+        #{sctEndVal,jdbcType=DECIMAL},
+      </if>
+      <if test="objDescn != null">
+        #{objDescn,jdbcType=VARCHAR},
+      </if>
+        1,
+        'C',
+        SYSDATE,
+        #{writUserId,jdbcType=VARCHAR},
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.advisor.prepare.summary.service.WadVarHst">
+    update WAD_VAR_HST
+    <set>
+      <if test="sctVal != null">
+        SCT_VAL = #{sctVal,jdbcType=DECIMAL},
+      </if>
+      <if test="sctNm != null">
+        SCT_NM = #{sctNm,jdbcType=VARCHAR},
+      </if>
+      <if test="sctStrVal != null">
+        SCT_STR_VAL = #{sctStrVal,jdbcType=DECIMAL},
+      </if>
+      <if test="sctEndVal != null">
+        SCT_END_VAL = #{sctEndVal,jdbcType=DECIMAL},
+      </if>
+      <if test="objDescn != null">
+        OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null">
+        OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null">
+        REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="writDtm != null">
+        WRIT_DTM = #{writDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="writUserId != null">
+        WRIT_USER_ID = #{writUserId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ANL_VAR_ID = #{anlVarId,jdbcType=VARCHAR}
+      and HST_SNO = #{hstSno,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="kr.wise.advisor.prepare.summary.service.WadVarHst">
+    update WAD_VAR_HST
+    set SCT_VAL = #{sctVal,jdbcType=DECIMAL},
+      SCT_NM = #{sctNm,jdbcType=VARCHAR},
+      SCT_STR_VAL = #{sctStrVal,jdbcType=DECIMAL},
+      SCT_END_VAL = #{sctEndVal,jdbcType=DECIMAL},
+      OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      OBJ_VERS = NVL(OBJ_VERS, 0) + 1,
+      REG_TYP_CD = 'U',
+      WRIT_DTM = SYSDATE,
+      WRIT_USER_ID = #{writUserId,jdbcType=VARCHAR}
+    where ANL_VAR_ID = #{anlVarId,jdbcType=VARCHAR}
+      and HST_SNO = #{hstSno,jdbcType=DECIMAL}
+  </update>
+</mapper>

@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.portal.dashboard.service.DqMainChartMapper" >
+<resultMap id="BaseResultMap" type="kr.wise.portal.dashboard.service.DqMainChartVO" >
+	<id column="BR_ANA_DGR"      property="brAnaDgr"  jdbcType="VARCHAR" />
+    <result column="BR_CNT"      property="brCnt"     jdbcType="VARCHAR" />
+    <result column="BR_ANA_CNT"  property="brAnaCnt"  jdbcType="VARCHAR" />
+    <result column="BR_ERR_CNT"  property="brErrCnt"  jdbcType="VARCHAR" />
+    <result column="CS_CNT"      property="csCnt"     jdbcType="VARCHAR" />
+    <result column="IM_CNT"      property="imCnt"     jdbcType="VARCHAR" />
+    <result column="BR_QS"       property="brQs"      jdbcType="VARCHAR" />
+    <result column="PRF_ANA_DGR" property="prfAnaDgr" jdbcType="VARCHAR" />
+    <result column="PRF_CNT"     property="prfCnt"    jdbcType="VARCHAR" />
+    <result column="PRF_ANA_CNT" property="prfAnaCnt" jdbcType="VARCHAR" />
+    <result column="PRF_ERR_CNT" property="prfErrCnt" jdbcType="VARCHAR" />
+    <result column="PRF_QS"      property="prfQs"     jdbcType="VARCHAR" />
+</resultMap>
+<select id ="getApproveChartList" resultMap="BaseResultMap">
+	<![CDATA[
+	--DQ Main 개선현황 차트 SQL
+	SELECT  COUNT(M.BR_ID) AS BR_CNT 
+	       , SUM( CASE WHEN R.BR_ID IS NOT NULL THEN 1 ELSE 0 END ) AS BR_ANA_CNT
+	       , SUM( CASE WHEN R.ER_CNT > 0 THEN 1 ELSE 0 END ) AS BR_ERR_CNT
+	       , SUM( CASE WHEN C.ANA_JOB_ID IS NOT NULL THEN 1 ELSE 0 END ) AS CS_CNT
+	       , SUM( CASE WHEN I.ANA_JOB_ID IS NOT NULL THEN 1 ELSE 0 END ) AS IM_CNT
+	       , MAX(R.ANA_DGR) AS BR_ANA_DGR
+	  FROM WAM_BR_MSTR M 
+	       INNER JOIN WAM_BIZ_AREA B
+	          ON M.BIZ_AREA_ID = B.BIZ_AREA_ID
+	         AND B.REG_TYP_CD IN ('C','U')
+	        LEFT OUTER JOIN (SELECT R.*
+	                           FROM WAM_BR_RESULT R
+	                          WHERE ANA_DGR = (SELECT MAX(ANA_DGR) FROM WAM_BR_RESULT)) R
+	                  ON M.BR_ID = R.BR_ID
+	        --개선계획
+	        LEFT OUTER JOIN WAM_CS_ANA_MSTR C                    
+	          ON R.BR_ID = C.ANA_JOB_ID      
+	         AND R.ANA_STR_DTM = C.ANA_STR_DTM 
+	        --개선활동
+	        LEFT OUTER JOIN WAM_IM_ACT_MSTR I                    
+	          ON C.ANA_JOB_ID = I.ANA_JOB_ID      
+	         AND C.ANA_STR_DTM = I.ANA_STR_DTM 
+	WHERE M.REG_TYP_CD IN ('C','U')
+	]]>
+</select>
+
+<select id ="getAnalyzeChartList" resultMap="BaseResultMap" parameterType="HashMap">
+
+SELECT 
+			SUM(ANA_CNT) AS prfAnaCnt
+		  , SUM(ESN_ER_CNT) AS prfErrCnt 
+		  , ROUND(COALESCE(SUM(ESN_ER_CNT)/SUM(ANA_CNT)*100,0), 2) AS errRate
+<!-- 			SUM(ANA_CNT) AS PRF_ANA_CNT
+		  , SUM(ESN_ER_CNT) AS PRF_ERR_CNT 
+		  , ROUND(COALESCE(SUM(ESN_ER_CNT)/SUM(ANA_CNT)*100,0), 2) AS ERR_RATE -->
+	      , SCH_LNM AS schLnm
+	      , DB_CONN_TRG_ID 
+		FROM (
+			SELECT A.ANA_STR_DTM
+					 , C.DB_SCH_LNM AS SCH_LNM
+					 , A.ANA_CNT
+					 , A.ESN_ER_CNT
+					 , D.DB_CONN_TRG_ID
+				  FROM WAM_PRF_RESULT A
+					   INNER JOIN WAA_COL_RULE_REL B
+						  ON B.RULE_REL_ID = A.PRF_ID
+					   INNER JOIN WAA_DB_SCH C
+						  ON C.EXP_DTM = TO_DATE('9999-12-31','YYYY-MM-DD')
+						 AND C.DB_SCH_ID = B.DB_SCH_ID 
+					   INNER JOIN WAA_DB_CONN_TRG D
+						  ON D.EXP_DTM = TO_DATE('9999-12-31','YYYY-MM-DD')
+						 AND D.DB_CONN_TRG_ID = C.DB_CONN_TRG_ID   
+					   INNER JOIN WAA_VRFC_RULE E
+						  ON E.EXP_DTM = TO_DATE('9999-12-31','YYYY-MM-DD')
+						 AND E.VRFC_ID = B.VRFC_ID 
+					  LEFT JOIN WAA_EXP_TBL EX          
+						  ON EX.DB_SCH_ID  = B.DB_SCH_ID  
+						 AND EX.DBC_TBL_NM = B.DBC_TBL_NM 	  
+				 WHERE  1 = 1  
+				   AND (A.PRF_ID, A.ANA_STR_DTM) IN (SELECT PRF_ID, MAX(ANA_STR_DTM)
+													   FROM WAM_PRF_RESULT
+													  GROUP BY PRF_ID 
+													 )   
+		           AND COALESCE(EX.EXP_YN,'N')='N'
+		      UNION ALL          
+		            
+		     SELECT A.ANA_STR_DTM
+					 , C.DB_SCH_LNM AS SCH_LNM
+					 , A.ANA_CNT
+					 , A.ESN_ER_CNT
+					 , D.DB_CONN_TRG_ID
+				  FROM WAM_PRF_RESULT A
+					   INNER JOIN WAA_COL_RULE_REL B
+						  ON B.RULE_REL_ID = A.PRF_ID
+					   INNER JOIN WAA_DB_SCH C
+						  ON C.EXP_DTM = TO_DATE('9999-12-31','YYYY-MM-DD')
+						 AND C.DB_SCH_ID = B.DB_SCH_ID 
+					   INNER JOIN WAA_DB_CONN_TRG D
+						  ON D.EXP_DTM = TO_DATE('9999-12-31','YYYY-MM-DD')
+						 AND D.DB_CONN_TRG_ID = C.DB_CONN_TRG_ID   
+					   INNER JOIN WAA_CD_RULE E
+						  ON E.CD_RULE_ID = B.VRFC_ID 
+					  LEFT JOIN WAA_EXP_TBL EX          
+						  ON EX.DB_SCH_ID  = B.DB_SCH_ID  
+						 AND EX.DBC_TBL_NM = B.DBC_TBL_NM 	  
+				 WHERE  1 = 1  
+				   AND (A.PRF_ID, A.ANA_STR_DTM) IN (SELECT PRF_ID, MAX(ANA_STR_DTM)
+													   FROM WAM_PRF_RESULT
+													  GROUP BY PRF_ID 
+													 )   
+		           AND COALESCE(EX.EXP_YN,'N')='N'                               
+			                             
+			 UNION ALL                             
+				SELECT A.ANA_STR_DTM
+					 , C.DB_SCH_LNM AS SCH_LNM
+					 , A.ANA_CNT
+					 , A.ESN_ER_CNT
+					 , D.DB_CONN_TRG_ID
+				  FROM WAM_PRF_RESULT A
+					   INNER JOIN WAM_PRF_MSTR B
+						  ON B.PRF_ID = A.PRF_ID 
+					   INNER JOIN WAA_DB_SCH C
+						  ON C.EXP_DTM = TO_DATE('9999-12-31','YYYY-MM-DD')
+						 AND C.DB_SCH_ID = B.DB_SCH_ID 
+					   INNER JOIN WAA_DB_CONN_TRG D
+						  ON D.EXP_DTM = TO_DATE('9999-12-31','YYYY-MM-DD')
+						 AND D.DB_CONN_TRG_ID = C.DB_CONN_TRG_ID
+						LEFT JOIN WAA_EXP_TBL EX          
+						  ON EX.DB_SCH_ID  = B.DB_SCH_ID  
+						 AND EX.DBC_TBL_NM = B.DBC_TBL_NM 			
+				 WHERE  1 = 1  
+				   AND B.PRF_KND_CD = 'PT01'
+				   AND (A.PRF_ID, A.ANA_STR_DTM) IN (SELECT PRF_ID, MAX(ANA_STR_DTM)
+													   FROM WAM_PRF_RESULT
+													  GROUP BY PRF_ID 
+													 )  
+		           AND COALESCE(EX.EXP_YN,'N')='N'                                   
+			UNION ALL                             
+				SELECT A.ANA_STR_DTM
+					 , C.DB_SCH_LNM AS SCH_LNM
+					 , A.ANA_CNT
+					 , A.ER_CNT AS ESN_ER_CNT
+					 , D.DB_CONN_TRG_ID
+				  FROM WAM_BR_RESULT A
+					   INNER JOIN WAM_BR_MSTR B
+						  ON B.BR_ID = A.BR_ID 
+					   INNER JOIN WAA_DB_SCH C
+						  ON C.EXP_DTM = TO_DATE('9999-12-31','YYYY-MM-DD')
+						 AND C.DB_SCH_ID = B.DB_SCH_ID 
+					   INNER JOIN WAA_DB_CONN_TRG D
+						  ON D.EXP_DTM = TO_DATE('9999-12-31','YYYY-MM-DD')
+						 AND D.DB_CONN_TRG_ID = C.DB_CONN_TRG_ID  
+						LEFT JOIN WAA_EXP_TBL EX          
+						  ON EX.DB_SCH_ID  = B.DB_SCH_ID  
+						 AND EX.DBC_TBL_NM = B.DBC_TBL_NM 			
+				 WHERE  1 = 1     
+				   AND (A.BR_ID, A.ANA_STR_DTM) IN (SELECT BR_ID, MAX(ANA_STR_DTM)
+													  FROM WAM_BR_RESULT
+													GROUP BY BR_ID 
+													)
+		           AND COALESCE(EX.EXP_YN,'N')='N'                                 
+		 ) AA
+		 WHERE 1 = 1
+		 <if test="dbConnTrgId != null and dbConnTrgId != ''">
+		   AND DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR}
+		 </if>
+		 GROUP BY SCH_LNM, DB_CONN_TRG_ID
+        <!--  ORDER BY ANA_STR_DTM DESC -->
+</select>
+
+<select id ="getQualityChartList" resultMap="BaseResultMap">
+	<![CDATA[
+	--DQ Main 품질현황 차트 SQL
+ SELECT  COALESCE(MAX(BR_ANA_DGR),0)  AS BR_ANA_DGR
+       , COALESCE(MAX(PRF_ANA_DGR),0) AS PRF_ANA_DGR
+       , MAX(BR_ANA_CNT)          
+       , MAX(BR_ER_CNT)
+       , CASE WHEN MAX(BR_ANA_CNT) = 0 THEN 0 ELSE (CASE WHEN MAX(BR_ER_CNT) = 0 THEN 100 ELSE ROUND(((MAX(BR_ANA_CNT)-MAX(BR_ER_CNT))/MAX(BR_ANA_CNT)*100),2) END ) END AS BR_QS
+       , MAX(PRF_ANA_CNT)
+       , MAX(PRF_ER_CNT) 
+       , CASE WHEN MAX(PRF_ANA_CNT) = 0 THEN 0 ELSE (CASE WHEN MAX(PRF_ER_CNT) = 0 THEN 100 ELSE ROUND(((MAX(PRF_ANA_CNT)-MAX(PRF_ER_CNT))/MAX(PRF_ANA_CNT)*100),2) END ) END AS PRF_QS
+  FROM (SELECT MAX(R.ANA_DGR) AS BR_ANA_DGR
+               ,SUM(COALESCE(R.ANA_CNT,0)) AS BR_ANA_CNT
+               ,SUM(COALESCE(R.ER_CNT,0)) AS BR_ER_CNT
+               ,NULL AS PRF_ANA_DGR
+               ,NULL AS PRF_ANA_CNT
+               ,NULL AS PRF_ER_CNT
+          FROM WAM_BR_MSTR M
+               INNER JOIN (SELECT R.*
+                             FROM WAM_BR_RESULT R
+                            WHERE ANA_DGR = (SELECT MAX(ANA_DGR) FROM WAM_BR_RESULT)) R
+                 ON M.BR_ID = R.BR_ID
+          WHERE M.REG_TYP_CD IN ('C','U')
+            AND R.ANA_DGR IS NOT NULL 
+         UNION ALL
+         SELECT NULL AS BR_ANA_DGR
+               ,NULL AS BR_ANA_CNT
+               ,NULL AS BR_ER_CNT
+               ,MAX(R.ANA_DGR) AS PRF_ANA_DGR
+               ,SUM(COALESCE(R.ANA_CNT,0)) AS PRF_ANA_CNT
+               ,SUM(COALESCE(R.ESN_ER_CNT,0)) AS PRF_ER_CNT
+          FROM WAM_PRF_MSTR M
+               INNER JOIN (SELECT R.*
+                             FROM WAM_PRF_RESULT R
+                            WHERE ANA_DGR = (SELECT MAX(ANA_DGR) FROM WAM_PRF_RESULT)) R
+                 ON M.PRF_ID = R.PRF_ID
+          WHERE M.REG_TYP_CD IN ('C','U')
+            AND R.ANA_DGR IS NOT NULL ) MM
+            ]]>
+</select>
+
+</mapper>

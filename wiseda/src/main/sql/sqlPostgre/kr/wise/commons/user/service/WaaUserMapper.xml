@@ -1,0 +1,630 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.commons.user.service.WaaUserMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.commons.user.service.WaaUser" extends="kr.wise.commons.user.service.WaaUsergMapper.BaseResultMap" >
+    <id column="USER_ID" property="userId" jdbcType="VARCHAR" />
+    <result column="LOGIN_AC_ID" property="loginAcId" jdbcType="VARCHAR" />
+    <result column="LOGIN_AC_PWD" property="loginAcPwd" jdbcType="VARCHAR" />
+    <result column="USER_NM" property="userNm" jdbcType="VARCHAR" />
+<!--     <result column="USERG_ID" property="usergId" jdbcType="VARCHAR" /> -->
+    <result column="DEPT_ID" property="deptId" jdbcType="VARCHAR" />
+    <result column="JGD_NM" property="jgdNm" jdbcType="VARCHAR" />
+    <result column="USER_TELNO" property="userTelno" jdbcType="VARCHAR" />
+    <result column="USER_HTELNO" property="userHtelno" jdbcType="VARCHAR" />
+    <result column="EMAIL_ADDR" property="emailAddr" jdbcType="VARCHAR" />
+    <result column="EXCL_DWLD_AUTH_YN" property="exclDwldAuthYn" jdbcType="VARCHAR" />
+    <result column="ID_USE_EXP_DT" property="idUseExpDt" jdbcType="VARCHAR" />
+    <result column="PWD_EXP_DT" property="pwdExpDt" jdbcType="VARCHAR" />
+<!--     <result column="RQST_DTM" property="rqstDtm" jdbcType="DATE" /> -->
+<!--     <result column="RQST_USER_ID" property="rqstUserId" jdbcType="VARCHAR" /> -->
+    <result column="APRV_DCD" property="aprvDcd" jdbcType="VARCHAR" />
+<!--     <result column="APRV_DTM" property="aprvDtm" jdbcType="DATE" /> -->
+<!--     <result column="APRV_USER_ID" property="aprvUserId" jdbcType="VARCHAR" /> -->
+    <result column="DEPT_NM" property="deptNm" jdbcType="VARCHAR" />
+    <result column="DEPT_PATH" property="deptPath" jdbcType="VARCHAR" />
+    
+    <result column="LOGIN_AC_PWD_ENC" property="loginAcPwdEnc" jdbcType="VARCHAR" />
+    <result column="SALT_KEY" property="saltKey" jdbcType="VARCHAR" />
+    <result column="LOGIN_FAIL_COUNT" property="loginFailCount" jdbcType="DECIMAL" />
+    <result column="IS_LOCK" property="isLock" jdbcType="VARCHAR" />
+    <result column="LOCK_COUNT" property="lockCount" jdbcType="DECIMAL" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    USER_ID, EXP_DTM, STR_DTM, LOGIN_AC_ID, LOGIN_AC_PWD, USER_NM, USERG_ID, DEPT_ID, 
+    JGD_NM, USER_TELNO, USER_HTELNO, EMAIL_ADDR, EXCL_DWLD_AUTH_YN, ID_USE_EXP_DT, PWD_EXP_DT, 
+    OBJ_DESCN, OBJ_VERS, REG_TYP_CD, RQST_DTM, RQST_USER_ID, APRV_DCD, APRV_DTM, APRV_USER_ID, LOGIN_AC_PWD_ENC, SALT_KEY
+    , LOGIN_FAIL_COUNT, IS_LOCK, LOCK_COUNT
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from WAA_USER
+    where USER_ID = #{userId,jdbcType=VARCHAR}
+    AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+    AND REG_TYP_CD IN ('C', 'U')
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from WAA_USER
+    where USER_ID = #{userId,jdbcType=VARCHAR}
+  </delete>
+  
+    <delete id="deleteAll" >
+    delete from WAA_USER
+    </delete>
+ 
+  <insert id="insert" parameterType="kr.wise.commons.user.service.WaaUser" >
+    	    <selectKey keyProperty="usergId" resultType="string" order="BEFORE" statementType="STATEMENT">
+    		<include refid="kr.wise.commons.cmm.service.CommonMapper.getObjId"/>
+    		</selectKey>
+    insert into WAA_USER (USER_ID, EXP_DTM, STR_DTM, 
+      LOGIN_AC_ID, LOGIN_AC_PWD, USER_NM, 
+      USERG_ID, DEPT_ID, JGD_NM, 
+      USER_TELNO, USER_HTELNO, EMAIL_ADDR, 
+      EXCL_DWLD_AUTH_YN, ID_USE_EXP_DT, PWD_EXP_DT, 
+      OBJ_DESCN, OBJ_VERS, REG_TYP_CD, 
+      RQST_DTM, RQST_USER_ID, APRV_DCD, 
+      APRV_DTM, APRV_USER_ID)
+    values (#{userId,jdbcType=VARCHAR}, #{expDtm,jdbcType=DATE}, #{strDtm,jdbcType=DATE}, 
+      #{loginAcId,jdbcType=VARCHAR}, #{loginAcPwd,jdbcType=VARCHAR}, #{userNm,jdbcType=VARCHAR}, 
+      #{usergId,jdbcType=VARCHAR}, #{deptId,jdbcType=VARCHAR}, #{jgdNm,jdbcType=VARCHAR}, 
+      #{userTelno,jdbcType=VARCHAR}, #{userHtelno,jdbcType=VARCHAR}, #{emailAddr,jdbcType=VARCHAR}, 
+      #{exclDwldAuthYn,jdbcType=VARCHAR}, #{idUseExpDt,jdbcType=VARCHAR}, #{pwdExpDt,jdbcType=VARCHAR}, 
+      #{objDescn,jdbcType=VARCHAR}, #{objVers,jdbcType=DECIMAL}, #{regTypCd,jdbcType=VARCHAR}, 
+      #{rqstDtm,jdbcType=DATE}, #{rqstUserId,jdbcType=VARCHAR}, #{aprvDcd,jdbcType=VARCHAR}, 
+      #{aprvDtm,jdbcType=DATE}, #{aprvUserId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="kr.wise.commons.user.service.WaaUser" >
+  	insert into WAA_USER
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="userId != null" >
+        USER_ID,
+      </if>
+        EXP_DTM,
+        STR_DTM,
+      <if test="loginAcId != null" >
+        LOGIN_AC_ID,
+      </if>
+      <if test="loginAcPwd != null" >
+        LOGIN_AC_PWD,
+      </if>
+      <if test="userNm != null" >
+        USER_NM,
+      </if>
+      <if test="usergId != null" >
+        USERG_ID,
+      </if>
+      <if test="deptId != null" >
+        DEPT_ID,
+      </if>
+      <if test="jgdNm != null" >
+        JGD_NM,
+      </if>
+      <if test="userTelno != null" >
+        USER_TELNO,
+      </if>
+      <if test="userHtelno != null" >
+        USER_HTELNO,
+      </if>
+      <if test="emailAddr != null" >
+        EMAIL_ADDR,
+      </if>
+      <if test="exclDwldAuthYn != null" >
+        EXCL_DWLD_AUTH_YN,
+      </if>
+      <if test="idUseExpDt != null" >
+        ID_USE_EXP_DT,
+      </if>
+      <if test='regTypCd.equals("C")' ><!--pwdExpDt-->
+        PWD_EXP_DT,
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN,
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS,
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD,
+      </if>
+        RQST_DTM,
+      <if test="rqstUserId != null" >
+        RQST_USER_ID,
+      </if>
+      <if test="aprvDcd != null" >
+        APRV_DCD,
+      </if>
+        APRV_DTM,
+      <if test="aprvUserId != null" >
+        APRV_USER_ID,
+      </if>
+      <if test="loginAcPwdEnc != null" >
+        LOGIN_AC_PWD_ENC,
+      </if>
+      <if test="saltKey != null" >
+        SALT_KEY,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="userId != null" >
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      TO_DATE('9999-12-31', 'YYYY-MM-DD'),
+      NOW(),
+      <if test="loginAcId != null" >
+        #{loginAcId,jdbcType=VARCHAR},
+      </if>
+      <if test="loginAcPwd != null" >
+        #{loginAcPwd,jdbcType=VARCHAR},
+      </if>
+      <if test="userNm != null" >
+        #{userNm,jdbcType=VARCHAR},
+      </if>
+      <if test="usergId != null" >
+        #{usergId,jdbcType=VARCHAR},
+      </if>
+      <if test="deptId != null" >
+        #{deptId,jdbcType=VARCHAR},
+      </if>
+      <if test="jgdNm != null" >
+        #{jgdNm,jdbcType=VARCHAR},
+      </if>
+      <if test="userTelno != null" >
+        #{userTelno,jdbcType=VARCHAR},
+      </if>
+      <if test="userHtelno != null" >
+        #{userHtelno,jdbcType=VARCHAR},
+      </if>
+      <if test="emailAddr != null" >
+        #{emailAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="exclDwldAuthYn != null" >
+        #{exclDwldAuthYn,jdbcType=VARCHAR},
+      </if>
+      <if test="idUseExpDt != null" >
+        #{idUseExpDt,jdbcType=VARCHAR},
+      </if>
+      <if test='regTypCd.equals("C")' ><!--pwdExpDt-->
+        TO_CHAR(NOW(), 'YYYYMMDD'),
+      </if>
+      <if test="objDescn != null" >
+        #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null" >
+        #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      NOW(),
+      <if test="rqstUserId != null" >
+        #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDcd != null" >
+        #{aprvDcd,jdbcType=VARCHAR},
+      </if>
+      NOW(),
+      <if test="aprvUserId != null" >
+        #{aprvUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="loginAcPwdEnc != null" >
+        #{loginAcPwdEnc,jdbcType=VARCHAR},
+      </if>
+      <if test="saltKey != null" >
+        #{saltKey,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.commons.user.service.WaaUser" >
+    update WAA_USER
+    <set >
+      <if test="expDtm != null" >
+        EXP_DTM = TO_DATE ('9999-12-31 ', 'YYYY-MM-DD'),
+      </if>
+      <if test="strDtm != null" >
+        STR_DTM = NOW(),
+      </if>
+      <if test="loginAcId != null" >
+        LOGIN_AC_ID = #{loginAcId,jdbcType=VARCHAR},
+      </if>
+      <if test="loginAcPwd != null" >
+        LOGIN_AC_PWD = #{loginAcPwd,jdbcType=VARCHAR},
+      </if>
+      <if test="userNm != null" >
+        USER_NM = #{userNm,jdbcType=VARCHAR},
+      </if>
+      <if test="usergId != null" >
+        USERG_ID = #{usergId,jdbcType=VARCHAR},
+      </if>
+      <if test="deptId != null" >
+        DEPT_ID = #{deptId,jdbcType=VARCHAR},
+      </if>
+      <if test="jgdNm != null" >
+        JGD_NM = #{jgdNm,jdbcType=VARCHAR},
+      </if>
+      <if test="userTelno != null" >
+        USER_TELNO = #{userTelno,jdbcType=VARCHAR},
+      </if>
+      <if test="userHtelno != null" >
+        USER_HTELNO = #{userHtelno,jdbcType=VARCHAR},
+      </if>
+      <if test="emailAddr != null" >
+        EMAIL_ADDR = #{emailAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="exclDwldAuthYn != null" >
+        EXCL_DWLD_AUTH_YN = #{exclDwldAuthYn,jdbcType=VARCHAR},
+      </if>
+      <if test="idUseExpDt != null" >
+        ID_USE_EXP_DT = #{idUseExpDt,jdbcType=VARCHAR},
+      </if>
+      <if test="pwdExpDt != null" >
+        PWD_EXP_DT = #{pwdExpDt,jdbcType=VARCHAR},
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDtm != null" >
+        RQST_DTM = #{rqstDtm,jdbcType=DATE},
+      </if>
+      <if test="rqstUserId != null" >
+        RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDcd != null" >
+        APRV_DCD = #{aprvDcd,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDtm != null" >
+        APRV_DTM = #{aprvDtm,jdbcType=DATE},
+      </if>
+      <if test="aprvUserId != null" >
+        APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="loginAcPwdEnc != null" >
+        LOGIN_AC_PWD_ENC = #{loginAcPwdEnc,jdbcType=VARCHAR},
+      </if>
+      <if test="saltKey != null" >
+        SALT_KEY = #{saltKey,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where USER_ID = #{userId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="kr.wise.commons.user.service.WaaUser" >
+    update WAA_USER
+    set EXP_DTM = #{expDtm,jdbcType=DATE},
+      STR_DTM = #{strDtm,jdbcType=DATE},
+      LOGIN_AC_ID = #{loginAcId,jdbcType=VARCHAR},
+      LOGIN_AC_PWD = #{loginAcPwd,jdbcType=VARCHAR},
+      USER_NM = #{userNm,jdbcType=VARCHAR},
+      USERG_ID = #{usergId,jdbcType=VARCHAR},
+      DEPT_ID = #{deptId,jdbcType=VARCHAR},
+      JGD_NM = #{jgdNm,jdbcType=VARCHAR},
+      USER_TELNO = #{userTelno,jdbcType=VARCHAR},
+      USER_HTELNO = #{userHtelno,jdbcType=VARCHAR},
+      EMAIL_ADDR = #{emailAddr,jdbcType=VARCHAR},
+      EXCL_DWLD_AUTH_YN = #{exclDwldAuthYn,jdbcType=VARCHAR},
+      ID_USE_EXP_DT = #{idUseExpDt,jdbcType=VARCHAR},
+      PWD_EXP_DT = #{pwdExpDt,jdbcType=VARCHAR},
+      OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      RQST_DTM = #{rqstDtm,jdbcType=DATE},
+      RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      APRV_DCD = #{aprvDcd,jdbcType=VARCHAR},
+      APRV_DTM = #{aprvDtm,jdbcType=DATE},
+      APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR},
+      LOGIN_AC_PWD_ENC = #{loginAcPwdEnc,jdbcType=VARCHAR},
+      SALT_KEY = #{saltKey,jdbcType=VARCHAR}
+    where USER_ID = #{userId,jdbcType=VARCHAR}
+  </update>
+  <update id="deleteRegTypCd" parameterType="kr.wise.commons.user.service.WaaUser" >
+    UPDATE WAA_USER
+    SET REG_TYP_CD = #{regTypCd}
+    where USER_ID = #{userId,jdbcType=VARCHAR}
+  </update>
+
+  <select id="selectListbyDept"  parameterType="kr.wise.commons.user.service.WaaUser" resultMap="BaseResultMap">
+  	   SELECT 
+
+      	A.USER_ID, A.EXP_DTM, A.STR_DTM, A.LOGIN_AC_ID, A.LOGIN_AC_PWD, A.LOGIN_AC_PWD_ENC, A.USER_NM, A.USERG_ID, A.DEPT_ID, 
+    	A.JGD_NM, A.USER_TELNO, A.USER_HTELNO, A.EMAIL_ADDR, A.EXCL_DWLD_AUTH_YN, A.ID_USE_EXP_DT, A.PWD_EXP_DT, 
+    	A.OBJ_DESCN, A.OBJ_VERS, A.REG_TYP_CD, A.RQST_DTM, A.RQST_USER_ID, A.APRV_DCD, A.APRV_DTM, A.APRV_USER_ID,
+    	C.DEPT_NM, C.DEPT_PATH
+		, CASE WHEN C.DEPT_ID = (SELECT A.DEPT_ID FROM WAA_USER A WHERE  A.USER_ID = #{userId} 
+								AND A.EXP_DTM = TO_DATE ('9999-12-31', 'YYYY-MM-DD')
+								AND A.REG_TYP_CD IN ('C', 'U')) THEN 0
+		ELSE NULL END AS DEPT_SEQ
+        FROM WAA_USER A
+	    
+		LEFT OUTER JOIN (
+							SELECT    A.DEPT_ID     
+									, B.DEPT_ID AS UPP_DEPT_ID
+									, A.DEPT_NM
+									, A.DEPT_LVL
+									, A.ALL_DEPT_NM AS DEPT_PATH
+								  FROM (
+							<!-- 	  		collection = 전달받은 인자값 -->
+							<!-- 	  		item   = 전달받은 인자값을 다른이름으로 대체  -->
+							<!-- 	  		open 해당 구문이 시작할떄  -->
+							<!-- 	  		lose 해당구문이 끝날떄 -->
+							<!-- 			separator  한번 이상 반복할때 반복되는 사이에  해당 문을 넣어줌 -->
+								  		<foreach collection="lvlList" item="item" index="index" open="" separator="UNION ALL" close="">
+											<include refid="kr.wise.commons.sysmgmt.dept.service.WaaDeptMapper.SelectSql" />	      
+										</foreach>
+								       ) A
+								       LEFT OUTER JOIN WAA_DEPT B
+								         ON A.UPP_DEPT_ID = B.DEPT_ID
+								        AND B.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+								        AND B.REG_TYP_CD IN ('C','U')
+								<where>
+										AND A.REG_TYP_CD IN ('C', 'U')
+										AND A.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+								</where>
+		) C
+		  ON A.DEPT_ID = C.DEPT_ID
+		where 1=1
+       	  AND A.EXP_DTM = TO_DATE ('9999-12-31', 'YYYY-MM-DD')
+          AND A.REG_TYP_CD IN ('C', 'U')
+        <if test="userId != null" >
+<!--        		AND	A.USER_ID = #{userId,jdbcType=VARCHAR} -->
+       	</if>
+		<if test="userNm != null" >
+			AND A.USER_NM LIKE '%' || #{userNm,jdbcType=VARCHAR} || '%'
+			</if>
+      	<if test="usergId != null" >
+      		AND	A.USERG_ID = #{usergId,jdbcType=VARCHAR}
+      		</if>
+      	<if test="deptNm != null" >
+      		AND C.DEPT_NM LIKE '%' || #{deptNm,jdbcType=VARCHAR} || '%'
+      		</if>	
+      	<if test="deptId != null" >
+      		AND	A.DEPT_ID = #{deptId,jdbcType=VARCHAR}
+      		</if>
+      	<if test="userTelno != null" >
+      		AND	A.USER_TELNO = #{userTelno,jdbcType=VARCHAR}
+      		</if>
+      	<if test="userHtelno != null" >
+      		AND	A.USER_HTELNO = #{userHtelno,jdbcType=VARCHAR}
+      	</if>
+      	<if test="usergTypCd == 'DB'" >
+      		AND	A.USER_ID IN (select Y.USER_ID from WAA_APRG X
+                                        INNER JOIN  WAA_APRG_USER Y
+                                        ON X.APRG_ID =Y.APRG_ID
+                                        WHERE X.APRG_ID = 'OBJ_00000007348'
+                                        AND X.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+                                        AND X.REG_TYP_CD IN ('C', 'U')
+                                        AND Y.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+                                        AND Y.REG_TYP_CD IN ('C', 'U'))
+      	</if>
+        ORDER BY DEPT_SEQ, C.DEPT_PATH, A.USER_NM  
+          
+  </select>
+
+  <select id="selectList" parameterType="kr.wise.commons.user.service.WaaUser" resultMap="BaseResultMap">
+  	SELECT 
+      	A.USER_ID, A.EXP_DTM, A.STR_DTM, A.LOGIN_AC_ID, A.USER_NM, A.USERG_ID, A.DEPT_ID, 
+    	A.JGD_NM, A.USER_TELNO, A.USER_HTELNO, A.EMAIL_ADDR, A.EXCL_DWLD_AUTH_YN, A.ID_USE_EXP_DT, A.PWD_EXP_DT, 
+    	A.OBJ_DESCN, A.OBJ_VERS, A.REG_TYP_CD, A.RQST_DTM, A.RQST_USER_ID, A.APRV_DCD, A.APRV_DTM, A.APRV_USER_ID,
+    	B.USERG_LNM, C.DEPT_NM, A.SALT_KEY, A.IS_LOCK
+    FROM WAA_USER A INNER JOIN WAA_USERG B --LEFT OUTER JOIN WAA_DEPT C
+    ON A.USERG_ID = B.USERG_ID
+    AND B.REG_TYP_CD IN ('C', 'U')
+    AND B.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+    LEFT OUTER JOIN WAA_DEPT C
+    ON A.DEPT_ID = C.DEPT_ID
+    AND C.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+    AND C.REG_TYP_CD IN ('C', 'U')
+    <where>
+    	A.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+    	AND A.REG_TYP_CD IN ('C', 'U')
+       	<if test="userId != null" >
+       		AND	A.USER_ID = #{userId,jdbcType=VARCHAR}
+       	</if>
+		<if test="userNm != null" >
+			AND UPPER(A.USER_NM) LIKE '%' || UPPER(#{userNm,jdbcType=VARCHAR}) || '%'
+			</if>
+      	<if test="usergId != null" >
+      		AND	A.USERG_ID = #{usergId,jdbcType=VARCHAR}
+      		</if>
+      	<if test="deptNm != null" >
+      		AND C.DEPT_NM LIKE '%' || #{deptNm,jdbcType=VARCHAR} || '%'
+      		</if>	
+      	<if test="deptId != null" >
+      		AND	A.DEPT_ID = #{deptId,jdbcType=VARCHAR}
+      		</if>
+      	<if test="userTelno != null" >
+      		AND	A.USER_TELNO = #{userTelno,jdbcType=VARCHAR}
+      		</if>
+      	<if test="userHtelno != null" >
+      		AND	A.USER_HTELNO = #{userHtelno,jdbcType=VARCHAR}
+      		</if>
+      </where>
+      		ORDER BY USER_NM
+    </select>   
+    
+     <select id="selectListOrderByDeptNm" parameterType="kr.wise.commons.user.service.WaaUser" resultMap="BaseResultMap">
+  	      SELECT * FROM           
+			(SELECT
+			A.USER_ID, A.EXP_DTM, A.STR_DTM, A.LOGIN_AC_ID, A.LOGIN_AC_PWD, A.LOGIN_AC_PWD_ENC, A.USER_NM, A.USERG_ID, A.DEPT_ID, 
+			A.JGD_NM, A.USER_TELNO, A.USER_HTELNO, A.EMAIL_ADDR, A.EXCL_DWLD_AUTH_YN, A.ID_USE_EXP_DT, A.PWD_EXP_DT, 
+			A.OBJ_DESCN, A.OBJ_VERS, A.REG_TYP_CD, A.RQST_DTM, A.RQST_USER_ID, A.APRV_DCD, A.APRV_DTM, A.APRV_USER_ID,
+			B.USERG_LNM, C.ALL_DEPT_NM AS DEPT_NM,
+			CASE WHEN A.DEPT_ID = (SELECT A.DEPT_ID FROM WAA_USER A WHERE  A.USER_ID = #{userId,jdbcType=VARCHAR} 
+											AND A.EXP_DTM = TO_DATE ('9999-12-31', 'YYYY-MM-DD')
+											AND A.REG_TYP_CD IN ('C', 'U')) THEN 0
+					ELSE NULL END AS DEPT_SEQ
+			FROM WAA_USER A 
+            INNER JOIN WAA_USERG B
+               ON A.USERG_ID = B.USERG_ID
+              AND B.REG_TYP_CD IN ('C', 'U')
+              AND B.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+             LEFT OUTER JOIN WAA_DEPT C
+               ON A.DEPT_ID = C.DEPT_ID
+              AND C.REG_TYP_CD IN ('C', 'U')
+              AND C.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+
+			WHERE A.EXP_DTM = TO_DATE ('9999-12-31', 'YYYY-MM-DD')
+			  AND A.REG_TYP_CD IN ('C', 'U') ) X
+ 
+        <where>
+		<if test="userNm != null" >
+			AND USER_NM LIKE '%' || #{userNm,jdbcType=VARCHAR} || '%'
+			</if>
+      	<if test="usergId != null" >
+      		AND	USERG_ID = #{usergId,jdbcType=VARCHAR}
+      		</if>
+      	<if test="deptNm != null" >
+      		AND UPPER(DEPT_NM) LIKE '%' || UPPER(#{deptNm,jdbcType=VARCHAR}) || '%'
+      		</if>	
+        </where>
+        ORDER BY DEPT_SEQ, DEPT_NM, USERG_LNM, USER_NM
+    </select>   
+    
+    <update id="updateExpDtm" parameterType="kr.wise.commons.user.service.WaaUser" >
+    UPDATE WAA_USER 
+    SET EXP_DTM = NOW()
+    WHERE USER_ID = #{userId,jdbcType=VARCHAR}
+    AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+    AND IS_LOCK = 'N'
+    </update>
+
+<select id="selectUserInfo"  parameterType="java.lang.String" resultMap="BaseResultMap">
+  	SELECT A.USER_ID
+	     , A.USER_NM
+	     , A.LOGIN_AC_ID
+	     , B.USERG_ID
+	     , B.USERG_LNM
+	     , B.USERG_PNM
+	     , B.USERG_TYP_CD
+	  FROM WAA_USER A
+	 INNER JOIN WAA_USERG B
+	    ON A.USERG_ID = B.USERG_ID
+	   AND B.REG_TYP_CD IN ('C', 'U')
+	   AND B.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	<where> 
+	   AND A.REG_TYP_CD IN ('C', 'U')
+	   AND A.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	   AND A.USER_ID = #{userId,jdbcType=VARCHAR}
+	   AND COALESCE(A.IS_LOCK, 'N') = 'N'
+	</where>
+         
+</select>
+
+  <update id="updateUserInfo" parameterType="kr.wise.commons.user.service.WaaUser" >
+    UPDATE WAA_USER
+    SET  LOGIN_AC_PWD = #{loginAcPwd,jdbcType=VARCHAR},
+    	 LOGIN_AC_PWD_ENC = #{loginAcPwdEnc,jdbcType=VARCHAR},
+    	 SALT_KEY = #{saltKey,jdbcType=VARCHAR},
+    	 PWD_EXP_DT = NULL
+    WHERE  EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+    AND    REG_TYP_CD IN ('C', 'U')
+    AND    USER_ID = #{userId,jdbcType=VARCHAR}
+    AND    IS_LOCK = 'N'
+  </update>
+  
+  <update id="updateUserPwInit" parameterType="kr.wise.commons.user.service.WaaUser" >
+    UPDATE WAA_USER
+    SET  LOGIN_AC_PWD = #{loginAcPwd,jdbcType=VARCHAR},
+    	 LOGIN_AC_PWD_ENC = #{loginAcPwdEnc,jdbcType=VARCHAR},
+    	 PWD_EXP_DT = TO_CHAR(current_timestamp + '-1day', 'YYYYMMDD'),
+    	 LOGIN_FAIL_COUNT = #{loginFailCount,jdbcType=DECIMAL},
+    	 IS_LOCK = #{isLock,jdbcType=VARCHAR},
+    	 SALT_KEY = #{saltKey,jdbcType=VARCHAR}
+    WHERE  EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+    AND    REG_TYP_CD IN ('C', 'U')
+    AND    USER_ID = #{userId,jdbcType=VARCHAR}
+  </update>
+  
+  
+  <select id="selectUserCnt"  parameterType="kr.wise.commons.user.service.WaaUser" resultType="int">
+	  	SELECT COUNT(*)
+		  FROM WAA_USER A
+		<where> 
+		   AND A.REG_TYP_CD IN ('C', 'U')
+		   AND A.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+		   AND A.LOGIN_AC_ID = #{loginAcId,jdbcType=VARCHAR}
+		   <if test="userId != null and userId != ''" >
+      		AND	USER_ID != #{userId,jdbcType=VARCHAR}
+		   </if>
+		   AND COALESCE(A.IS_LOCK, 'N') = 'N'
+		</where>
+	         
+	</select>
+	
+	<select id="selectSaltKey" parameterType="java.lang.String" resultType="String">
+		SELECT SALT_KEY
+		  FROM WAA_USER
+		 WHERE 1=1
+		   AND REG_TYP_CD IN ('C', 'U')
+		   AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+		   AND USER_ID = #{id,jdbcType=VARCHAR}
+		   AND IS_LOCK = 'N'
+	</select>
+	
+	<select id="selectBfPw" parameterType="kr.wise.commons.user.service.WaaUser" resultType="int">
+		SELECT COUNT(*)
+		  FROM WAA_USER
+		 WHERE 1=1
+		   AND REG_TYP_CD IN ('C', 'U')
+		   AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+		   AND USER_ID = #{userId,jdbcType=VARCHAR}
+		   AND LOGIN_AC_PWD = #{loginAcPwd,jdbcType=VARCHAR}
+		   <if test="loginAcPwdEnc != null and loginAcPwdEnc != ''" >
+		   AND LOGIN_AC_PWD_ENC = #{loginAcPwdEnc,jdbcType=VARCHAR}
+		   </if>
+		   AND IS_LOCK = 'N'
+	</select>
+	
+	<select id="idCheck" resultType="int">
+		SELECT COUNT(*) FROM WAA_USER
+		WHERE USER_ID= #{userId}
+		  AND EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+	</select>
+	
+	<insert id="register" parameterType="kr.wise.commons.user.service.WaaUser" >
+		INSERT INTO WAA_USER (USER_ID
+							, USERG_ID
+							, LOGIN_AC_ID
+							, LOGIN_AC_PWD
+							, EMAIL_ADDR
+							, ID_USE_EXP_DT
+							, EXP_DTM
+							, STR_DTM
+							, USER_NM
+							, USER_HTELNO
+							, OBJ_VERS
+							, REG_TYP_CD
+							, RQST_DTM
+							, RQST_USER_ID
+							, APRV_DTM
+							, APRV_USER_ID
+							, VERIFY
+			  )
+			          VALUES (#{userId}
+			                , 'OBJ_00000086147'
+			                , #{userId}
+			                , #{loginAcPwd}
+			                , #{emailAddr}
+			                , TO_CHAR(ADD_MONTHS(CURRENT_TIMESTAMP + '1day'),'YYYYMMDD')
+			                , TO_DATE('99991231', 'YYYYMMDD')
+			                , NOW()
+			                , #{userNm}
+			                , #{userHtelno}
+			                , 1
+			                , 'C'
+			                , NOW()
+			                , 'meta'
+			                , NOW()
+			                , 'meta'
+			                , 'N' )
+	</insert>
+
+	<update id ="updateVerify">
+		UPDATE WAA_USER SET VERIFY = 'Y'
+			WHERE USER_ID = #{userId} AND EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+	</update>
+    
+</mapper>

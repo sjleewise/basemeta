@@ -1,0 +1,403 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.wise.advisor.prepare.udefoutlier.service.WadUodcAnaDaseColMapper">
+  <resultMap id="BaseResultMap" type="kr.wise.advisor.prepare.udefoutlier.service.WadUodcAnaDaseCol" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap" >
+    <id column="ANA_DASE_ID"      jdbcType="VARCHAR"   property="anaDaseId" />
+    <id column="ANA_COL_SNO"      jdbcType="CHAR"      property="anaColSno" />
+    <result column="ANA_VAR_ID"   jdbcType="VARCHAR"   property="anaVarId" />
+    <result column="ANA_DASE_ID"   jdbcType="VARCHAR"   property="anaDaseId" />
+    <result column="COL_PNM"      jdbcType="VARCHAR"   property="colPnm" />    
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    ANA_DASE_ID, ANA_COL_SNO, ANA_VAR_ID, COL_PNM, OBJ_DESCN, OBJ_VERS, REG_TYP_CD, WRIT_USER_ID, 
+    WRIT_DTM
+  </sql>
+  
+  <select id="selectByPrimaryKey" parameterType="map" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from WAD_UODC_ANA_DASE_COL
+    where ANA_DASE_ID = #{anaDaseId,jdbcType=VARCHAR}
+      and ANA_COL_SNO = #{anaColSno,jdbcType=CHAR}
+  </select>
+  
+  <select id="selectAnaDaseColList" parameterType="map" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from WAD_UODC_ANA_DASE_COL
+    where ANA_DASE_ID = #{anaDaseId,jdbcType=VARCHAR}      
+  </select>
+  
+  
+  <delete id="deleteByPrimaryKey" parameterType="map">
+    delete from WAD_UODC_ANA_DASE_COL
+    where ANA_DASE_ID = #{anaDaseId,jdbcType=VARCHAR}
+      and ANA_COL_SNO = #{anaColSno,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="kr.wise.advisor.prepare.udefoutlier.service.WadUodcAnaDaseCol">
+    insert into WAD_UODC_ANA_DASE_COL (ANA_DASE_ID, ANA_COL_SNO, ANA_VAR_ID, 
+      COL_PNM, OBJ_DESCN, OBJ_VERS, 
+      REG_TYP_CD, WRIT_USER_ID, WRIT_DTM
+      )
+    values (#{anaDaseId,jdbcType=VARCHAR}, #{anaColSno,jdbcType=CHAR}, #{anaVarId,jdbcType=VARCHAR}, 
+      #{colPnm,jdbcType=VARCHAR}, #{objDescn,jdbcType=VARCHAR}, #{objVers,jdbcType=DECIMAL}, 
+      #{regTypCd,jdbcType=VARCHAR}, #{writUserId,jdbcType=VARCHAR}, #{writDtm,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="kr.wise.advisor.prepare.udefoutlier.service.WadUodcAnaDaseCol">
+    insert into WAD_UODC_ANA_DASE_COL
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="anaDaseId != null">
+        ANA_DASE_ID,
+      </if>
+      <if test="anaColSno != null">
+        ANA_COL_SNO,
+      </if>
+      <if test="anaVarId != null">
+        ANA_VAR_ID,
+      </if>
+      <if test="colPnm != null">
+        COL_PNM,
+      </if>
+      <if test="objDescn != null">
+        OBJ_DESCN,
+      </if>
+      <if test="objVers != null">
+        OBJ_VERS,
+      </if>
+      <if test="regTypCd != null">
+        REG_TYP_CD,
+      </if>
+      <if test="writUserId != null">
+        WRIT_USER_ID,
+      </if>
+      <if test="writDtm != null">
+        WRIT_DTM,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="anaDaseId != null">
+        #{anaDaseId,jdbcType=VARCHAR},
+      </if>
+      <if test="anaColSno != null">
+        #{anaColSno,jdbcType=CHAR},
+      </if>
+      <if test="anaVarId != null">
+        #{anaVarId,jdbcType=VARCHAR},
+      </if>
+      <if test="colPnm != null">
+        #{colPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="objDescn != null">
+        #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null">
+        #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null">
+        #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="writUserId != null">
+        #{writUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="writDtm != null">
+        #{writDtm,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.advisor.prepare.udefoutlier.service.WadUodcAnaDaseCol">
+    update WAD_UODC_ANA_DASE_COL
+    <set>
+      <if test="anaVarId != null">
+        ANA_VAR_ID = #{anaVarId,jdbcType=VARCHAR},
+      </if>
+      <if test="colPnm != null">
+        COL_PNM = #{colPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="objDescn != null">
+        OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null">
+        OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null">
+        REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="writUserId != null">
+        WRIT_USER_ID = #{writUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="writDtm != null">
+        WRIT_DTM = #{writDtm,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where ANA_DASE_ID = #{anaDaseId,jdbcType=VARCHAR}
+      and ANA_COL_SNO = #{anaColSno,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="kr.wise.advisor.prepare.udefoutlier.service.WadUodcAnaDaseCol">
+    update WAD_UODC_ANA_DASE_COL
+    set ANA_VAR_ID = #{anaVarId,jdbcType=VARCHAR},
+      COL_PNM = #{colPnm,jdbcType=VARCHAR},
+      OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      WRIT_USER_ID = #{writUserId,jdbcType=VARCHAR},
+      WRIT_DTM = #{writDtm,jdbcType=TIMESTAMP}
+    where ANA_DASE_ID = #{anaDaseId,jdbcType=VARCHAR}
+      and ANA_COL_SNO = #{anaColSno,jdbcType=CHAR}
+  </update>
+  
+  <insert id="insertAnaColDataImp" parameterType="kr.wise.advisor.prepare.udefoutlier.service.WadUodcAnaDase" >
+  	 INSERT INTO WAD_UODC_ANA_DASE_COL
+  	 (
+  	 	  ANA_DASE_ID
+  	 	, ANA_COL_SNO  
+  	 	, UDF_OTL_DTC_ID
+  	    , CRE_COMP_ID 
+  	 	, COL_PNM
+  	 	, COL_LNM
+  	 	, ANA_VAR_ID
+  	 	, OBJ_VERS
+  	 	, REG_TYP_CD
+  	 	, WRIT_USER_ID
+  	 	, WRIT_DTM
+  	 )
+  	 SELECT B.ANA_DASE_ID
+  	      , A.COL_SNO  AS ANA_COL_SNO
+  	      , A.UDF_OTL_DTC_ID
+  	      , A.CRE_COMP_ID 
+  	 	  , A.COL_PNM
+  	 	  , A.COL_LNM
+  	 	  , A.ANA_VAR_ID
+  	 	  , A.OBJ_VERS
+  	 	  , A.REG_TYP_CD
+  	 	  , A.WRIT_USER_ID
+  	 	  , A.WRIT_DTM
+  	   FROM WAD_UODC_DASE_IMP_COL A
+  	        INNER JOIN WAD_UODC_ANA_DASE B
+  	           ON B.UDF_OTL_DTC_ID = A.UDF_OTL_DTC_ID
+  	          AND B.CRE_COMP_ID    = A.CRE_COMP_ID 
+  	  WHERE A.UDF_OTL_DTC_ID = #{udfOtlDtcId,jdbcType=VARCHAR}
+  	    AND A.CRE_COMP_ID    = #{creCompId,jdbcType=VARCHAR}
+  </insert>
+  
+  <delete id="deleteFkUodcAnaDaseCol" parameterType="kr.wise.advisor.prepare.udefoutlier.service.WadUodcAnaDase" >
+  	DELETE FROM WAD_UODC_ANA_DASE_COL 
+  	 WHERE ANA_DASE_ID IN (SELECT ANA_DASE_ID  
+  	                         FROM WAD_UODC_ANA_DASE
+  	                        WHERE UDF_OTL_DTC_ID = #{udfOtlDtcId,jdbcType=VARCHAR}
+  	   						  AND CRE_COMP_ID    = #{creCompId,jdbcType=VARCHAR}
+  	   					  )	 
+  </delete>
+  
+  <delete id="deleteByUdfOtlDtcId" parameterType="java.lang.String" >
+  	DELETE FROM WAD_UODC_ANA_DASE_COL 
+  	 WHERE ANA_DASE_ID IN (SELECT ANA_DASE_ID  
+  	                         FROM WAD_UODC_ANA_DASE
+  	                        WHERE UDF_OTL_DTC_ID = #{udfOtlDtcId,jdbcType=VARCHAR}   	   						
+  	   					  )	 
+  </delete>
+  
+  <delete id="deleteAnaDaseColJnCol" parameterType="kr.wise.advisor.prepare.udefoutlier.service.WadUodcAnaDase">
+  	DELETE FROM WAD_UODC_ANA_DASE_COL 
+  	 WHERE  UDF_OTL_DTC_ID = #{udfOtlDtcId,jdbcType=VARCHAR}
+		AND CRE_COMP_ID    = #{creCompId,jdbcType=VARCHAR}
+  </delete>
+  
+  <insert id="insertAnaColDaseRowDv" parameterType="kr.wise.advisor.prepare.udefoutlier.service.WadUodcAnaDase" >
+  	 INSERT INTO WAD_UODC_ANA_DASE_COL
+  	 (
+  	 	  ANA_DASE_ID
+  	 	, ANA_COL_SNO  
+  	 	, UDF_OTL_DTC_ID
+  	    , CRE_COMP_ID 
+  	 	, COL_PNM
+  	 	, COL_LNM
+  	 	, ANA_VAR_ID
+  	 	, OBJ_VERS
+  	 	, REG_TYP_CD
+  	 	, WRIT_USER_ID
+  	 	, WRIT_DTM
+  	 )
+  	 SELECT (SELECT X.ANA_DASE_ID
+  	           FROM WAD_UODC_DASE_ROW_DV X
+  	          WHERE X.UDF_OTL_DTC_ID = #{udfOtlDtcId,jdbcType=VARCHAR}
+  	            AND X.CRE_COMP_ID    = #{creCompId,jdbcType=VARCHAR} 
+  	         ) AS ANA_DASE_ID
+	      , B.ANA_COL_SNO
+	      , A.UDF_OTL_DTC_ID
+	      , #{creCompId,jdbcType=VARCHAR} AS CRE_COMP_ID  
+	      , B.COL_PNM
+	      , B.COL_LNM
+	      , B.ANA_VAR_ID
+	      , B.OBJ_VERS
+	      , B.REG_TYP_CD
+	      , B.WRIT_USER_ID
+	      , B.WRIT_DTM
+	   FROM WAD_UODC_ANA_DASE A
+	        INNER JOIN WAD_UODC_ANA_DASE_COL B
+	           ON B.ANA_DASE_ID = A.ANA_DASE_ID	       
+  	  WHERE A.ANA_DASE_ID = #{srcAnaDaseId,jdbcType=VARCHAR}  	   
+  </insert>
+  
+  <insert id="insertAnaColColDaseDv" parameterType="kr.wise.advisor.prepare.udefoutlier.service.WadUodcAnaDase" >
+  	 INSERT INTO WAD_UODC_ANA_DASE_COL
+  	 (
+  	 	  ANA_DASE_ID
+  	 	, ANA_COL_SNO  
+  	 	, UDF_OTL_DTC_ID
+  	    , CRE_COMP_ID 
+  	 	, COL_PNM
+  	 	, COL_LNM
+  	 	, ANA_VAR_ID
+  	 	, OBJ_VERS
+  	 	, REG_TYP_CD
+  	 	, WRIT_USER_ID
+  	 	, WRIT_DTM
+  	 )
+  	  SELECT B.ANA_DASE_ID
+  	      , A.COL_SNO  AS ANA_COL_SNO
+  	      , A.UDF_OTL_DTC_ID
+  	      , A.CRE_COMP_ID 
+  	 	  , A.COL_PNM
+  	 	  , A.COL_LNM
+  	 	  , A.ANA_VAR_ID
+  	 	  , A.OBJ_VERS
+  	 	  , A.REG_TYP_CD
+  	 	  , A.WRIT_USER_ID
+  	 	  , A.WRIT_DTM
+  	   FROM WAD_UODC_COL_DASE_DV_COL A
+  	        INNER JOIN WAD_UODC_ANA_DASE B
+  	           ON B.UDF_OTL_DTC_ID = A.UDF_OTL_DTC_ID
+  	          AND B.CRE_COMP_ID    = A.CRE_COMP_ID 
+  	  WHERE A.UDF_OTL_DTC_ID = #{udfOtlDtcId,jdbcType=VARCHAR}
+  	    AND A.CRE_COMP_ID    = #{creCompId,jdbcType=VARCHAR}
+  </insert>
+  
+  <insert id="insertAnaColDaseCndDv" parameterType="kr.wise.advisor.prepare.udefoutlier.service.WadUodcAnaDase" >
+  	 INSERT INTO WAD_UODC_ANA_DASE_COL
+  	 (
+  	 	  ANA_DASE_ID
+  	 	, ANA_COL_SNO  
+  	 	, UDF_OTL_DTC_ID
+  	    , CRE_COMP_ID 
+  	 	, COL_PNM
+  	 	, COL_LNM
+  	 	, ANA_VAR_ID
+  	 	, OBJ_VERS
+  	 	, REG_TYP_CD
+  	 	, WRIT_USER_ID
+  	 	, WRIT_DTM
+  	 )
+  	 SELECT A.ANA_DASE_ID
+  	      , B.ANA_COL_SNO
+  	      , A.UDF_OTL_DTC_ID
+  	      , A.CRE_COMP_ID 
+  	 	  , B.COL_PNM
+  	 	  , B.COL_LNM
+  	 	  , B.ANA_VAR_ID
+  	 	  , B.OBJ_VERS
+  	 	  , B.REG_TYP_CD
+  	 	  , B.WRIT_USER_ID
+  	 	  , SYSDATE 
+  	   FROM WAD_UODC_ANA_DASE A  
+  	        INNER JOIN WAD_UODC_ANA_DASE_COL B
+  	           ON B.UDF_OTL_DTC_ID = A.UDF_OTL_DTC_ID
+  	          AND B.ANA_DASE_ID = #{srcAnaDaseId,jdbcType=VARCHAR}
+  	  WHERE A.UDF_OTL_DTC_ID = #{udfOtlDtcId,jdbcType=VARCHAR}
+  	    AND A.CRE_COMP_ID    = #{creCompId,jdbcType=VARCHAR}
+  	    
+  </insert>
+  
+  <insert id="insertAnaColJnCol" parameterType="kr.wise.advisor.prepare.udefoutlier.service.WadUodcAnaDaseCol">
+  	INSERT INTO WAD_UODC_ANA_DASE_COL
+  	 (
+  	 	  ANA_DASE_ID
+  	 	, ANA_COL_SNO  
+  	 	, UDF_OTL_DTC_ID
+  	    , CRE_COMP_ID 
+  	 	, COL_PNM
+  	 	, COL_LNM
+  	 	, ANA_VAR_ID
+  	 	, OBJ_VERS
+  	 	, REG_TYP_CD
+  	 	, WRIT_USER_ID
+  	 	, WRIT_DTM
+  	 )
+  	 VALUES
+  	 (
+  	 	  #{anaDaseId,jdbcType=VARCHAR}
+  	 	, #{anaColSno,jdbcType=VARCHAR}
+  	 	, #{udfOtlDtcId,jdbcType=VARCHAR}
+  	 	, #{creCompId,jdbcType=VARCHAR}
+  	 	, #{colPnm,jdbcType=VARCHAR}
+  	 	, #{colLnm,jdbcType=VARCHAR}
+  	 	, #{anaVarId,jdbcType=VARCHAR}
+  	 	, #{objVers,jdbcType=VARCHAR}
+  	 	, #{regTypCd,jdbcType=VARCHAR}
+  	 	, #{writUserId,jdbcType=VARCHAR}
+  	 	, SYSDATE
+  	 )
+  </insert>
+  
+  <insert id="insertAnaColDataClnCol" parameterType="kr.wise.advisor.prepare.udefoutlier.service.WadUodcAnaDaseCol">
+  	INSERT INTO WAD_UODC_ANA_DASE_COL
+  	 (
+  	 	  ANA_DASE_ID
+  	 	, ANA_COL_SNO  
+  	 	, UDF_OTL_DTC_ID
+  	    , CRE_COMP_ID 
+  	    , ANA_VAR_ID
+  	 	, COL_PNM
+  	 	, COL_LNM
+  	 	, OBJ_VERS
+  	 	, REG_TYP_CD
+  	 	, WRIT_USER_ID
+  	 	, WRIT_DTM
+  	 )
+  	 VALUES
+  	 (
+  	 	  #{anaDaseId,jdbcType=VARCHAR}
+  	 	, #{anaColSno,jdbcType=VARCHAR}
+  	 	, #{udfOtlDtcId,jdbcType=VARCHAR}
+  	 	, #{creCompId,jdbcType=VARCHAR}
+  	 	, #{anaVarId,jdbcType=VARCHAR}
+  	 	, #{colPnm,jdbcType=VARCHAR}
+  	 	, #{colLnm,jdbcType=VARCHAR}
+  	 	, #{objVers,jdbcType=VARCHAR}
+  	 	, #{regTypCd,jdbcType=VARCHAR}
+  	 	, #{writUserId,jdbcType=VARCHAR}
+  	 	, SYSDATE
+  	 )
+  </insert>
+  
+  <insert id="insertAnaColBoxplotCol">
+  	INSERT INTO WAD_UODC_ANA_DASE_COL
+  	 (
+  	 	  ANA_DASE_ID
+  	 	, ANA_COL_SNO  
+  	 	, UDF_OTL_DTC_ID
+  	    , CRE_COMP_ID 
+  	    , ANA_VAR_ID
+  	 	, COL_PNM
+  	 	, OBJ_VERS
+  	 	, REG_TYP_CD
+  	 	, WRIT_USER_ID
+  	 	, WRIT_DTM
+  	 )
+  	 VALUES
+  	 (
+  	 	  #{anaDaseId,jdbcType=VARCHAR}
+  	 	, #{anaColSno,jdbcType=VARCHAR}
+  	 	, #{udfOtlDtcId,jdbcType=VARCHAR}
+  	 	, #{creCompId,jdbcType=VARCHAR}
+  	 	, #{anaVarId,jdbcType=VARCHAR}
+  	 	, #{colPnm,jdbcType=VARCHAR}
+  	 	, #{objVers,jdbcType=VARCHAR}
+  	 	, #{regTypCd,jdbcType=VARCHAR}
+  	 	, #{writUserId,jdbcType=VARCHAR}
+  	 	, SYSDATE
+  	 )
+  </insert>
+  
+</mapper>

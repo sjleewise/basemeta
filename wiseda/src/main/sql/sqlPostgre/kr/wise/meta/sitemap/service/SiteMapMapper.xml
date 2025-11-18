@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.meta.sitemap.service.SiteMapMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.commons.sysmgmt.menu.service.MenuManageVO" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap" >
+    <id 	column="MENU_ID" 		property="menuId" 		jdbcType="VARCHAR" />
+<!--     <result column="EXP_DTM" 		property="expDtm" 		jdbcType="DATE" /> -->
+<!--     <result column="STR_DTM" 		property="strDtm" 		jdbcType="DATE" /> -->
+    <result column="MENU_NM" 		property="menuNm" 		jdbcType="VARCHAR" />
+    <result column="UPP_MENU_ID" 	property="uppMenuId"	jdbcType="VARCHAR" />
+    <result column="UPP_MENU_NM" 	property="uppMenuNm"	jdbcType="VARCHAR" />
+    <result column="MENU_LVL" 		property="menuLvl" 		jdbcType="DECIMAL" />
+    <result column="MENU_LVL" 		property="Level" 		jdbcType="DECIMAL" />
+    <result column="FILE_PATH" 		property="filePath"		jdbcType="VARCHAR" />
+    <result column="FILE_NM" 		property="fileNm" 		jdbcType="VARCHAR" />
+    <result column="DISP_YN" 		property="dispYn" 		jdbcType="VARCHAR" />
+    <result column="DISP_ORD" 		property="dispOrd" 		jdbcType="DECIMAL" />
+    <result column="MNGR_MENU_YN"	property="mngrMenuYn"	jdbcType="VARCHAR" />
+    <result column="IMG_PATH"	property="imgPath"	jdbcType="VARCHAR" />
+    <result column="MENU_DCD"	property="menuDcd"	jdbcType="VARCHAR" />
+    <result column="FAVORITE_YN"	property="favoriteYn"	jdbcType="VARCHAR" />
+    <result column="FULL_PATH"	property="fullPath"	jdbcType="VARCHAR" />
+<!--     <result column="OBJ_DESCN" 		property="objDescn" 	jdbcType="VARCHAR" />  -->
+<!--     <result column="OBJ_VERS" 		property="objVers" 		jdbcType="DECIMAL" /> -->
+<!--     <result column="REG_TYP_CD"	 	property="regTypCd"		jdbcType="VARCHAR" /> -->
+<!--     <result column="WRIT_DTM"	 	property="writDtm"	 	jdbcType="DATE" /> -->
+<!--     <result column="WRIT_USER_ID" 	property="writUserId" 	jdbcType="VARCHAR" /> -->
+  </resultMap>
+  <sql id="Base_Column_List" >
+    MENU_ID, EXP_DTM, STR_DTM, MENU_NM, UPP_MENU_ID, MENU_LVL, FILE_PATH, FILE_NM, DISP_YN, DISP_ORD,
+     MNGR_MENU_YN, OBJ_DESCN, OBJ_VERS, REG_TYP_CD, WRIT_DTM, WRIT_USER_ID
+  </sql>
+   <select id="selectMenuListForSiteMap" parameterType="kr.wise.commons.sysmgmt.menu.service.MenuManageVO" resultMap="BaseResultMap" >
+	--사이트맵용 메뉴 조회
+	SELECT  A.MENU_ID     
+		, A.EXP_DTM     
+		, A.STR_DTM     
+		, A.MENU_NM
+		, A.UPP_MENU_ID 
+		, A.MENU_LVL
+		, A.FILE_PATH
+		, A.FILE_NM
+		, A.DISP_YN
+		, A.DISP_ORD
+		, A.MNGR_MENU_YN
+		, A.IMG_PATH
+		, A.MENU_DCD
+		, A.OBJ_DESCN   
+		, A.OBJ_VERS    
+		, A.REG_TYP_CD  
+		, A.WRIT_DTM    
+		, A.WRIT_USER_ID
+		, A.FULL_PATH
+		, B.MENU_NM AS UPP_MENU_NM
+	    , GET_USER_NM(A.WRIT_USER_ID) AS WRIT_USER_NM
+	    , CASE WHEN C.MENU_ID IS NULL THEN 'N' ELSE 'Y' END AS FAVORITE_YN
+	  FROM V_WAA_PRGM_MENU A
+<!-- 	  		collection = 전달받은 인자값 -->
+<!-- 	  		item   = 전달받은 인자값을 다른이름으로 대체  -->
+<!-- 	  		open 해당 구문이 시작할떄  -->
+<!-- 	  		lose 해당구문이 끝날떄 -->
+<!-- 			separator  한번 이상 반복할때 반복되는 사이에  해당 문을 넣어줌 -->
+<!-- 	  		<foreach collection="lvlList" item="item" index="index" open="" separator="UNION ALL" close=""> -->
+<!-- 				<include refid="SelectSql" />	       -->
+<!-- 			</foreach> -->
+	       
+	       INNER JOIN WAA_USERG_MENU_AUTH D
+             ON D.USERG_ID = #{userGroupId,jdbcType=VARCHAR}
+             AND A.MENU_ID = D.MENU_ID
+             AND D.EXP_DTM =TO_DATE('9999-12-31', 'YYYY-MM-DD')
+             AND D.REG_TYP_CD  IN ('C', 'U')
+	       LEFT OUTER JOIN WAA_PRGM_MENU B
+	         ON A.UPP_MENU_ID = B.MENU_ID
+	        AND B.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	        AND B.REG_TYP_CD IN ('C','U')
+	        LEFT OUTER JOIN WAA_MENUS_PERSONAL C
+	        ON A.MENU_ID = C.MENU_ID
+	        AND C.USER_ID = #{userId,jdbcType=VARCHAR}
+            AND C.USER_GROUP_ID = #{userGroupId,jdbcType=VARCHAR} 
+
+  	<where>
+		AND A.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')
+  		AND A.REG_TYP_CD IN ('C', 'U')
+	    AND A.DISP_ORD != 0
+	    AND A.MENU_DCD = #{menuDcd,jdbcType=VARCHAR}
+	    AND A.DISP_YN ='Y'
+	</where>
+	ORDER BY A.MENU_DCD DESC, A.FULL_DISP_ORD
+  </select>
+  
+  
+  
+    <select id="selectFavoriteList" parameterType="kr.wise.commons.sysmgmt.menu.service.MenuManageVO" resultMap="BaseResultMap" >
+	--사이트맵 즐겨찾기 리스트
+	SELECT  A.MENU_ID     
+		, A.EXP_DTM     
+		, A.STR_DTM     
+		, A.MENU_NM
+		, A.UPP_MENU_ID 
+		, A.MENU_LVL
+		, A.FILE_PATH
+		, A.FILE_NM
+		, A.DISP_YN
+		, A.DISP_ORD
+		, A.MNGR_MENU_YN
+		, A.IMG_PATH
+		, A.MENU_DCD
+		, A.OBJ_DESCN   
+		, A.OBJ_VERS    
+		, A.REG_TYP_CD  
+		, A.WRIT_DTM    
+		, A.WRIT_USER_ID
+		, A.FULL_PATH
+		, B.MENU_NM AS UPP_MENU_NM
+	    , GET_USER_NM(A.WRIT_USER_ID) AS WRIT_USER_NM
+	  FROM V_WAA_PRGM_MENU A
+<!-- 	  		collection = 전달받은 인자값 -->
+<!-- 	  		item   = 전달받은 인자값을 다른이름으로 대체  -->
+<!-- 	  		open 해당 구문이 시작할떄  -->
+<!-- 	  		lose 해당구문이 끝날떄 -->
+<!-- 			separator  한번 이상 반복할때 반복되는 사이에  해당 문을 넣어줌 -->
+<!-- 	  		<foreach collection="lvlList" item="item" index="index" open="" separator="UNION ALL" close=""> -->
+<!-- 				<include refid="SelectSql" />	       -->
+<!-- 			</foreach> -->
+	       
+	       INNER JOIN WAA_USERG_MENU_AUTH D
+             ON D.USERG_ID = #{userGroupId,jdbcType=VARCHAR}
+             AND A.MENU_ID = D.MENU_ID
+             AND D.EXP_DTM =TO_DATE('9999-12-31', 'YYYY-MM-DD')
+             AND D.REG_TYP_CD  IN ('C', 'U')
+           INNER JOIN WAA_MENUS_PERSONAL C
+	        ON A.MENU_ID = C.MENU_ID
+	        AND C.USER_ID = #{userId,jdbcType=VARCHAR}
+            AND C.USER_GROUP_ID = #{userGroupId,jdbcType=VARCHAR}   
+	       LEFT OUTER JOIN WAA_PRGM_MENU B
+	         ON A.UPP_MENU_ID = B.MENU_ID
+	        AND B.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	        AND B.REG_TYP_CD IN ('C','U')
+  	<where>
+		AND A.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')
+  		AND A.REG_TYP_CD IN ('C', 'U')
+	    AND A.DISP_ORD != 0
+	    AND A.MENU_DCD = #{menuDcd,jdbcType=VARCHAR}
+	    AND A.DISP_YN ='Y'
+	</where>
+	ORDER BY A.MENU_DCD DESC, A.FULL_DISP_ORD
+  </select>
+  
+  <insert id="saveFavoriteMenu" parameterType="map" >
+       insert into WAA_MENUS_PERSONAL
+      (  USER_ID
+        ,USER_GROUP_ID
+        ,MENU_ID
+        ,EXP_DTM
+        ,STR_DTM
+        ,OBJ_VERS
+        ,REG_TYP_CD
+       )
+       SELECT 
+             #{userId,jdbcType=VARCHAR}
+            ,#{userGroupId,jdbcType=VARCHAR}
+            ,#{menuId,jdbcType=VARCHAR}
+            ,TO_DATE('9999-12-31', 'YYYY-MM-DD')
+            ,NOW()
+            ,1
+            ,'C'
+  </insert>
+    
+    
+     <delete id="deleteFavoriteMenu" parameterType="map" >
+     DELETE FROM WAA_MENUS_PERSONAL
+     WHERE USER_ID = #{userId,jdbcType=VARCHAR}
+     AND USER_GROUP_ID = #{userGroupId,jdbcType=VARCHAR}
+     </delete>
+</mapper>

@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.sysinf.prism.service.PrismResearchMstMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.sysinf.prism.service.PrismResearchMst" >
+    <id column="RESEARCH_ID" property="researchId" jdbcType="VARCHAR" />
+    <result column="RESEARCH_NAME" property="researchName" jdbcType="VARCHAR" />
+    <result column="RESEARCH_OUTLINE" property="researchOutline" jdbcType="VARCHAR" />
+    <result column="ORGAN_NAME" property="organName" jdbcType="VARCHAR" />
+    <result column="URL" property="url" jdbcType="VARCHAR" />
+    <result column="BIZ_NAME1" property="bizName1" jdbcType="VARCHAR" />
+    <result column="BRM_BIZID" property="brmBizid" jdbcType="VARCHAR" />
+    <result column="BIZ_NAME2" property="bizName2" jdbcType="VARCHAR" />
+    <result column="PARENT_ID" property="parentId" jdbcType="VARCHAR" />
+    <result column="BIZ_NAME3" property="bizName3" jdbcType="VARCHAR" />
+    <result column="SUPER_ID" property="superId" jdbcType="VARCHAR" />
+    <result column="ISSUED_YEAR" property="issuedYear" jdbcType="VARCHAR" />
+    <result column="RESEARCH_START_DATE" property="researchStartDate" jdbcType="VARCHAR" />
+    <result column="RESEARCH_END_DATE" property="researchEndDate" jdbcType="VARCHAR" />
+    <result column="SUPPLY_ORG" property="supplyOrg" jdbcType="VARCHAR" />
+    <result column="RESEARCH_ORGAN_NAME" property="researchOrganName" jdbcType="VARCHAR" />
+    <result column="SUBMITTED_DATE" property="submittedDate" jdbcType="VARCHAR" />
+    <result column="UPDATE_OPTION" property="updateOption" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    RESEARCH_ID, RESEARCH_NAME, RESEARCH_OUTLINE, ORGAN_NAME, URL, BIZ_NAME1, BRM_BIZID, 
+    BIZ_NAME2, PARENT_ID, BIZ_NAME3, SUPER_ID, ISSUED_YEAR, RESEARCH_START_DATE, RESEARCH_END_DATE, 
+    SUPPLY_ORG, RESEARCH_ORGAN_NAME, SUBMITTED_DATE, UPDATE_OPTION
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select /* PrismResearchMstMapper.selectByPrimaryKey */
+    <include refid="Base_Column_List" />
+    from PRISM_RESEARCH_MST
+    where RESEARCH_ID = #{researchId,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectByOrgan" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    SELECT /* PrismResearchMstMapper.selectByOrgan */
+           A.RESEARCH_ID
+         , A.RESEARCH_NAME
+         , A.ISSUED_YEAR
+         , A.RESEARCH_ORGAN_NAME
+         , A.SUBMITTED_DATE
+         , A.UPDATE_OPTION
+    FROM PRISM_RESEARCH_MST A
+    LEFT OUTER JOIN PRISM_RESEARCH_DTL B
+      ON A.RESEARCH_ID = B.RESEARCH_ID
+    WHERE B.RESEARCH_ID IS NULL
+      AND A.ORGAN_NAME = #{organName,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="selectResearchbyOrgan" resultMap="BaseResultMap" parameterType="java.lang.String" >
+  --기관에 해당하는 기존 등록된 과제목록을 가져온다.
+    SELECT /* PrismResearchMstMapper.selectResearchbyOrgan */
+           RESEARCH_ID
+         , RESEARCH_NAME
+         , ORGAN_NAME
+    FROM PRISM_RESEARCH_MST A
+    WHERE ORGAN_NAME = #{organName,jdbcType=VARCHAR}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete /* PrismResearchMstMapper.deleteByPrimaryKey */
+    from PRISM_RESEARCH_MST
+    where RESEARCH_ID = #{researchId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="kr.wise.sysinf.prism.service.PrismResearchMst" >
+    insert /* PrismResearchMstMapper.insert */
+    into PRISM_RESEARCH_MST (RESEARCH_ID, RESEARCH_NAME, RESEARCH_OUTLINE, 
+      ORGAN_NAME, URL, BIZ_NAME1, 
+      BRM_BIZID, BIZ_NAME2, PARENT_ID, 
+      BIZ_NAME3, SUPER_ID, ISSUED_YEAR, 
+      RESEARCH_START_DATE, RESEARCH_END_DATE, SUPPLY_ORG, 
+      RESEARCH_ORGAN_NAME, SUBMITTED_DATE, UPDATE_OPTION
+      )
+    values (#{researchId,jdbcType=VARCHAR}, #{researchName,jdbcType=VARCHAR}, #{researchOutline,jdbcType=VARCHAR}, 
+      #{organName,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, #{bizName1,jdbcType=VARCHAR}, 
+      #{brmBizid,jdbcType=VARCHAR}, #{bizName2,jdbcType=VARCHAR}, #{parentId,jdbcType=VARCHAR}, 
+      #{bizName3,jdbcType=VARCHAR}, #{superId,jdbcType=VARCHAR}, #{issuedYear,jdbcType=VARCHAR}, 
+      #{researchStartDate,jdbcType=VARCHAR}, #{researchEndDate,jdbcType=VARCHAR}, #{supplyOrg,jdbcType=VARCHAR}, 
+      #{researchOrganName,jdbcType=VARCHAR}, #{submittedDate,jdbcType=VARCHAR}, #{updateOption,jdbcType=VARCHAR}
+      )
+  </insert>
+
+  <insert id="insertResearch" parameterType="kr.wise.rest.client.ResearchVo" >
+    --prism 과제목록 입력
+    insert /* PrismResearchMstMapper.insertResearch */
+    into PRISM_RESEARCH_MST (RESEARCH_ID, RESEARCH_NAME, RESEARCH_OUTLINE, 
+      ORGAN_NAME, URL, BIZ_NAME1, 
+      BRM_BIZID, BIZ_NAME2, PARENT_ID, 
+      BIZ_NAME3, SUPER_ID, ISSUED_YEAR, 
+      RESEARCH_START_DATE, RESEARCH_END_DATE, SUPPLY_ORG, 
+      RESEARCH_ORGAN_NAME, SUBMITTED_DATE, UPDATE_OPTION
+      )
+    values (#{researchID,jdbcType=VARCHAR}, #{researchName,jdbcType=VARCHAR}, #{researchOutline,jdbcType=VARCHAR}, 
+      #{organName,jdbcType=VARCHAR}, #{URL,jdbcType=VARCHAR}, #{bizName1,jdbcType=VARCHAR}, 
+      #{brmBizId,jdbcType=VARCHAR}, #{bizName2,jdbcType=VARCHAR}, #{parentId,jdbcType=VARCHAR}, 
+      #{bizName3,jdbcType=VARCHAR}, #{superId,jdbcType=VARCHAR}, #{issuedYear,jdbcType=VARCHAR}, 
+      #{researchStartDate,jdbcType=VARCHAR}, #{researchEndDate,jdbcType=VARCHAR}, #{supplyOrg,jdbcType=VARCHAR}, 
+      #{researchOrganName,jdbcType=VARCHAR}, #{submittedDate,jdbcType=VARCHAR}, #{updateOption,jdbcType=VARCHAR}
+      )
+  </insert>
+  
+  <insert id="insertSelective" parameterType="kr.wise.sysinf.prism.service.PrismResearchMst" >
+    insert /* PrismResearchMstMapper.insertSelective */
+    into PRISM_RESEARCH_MST
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="researchId != null" >
+        RESEARCH_ID,
+      </if>
+      <if test="researchName != null" >
+        RESEARCH_NAME,
+      </if>
+      <if test="researchOutline != null" >
+        RESEARCH_OUTLINE,
+      </if>
+      <if test="organName != null" >
+        ORGAN_NAME,
+      </if>
+      <if test="url != null" >
+        URL,
+      </if>
+      <if test="bizName1 != null" >
+        BIZ_NAME1,
+      </if>
+      <if test="brmBizid != null" >
+        BRM_BIZID,
+      </if>
+      <if test="bizName2 != null" >
+        BIZ_NAME2,
+      </if>
+      <if test="parentId != null" >
+        PARENT_ID,
+      </if>
+      <if test="bizName3 != null" >
+        BIZ_NAME3,
+      </if>
+      <if test="superId != null" >
+        SUPER_ID,
+      </if>
+      <if test="issuedYear != null" >
+        ISSUED_YEAR,
+      </if>
+      <if test="researchStartDate != null" >
+        RESEARCH_START_DATE,
+      </if>
+      <if test="researchEndDate != null" >
+        RESEARCH_END_DATE,
+      </if>
+      <if test="supplyOrg != null" >
+        SUPPLY_ORG,
+      </if>
+      <if test="researchOrganName != null" >
+        RESEARCH_ORGAN_NAME,
+      </if>
+      <if test="submittedDate != null" >
+        SUBMITTED_DATE,
+      </if>
+      <if test="updateOption != null" >
+        UPDATE_OPTION,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="researchId != null" >
+        #{researchId,jdbcType=VARCHAR},
+      </if>
+      <if test="researchName != null" >
+        #{researchName,jdbcType=VARCHAR},
+      </if>
+      <if test="researchOutline != null" >
+        #{researchOutline,jdbcType=VARCHAR},
+      </if>
+      <if test="organName != null" >
+        #{organName,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null" >
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="bizName1 != null" >
+        #{bizName1,jdbcType=VARCHAR},
+      </if>
+      <if test="brmBizid != null" >
+        #{brmBizid,jdbcType=VARCHAR},
+      </if>
+      <if test="bizName2 != null" >
+        #{bizName2,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null" >
+        #{parentId,jdbcType=VARCHAR},
+      </if>
+      <if test="bizName3 != null" >
+        #{bizName3,jdbcType=VARCHAR},
+      </if>
+      <if test="superId != null" >
+        #{superId,jdbcType=VARCHAR},
+      </if>
+      <if test="issuedYear != null" >
+        #{issuedYear,jdbcType=VARCHAR},
+      </if>
+      <if test="researchStartDate != null" >
+        #{researchStartDate,jdbcType=VARCHAR},
+      </if>
+      <if test="researchEndDate != null" >
+        #{researchEndDate,jdbcType=VARCHAR},
+      </if>
+      <if test="supplyOrg != null" >
+        #{supplyOrg,jdbcType=VARCHAR},
+      </if>
+      <if test="researchOrganName != null" >
+        #{researchOrganName,jdbcType=VARCHAR},
+      </if>
+      <if test="submittedDate != null" >
+        #{submittedDate,jdbcType=VARCHAR},
+      </if>
+      <if test="updateOption != null" >
+        #{updateOption,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.sysinf.prism.service.PrismResearchMst" >
+    update /* PrismResearchMstMapper.updateByPrimaryKeySelective */
+    PRISM_RESEARCH_MST
+    <set >
+      <if test="researchName != null" >
+        RESEARCH_NAME = #{researchName,jdbcType=VARCHAR},
+      </if>
+      <if test="researchOutline != null" >
+        RESEARCH_OUTLINE = #{researchOutline,jdbcType=VARCHAR},
+      </if>
+      <if test="organName != null" >
+        ORGAN_NAME = #{organName,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null" >
+        URL = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="bizName1 != null" >
+        BIZ_NAME1 = #{bizName1,jdbcType=VARCHAR},
+      </if>
+      <if test="brmBizid != null" >
+        BRM_BIZID = #{brmBizid,jdbcType=VARCHAR},
+      </if>
+      <if test="bizName2 != null" >
+        BIZ_NAME2 = #{bizName2,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null" >
+        PARENT_ID = #{parentId,jdbcType=VARCHAR},
+      </if>
+      <if test="bizName3 != null" >
+        BIZ_NAME3 = #{bizName3,jdbcType=VARCHAR},
+      </if>
+      <if test="superId != null" >
+        SUPER_ID = #{superId,jdbcType=VARCHAR},
+      </if>
+      <if test="issuedYear != null" >
+        ISSUED_YEAR = #{issuedYear,jdbcType=VARCHAR},
+      </if>
+      <if test="researchStartDate != null" >
+        RESEARCH_START_DATE = #{researchStartDate,jdbcType=VARCHAR},
+      </if>
+      <if test="researchEndDate != null" >
+        RESEARCH_END_DATE = #{researchEndDate,jdbcType=VARCHAR},
+      </if>
+      <if test="supplyOrg != null" >
+        SUPPLY_ORG = #{supplyOrg,jdbcType=VARCHAR},
+      </if>
+      <if test="researchOrganName != null" >
+        RESEARCH_ORGAN_NAME = #{researchOrganName,jdbcType=VARCHAR},
+      </if>
+      <if test="submittedDate != null" >
+        SUBMITTED_DATE = #{submittedDate,jdbcType=VARCHAR},
+      </if>
+      <if test="updateOption != null" >
+        UPDATE_OPTION = #{updateOption,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where RESEARCH_ID = #{researchId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="kr.wise.sysinf.prism.service.PrismResearchMst" >
+    update /* PrismResearchMstMapper.updateByPrimaryKey */
+    PRISM_RESEARCH_MST
+    set RESEARCH_NAME = #{researchName,jdbcType=VARCHAR},
+      RESEARCH_OUTLINE = #{researchOutline,jdbcType=VARCHAR},
+      ORGAN_NAME = #{organName,jdbcType=VARCHAR},
+      URL = #{url,jdbcType=VARCHAR},
+      BIZ_NAME1 = #{bizName1,jdbcType=VARCHAR},
+      BRM_BIZID = #{brmBizid,jdbcType=VARCHAR},
+      BIZ_NAME2 = #{bizName2,jdbcType=VARCHAR},
+      PARENT_ID = #{parentId,jdbcType=VARCHAR},
+      BIZ_NAME3 = #{bizName3,jdbcType=VARCHAR},
+      SUPER_ID = #{superId,jdbcType=VARCHAR},
+      ISSUED_YEAR = #{issuedYear,jdbcType=VARCHAR},
+      RESEARCH_START_DATE = #{researchStartDate,jdbcType=VARCHAR},
+      RESEARCH_END_DATE = #{researchEndDate,jdbcType=VARCHAR},
+      SUPPLY_ORG = #{supplyOrg,jdbcType=VARCHAR},
+      RESEARCH_ORGAN_NAME = #{researchOrganName,jdbcType=VARCHAR},
+      SUBMITTED_DATE = #{submittedDate,jdbcType=VARCHAR},
+      UPDATE_OPTION = #{updateOption,jdbcType=VARCHAR}
+    where RESEARCH_ID = #{researchId,jdbcType=VARCHAR}
+  </update>
+</mapper>

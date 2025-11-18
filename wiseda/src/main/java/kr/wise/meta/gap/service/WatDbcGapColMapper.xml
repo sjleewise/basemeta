@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.meta.gap.service.WatDbcGapColMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.meta.gap.service.WatDbcGapCol" extends="kr.wise.meta.dbc.service.WatDbcColMapper.BaseResultMap" >
+    <result column="SRC_DB_SCH_ID" property="srcDbSchId" jdbcType="VARCHAR" />
+    <result column="SRC_TBL_PNM" property="srcTblPnm" jdbcType="VARCHAR" />
+    <result column="SRC_COL_PNM" property="srcColPnm" jdbcType="VARCHAR" />
+    <result column="SRC_COL_LNM" property="srcColLnm" jdbcType="VARCHAR" />
+    <result column="TGT_DB_SCH_ID" property="tgtDbSchId" jdbcType="VARCHAR" />
+    <result column="TGT_TBL_PNM" property="tgtTblPnm" jdbcType="VARCHAR" />
+    <result column="TGT_COL_PNM" property="tgtColPnm" jdbcType="VARCHAR" />
+    <result column="TGT_COL_LNM" property="tgtColLnm" jdbcType="VARCHAR" />
+    <result column="SRC_COL_EXTNC_EXS" property="srcColExtncExs" jdbcType="VARCHAR" />
+    <result column="TGT_COL_EXTNC_EXS" property="tgtColExtncExs" jdbcType="VARCHAR" />
+    <result column="COL_ERR_EXS" property="colErrExs" jdbcType="VARCHAR" />
+    <result column="COL_ERR_DESCN" property="colErrDescn" jdbcType="VARCHAR" />
+    <result column="ORD_ERR_EXS" property="ordErrExs" jdbcType="VARCHAR" />
+    <result column="PK_YN_ERR_EXS" property="pkYnErrExs" jdbcType="VARCHAR" />
+    <result column="PK_ORD_ERR_EXS" property="pkOrdErrExs" jdbcType="VARCHAR" />
+    <result column="NULL_YN_ERR_EXS" property="nullYnErrExs" jdbcType="VARCHAR" />
+    <result column="DEFLT_ERR_EXS" property="defltErrExs" jdbcType="VARCHAR" />
+    <result column="CMMT_ERR_EXS" property="cmmtErrExs" jdbcType="VARCHAR" />
+    <result column="DATA_TYPE_ERR_EXS" property="dataTypeErrExs" jdbcType="VARCHAR" />
+    <result column="DATA_LEN_ERR_EXS" property="dataLenErrExs" jdbcType="VARCHAR" />
+    <result column="DATA_PNT_ERR_EXS" property="dataPntErrExs" jdbcType="VARCHAR" />
+    <result column="OBJ_DESCN" property="objDescn" jdbcType="VARCHAR" />
+    <result column="OBJ_VERS" property="objVers" jdbcType="DECIMAL" />
+    <result column="REG_TYP_CD" property="regTypCd" jdbcType="VARCHAR" />
+    <result column="WRIT_DTM" property="writDtm" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <select id="getGapColList" parameterType="kr.wise.meta.gap.service.WatDbcGapCol" resultMap="BaseResultMap">
+  SELECT A.*
+       , CASE WHEN A.COL_ERR_EXS = 'Y' THEN '#FF0000' END AS FontColor
+    FROM (
+		  SELECT A.*
+			FROM WAT_DBC_GAP_COL A
+	       INNER JOIN WAT_DBC_GAP_TBL B
+			  ON NVL(A.SRC_DB_SCH_ID, '_') = NVL(B.SRC_DB_SCH_ID, '_')
+			 AND NVL(A.SRC_TBL_PNM, '_') = NVL(B.SRC_TBL_PNM, '_')
+			 AND NVL(A.TGT_DB_SCH_ID, '_') = NVL(B.TGT_DB_SCH_ID, '_')
+			 AND NVL(A.TGT_TBL_PNM, '_') = NVL(B.TGT_TBL_PNM, '_')
+		 ) A
+	 <where>
+	 <if test="srcDbSchId != null">
+     AND A.SRC_DB_SCH_ID = #{srcDbSchId,jdbcType=VARCHAR}
+     </if>
+	 <if test="srcTblPnm != null">
+     AND A.SRC_TBL_PNM = #{srcTblPnm,jdbcType=VARCHAR}
+     </if>
+	 <if test="tgtDbSchId != null">
+     AND A.TGT_DB_SCH_ID = #{tgtDbSchId,jdbcType=VARCHAR}
+     </if>
+	 <if test="tgtTblPnm != null">
+     AND A.TGT_TBL_PNM = #{tgtTblPnm,jdbcType=VARCHAR}
+     </if>
+     </where>
+     ORDER BY A.SRC_DB_SCH_ID, A.SRC_TBL_PNM, A.SRC_ORD, A.TGT_DB_SCH_ID, A.TGT_TBL_PNM, A.TGT_ORD
+  </select>
+  
+  <select id="getGapSrcList" parameterType="kr.wise.meta.gap.service.WatDbcGapCol" resultMap="BaseResultMap">
+	SELECT 
+	         C.SRC_DB_SCH_ID AS DB_SCH_ID
+	  	   , C.SRC_TBL_PNM AS DBC_TBL_NM
+	  	   , C.SRC_COL_PNM AS DBC_COL_NM
+	  	   , C.SRC_COL_LNM AS DBC_COL_KOR_NM
+	  	   , C.SRC_ORD AS ORD
+	  	   , C.SRC_DATA_TYPE AS DATA_TYPE
+	  	   , C.SRC_DATA_LEN AS DATA_LEN
+	  	   , C.SRC_DATA_PNUM AS DATA_PNUM
+	  	   , C.SRC_DATA_PNT AS DATA_PNT
+	  	   , C.SRC_PK_YN AS PK_YN
+	  	   , C.SRC_PK_ORD AS PK_ORD
+	  	   , C.SRC_NULL_YN AS NULL_YN
+	  	   , C.SRC_DEFLT_LEN AS DEFLT_LEN
+	  	   , C.SRC_DEFLT_VAL AS DEFLT_VAL
+	  	   , M.DB_SCH_LNM AS DB_SCH_LNM
+		FROM WAA_DB_SCH M
+	         INNER JOIN WAT_DBC_GAP_TBL A
+	            ON M.DB_SCH_ID = A.SRC_DB_SCH_ID
+	           AND A.SRC_DB_SCH_ID = #{srcDbSchId,jdbcType=VARCHAR}
+	           AND A.SRC_TBL_PNM = #{srcTblPnm,jdbcType=VARCHAR}
+			 INNER JOIN WAT_DBC_GAP_COL C
+			    ON NVL(A.SRC_DB_SCH_ID, '_') = NVL(C.SRC_DB_SCH_ID, '_')
+			   AND NVL(A.SRC_TBL_PNM, '_') = NVL(C.SRC_TBL_PNM, '_')
+			   AND NVL(A.TGT_DB_SCH_ID, '_') = NVL(C.TGT_DB_SCH_ID, '_')
+		 	   AND NVL(A.TGT_TBL_PNM, '_') = NVL(C.TGT_TBL_PNM, '_')
+	   WHERE M.REG_TYP_CD IN ('C', 'U')
+		 AND M.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	   ORDER BY C.SRC_ORD, C.SRC_PK_ORD
+  </select>
+  <select id="getGapTgtList" parameterType="kr.wise.meta.gap.service.WatDbcGapCol" resultMap="BaseResultMap">
+  	SELECT 
+	         C.TGT_DB_SCH_ID AS DB_SCH_ID
+	  	   , C.TGT_TBL_PNM AS DBC_TBL_NM
+	  	   , C.TGT_COL_PNM AS DBC_COL_NM
+	  	   , C.TGT_COL_LNM AS DBC_COL_KOR_NM
+	  	   , C.TGT_ORD AS ORD
+	  	   , C.TGT_DATA_TYPE AS DATA_TYPE
+	  	   , C.TGT_DATA_LEN AS DATA_LEN
+	  	   , C.TGT_DATA_PNUM AS DATA_PNUM
+	  	   , C.TGT_DATA_PNT AS DATA_PNT
+	  	   , C.TGT_PK_YN AS PK_YN
+	  	   , C.TGT_PK_ORD AS PK_ORD
+	  	   , C.TGT_NULL_YN AS NULL_YN
+	  	   , C.TGT_DEFLT_LEN AS DEFLT_LEN
+	  	   , C.TGT_DEFLT_VAL AS DEFLT_VAL
+	  	   , M.DB_SCH_LNM AS DB_SCH_LNM
+		FROM WAA_DB_SCH M
+	         INNER JOIN WAT_DBC_GAP_TBL A
+	            ON M.DB_SCH_ID = A.TGT_DB_SCH_ID
+	           AND A.TGT_DB_SCH_ID = #{tgtDbSchId,jdbcType=VARCHAR}
+	           AND A.TGT_TBL_PNM = #{tgtTblPnm,jdbcType=VARCHAR}
+			 INNER JOIN WAT_DBC_GAP_COL C
+			    ON NVL(A.SRC_DB_SCH_ID, '_') = NVL(C.SRC_DB_SCH_ID, '_')
+			   AND NVL(A.SRC_TBL_PNM, '_') = NVL(C.SRC_TBL_PNM, '_')
+			   AND NVL(A.TGT_DB_SCH_ID, '_') = NVL(C.TGT_DB_SCH_ID, '_')
+		 	   AND NVL(A.TGT_TBL_PNM, '_') = NVL(C.TGT_TBL_PNM, '_')
+	   WHERE M.REG_TYP_CD IN ('C', 'U')
+		 AND M.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	   ORDER BY C.TGT_ORD, C.TGT_PK_ORD
+  </select>
+</mapper>

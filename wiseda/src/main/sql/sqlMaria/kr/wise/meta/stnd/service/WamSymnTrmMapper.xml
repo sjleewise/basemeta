@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.meta.stnd.service.WamSymnTrmMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.meta.stnd.service.WamSymnTrm" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+    <id column="SYMN_ID" property="symnId" jdbcType="VARCHAR" />
+    <result column="SYMN_LNM" property="symnLnm" jdbcType="VARCHAR" />
+    <result column="SYMN_PNM" property="symnPnm" jdbcType="VARCHAR" />
+    <result column="SYMN_DCD" property="symnDcd" jdbcType="VARCHAR" />
+    <result column="STWD_ID" property="stwdId" jdbcType="VARCHAR" />
+    <result column="SBSWD_LNM" property="sbswdLnm" jdbcType="VARCHAR" />
+    <result column="SBSWD_PNM" property="sbswdPnm" jdbcType="VARCHAR" />
+<!--     <result column="OBJ_DESCN" property="objDescn" jdbcType="VARCHAR" /> -->
+<!--     <result column="OBJ_VERS" property="objVers" jdbcType="DECIMAL" /> -->
+<!--     <result column="REG_TYP_CD" property="regTypCd" jdbcType="VARCHAR" /> -->
+<!--     <result column="FRS_RQST_DTM" property="frsRqstDtm" jdbcType="DATE" /> -->
+<!--     <result column="FRS_RQST_USER_ID" property="frsRqstUserId" jdbcType="VARCHAR" /> -->
+<!--     <result column="RQST_DTM" property="rqstDtm" jdbcType="DATE" /> -->
+<!--     <result column="RQST_USER_ID" property="rqstUserId" jdbcType="VARCHAR" /> -->
+<!--     <result column="APRV_DTM" property="aprvDtm" jdbcType="DATE" /> -->
+<!--     <result column="APRV_USER_ID" property="aprvUserId" jdbcType="VARCHAR" /> -->
+  </resultMap>
+  <sql id="Base_Column_List" >
+    SYMN_ID, SYMN_LNM, SYMN_PNM, SYMN_DCD, STWD_ID, SBSWD_LNM, SBSWD_PNM, OBJ_DESCN, 
+    OBJ_VERS, REG_TYP_CD, FRS_RQST_DTM, FRS_RQST_USER_ID, RQST_DTM, RQST_USER_ID, APRV_DTM, 
+    APRV_USER_ID
+  </sql>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+  
+    select /* WamSymnTrmMapper.selectByPrimaryKey */
+    	*
+    from WAM_SYMN_TRM
+    where SYMN_ID = #{symnId,jdbcType=VARCHAR}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+  
+    delete /* WamSymnTrmMapper.deleteByPrimaryKey */
+    from WAM_SYMN_TRM
+    where SYMN_ID = #{sditmId,jdbcType=VARCHAR}
+    
+  </delete>
+  
+  <select id="selectSymnList" resultMap="BaseResultMap" parameterType="kr.wise.meta.stnd.service.WamSymn">
+  
+  SELECT /* WamSymnTrmMapper.selectSymnList */
+  	A.*
+	,GET_USER_NM(FRS_RQST_USER_ID) AS FRS_RQST_USER_NM
+  FROM WAM_SYMN_TRM A
+  <where>
+  	   REG_TYP_CD IN ('C', 'U')
+  	  <if test="symnId != null" >
+       AND SYMN_ID = #{symnId,jdbcType=VARCHAR}
+      </if>
+  	  <if test="symnLnm != null" >
+       AND (SYMN_LNM LIKE '%' || #{symnLnm,jdbcType=VARCHAR} || '%' 
+             OR SYMN_PNM LIKE '%' || #{symnLnm,jdbcType=VARCHAR} || '%')
+      </if>
+      <if test="symnDcd != null" >
+       AND SYMN_DCD = #{symnDcd,jdbcType=VARCHAR}
+      </if>
+      <if test="stwdId != null" >
+       AND STWD_ID = #{stwdId,jdbcType=VARCHAR}
+      </if>
+      <if test="sbswdLnm != null" >
+       AND (SBSWD_LNM LIKE '%' || #{sbswdLnm,jdbcType=VARCHAR} || '%' 
+             OR SBSWD_PNM LIKE '%' || #{sbswdLnm,jdbcType=VARCHAR} || '%')
+      </if>
+      <if test="objDescn != null" >
+       AND OBJ_DESCN LIKE '%' || #{objDescn,jdbcType=VARCHAR} || '%' 
+      </if>
+      <if test="objVers != null" >
+       AND OBJ_VERS = #{objVers,jdbcType=DECIMAL}
+      </if>
+      <if test="frsRqstDtm != null" >
+       AND FRS_RQST_DTM = #{frsRqstDtm,jdbcType=DATE}
+      </if>
+      <if test="frsRqstUserId != null" >
+       AND FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR}
+      </if>
+      <if test="rqstDtm != null" >
+       AND RQST_DTM = #{rqstDtm,jdbcType=DATE}
+      </if>
+      <if test="rqstUserId != null" >
+       AND RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR}
+      </if>
+      <if test="aprvDtm != null" >
+       AND APRV_DTM = #{aprvDtm,jdbcType=DATE}
+      </if>
+      <if test="aprvUserId != null" >
+       AND APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR}
+      </if>
+      </where>
+      AND SYMN_DCD ='NT' OR SYMN_DCD = 'SW'
+  ORDER BY SYMN_LNM
+  
+  </select>
+  
+  <insert id="updateWahSymn" parameterType="kr.wise.meta.stnd.service.WamSymn" >
+  
+    INSERT /* WamSymnTrmMapper.updateWahSymn */
+    	INTO 
+    WAH_SYMN_TRM 
+    (SYMN_ID, EXP_DTM, SYMN_LNM, SYMN_PNM, SYMN_DCD, STWD_ID, SBSWD_LNM, SBSWD_PNM, OBJ_DESCN, 
+    OBJ_VERS, REG_TYP_CD, FRS_RQST_DTM, FRS_RQST_USER_ID, RQST_DTM, RQST_USER_ID, APRV_DTM, 
+    APRV_USER_ID)
+	
+	SELECT 
+	SYMN_ID, NOW(), SYMN_LNM, SYMN_PNM, SYMN_DCD, STWD_ID, SBSWD_LNM, SBSWD_PNM, OBJ_DESCN, 
+    OBJ_VERS, #{regTypCd,jdbcType=VARCHAR}, FRS_RQST_DTM, FRS_RQST_USER_ID, RQST_DTM, RQST_USER_ID, APRV_DTM, 
+    APRV_USER_ID 
+    FROM WAM_SYMN_TRM
+    
+    WHERE SYMN_ID = #{symnId,jdbcType=VARCHAR}
+    
+  </insert>
+  
+  <insert id="insertSelective" parameterType="kr.wise.meta.stnd.service.WamSymn" >
+  
+    insert /* WamSymnTrmMapper.insertSelective */
+    	into WAM_SYMN_TRM
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="symnId != null" >
+        SYMN_ID,
+      </if>
+      <if test="symnLnm != null" >
+        SYMN_LNM,
+      </if>
+      <if test="symnPnm != null" >
+        SYMN_PNM,
+      </if>
+      <if test="symnDcd != null" >
+        SYMN_DCD,
+      </if>
+      <if test="stwdId != null" >
+        STWD_ID,
+      </if>
+      <if test="sbswdLnm != null" >
+        SBSWD_LNM,
+      </if>
+      <if test="sbswdPnm != null" >
+        SBSWD_PNM,
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN,
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS,
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD,
+      </if>
+      <if test="frsRqstDtm != null" >
+        FRS_RQST_DTM,
+      </if>
+      <if test="frsRqstUserId != null" >
+        FRS_RQST_USER_ID,
+      </if>
+      <if test="rqstDtm != null" >
+        RQST_DTM,
+      </if>
+      <if test="rqstUserId != null" >
+        RQST_USER_ID,
+      </if>
+      <if test="aprvDtm != null" >
+        APRV_DTM,
+      </if>
+      <if test="aprvUserId != null" >
+        APRV_USER_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="symnId != null" >
+        #{symnId,jdbcType=VARCHAR},
+      </if>
+      <if test="symnLnm != null" >
+        #{symnLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="symnPnm != null" >
+        #{symnPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="symnDcd != null" >
+        #{symnDcd,jdbcType=VARCHAR},
+      </if>
+      <if test="stwdId != null" >
+        #{stwdId,jdbcType=VARCHAR},
+      </if>
+      <if test="sbswdLnm != null" >
+        #{sbswdLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="sbswdPnm != null" >
+        #{sbswdPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="objDescn != null" >
+        #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null" >
+        #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="frsRqstDtm != null" >
+        #{frsRqstDtm,jdbcType=DATE},
+      </if>
+      <if test="frsRqstUserId != null" >
+        #{frsRqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDtm != null" >
+        #{rqstDtm,jdbcType=DATE},
+      </if>
+      <if test="rqstUserId != null" >
+        #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDtm != null" >
+        #{aprvDtm,jdbcType=DATE},
+      </if>
+      <if test="aprvUserId != null" >
+        #{aprvUserId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <select id="selectByLnmPnm" parameterType="map" resultMap="BaseResultMap">
+  
+  SELECT /* WamSymnTrmMapper.selectByLnmPnm */
+  	*
+  FROM WAM_SYMN_TRM
+  WHERE REG_TYP_CD IN ('C', 'U')
+  	AND 
+  	(SYMN_LNM = #{symnLnm}
+  	OR SYMN_LNM = UPPER(#{symnLnm})
+  	OR SYMN_PNM = #{symnPnm} 
+  	OR SYMN_PNM = UPPER(#{symnPnm}))
+  </select>
+  
+  <select id="selectHmnmList" resultMap="BaseResultMap" parameterType="kr.wise.meta.stnd.service.WamSymn">
+  
+  SELECT /* WamSymnTrmMapper.selectHmnmList */
+  	A.*
+	,GET_USER_NM(FRS_RQST_USER_ID) AS FRS_RQST_USER_NM
+  FROM WAM_SYMN_TRM A
+  <where>
+  	   REG_TYP_CD IN ('C', 'U')
+  	  <if test="symnId != null" >
+       AND SYMN_ID = #{symnId,jdbcType=VARCHAR}
+      </if>
+  	  <if test="symnLnm != null" >
+       AND (SYMN_LNM LIKE '%' || #{symnLnm,jdbcType=VARCHAR} || '%' 
+             OR SYMN_PNM LIKE '%' || #{symnLnm,jdbcType=VARCHAR} || '%')
+      </if>
+      <if test="symnDcd != null" >
+       AND SYMN_DCD = #{symnDcd,jdbcType=VARCHAR}
+      </if>
+      <if test="stwdId != null" >
+       AND STWD_ID = #{stwdId,jdbcType=VARCHAR}
+      </if>
+      <if test="sbswdLnm != null" >
+       AND (SBSWD_LNM LIKE '%' || #{sbswdLnm,jdbcType=VARCHAR} || '%' 
+             OR SBSWD_PNM LIKE '%' || #{sbswdLnm,jdbcType=VARCHAR} || '%')
+      </if>
+      <if test="objDescn != null" >
+       AND OBJ_DESCN LIKE '%' || #{objDescn,jdbcType=VARCHAR} || '%' 
+      </if>
+      <if test="objVers != null" >
+       AND OBJ_VERS = #{objVers,jdbcType=DECIMAL}
+      </if>
+      <if test="frsRqstDtm != null" >
+       AND FRS_RQST_DTM = #{frsRqstDtm,jdbcType=DATE}
+      </if>
+      <if test="frsRqstUserId != null" >
+       AND FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR}
+      </if>
+      <if test="rqstDtm != null" >
+       AND RQST_DTM = #{rqstDtm,jdbcType=DATE}
+      </if>
+      <if test="rqstUserId != null" >
+       AND RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR}
+      </if>
+      <if test="aprvDtm != null" >
+       AND APRV_DTM = #{aprvDtm,jdbcType=DATE}
+      </if>
+      <if test="aprvUserId != null" >
+       AND APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR}
+      </if>
+      </where>
+      AND SYMN_DCD ='HM'
+  ORDER BY SYMN_LNM
+  
+  </select>
+  
+  
+</mapper>

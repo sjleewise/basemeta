@@ -1,0 +1,714 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.commons.damgmt.schedule.service.WamShdMapper" >
+  <resultMap id="ShdResultMap" type="kr.wise.commons.damgmt.schedule.service.WamShd" >
+    <id column="SHD_ID" property="shdId" jdbcType="VARCHAR" />
+    <result column="SHD_LNM" property="shdLnm" jdbcType="VARCHAR" />
+    <result column="SHD_PNM" property="shdPnm" jdbcType="VARCHAR" />
+    <result column="SHD_KND_CD" property="shdKndCd" jdbcType="VARCHAR" />
+    <result column="SHD_KND_NM" property="shdKndNm" jdbcType="VARCHAR" />
+    <result column="SHD_USE_YN" property="shdUseYn" jdbcType="VARCHAR" />
+    <result column="SHD_BPR_YN" property="shdBprYn" jdbcType="VARCHAR" />
+    <result column="ER_DATA_LD_YN" property="erDataLdYn" jdbcType="VARCHAR" />
+    <result column="ER_DATA_LD_CNT" property="erDataLdCnt" jdbcType="DECIMAL" />
+    <result column="PK_DATA_LD_YN" property="pkDataLdYn" jdbcType="VARCHAR" />
+    <result column="PK_DATA_LD_CNT" property="pkDataLdCnt" jdbcType="DECIMAL" />
+    <result column="ANA_DGR" property="anaDgr" jdbcType="DECIMAL" />
+    <result column="ANA_DGR_NM" property="anaDgrNm" jdbcType="DECIMAL" />
+    <result column="ANA_DGR_AUTO_INC_YN" property="anaDgrAutoIncYn" jdbcType="VARCHAR" />
+    <result column="SHD_TYP_CD" property="shdTypCd" jdbcType="VARCHAR" />
+    <result column="SHD_TYP_NM" property="shdTypNm" jdbcType="VARCHAR" />
+    <result column="SHD_STR_DTM" property="shdStrDtm" jdbcType="VARCHAR" />
+    <result column="SHD_STR_HR" property="shdStrHr" jdbcType="VARCHAR" />
+    <result column="SHD_STR_MNT" property="shdStrMnt" jdbcType="VARCHAR" />
+    <result column="SHD_DLY" property="shdDly" jdbcType="VARCHAR" />
+    <result column="SHD_DLY_VAL" property="shdDlyVal" jdbcType="VARCHAR" />
+    <result column="SHD_WKL" property="shdWkl" jdbcType="VARCHAR" />
+    <result column="SHD_WKL_VAL" property="shdWklVal" jdbcType="VARCHAR" />
+    <result column="SHD_MNY" property="shdMny" jdbcType="VARCHAR" />
+    <result column="SHD_MNY_VAL" property="shdMnyVal" jdbcType="VARCHAR" />
+  </resultMap>
+
+  
+  <sql id="Base_Column_List" >
+    SHD_ID, SHD_LNM, SHD_PNM, SHD_KND_CD, SHD_USE_YN, SHD_BPR_YN, ER_DATA_LD_YN, ER_DATA_LD_CNT, 
+    PK_DATA_LD_YN, PK_DATA_LD_CNT, ANA_DGR, ANA_DGR_AUTO_INC_YN, SHD_TYP_CD, SHD_STR_DTM, 
+    SHD_STR_HR, SHD_STR_MNT, SHD_DLY, SHD_DLY_VAL, SHD_WKL, SHD_WKL_VAL, SHD_MNY, SHD_MNY_VAL
+  </sql>
+  
+  <select id="selectList" parameterType="kr.wise.commons.damgmt.schedule.service.WamShd" resultMap="ShdResultMap">
+	  SELECT SHD_ID
+	  				, SHD_LNM
+	  				, SHD_PNM
+	  				, SHD_KND_CD
+	  				, (CASE WHEN SHD_KND_CD = 'SC' THEN '스키마수집' 
+									WHEN SHD_KND_CD = 'QP' THEN '프로파일'
+									WHEN SHD_KND_CD = 'QB' THEN '업무규칙'
+									WHEN SHD_KND_CD = 'CS' THEN '코드전송'  
+									WHEN SHD_KND_CD = 'GN' THEN '일반배치'END ) AS SHD_KND_NM
+					, SHD_USE_YN
+					, SHD_BPR_YN
+					, ER_DATA_LD_YN
+					, ER_DATA_LD_CNT
+					, PK_DATA_LD_YN
+					, PK_DATA_LD_CNT
+					, ANA_DGR
+					<!-- , DECODE(ANA_DGR, NULL, '', ANA_DGR || '차') AS ANA_DGR_NM -->
+					, CASE WHEN ANA_DGR IS NULL 
+							 THEN  '' 
+							 ELSE CONCAT(IFNULL(ANA_DGR, '') , '차')  
+					  END AS ANA_DGR_NM					
+					, ANA_DGR_AUTO_INC_YN
+					, SHD_TYP_CD
+					, SHD_STR_DTM
+					, SHD_STR_HR
+					, SHD_STR_MNT
+					, SHD_DLY
+					, SHD_DLY_VAL
+					, SHD_WKL
+					, SHD_WKL_VAL
+					, SHD_MNY
+					, SHD_MNY_VAL
+					, OBJ_DESCN
+					, REG_TYP_CD
+	FROM WAM_SHD_MSTR
+	WHERE 1=1
+	<!-- 실시간분석 제외 -->
+	    AND IFNULL(OBJ_DESCN, '*') != 'ONLINE'
+		AND REG_TYP_CD IN ('C','U')
+	 <if test="shdLnm != null and shdLnm !='' ">
+        AND SHD_LNM = #{shdLnm,jdbcType=VARCHAR}
+      </if>
+	 <if test="shdKndCd != null and shdKndCd !='' ">
+        AND SHD_KND_CD = #{shdKndCd,jdbcType=VARCHAR}
+      </if>
+	ORDER BY SHD_STR_DTM DESC, SHD_STR_HR DESC, SHD_STR_MNT DESC 
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="ShdResultMap" parameterType="kr.wise.commons.damgmt.schedule.service.WamShd" >
+    SELECT 
+     SHD_ID, SHD_LNM, SHD_PNM, SHD_KND_CD, 
+		(CASE WHEN SHD_KND_CD = 'SC' THEN '스키마수집' 
+		WHEN SHD_KND_CD = 'QP' THEN '프로파일'
+		WHEN SHD_KND_CD = 'QB' THEN '업무규칙'
+		WHEN SHD_KND_CD = 'CS' THEN '코드전송' 
+		WHEN SHD_KND_CD = 'GN' THEN '일반배치'END ) AS SHD_KND_NM,
+		SHD_USE_YN, SHD_BPR_YN, ER_DATA_LD_YN, ER_DATA_LD_CNT, 
+   		PK_DATA_LD_YN, PK_DATA_LD_CNT, ANA_DGR, ANA_DGR_AUTO_INC_YN, SHD_TYP_CD, SHD_STR_DTM, 
+   		SHD_STR_HR, SHD_STR_MNT, SHD_DLY, SHD_DLY_VAL, SHD_WKL, SHD_WKL_VAL, SHD_MNY, SHD_MNY_VAL, OBJ_DESCN, REG_TYP_CD
+    FROM WAM_SHD_MSTR
+    WHERE 1=1
+     <if test="shdId != null and shdId !='' ">
+     AND SHD_ID = #{shdId,jdbcType=VARCHAR}
+     </if>
+  </select>
+
+  
+  
+    
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from WAM_SHD_MSTR
+    where SHD_ID = #{shdId,jdbcType=VARCHAR}
+  </delete>
+  
+    <delete id="deleteJobByPrimaryKey" parameterType="java.lang.String" >
+    delete from WAM_SHD_JOB
+    where SHD_ID = #{shdId,jdbcType=VARCHAR}
+  </delete>
+  
+  <delete id="deleteJobByKey" parameterType="kr.wise.commons.damgmt.schedule.service.WamShdJob"  >
+    delete from WAM_SHD_JOB
+    where SHD_ID = #{shdId,jdbcType=VARCHAR}
+    and SHD_JOB_ID = #{shdJobId,jdbcType=VARCHAR}
+  </delete>
+  
+  
+ <!--  <insert id="insertShd" parameterType="kr.wise.commons.damgmt.schedule.service.WamShd" >
+    insert into WAM_SHD_MSTR (SHD_ID, SHD_LNM, SHD_PNM, 
+      SHD_KND_CD, SHD_USE_YN, SHD_BPR_YN, 
+      ER_DATA_LD_YN, ER_DATA_LD_CNT, PK_DATA_LD_YN, 
+      PK_DATA_LD_CNT, ANA_DGR, ANA_DGR_AUTO_INC_YN, 
+      SHD_TYP_CD, SHD_STR_DTM, SHD_STR_HR, 
+      SHD_STR_MNT, SHD_DLY, SHD_DLY_VAL, 
+      SHD_WKL, SHD_WKL_VAL, SHD_MNY, 
+      SHD_MNY_VAL, RQST_NO, RQST_SNO, 
+      OBJ_DESCN, OBJ_VERS, REG_TYP_CD, 
+      FRS_RQST_DTM, FRS_RQST_USER_ID, RQST_DTM, 
+      RQST_USER_ID, APRV_DTM, APRV_USER_ID
+      )
+    values (#{shdId,jdbcType=VARCHAR}, #{shdLnm,jdbcType=VARCHAR}, #{shdPnm,jdbcType=VARCHAR}, 
+      #{shdKndCd,jdbcType=VARCHAR}, #{shdUseYn,jdbcType=VARCHAR}, #{shdBprYn,jdbcType=VARCHAR}, 
+      #{erDataLdYn,jdbcType=VARCHAR}, #{erDataLdCnt,jdbcType=DECIMAL}, #{pkDataLdYn,jdbcType=VARCHAR}, 
+      #{pkDataLdCnt,jdbcType=DECIMAL}, #{anaDgr,jdbcType=DECIMAL}, #{anaDgrAutoIncYn,jdbcType=VARCHAR}, 
+      #{shdTypCd,jdbcType=VARCHAR}, #{shdStrDtm,jdbcType=TIMESTAMP}, #{shdStrHr,jdbcType=VARCHAR}, 
+      #{shdStrMnt,jdbcType=VARCHAR}, #{shdDly,jdbcType=VARCHAR}, #{shdDlyVal,jdbcType=VARCHAR}, 
+      #{shdWkl,jdbcType=VARCHAR}, #{shdWklVal,jdbcType=VARCHAR}, #{shdMny,jdbcType=VARCHAR}, 
+      #{shdMnyVal,jdbcType=VARCHAR}, #{rqstNo,jdbcType=VARCHAR}, #{rqstSno,jdbcType=DECIMAL}, 
+      #{objDescn,jdbcType=VARCHAR}, #{objVers,jdbcType=DECIMAL}, #{regTypCd,jdbcType=VARCHAR}, 
+      #{frsRqstDtm,jdbcType=TIMESTAMP}, #{frsRqstUserId,jdbcType=VARCHAR}, #{rqstDtm,jdbcType=TIMESTAMP}, 
+      #{rqstUserId,jdbcType=VARCHAR}, #{aprvDtm,jdbcType=TIMESTAMP}, #{aprvUserId,jdbcType=VARCHAR}
+      )
+  </insert> -->
+  
+  <insert id="insertShd" parameterType="java.lang.String" >
+	insert into WAM_SHD_MSTR
+	(SHD_ID, SHD_LNM, SHD_PNM, 
+      SHD_KND_CD, SHD_USE_YN, SHD_BPR_YN, 
+      ER_DATA_LD_YN, ER_DATA_LD_CNT, PK_DATA_LD_YN, 
+      PK_DATA_LD_CNT, ANA_DGR, ANA_DGR_AUTO_INC_YN, 
+      SHD_TYP_CD, SHD_STR_DTM, SHD_STR_HR, 
+      SHD_STR_MNT, SHD_DLY, SHD_DLY_VAL, 
+      SHD_WKL, SHD_WKL_VAL, SHD_MNY, 
+      SHD_MNY_VAL, RQST_NO, RQST_SNO, 
+      OBJ_DESCN, OBJ_VERS, REG_TYP_CD, 
+      FRS_RQST_DTM, FRS_RQST_USER_ID, RQST_DTM, 
+      RQST_USER_ID, APRV_DTM, APRV_USER_ID)
+	select 
+	SHD_ID, SHD_LNM, SHD_PNM, 
+      SHD_KND_CD, SHD_USE_YN, SHD_BPR_YN, 
+      ER_DATA_LD_YN, ER_DATA_LD_CNT, PK_DATA_LD_YN, 
+      PK_DATA_LD_CNT, ANA_DGR, ANA_DGR_AUTO_INC_YN, 
+      SHD_TYP_CD, SHD_STR_DTM, SHD_STR_HR, 
+      SHD_STR_MNT, SHD_DLY, SHD_DLY_VAL, 
+      SHD_WKL, SHD_WKL_VAL, SHD_MNY, 
+      SHD_MNY_VAL, RQST_NO, RQST_SNO, 
+      OBJ_DESCN, OBJ_VERS, REG_TYP_CD, 
+      FRS_RQST_DTM, FRS_RQST_USER_ID, RQST_DTM, 
+      RQST_USER_ID, APRV_DTM, APRV_USER_ID
+	from WAH_SHD_MSTR
+   where SHD_ID = #{shdId,jdbcType=VARCHAR}
+	 and EXP_DTM = STR_TO_DATE('99991231','%Y%m%d')
+	 and REG_TYP_CD in ('C','U')
+  </insert>
+  
+  <insert id="insertSelectiveShd" parameterType="kr.wise.commons.damgmt.schedule.service.WamShd" >
+    insert into WAM_SHD_MSTR
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="shdId != null" >
+        SHD_ID,
+      </if>
+      <if test="shdLnm != null" >
+        SHD_LNM,
+      </if>
+      <if test="shdPnm != null" >
+        SHD_PNM,
+      </if>
+      <if test="shdKndCd != null" >
+        SHD_KND_CD,
+      </if>
+      <if test="shdUseYn != null" >
+        SHD_USE_YN,
+      </if>
+      <if test="shdBprYn != null" >
+        SHD_BPR_YN,
+      </if>
+      <if test="erDataLdYn != null" >
+        ER_DATA_LD_YN,
+      </if>
+      <if test="erDataLdCnt != null" >
+        ER_DATA_LD_CNT,
+      </if>
+      <if test="pkDataLdYn != null" >
+        PK_DATA_LD_YN,
+      </if>
+      <if test="pkDataLdCnt != null" >
+        PK_DATA_LD_CNT,
+      </if>
+      <if test="anaDgr != null" >
+        ANA_DGR,
+      </if>
+      <if test="anaDgrAutoIncYn != null" >
+        ANA_DGR_AUTO_INC_YN,
+      </if>
+      <if test="shdTypCd != null" >
+        SHD_TYP_CD,
+      </if>
+      <if test="shdStrDtm != null" >
+        SHD_STR_DTM,
+      </if>
+      <if test="shdStrHr != null" >
+        SHD_STR_HR,
+      </if>
+      <if test="shdStrMnt != null" >
+        SHD_STR_MNT,
+      </if>
+      <if test="shdDly != null" >
+        SHD_DLY,
+      </if>
+      <if test="shdDlyVal != null" >
+        SHD_DLY_VAL,
+      </if>
+      <if test="shdWkl != null" >
+        SHD_WKL,
+      </if>
+      <if test="shdWklVal != null" >
+        SHD_WKL_VAL,
+      </if>
+      <if test="shdMny != null" >
+        SHD_MNY,
+      </if>
+      <if test="shdMnyVal != null" >
+        SHD_MNY_VAL,
+      </if>
+      <if test="rqstNo != null" >
+        RQST_NO,
+      </if>
+      <if test="rqstSno != null" >
+        RQST_SNO,
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN,
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS,
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD,
+      </if>
+      <if test="frsRqstDtm != null" >
+        FRS_RQST_DTM,
+      </if>
+      <if test="frsRqstUserId != null" >
+        FRS_RQST_USER_ID,
+      </if>
+      <if test="rqstDtm != null" >
+        RQST_DTM,
+      </if>
+      <if test="rqstUserId != null" >
+        RQST_USER_ID,
+      </if>
+      <if test="aprvDtm != null" >
+        APRV_DTM,
+      </if>
+      <if test="aprvUserId != null" >
+        APRV_USER_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="shdId != null" >
+        #{shdId,jdbcType=VARCHAR},
+      </if>
+      <if test="shdLnm != null" >
+        #{shdLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="shdPnm != null" >
+        #{shdPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="shdKndCd != null" >
+        #{shdKndCd,jdbcType=VARCHAR},
+      </if>
+      <if test="shdUseYn != null" >
+        #{shdUseYn,jdbcType=VARCHAR},
+      </if>
+      <if test="shdBprYn != null" >
+        #{shdBprYn,jdbcType=VARCHAR},
+      </if>
+      <if test="erDataLdYn != null" >
+        #{erDataLdYn,jdbcType=VARCHAR},
+      </if>
+      <if test="erDataLdCnt != null" >
+        #{erDataLdCnt,jdbcType=DECIMAL},
+      </if>
+      <if test="pkDataLdYn != null" >
+        #{pkDataLdYn,jdbcType=VARCHAR},
+      </if>
+      <if test="pkDataLdCnt != null" >
+        #{pkDataLdCnt,jdbcType=DECIMAL},
+      </if>
+      <if test="anaDgr != null" >
+        #{anaDgr,jdbcType=DECIMAL},
+      </if>
+      <if test="anaDgrAutoIncYn != null" >
+        #{anaDgrAutoIncYn,jdbcType=VARCHAR},
+      </if>
+      <if test="shdTypCd != null" >
+        #{shdTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="shdStrDtm != null" >
+        #{shdStrDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="shdStrHr != null" >
+        #{shdStrHr,jdbcType=VARCHAR},
+      </if>
+      <if test="shdStrMnt != null" >
+        #{shdStrMnt,jdbcType=VARCHAR},
+      </if>
+      <if test="shdDly != null" >
+        #{shdDly,jdbcType=VARCHAR},
+      </if>
+      <if test="shdDlyVal != null" >
+        #{shdDlyVal,jdbcType=VARCHAR},
+      </if>
+      <if test="shdWkl != null" >
+        #{shdWkl,jdbcType=VARCHAR},
+      </if>
+      <if test="shdWklVal != null" >
+        #{shdWklVal,jdbcType=VARCHAR},
+      </if>
+      <if test="shdMny != null" >
+        #{shdMny,jdbcType=VARCHAR},
+      </if>
+      <if test="shdMnyVal != null" >
+        #{shdMnyVal,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstNo != null" >
+        #{rqstNo,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstSno != null" >
+        #{rqstSno,jdbcType=DECIMAL},
+      </if>
+      <if test="objDescn != null" >
+        #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null" >
+        #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="frsRqstDtm != null" >
+        #{frsRqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="frsRqstUserId != null" >
+        #{frsRqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDtm != null" >
+        #{rqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rqstUserId != null" >
+        #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDtm != null" >
+        #{aprvDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aprvUserId != null" >
+        #{aprvUserId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <!--  <insert id="insertShdJob" parameterType="kr.wise.commons.damgmt.schedule.service.WamShdJob" >
+    insert into WAM_SHD_JOB (SHD_ID, SHD_JOB_ID, SHD_JOB_SNO, 
+      RQST_NO, RQST_SNO, OBJ_DESCN, 
+      OBJ_VERS, REG_TYP_CD, FRS_RQST_DTM, 
+      FRS_RQST_USER_ID, RQST_DTM, RQST_USER_ID, 
+      APRV_DTM, APRV_USER_ID, ETC_JOB_DTLS, ETC_JOB_NM, ETC_JOB_KND_CD)
+   SELECT #{shdId,jdbcType=VARCHAR}, #{shdJobId,jdbcType=VARCHAR}, IFNULL(MAX(SHD_JOB_SNO)+1, 1), 
+      #{rqstNo,jdbcType=VARCHAR}, #{rqstSno,jdbcType=DECIMAL}, #{objDescn,jdbcType=VARCHAR}, 
+      #{objVers,jdbcType=DECIMAL}, #{regTypCd,jdbcType=VARCHAR}, #{frsRqstDtm,jdbcType=TIMESTAMP}, 
+      #{frsRqstUserId,jdbcType=VARCHAR}, #{rqstDtm,jdbcType=TIMESTAMP}, #{rqstUserId,jdbcType=VARCHAR}, 
+      #{aprvDtm,jdbcType=TIMESTAMP}, #{aprvUserId,jdbcType=VARCHAR},
+      #{etcJobDtls,jdbcType=VARCHAR}, #{etcJobNm,jdbcType=VARCHAR}, #{etcJobKndCd,jdbcType=VARCHAR}
+      FROM WAH_SHD_JOB
+  </insert> -->
+  
+     <insert id="insertShdGnJob" parameterType="kr.wise.commons.damgmt.schedule.service.WamShdJob" >
+    insert into WAM_SHD_JOB (SHD_ID, SHD_JOB_ID, SHD_JOB_SNO, 
+      RQST_NO, RQST_SNO, OBJ_DESCN, 
+      OBJ_VERS, REG_TYP_CD, FRS_RQST_DTM, 
+      FRS_RQST_USER_ID, RQST_DTM, RQST_USER_ID, 
+      APRV_DTM, APRV_USER_ID, ETC_JOB_DTLS, ETC_JOB_NM, ETC_JOB_KND_CD)
+   SELECT #{shdId,jdbcType=VARCHAR}, #{shdJobId,jdbcType=VARCHAR}, IFNULL(MAX(SHD_JOB_SNO)+1, 1), 
+      #{rqstNo,jdbcType=VARCHAR}, #{rqstSno,jdbcType=DECIMAL}, #{objDescn,jdbcType=VARCHAR}, 
+      #{objVers,jdbcType=DECIMAL}, #{regTypCd,jdbcType=VARCHAR}, #{frsRqstDtm,jdbcType=TIMESTAMP}, 
+      #{frsRqstUserId,jdbcType=VARCHAR}, #{rqstDtm,jdbcType=TIMESTAMP}, #{rqstUserId,jdbcType=VARCHAR}, 
+      #{aprvDtm,jdbcType=TIMESTAMP}, #{aprvUserId,jdbcType=VARCHAR},
+      #{etcJobDtls,jdbcType=VARCHAR}, #{etcJobNm,jdbcType=VARCHAR}, #{etcJobKndCd,jdbcType=VARCHAR}
+      FROM WAM_SHD_JOB
+  </insert>
+ <insert id="insertShdJob" parameterType="kr.wise.commons.damgmt.schedule.service.WamShdJob" >
+    insert into WAM_SHD_JOB 
+    (SHD_ID, SHD_JOB_ID, SHD_JOB_SNO, 
+      RQST_NO, RQST_SNO, OBJ_DESCN, 
+      OBJ_VERS, REG_TYP_CD, FRS_RQST_DTM, 
+      FRS_RQST_USER_ID, RQST_DTM, RQST_USER_ID, 
+      APRV_DTM, APRV_USER_ID, ETC_JOB_DTLS, ETC_JOB_NM, ETC_JOB_KND_CD)
+   SELECT 
+   	  SHD_ID, SHD_JOB_ID, SHD_JOB_SNO, 
+      RQST_NO, RQST_SNO, OBJ_DESCN, 
+      OBJ_VERS, REG_TYP_CD, FRS_RQST_DTM, 
+      FRS_RQST_USER_ID, RQST_DTM, RQST_USER_ID, 
+      APRV_DTM, APRV_USER_ID, ETC_JOB_DTLS, ETC_JOB_NM, ETC_JOB_KND_CD
+      FROM WAH_SHD_JOB
+     where SHD_ID = #{shdId,jdbcType=VARCHAR}
+	 and EXP_DTM = STR_TO_DATE('99991231','%Y%m%d')
+	 and REG_TYP_CD in ('C','U')
+  </insert> 
+  
+  <insert id="insertSelectiveShdJob" parameterType="kr.wise.commons.damgmt.schedule.service.WamShdJob" >
+    insert into WAM_SHD_JOB
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="shdId != null" >
+        SHD_ID,
+      </if>
+      <if test="shdJobId != null" >
+        SHD_JOB_ID,
+      </if>
+      <if test="shdJobSno != null" >
+        SHD_JOB_SNO,
+      </if>
+      <if test="rqstNo != null" >
+        RQST_NO,
+      </if>
+      <if test="rqstSno != null" >
+        RQST_SNO,
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN,
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS,
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD,
+      </if>
+      <if test="frsRqstDtm != null" >
+        FRS_RQST_DTM,
+      </if>
+      <if test="frsRqstUserId != null" >
+        FRS_RQST_USER_ID,
+      </if>
+      <if test="rqstDtm != null" >
+        RQST_DTM,
+      </if>
+      <if test="rqstUserId != null" >
+        RQST_USER_ID,
+      </if>
+      <if test="aprvDtm != null" >
+        APRV_DTM,
+      </if>
+      <if test="aprvUserId != null" >
+        APRV_USER_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="shdId != null" >
+        #{shdId,jdbcType=VARCHAR},
+      </if>
+      <if test="shdJobId != null" >
+        #{shdJobId,jdbcType=VARCHAR},
+      </if>
+      <if test="shdJobSno != null" >
+        IFNULL(MAX(SHD_JOB_SNO), 1),
+      </if>
+      <if test="rqstNo != null" >
+        #{rqstNo,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstSno != null" >
+        #{rqstSno,jdbcType=DECIMAL},
+      </if>
+      <if test="objDescn != null" >
+        #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null" >
+        #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="frsRqstDtm != null" >
+        #{frsRqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="frsRqstUserId != null" >
+        #{frsRqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDtm != null" >
+        #{rqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rqstUserId != null" >
+        #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDtm != null" >
+        #{aprvDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aprvUserId != null" >
+        #{aprvUserId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  
+  <update id="updateSchedule" parameterType="kr.wise.commons.damgmt.schedule.service.WamShd" >
+    update WAM_SHD_MSTR
+    <set >
+      <if test="shdLnm != null" >
+        SHD_LNM = #{shdLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="shdPnm != null" >
+        SHD_PNM = #{shdPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="shdKndCd != null" >
+        SHD_KND_CD = #{shdKndCd,jdbcType=VARCHAR},
+      </if>
+      <if test="shdUseYn != null" >
+        SHD_USE_YN = #{shdUseYn,jdbcType=VARCHAR},
+      </if>
+      <if test="shdBprYn != null" >
+        SHD_BPR_YN = #{shdBprYn,jdbcType=VARCHAR},
+      </if>
+      <if test="erDataLdYn != null" >
+        ER_DATA_LD_YN = #{erDataLdYn,jdbcType=VARCHAR},
+      </if>
+      <if test="erDataLdCnt != null" >
+        ER_DATA_LD_CNT = #{erDataLdCnt,jdbcType=DECIMAL},
+      </if>
+      <if test="pkDataLdYn != null" >
+        PK_DATA_LD_YN = #{pkDataLdYn,jdbcType=VARCHAR},
+      </if>
+      <if test="pkDataLdCnt != null" >
+        PK_DATA_LD_CNT = #{pkDataLdCnt,jdbcType=DECIMAL},
+      </if>
+      <if test="anaDgr != null" >
+        ANA_DGR = #{anaDgr,jdbcType=DECIMAL},
+      </if>
+      <if test="anaDgrAutoIncYn != null" >
+        ANA_DGR_AUTO_INC_YN = #{anaDgrAutoIncYn,jdbcType=VARCHAR},
+      </if>
+      <if test="shdTypCd != null" >
+        SHD_TYP_CD = #{shdTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="shdStrDtm != null" >
+        SHD_STR_DTM = #{shdStrDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="shdStrHr != null" >
+        SHD_STR_HR = #{shdStrHr,jdbcType=VARCHAR},
+      </if>
+      <if test="shdStrMnt != null" >
+        SHD_STR_MNT = #{shdStrMnt,jdbcType=VARCHAR},
+      </if>
+      <if test="shdDly != null" >
+        SHD_DLY = #{shdDly,jdbcType=VARCHAR},
+      </if>
+      <if test="shdDlyVal != null" >
+        SHD_DLY_VAL = #{shdDlyVal,jdbcType=VARCHAR},
+      </if>
+      <if test="shdWkl != null" >
+        SHD_WKL = #{shdWkl,jdbcType=VARCHAR},
+      </if>
+      <if test="shdWklVal != null" >
+        SHD_WKL_VAL = #{shdWklVal,jdbcType=VARCHAR},
+      </if>
+      <if test="shdMny != null" >
+        SHD_MNY = #{shdMny,jdbcType=VARCHAR},
+      </if>
+      <if test="shdMnyVal != null" >
+        SHD_MNY_VAL = #{shdMnyVal,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstNo != null" >
+        RQST_NO = #{rqstNo,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstSno != null" >
+        RQST_SNO = #{rqstSno,jdbcType=DECIMAL},
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="frsRqstDtm != null" >
+        FRS_RQST_DTM = #{frsRqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="frsRqstUserId != null" >
+        FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDtm != null" >
+        RQST_DTM = #{rqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rqstUserId != null" >
+        RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDtm != null" >
+        APRV_DTM = #{aprvDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aprvUserId != null" >
+        APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where SHD_ID = #{shdId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="kr.wise.commons.damgmt.schedule.service.WamShd" >
+    update WAM_SHD_MSTR
+    set SHD_LNM = #{shdLnm,jdbcType=VARCHAR},
+      SHD_PNM = #{shdPnm,jdbcType=VARCHAR},
+      SHD_KND_CD = #{shdKndCd,jdbcType=VARCHAR},
+      SHD_USE_YN = #{shdUseYn,jdbcType=VARCHAR},
+      SHD_BPR_YN = #{shdBprYn,jdbcType=VARCHAR},
+      ER_DATA_LD_YN = #{erDataLdYn,jdbcType=VARCHAR},
+      ER_DATA_LD_CNT = #{erDataLdCnt,jdbcType=DECIMAL},
+      PK_DATA_LD_YN = #{pkDataLdYn,jdbcType=VARCHAR},
+      PK_DATA_LD_CNT = #{pkDataLdCnt,jdbcType=DECIMAL},
+      ANA_DGR = #{anaDgr,jdbcType=DECIMAL},
+      ANA_DGR_AUTO_INC_YN = #{anaDgrAutoIncYn,jdbcType=VARCHAR},
+      SHD_TYP_CD = #{shdTypCd,jdbcType=VARCHAR},
+      SHD_STR_DTM = #{shdStrDtm,jdbcType=TIMESTAMP},
+      SHD_STR_HR = #{shdStrHr,jdbcType=VARCHAR},
+      SHD_STR_MNT = #{shdStrMnt,jdbcType=VARCHAR},
+      SHD_DLY = #{shdDly,jdbcType=VARCHAR},
+      SHD_DLY_VAL = #{shdDlyVal,jdbcType=VARCHAR},
+      SHD_WKL = #{shdWkl,jdbcType=VARCHAR},
+      SHD_WKL_VAL = #{shdWklVal,jdbcType=VARCHAR},
+      SHD_MNY = #{shdMny,jdbcType=VARCHAR},
+      SHD_MNY_VAL = #{shdMnyVal,jdbcType=VARCHAR},
+      RQST_NO = #{rqstNo,jdbcType=VARCHAR},
+      RQST_SNO = #{rqstSno,jdbcType=DECIMAL},
+      OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      FRS_RQST_DTM = #{frsRqstDtm,jdbcType=TIMESTAMP},
+      FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR},
+      RQST_DTM = #{rqstDtm,jdbcType=TIMESTAMP},
+      RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      APRV_DTM = #{aprvDtm,jdbcType=TIMESTAMP},
+      APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR}
+    where SHD_ID = #{shdId,jdbcType=VARCHAR}
+  </update>
+  
+  <update id="deleteSchedule" parameterType="kr.wise.commons.damgmt.schedule.service.WamShd">
+  	UPDATE WAM_SHD_MSTR
+  		<set>
+  			REG_TYP_CD = 'D'
+  		</set>
+    WHERE SHD_ID = #{shdId,jdbcType=VARCHAR}
+      AND REG_TYP_CD IN ('C', 'U')
+  </update>
+  
+  <update id="deleteScheduleJob" parameterType="kr.wise.commons.damgmt.schedule.service.WamShd">
+  	UPDATE WAM_SHD_JOB
+  		<set>
+  			REG_TYP_CD = 'D'
+  		</set>
+    WHERE SHD_ID = #{shdId,jdbcType=VARCHAR}
+      AND REG_TYP_CD IN ('C', 'U')
+  </update>
+  
+  <update id="deleteScheduleJobDtl" parameterType="kr.wise.commons.damgmt.schedule.service.WamShd">
+  	UPDATE WAM_SHD_JOB
+  		<set>
+  			REG_TYP_CD = 'D'
+  		</set>
+    WHERE SHD_JOB_ID = #{shdJobId,jdbcType=VARCHAR}
+      AND REG_TYP_CD IN ('C', 'U')
+  </update>
+  
+  <insert id="insertOrgShdJob" parameterType="kr.wise.commons.damgmt.schedule.service.WamShdJob" >
+    insert into WAM_SHD_JOB 
+    (SHD_ID, SHD_JOB_ID, SHD_JOB_SNO, 
+      RQST_NO, RQST_SNO, OBJ_DESCN, 
+      OBJ_VERS, REG_TYP_CD, FRS_RQST_DTM, 
+      FRS_RQST_USER_ID, RQST_DTM, RQST_USER_ID, 
+      APRV_DTM, APRV_USER_ID, ETC_JOB_DTLS, ETC_JOB_NM, ETC_JOB_KND_CD)
+   SELECT 
+   	  #{shdId,jdbcType=VARCHAR}, SHD_JOB_ID, SHD_JOB_SNO, 
+      RQST_NO, RQST_SNO, OBJ_DESCN, 
+      OBJ_VERS, REG_TYP_CD, FRS_RQST_DTM, 
+      FRS_RQST_USER_ID, RQST_DTM, RQST_USER_ID, 
+      APRV_DTM, APRV_USER_ID, ETC_JOB_DTLS, ETC_JOB_NM, ETC_JOB_KND_CD
+      FROM WAM_SHD_JOB
+     where SHD_ID = #{orgShdId,jdbcType=VARCHAR}
+	 
+  </insert> 
+</mapper>

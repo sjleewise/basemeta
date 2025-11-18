@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.meta.stnd.service.WaqSditmEngMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.meta.stnd.service.WaqSditm"  extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+    <id column="RQST_NO" 		property="rqstNo" 	jdbcType="VARCHAR" />
+    <id column="RQST_SNO" 		property="rqstSno" 	jdbcType="DECIMAL" />
+    <result column="SDITM_ID" 	property="sditmId" 	jdbcType="VARCHAR" />
+    <result column="SDITM_LNM" 	property="sditmLnm" jdbcType="VARCHAR" />
+    <result column="SDITM_PNM" 	property="sditmPnm" jdbcType="VARCHAR" />
+    <result column="LNM_CRI_DS" property="lnmCriDs" jdbcType="VARCHAR" />
+    <result column="PNM_CRI_DS" property="pnmCriDs" jdbcType="VARCHAR" />
+
+    <result column="DMN_ID" 	property="dmnId" 	jdbcType="VARCHAR" />
+    <result column="DMN_LNM" 	property="dmnLnm" 	jdbcType="VARCHAR" />
+    <result column="DMN_PNM" 	property="dmnPnm" 	jdbcType="VARCHAR" />
+    <result column="INFOTP_ID" 	property="infotpId" jdbcType="VARCHAR" />
+    <result column="DATA_TYPE" 	property="dataType" jdbcType="VARCHAR" />
+    <result column="DATA_LEN" 	property="dataLen" 	jdbcType="DECIMAL" />
+    <result column="DATA_SCAL" 	property="dataScal" jdbcType="DECIMAL" />
+    <result column="INFOTP_LNM" property="infotpLnm" jdbcType="VARCHAR" />
+    <result column="INFOTP_CHG_YN" property="infotpChgYn" jdbcType="VARCHAR" />
+    <result column="ENC_YN" 	property="encYn" 	jdbcType="VARCHAR" />
+
+	<result column="DMNG_ID" 	  property="dmngId" 	jdbcType="VARCHAR" />
+    <result column="DMNG_LNM" 	  property="dmngLnm" 	jdbcType="VARCHAR" />
+	<result column="UPP_DMNG_ID"  property="uppDmngId" jdbcType="VARCHAR" />
+	<result column="UPP_DMNG_LNM" property="uppDmngLnm" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    RQST_NO, RQST_SNO, SDITM_ID, SDITM_LNM, SDITM_PNM, LNM_CRI_DS, RQST_DCD, RVW_STS_CD, 
+    RVW_CONTS, VRF_RMK, VRF_CD, DMN_ID, DMN_LNM, INFOTP_ID, DATA_TYPE, DATA_LEN, DATA_SCAL, 
+    INFOTP_LNM, INFOTP_CHG_YN, ENC_YN, OBJ_DESCN, OBJ_VERS, REG_TYP_CD, FRS_RQST_DTM, 
+    FRS_RQST_USER_ID, RQST_DTM, RQST_USER_ID, APRV_DTM, APRV_USER_ID
+  </sql>
+  
+  <sql id="waq_col_list">
+  	RQST_NO, RQST_SNO, SDITM_ID, SDITM_LNM, SDITM_PNM, LNM_CRI_DS, RQST_DCD, 
+    RVW_CONTS, VRF_RMK, VRF_CD, DMN_ID, DMN_LNM, INFOTP_ID, DATA_TYPE, DATA_LEN, DATA_SCAL, 
+    INFOTP_LNM, INFOTP_CHG_YN, ENC_YN, OBJ_DESCN, OBJ_VERS, REG_TYP_CD, FRS_RQST_DTM, 
+    FRS_RQST_USER_ID, RQST_DTM, RQST_USER_ID, APRV_DTM, APRV_USER_ID
+  </sql>
+  
+  
+  
+  <select id="selectItemEngRqstListbyMst" parameterType="kr.wise.commons.rqstmst.service.WaqMstr" resultMap="BaseResultMap">
+  	SELECT A.RQST_NO, A.RQST_SNO, A.SDITM_ID, A.SDITM_LNM, A.SDITM_PNM, A.LNM_CRI_DS, A.PNM_CRI_DS, A.RQST_DCD 
+         , A.RVW_CONTS, A.VRF_RMK, A.VRF_CD
+         , A.DMN_ID, A.DMN_LNM, A.DMN_PNM, A.INFOTP_ID
+         , A.DATA_TYPE, A.DATA_LEN, A.DATA_SCAL 
+         , A.INFOTP_LNM, A.INFOTP_CHG_YN
+         , '' AS ENC_YN 
+         , A.OBJ_DESCN, A.OBJ_VERS, A.REG_TYP_CD, A.FRS_RQST_DTM 
+         , A.FRS_RQST_USER_ID, A.RQST_DTM, A.RQST_USER_ID, A.APRV_DTM, A.APRV_USER_ID
+  	     <if test='rqstStepCd == "Q" '>
+         , CASE WHEN A.RVW_STS_CD = '2' THEN '2' ELSE '0' END AS RVW_STS_CD
+         </if>
+         <if test='rqstStepCd != "Q" '>
+         , A.RVW_STS_CD
+         </if>
+         , CASE WHEN A.VRF_CD = '2' THEN '#FF0000' END AS FontColor
+         , (SELECT USER_NM FROM WAA_USER WHERE USER_ID = A.RQST_USER_ID AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD') AND REG_TYP_CD IN ('C','U')) AS RQST_USER_NM
+         , A.DMNG_LNM            
+  	  FROM WAQ_SDITM A  	         	           	       
+  	 WHERE A.RQST_NO = #{rqstNo}
+  	<if test='rqstStepCd == "Q" or rqstStepCd == "A" '>
+    	AND A.VRF_CD = '1'
+    </if>
+  	 ORDER BY A.RQST_SNO
+  </select>
+  
+  <insert id="checkEngInfoType" parameterType="map">
+  	<include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSql"/>
+  	--검증쿼리
+      AND A.RQST_DCD = 'CU'
+      AND NOT EXISTS (SELECT 1
+		                FROM WAA_INFO_TYPE F				             
+				       WHERE F.EXP_DTM = TO_DATE('9999-12-31','YYYY-MM-DD') 
+				         AND F.INFOTP_LNM = A.INFOTP_LNM				        
+		             )    
+  </insert>
+  
+</mapper>
+
+
+

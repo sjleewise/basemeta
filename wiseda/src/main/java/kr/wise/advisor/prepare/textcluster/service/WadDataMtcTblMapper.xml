@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.wise.advisor.prepare.textcluster.service.WadDataMtcTblMapper">
+  <resultMap id="BaseResultMap" type="kr.wise.advisor.prepare.textcluster.service.WadDataMtcTbl" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+    <id column="MTC_ID" jdbcType="VARCHAR" property="mtcId" />
+    <result column="SRC_DB_CONN_TRG_ID" jdbcType="VARCHAR" property="srcDbConnTrgId" />
+    <result column="SRC_DB_CONN_TRG_NM" jdbcType="VARCHAR" property="srcDbConnTrgNm" />
+    <result column="SRC_DBC_SCH_ID" jdbcType="VARCHAR" property="srcDbcSchId" />
+    <result column="SRC_DBC_SCH_NM" jdbcType="VARCHAR" property="srcDbcSchNm" />
+    <result column="SRC_DBC_TBL_NM" jdbcType="VARCHAR" property="srcDbcTblNm" />
+    <result column="SRC_DBC_TBL_LNM" jdbcType="VARCHAR" property="srcDbcTblLnm" />
+    <result column="SRC_ADT_CND_SQL" jdbcType="VARCHAR" property="srcAdtCndSql" />
+    <result column="TGT_DB_CONN_TRG_ID" jdbcType="VARCHAR" property="tgtDbConnTrgId" />
+    <result column="TGT_DB_CONN_TRG_NM" jdbcType="VARCHAR" property="tgtDbConnTrgNm" />
+    <result column="TGT_DBC_SCH_ID" jdbcType="VARCHAR" property="tgtDbcSchId" />
+    <result column="TGT_DBC_SCH_NM" jdbcType="VARCHAR" property="tgtDbcSchNm" />
+    <result column="TGT_DBC_TBL_NM" jdbcType="VARCHAR" property="tgtDbcTblNm" />
+    <result column="TGT_DBC_TBL_LNM" jdbcType="VARCHAR" property="tgtDbcTblLnm" />
+    <result column="TGT_ADT_CND_SQL" jdbcType="VARCHAR" property="tgtAdtCndSql" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    MTC_ID, SRC_DB_CONN_TRG_ID, SRC_DBC_SCH_ID, SRC_DBC_TBL_NM, SRC_ADT_CND_SQL, TGT_DB_CONN_TRG_ID, 
+    TGT_DBC_SCH_ID, TGT_DBC_TBL_NM, TGT_ADT_CND_SQL, RQST_NO, RQST_SNO, OBJ_DESCN, OBJ_VERS, 
+    REG_TYP_CD, RQST_DTM, RQST_USER_ID
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from WAD_DATA_MTC_TBL
+    where MTC_ID = #{mtcId,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectList" parameterType="kr.wise.advisor.prepare.textcluster.service.WadDataMtcTbl" resultMap="BaseResultMap">
+  --데이터매칭 테이블 리스트 조회...
+      SELECT MT.MTC_ID
+       , MT.SRC_DB_CONN_TRG_ID
+       , MT.SRC_DBC_SCH_ID
+       , MT.SRC_DBC_TBL_NM
+       , MT.SRC_ADT_CND_SQL
+       , MT.TGT_DB_CONN_TRG_ID
+       , MT.TGT_DBC_SCH_ID
+       , MT.TGT_DBC_TBL_NM
+       , MT.TGT_ADT_CND_SQL 
+       , DB.DB_CONN_TRG_PNM AS SRC_DB_CONN_TRG_NM
+       , S.DB_SCH_PNM AS SRC_DBC_SCH_NM
+       , DB.DB_CONN_TRG_PNM AS TGT_DB_CONN_TRG_NM
+       , S.DB_SCH_PNM AS TGT_DBC_SCH_NM
+              
+  FROM WAD_DATA_MTC_TBL MT
+  JOIN WAA_DB_CONN_TRG DB
+    ON MT.SRC_DB_CONN_TRG_ID = DB.DB_CONN_TRG_ID
+   AND DB.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+   AND DB.REG_TYP_CD IN ('C','U')
+  JOIN WAA_DB_SCH S
+    ON MT.SRC_DBC_SCH_ID = S.DB_SCH_ID
+   AND S.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+   AND S.REG_TYP_CD IN ('C','U')
+  WHERE 1=1
+    <if test="srcDbConnTrgId != null and srcDbConnTrgId != ''">
+    AND MT.SRC_DB_CONN_TRG_ID = #{srcDbConnTrgId, jdbcType=VARCHAR}
+    </if>
+    <if test="srcDbcSchNm != null and srcDbcSchNm != '' ">
+    AND (UPPER(S.DB_SCH_PNM) LIKE '%'||UPPER(#{srcDbcSchNm, jdbcType=VARCHAR})||'%' )
+    </if>
+    <if test="srcDbcTblNm != null and srcDbcTblNm != '' ">
+    AND (UPPER(MT.SRC_DBC_TBL_NM)  LIKE '%'|| UPPER(#{srcDbcTblNm, jdbcType=VARCHAR}) ||'%' )
+    </if>
+    <if test="tgtDbcTblNm != null and tgtDbcTblNm != '' ">
+    AND (UPPER(MT.TGT_DBC_TBL_NM)  LIKE '%'||UPPER(#{tgtDbcTblNm, jdbcType=VARCHAR}) ||'%')
+    </if>    
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from WAD_DATA_MTC_TBL
+    where MTC_ID = #{mtcId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="kr.wise.advisor.prepare.textcluster.service.WadDataMtcTbl">
+    insert into WAD_DATA_MTC_TBL (MTC_ID, SRC_DB_CONN_TRG_ID, SRC_DBC_SCH_ID, 
+      SRC_DBC_TBL_NM, SRC_ADT_CND_SQL, TGT_DB_CONN_TRG_ID, 
+      TGT_DBC_SCH_ID, TGT_DBC_TBL_NM, TGT_ADT_CND_SQL, 
+      RQST_NO, RQST_SNO, OBJ_DESCN, 
+      OBJ_VERS, REG_TYP_CD, RQST_DTM, 
+      RQST_USER_ID)
+    values (#{mtcId,jdbcType=VARCHAR}, #{srcDbConnTrgId,jdbcType=VARCHAR}, #{srcDbcSchId,jdbcType=VARCHAR}, 
+      #{srcDbcTblNm,jdbcType=VARCHAR}, #{srcAdtCndSql,jdbcType=VARCHAR}, #{tgtDbConnTrgId,jdbcType=VARCHAR}, 
+      #{tgtDbcSchId,jdbcType=VARCHAR}, #{tgtDbcTblNm,jdbcType=VARCHAR}, #{tgtAdtCndSql,jdbcType=VARCHAR}, 
+      #{rqstNo,jdbcType=VARCHAR}, #{rqstSno,jdbcType=DECIMAL}, #{objDescn,jdbcType=VARCHAR}, 
+      #{objVers,jdbcType=DECIMAL}, #{regTypCd,jdbcType=VARCHAR}, #{rqstDtm,jdbcType=TIMESTAMP}, 
+      #{rqstUserId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="kr.wise.advisor.prepare.textcluster.service.WadDataMtcTbl">
+    insert into WAD_DATA_MTC_TBL
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="mtcId != null">
+        MTC_ID,
+      </if>
+      <if test="srcDbConnTrgId != null">
+        SRC_DB_CONN_TRG_ID,
+      </if>
+      <if test="srcDbcSchId != null">
+        SRC_DBC_SCH_ID,
+      </if>
+      <if test="srcDbcTblNm != null">
+        SRC_DBC_TBL_NM,
+      </if>
+      <if test="srcAdtCndSql != null">
+        SRC_ADT_CND_SQL,
+      </if>
+      <if test="tgtDbConnTrgId != null">
+        TGT_DB_CONN_TRG_ID,
+      </if>
+      <if test="tgtDbcSchId != null">
+        TGT_DBC_SCH_ID,
+      </if>
+      <if test="tgtDbcTblNm != null">
+        TGT_DBC_TBL_NM,
+      </if>
+      <if test="tgtAdtCndSql != null">
+        TGT_ADT_CND_SQL,
+      </if>
+      <if test="rqstNo != null">
+        RQST_NO,
+      </if>
+      <if test="rqstSno != null">
+        RQST_SNO,
+      </if>
+      <if test="objDescn != null">
+        OBJ_DESCN,
+      </if>
+      
+        OBJ_VERS,          
+        REG_TYP_CD,       
+        RQST_DTM,
+     
+      <if test="rqstUserId != null">
+        RQST_USER_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="mtcId != null">
+        #{mtcId,jdbcType=VARCHAR},
+      </if>
+      <if test="srcDbConnTrgId != null">
+        #{srcDbConnTrgId,jdbcType=VARCHAR},
+      </if>
+      <if test="srcDbcSchId != null">
+        #{srcDbcSchId,jdbcType=VARCHAR},
+      </if>
+      <if test="srcDbcTblNm != null">
+        #{srcDbcTblNm,jdbcType=VARCHAR},
+      </if>
+      <if test="srcAdtCndSql != null">
+        #{srcAdtCndSql,jdbcType=VARCHAR},
+      </if>
+      <if test="tgtDbConnTrgId != null">
+        #{tgtDbConnTrgId,jdbcType=VARCHAR},
+      </if>
+      <if test="tgtDbcSchId != null">
+        #{tgtDbcSchId,jdbcType=VARCHAR},
+      </if>
+      <if test="tgtDbcTblNm != null">
+        #{tgtDbcTblNm,jdbcType=VARCHAR},
+      </if>
+      <if test="tgtAdtCndSql != null">
+        #{tgtAdtCndSql,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstNo != null">
+        #{rqstNo,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstSno != null">
+        #{rqstSno,jdbcType=DECIMAL},
+      </if>
+      <if test="objDescn != null">
+        #{objDescn,jdbcType=VARCHAR},
+      </if>
+      1,
+      'C',
+      SYSDATE, 
+      <if test="rqstUserId != null">
+        #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.advisor.prepare.textcluster.service.WadDataMtcTbl">
+    update WAD_DATA_MTC_TBL
+    <set>
+      <if test="srcDbConnTrgId != null">
+        SRC_DB_CONN_TRG_ID = #{srcDbConnTrgId,jdbcType=VARCHAR},
+      </if>
+      <if test="srcDbcSchId != null">
+        SRC_DBC_SCH_ID = #{srcDbcSchId,jdbcType=VARCHAR},
+      </if>
+      <if test="srcDbcTblNm != null">
+        SRC_DBC_TBL_NM = #{srcDbcTblNm,jdbcType=VARCHAR},
+      </if>
+      <if test="srcAdtCndSql != null">
+        SRC_ADT_CND_SQL = #{srcAdtCndSql,jdbcType=VARCHAR},
+      </if>
+      <if test="tgtDbConnTrgId != null">
+        TGT_DB_CONN_TRG_ID = #{tgtDbConnTrgId,jdbcType=VARCHAR},
+      </if>
+      <if test="tgtDbcSchId != null">
+        TGT_DBC_SCH_ID = #{tgtDbcSchId,jdbcType=VARCHAR},
+      </if>
+      <if test="tgtDbcTblNm != null">
+        TGT_DBC_TBL_NM = #{tgtDbcTblNm,jdbcType=VARCHAR},
+      </if>
+      <if test="tgtAdtCndSql != null">
+        TGT_ADT_CND_SQL = #{tgtAdtCndSql,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstNo != null">
+        RQST_NO = #{rqstNo,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstSno != null">
+        RQST_SNO = #{rqstSno,jdbcType=DECIMAL},
+      </if>
+      <if test="objDescn != null">
+        OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null">
+        OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null">
+        REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDtm != null">
+        RQST_DTM = #{rqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rqstUserId != null">
+        RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where MTC_ID = #{mtcId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="kr.wise.advisor.prepare.textcluster.service.WadDataMtcTbl">
+    update WAD_DATA_MTC_TBL
+    set SRC_DB_CONN_TRG_ID = #{srcDbConnTrgId,jdbcType=VARCHAR},
+      SRC_DBC_SCH_ID = #{srcDbcSchId,jdbcType=VARCHAR},
+      SRC_DBC_TBL_NM = #{srcDbcTblNm,jdbcType=VARCHAR},
+      SRC_ADT_CND_SQL = #{srcAdtCndSql,jdbcType=VARCHAR},
+      TGT_DB_CONN_TRG_ID = #{tgtDbConnTrgId,jdbcType=VARCHAR},
+      TGT_DBC_SCH_ID = #{tgtDbcSchId,jdbcType=VARCHAR},
+      TGT_DBC_TBL_NM = #{tgtDbcTblNm,jdbcType=VARCHAR},
+      TGT_ADT_CND_SQL = #{tgtAdtCndSql,jdbcType=VARCHAR},
+      RQST_NO = #{rqstNo,jdbcType=VARCHAR},
+      RQST_SNO = #{rqstSno,jdbcType=DECIMAL},
+      OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      RQST_DTM = #{rqstDtm,jdbcType=TIMESTAMP},
+      RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR}
+    where MTC_ID = #{mtcId,jdbcType=VARCHAR}
+  </update>
+  
+  <select id="tblList" parameterType="kr.wise.advisor.prepare.textcluster.service.WadDataMtcTbl" resultMap="BaseResultMap">
+  	SELECT
+	         T.DBC_TBL_NM AS SRC_DBC_TBL_NM
+	  FROM WAA_DB_CONN_TRG DB
+	       INNER JOIN WAA_DB_SCH S
+	          ON DB.DB_CONN_TRG_ID = S.DB_CONN_TRG_ID
+	         AND S.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+	         AND S.REG_TYP_CD IN ('C','U')
+	       INNER JOIN WAT_DBC_TBL T
+	          ON DB.DB_CONN_TRG_ID = T.DB_CONN_TRG_ID
+	         AND S.DB_SCH_ID = T.DB_SCH_ID
+	        LEFT OUTER JOIN WAD_DATA_SET DS
+	          ON DS.DB_SCH_ID = T.DB_SCH_ID
+	         AND DS.DB_TBL_NM = T.DBC_TBL_NM
+	        LEFT OUTER JOIN (
+	        	SELECT DASE_ID, COUNT(*) AS CNT 
+	      		  FROM WAD_ANA_VAR A
+	        	  JOIN WAD_DMN_PDT B
+	        	    ON A.ANL_VAR_ID = B.ANL_VAR_ID
+	        	 GROUP BY DASE_ID
+	        ) DP 
+	          ON DP.DASE_ID = DS.DASE_ID         
+	        LEFT OUTER JOIN (
+	        	SELECT DASE_ID, COUNT(*) AS CNT 
+	      		  FROM WAD_ANA_VAR A
+	        	  JOIN WAD_VAR_SUM B
+	        	    ON A.ANL_VAR_ID = B.ANL_VAR_ID
+	        	 GROUP BY DASE_ID
+	        ) VS 
+	          ON VS.DASE_ID = DS.DASE_ID         
+	       
+	  WHERE DB.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+	    AND DB.REG_TYP_CD IN ('C','U')
+	    
+	    AND DB.DB_CONN_TRG_ID = #{srcDbConnTrgId, jdbcType=VARCHAR}
+	    AND DB.DBMS_TYP_CD != 'HIV'
+	    <if test="srcDbcSchNm != null">
+	    AND (S.DB_SCH_PNM LIKE '%'||#{srcDbcSchNm, jdbcType=VARCHAR}||'%' OR  S.DB_SCH_LNM  LIKE '%'||#{srcDbcSchNm, jdbcType=VARCHAR}||'%' )
+	    </if>
+	    <if test="srcDbcSchId != null">
+	    AND S.DB_SCH_ID = #{srcDbcSchId, jdbcType=VARCHAR}
+	    </if>
+	            
+	  ORDER BY DB.DB_CONN_TRG_ID, S.DB_SCH_ID, T.DBC_TBL_NM
+  </select>
+  
+  <select id="hiveTblList" parameterType="kr.wise.advisor.prepare.textcluster.service.WadDataMtcTbl" resultMap="BaseResultMap">
+  	SELECT
+	         T.DBC_TBL_NM AS SRC_DBC_TBL_NM
+	  FROM WAA_DB_CONN_TRG DB
+	       INNER JOIN WAA_DB_SCH S
+	          ON DB.DB_CONN_TRG_ID = S.DB_CONN_TRG_ID
+	         AND S.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+	         AND S.REG_TYP_CD IN ('C','U')
+	       INNER JOIN WAT_DBC_TBL T
+	          ON DB.DB_CONN_TRG_ID = T.DB_CONN_TRG_ID
+	         AND S.DB_SCH_ID = T.DB_SCH_ID
+	        LEFT OUTER JOIN WAD_DATA_SET DS
+	          ON DS.DB_SCH_ID = T.DB_SCH_ID
+	         AND DS.DB_TBL_NM = T.DBC_TBL_NM
+	        LEFT OUTER JOIN (
+	        	SELECT DASE_ID, COUNT(*) AS CNT 
+	      		  FROM WAD_ANA_VAR A
+	        	  JOIN WAD_DMN_PDT B
+	        	    ON A.ANL_VAR_ID = B.ANL_VAR_ID
+	        	 GROUP BY DASE_ID
+	        ) DP 
+	          ON DP.DASE_ID = DS.DASE_ID         
+	        LEFT OUTER JOIN (
+	        	SELECT DASE_ID, COUNT(*) AS CNT 
+	      		  FROM WAD_ANA_VAR A
+	        	  JOIN WAD_VAR_SUM B
+	        	    ON A.ANL_VAR_ID = B.ANL_VAR_ID
+	        	 GROUP BY DASE_ID
+	        ) VS 
+	          ON VS.DASE_ID = DS.DASE_ID         
+	       
+	  WHERE DB.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+	    AND DB.REG_TYP_CD IN ('C','U')
+	    AND DB.DBMS_TYP_CD = 'HIV'
+	    AND DB.DB_CONN_TRG_ID = #{srcDbConnTrgId, jdbcType=VARCHAR}
+	    <if test="srcDbcSchNm != null">
+	    AND (S.DB_SCH_PNM LIKE '%'||#{srcDbcSchNm, jdbcType=VARCHAR}||'%' OR  S.DB_SCH_LNM  LIKE '%'||#{srcDbcSchNm, jdbcType=VARCHAR}||'%' )
+	    </if>
+	    <if test="srcDbcSchId != null">
+	    AND S.DB_SCH_ID = #{srcDbcSchId, jdbcType=VARCHAR}
+	    </if>
+	            
+	  ORDER BY DB.DB_CONN_TRG_ID, S.DB_SCH_ID, T.DBC_TBL_NM
+  </select>
+</mapper>

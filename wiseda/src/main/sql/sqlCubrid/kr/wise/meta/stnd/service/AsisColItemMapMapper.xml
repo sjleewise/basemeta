@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.meta.stnd.service.AsisColItemMapMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.meta.stnd.service.AsisColItemMap"  extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+    <result column="MODEL_NM" property="modelNm" jdbcType="VARCHAR" />
+    <result column="BIZ_NM" property="bizNm" jdbcType="VARCHAR" />
+    <result column="SUBJ_NM" property="subjNm" jdbcType="VARCHAR" />
+    <result column="PDM_TBL_PNM" property="pdmTblPnm" jdbcType="VARCHAR" />
+    <result column="PDM_TBL_LNM" property="pdmTblLnm" jdbcType="VARCHAR" />
+    <result column="PDM_COL_PNM" property="pdmColPnm" jdbcType="VARCHAR" />
+    <result column="PDM_COL_LNM" property="pdmColLnm" jdbcType="VARCHAR" />
+    <result column="PK_ORD" property="pkOrd" jdbcType="DECIMAL" />
+    <result column="COL_ORD" property="colOrd" jdbcType="DECIMAL" />
+    <result column="DMN_LNM" property="dmnLnm" jdbcType="VARCHAR" />
+    <result column="DATA_TYPE" property="dataType" jdbcType="VARCHAR" />
+    <result column="DATA_LEN" property="dataLen" jdbcType="DECIMAL" />
+    <result column="DATA_SCAL" property="dataScal" jdbcType="DECIMAL" />
+    <result column="OBJ_DESCN" property="objDescn" jdbcType="VARCHAR" />
+    <result column="SDITM_LNM" property="sditmLnm" jdbcType="VARCHAR" />
+    <result column="SDITM_ID" property="sditmId" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <select id="selectAsisColvsItem" parameterType="kr.wise.meta.stnd.service.AsisColItemMap" resultMap="BaseResultMap">
+  --AS-IS 컬럼 vs TO-BE 용어 매핑 조회
+  SELECT A.MODEL_NM
+       , A.BIZ_NM
+       , A.SUBJ_NM
+       , A.PDM_TBL_PNM
+       , A.PDM_TBL_LNM
+       , A.PDM_COL_PNM
+       , A.PDM_COL_LNM
+       , A.PK_ORD
+       , A.COL_ORD
+       , A.DMN_LNM
+       , A.DATA_TYPE
+       , A.DATA_LEN
+       , A.DATA_SCAL
+       , A.OBJ_DESCN
+       , (CASE WHEN B.SDITM_ID IS NULL THEN '표준용어 미존재' ELSE B.SDITM_LNM END) AS SDITM_LNM
+       , B.SDITM_ID
+       , (CASE WHEN B.SDITM_ID IS NULL THEN '#FF0000' END) AS FontColor
+    FROM ASIS_COL_ITEM_MAP A
+    LEFT OUTER JOIN WAM_SDITM B
+      ON A.SDITM_LNM = B.SDITM_LNM
+   WHERE 1=1
+   <if test="pdmColLnm != null" >
+     AND (A.PDM_COL_LNM LIKE '%'||UPPER(#{pdmColLnm,jdbcType=VARCHAR})||'%'
+      OR A.PDM_COL_PNM LIKE '%'||UPPER(#{pdmColLnm,jdbcType=VARCHAR})||'%'
+      OR A.SDITM_LNM LIKE '%'||UPPER(#{pdmColLnm,jdbcType=VARCHAR})||'%'
+      )
+   </if>
+   <if test="pdmTblLnm != null" >
+     AND (A.PDM_TBL_LNM LIKE '%'||UPPER(#{pdmTblLnm,jdbcType=VARCHAR})||'%'
+      OR A.PDM_TBL_PNM LIKE '%'||UPPER(#{pdmTblLnm,jdbcType=VARCHAR})||'%'
+      )
+   </if>
+   <if test="subjNm != null" >
+     AND (A.MODEL_NM LIKE '%'||UPPER(#{subjNm,jdbcType=VARCHAR})||'%'
+      OR A.BIZ_NM LIKE '%'||UPPER(#{subjNm,jdbcType=VARCHAR})||'%'
+      OR A.SUBJ_NM LIKE '%'||UPPER(#{subjNm,jdbcType=VARCHAR})||'%'
+      )
+   </if>
+   <if test="selectType != null" >
+     AND CASE WHEN B.SDITM_ID IS NOT NULL THEN 'Y' ELSE 'N' END = #{selectType,jdbcType=VARCHAR}
+   </if>
+   ORDER BY A.MODEL_NM,A.BIZ_NM,A.SUBJ_NM,A.PDM_TBL_PNM,A.COL_ORD
+  </select>
+  
+  
+  
+  <insert id="insert" parameterType="kr.wise.meta.stnd.service.AsisColItemMap" >
+    insert into ASIS_COL_ITEM_MAP (MODEL_NM, BIZ_NM, SUBJ_NM, 
+      PDM_TBL_PNM, PDM_TBL_LNM, PDM_COL_PNM, 
+      PDM_COL_LNM, PK_ORD, COL_ORD, 
+      DMN_LNM, DATA_TYPE, DATA_LEN, 
+      DATA_SCAL, OBJ_DESCN, SDITM_LNM
+      )
+    values (#{modelNm,jdbcType=VARCHAR}, #{bizNm,jdbcType=VARCHAR}, #{subjNm,jdbcType=VARCHAR}, 
+      #{pdmTblPnm,jdbcType=VARCHAR}, #{pdmTblLnm,jdbcType=VARCHAR}, #{pdmColPnm,jdbcType=VARCHAR}, 
+      #{pdmColLnm,jdbcType=VARCHAR}, #{pkOrd,jdbcType=DECIMAL}, #{colOrd,jdbcType=DECIMAL}, 
+      #{dmnLnm,jdbcType=VARCHAR}, #{dataType,jdbcType=VARCHAR}, #{dataLen,jdbcType=DECIMAL}, 
+      #{dataScal,jdbcType=DECIMAL}, #{objDescn,jdbcType=VARCHAR}, #{sditmLnm,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="kr.wise.meta.stnd.service.AsisColItemMap" >
+    insert into ASIS_COL_ITEM_MAP
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="modelNm != null" >
+        MODEL_NM,
+      </if>
+      <if test="bizNm != null" >
+        BIZ_NM,
+      </if>
+      <if test="subjNm != null" >
+        SUBJ_NM,
+      </if>
+      <if test="pdmTblPnm != null" >
+        PDM_TBL_PNM,
+      </if>
+      <if test="pdmTblLnm != null" >
+        PDM_TBL_LNM,
+      </if>
+      <if test="pdmColPnm != null" >
+        PDM_COL_PNM,
+      </if>
+      <if test="pdmColLnm != null" >
+        PDM_COL_LNM,
+      </if>
+      <if test="pkOrd != null" >
+        PK_ORD,
+      </if>
+      <if test="colOrd != null" >
+        COL_ORD,
+      </if>
+      <if test="dmnLnm != null" >
+        DMN_LNM,
+      </if>
+      <if test="dataType != null" >
+        DATA_TYPE,
+      </if>
+      <if test="dataLen != null" >
+        DATA_LEN,
+      </if>
+      <if test="dataScal != null" >
+        DATA_SCAL,
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN,
+      </if>
+      <if test="sditmLnm != null" >
+        SDITM_LNM,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="modelNm != null" >
+        #{modelNm,jdbcType=VARCHAR},
+      </if>
+      <if test="bizNm != null" >
+        #{bizNm,jdbcType=VARCHAR},
+      </if>
+      <if test="subjNm != null" >
+        #{subjNm,jdbcType=VARCHAR},
+      </if>
+      <if test="pdmTblPnm != null" >
+        #{pdmTblPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="pdmTblLnm != null" >
+        #{pdmTblLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="pdmColPnm != null" >
+        #{pdmColPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="pdmColLnm != null" >
+        #{pdmColLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="pkOrd != null" >
+        #{pkOrd,jdbcType=DECIMAL},
+      </if>
+      <if test="colOrd != null" >
+        #{colOrd,jdbcType=DECIMAL},
+      </if>
+      <if test="dmnLnm != null" >
+        #{dmnLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="dataType != null" >
+        #{dataType,jdbcType=VARCHAR},
+      </if>
+      <if test="dataLen != null" >
+        #{dataLen,jdbcType=DECIMAL},
+      </if>
+      <if test="dataScal != null" >
+        #{dataScal,jdbcType=DECIMAL},
+      </if>
+      <if test="objDescn != null" >
+        #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="sditmLnm != null" >
+        #{sditmLnm,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+	<delete id="delAsisColvsItem" parameterType="kr.wise.meta.stnd.service.AsisColItemMap">
+    DELETE FROM ASIS_COL_ITEM_MAP
+     WHERE 1=1
+      <if test="modelNm != null and modelNm != ''" >
+       AND MODEL_NM = #{modelNm,jdbcType=VARCHAR}
+      </if>
+      <if test="bizNm != null and bizNm != ''" >
+       AND BIZ_NM = #{bizNm,jdbcType=VARCHAR}
+      </if>
+      <if test="subjNm != null and subjNm != ''" >
+       AND SUBJ_NM = #{subjNm,jdbcType=VARCHAR}
+      </if>
+       AND PDM_TBL_PNM = #{pdmTblPnm,jdbcType=VARCHAR}
+       AND PDM_COL_PNM = #{pdmColPnm,jdbcType=VARCHAR}
+	</delete>
+	
+	<update id="updateAsisColvsItem" parameterType="kr.wise.meta.stnd.service.AsisColItemMap" >
+    UPDATE ASIS_COL_ITEM_MAP SET
+    <trim suffixOverrides="," >
+      <if test="pdmTblLnm != null" >
+        PDM_TBL_LNM = #{pdmTblLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="pdmColLnm != null" >
+        PDM_COL_LNM = #{pdmColLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="pkOrd != null" >
+        PK_ORD = #{pkOrd,jdbcType=DECIMAL},
+      </if>
+      <if test="colOrd != null" >
+        COL_ORD = #{colOrd,jdbcType=DECIMAL},
+      </if>
+      <if test="dmnLnm != null" >
+        DMN_LNM = #{dmnLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="dataType != null" >
+        DATA_TYPE = #{dataType,jdbcType=VARCHAR},
+      </if>
+      <if test="dataLen != null" >
+        DATA_LEN = #{dataLen,jdbcType=DECIMAL},
+      </if>
+      <if test="dataScal != null" >
+        DATA_SCAL = #{dataScal,jdbcType=DECIMAL},
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="sditmLnm != null" >
+        SDITM_LNM = #{sditmLnm,jdbcType=VARCHAR},
+      </if>
+    </trim>
+    WHERE 1=1
+      <if test="modelNm != null and modelNm != ''" >
+       AND MODEL_NM = #{modelNm,jdbcType=VARCHAR}
+      </if>
+      <if test="bizNm != null and bizNm != ''" >
+       AND BIZ_NM = #{bizNm,jdbcType=VARCHAR}
+      </if>
+      <if test="subjNm != null and subjNm != ''" >
+       AND SUBJ_NM = #{subjNm,jdbcType=VARCHAR}
+      </if>
+      AND PDM_TBL_PNM = #{pdmTblPnm,jdbcType=VARCHAR}
+      AND PDM_COL_PNM = #{pdmColPnm,jdbcType=VARCHAR}
+  </update>
+</mapper>

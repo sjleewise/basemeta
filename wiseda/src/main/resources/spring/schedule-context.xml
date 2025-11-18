@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="http://www.springframework.org/schema/aop 
+	                    http://www.springframework.org/schema/aop/spring-aop-3.1.xsd
+		                http://www.springframework.org/schema/beans 
+		                http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+		                http://www.springframework.org/schema/util 
+		                http://www.springframework.org/schema/util/spring-util-3.1.xsd
+		                http://www.springframework.org/schema/tx 
+		                http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
+		                http://www.springframework.org/schema/task
+		                http://www.springframework.org/schema/task/spring-task-3.1.xsd
+		                http://www.springframework.org/schema/context 
+		                http://www.springframework.org/schema/context/spring-context-3.1.xsd">
+	
+
+	<bean id="totSearchTask" class="kr.wise.commons.schedule.task.TotalSearchTask" />
+	<bean id="codeSyncTask" class="kr.wise.commons.code.task.CodeSyncTask" />
+    <bean id="messageSyncTask" class="kr.wise.sysinf.messageSync.task.MessageSyncTask" />
+	
+	<bean id="totSearchJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="totSearchTask" />
+		<property name="targetMethod" value="totSearchexecute" />
+		<property name="concurrent" value="false" />
+	</bean>
+    <bean id="codeSyncJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="codeSyncTask" />
+		<property name="targetMethod" value="CodeSyncExecute" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="messageSyncJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="messageSyncTask" />
+		<property name="targetMethod" value="MessageSyncExecute" />
+		<property name="concurrent" value="false" />
+	</bean>
+<!-- 	<bean name="quartzJob" class="org.springframework.scheduling.quartz.JobDetailBean"> -->
+	<bean name="quartzJob" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<property name="jobClass" value="kr.wise.commons.schedule.job.QuartzJob" />
+		<property name="jobDataAsMap">
+			<map>
+				<entry key="totSearchTask" value-ref="totSearchTask"></entry>
+				<entry key="codeSyncTask" value-ref="codeSyncTask"></entry>
+				<entry key="messageSyncTask" value-ref="messageSyncTask"></entry>
+			</map>
+		</property>
+	</bean>
+<!-- 	<bean id="totSearchTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean"> -->
+	<bean id="totSearchTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="totSearchJob" />
+        <property name="cronExpression" value="0 0 2 * * ?" />
+    </bean>
+<!--     <bean id="codeSyncTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean"> -->
+    <bean id="codeSyncTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="codeSyncJob" />
+        <property name="cronExpression" value="0 0/20 * * * ?" />
+    </bean>
+<!--     <bean id="messageSyncTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean"> -->
+    <bean id="messageSyncTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="messageSyncJob" />
+        <property name="cronExpression" value="0 0/20 * * * ?" />
+    </bean>
+	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="jobDetails">
+            <list>
+                <ref bean="totSearchJob" />
+                <ref bean="codeSyncJob" />
+                <ref bean="messageSyncJob" />
+            </list>
+        </property>
+        <property name="triggers">
+            <list>
+                <ref bean="totSearchTrigger" />
+               <!--  <ref bean="codeSyncTrigger" />
+                <ref bean="messageSyncTrigger" /> -->
+            </list>
+        </property>
+    </bean>
+		
+</beans>

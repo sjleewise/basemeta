@@ -1,0 +1,474 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.wise.meta.symn.service.WamSymnItemMapper">
+  <resultMap id="BaseResultMap" type="kr.wise.meta.symn.service.WamSymnItem"  extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+    <id column="SYMN_ITEM_ID" jdbcType="VARCHAR" property="symnItemId" />
+    <result column="SYMN_ITEM_LNM" jdbcType="VARCHAR" property="symnItemLnm" />
+    <result column="SYMN_ITEM_PNM" jdbcType="VARCHAR" property="symnItemPnm" />
+    <result column="SYMN_ITEM_TYPE" jdbcType="VARCHAR" property="symnItemType" />
+    <result column="SDITM_ID" jdbcType="VARCHAR" property="sditmId" />
+    <result column="SDITM_LNM" jdbcType="VARCHAR" property="sditmLnm" />
+    <result column="SDITM_PNM" jdbcType="VARCHAR" property="sditmPnm" />
+    <result column="RQST_NO" jdbcType="VARCHAR" property="rqstNo" />
+    <result column="RQST_SNO" jdbcType="DECIMAL" property="rqstSno" />
+    <result column="OBJ_DESCN" jdbcType="VARCHAR" property="objDescn" />
+    <result column="OBJ_VERS" jdbcType="DECIMAL" property="objVers" />
+    <result column="REG_TYP_CD" jdbcType="VARCHAR" property="regTypCd" />
+    <result column="FRS_RQST_DTM" jdbcType="TIMESTAMP" property="frsRqstDtm" />
+    <result column="FRS_RQST_USER_ID" jdbcType="VARCHAR" property="frsRqstUserId" />
+    <result column="RQST_DTM" jdbcType="TIMESTAMP" property="rqstDtm" />
+    <result column="RQST_USER_ID" jdbcType="VARCHAR" property="rqstUserId" />
+    <result column="APRV_DTM" jdbcType="TIMESTAMP" property="aprvDtm" />
+    <result column="APRV_USER_ID" jdbcType="VARCHAR" property="aprvUserId" />
+    <result column="PNM_CRI_DS" jdbcType="VARCHAR" property="pnmCriDs" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    SYMN_ITEM_ID, SYMN_ITEM_LNM, SYMN_ITEM_PNM, SYMN_ITEM_TYPE, SDITM_ID, SDITM_LNM, 
+    SDITM_PNM, RQST_NO, RQST_SNO, OBJ_DESCN, OBJ_VERS, REG_TYP_CD, FRS_RQST_DTM, FRS_RQST_USER_ID, 
+    RQST_DTM, RQST_USER_ID, APRV_DTM, APRV_USER_ID, PNM_CRI_DS
+  </sql>
+  <select id="selectByExample" parameterType="kr.wise.meta.symn.service.WamSymnItemExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from WAM_SYMN_ITEM
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from WAM_SYMN_ITEM
+    where SYMN_ITEM_ID = #{symnItemId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from WAM_SYMN_ITEM
+    where SYMN_ITEM_ID = #{symnItemId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="kr.wise.meta.symn.service.WamSymnItemExample">
+    delete from WAM_SYMN_ITEM
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="kr.wise.meta.symn.service.WamSymnItem">
+    insert into WAM_SYMN_ITEM (SYMN_ITEM_ID, SYMN_ITEM_LNM, SYMN_ITEM_PNM, 
+      SYMN_ITEM_TYPE, SDITM_ID, SDITM_LNM, 
+      SDITM_PNM, RQST_NO, RQST_SNO, 
+      OBJ_DESCN, OBJ_VERS, REG_TYP_CD, 
+      FRS_RQST_DTM, FRS_RQST_USER_ID, RQST_DTM, 
+      RQST_USER_ID, APRV_DTM, APRV_USER_ID, 
+      PNM_CRI_DS)
+    values (#{symnItemId,jdbcType=VARCHAR}, #{symnItemLnm,jdbcType=VARCHAR}, #{symnItemPnm,jdbcType=VARCHAR}, 
+      #{symnItemType,jdbcType=VARCHAR}, #{sditmId,jdbcType=VARCHAR}, #{sditmLnm,jdbcType=VARCHAR}, 
+      #{sditmPnm,jdbcType=VARCHAR}, #{rqstNo,jdbcType=VARCHAR}, #{rqstSno,jdbcType=DECIMAL}, 
+      #{objDescn,jdbcType=VARCHAR}, #{objVers,jdbcType=DECIMAL}, #{regTypCd,jdbcType=VARCHAR}, 
+      #{frsRqstDtm,jdbcType=TIMESTAMP}, #{frsRqstUserId,jdbcType=VARCHAR}, #{rqstDtm,jdbcType=TIMESTAMP}, 
+      #{rqstUserId,jdbcType=VARCHAR}, #{aprvDtm,jdbcType=TIMESTAMP}, #{aprvUserId,jdbcType=VARCHAR}, 
+      #{pnmCriDs,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="kr.wise.meta.symn.service.WamSymnItem">
+    insert into WAM_SYMN_ITEM
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="symnItemId != null">
+        SYMN_ITEM_ID,
+      </if>
+      <if test="symnItemLnm != null">
+        SYMN_ITEM_LNM,
+      </if>
+      <if test="symnItemPnm != null">
+        SYMN_ITEM_PNM,
+      </if>
+      <if test="symnItemType != null">
+        SYMN_ITEM_TYPE,
+      </if>
+      <if test="sditmId != null">
+        SDITM_ID,
+      </if>
+      <if test="sditmLnm != null">
+        SDITM_LNM,
+      </if>
+      <if test="sditmPnm != null">
+        SDITM_PNM,
+      </if>
+      <if test="rqstNo != null">
+        RQST_NO,
+      </if>
+      <if test="rqstSno != null">
+        RQST_SNO,
+      </if>
+      <if test="objDescn != null">
+        OBJ_DESCN,
+      </if>
+      <if test="objVers != null">
+        OBJ_VERS,
+      </if>
+      <if test="regTypCd != null">
+        REG_TYP_CD,
+      </if>
+      <if test="frsRqstDtm != null">
+        FRS_RQST_DTM,
+      </if>
+      <if test="frsRqstUserId != null">
+        FRS_RQST_USER_ID,
+      </if>
+      <if test="rqstDtm != null">
+        RQST_DTM,
+      </if>
+      <if test="rqstUserId != null">
+        RQST_USER_ID,
+      </if>
+      <if test="aprvDtm != null">
+        APRV_DTM,
+      </if>
+      <if test="aprvUserId != null">
+        APRV_USER_ID,
+      </if>
+      <if test="pnmCriDs != null">
+        PNM_CRI_DS,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="symnItemId != null">
+        #{symnItemId,jdbcType=VARCHAR},
+      </if>
+      <if test="symnItemLnm != null">
+        #{symnItemLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="symnItemPnm != null">
+        #{symnItemPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="symnItemType != null">
+        #{symnItemType,jdbcType=VARCHAR},
+      </if>
+      <if test="sditmId != null">
+        #{sditmId,jdbcType=VARCHAR},
+      </if>
+      <if test="sditmLnm != null">
+        #{sditmLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="sditmPnm != null">
+        #{sditmPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstNo != null">
+        #{rqstNo,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstSno != null">
+        #{rqstSno,jdbcType=DECIMAL},
+      </if>
+      <if test="objDescn != null">
+        #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null">
+        #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null">
+        #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="frsRqstDtm != null">
+        #{frsRqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="frsRqstUserId != null">
+        #{frsRqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDtm != null">
+        #{rqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rqstUserId != null">
+        #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDtm != null">
+        #{aprvDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aprvUserId != null">
+        #{aprvUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="pnmCriDs != null">
+        #{pnmCriDs,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="kr.wise.meta.symn.service.WamSymnItemExample" resultType="java.lang.Long">
+    select count(*) from WAM_SYMN_ITEM
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update WAM_SYMN_ITEM
+    <set>
+      <if test="record.symnItemId != null">
+        SYMN_ITEM_ID = #{record.symnItemId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.symnItemLnm != null">
+        SYMN_ITEM_LNM = #{record.symnItemLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="record.symnItemPnm != null">
+        SYMN_ITEM_PNM = #{record.symnItemPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="record.symnItemType != null">
+        SYMN_ITEM_TYPE = #{record.symnItemType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sditmId != null">
+        SDITM_ID = #{record.sditmId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sditmLnm != null">
+        SDITM_LNM = #{record.sditmLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sditmPnm != null">
+        SDITM_PNM = #{record.sditmPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="record.rqstNo != null">
+        RQST_NO = #{record.rqstNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.rqstSno != null">
+        RQST_SNO = #{record.rqstSno,jdbcType=DECIMAL},
+      </if>
+      <if test="record.objDescn != null">
+        OBJ_DESCN = #{record.objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="record.objVers != null">
+        OBJ_VERS = #{record.objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="record.regTypCd != null">
+        REG_TYP_CD = #{record.regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="record.frsRqstDtm != null">
+        FRS_RQST_DTM = #{record.frsRqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.frsRqstUserId != null">
+        FRS_RQST_USER_ID = #{record.frsRqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.rqstDtm != null">
+        RQST_DTM = #{record.rqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.rqstUserId != null">
+        RQST_USER_ID = #{record.rqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.aprvDtm != null">
+        APRV_DTM = #{record.aprvDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.aprvUserId != null">
+        APRV_USER_ID = #{record.aprvUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pnmCriDs != null">
+        PNM_CRI_DS = #{record.pnmCriDs,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update WAM_SYMN_ITEM
+    set SYMN_ITEM_ID = #{record.symnItemId,jdbcType=VARCHAR},
+      SYMN_ITEM_LNM = #{record.symnItemLnm,jdbcType=VARCHAR},
+      SYMN_ITEM_PNM = #{record.symnItemPnm,jdbcType=VARCHAR},
+      SYMN_ITEM_TYPE = #{record.symnItemType,jdbcType=VARCHAR},
+      SDITM_ID = #{record.sditmId,jdbcType=VARCHAR},
+      SDITM_LNM = #{record.sditmLnm,jdbcType=VARCHAR},
+      SDITM_PNM = #{record.sditmPnm,jdbcType=VARCHAR},
+      RQST_NO = #{record.rqstNo,jdbcType=VARCHAR},
+      RQST_SNO = #{record.rqstSno,jdbcType=DECIMAL},
+      OBJ_DESCN = #{record.objDescn,jdbcType=VARCHAR},
+      OBJ_VERS = #{record.objVers,jdbcType=DECIMAL},
+      REG_TYP_CD = #{record.regTypCd,jdbcType=VARCHAR},
+      FRS_RQST_DTM = #{record.frsRqstDtm,jdbcType=TIMESTAMP},
+      FRS_RQST_USER_ID = #{record.frsRqstUserId,jdbcType=VARCHAR},
+      RQST_DTM = #{record.rqstDtm,jdbcType=TIMESTAMP},
+      RQST_USER_ID = #{record.rqstUserId,jdbcType=VARCHAR},
+      APRV_DTM = #{record.aprvDtm,jdbcType=TIMESTAMP},
+      APRV_USER_ID = #{record.aprvUserId,jdbcType=VARCHAR},
+      PNM_CRI_DS = #{record.pnmCriDs,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.meta.symn.service.WamSymnItem">
+    update WAM_SYMN_ITEM
+    <set>
+      <if test="symnItemLnm != null">
+        SYMN_ITEM_LNM = #{symnItemLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="symnItemPnm != null">
+        SYMN_ITEM_PNM = #{symnItemPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="symnItemType != null">
+        SYMN_ITEM_TYPE = #{symnItemType,jdbcType=VARCHAR},
+      </if>
+      <if test="sditmId != null">
+        SDITM_ID = #{sditmId,jdbcType=VARCHAR},
+      </if>
+      <if test="sditmLnm != null">
+        SDITM_LNM = #{sditmLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="sditmPnm != null">
+        SDITM_PNM = #{sditmPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstNo != null">
+        RQST_NO = #{rqstNo,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstSno != null">
+        RQST_SNO = #{rqstSno,jdbcType=DECIMAL},
+      </if>
+      <if test="objDescn != null">
+        OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null">
+        OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null">
+        REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="frsRqstDtm != null">
+        FRS_RQST_DTM = #{frsRqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="frsRqstUserId != null">
+        FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDtm != null">
+        RQST_DTM = #{rqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rqstUserId != null">
+        RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDtm != null">
+        APRV_DTM = #{aprvDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aprvUserId != null">
+        APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="pnmCriDs != null">
+        PNM_CRI_DS = #{pnmCriDs,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where SYMN_ITEM_ID = #{symnItemId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="kr.wise.meta.symn.service.WamSymnItem">
+    update WAM_SYMN_ITEM
+    set SYMN_ITEM_LNM = #{symnItemLnm,jdbcType=VARCHAR},
+      SYMN_ITEM_PNM = #{symnItemPnm,jdbcType=VARCHAR},
+      SYMN_ITEM_TYPE = #{symnItemType,jdbcType=VARCHAR},
+      SDITM_ID = #{sditmId,jdbcType=VARCHAR},
+      SDITM_LNM = #{sditmLnm,jdbcType=VARCHAR},
+      SDITM_PNM = #{sditmPnm,jdbcType=VARCHAR},
+      RQST_NO = #{rqstNo,jdbcType=VARCHAR},
+      RQST_SNO = #{rqstSno,jdbcType=DECIMAL},
+      OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      FRS_RQST_DTM = #{frsRqstDtm,jdbcType=TIMESTAMP},
+      FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR},
+      RQST_DTM = #{rqstDtm,jdbcType=TIMESTAMP},
+      RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      APRV_DTM = #{aprvDtm,jdbcType=TIMESTAMP},
+      APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR},
+      PNM_CRI_DS = #{pnmCriDs,jdbcType=VARCHAR}
+    where SYMN_ITEM_ID = #{symnItemId,jdbcType=VARCHAR}
+  </update>
+  
+   <select id="selectList" parameterType="kr.wise.meta.symn.service.WamSymnItem" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from WAM_SYMN_ITEM
+    <where>
+    <if test="symnItemLnm!=null" >
+    	 AND (SYMN_ITEM_LNM like '%'||#{symnItemLnm,jdbcType=VARCHAR}||'%' OR  SYMN_ITEM_PNM like '%'||#{symnItemLnm,jdbcType=VARCHAR}||'%' )
+    </if>
+    </where>
+  </select>
+  
+  
+  <select id="selectSymnItemInfoDetail" resultMap="BaseResultMap" parameterType="java.lang.String">
+
+  SELECT A.*
+  	  	,(SELECT USER_NM FROM WAA_USER WHERE USER_ID = A.FRS_RQST_USER_ID AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD') AND REG_TYP_CD IN ('C','U')) AS FRS_RQST_USER_NM
+  	  	,(SELECT USER_NM FROM WAA_USER WHERE USER_ID = A.RQST_USER_ID AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD') AND REG_TYP_CD IN ('C','U')) AS RQST_USER_NM
+  	  	,(SELECT USER_NM FROM WAA_USER WHERE USER_ID = A.APRV_USER_ID AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD') AND REG_TYP_CD IN ('C','U')) AS APRV_USER_NM 
+  FROM 
+  	WAM_SYMN_ITEM A
+  WHERE A.SYMN_ITEM_ID =  #{symnItemId,jdbcType=VARCHAR}
+    AND A.REG_TYP_CD IN ('C', 'U')
+
+  </select>
+  
+  
+  
+  <select id="selectSymnItemChangeList" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    SELECT A.*
+         , (SELECT USER_NM FROM WAA_USER WHERE USER_ID = A.RQST_USER_ID AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD') AND REG_TYP_CD IN ('C','U')) AS RQST_USER_NM
+    	 , CASE WHEN A.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD') AND A.REG_TYP_CD IN ('C', 'U') THEN '#0000FF'
+    	   ELSE NULL END AS FontColor
+      FROM WAH_SYMN_ITEM A
+     WHERE SYMN_ITEM_ID = #{symnItemId,jdbcType=VARCHAR}
+     ORDER BY EXP_DTM DESC, STR_DTM DESC
+  </select>
+  
+  
+  
+  
+</mapper>

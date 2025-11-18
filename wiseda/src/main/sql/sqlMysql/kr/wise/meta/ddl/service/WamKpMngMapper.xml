@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.meta.ddl.service.WamKpMngMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.meta.ddl.service.WamTblMst" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+     <id column="OBJ_ID" property="objId" jdbcType="VARCHAR" />
+     <result column="EXP_DTM" property="expDtm" jdbcType="VARCHAR" />
+     <result column="STR_DTM" property="strDtm" jdbcType="VARCHAR" />
+     <result column="REG_TYP_CD" property="regTypCd" jdbcType="VARCHAR" />
+     <result column="FRS_RQST_DTM" property="frsRqstDtm" jdbcType="VARCHAR" />
+     <result column="FRS_RQST_USER_ID" property="frsRqstUserId" jdbcType="VARCHAR" />
+     <result column="RQST_DTM" property="rqstDtm" jdbcType="VARCHAR" />
+     <result column="RQST_USER_ID" property="rqstUserId" jdbcType="VARCHAR" />
+     <result column="DB_SCH_ID" property="dbSchId" jdbcType="VARCHAR" />
+     <result column="MST_DDL_TBL_PNM" property="mstDdlTblPnm" jdbcType="VARCHAR" />
+     <result column="MST_DDL_TBL_LNM" property="mstDdlTblLnm" jdbcType="VARCHAR" />
+     <result column="MST_DDL_TBL_ID" property="mstDdlTblId" jdbcType="VARCHAR" />
+     <result column="HIST_DDL_TBL_PNM" property="histDdlTblPnm" jdbcType="VARCHAR" />
+     <result column="HIST_DDL_TBL_LNM" property="histDdlTblLnm" jdbcType="VARCHAR" />
+     <result column="HIST_DDL_TBL_ID" property="histDdlTblId" jdbcType="VARCHAR" />
+     <result column="OBJ_DESCN" property="objDescn" jdbcType="VARCHAR" />
+     <result column="SUBJ_LNM" property="subjLnm" jdbcType="VARCHAR" />
+     <result column="HIST_SUBJ_LNM" property="histSubjLnm" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    OBJ_ID,EXP_DTM,STR_DTM,REG_TYP_CD,FRS_RQST_DTM,FRS_RQST_USER_ID,RQST_DTM,RQST_USER_ID,DB_SCH_ID,
+    MST_DDL_TBL_PNM,MST_DDL_TBL_LNM,MST_DDL_TBL_ID,HIST_DDL_TBL_PNM,HIST_DDL_TBL_LNM,HIST_DDL_TBL_ID,OBJ_DESCN
+  </sql>
+
+  <select id="selectKpMngList" resultMap="BaseResultMap" parameterType="kr.wise.meta.ddl.service.WamTblMst" >
+       SELECT /* WamKpMngMapper.selectKpMngList */
+       	<include refid="Base_Column_List"/>
+       	,GET_DDL_TBL_SUBJ_LNM(MST_DDL_TBL_ID) AS SUBJ_LNM
+       	,GET_DDL_TBL_SUBJ_LNM(HIST_DDL_TBL_ID) AS HIST_SUBJ_LNM
+       FROM WAM_KP_TBL_MAP
+       WHERE EXP_DTM = STR_TO_DATE('99991231', '%Y%m%d')
+       AND REG_TYP_CD IN ('C', 'U')
+       <if test=" mstDdlTblLnm != null" >
+       AND (MST_DDL_TBL_PNM LIKE '%'||#{mstDdlTblLnm,jdbcType=VARCHAR}||'%' OR MST_DDL_TBL_LNM LIKE '%'||#{mstDdlTblLnm,jdbcType=VARCHAR}||'%') 
+      </if>
+      <if test=" histDdlTblLnm != null" >
+       AND (HIST_DDL_TBL_PNM LIKE '%'||#{histDdlTblLnm,jdbcType=VARCHAR}||'%' OR HIST_DDL_TBL_LNM LIKE '%'||#{histDdlTblLnm,jdbcType=VARCHAR}||'%') 
+      </if>
+      
+  </select>
+   <select id="checkDup" resultMap="BaseResultMap" parameterType="kr.wise.meta.ddl.service.WamTblMst" >
+       SELECT /* WamKpMngMapper.checkDup */
+       	DISTINCT MST_DDL_TBL_ID, HIST_DDL_TBL_ID
+       FROM WAM_KP_TBL_MAP
+       WHERE EXP_DTM = STR_TO_DATE('99991231', '%Y%m%d')
+       AND REG_TYP_CD IN ('C', 'U')
+       AND MST_DDL_TBL_ID = #{mstDdlTblId,jdbcType=VARCHAR} 
+       AND HIST_DDL_TBL_ID = #{histDdlTblId,jdbcType=VARCHAR}       
+  </select>
+  
+  
+  
+  <select id="selectKpMngByKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+       SELECT /* WamKpMngMapper.selectKpMngByKey */
+       	<include refid="Base_Column_List"/>
+       FROM WAM_KP_TBL_MAP
+       WHERE OBJ_ID = #{objId,jdbcType=VARCHAR}
+  </select>
+  <insert id ="regKpMng" parameterType="kr.wise.meta.ddl.service.WamTblMst">
+       INSERT /* WamKpMngMapper.regKpMng */
+       	INTO WAM_KP_TBL_MAP(
+       	       	<include refid="Base_Column_List"/>
+       ) VALUES(#{objId         ,jdbcType=VARCHAR}
+               ,STR_TO_DATE('99991231', '%Y%m%d')
+               ,NOW()
+               ,'C'
+               ,NOW()
+               ,#{frsRqstUserId ,jdbcType=VARCHAR}
+               ,NOW()
+               ,#{rqstUserId    ,jdbcType=VARCHAR}
+               ,#{dbSchId       ,jdbcType=VARCHAR}
+               ,#{mstDdlTblPnm  ,jdbcType=VARCHAR}
+               ,#{mstDdlTblLnm  ,jdbcType=VARCHAR}
+               ,#{mstDdlTblId   ,jdbcType=VARCHAR}
+               ,#{histDdlTblPnm ,jdbcType=VARCHAR}
+               ,#{histDdlTblLnm ,jdbcType=VARCHAR}
+               ,#{histDdlTblId  ,jdbcType=VARCHAR}
+               ,#{objDescn      ,jdbcType=VARCHAR}
+               )
+  </insert>
+  
+  <update id="updateKpMng" parameterType="kr.wise.meta.ddl.service.WamTblMst">
+       UPDATE /* WamKpMngMapper.updateKpMng */
+       	WAM_KP_TBL_MAP
+       SET 
+          MST_DDL_TBL_ID = #{mstDdlTblId  ,jdbcType=VARCHAR},
+          HIST_DDL_TBL_ID = #{histDdlTblId  ,jdbcType=VARCHAR},
+          MST_DDL_TBL_PNM = #{mstDdlTblPnm  ,jdbcType=VARCHAR},
+          HIST_DDL_TBL_PNM = #{histDdlTblPnm  ,jdbcType=VARCHAR},
+          MST_DDL_TBL_LNM = #{mstDdlTblLnm  ,jdbcType=VARCHAR},
+          HIST_DDL_TBL_LNM = #{histDdlTblLnm  ,jdbcType=VARCHAR},
+          DB_SCH_ID = #{dbSchId  ,jdbcType=VARCHAR},
+          OBJ_DESCN = #{objDescn  ,jdbcType=VARCHAR},
+          REG_TYP_CD ='U'
+       WHERE OBJ_ID = #{objId         ,jdbcType=VARCHAR}
+  </update>
+  
+  
+  
+  <update id="delKpMng" parameterType="kr.wise.meta.ddl.service.WamTblMst">
+       UPDATE /* WamKpMngMapper.delKpMng */
+       	WAM_KP_TBL_MAP
+       SET 
+          EXP_DTM = NOW(),
+          REG_TYP_CD ='D'
+       WHERE OBJ_ID = #{objId         ,jdbcType=VARCHAR}
+  </update>
+</mapper>

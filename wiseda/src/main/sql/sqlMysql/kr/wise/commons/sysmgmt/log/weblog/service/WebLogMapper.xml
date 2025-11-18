@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.commons.sysmgmt.log.weblog.service.WebLogMapper" >
+<!-- 	<typeAlias  alias="loginVO" type="kr.wise.commons.cmm.LoginVO"/> -->
+
+	<!-- 웹로그 맵 -->
+	<resultMap id="WebLogVO" type="kr.wise.commons.sysmgmt.log.weblog.service.WebLog">
+		<result property="requstId" column="REQUST_ID"/>
+		<result property="occrrncDe" column="OCCRRNC_DE"/>
+		<result property="url" column="URL"/>
+		<result property="rqesterIp" column="RQESTER_IP"/>
+		<result property="rqesterId" column="RQESTER_ID"/>
+		<result property="rqsterNm" column="RQESTER_NM"/>
+		<result property="creatDt" column="CREAT_DT" jdbcType="TIMESTAMP"/>
+		<result property="progrmKoreanNm" column="PROGRM_KOREAN_NM" jdbcType="VARCHAR"/>
+	</resultMap>
+
+	<!-- 웹 로그 등록 -->
+	<insert id="logInsertWebLog" parameterType="kr.wise.commons.sysmgmt.log.weblog.service.WebLog" >
+		<![CDATA[
+			INSERT INTO COMTNWEBLOG
+				( REQUST_ID
+				  , URL
+				  , RQESTER_ID
+				  , RQESTER_IP
+				  , OCCRRNC_DE
+				  , CREAT_DT )
+			VALUES ( #{requstId}
+				  , #{url}
+				  , #{rqesterId}
+				  , #{rqesterIp, jdbcType=VARCHAR}
+				  , DATE_FORMAT(NOW(), '%Y%m%d')
+				  , NOW())
+		]]>
+	</insert>
+	
+	<!-- 웹로그 조회  by user -->
+	<select id="selectweblogbyuser" parameterType="kr.wise.commons.sysmgmt.log.weblog.service.WebLog" resultMap="WebLogVO">
+	
+	SELECT A.*
+	     , B.PROGRM_KOREAN_NM
+	     , U.USER_NM AS RQESTER_NM
+	  FROM COMTNWEBLOG A
+	  LEFT OUTER JOIN COMTNPROGRMLIST B
+	    ON A.URL = CONCAT(IFNULL(B.PROGRM_STRE_PATH, ''),IFNULL(B.URL, ''))
+	  LEFT OUTER JOIN WAA_USER U
+	    ON A.RQESTER_ID = U.USER_ID
+	   AND U.EXP_DTM = STR_TO_DATE('99991231', '%Y%m%d')
+	   AND U.REG_TYP_CD IN ('C', 'U')
+	WHERE CREAT_DT IS NOT NULL
+	  AND DATE_FORMAT(CREAT_DT, '%Y%m%d') BETWEEN #{searchBgnDe,jdbcType=VARCHAR} AND #{searchEndDe,jdbcType=VARCHAR}
+	  <if test="rqesterId != null and rqesterId != '' ">AND A.RQESTER_ID = #{rqesterId,jdbcType=VARCHAR}</if>
+	  <if test="rqsterNm != null and rqsterNm != '' ">AND U.USER_NM = #{rqsterNm,jdbcType=VARCHAR}</if>
+	ORDER BY RQESTER_ID, CREAT_DT  
+	</select>
+	
+	
+	<select id="checkDup" parameterType="kr.wise.commons.sysmgmt.log.weblog.service.WebLog" resultType="java.lang.Integer">
+	
+	SELECT COUNT(*) AS CNT
+	  FROM COMTNWEBLOG A
+	 WHERE REQUST_ID = #{requstId}
+	</select>
+
+</mapper>

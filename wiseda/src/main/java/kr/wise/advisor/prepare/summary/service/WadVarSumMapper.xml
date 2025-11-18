@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.wise.advisor.prepare.summary.service.WadVarSumMapper">
+  <resultMap id="BaseResultMap" type="kr.wise.advisor.prepare.summary.service.WadVarSum">
+    <id column="ANL_VAR_ID" jdbcType="VARCHAR" property="anlVarId" />
+    
+    <result column="VAR_TYPE" jdbcType="VARCHAR" property="varType" />
+    <result column="TOT_CNT"  jdbcType="VARCHAR" property="totCnt"  />
+    <result column="MDN_VAL"  jdbcType="VARCHAR" property="mdnVal"  />
+    <result column="MAX_VAL"  jdbcType="VARCHAR" property="maxVal"  />
+    <result column="TOP_VAL"  jdbcType="VARCHAR" property="topVal"  />
+    <result column="FRQ_VAL"  jdbcType="VARCHAR" property="frqVal"  />
+    <result column="MIN_VAL"  jdbcType="VARCHAR" property="minVal"  />
+    <result column="UNQ_VAL"  jdbcType="VARCHAR" property="unqVal"  />
+    <result column="MN_VAL"   jdbcType="VARCHAR" property="mnVal"   />
+    <result column="STD_DVT"  jdbcType="VARCHAR" property="stdDvt"  />
+    <result column="QRT_CNT1" jdbcType="VARCHAR" property="qrtCnt1" />
+    <result column="QRT_CNT3" jdbcType="VARCHAR" property="qrtCnt3" />
+    <!-- 
+    <result column="VAR_TYPE" jdbcType="VARCHAR" property="varType" />
+    <result column="TOT_CNT" jdbcType="DECIMAL" property="totCnt" />
+    <result column="MDN_VAL" jdbcType="DECIMAL" property="mdnVal" />
+    <result column="MAX_VAL" jdbcType="DECIMAL" property="maxVal" />
+    <result column="TOP_VAL" jdbcType="VARCHAR" property="topVal" />
+    <result column="FRQ_VAL" jdbcType="DECIMAL" property="frqVal" />
+    <result column="MIN_VAL" jdbcType="DECIMAL" property="minVal" />
+    <result column="UNQ_VAL" jdbcType="DECIMAL" property="unqVal" />
+    <result column="MN_VAL" jdbcType="DECIMAL" property="mnVal" />
+    <result column="STD_DVT" jdbcType="DECIMAL" property="stdDvt" />
+    <result column="QRT_CNT1" jdbcType="DECIMAL" property="qrtCnt1" />
+    <result column="QRT_CNT3" jdbcType="DECIMAL" property="qrtCnt3" />
+     -->
+  </resultMap>
+  <sql id="Base_Column_List">
+    ANL_VAR_ID, VAR_TYPE, TOT_CNT, MDN_VAL, MAX_VAL, TOP_VAL, FRQ_VAL, MIN_VAL, UNQ_VAL, MN_VAL, 
+    STD_DVT, QRT_CNT1, QRT_CNT3, OBJ_DESCN, OBJ_VERS, REG_TYP_CD, WRIT_DTM, WRIT_USER_ID
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from WAD_VAR_SUM
+    where ANL_VAR_ID = #{anlVarId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from WAD_VAR_SUM
+    where ANL_VAR_ID = #{anlVarId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="kr.wise.advisor.prepare.summary.service.WadVarSum">
+    insert into WAD_VAR_SUM (ANL_VAR_ID, VAR_TYPE, TOT_CNT, 
+      MDN_VAL, MAX_VAL, TOP_VAL, FRQ_VAL, 
+      MIN_VAL, UNQ_VAL, MN_VAL, 
+      STD_DVT, QRT_CNT1, QRT_CNT3, 
+      OBJ_DESCN, OBJ_VERS, REG_TYP_CD, 
+      WRIT_DTM, WRIT_USER_ID)
+    values (#{anlVarId,jdbcType=VARCHAR}, #{varType,jdbcType=VARCHAR}, #{totCnt,jdbcType=DECIMAL}, 
+      #{mdnVal,jdbcType=DECIMAL}, #{maxVal,jdbcType=DECIMAL}, #{topVal,jdbcType=VARCHAR}, #{frqVal,jdbcType=DECIMAL}, 
+      #{minVal,jdbcType=DECIMAL}, #{unqVal,jdbcType=DECIMAL}, #{mnVal,jdbcType=DECIMAL}, 
+      #{stdDvt,jdbcType=DECIMAL}, #{qrtCnt1,jdbcType=DECIMAL}, #{qrtCnt3,jdbcType=DECIMAL}, 
+      #{objDescn,jdbcType=VARCHAR}, #{objVers,jdbcType=DECIMAL}, #{regTypCd,jdbcType=VARCHAR}, 
+      #{writDtm,jdbcType=TIMESTAMP}, #{writUserId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="kr.wise.advisor.prepare.summary.service.WadVarSum">
+    insert into WAD_VAR_SUM
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+        ANL_VAR_ID,
+      <if test="varType != null">
+        VAR_TYPE,
+      </if>
+      <if test="totCnt != null">
+        TOT_CNT,
+      </if>
+      <if test="mdnVal != null">
+        MDN_VAL,
+      </if>
+      <if test="maxVal != null">
+        MAX_VAL,
+      </if>
+      <if test="topVal != null">
+        TOP_VAL ,
+      </if>
+      <if test="frqVal != null">
+        FRQ_VAL,
+      </if>
+      <if test="minVal != null">
+        MIN_VAL,
+      </if>
+      <if test="unqVal != null">
+        UNQ_VAL,
+      </if>
+      <if test="mnVal != null">
+        MN_VAL,
+      </if>
+      <if test="stdDvt != null">
+        STD_DVT,
+      </if>
+      <if test="qrtCnt1 != null">
+        QRT_CNT1,
+      </if>
+      <if test="qrtCnt3 != null">
+        QRT_CNT3,
+      </if>
+      <if test="objDescn != null">
+        OBJ_DESCN,
+      </if>
+        OBJ_VERS,
+        REG_TYP_CD,
+        WRIT_DTM,
+        WRIT_USER_ID,
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+        #{anlVarId,jdbcType=VARCHAR},
+      <if test="varType != null">
+        #{varType,jdbcType=VARCHAR},
+      </if>
+      <if test="totCnt != null">
+        #{totCnt,jdbcType=DECIMAL},
+      </if>
+      <if test="mdnVal != null">
+        #{mdnVal,jdbcType=DECIMAL},
+      </if>
+      <if test="maxVal != null">
+        #{maxVal,jdbcType=DECIMAL},
+      </if>
+      <if test="topVal != null">
+        #{topVal,jdbcType=VARCHAR},
+      </if>
+      <if test="frqVal != null">
+        #{frqVal,jdbcType=DECIMAL},
+      </if>
+      <if test="minVal != null">
+        #{minVal,jdbcType=DECIMAL},
+      </if>
+      <if test="unqVal != null">
+        #{unqVal,jdbcType=DECIMAL},
+      </if>
+      <if test="mnVal != null">
+        #{mnVal,jdbcType=DECIMAL},
+      </if>
+      <if test="stdDvt != null">
+        #{stdDvt,jdbcType=DECIMAL},
+      </if>
+      <if test="qrtCnt1 != null">
+        #{qrtCnt1,jdbcType=DECIMAL},
+      </if>
+      <if test="qrtCnt3 != null">
+        #{qrtCnt3,jdbcType=DECIMAL},
+      </if>
+      <if test="objDescn != null">
+        #{objDescn,jdbcType=VARCHAR},
+      </if>
+        1,
+        'C',
+        SYSDATE,
+        #{writUserId,jdbcType=VARCHAR},
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.advisor.prepare.summary.service.WadVarSum">
+    update WAD_VAR_SUM
+    <set>
+      <if test="varType != null">
+        VAR_TYPE = #{varType,jdbcType=VARCHAR},
+      </if>
+      <if test="totCnt != null">
+        TOT_CNT = #{totCnt,jdbcType=DECIMAL},
+      </if>
+      <if test="mdnVal != null">
+        MDN_VAL = #{mdnVal,jdbcType=DECIMAL},
+      </if>
+      <if test="maxVal != null">
+        MAX_VAL = #{maxVal,jdbcType=DECIMAL},
+      </if>
+      <if test="topVal != null">
+        TOP_VAL = #{topVal,jdbcType=VARCHAR},
+      </if>
+      <if test="frqVal != null">
+        FRQ_VAL = #{frqVal,jdbcType=DECIMAL},
+      </if>
+      <if test="minVal != null">
+        MIN_VAL = #{minVal,jdbcType=DECIMAL},
+      </if>
+      <if test="unqVal != null">
+        UNQ_VAL = #{unqVal,jdbcType=DECIMAL},
+      </if>
+      <if test="mnVal != null">
+        MN_VAL = #{mnVal,jdbcType=DECIMAL},
+      </if>
+      <if test="stdDvt != null">
+        STD_DVT = #{stdDvt,jdbcType=DECIMAL},
+      </if>
+      <if test="qrtCnt1 != null">
+        QRT_CNT1 = #{qrtCnt1,jdbcType=DECIMAL},
+      </if>
+      <if test="qrtCnt3 != null">
+        QRT_CNT3 = #{qrtCnt3,jdbcType=DECIMAL},
+      </if>
+      <if test="objDescn != null">
+        OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null">
+        OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null">
+        REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="writDtm != null">
+        WRIT_DTM = #{writDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="writUserId != null">
+        WRIT_USER_ID = #{writUserId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ANL_VAR_ID = #{anlVarId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="kr.wise.advisor.prepare.summary.service.WadVarSum">
+    UPDATE WAD_VAR_SUM
+    SET VAR_TYPE = #{varType,jdbcType=VARCHAR},
+      TOT_CNT = #{totCnt,jdbcType=DECIMAL},
+      MDN_VAL = #{mdnVal,jdbcType=DECIMAL},
+      MAX_VAL = #{maxVal,jdbcType=DECIMAL},
+      TOP_VAL = #{topVal,jdbcType=VARCHAR},
+      FRQ_VAL = #{frqVal,jdbcType=DECIMAL},
+      MIN_VAL = #{minVal,jdbcType=DECIMAL},
+      UNQ_VAL = #{unqVal,jdbcType=DECIMAL},
+      MN_VAL = #{mnVal,jdbcType=DECIMAL},
+      STD_DVT = #{stdDvt,jdbcType=DECIMAL},
+      QRT_CNT1 = #{qrtCnt1,jdbcType=DECIMAL},
+      QRT_CNT3 = #{qrtCnt3,jdbcType=DECIMAL},
+      <if test="objDescn != null">
+        OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      </if>
+      OBJ_VERS = NVL(OBJ_VERS,0)+1,
+      REG_TYP_CD = 'U',
+      WRIT_DTM = SYSDATE,
+      WRIT_USER_ID = #{writUserId,jdbcType=VARCHAR}
+    WHERE ANL_VAR_ID = #{anlVarId,jdbcType=VARCHAR}
+  </update>
+</mapper>

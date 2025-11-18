@@ -1,0 +1,833 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.dq.criinfo.ctq.service.WaqCtqMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.dq.criinfo.ctq.service.WaqCtqVO" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+<!--     <id column="RQST_NO" property="rqstNo" jdbcType="VARCHAR" /> -->
+<!--     <id column="RQST_SNO" property="rqstSno" jdbcType="DECIMAL" /> -->
+    <result column="CTQ_ID" property="ctqId" jdbcType="VARCHAR" />
+    <result column="CTQ_LNM" property="ctqLnm" jdbcType="VARCHAR" />
+    <result column="CTQ_PNM" property="ctqPnm" jdbcType="VARCHAR" />
+<!--     <result column="RQST_DCD" property="rqstDcd" jdbcType="VARCHAR" /> -->
+<!--     <result column="RVW_STS_CD" property="rvwStsCd" jdbcType="VARCHAR" /> -->
+<!--     <result column="RVW_CONTS" property="rvwConts" jdbcType="VARCHAR" /> -->
+<!--     <result column="VRF_CD" property="vrfCd" jdbcType="VARCHAR" /> -->
+<!--     <result column="VRF_RMK" property="vrfRmk" jdbcType="VARCHAR" /> -->
+    <result column="CTQ_LVL" property="ctqLvl" jdbcType="DECIMAL" />
+    <result column="UPP_CTQ_LNM" property="uppCtqLnm" jdbcType="VARCHAR" />
+    <result column="UPP_CTQ_PNM" property="uppCtqPnm" jdbcType="VARCHAR" />
+    <result column="UPP_CTQ_ID" property="uppCtqId" jdbcType="VARCHAR" />
+<!--     <result column="OBJ_DESCN" property="objDescn" jdbcType="VARCHAR" /> -->
+<!--     <result column="OBJ_VERS" property="objVers" jdbcType="DECIMAL" /> -->
+<!--     <result column="REG_TYP_CD" property="regTypCd" jdbcType="VARCHAR" /> -->
+<!--     <result column="FRS_RQST_DTM" property="frsRqstDtm" jdbcType="DATE" /> -->
+<!--     <result column="FRS_RQST_USER_ID" property="frsRqstUserId" jdbcType="VARCHAR" /> -->
+<!--     <result column="RQST_DTM" property="rqstDtm" jdbcType="DATE" /> -->
+<!--     <result column="RQST_USER_ID" property="rqstUserId" jdbcType="VARCHAR" /> -->
+<!--     <result column="RQST_USER_NM" property="rqstUserNm" jdbcType="VARCHAR" /> -->
+<!--     <result column="APRV_DTM" property="aprvDtm" jdbcType="DATE" /> -->
+<!--     <result column="APRV_USER_ID" property="aprvUserId" jdbcType="VARCHAR" /> -->
+	<result column="GOAL" property="goal" jdbcType="DECIMAL" />
+    <result column="WEIGHT" property="weight" jdbcType="DECIMAL" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    RQST_NO, RQST_SNO, CTQ_ID, CTQ_LNM, CTQ_PNM, RQST_DCD, RVW_STS_CD, 
+    RVW_CONTS, VRF_CD, VRF_RMK, CTQ_LVL, UPP_CTQ_LNM, UPP_CTQ_PNM, UPP_CTQ_ID,
+    OBJ_DESCN, OBJ_VERS, REG_TYP_CD, FRS_RQST_DTM, FRS_RQST_USER_ID, RQST_DTM, RQST_USER_ID, 
+    APRV_DTM, APRV_USER_ID , FULL_PATH, WEIGHT, GOAL
+  </sql>
+  
+  <select id="selectCtqRqstList" parameterType="java.lang.String" resultMap="BaseResultMap">
+    SELECT 
+     A.RQST_NO, A.RQST_SNO, A.CTQ_ID, A.CTQ_LNM, A.CTQ_PNM, A.RQST_DCD
+     <if test='rqstStepCd == "Q" '>
+     , CASE WHEN A.RVW_STS_CD = '2' THEN '2' ELSE '0' END AS RVW_STS_CD
+     </if>
+     <if test='rqstStepCd != "Q" '>
+     , A.RVW_STS_CD
+     </if>
+     , A.RVW_CONTS
+     , A.VRF_CD, A.VRF_RMK, A.CTQ_LVL, A.UPP_CTQ_LNM, A.UPP_CTQ_PNM, A.UPP_CTQ_ID, A.GOAL, A.WEIGHT, A.OBJ_DESCN, A.OBJ_VERS, A.REG_TYP_CD, A.FRS_RQST_DTM, 
+    A.FRS_RQST_USER_ID, A.RQST_DTM, A.RQST_USER_ID, A.APRV_DTM, A.APRV_USER_ID
+    , (CASE WHEN A.VRF_CD = '2' THEN '#FF0000' 
+    		WHEN A.VRF_CD = '5' THEN '#0000FF' END  ) AS FontColor
+    , U.USER_NM AS RQST_USER_NM
+    FROM WAQ_CTQ A
+    LEFT OUTER JOIN WAA_USER U
+      ON A.RQST_USER_ID = U.USER_ID
+     AND U.REG_TYP_CD IN ('C', 'U')
+     AND U.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+    WHERE A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+    <if test='rqstStepCd == "Q" '>
+    	AND A.VRF_CD = '1'
+    </if>
+    
+    ORDER BY A.RQST_SNO
+  </select>
+  
+  <select id="selectRqstCtq" resultMap="BaseResultMap" parameterType="kr.wise.dq.criinfo.ctq.service.WaqCtqVO" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM WAQ_CTQ
+    WHERE RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      AND RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+  </select>
+  
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="map" >
+     select A.*, B.USER_NM AS RQST_USER_NM
+       from WAQ_CTQ A
+            left outer join WAA_USER B
+              on A.RQST_USER_ID = B.USER_ID
+             and EXP_DTM = to_date('99991231','YYYYMMDD')
+             and REG_TYP_CD in ('C','U')
+      where A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+        and A.RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="map" >
+    delete from WAQ_CTQ
+    where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      and RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+  </delete>
+  
+  <delete id="deleteRqstVrfDtls" parameterType="kr.wise.commons.rqstmst.service.WaqMstr" >
+    delete from WAQ_RQST_VRF_DTLS
+    where BIZ_DTL_CD = #{bizDcd,jdbcType=VARCHAR}
+       and RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+  </delete>
+  
+  <insert id="insert" parameterType="kr.wise.dq.criinfo.ctq.service.WaqCtqVO" >
+    insert into WAQ_CTQ (RQST_NO, RQST_SNO, CTQ_ID, 
+      CTQ_LNM, CTQ_PNM, RQST_DCD, 
+      RVW_STS_CD, RVW_CONTS, VRF_CD, 
+      VRF_RMK, CTQ_LVL, UPP_CTQ_LNM, 
+      UPP_CTQ_PNM, UPP_CTQ_ID, GOAL, WEIGHT, OBJ_DESCN, 
+      OBJ_VERS, REG_TYP_CD, FRS_RQST_DTM, 
+      FRS_RQST_USER_ID, RQST_DTM, RQST_USER_ID, 
+      APRV_DTM, APRV_USER_ID)
+    values (#{rqstNo,jdbcType=VARCHAR}, #{rqstSno,jdbcType=DECIMAL}, #{ctqId,jdbcType=VARCHAR}, 
+      #{ctqLnm,jdbcType=VARCHAR}, #{ctqPnm,jdbcType=VARCHAR}, #{rqstDcd,jdbcType=VARCHAR}, 
+      #{rvwStsCd,jdbcType=VARCHAR}, #{rvwConts,jdbcType=VARCHAR}, #{vrfCd,jdbcType=VARCHAR}, 
+      #{vrfRmk,jdbcType=VARCHAR}, #{ctqLvl,jdbcType=DECIMAL}, #{uppCtqLnm,jdbcType=VARCHAR}, 
+      #{uppCtqPnm,jdbcType=VARCHAR}, #{uppCtqId,jdbcType=VARCHAR}, #{goal,jdbcType=DECIMAL}, 
+      #{weight,jdbcType=DECIMAL}, #{objDescn,jdbcType=VARCHAR}, 
+      #{objVers,jdbcType=DECIMAL}, #{regTypCd,jdbcType=VARCHAR}, #{frsRqstDtm,jdbcType=DATE}, 
+      #{frsRqstUserId,jdbcType=VARCHAR}, #{rqstDtm,jdbcType=DATE}, #{rqstUserId,jdbcType=VARCHAR}, 
+      #{aprvDtm,jdbcType=DATE}, #{aprvUserId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="kr.wise.dq.criinfo.ctq.service.WaqCtqVO" >
+    insert into WAQ_CTQ
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+        RQST_NO,
+        RQST_SNO,
+      <if test="ctqId != null" >
+        CTQ_ID,
+      </if>
+      <if test="ctqLnm != null" >
+        CTQ_LNM,
+      </if>
+      <if test="ctqPnm != null" >
+        CTQ_PNM,
+      </if>
+      <if test="rqstDcd != null" >
+        RQST_DCD,
+      </if>
+      <if test="rvwStsCd != null" >
+        RVW_STS_CD,
+      </if>
+      <if test="rvwConts != null" >
+        RVW_CONTS,
+      </if>
+      <if test="vrfCd != null" >
+        VRF_CD,
+      </if>
+      <if test="vrfRmk != null" >
+        VRF_RMK,
+      </if>
+      <if test="ctqLvl != null" >
+        CTQ_LVL,
+      </if>
+      <if test="uppCtqLnm != null" >
+        UPP_CTQ_LNM,
+      </if>
+      <if test="uppCtqPnm != null" >
+        UPP_CTQ_PNM,
+      </if>
+      <if test="uppCtqId != null" >
+        UPP_CTQ_ID,
+      </if>
+      <if test="goal != null" >
+        GOAL,
+      </if>
+      <if test="weight != null" >
+        WEIGHT,
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN,
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS,
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD,
+      </if>
+      <if test="frsRqstDtm != null" >
+        FRS_RQST_DTM,
+      </if>
+      <if test="frsRqstUserId != null" >
+        FRS_RQST_USER_ID,
+      </if>
+      <if test="rqstDtm != null" >
+        RQST_DTM,
+      </if>
+      <if test="rqstUserId != null" >
+        RQST_USER_ID,
+      </if>
+      <if test="aprvDtm != null" >
+        APRV_DTM,
+      </if>
+      <if test="aprvUserId != null" >
+        APRV_USER_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+        #{rqstNo,jdbcType=VARCHAR},
+         (SELECT COALESCE(MAX(RQST_SNO), 0) + 1 FROM WAQ_CTQ WHERE RQST_NO = #{rqstNo}) ,
+      <if test="ctqId != null" >
+        #{ctqId,jdbcType=VARCHAR},
+      </if>
+      <if test="ctqLnm != null" >
+        #{ctqLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="ctqPnm != null" >
+        #{ctqPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDcd != null" >
+        #{rqstDcd,jdbcType=VARCHAR},
+      </if>
+      <if test="rvwStsCd != null" >
+        #{rvwStsCd,jdbcType=VARCHAR},
+      </if>
+      <if test="rvwConts != null" >
+        #{rvwConts,jdbcType=VARCHAR},
+      </if>
+      <if test="vrfCd != null" >
+        #{vrfCd,jdbcType=VARCHAR},
+      </if>
+      <if test="vrfRmk != null" >
+        #{vrfRmk,jdbcType=VARCHAR},
+      </if>
+      <if test="ctqLvl != null" >
+        #{ctqLvl,jdbcType=DECIMAL},
+      </if>
+      <if test="uppCtqLnm != null" >
+        #{uppCtqLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="uppCtqPnm != null" >
+        #{uppCtqPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="uppCtqId != null" >
+        #{uppCtqId,jdbcType=VARCHAR},
+      </if>
+      <if test="goal != null" >
+        #{goal,jdbcType=DECIMAL},
+      </if>
+      <if test="weight != null" >
+        #{weight,jdbcType=DECIMAL},
+      </if>
+      <if test="objDescn != null" >
+        #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null" >
+        #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="frsRqstDtm != null" >
+        #{frsRqstDtm,jdbcType=DATE},
+      </if>
+      <if test="frsRqstUserId != null" >
+        #{frsRqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDtm != null" >
+        #{rqstDtm,jdbcType=DATE},
+      </if>
+      <if test="rqstUserId != null" >
+        #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDtm != null" >
+        #{aprvDtm,jdbcType=DATE},
+      </if>
+      <if test="aprvUserId != null" >
+        #{aprvUserId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.dq.criinfo.ctq.service.WaqCtqVO" >
+    update WAQ_CTQ
+    <set >
+      <if test="rqstSno != null" >
+        RQST_SNO = #{rqstSno,jdbcType=VARCHAR},
+      </if>
+      <if test="ctqId != null" >
+        CTQ_ID = #{ctqId,jdbcType=VARCHAR},
+      </if>
+      <if test="ctqLnm != null" >
+        CTQ_LNM = #{ctqLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="ctqPnm != null" >
+        CTQ_PNM = #{ctqPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDcd != null" >
+        RQST_DCD = #{rqstDcd,jdbcType=VARCHAR},
+      </if>
+      <if test="rvwStsCd != null" >
+        RVW_STS_CD = #{rvwStsCd,jdbcType=VARCHAR},
+      </if>
+      <if test="rvwConts != null" >
+        RVW_CONTS = #{rvwConts,jdbcType=VARCHAR},
+      </if>
+      <if test="vrfCd != null" >
+        VRF_CD = #{vrfCd,jdbcType=VARCHAR},
+      </if>
+      <if test="vrfRmk != null" >
+        VRF_RMK = #{vrfRmk,jdbcType=VARCHAR},
+      </if>
+      <if test="ctqLvl != null" >
+        CTQ_LVL = #{ctqLvl,jdbcType=DECIMAL},
+      </if>
+      <if test="uppCtqLnm != null" >
+        UPP_CTQ_LNM = #{uppCtqLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="uppCtqPnm != null" >
+        UPP_CTQ_PNM = #{uppCtqPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="uppCtqId != null" >
+        UPP_CTQ_ID = #{uppCtqId,jdbcType=VARCHAR},
+      </if>
+      <if test="goal != null" >
+        GOAL = #{goal,jdbcType=DECIMAL},
+      </if>
+      <if test="weight != null" >
+        WEIGHT = #{weight,jdbcType=DECIMAL},
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="frsRqstDtm != null" >
+        FRS_RQST_DTM = #{frsRqstDtm,jdbcType=DATE},
+      </if>
+      <if test="frsRqstUserId != null" >
+        FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR},
+      </if>
+        RQST_DTM = NOW(),
+      <if test="rqstUserId != null" >
+        RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDtm != null" >
+        APRV_DTM = #{aprvDtm,jdbcType=DATE},
+      </if>
+      <if test="aprvUserId != null" >
+        APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      and RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="kr.wise.dq.criinfo.ctq.service.WaqCtqVO" >
+    update WAQ_CTQ
+    set CTQ_ID = #{ctqId,jdbcType=VARCHAR},
+      CTQ_LNM = #{ctqLnm,jdbcType=VARCHAR},
+      CTQ_PNM = #{ctqPnm,jdbcType=VARCHAR},
+      RQST_DCD = #{rqstDcd,jdbcType=VARCHAR},
+      RVW_STS_CD = #{rvwStsCd,jdbcType=VARCHAR},
+      RVW_CONTS = #{rvwConts,jdbcType=VARCHAR},
+      VRF_CD = #{vrfCd,jdbcType=VARCHAR},
+      VRF_RMK = #{vrfRmk,jdbcType=VARCHAR},
+      CTQ_LVL = #{ctqLvl,jdbcType=DECIMAL},
+      UPP_CTQ_LNM = #{uppCtqLnm,jdbcType=VARCHAR},
+      UPP_CTQ_PNM = #{uppCtqPnm,jdbcType=VARCHAR},
+      UPP_CTQ_ID = #{uppCtqId,jdbcType=VARCHAR},
+      GOAL = #{goal,jdbcType=DECIMAL},
+      WEIGHT = #{weight,jdbcType=DECIMAL},
+      OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      FRS_RQST_DTM = #{frsRqstDtm,jdbcType=DATE},
+      FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR},
+      RQST_DTM = #{rqstDtm,jdbcType=DATE},
+      RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      APRV_DTM = #{aprvDtm,jdbcType=DATE},
+      APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR}
+    where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      and RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+  </update>
+  
+  
+  <!-- 요청서내 중복자료 검증(CTQ01) -->
+  <insert id="checkDupCtq" parameterType="map">
+   <include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSql"/>
+--검증쿼리
+      and exists (select 1
+                    from WAQ_CTQ D
+                   where A.RQST_NO = D.RQST_NO
+                     and A.CTQ_LNM = D.CTQ_LNM
+                     and COALESCE(A.UPP_CTQ_LNM, '▦') = COALESCE(D.UPP_CTQ_LNM, '▦')
+                     and A.RQST_SNO != D.RQST_SNO)
+  </insert>
+  
+  <insert id="checkNotExistUppCtq" parameterType="map">
+   <include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSql"/>
+      and A.REG_TYP_CD IN ('C', 'U')
+      and A.UPP_CTQ_LNM IS NOT NULL
+      and A.UPP_CTQ_LNM != ''
+--검증쿼리
+      and not exists (select 1
+                        from WAM_CTQ D
+                       where D.REG_TYP_CD IN ('C', 'U')
+                         and A.UPP_CTQ_LNM = D.CTQ_LNM
+                       UNION
+                      select 1
+                        from WAQ_CTQ E
+                       where E.REG_TYP_CD IN ('C', 'U')
+                         and A.UPP_CTQ_LNM = E.CTQ_LNM
+                     )
+  </insert>
+  
+  <insert id="checkNotExistCtq" parameterType="map">
+    <include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSql"/>
+      and A.RQST_DCD = 'DD'
+--검증쿼리
+      and not exists (select 1
+                        from WAM_CTQ D
+                       where D.REG_TYP_CD in ('C','U')
+                         and A.CTQ_LNM = D.CTQ_LNM
+                      )
+  </insert>
+  
+  <insert id="checkLowRankBizAareId" parameterType="map">
+    <include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSql"/>
+      and A.RQST_DCD = 'DD'
+--검증쿼리
+      and exists (select 1
+                        from WAM_CTQ D
+                      where D.REG_TYP_CD in ('C','U')
+                          and A.CTQ_ID = D.UPP_CTQ_ID
+                      )
+  </insert>
+  
+  <insert id="checkDelUppBizAareId" parameterType="map">
+  
+    <include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSql"/>
+  <![CDATA[
+       and A.RQST_DCD <> 'DD'
+       and A.REG_TYP_CD = 'D'
+--검증쿼리
+      and not exists (select 1
+                              from WAQ_CTQ D
+                            where A.CTQ_ID = D.UPP_CTQ_ID
+                               and A.RQST_SNO <> D.RQST_SNO
+                               and D.RQST_DCD = 'DD'
+                      )
+    ]]>
+  </insert>
+  
+  <insert id="checkUsedCtq" parameterType="map">
+    <include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSql"/>
+    	and A.REG_TYP_CD = 'D'
+-- 검증쿼리
+		and exists (select 1
+							from WAM_BR_MSTR M
+								inner join WAM_BR_CTQ_MAP MAP
+								on M.BR_ID = MAP.BR_ID
+							where M.REG_TYP_CD IN ('C', 'U')
+							and MAP.CTQ_ID = A.CTQ_ID)
+  </insert>
+  
+  <!-- 	다른 요청서와 겹치는지 확인 -->
+  <insert id="checkDupCtqRqst" parameterType="map">
+  	<include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSql"/>
+  		and A.REG_TYP_CD IN ('C', 'U')
+ -- 검증쿼리
+		and exists (select 1
+							from (select *
+							        	from WAQ_MSTR
+							        	where RQST_STEP_CD = 'Q'
+							        	and BIZ_DCD = 'CTQ') M
+							     inner join WAQ_CTQ C
+							     	on M.RQST_NO = C.RQST_NO
+							     	and C.REG_TYP_CD IN ('C', 'U')
+						  where C.CTQ_LNM = A.CTQ_LNM)
+  </insert>
+  
+  <!-- 기본정보레벨 확인 -->
+  <insert id="checkCtqBscLvl" parameterType="map">
+  	<include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.insertVrfDtlSql"/>
+  		and A.REG_TYP_CD IN ('C', 'U')
+ -- 검증쿼리
+		and exists (select 1
+							from (SELECT *
+							       	FROM WAQ_CTQ D
+							       	<![CDATA[
+							       WHERE CTQ_LVL > COALESCE((SELECT BSC_LVL 
+							        					   FROM WAA_BSC_LVL
+							        					  WHERE BSC_ID = 'CTQ'
+							        					    AND REG_TYP_CD IN ('C', 'U')
+							        					    AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD') ),0) ) D
+							       ]]>
+						  where D.CTQ_LNM = A.CTQ_LNM) 
+  </insert>
+  
+  <insert id="checkNoChg" parameterType="map">
+    <include refid="kr.wise.commons.rqstmst.service.WaqRqstVrfDtlsMapper.updateVrfNotChg"/>
+      and A.REG_TYP_CD = 'U'
+--검증쿼리
+      and exists (select 1
+                    from WAM_CTQ D
+                   where D.REG_TYP_CD in ('C','U')
+                     and A.CTQ_LNM = D.CTQ_LNM
+                     and COALESCE(A.UPP_CTQ_ID, '▦') = COALESCE(D.UPP_CTQ_ID, '▦')
+                     and COALESCE(A.OBJ_DESCN, '▦') = COALESCE(D.OBJ_DESCN, '▦')
+                     and COALESCE(A.WEIGHT, '-999') = COALESCE(D.WEIGHT, '-999')
+                     and COALESCE(A.GOAL, '-999') = COALESCE(D.GOAL, '-999')
+                 )
+  </insert>
+  
+  <!--  검증코드 UPDATE  -->
+  <update id="updateCheckInit" parameterType="java.lang.String">
+    update WAQ_CTQ A
+       set VRF_CD = '4' --검증전
+            ,RVW_STS_CD = '0' --검토전
+     where A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+  </update>
+  
+  <!--  OBJ_ID, OBJ_VERS UPDATE  -->
+  <update id="updateObjInfo" parameterType="java.lang.String">
+    update WAQ_CTQ A
+       set (REG_TYP_CD
+            , CTQ_ID
+            , OBJ_VERS 
+            , FRS_RQST_DTM
+            , FRS_RQST_USER_ID ) =
+                          (select case when A.RQST_DCD = 'DD' then 'D' else case when MAX(B.CTQ_ID) IS NULL then 'C' else 'U' end end
+                                  ,max(B.CTQ_ID) as CTQ_ID
+                                  ,case when max(B.OBJ_VERS) is null then 1
+                                           else max(B.OBJ_VERS)
+                                           end as OBJ_VERS
+                                 , COALESCE(MAX(B.FRS_RQST_DTM), A.RQST_DTM) as FRS_RQST_DTM
+           						 , COALESCE(MAX(B.FRS_RQST_USER_ID), A.RQST_USER_ID) as FRS_RQST_USER_ID           
+                             from WAM_CTQ B
+                            where B.REG_TYP_CD in ('C','U')
+                              and B.CTQ_LNM = A.CTQ_LNM )
+     where A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+  </update>
+  
+  
+  <update id="updateVrfUppBizAareId" parameterType="java.lang.String">
+    update WAQ_CTQ A
+    set UPP_CTQ_ID = (select CTQ_ID
+                           from WAM_CTQ B
+                          where B.REG_TYP_CD in ('C','U')
+                            and B.CTQ_LNM = A.UPP_CTQ_LNM
+                         )
+    where A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      and NULLIF(A.UPP_CTQ_LNM, '') is not null
+      --and A.VRF_CD = '1' --등록가능
+  </update>
+  
+  <update id="updateVrfUppCtqId" parameterType="java.lang.String">
+    update WAQ_CTQ A
+    set UPP_CTQ_ID = (select CTQ_ID
+                           from WAQ_CTQ B
+                          where B.REG_TYP_CD in ('C','U')
+                            and B.CTQ_LNM = A.UPP_CTQ_LNM
+                         )
+    where A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      and A.UPP_CTQ_LNM is not null
+      and A.UPP_CTQ_ID is null
+      --and A.VRF_CD = '1' --등록가능
+  </update>
+  
+  <update id="updateVrfUppCtqIdClear" parameterType="java.lang.String">
+    update WAQ_CTQ A
+    set UPP_CTQ_ID = NULL
+    where A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      --and A.UPP_CTQ_LNM is not null
+      --and A.VRF_CD = '1' --등록가능
+  </update>
+  
+  
+  <update id="updateVrfCtqLvl" parameterType="kr.wise.commons.rqstmst.service.WaqMstr">
+    update WAQ_CTQ A
+       set CTQ_LVL = (select (COALESCE(B.CTQ_LVL, 0) +1) as CTQ_LVL
+                               from WAQ_CTQ R
+                                    inner join WAM_CTQ B
+                                      on B.CTQ_LNM = COALESCE(R.UPP_CTQ_LNM, '▦')
+                                     and B.REG_TYP_CD in ('C','U')
+                              where A.RQST_NO = R.RQST_NO
+                                and A.RQST_SNO = R.RQST_SNO
+                               UNION
+                             select (COALESCE(B.CTQ_LVL, 0) +1) as CTQ_LVL
+                               from WAQ_CTQ R
+                                    left outer join WAQ_CTQ B
+                                      on B.CTQ_LNM = COALESCE(R.UPP_CTQ_LNM, '▦')
+                                     and B.REG_TYP_CD in ('C','U')
+                              where A.RQST_NO = R.RQST_NO
+                                and A.RQST_SNO = R.RQST_SNO
+                            )
+    where A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      --and A.VRF_CD = '1' --등록가능      
+  </update>
+  
+  <update id="updateVrfCd" parameterType="kr.wise.commons.rqstmst.service.WaqMstr">
+    update WAQ_CTQ A
+       set VRF_CD = (select case when  COALESCE(MAX(B.RQST_SNO), 0) = 0 
+                                         THEN '1' ELSE '2'  -- 1: 등록가능 2: 검증오류
+                                          END 
+                             from WAQ_RQST_VRF_DTLS B 
+                           where B.RQST_NO = A.RQST_NO
+                              and B.RQST_SNO = A.RQST_SNO)
+    where A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+    and A.VRF_CD = '4'
+  </update>
+  
+  <sql id="wam_col">
+   		, CTQ_LNM , CTQ_PNM , CTQ_LVL, UPP_CTQ_ID
+   		, RQST_NO , RQST_SNO , OBJ_DESCN , OBJ_VERS , REG_TYP_CD 
+		, FRS_RQST_DTM , FRS_RQST_USER_ID , RQST_DTM , RQST_USER_ID , APRV_DTM
+		, APRV_USER_ID ,FULL_PATH ,GOAL ,WEIGHT
+   </sql>
+  
+  
+    <update id="updatervwStsCd" parameterType="kr.wise.dq.criinfo.ctq.service.WaqCtqVO" >
+  	UPDATE WAQ_CTQ
+  	<set>
+  	    RVW_STS_CD 	= #{rvwStsCd} , 
+  		RVW_CONTS 	= #{rvwConts} , 
+  		APRV_DTM	= NOW() ,
+  		APRV_USER_ID = #{aprvUserId} ,
+  	</set>
+    WHERE RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+      AND RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+      AND VRF_CD = '1'
+      AND COALESCE(RVW_STS_CD, '_') != '2'
+  </update>
+  
+  <select id="selectWaqC" parameterType="map" resultMap="BaseResultMap">
+   	SELECT * FROM WAQ_CTQ
+   	WHERE RQST_NO = #{rqstNo}
+   	  AND RVW_STS_CD = '1'  --승인
+   	  AND REG_TYP_CD = 'C'
+   </select>
+   
+   <update id="updateidByKey" parameterType="kr.wise.dq.criinfo.ctq.service.WaqCtqVO" >
+  	UPDATE WAQ_CTQ SET CTQ_ID = #{ctqId,jdbcType=VARCHAR}
+  	 WHERE RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+       AND RQST_SNO = #{rqstSno,jdbcType=DECIMAL}
+  </update>
+  
+  <update id="updateWaqCUD" parameterType="map">
+   	--WAQ ID, VERS 등을 업데이트...
+	UPDATE WAQ_CTQ A
+	SET (CTQ_ID, OBJ_VERS, FRS_RQST_DTM, FRS_RQST_USER_ID) = (
+	    SELECT 
+	          B.CTQ_ID AS CTQ_ID
+	        , COALESCE(B.OBJ_VERS, 0) + 1 AS OBJ_VERS
+	        , B.FRS_RQST_DTM
+	        , B.FRS_RQST_USER_ID
+	    FROM WAM_CTQ B
+	    WHERE B.CTQ_LNM = A.CTQ_LNM
+	    AND B.CTQ_PNM = A.CTQ_PNM
+	    AND B.REG_TYP_CD IN ('C', 'U')
+	)
+	WHERE A.RQST_NO = #{rqstNo}
+	--AND A.VRF_CD = '1' 		--등록가능
+	AND A.RVW_STS_CD = '1'  --승인
+	AND EXISTS (
+		SELECT 1
+		  FROM WAM_CTQ B
+		 WHERE B.CTQ_LNM = A.CTQ_LNM
+	       AND B.CTQ_PNM = A.CTQ_PNM
+	       AND B.REG_TYP_CD IN ('C', 'U')
+	)
+   </update>
+
+   <update id="updateWaqFullPath" parameterType="map">
+	 UPDATE WAQ_CTQ A
+			SET FULL_PATH = (
+			                SELECT FULL_PATH
+			                FROM (
+			                    SELECT CTQ_ID, FULL_PATH
+			                      FROM V_WAM_CTQ) B
+			                WHERE A.VRF_CD = '1'
+			                AND A.CTQ_ID = CTQ_ID
+			)
+   </update>
+
+   <update id="updateWamFullPath" parameterType="map">
+	 UPDATE WAM_CTQ A
+			SET FULL_PATH = (
+			                SELECT FULL_PATH
+			                FROM (
+			                    SELECT CTQ_ID, FULL_PATH
+			                      FROM V_WAM_CTQ) B
+			                WHERE A.CTQ_ID = CTQ_ID
+			)
+   </update>
+
+   <update id="updateWahFullPath" parameterType="map">
+	 UPDATE WAH_CTQ A
+			SET FULL_PATH = (
+			                SELECT FULL_PATH
+			                FROM (
+			                    SELECT CTQ_ID, FULL_PATH
+			                      FROM V_WAM_CTQ) B
+			                WHERE A.CTQ_ID = CTQ_ID
+			)
+			WHERE A.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')
+   </update>
+   
+   <update id="updateWaqC" parameterType="map">
+   	
+   </update>
+
+   <delete id="deleteWAM" parameterType="map">
+    --WAM 삭제 (등록유형코드가REG_TYP_CD 변경, 삭제일 경우)
+	DELETE FROM WAM_CTQ A
+	WHERE EXISTS (
+	    SELECT 1 FROM WAQ_CTQ B
+	    WHERE B.RQST_NO = #{rqstNo}
+	    AND B.RVW_STS_CD = '1'
+	    --AND B.CTQ_PNM = A.CTQ_PNM
+	    AND B.CTQ_LNM = A.CTQ_LNM
+	)
+   </delete>
+   
+   <insert id="insertWAM" parameterType="map">
+   	--WAM 추가 (WAQ 내용을 추가, REG_TYP_CD 가 신규,변경일 경우)
+	INSERT INTO WAM_CTQ
+	SELECT 
+		CTQ_ID 
+	
+	<include refid="wam_col"/>
+	
+	FROM WAQ_CTQ A
+	WHERE A.RQST_NO = #{rqstNo}
+	AND A.RVW_STS_CD = '1'
+	AND A.REG_TYP_CD IN ('C', 'U')
+   </insert>
+   
+   <update id="updateWAH"  parameterType="map">
+   	--WAH 이력 만료...
+	UPDATE WAH_CTQ A
+	SET EXP_DTM = NOW()
+	WHERE EXISTS (
+	    SELECT 1 FROM WAQ_CTQ B
+	    WHERE B.RQST_NO = #{rqstNo}
+	    AND B.RVW_STS_CD = '1'
+	    --AND B.REG_TYP_CD IN ('U', 'D')
+	    --AND B.CTQ_PNM = A.CTQ_PNM
+	    AND B.CTQ_LNM = A.CTQ_LNM
+	    )
+	AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+   </update>
+   
+   <insert id="insertWAH"  parameterType="map">
+   	--WAH이력 적재...
+	INSERT INTO WAH_CTQ
+	SELECT
+	    A.CTQ_ID AS CTQ_ID
+	    , TO_DATE( '9999-12-31', 'YYYY-MM-DD') AS EXP_DTM
+	    , NOW() AS STR_DTM 
+	
+	<include refid="wam_col"/>
+   
+	FROM WAQ_CTQ A
+	WHERE A.RQST_NO = #{rqstNo}
+	AND A.RVW_STS_CD = '1'
+   </insert>
+   
+   <insert id="insertwam2waq" parameterType="map">
+  	INSERT INTO WAQ_CTQ (RQST_NO, RQST_SNO, CTQ_ID,  CTQ_LNM, CTQ_PNM, RQST_DCD, CTQ_LVL, UPP_CTQ_ID, UPP_CTQ_LNM, UPP_CTQ_PNM, GOAL, WEIGHT, OBJ_DESCN, OBJ_VERS, RQST_DTM, RQST_USER_ID)
+  	SELECT #{reqmst.rqstNo} 
+  		  , (SELECT COALESCE(MAX(RQST_SNO), 0) FROM WAQ_CTQ WHERE RQST_NO = #{reqmst.rqstNo}) + (ROW_NUMBER() OVER())
+  		  , A.CTQ_ID,  A.CTQ_LNM, A.CTQ_PNM
+  		  , 'CU' , A.CTQ_LVL, A.UPP_CTQ_ID, B.CTQ_LNM, B.CTQ_PNM, A.GOAL, A.WEIGHT, A.OBJ_DESCN, A.OBJ_VERS
+  		  , NOW()
+  		  , #{reqmst.rqstUserId,jdbcType=VARCHAR}
+      FROM WAM_CTQ A
+      LEFT OUTER JOIN WAM_CTQ B
+        ON A.UPP_CTQ_ID = B.CTQ_ID
+       AND B.REG_TYP_CD IN ('C', 'U')
+     WHERE A.CTQ_ID IN 
+     <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+     	#{item.ctqId}
+     </foreach>
+       AND A.REG_TYP_CD IN ('C' , 'U')
+  </insert>
+  
+  <insert id="insertWaqRejected" parameterType="map">
+   INSERT INTO WAQ_CTQ (  RQST_NO
+						, RQST_SNO
+						, CTQ_ID
+						, CTQ_LNM
+						, CTQ_PNM
+						, RQST_DCD
+						, RVW_STS_CD
+						, RVW_CONTS
+						, VRF_CD
+						, VRF_RMK
+						, CTQ_LVL
+						, UPP_CTQ_LNM
+						, UPP_CTQ_PNM
+						, UPP_CTQ_ID
+						, OBJ_DESCN
+						, OBJ_VERS
+						, REG_TYP_CD
+						, FRS_RQST_DTM
+						, FRS_RQST_USER_ID
+						, RQST_DTM
+						, RQST_USER_ID
+						, APRV_DTM
+						, APRV_USER_ID
+						, FULL_PATH
+						, WEIGHT
+						, GOAL)
+   SELECT #{reqmst.rqstNo,jdbcType=VARCHAR}            
+		, RQST_SNO
+		, CTQ_ID
+		, CTQ_LNM
+		, CTQ_PNM
+		, RQST_DCD
+		, NULL
+		, NULL
+		, NULL
+		, NULL
+		, CTQ_LVL
+		, UPP_CTQ_LNM
+		, UPP_CTQ_PNM
+		, UPP_CTQ_ID
+		, OBJ_DESCN
+		, OBJ_VERS
+		, REG_TYP_CD
+		, FRS_RQST_DTM
+		, FRS_RQST_USER_ID
+		, RQST_DTM
+		, RQST_USER_ID
+		, NULL
+		, NULL
+		, FULL_PATH
+		, WEIGHT
+		, GOAL
+   	 FROM WAQ_CTQ
+   	WHERE RQST_NO = #{oldRqstNo,jdbcType=VARCHAR}
+  	  AND RVW_STS_CD = '2'
+  </insert>
+</mapper>

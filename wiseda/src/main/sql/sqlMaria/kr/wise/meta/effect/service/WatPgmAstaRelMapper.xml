@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.meta.effect.service.WatPgmAstaRelMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.meta.effect.service.WatPgmAstaRel" >
+    <result column="REQUEST_ID" property="requestId" jdbcType="VARCHAR" />
+    <result column="OBJ_NM" property="objNm" jdbcType="VARCHAR" />
+    <result column="STA_DTTM" property="staDttm" jdbcType="TIMESTAMP" />
+    <result column="SUBSYSTEM_ID" property="subsystemId" jdbcType="DECIMAL" />
+    <result column="PGM_ID" property="pgmId" jdbcType="DECIMAL" />
+    <result column="CALL_SUBSYSTEM_ID" property="callSubsystemId" jdbcType="DECIMAL" />
+    <result column="CALL_PGM_ID" property="callPgmId" jdbcType="DECIMAL" />
+  </resultMap>
+  <insert id="insert" parameterType="kr.wise.meta.effect.service.WatPgmAstaRel" >
+    insert /* WatPgmAstaRelMapper.insert */
+    into WAT_PGM_ASTA_REL (REQUEST_ID, OBJ_NM, STA_DTTM, 
+      SUBSYSTEM_ID, PGM_ID, CALL_SUBSYSTEM_ID, 
+      CALL_PGM_ID)
+    values (#{requestId,jdbcType=VARCHAR}, #{objNm,jdbcType=VARCHAR}, #{staDttm,jdbcType=TIMESTAMP}, 
+      #{subsystemId,jdbcType=DECIMAL}, #{pgmId,jdbcType=DECIMAL}, #{callSubsystemId,jdbcType=DECIMAL}, 
+      #{callPgmId,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="kr.wise.meta.effect.service.WatPgmAstaRel" >
+    insert /* WatPgmAstaRelMapper.insertSelective */
+    into WAT_PGM_ASTA_REL
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="requestId != null" >
+        REQUEST_ID,
+      </if>
+      <if test="objNm != null" >
+        OBJ_NM,
+      </if>
+      <if test="staDttm != null" >
+        STA_DTTM,
+      </if>
+      <if test="subsystemId != null" >
+        SUBSYSTEM_ID,
+      </if>
+      <if test="pgmId != null" >
+        PGM_ID,
+      </if>
+      <if test="callSubsystemId != null" >
+        CALL_SUBSYSTEM_ID,
+      </if>
+      <if test="callPgmId != null" >
+        CALL_PGM_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="requestId != null" >
+        #{requestId,jdbcType=VARCHAR},
+      </if>
+      <if test="objNm != null" >
+        #{objNm,jdbcType=VARCHAR},
+      </if>
+      <if test="staDttm != null" >
+        #{staDttm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="subsystemId != null" >
+        #{subsystemId,jdbcType=DECIMAL},
+      </if>
+      <if test="pgmId != null" >
+        #{pgmId,jdbcType=DECIMAL},
+      </if>
+      <if test="callSubsystemId != null" >
+        #{callSubsystemId,jdbcType=DECIMAL},
+      </if>
+      <if test="callPgmId != null" >
+        #{callPgmId,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+</mapper>

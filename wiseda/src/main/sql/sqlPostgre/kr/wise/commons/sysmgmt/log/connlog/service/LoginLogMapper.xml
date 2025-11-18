@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.commons.sysmgmt.log.connlog.service.LoginLogMapper" >
+<!-- 	<typeAlias  alias="loginVO" type="kr.wise.commons.cmm.LoginVO"/> -->
+
+		<!-- 로그인로그 맵 -->
+	<resultMap id="LoginLogVO" type="kr.wise.commons.sysmgmt.log.connlog.service.LoginLog">
+		<result property="logId" column="LOG_ID" />
+		<result property="creatDt" column="CREAT_DT" />
+		<result property="loginMthd" column="CONECT_MTHD" />
+		<result property="loginIp" column="CONECT_IP" />
+		<result property="loginId" column="CONECT_ID" />
+		<result property="loginNm" column="LOGIN_NM" />
+	</resultMap>
+	
+	<!-- 사용자 접속 이력 -->
+	<select id="selectLoginLogList" parameterType="kr.wise.commons.sysmgmt.log.connlog.service.LoginLog" resultMap="LoginLogVO">
+		<![CDATA[
+		SELECT 
+		      A.LOG_ID
+		    , A.CONECT_ID
+		    , A.CONECT_IP
+		    , A.CONECT_MTHD
+		    , A.CREAT_DT
+		    , B.USER_NM AS LOGIN_NM
+		FROM COMTNLOGINLOG A
+		LEFT OUTER JOIN WAA_USER B
+		ON A.CONECT_ID = B.USER_ID
+		AND B.EXP_DTM  = TO_DATE('99991231', 'yyyymmdd')
+		]]>
+		WHERE 1=1
+		<if test="loginNm != null and loginNm != '' " >
+			AND B.USER_NM LIKE '%'||#{loginNm}||'%'
+      	</if>
+		<if test="searchBgnDe != null and searchEndDe != null and searchBgnDe != '' and searchEndDe != '' " >
+			AND TO_CHAR(A.CREAT_DT, 'yyyymmdd') BETWEEN #{searchBgnDe} AND #{searchEndDe}
+      	</if>
+		ORDER BY A.CREAT_DT DESC
+	</select>
+
+	<!-- 사용자 접속 통계 -->
+	<select id="selectConnStatList" parameterType="kr.wise.commons.sysmgmt.log.connlog.service.LoginLog" 
+			resultType="kr.wise.commons.sysmgmt.log.connlog.service.LoginLog">
+		<![CDATA[
+		]]>
+		SELECT 
+		      A.CONECT_ID        AS loginId
+		    , COUNT(A.CONECT_ID) AS statsCo
+		    <!-- 기간검색(일) -->
+		    <if test='pdKind == "D" ' >
+		    , SUBSTR(TO_CHAR(CREAT_DT, 'YYYYMMDD'), 1, 4) || '-' || SUBSTR(TO_CHAR(CREAT_DT, 'YYYYMMDD'), 5, 2) || '-' || SUBSTR(TO_CHAR(CREAT_DT, 'YYYYMMDD'), 7, 2) AS creatDt
+		    </if>
+		    <!-- 기간검색(월) -->
+		    <if test='pdKind == "M" ' >
+		    , SUBSTR(TO_CHAR(CREAT_DT, 'YYYYMMDD'), 1, 4) || '-' || SUBSTR(TO_CHAR(CREAT_DT, 'YYYYMMDD'), 5, 2) AS creatDt
+		    </if>
+		    <!-- 기간검색(년) -->
+		    <if test='pdKind == "Y" ' >
+		    , SUBSTR(TO_CHAR(CREAT_DT, 'YYYYMMDD'), 1, 4) AS creatDt
+		    </if>
+		    , B.USER_NM AS loginNm
+		FROM COMTNLOGINLOG A
+		LEFT OUTER JOIN WAA_USER B
+		ON A.CONECT_ID = B.USER_ID
+		AND B.EXP_DTM  = TO_DATE('99991231', 'yyyymmdd')
+		WHERE 1=1
+		<if test="loginNm != null and loginNm != '' " >
+			AND B.USER_NM LIKE '%'||#{loginNm}||'%'
+      	</if>
+		<if test="searchBgnDe != null and searchEndDe != null and searchBgnDe != '' and searchEndDe != '' " >
+			AND TO_CHAR(A.CREAT_DT, 'yyyymmdd') BETWEEN #{searchBgnDe} AND #{searchEndDe}
+      	</if>
+      	
+      	 <!-- 기간검색(일) -->
+		<if test='pdKind == "D" ' >
+		GROUP BY SUBSTR(TO_CHAR(CREAT_DT, 'YYYYMMDD'), 1, 4) || '-' || SUBSTR(TO_CHAR(CREAT_DT, 'YYYYMMDD'), 5, 2) || '-' || SUBSTR(TO_CHAR(CREAT_DT, 'YYYYMMDD'), 7, 2), A.CONECT_ID, B.USER_NM
+		ORDER BY SUBSTR(TO_CHAR(CREAT_DT, 'YYYYMMDD'), 1, 4) || '-' || SUBSTR(TO_CHAR(CREAT_DT, 'YYYYMMDD'), 5, 2) || '-' || SUBSTR(TO_CHAR(CREAT_DT, 'YYYYMMDD'), 7, 2) DESC
+		</if>
+      	 <!-- 기간검색(월) -->
+		<if test='pdKind == "M" ' >
+		GROUP BY SUBSTR(TO_CHAR(CREAT_DT, 'YYYYMMDD'), 1, 4) || '-' || SUBSTR(TO_CHAR(CREAT_DT, 'YYYYMMDD'), 5, 2), A.CONECT_ID, B.USER_NM
+		ORDER BY SUBSTR(TO_CHAR(CREAT_DT, 'YYYYMMDD'), 1, 4) || '-' || SUBSTR(TO_CHAR(CREAT_DT, 'YYYYMMDD'), 5, 2) DESC
+		</if>
+      	 <!-- 기간검색(년) -->
+		<if test='pdKind == "Y" ' >
+		GROUP BY SUBSTR(TO_CHAR(CREAT_DT, 'YYYYMMDD'), 1, 4), A.CONECT_ID, B.USER_NM
+		ORDER BY SUBSTR(TO_CHAR(CREAT_DT, 'YYYYMMDD'), 1, 4) DESC
+		</if>
+	</select>
+	
+	<select id="selectConnStatTot" parameterType="kr.wise.commons.sysmgmt.log.connlog.service.LoginLog" 
+			resultType="kr.wise.commons.sysmgmt.log.connlog.service.LoginLog">
+		<![CDATA[
+		]]>
+		SELECT 
+		    <!-- 기간검색(일) -->
+		    <if test='pdKind == "D" ' >
+		      TO_CHAR(CREAT_DT, 'YYYY-MM-DD') AS creatDt --접속일자
+		    </if>
+		    <!-- 기간검색(월) -->
+		    <if test='pdKind == "M" ' >
+		      SUBSTR(TO_CHAR(CREAT_DT, 'YYYY-MM-DD'), 1, 7) AS creatDt
+		    </if>
+		    <!-- 기간검색(년) -->
+		    <if test='pdKind == "Y" ' >
+		      SUBSTR(TO_CHAR(CREAT_DT, 'YYYYMMDD'), 1, 4) AS creatDt
+		    </if>
+		   	, COUNT(DISTINCT A.CONECT_ID) AS loginId   --접속자수
+			, COUNT(A.CONECT_ID) AS statsCo            --접속수
+		FROM COMTNLOGINLOG A
+		LEFT OUTER JOIN WAA_USER B
+		ON A.CONECT_ID = B.USER_ID
+		AND B.EXP_DTM  = TO_DATE('99991231', 'yyyymmdd')
+		WHERE 1=1
+		<if test="loginNm != null and loginNm != '' " >
+			AND B.USER_NM LIKE '%'||#{loginNm}||'%'
+      	</if>
+		<if test="searchBgnDe != null and searchEndDe != null and searchBgnDe != '' and searchEndDe != '' " >
+			AND TO_CHAR(A.CREAT_DT, 'yyyymmdd') BETWEEN #{searchBgnDe} AND #{searchEndDe}
+      	</if>
+      	
+      	 <!-- 기간검색(일) -->
+		<if test='pdKind == "D" ' >
+		GROUP BY TO_CHAR(CREAT_DT, 'YYYY-MM-DD')
+		ORDER BY TO_CHAR(CREAT_DT, 'YYYY-MM-DD') DESC
+		</if>
+      	 <!-- 기간검색(월) -->
+		<if test='pdKind == "M" ' >
+		GROUP BY SUBSTR(TO_CHAR(CREAT_DT, 'YYYY-MM-DD'), 1, 7)
+		ORDER BY SUBSTR(TO_CHAR(CREAT_DT, 'YYYY-MM-DD'), 1, 7) DESC
+		</if>
+      	 <!-- 기간검색(년) -->
+		<if test='pdKind == "Y" ' >
+		GROUP BY SUBSTR(TO_CHAR(CREAT_DT, 'YYYYMMDD'), 1, 4)
+		ORDER BY SUBSTR(TO_CHAR(CREAT_DT, 'YYYYMMDD'), 1, 4) DESC
+		</if>
+	</select>
+	
+		<!-- 로그인 로그 등록 -->
+	<insert id="logInsertLoginLog" parameterType="kr.wise.commons.sysmgmt.log.connlog.service.LoginLog">
+		<![CDATA[
+			INSERT INTO COMTNLOGINLOG
+				( LOG_ID
+				  , CONECT_MTHD
+				  , CONECT_ID
+				  , CONECT_IP
+				  , ERROR_OCCRRNC_AT
+				  , ERROR_CODE
+				  , CREAT_DT )
+			VALUES ( #{logId}
+				  , #{loginMthd}
+				  , #{loginId}
+				  , #{loginIp, jdbcType=VARCHAR}
+				  , #{errOccrrAt}
+				  , #{errorCode}
+				  , now())
+		]]>
+	</insert>
+	
+	
+	
+	
+
+</mapper>

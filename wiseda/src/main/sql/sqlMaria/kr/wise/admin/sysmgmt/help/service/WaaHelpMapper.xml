@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.admin.sysmgmt.help.service.WaaHelpMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.admin.sysmgmt.help.service.WaaHelp" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+    <id column="HELP_ID" property="helpId" jdbcType="VARCHAR" />
+    <result column="MENU_ID" property="menuId" jdbcType="VARCHAR" />
+    <result column="MENU_NM" property="menuNm" jdbcType="VARCHAR" />
+    <result column="STND_TYPE" property="stndType" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="kr.wise.admin.sysmgmt.help.service.WaaHelp" extends="BaseResultMap" >
+    <result column="HELP_CTNT" property="helpCtnt" jdbcType="CLOB" />
+  </resultMap>
+  
+  
+	<select id="getAllHelpMstrList" resultMap="BaseResultMap" parameterType="kr.wise.admin.sysmgmt.help.service.WaaHelp" >
+		/* WamPdmTblMapper.getAllHelpMstrList */
+  		<![CDATA[	  	
+  		SELECT A.*
+  		FROM(		
+  			SELECT
+  			 	  A.HELP_ID
+  				, A.MENU_ID
+  				, A.WRIT_USER_ID
+  				, A.WRIT_DTM
+  				, CASE WHEN A.STND_TYPE = 'STWD' THEN '표준단어 등록요청'
+  					   WHEN A.STND_TYPE = 'DMN'  THEN '도메인 등록요청'
+  					   WHEN A.STND_TYPE = 'SDITM' THEN '항목 등록요청'
+  				   ELSE B.MENU_NM
+  				   END AS MENU_NM	   
+  				, GET_USER_NM(A.WRIT_USER_ID) AS WRIT_USER_NM
+  				, A.HELP_CTNT
+  				, A.STND_TYPE
+  			FROM WAA_HELP A
+  		    INNER JOIN WAA_PRGM_MENU B
+  		       ON B.MENU_ID = A.MENU_ID
+  		      AND B.EXP_DTM = STR_TO_DATE('99991231','%Y%m%d')
+  			  AND B.DISP_YN ='Y'
+			  AND B.MENU_DCD ='META'
+			  AND B.FILE_PATH != 'dir'
+			  AND IFNULL(B.UPP_MENU_ID,'') !=''
+			  AND B.REG_TYP_CD IN ('C','U') 
+		) A	   
+  			WHERE 1=1
+  		]]>	
+			<if test="menuNm != null and menuNm != ''">
+			       <![CDATA[   AND A.MENU_NM like  CONCAT('%',#{menuNm},'%')]]>
+			</if>
+  			ORDER BY A.HELP_ID ASC
+	</select>
+	
+	<select id="getHelpMasterInf" resultMap="ResultMapWithBLOBs" parameterType="kr.wise.admin.sysmgmt.help.service.WaaHelp" >
+	/* WaaHelpMapper.getHelpMasterInf */
+		<![CDATA[  			
+  			SELECT A.*
+  		FROM(		
+  			SELECT
+  				   A.HELP_ID
+  			     , A.MENU_ID
+  			     , A.WRIT_USER_ID
+  			     , A.WRIT_DTM
+  			     , CASE WHEN A.STND_TYPE = 'STWD' THEN '표준단어 등록요청'
+  					   WHEN A.STND_TYPE = 'DMN'  THEN '도메인 등록요청'
+  					   WHEN A.STND_TYPE = 'SDITM' THEN '항목 등록요청'
+  				   ELSE B.MENU_NM
+  				   END AS MENU_NM
+  			     , GET_USER_NM(A.WRIT_USER_ID) AS WRIT_USER_NM
+  			     , A.HELP_CTNT
+  			     , A.STND_TYPE
+  			FROM WAA_HELP A
+  		    INNER JOIN WAA_PRGM_MENU B
+  		       ON B.MENU_ID = A.MENU_ID
+  		      AND B.EXP_DTM = STR_TO_DATE('99991231','%Y%m%d')
+  			  AND B.DISP_YN ='Y'
+			  AND B.MENU_DCD ='META'
+			  AND B.FILE_PATH != 'dir'
+			  AND IFNULL(B.UPP_MENU_ID,'') !=''
+			  AND B.REG_TYP_CD IN ('C','U') 
+		) A	   
+  			WHERE 1=1
+  			AND A.HELP_ID = #{helpId}
+  		]]>
+  </select>
+  
+  <insert id="insertHelpMastetInf" parameterType="kr.wise.admin.sysmgmt.help.service.WaaHelp" >
+  		/* WaaHelpMapper.insertHelpMastetInf */
+		<![CDATA[
+				INSERT INTO  WAA_HELP (
+					  HELP_ID, USE_YN, HELP_CTNT, MENU_ID, 
+					  REG_TYP_CD, WRIT_DTM, WRIT_USER_ID, EXP_DTM, STR_DTM, STND_TYPE
+					) VALUES (
+					#{helpId, jdbcType=CHAR},   	
+					#{useYn, jdbcType=CHAR},      	
+					#{helpCtnt, jdbcType=VARCHAR},           	
+					#{menuId, jdbcType=VARCHAR},
+					'C',            	
+					NOW(),           	
+					#{writUserId, jdbcType=VARCHAR},         	
+					STR_TO_DATE('9999-12-31','%Y-%m-%d'),           	
+					NOW(),
+					#{stndType, jdbcType=VARCHAR}					         	
+					)
+		 ]]>
+	</insert>
+	
+	<update id="updateHelpMastetInf" parameterType="kr.wise.admin.sysmgmt.help.service.WaaHelp" >
+  		/* WaaHelpMapper.updateHelpMastetInf */	
+		<![CDATA[
+				UPDATE WAA_HELP 
+					SET
+					USE_YN         = #{useYn, jdbcType=CHAR},      	                
+					HELP_CTNT      = #{helpCtnt, jdbcType=VARCHAR},           	
+					MENU_ID        = #{menuId, jdbcType=VARCHAR}, 
+					REG_TYP_CD     = 'U',            	        
+					WRIT_DTM       = NOW(),
+					WRIT_USER_ID   = #{writUserId, jdbcType=VARCHAR},         	
+					EXP_DTM        = STR_TO_DATE('9999-12-31','%Y-%m-%d'),
+					STND_TYPE      = #{stndType, jdbcType=VARCHAR}
+				WHERE HELP_ID = #{helpId}
+		 ]]>
+	</update> 
+  
+	<delete id="deleteHelp" parameterType="java.util.Arrays">
+  		/* WaaHelpMapper.deleteHelp */		
+		<![CDATA[
+				DELETE FROM WAA_HELP 
+				WHERE HELP_ID IN 
+		 ]]>
+				<foreach collection="array" item="item" index="index" open="(" separator="," close=")">
+					#{item}
+				</foreach>
+	</delete>
+  
+  
+  	<select id="getHelpCtnt" resultMap="ResultMapWithBLOBs" parameterType="kr.wise.admin.sysmgmt.help.service.WaaHelp">
+		/* WaaHelpMapper.getHelpCtnt */		
+		<![CDATA[  			
+  			SELECT A.* 
+  		FROM(		
+  			SELECT
+  			 	  A.HELP_ID
+  				, A.MENU_ID
+  				, A.WRIT_USER_ID
+  				, A.WRIT_DTM
+  				, CASE WHEN A.STND_TYPE = 'STWD' THEN '표준단어 등록요청'
+  					   WHEN A.STND_TYPE = 'DMN'  THEN '도메인 등록요청'
+  					   WHEN A.STND_TYPE = 'SDITM' THEN '항목 등록요청'
+  				   ELSE B.MENU_NM
+  				   END AS MENU_NM	   
+  				, GET_USER_NM(A.WRIT_USER_ID) AS WRIT_USER_NM
+  				, A.HELP_CTNT  				
+  				, A.STND_TYPE
+  			FROM WAA_HELP A
+  		    INNER JOIN WAA_PRGM_MENU B
+  		       ON B.MENU_ID = A.MENU_ID
+  		      AND B.EXP_DTM = STR_TO_DATE('99991231','%Y%m%d')
+  			  AND B.DISP_YN ='Y'
+			  AND B.MENU_DCD ='META'
+			  AND B.FILE_PATH != 'dir'
+			  AND IFNULL(B.UPP_MENU_ID,'') !=''
+			  AND B.REG_TYP_CD IN ('C','U')  
+		) A
+  			WHERE A.HELP_ID = #{helpId, javaType=String, jdbcType=VARCHAR}
+  		]]>
+	</select>
+	
+	
+	<select id="getHelpMasterUrl" resultMap="ResultMapWithBLOBs" parameterType="kr.wise.admin.sysmgmt.help.service.WaaHelp" >
+		<![CDATA[  			
+  			SELECT A.* /* WamPdmTblMapper.getHelpMasterUrl */
+  		FROM(		
+  			SELECT
+  			 	  A.HELP_ID
+  				, A.MENU_ID
+  				, A.WRIT_USER_ID
+  				, A.WRIT_DTM
+  				, CASE WHEN A.STND_TYPE = 'STWD' THEN '표준단어 등록요청'
+  					   WHEN A.STND_TYPE = 'DMN'  THEN '도메인 등록요청'
+  					   WHEN A.STND_TYPE = 'SDITM' THEN '항목 등록요청'
+  				   ELSE B.MENU_NM
+  				   END AS MENU_NM	   
+  				, GET_USER_NM(A.WRIT_USER_ID) AS WRIT_USER_NM
+				, A.HELP_CTNT
+				, B.FULL_PATH
+  				, A.STND_TYPE
+  			FROM WAA_HELP A
+  		    INNER JOIN WAA_PRGM_MENU B
+  		       ON B.MENU_ID = A.MENU_ID
+  		      AND B.EXP_DTM = STR_TO_DATE('99991231','%Y%m%d')
+  			  AND B.DISP_YN ='Y'
+			  AND B.MENU_DCD ='META'
+			  AND B.FILE_PATH != 'dir'
+			  AND IFNULL(B.UPP_MENU_ID,'') !=''
+			  AND B.REG_TYP_CD IN ('C','U')  			 
+		) A
+  	    WHERE 1=1 
+  	    ]]>
+  	    <if test="fullPath != null and fullPath != ''">
+			   <![CDATA[   AND A.FULL_PATH = #{fullPath}]]>
+		</if>
+		 <if test="bizDtlCd != null and bizDtlCd != ''">
+			   <![CDATA[   AND A.STND_TYPE = #{bizDtlCd}]]>
+		</if>
+  		
+  </select>
+</mapper>

@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.dq.criinfo.dqi.service.WahDqiMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.dq.criinfo.dqi.service.WahDqiVO"  >
+    <id column="DQI_ID" property="dqiId" jdbcType="VARCHAR" />
+    <id column="EXP_DTM" property="expDtm" jdbcType="DATE" />
+    <result column="STR_DTM" property="strDtm" jdbcType="DATE" /> 
+    <result column="DQI_LNM" property="dqiLnm" jdbcType="VARCHAR" />
+    <result column="DQI_PNM" property="dqiPnm" jdbcType="VARCHAR" />
+    <result column="DQI_LVL" property="dqiLvl" jdbcType="DECIMAL" />
+    <result column="UPP_DQI_ID" property="uppDqiId" jdbcType="VARCHAR" />
+    <result column="UPP_DQI_LNM" property="uppDqiLnm" jdbcType="VARCHAR" />
+	<result column="GOAL" property="goal" jdbcType="DECIMAL" />
+	<result column="WEIGHT" property="weight" jdbcType="DECIMAL" />
+    <result column="OBJ_DESCN" property="objDescn" jdbcType="VARCHAR" />
+    <result column="OBJ_VERS" property="objVers" jdbcType="DECIMAL" />
+    <result column="REG_TYP_CD" property="regTypCd" jdbcType="VARCHAR" />
+    <result column="FRS_RQST_DTM" property="frsRqstDtm" jdbcType="DATE" />
+    <result column="FRS_RQST_USER_ID" property="frsRqstUserId" jdbcType="VARCHAR" />
+    <result column="FRS_RQST_USER_NM" property="frsRqstUserNm" jdbcType="VARCHAR" />
+    <result column="RQST_DTM" property="rqstDtm" jdbcType="DATE" />
+    <result column="RQST_USER_ID" property="rqstUserId" jdbcType="VARCHAR" />
+    <result column="RQST_USER_NM" property="rqstUserNm" jdbcType="VARCHAR" />
+    <result column="APRV_DTM" property="aprvDtm" jdbcType="DATE" />
+    <result column="APRV_USER_ID" property="aprvUserId" jdbcType="VARCHAR" />
+    <result column="APRV_USER_NM" property="aprvUserNm" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    DQI_ID, EXP_DTM, STR_DTM, DQI_LNM, DQI_PNM, DQI_LVL, UPP_DQI_ID, GOAL, WEIGHT,
+    OBJ_DESCN, OBJ_VERS, REG_TYP_CD, FRS_RQST_DTM, FRS_RQST_USER_ID, RQST_DTM, RQST_USER_ID, 
+    APRV_DTM, APRV_USER_ID
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="map" >
+    select 
+    <include refid="Base_Column_List" />
+    from WAH_DQI
+    where DQI_ID = #{dqiId,jdbcType=VARCHAR}
+      and EXP_DTM = #{expDtm,jdbcType=DATE}
+  </select>
+  <select id="selectHstByDqiId" resultMap="BaseResultMap" parameterType="String" >
+	SELECT  A.DQI_ID
+	        ,A.EXP_DTM
+	        ,A.STR_DTM
+	        ,A.DQI_LNM
+	        ,A.DQI_PNM
+	        ,A.DQI_LVL
+	        ,A.UPP_DQI_ID
+	        ,M.DQI_LNM AS UPP_DQI_LNM
+			,A.GOAL
+			,A.WEIGHT
+	        ,A.OBJ_DESCN
+	        ,A.OBJ_VERS
+	        ,A.REG_TYP_CD
+	        ,A.FRS_RQST_DTM
+	        ,A.FRS_RQST_USER_ID
+	        ,A.RQST_DTM
+	        ,A.RQST_USER_ID
+	        ,A.APRV_DTM
+	        ,A.APRV_USER_ID        
+	        ,B.USER_NM AS RQST_USER_NM
+	        ,C.USER_NM AS FRS_RQST_USER_NM
+	        ,D.USER_NM AS APRV_USER_NM
+	 FROM WAH_DQI A
+	      LEFT OUTER JOIN WAM_DQI M
+	       ON A.UPP_DQI_ID = M.DQI_ID
+	      AND A.REG_TYP_CD IN ('C','U')
+	      LEFT OUTER JOIN WAA_USER  B
+	        ON A.RQST_USER_ID = B.USER_ID
+	       AND B.EXP_DTM = STR_TO_DATE('99991231', '%Y%m%d')
+	       AND B.REG_TYP_CD IN ('C','U')
+	      LEFT OUTER JOIN WAA_USER  C
+	        ON A.FRS_RQST_USER_ID = C.USER_ID
+	       AND C.EXP_DTM = STR_TO_DATE('99991231', '%Y%m%d')
+	       AND C.REG_TYP_CD IN ('C','U')   
+	      LEFT OUTER JOIN WAA_USER  D
+	        ON A.APRV_USER_ID = D.USER_ID
+	       AND D.EXP_DTM = STR_TO_DATE('99991231', '%Y%m%d')
+	       AND D.REG_TYP_CD IN ('C','U')  
+	 WHERE  A.DQI_ID = #{dqiId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="map" >
+    delete from WAH_DQI
+    where DQI_ID = #{dqiId,jdbcType=VARCHAR}
+      and EXP_DTM = #{expDtm,jdbcType=DATE}
+  </delete>
+  <insert id="insert" parameterType="kr.wise.dq.criinfo.dqi.service.WahDqiVO" >
+    insert into WAH_DQI (DQI_ID, EXP_DTM, STR_DTM, 
+      DQI_LNM, DQI_PNM, DQI_LVL, 
+      UPP_DQI_ID, GOAL, WEIGHT, OBJ_DESCN, OBJ_VERS, 
+      REG_TYP_CD, FRS_RQST_DTM, FRS_RQST_USER_ID, 
+      RQST_DTM, RQST_USER_ID, APRV_DTM, 
+      APRV_USER_ID)
+    values (#{dqiId,jdbcType=VARCHAR}, #{expDtm,jdbcType=DATE}, #{strDtm,jdbcType=DATE}, 
+      #{dqiLnm,jdbcType=VARCHAR}, #{dqiPnm,jdbcType=VARCHAR}, #{dqiLvl,jdbcType=DECIMAL}, 
+      #{uppDqiId,jdbcType=VARCHAR}, #{goal,jdbcType=DECIMAL}, #{weight,jdbcType=DECIMAL},
+	  #{objDescn,jdbcType=VARCHAR}, #{objVers,jdbcType=DECIMAL}, 
+      #{regTypCd,jdbcType=VARCHAR}, #{frsRqstDtm,jdbcType=DATE}, #{frsRqstUserId,jdbcType=VARCHAR}, 
+      #{rqstDtm,jdbcType=DATE}, #{rqstUserId,jdbcType=VARCHAR}, #{aprvDtm,jdbcType=DATE}, 
+      #{aprvUserId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="kr.wise.dq.criinfo.dqi.service.WahDqiVO" >
+    insert into WAH_DQI
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="dqiId != null" >
+        DQI_ID,
+      </if>
+      <if test="expDtm != null" >
+        EXP_DTM,
+      </if>
+      <if test="strDtm != null" >
+        STR_DTM,
+      </if>
+      <if test="dqiLnm != null" >
+        DQI_LNM,
+      </if>
+      <if test="dqiPnm != null" >
+        DQI_PNM,
+      </if>
+      <if test="dqiLvl != null" >
+        DQI_LVL,
+      </if>
+      <if test="uppDqiId != null" >
+        UPP_DQI_ID,
+      </if>
+	  <if test="goal != null" >
+        GOAL,
+      </if>
+	  <if test="weight != null" >
+        WEIGHT,
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN,
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS,
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD,
+      </if>
+      <if test="frsRqstDtm != null" >
+        FRS_RQST_DTM,
+      </if>
+      <if test="frsRqstUserId != null" >
+        FRS_RQST_USER_ID,
+      </if>
+      <if test="rqstDtm != null" >
+        RQST_DTM,
+      </if>
+      <if test="rqstUserId != null" >
+        RQST_USER_ID,
+      </if>
+      <if test="aprvDtm != null" >
+        APRV_DTM,
+      </if>
+      <if test="aprvUserId != null" >
+        APRV_USER_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="dqiId != null" >
+        #{dqiId,jdbcType=VARCHAR},
+      </if>
+      <if test="expDtm != null" >
+        #{expDtm,jdbcType=DATE},
+      </if>
+      <if test="strDtm != null" >
+        #{strDtm,jdbcType=DATE},
+      </if>
+      <if test="dqiLnm != null" >
+        #{dqiLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="dqiPnm != null" >
+        #{dqiPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="dqiLvl != null" >
+        #{dqiLvl,jdbcType=DECIMAL},
+      </if>
+      <if test="uppDqiId != null" >
+        #{uppDqiId,jdbcType=VARCHAR},
+      </if>
+	  <if test="goal != null" >
+        #{goal,jdbcType=DECIMAL},
+      </if>
+	  <if test="weight != null" >
+        #{weight,jdbcType=DECIMAL},
+      </if>
+      <if test="objDescn != null" >
+        #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null" >
+        #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="frsRqstDtm != null" >
+        #{frsRqstDtm,jdbcType=DATE},
+      </if>
+      <if test="frsRqstUserId != null" >
+        #{frsRqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDtm != null" >
+        #{rqstDtm,jdbcType=DATE},
+      </if>
+      <if test="rqstUserId != null" >
+        #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDtm != null" >
+        #{aprvDtm,jdbcType=DATE},
+      </if>
+      <if test="aprvUserId != null" >
+        #{aprvUserId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.dq.criinfo.dqi.service.WahDqiVO" >
+    update WAH_DQI
+    <set >
+      <if test="strDtm != null" >
+        STR_DTM = #{strDtm,jdbcType=DATE},
+      </if>
+      <if test="dqiLnm != null" >
+        DQI_LNM = #{dqiLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="dqiPnm != null" >
+        DQI_PNM = #{dqiPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="dqiLvl != null" >
+        DQI_LVL = #{dqiLvl,jdbcType=DECIMAL},
+      </if>
+      <if test="uppDqiId != null" >
+        UPP_DQI_ID = #{uppDqiId,jdbcType=VARCHAR},
+      </if>
+	  <if test="goal != null" >
+        GOAL = #{goal,jdbcType=DECIMAL},
+      </if>
+	  <if test="weight != null" >
+        WEIGHT = #{weight,jdbcType=DECIMAL},
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="frsRqstDtm != null" >
+        FRS_RQST_DTM = #{frsRqstDtm,jdbcType=DATE},
+      </if>
+      <if test="frsRqstUserId != null" >
+        FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDtm != null" >
+        RQST_DTM = #{rqstDtm,jdbcType=DATE},
+      </if>
+      <if test="rqstUserId != null" >
+        RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDtm != null" >
+        APRV_DTM = #{aprvDtm,jdbcType=DATE},
+      </if>
+      <if test="aprvUserId != null" >
+        APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where DQI_ID = #{dqiId,jdbcType=VARCHAR}
+      and EXP_DTM = #{expDtm,jdbcType=DATE}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="kr.wise.dq.criinfo.dqi.service.WahDqiVO" >
+    update WAH_DQI
+    set STR_DTM = #{strDtm,jdbcType=DATE},
+      DQI_LNM = #{dqiLnm,jdbcType=VARCHAR},
+      DQI_PNM = #{dqiPnm,jdbcType=VARCHAR},
+      DQI_LVL = #{dqiLvl,jdbcType=DECIMAL},
+      UPP_DQI_ID = #{uppDqiId,jdbcType=VARCHAR},
+	  GOAL = #{goal,jdbcType=DECIMAL},
+	  WEIGHT = #{weight,jdbcType=DECIMAL},
+      OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      FRS_RQST_DTM = #{frsRqstDtm,jdbcType=DATE},
+      FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR},
+      RQST_DTM = #{rqstDtm,jdbcType=DATE},
+      RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      APRV_DTM = #{aprvDtm,jdbcType=DATE},
+      APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR}
+    where DQI_ID = #{dqiId,jdbcType=VARCHAR}
+      and EXP_DTM = #{expDtm,jdbcType=DATE}
+  </update>
+  
+  <update id="updateWahDqi" parameterType="kr.wise.commons.rqstmst.service.WaqMstr" >
+	update WAH_DQI A
+	set A.EXP_DTM = (select STR_DTM from WAM_DQI B
+			                  where A.DQI_ID = B.DQI_ID
+			                     and A.OBJ_VERS = B.OBJ_VERS )
+    where A.EXP_DTM = STR_TO_DATE('99991231', '%Y%m%d')
+      and exists (select 1 from WAQ_DQI B
+	                  where A.DQI_ID = B.DQI_ID
+	                     and B.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+	                     and A.OBJ_VERS = B.OBJ_VERS)
+  </update>
+  
+  <insert id="insertWahDqi" parameterType="kr.wise.commons.rqstmst.service.WaqMstr" >
+	insert into WAH_DQI
+	select
+	         coalesce(B.DQI_ID, OBJ_ID.NEXTVAL) as DQI_ID
+	       , STR_TO_DATE('99991231', '%Y%m%d') as EXP_DTM 
+           , SYSDATE as STR_DTM
+           , A.DQI_LNM
+           , A.DQI_PNM 
+           , A.DQI_LVL
+           , A.UPP_DQI_ID
+		   , A.GOAL
+		   , A.WEIGHT
+           , A.RQST_NO
+           , A.RQST_SNO
+           , A.OBJ_DESCN
+           , coalesce(B.OBJ_VERS, 0) + 1 as OBJ_VERS
+          -- , A.OBJ_VERS
+           , A.REG_TYP_CD
+           , coalesce(B.FRS_RQST_DTM, A.RQST_DTM) as FRS_RQST_DTM
+           , coalesce(B.FRS_RQST_USER_ID, A.RQST_USER_ID) as FRS_RQST_USER_ID
+           , A.RQST_DTM
+           , A.RQST_USER_ID
+           , SYSDATE AS APRV_DTM   --A.APRV_DTM
+           , #{aprvUserId,jdbcType=VARCHAR}  AS APRV_USER_ID    --A.APRV_USER_ID
+	from WAQ_DQI A
+	     left outer join WAM_DQI B
+	       on A.DQI_ID = B.DQI_ID
+	      and B.REG_TYP_CD in ('C','U')
+	where A.RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+	  and A.VRF_CD = '1' --등록가능
+  </insert>
+</mapper>

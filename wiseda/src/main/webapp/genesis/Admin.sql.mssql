@@ -1,0 +1,1990 @@
+
+CREATE TYPE CREATEDATE
+	FROM DATETIME NULL
+go
+
+
+CREATE TYPE USE_YN
+	FROM CHAR(1) NULL
+go
+
+
+CREATE DEFAULT YN
+	AS 'Y'
+go
+
+
+CREATE DEFAULT currentdate
+	AS getdate()
+go
+
+
+CREATE DEFAULT NY
+	AS 'N'
+go
+
+
+
+exec sp_bindefault 'currentdate', 'CREATEDATE'
+go
+
+
+
+exec sp_bindefault 'YN', 'USE_YN'
+go
+
+CREATE TABLE BATCH_LOG
+(
+    BATCH_LOG_ID          VARCHAR(30)  NOT NULL ,
+    BATCH_NAME            VARCHAR(100)  NULL ,
+    START_DT              CREATEDATE  NULL ,
+    END_DT                CREATEDATE  NULL ,
+    STATUS                VARCHAR(10)  NULL ,
+    WORKING_TIME          INTEGER  NULL ,
+    IS_MANUAL_RUN         CHAR(1)  NULL ,
+CONSTRAINT  PK_BATCH_LOG PRIMARY KEY (BATCH_LOG_ID)
+);
+
+CREATE TABLE BATCH_ERROR_LOG
+(
+    BATCH_LOG_ID          VARCHAR(30)  NOT NULL ,
+    EXCEPTION_MSG         VARCHAR(4000)  NULL ,
+    MODEL_ID              INTEGER  NULL ,
+    EXCEPTION_TIME        VARCHAR(25)  NULL ,
+    PROCESS_CNT           INTEGER  NULL ,
+    LIBRARY_ID            INTEGER  NULL ,
+    SUBJECT_ID            INTEGER  NULL ,
+    TOTAL_WORKING_CNT     INTEGER  NULL ,
+    LIBRARY_NAME          VARCHAR(255)  NULL ,
+    MODEL_NAME            VARCHAR(255)  NULL ,
+    SUBJECT_NAME          VARCHAR(255)  NULL
+);
+
+CREATE TABLE MODELTREE
+(
+	LIBRARYID			VARCHAR(100)  
+	, LIBRARYNAME		VARCHAR(100)  
+	, MODELID			VARCHAR(100)  
+	, MODELNAME			VARCHAR(100)  
+	, MODELTYPE			VARCHAR(100)  
+	, SUBJECTID			VARCHAR(100)  
+	, SUBJECTNAME		VARCHAR(100)  
+	, DIAGRAMID			VARCHAR(100)  
+	, DIAGRAMNAME		VARCHAR(100)  
+	, MDVERSION			VARCHAR(100)  
+	, OBJECTID			VARCHAR(100)  
+	, OBJECTNAME		VARCHAR(100)  
+	, PARENTID			VARCHAR(100)  
+	, CNTTRANSFORMS		VARCHAR(100)  
+	, ENTITYID			VARCHAR(100)  
+	, ENTITYNAME		VARCHAR(200)  
+	, ENTITYNAMEPH		VARCHAR(100)  
+	, startX			VARCHAR(100)  
+	, startY			VARCHAR(100)  
+	, entityType		VARCHAR(100)  
+	, ENTITYCNT			VARCHAR(100)  
+	, PL				VARCHAR(100)  
+	, INSERTDATE		CREATEDATE
+)
+
+CREATE TABLE MODELTREETEMP
+(
+	LIBRARYID			VARCHAR(100)  
+	, LIBRARYNAME		VARCHAR(100)  
+	, MODELID			VARCHAR(100)  
+	, MODELNAME			VARCHAR(100)  
+	, MODELTYPE			VARCHAR(100)  
+	, SUBJECTID			VARCHAR(100)  
+	, SUBJECTNAME		VARCHAR(100)  
+	, DIAGRAMID			VARCHAR(100)  
+	, DIAGRAMNAME		VARCHAR(100)  
+	, MDVERSION			VARCHAR(100)  
+	, OBJECTID			VARCHAR(100)  
+	, OBJECTNAME		VARCHAR(100)  
+	, PARENTID			VARCHAR(100)  
+	, CNTTRANSFORMS		VARCHAR(100)  
+	, ENTITYID			VARCHAR(100)  
+	, ENTITYNAME		VARCHAR(200)  
+	, ENTITYNAMEPH		VARCHAR(100)  
+	, startX			VARCHAR(100)  
+	, startY			VARCHAR(100)  
+	, entityType		VARCHAR(100)  
+	, ENTITYCNT			VARCHAR(100)  
+	, PL				VARCHAR(100)  
+	, INSERTDATE		CREATEDATE
+)
+
+CREATE TABLE MODEL_USER_ACCESS
+(
+  SEQ     INTEGER                            NOT NULL,
+  VIEWDATE    CREATEDATE,
+  USERID  VARCHAR(50),
+  USERNAME      VARCHAR(100),
+  SUBJECTID     VARCHAR(20),
+  SUBJECTNAME   VARCHAR(100),
+  MODELID    VARCHAR(20),
+  MODELNAME    VARCHAR(100),
+  LIBRARYID    VARCHAR(20),
+  LIBRARYNAME    VARCHAR(100),
+  CONNECTMETAYN    CHAR(1)  DEFAULT 'N'
+)
+go
+
+CREATE INDEX "INDEX_VIEWDATE1" ON "MODEL_USER_ACCESS" ("VIEWDATE");
+go
+
+CREATE TABLE LOGDATA
+(
+  LOGSEQ     INTEGER                            NOT NULL,
+  LOGDATE    CREATEDATE,
+  ERRORCODE  VARCHAR(20),
+  TITLE      VARCHAR(100),
+  BEANID     VARCHAR(50),
+  JOBCLASS   VARCHAR(100),
+  CONTENT    VARCHAR(4000),
+  FLAG       CHAR(1)
+)
+go
+
+CREATE TABLE modelsvg
+(
+	seq                  numeric  NOT NULL ,
+	delSvgKey			 VARCHAR(100) NOT NULL ,
+	modelid              integer  NOT NULL ,
+	subjmasterid         integer  NOT NULL ,
+	modelversion         integer  NULL ,
+	subjversion          integer  NOT NULL ,
+	svgdata              text  NULL ,
+	CREATEDATE           CREATEDATE ,
+	pl                   CHAR(1)  NOT NULL
+)
+go
+
+
+ALTER TABLE modelsvg
+	ADD CONSTRAINT PK_modelsvg PRIMARY KEY  NONCLUSTERED (seq ASC)
+go
+
+
+ALTER TABLE modelsvg
+	ADD CONSTRAINT AK1_modelsvg UNIQUE (modelid  ASC, subjmasterid  ASC,pl  ASC,subjversion  ASC)
+go
+
+
+CREATE TABLE Role
+(
+	RoleID               integer  NOT NULL ,
+	RoleNM               varchar(50)  NULL ,
+	Description          varchar(2000)  NULL ,
+	createdate           CREATEDATE ,
+	use_yn               USE_YN
+)
+go
+
+
+ALTER TABLE Role
+	ADD CONSTRAINT PK_Role PRIMARY KEY  NONCLUSTERED (RoleID ASC)
+go
+
+
+CREATE TABLE Role_and_Model
+(
+	RoleID               integer  NOT NULL ,
+	SubjectAreaID        integer  NOT NULL ,
+	LibraryID            integer  NULL ,
+	ModelID              integer  NOT NULL
+)
+go
+
+
+ALTER TABLE Role_and_Model
+	ADD CONSTRAINT PK_Role_and_Model PRIMARY KEY  NONCLUSTERED (RoleID ASC, MODELID ASC, SubjectAreaID ASC)
+go
+
+
+CREATE TABLE Role_and_User
+(
+	USERID               varchar(20)  NOT NULL ,
+	RoleID               integer  NOT NULL
+)
+go
+
+
+ALTER TABLE Role_and_User
+	ADD CONSTRAINT PK_Role_and_User PRIMARY KEY  NONCLUSTERED (USERID ASC,RoleID ASC)
+go
+
+
+CREATE TABLE USERINFO
+(
+	USERID               varchar(20)  NOT NULL ,
+	PASSWORD             varchar(64)  NULL ,
+	USERNAME             varchar(30)  NULL ,
+	DEPT                 varchar(30)  NULL ,
+	EMAIL                varchar(100)  NULL ,
+	PHONE                varchar(30)  NULL ,
+	createdate           CREATEDATE ,
+	use_yn               USE_YN ,
+	adminYN              char(1)  NULL ,
+	ISUSEDROLE           char(1)  NULL ,
+	ISENABLEDBATCH           char(1)  NULL ,
+	ISUSEDMVTREE  		char(1 )  DEFAULT 'N',
+	pw_modifydate           CREATEDATE
+)
+go
+
+
+ALTER TABLE USERINFO
+	ADD CONSTRAINT PK_USERINFO PRIMARY KEY  NONCLUSTERED (USERID ASC)
+go
+
+exec sp_bindefault 'NY', 'USERINFO.adminYN'
+go
+
+exec sp_bindefault 'NY', 'USERINFO.ISUSEDROLE'
+go
+
+
+ALTER TABLE Role_and_Model
+	ADD CONSTRAINT R_5 FOREIGN KEY (RoleID) REFERENCES Role(RoleID)
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+go
+
+
+
+ALTER TABLE Role_and_User
+	ADD CONSTRAINT R_3 FOREIGN KEY (USERID) REFERENCES USERINFO(USERID)
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+go
+
+ALTER TABLE Role_and_User
+	ADD CONSTRAINT R_6 FOREIGN KEY (RoleID) REFERENCES Role(RoleID)
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+go
+
+
+Insert into USERINFO
+   (USERID, PASSWORD, USERNAME, DEPT, PHONE, CREATEDATE, USE_YN, ADMINYN, ISUSEDMVTREE)
+ Values
+   ('genesis', 'aeebad4a796fcc2e15dc4c6061b45ed9b373f26adfc798ca7d2d8cc58182718e', 'genesis', 'EMA기술팀', '02-2528-0700', getdate(), 'Y', 'Y', 'N');
+Insert into USERINFO
+   (USERID, PASSWORD, USERNAME, DEPT, PHONE, CREATEDATE, USE_YN, ADMINYN, ISUSEDMVTREE)
+ Values
+   ('meta', 'ea3bd73e2b506e0527232b3ed743c66da83a8e3066f62a71e75eb9b4aa1db6', 'meta', 'META', '', getdate(), 'Y', 'N', 'N');
+
+go
+
+
+CREATE TABLE SYSTEMSETTING
+(
+  SEQ                   integer                  NOT NULL,
+  USERINFOMODIFYENABLE  CHAR(1)  NULL ,
+  PASSWORDEXPIREENABLE  CHAR(1)  NULL ,
+  PASSWORDEXPIREDATE    integer  NULL ,
+  CREATEDATE            CREATEDATE,
+  CONSTRAINT PK_SYSTEMSETTING PRIMARY KEY(SEQ)
+)
+go
+
+exec sp_bindefault 'NY', 'SYSTEMSETTING.USERINFOMODIFYENABLE'
+go
+exec sp_bindefault 'NY', 'SYSTEMSETTING.PASSWORDEXPIREENABLE'
+go
+
+INSERT INTO SYSTEMSETTING (
+   SEQ, USERINFOMODIFYENABLE, PASSWORDEXPIREENABLE, PASSWORDEXPIREDATE, CREATEDATE)
+VALUES ( 1, 'N', 'N', 90, getdate());
+
+go
+
+
+CREATE TABLE Tranform_DataType
+(
+	DBMS                 varchar(200)  NULL ,
+	FromDataType         varchar(200)  NULL ,
+	ToDataType           varchar(200)  NULL
+)
+
+go
+
+CREATE NONCLUSTERED INDEX XIE1Tranform_DataType ON Tranform_DataType
+(
+	DBMS                  ASC,
+	FromDataType          ASC,
+	ToDataType            ASC
+)
+go
+
+--mssql2005
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901690', 'CHAR', 'char');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901690', 'INTERVAL MINUTE TO SECOND', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901690', 'INTERVAL HOUR TO FRACTION', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901690', 'INTERVAL DAY TO HOUR', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901690', 'INTERVAL', 'float');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901690', 'VIDEO', 'varbinary');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901690', 'HUGE', 'bigint');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901690', 'BYTE', 'tinyint');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901690', 'INTERVAL MINUTE', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901690', 'IMAGE', 'image');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901690', 'INTERVAL HOUR TO SECOND', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901690', 'INTERVAL SECOND', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901690', 'NUMERIC', 'numeric');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901690', 'DATETIME HOUR TO SECOND', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901690', 'BOOLEAN', 'bit');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901690', 'INTERVAL MONTH', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901690', 'INTERVAL DAY TO FRACTION', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901690', 'DATETIME MONTH TO HOUR', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901690', 'DATETIME MONTH TO FRACTION', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901690', 'SMALLINT', 'smallint');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901690', 'DATETIME HOUR TO FRACTION', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901690', 'DATETIME DAY TO MINUTE', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901690', 'LONG TEXT', 'text');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901690', 'DATETIME DAY TO HOUR', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901690', 'DATETIME HOUR TO HOUR', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901690', 'DATETIME SECOND TO FRACTION', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901690', 'VARCHAR', 'varchar');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901690', 'FLOAT', 'float');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901690', 'INTERVAL SECOND TO FRACTION', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901690', 'DATETIME MINUTE TO MINUTE', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901690', 'SHORT FLOAT', 'real');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901690', 'DATETIME DAY TO DAY', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901690', 'DATETIME MINUTE TO SECOND', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901690', 'UNIQUEID', 'uniqueidentifier');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901690', 'TIME', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901690', 'TEXT', 'text');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901690', 'DATETIME MONTH TO SECOND', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901690', 'INTERVAL HOUR TO MINUTE', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901690', 'NVARCHAR', 'nvarchar');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901690', 'MONEY', 'money');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901690', 'BINARY', 'binary');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901690', 'DATETIME MONTH TO MONTH', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901690', 'DATETIME MONTH TO MINUTE', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901690', 'INTERVAL DAY TO MINUTE', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901690', 'DATETIME MONTH TO DAY', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901690', 'LONG FLOAT', 'double precision');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901690', 'NUMBER', 'numeric');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901690', 'LARGE BINARY', 'varbinary');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901690', 'INTERVAL DAY TO SECOND', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901690', 'INTERVAL YEAR TO MONTH', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901690', 'INTERVAL MINUTE TO FRACTION', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901690', 'SECURITY_ID', 'varchar');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901690', 'DATETIME DAY TO FRACTION', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901690', 'DECIMAL', 'decimal');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901690', 'TIMESTAMP', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901690', 'DATETIME DAY TO SECOND', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901690', 'LONG', 'int');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901690', 'DATETIME FRACTION TO FRACTION', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901690', 'AUDIO', 'varbinary');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901690', 'NCHAR', 'nchar');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901690', 'DATE', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901690', 'DATETIME MINUTE TO FRACTION', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901690', 'INTERVAL HOUR', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901690', 'INTEGER', 'integer');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901690', 'DATETIME HOUR TO MINUTE', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901690', 'DATETIME SECOND TO SECOND', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901690', 'INTERVAL DAY', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901690', 'INTERVAL YEAR', 'datetime');
+
+
+--mssql2000
+
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901680', 'TIMESTAMP', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901680', 'DATETIME DAY TO HOUR', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901680', 'DATETIME MONTH TO HOUR', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901680', 'INTERVAL YEAR', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901680', 'NVARCHAR', 'nvarchar');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901680', 'DATETIME DAY TO FRACTION', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901680', 'NUMERIC', 'numeric');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901680', 'DATETIME MONTH TO FRACTION', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901680', 'CHAR', 'char');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901680', 'VARCHAR', 'varchar');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901680', 'DATETIME MINUTE TO FRACTION', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901680', 'INTERVAL MONTH', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901680', 'INTERVAL HOUR TO FRACTION', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901680', 'AUDIO', 'varbinary');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901680', 'BYTE', 'tinyint');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901680', 'LONG TEXT', 'text');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901680', 'INTERVAL HOUR TO SECOND', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901680', 'DATETIME HOUR TO MINUTE', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901680', 'DATETIME DAY TO MINUTE', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901680', 'BOOLEAN', 'bit');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901680', 'DATETIME MONTH TO DAY', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901680', 'INTEGER', 'integer');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901680', 'DATETIME MONTH TO MONTH', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901680', 'DATETIME MONTH TO SECOND', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901680', 'INTERVAL DAY TO FRACTION', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901680', 'SHORT FLOAT', 'real');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901680', 'DATETIME MONTH TO MINUTE', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901680', 'LONG FLOAT', 'double precision');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901680', 'LONG', 'int');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901680', 'INTERVAL MINUTE TO FRACTION', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901680', 'INTERVAL DAY', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901680', 'DECIMAL', 'decimal');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901680', 'INTERVAL DAY TO SECOND', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901680', 'DATETIME FRACTION TO FRACTION', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901680', 'MONEY', 'money');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901680', 'IMAGE', 'image');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901680', 'SMALLINT', 'smallint');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901680', 'DATETIME DAY TO SECOND', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901680', 'DATETIME MINUTE TO MINUTE', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901680', 'SECURITY_ID', 'varchar');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901680', 'DATETIME DAY TO DAY', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901680', 'DATETIME SECOND TO SECOND', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901680', 'DATETIME HOUR TO HOUR', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901680', 'FLOAT', 'float');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901680', 'INTERVAL SECOND TO FRACTION', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901680', 'HUGE', 'bigint');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901680', 'NUMBER', 'numeric');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901680', 'INTERVAL DAY TO MINUTE', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901680', 'VIDEO', 'varbinary');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901680', 'DATETIME SECOND TO FRACTION', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901680', 'UNIQUEID', 'uniqueidentifier');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901680', 'DATE', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901680', 'DATE', 'smalldatetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901680', 'INTERVAL HOUR TO MINUTE', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901680', 'TEXT', 'text');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901680', 'NCHAR', 'nchar');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901680', 'INTERVAL', 'float');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901680', 'BINARY', 'binary');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901680', 'INTERVAL DAY TO HOUR', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901680', 'DATETIME MINUTE TO SECOND', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901680', 'DATETIME HOUR TO FRACTION', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901680', 'INTERVAL MINUTE', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901680', 'INTERVAL SECOND', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901680', 'INTERVAL MINUTE TO SECOND', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901680', 'DATETIME HOUR TO SECOND', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901680', 'TIME', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901680', 'INTERVAL YEAR TO MONTH', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901680', 'LARGE BINARY', 'varbinary');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901680', 'INTERVAL HOUR', 'datetime');
+
+
+
+--msql7.0
+
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901670', 'INTERVAL', 'float');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901670', 'DATETIME HOUR TO HOUR', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901670', 'DECIMAL', 'decimal');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901670', 'LONG TEXT', 'text');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901670', 'TIME', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901670', 'SMALLINT', 'smallint');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901670', 'INTERVAL MINUTE TO FRACTION', 'timestamp');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901670', 'NUMERIC', 'numeric');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901670', 'INTERVAL HOUR TO FRACTION', 'timestamp');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901670', 'INTERVAL HOUR', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901670', 'SECURITY_ID', 'varchar');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901670', 'INTERVAL DAY TO MINUTE', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901670', 'INTERVAL YEAR TO MONTH', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901670', 'BINARY', 'binary');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901670', 'INTERVAL MINUTE TO SECOND', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901670', 'DATETIME DAY TO MINUTE', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901670', 'INTERVAL DAY', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901670', 'LONG', 'int');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901670', 'DATE', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901670', 'TIMESTAMP', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901670', 'DATETIME MONTH TO FRACTION', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901670', 'DATETIME MONTH TO HOUR', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901670', 'DATETIME DAY TO HOUR', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901670', 'SHORT FLOAT', 'real');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901670', 'NCHAR', 'nchar');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901670', 'INTERVAL HOUR TO MINUTE', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901670', 'INTERVAL HOUR TO SECOND', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901670', 'DATETIME MONTH TO SECOND', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901670', 'CHAR', 'char');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901670', 'DATETIME HOUR TO FRACTION', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901670', 'IMAGE', 'image');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901670', 'DATETIME MINUTE TO MINUTE', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901670', 'DATETIME SECOND TO FRACTION', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901670', 'INTERVAL SECOND TO FRACTION', 'timestamp');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901670', 'INTEGER', 'integer');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901670', 'DATETIME MONTH TO MINUTE', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901670', 'LONG FLOAT', 'double precision');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901670', 'DATETIME MINUTE TO SECOND', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901670', 'BYTE', 'tinyint');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901670', 'INTERVAL DAY TO SECOND', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901670', 'NUMBER', 'numeric');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901670', 'INTERVAL YEAR', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901670', 'LARGE BINARY', 'varbinary');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901670', 'INTERVAL DAY TO HOUR', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901670', 'UNIQUEID', 'uniqueidentifier');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901670', 'DATETIME HOUR TO SECOND', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901670', 'AUDIO', 'varbinary');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901670', 'DATETIME DAY TO FRACTION', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901670', 'VARCHAR', 'varchar');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901670', 'INTERVAL MINUTE', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901670', 'DATETIME SECOND TO SECOND', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901670', 'FLOAT', 'float');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901670', 'DATETIME MONTH TO MONTH', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901670', 'DATETIME FRACTION TO FRACTION', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901670', 'MONEY', 'money');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901670', 'TEXT', 'text');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901670', 'NVARCHAR', 'nvarchar');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901670', 'VIDEO', 'varbinary');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901670', 'INTERVAL SECOND', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901670', 'DATETIME HOUR TO MINUTE', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901670', 'DATETIME MONTH TO DAY', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901670', 'HUGE', 'float');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901670', 'INTERVAL MONTH', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901670', 'DATETIME DAY TO DAY', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901670', 'INTERVAL DAY TO FRACTION', 'timestamp');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901670', 'DATETIME MINUTE TO FRACTION', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901670', 'DATETIME DAY TO SECOND', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901670', 'BOOLEAN', 'bit');
+
+
+
+
+--oracle10
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075858979100', 'FLOAT', 'FLOAT');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075858979100', 'AUDIO', 'ORDAudio');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075858979100', 'NUMERIC', 'NUMERIC');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075858979100', 'INTERVAL YEAR TO MONTH', 'INTERVAL YEAR TO MONTH');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075858979100', 'INTERVAL DAY TO HOUR', 'INTERVAL DAY TO SECOND');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075858979100', 'INTERVAL MINUTE TO FRACTION', 'INTERVAL DAY TO SECOND');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075858979100', 'DATETIME MONTH TO HOUR', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075858979100', 'DATETIME MONTH TO MINUTE', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075858979100', 'UNIQUEID', 'ROWID');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075858979100', 'INTERVAL MINUTE', 'INTERVAL DAY TO SECOND');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075858979100', 'SMALLINT', 'SMALLINT');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075858979100', 'DATETIME FRACTION TO FRACTION', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075858979100', 'DATE', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075858979100', 'INTERVAL DAY TO MINUTE', 'INTERVAL DAY TO SECOND');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075858979100', 'DATETIME HOUR TO FRACTION', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075858979100', 'INTERVAL MINUTE TO SECOND', 'INTERVAL DAY TO SECOND');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075858979100', 'INTERVAL YEAR', 'INTERVAL YEAR TO MONTH');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075858979100', 'INTEGER', 'INTEGER');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075858979100', 'DATETIME MINUTE TO SECOND', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075858979100', 'MONEY', 'DECIMAL(19,4)');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075858979100', 'HUGE', 'REAL');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075858979100', 'DATETIME HOUR TO SECOND', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075858979100', 'DATETIME DAY TO MINUTE', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075858979100', 'NUMBER', 'NUMBER');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075858979100', 'BYTE', 'SMALLINT');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075858979100', 'INTERVAL HOUR TO MINUTE', 'INTERVAL DAY TO SECOND');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075858979100', 'DATETIME DAY TO SECOND', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075858979100', 'VARCHAR', 'VARCHAR2');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075858979100', 'DATETIME MINUTE TO MINUTE', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075858979100', 'DATETIME SECOND TO FRACTION', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075858979100', 'DATETIME MONTH TO SECOND', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075858979100', 'LONG', 'INT');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075858979100', 'DATETIME HOUR TO HOUR', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075858979100', 'INTERVAL SECOND TO FRACTION', 'INTERVAL DAY TO SECOND');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075858979100', 'IMAGE', 'ORDImage');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075858979100', 'INTERVAL DAY TO FRACTION', 'INTERVAL DAY TO SECOND');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075858979100', 'BOOLEAN', 'SMALLINT');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075858979100', 'SECURITY_ID', 'MLSLABEL');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075858979100', 'INTERVAL DAY TO SECOND', 'INTERVAL DAY TO SECOND');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075858979100', 'LARGE BINARY', 'BLOB');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075858979100', 'INTERVAL HOUR', 'INTERVAL DAY TO SECOND');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075858979100', 'DATETIME DAY TO DAY', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075858979100', 'NVARCHAR', 'NVARCHAR2');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075858979100', 'DATETIME MONTH TO DAY', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075858979100', 'SHORT FLOAT', 'FLOAT');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075858979100', 'INTERVAL HOUR TO FRACTION', 'INTERVAL DAY TO SECOND');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075858979100', 'CHAR', 'CHAR');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075858979100', 'NCHAR', 'NCHAR');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075858979100', 'VIDEO', 'ORDVideo');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075858979100', 'INTERVAL', 'NUMBER');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075858979100', 'DATETIME MINUTE TO FRACTION', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075858979100', 'INTERVAL DAY', 'INTERVAL YEAR TO MONTH');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075858979100', 'DATETIME HOUR TO MINUTE', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075858979100', 'LONG FLOAT', 'DOUBLE PRECISION');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075858979100', 'DATETIME MONTH TO MONTH', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075858979100', 'DATETIME DAY TO FRACTION', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075858979100', 'DATETIME SECOND TO SECOND', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075858979100', 'DATETIME DAY TO HOUR', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075858979100', 'DECIMAL', 'DECIMAL');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075858979100', 'LONG TEXT', 'CLOB');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075858979100', 'INTERVAL SECOND', 'INTERVAL DAY TO SECOND');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075858979100', 'DATETIME MONTH TO FRACTION', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075858979100', 'TEXT', 'LONG VARCHAR');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075858979100', 'TIMESTAMP', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075858979100', 'BINARY', 'RAW');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075858979100', 'INTERVAL HOUR TO SECOND', 'INTERVAL DAY TO SECOND');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075858979100', 'INTERVAL MONTH', 'INTERVAL YEAR TO MONTH');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075858979100', 'TIME', 'DATE');
+
+
+
+--oracle 9
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897990', 'SHORT FLOAT', 'FLOAT');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897990', 'BINARY', 'RAW');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897990', 'INTERVAL DAY TO SECOND', 'INTERVAL DAY TO SECOND');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897990', 'DATETIME DAY TO DAY', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897990', 'INTERVAL MINUTE', 'INTERVAL DAY TO SECOND');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897990', 'DATETIME DAY TO MINUTE', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897990', 'FLOAT', 'FLOAT');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897990', 'INTERVAL SECOND TO FRACTION', 'INTERVAL DAY TO SECOND');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897990', 'SMALLINT', 'SMALLINT');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897990', 'IMAGE', 'ORDImage');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897990', 'LONG TEXT', 'CLOB');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897990', 'INTEGER', 'INTEGER');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897990', 'INTERVAL YEAR TO MONTH', 'INTERVAL YEAR TO MONTH');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897990', 'INTERVAL HOUR TO MINUTE', 'INTERVAL DAY TO SECOND');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897990', 'DATETIME SECOND TO FRACTION', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897990', 'DATETIME HOUR TO FRACTION', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897990', 'INTERVAL DAY TO HOUR', 'INTERVAL DAY TO SECOND');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897990', 'DATETIME HOUR TO MINUTE', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897990', 'INTERVAL DAY', 'INTERVAL YEAR TO MONTH');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897990', 'DATETIME MINUTE TO MINUTE', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897990', 'INTERVAL YEAR', 'INTERVAL YEAR TO MONTH');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897990', 'INTERVAL', 'NUMBER');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897990', 'INTERVAL DAY TO FRACTION', 'INTERVAL DAY TO SECOND');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897990', 'INTERVAL MINUTE TO SECOND', 'INTERVAL DAY TO SECOND');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897990', 'BYTE', 'SMALLINT');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897990', 'DATE', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897990', 'AUDIO', 'ORDAudio');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897990', 'DATETIME MONTH TO FRACTION', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897990', 'DATETIME FRACTION TO FRACTION', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897990', 'LONG', 'INT');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897990', 'VARCHAR', 'VARCHAR2');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897990', 'NUMERIC', 'NUMERIC');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897990', 'DATETIME DAY TO SECOND', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897990', 'INTERVAL HOUR', 'INTERVAL DAY TO SECOND');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897990', 'NVARCHAR', 'NVARCHAR2');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897990', 'DATETIME MONTH TO HOUR', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897990', 'DATETIME HOUR TO SECOND', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897990', 'INTERVAL DAY TO MINUTE', 'INTERVAL DAY TO SECOND');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897990', 'CHAR', 'CHAR');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897990', 'NCHAR', 'NCHAR');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897990', 'TEXT', 'LONG VARCHAR');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897990', 'DATETIME MONTH TO DAY', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897990', 'DATETIME MINUTE TO SECOND', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897990', 'DATETIME MONTH TO MINUTE', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897990', 'TIMESTAMP', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897990', 'DATETIME MINUTE TO FRACTION', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897990', 'VIDEO', 'ORDVideo');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897990', 'INTERVAL SECOND', 'INTERVAL DAY TO SECOND');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897990', 'LONG FLOAT', 'DOUBLE PRECISION');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897990', 'INTERVAL MONTH', 'INTERVAL YEAR TO MONTH');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897990', 'NUMBER', 'NUMBER');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897990', 'INTERVAL MINUTE TO FRACTION', 'INTERVAL DAY TO SECOND');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897990', 'DATETIME DAY TO FRACTION', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897990', 'SECURITY_ID', 'MLSLABEL');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897990', 'HUGE', 'REAL');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897990', 'BOOLEAN', 'SMALLINT');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897990', 'DATETIME DAY TO HOUR', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897990', 'INTERVAL HOUR TO FRACTION', 'INTERVAL DAY TO SECOND');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897990', 'INTERVAL HOUR TO SECOND', 'INTERVAL DAY TO SECOND');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897990', 'DATETIME MONTH TO SECOND', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897990', 'UNIQUEID', 'ROWID');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897990', 'DATETIME HOUR TO HOUR', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897990', 'LARGE BINARY', 'BLOB');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897990', 'MONEY', 'DECIMAL(19,4)');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897990', 'DATETIME SECOND TO SECOND', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897990', 'DATETIME MONTH TO MONTH', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897990', 'DECIMAL', 'DECIMAL');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897990', 'TIME', 'DATE');
+
+
+
+
+--oracle 8i
+
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897980', 'MONEY', 'DECIMAL(19,4)');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897980', 'INTERVAL SECOND TO FRACTION', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897980', 'VIDEO', 'RAW');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897980', 'DATETIME DAY TO MINUTE', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897980', 'BINARY', 'RAW');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897980', 'INTERVAL DAY TO FRACTION', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897980', 'FLOAT', 'FLOAT');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897980', 'SECURITY_ID', 'MLSLABEL');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897980', 'DATETIME HOUR TO MINUTE', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897980', 'DATETIME MONTH TO SECOND', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897980', 'NCHAR', 'NCHAR');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897980', 'DATETIME DAY TO DAY', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897980', 'LONG', 'INT');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897980', 'INTERVAL DAY', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897980', 'DATE', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897980', 'INTEGER', 'INTEGER');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897980', 'BOOLEAN', 'SMALLINT');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897980', 'DATETIME FRACTION TO FRACTION', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897980', 'IMAGE', 'BLOB');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897980', 'DATETIME HOUR TO HOUR', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897980', 'INTERVAL MINUTE', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897980', 'INTERVAL DAY TO SECOND', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897980', 'INTERVAL SECOND', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897980', 'NUMERIC', 'NUMERIC');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897980', 'INTERVAL', 'NUMBER');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897980', 'BYTE', 'SMALLINT');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897980', 'DATETIME DAY TO HOUR', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897980', 'CHAR', 'CHAR');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897980', 'DECIMAL', 'DECIMAL');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897980', 'DATETIME SECOND TO SECOND', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897980', 'INTERVAL HOUR TO SECOND', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897980', 'INTERVAL YEAR', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897980', 'INTERVAL MINUTE TO SECOND', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897980', 'INTERVAL MINUTE TO FRACTION', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897980', 'DATETIME MONTH TO MINUTE', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897980', 'LARGE BINARY', 'BLOB');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897980', 'TEXT', 'LONG VARCHAR');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897980', 'INTERVAL DAY TO MINUTE', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897980', 'DATETIME HOUR TO FRACTION', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897980', 'INTERVAL YEAR TO MONTH', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897980', 'DATETIME HOUR TO SECOND', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897980', 'HUGE', 'REAL');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897980', 'TIMESTAMP', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897980', 'INTERVAL HOUR TO FRACTION', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897980', 'TIME', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897980', 'UNIQUEID', 'ROWID');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897980', 'NUMBER', 'NUMBER');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897980', 'DATETIME MINUTE TO FRACTION', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897980', 'LONG TEXT', 'CLOB');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897980', 'INTERVAL DAY TO HOUR', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897980', 'SMALLINT', 'SMALLINT');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897980', 'DATETIME MONTH TO HOUR', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897980', 'AUDIO', 'BLOB');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897980', 'DATETIME DAY TO FRACTION', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897980', 'DATETIME MONTH TO FRACTION', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897980', 'VARCHAR', 'VARCHAR2');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897980', 'INTERVAL MONTH', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897980', 'INTERVAL HOUR TO MINUTE', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897980', 'DATETIME DAY TO SECOND', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897980', 'DATETIME MINUTE TO SECOND', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897980', 'DATETIME MINUTE TO MINUTE', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897980', 'DATETIME SECOND TO FRACTION', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897980', 'INTERVAL HOUR', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897980', 'SHORT FLOAT', 'FLOAT');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897980', 'NVARCHAR', 'NVARCHAR2');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897980', 'DATETIME MONTH TO DAY', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897980', 'DATETIME MONTH TO MONTH', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897980', 'LONG FLOAT', 'DOUBLE PRECISION');
+
+
+
+--Acess2000/2002/2003
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900490', 'DATETIME MINUTE TO MINUTE', 'Date/Time');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900490', 'DATETIME HOUR TO SECOND', 'Date/Time');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900490', 'INTERVAL HOUR TO FRACTION', 'Date/Time');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900490', 'INTERVAL DAY TO FRACTION', 'Date/Time');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900490', 'BYTE', 'Byte');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900490', 'DATETIME MONTH TO MONTH', 'Date/Time');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900490', 'FLOAT', 'Double');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900490', 'DATETIME DAY TO HOUR', 'Date/Time');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900490', 'LARGE BINARY', 'OLE Object');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900490', 'DATETIME MONTH TO FRACTION', 'Date/Time');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900490', 'DATETIME MONTH TO DAY', 'Date/Time');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900490', 'INTEGER', 'Long Integer');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900490', 'DATETIME HOUR TO FRACTION', 'Date/Time');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900490', 'DATETIME DAY TO DAY', 'Date/Time');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900490', 'DATETIME DAY TO MINUTE', 'Date/Time');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900490', 'DATETIME MINUTE TO FRACTION', 'Date/Time');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900490', 'INTERVAL', 'Counter');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900490', 'INTERVAL YEAR', 'Date/Time');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900490', 'INTERVAL SECOND', 'Date/Time');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900490', 'DATETIME MONTH TO MINUTE', 'Date/Time');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900490', 'TIME', 'Date/Time');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900490', 'INTERVAL HOUR TO MINUTE', 'Date/Time');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900490', 'INTERVAL MONTH', 'Date/Time');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900490', 'BOOLEAN', 'Yes/No');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900490', 'NUMBER', 'Double');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900490', 'AUDIO', 'OLE Object');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900490', 'DATETIME SECOND TO SECOND', 'Date/Time');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900490', 'DATETIME DAY TO SECOND', 'Date/Time');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900490', 'DATE', 'Date/Time');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900490', 'INTERVAL HOUR TO SECOND', 'Date/Time');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900490', 'INTERVAL MINUTE TO FRACTION', 'Date/Time');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900490', 'TEXT', 'Memo');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900490', 'NVARCHAR', 'Text');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900490', 'DATETIME MONTH TO HOUR', 'Date/Time');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900490', 'LONG TEXT', 'Memo');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900490', 'DATETIME DAY TO FRACTION', 'Date/Time');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900490', 'SHORT FLOAT', 'Single');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900490', 'HUGE', 'Double');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900490', 'DATETIME SECOND TO FRACTION', 'Date/Time');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900490', 'INTERVAL SECOND TO FRACTION', 'Date/Time');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900490', 'IMAGE', 'OLE Object');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900490', 'SECURITY_ID', 'Memo');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900490', 'MONEY', 'Currency');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900490', 'INTERVAL YEAR TO MONTH', 'Date/Time');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900490', 'INTERVAL HOUR', 'Date/Time');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900490', 'INTERVAL DAY TO SECOND', 'Date/Time');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900490', 'DECIMAL', 'Decimal');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900490', 'DATETIME MONTH TO SECOND', 'Date/Time');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900490', 'INTERVAL MINUTE', 'Date/Time');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900490', 'DATETIME HOUR TO HOUR', 'Date/Time');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900490', 'SMALLINT', 'Integer');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900490', 'NCHAR', 'Text');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900490', 'INTERVAL DAY', 'Date/Time');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900490', 'NUMERIC', 'Double');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900490', 'LONG FLOAT', 'Double');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900490', 'VARCHAR', 'Text');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900490', 'BINARY', 'OLE Object');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900490', 'UNIQUEID', 'Replication ID');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900490', 'VIDEO', 'OLE Object');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900490', 'INTERVAL DAY TO MINUTE', 'Date/Time');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900490', 'INTERVAL DAY TO HOUR', 'Date/Time');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900490', 'CHAR', 'Text');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900490', 'LONG', 'Long Integer');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900490', 'DATETIME FRACTION TO FRACTION', 'Date/Time');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900490', 'DATETIME MINUTE TO SECOND', 'Date/Time');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900490', 'DATETIME HOUR TO MINUTE', 'Date/Time');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900490', 'INTERVAL MINUTE TO SECOND', 'Date/Time');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900490', 'TIMESTAMP', 'Date/Time');
+
+
+--DB2 390/7
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897870', 'INTERVAL HOUR TO SECOND', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897870', 'VIDEO', 'VARGRAPHIC');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897870', 'BYTE', 'SMALLINT');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897870', 'DATETIME MONTH TO FRACTION', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897870', 'TEXT', 'LONG VARCHAR');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897870', 'DATETIME FRACTION TO FRACTION', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897870', 'DATETIME DAY TO FRACTION', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897870', 'INTERVAL SECOND TO FRACTION', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897870', 'INTERVAL DAY TO MINUTE', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897870', 'DATETIME SECOND TO FRACTION', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897870', 'SMALLINT', 'SMALLINT');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897870', 'DATETIME MONTH TO HOUR', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897870', 'HUGE', 'REAL');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897870', 'INTERVAL', 'FLOAT');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897870', 'DATETIME DAY TO HOUR', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897870', 'NUMERIC', 'NUMERIC');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897870', 'IMAGE', 'DBCLOB');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897870', 'DECIMAL', 'DECIMAL');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897870', 'DATETIME MONTH TO MINUTE', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897870', 'INTEGER', 'INTEGER');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897870', 'DATETIME MINUTE TO SECOND', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897870', 'CHAR', 'CHAR');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897870', 'INTERVAL DAY TO FRACTION', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897870', 'DATETIME MONTH TO SECOND', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897870', 'DATETIME DAY TO DAY', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897870', 'NVARCHAR', 'VARCHAR');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897870', 'DATETIME HOUR TO MINUTE', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897870', 'BOOLEAN', 'SMALLINT');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897870', 'INTERVAL MINUTE', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897870', 'TIME', 'TIME');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897870', 'DATETIME HOUR TO SECOND', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897870', 'NUMBER', 'NUMERIC');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897870', 'MONEY', 'DECIMAL(19,4)');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897870', 'INTERVAL MONTH', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897870', 'INTERVAL MINUTE TO SECOND', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897870', 'INTERVAL HOUR', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897870', 'SHORT FLOAT', 'REAL');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897870', 'DATETIME HOUR TO HOUR', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897870', 'INTERVAL YEAR', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897870', 'BINARY', 'GRAPHIC');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897870', 'AUDIO', 'BLOB');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897870', 'DATETIME MINUTE TO FRACTION', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897870', 'INTERVAL SECOND', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897870', 'FLOAT', 'FLOAT');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897870', 'INTERVAL DAY', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897870', 'DATE', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897870', 'DATETIME MONTH TO DAY', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897870', 'LONG FLOAT', 'DOUBLE PRECISION');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897870', 'DATETIME SECOND TO SECOND', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897870', 'INTERVAL DAY TO SECOND', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897870', 'DATETIME MONTH TO MONTH', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897870', 'DATETIME DAY TO MINUTE', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897870', 'LONG', 'INT');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897870', 'DATETIME DAY TO SECOND', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897870', 'SECURITY_ID', 'BLOB');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897870', 'UNIQUEID', 'ROWID');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897870', 'DATETIME HOUR TO FRACTION', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897870', 'VARCHAR', 'VARCHAR');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897870', 'INTERVAL MINUTE TO FRACTION', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897870', 'DATETIME MINUTE TO MINUTE', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897870', 'NCHAR', 'CHAR');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897870', 'LARGE BINARY', 'BLOB');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897870', 'INTERVAL YEAR TO MONTH', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897870', 'TIMESTAMP', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897870', 'INTERVAL DAY TO HOUR', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897870', 'LONG TEXT', 'CLOB');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897870', 'INTERVAL HOUR TO MINUTE', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897870', 'INTERVAL HOUR TO FRACTION', 'TIMESTAMP');
+
+
+
+
+--DB2/390 8
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897880', 'INTERVAL HOUR TO FRACTION', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897880', 'INTERVAL YEAR', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897880', 'LONG TEXT', 'CLOB');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897880', 'INTERVAL', 'FLOAT');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897880', 'BYTE', 'SMALLINT');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897880', 'DATETIME DAY TO HOUR', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897880', 'TIME', 'TIME');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897880', 'HUGE', 'REAL');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897880', 'UNIQUEID', 'ROWID');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897880', 'DATETIME DAY TO MINUTE', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897880', 'DATETIME DAY TO FRACTION', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897880', 'AUDIO', 'BLOB');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897880', 'INTERVAL MINUTE', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897880', 'DATETIME MINUTE TO MINUTE', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897880', 'IMAGE', 'DBCLOB');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897880', 'DATE', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897880', 'INTERVAL HOUR', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897880', 'DATETIME HOUR TO MINUTE', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897880', 'INTERVAL SECOND TO FRACTION', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897880', 'INTERVAL MINUTE TO SECOND', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897880', 'NUMBER', 'NUMERIC');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897880', 'DECIMAL', 'DECIMAL');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897880', 'NUMERIC', 'NUMERIC');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897880', 'TEXT', 'LONG VARCHAR');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897880', 'SMALLINT', 'SMALLINT');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897880', 'INTERVAL SECOND', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897880', 'DATETIME MONTH TO DAY', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897880', 'DATETIME SECOND TO SECOND', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897880', 'NCHAR', 'CHAR');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897880', 'DATETIME MONTH TO FRACTION', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897880', 'INTERVAL DAY TO FRACTION', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897880', 'DATETIME MINUTE TO SECOND', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897880', 'FLOAT', 'FLOAT');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897880', 'LONG FLOAT', 'DOUBLE PRECISION');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897880', 'INTEGER', 'INTEGER');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897880', 'NVARCHAR', 'VARCHAR');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897880', 'VARCHAR', 'VARCHAR');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897880', 'DATETIME MONTH TO MONTH', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897880', 'SECURITY_ID', 'BLOB');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897880', 'DATETIME MONTH TO HOUR', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897880', 'DATETIME FRACTION TO FRACTION', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897880', 'INTERVAL DAY TO MINUTE', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897880', 'CHAR', 'CHAR');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897880', 'BOOLEAN', 'SMALLINT');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897880', 'VIDEO', 'VARGRAPHIC');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897880', 'DATETIME MONTH TO MINUTE', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897880', 'DATETIME HOUR TO FRACTION', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897880', 'MONEY', 'DECIMAL(19,4)');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897880', 'LARGE BINARY', 'BLOB');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897880', 'INTERVAL HOUR TO MINUTE', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897880', 'SHORT FLOAT', 'REAL');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897880', 'DATETIME SECOND TO FRACTION', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897880', 'DATETIME HOUR TO SECOND', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897880', 'DATETIME HOUR TO HOUR', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897880', 'DATETIME DAY TO DAY', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897880', 'DATETIME MINUTE TO FRACTION', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897880', 'DATETIME MONTH TO SECOND', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897880', 'INTERVAL DAY TO HOUR', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897880', 'INTERVAL DAY TO SECOND', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897880', 'TIMESTAMP', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897880', 'DATETIME DAY TO SECOND', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897880', 'LONG', 'INT');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897880', 'INTERVAL YEAR TO MONTH', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897880', 'BINARY', 'GRAPHIC');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897880', 'INTERVAL HOUR TO SECOND', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897880', 'INTERVAL MONTH', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897880', 'INTERVAL DAY', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897880', 'INTERVAL MINUTE TO FRACTION', 'TIMESTAMP');
+
+
+-- DB2/UDB 8.1
+
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897781', 'DATETIME SECOND TO FRACTION', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897781', 'DATETIME HOUR TO MINUTE', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897781', 'DATETIME DAY TO FRACTION', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897781', 'DATETIME DAY TO SECOND', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897781', 'LARGE BINARY', 'BLOB');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897781', 'LONG FLOAT', 'DOUBLE PRECISION');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897781', 'INTERVAL MINUTE TO FRACTION', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897781', 'DATETIME MONTH TO MONTH', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897781', 'INTERVAL DAY TO MINUTE', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897781', 'INTERVAL MINUTE TO SECOND', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897781', 'FLOAT', 'FLOAT');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897781', 'INTERVAL DAY', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897781', 'VIDEO', 'VARGRAPHIC');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897781', 'DATETIME HOUR TO SECOND', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897781', 'INTEGER', 'INTEGER');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897781', 'CHAR', 'CHAR');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897781', 'DATETIME SECOND TO SECOND', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897781', 'NUMBER', 'NUMERIC');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897781', 'UNIQUEID', 'INTEGER');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897781', 'BOOLEAN', 'SMALLINT');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897781', 'DATETIME FRACTION TO FRACTION', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897781', 'DATETIME MONTH TO DAY', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897781', 'VARCHAR', 'VARCHAR');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897781', 'DATETIME HOUR TO HOUR', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897781', 'INTERVAL', 'DOUBLE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897781', 'INTERVAL HOUR TO SECOND', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897781', 'DATETIME HOUR TO FRACTION', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897781', 'INTERVAL YEAR TO MONTH', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897781', 'DATE', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897781', 'TIMESTAMP', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897781', 'TEXT', 'LONG VARCHAR');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897781', 'DATETIME DAY TO MINUTE', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897781', 'SECURITY_ID', 'BLOB');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897781', 'DATETIME MINUTE TO SECOND', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897781', 'NVARCHAR', 'VARCHAR');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897781', 'INTERVAL SECOND', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897781', 'DATETIME MINUTE TO FRACTION', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897781', 'TIME', 'TIME');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897781', 'INTERVAL DAY TO SECOND', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897781', 'DATETIME MONTH TO SECOND', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897781', 'SHORT FLOAT', 'DOUBLE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897781', 'DATETIME MONTH TO MINUTE', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897781', 'INTERVAL SECOND TO FRACTION', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897781', 'DATETIME MINUTE TO MINUTE', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897781', 'INTERVAL HOUR', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897781', 'HUGE', 'BIGINT');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897781', 'NUMERIC', 'NUMERIC');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897781', 'INTERVAL DAY TO FRACTION', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897781', 'INTERVAL HOUR TO MINUTE', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897781', 'MONEY', 'DECIMAL(19,4)');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897781', 'DATETIME MONTH TO FRACTION', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897781', 'DATETIME DAY TO HOUR', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897781', 'AUDIO', 'BLOB');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897781', 'INTERVAL MINUTE', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897781', 'SMALLINT', 'SMALLINT');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897781', 'INTERVAL YEAR', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897781', 'NCHAR', 'CHAR');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897781', 'DATETIME MONTH TO HOUR', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897781', 'BINARY', 'GRAPHIC');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897781', 'LONG TEXT', 'CLOB');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897781', 'IMAGE', 'LONG VARGRAPHIC');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897781', 'BYTE', 'SMALLINT');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897781', 'INTERVAL DAY TO HOUR', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897781', 'LONG', 'INTEGER');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897781', 'DATETIME DAY TO DAY', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897781', 'DECIMAL', 'DECIMAL');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897781', 'INTERVAL MONTH', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585897781', 'INTERVAL HOUR TO FRACTION', 'TIMESTAMP');
+
+
+--FoxPro
+
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585902910', 'AUDIO', 'Memo');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585902910', 'BINARY', 'Memo');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585902910', 'BOOLEAN', 'Logical');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585902910', 'BYTE', 'Numeric');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585902910', 'CHAR', 'Character');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585902910', 'DATE', 'Date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585902910', 'DATETIME DAY TO DAY', 'Date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585902910', 'DATETIME DAY TO FRACTION', 'Date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585902910', 'DATETIME DAY TO HOUR', 'Date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585902910', 'DATETIME DAY TO MINUTE', 'Date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585902910', 'DATETIME DAY TO SECOND', 'Date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585902910', 'DATETIME FRACTION TO FRACTION', 'Date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585902910', 'DATETIME HOUR TO FRACTION', 'Date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585902910', 'DATETIME HOUR TO HOUR', 'Date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585902910', 'DATETIME HOUR TO MINUTE', 'Date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585902910', 'DATETIME HOUR TO SECOND', 'Date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585902910', 'DATETIME MINUTE TO FRACTION', 'Date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585902910', 'DATETIME MINUTE TO MINUTE', 'Date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585902910', 'DATETIME MINUTE TO SECOND', 'Date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585902910', 'DATETIME MONTH TO DAY', 'Date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585902910', 'DATETIME MONTH TO FRACTION', 'Date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585902910', 'DATETIME MONTH TO HOUR', 'Date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585902910', 'DATETIME MONTH TO MINUTE', 'Date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585902910', 'DATETIME MONTH TO MONTH', 'Date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585902910', 'DATETIME MONTH TO SECOND', 'Date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585902910', 'DATETIME SECOND TO FRACTION', 'Date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585902910', 'DATETIME SECOND TO SECOND', 'Date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585902910', 'DECIMAL', 'Numeric');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585902910', 'FLOAT', 'Float');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585902910', 'HUGE', 'Numeric');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585902910', 'IMAGE', 'Memo');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585902910', 'INTEGER', 'Numeric');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585902910', 'INTERVAL DAY TO FRACTION', 'Date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585902910', 'INTERVAL DAY TO HOUR', 'Date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585902910', 'INTERVAL DAY TO MINUTE', 'Date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585902910', 'INTERVAL DAY TO SECOND', 'Date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585902910', 'INTERVAL DAY', 'Date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585902910', 'INTERVAL HOUR TO FRACTION', 'Date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585902910', 'INTERVAL HOUR TO MINUTE', 'Date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585902910', 'INTERVAL HOUR TO SECOND', 'Date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585902910', 'INTERVAL HOUR', 'Date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585902910', 'INTERVAL MINUTE TO FRACTION', 'Date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585902910', 'INTERVAL MINUTE TO SECOND', 'Date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585902910', 'INTERVAL MINUTE', 'Date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585902910', 'INTERVAL MONTH', 'Date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585902910', 'INTERVAL SECOND TO FRACTION', 'Date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585902910', 'INTERVAL SECOND', 'Date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585902910', 'INTERVAL YEAR TO MONTH', 'Date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585902910', 'INTERVAL YEAR', 'Date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585902910', 'INTERVAL', 'Numeric');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585902910', 'LARGE BINARY', 'Memo');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585902910', 'LONG FLOAT', 'Numeric');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585902910', 'LONG TEXT', 'Memo');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585902910', 'LONG', 'Numeric');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585902910', 'MONEY', 'Numeric(19,2)');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585902910', 'NCHAR', 'Character');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585902910', 'NUMBER', 'Numeric');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585902910', 'NUMERIC', 'Numeric');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585902910', 'NVARCHAR', 'Character');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585902910', 'SECURITY_ID', 'Memo');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585902910', 'SHORT FLOAT', 'Float');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585902910', 'SMALLINT', 'Numeric');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585902910', 'TEXT', 'Memo');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585902910', 'TIME', 'Date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585902910', 'TIMESTAMP', 'Date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585902910', 'UNIQUEID', 'Numeric');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585902910', 'VARCHAR', 'Character');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585902910', 'VIDEO', 'Memo');
+
+
+
+--Informix 7.0
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900670', 'AUDIO', 'byte');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900670', 'BINARY', 'byte in table');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900670', 'BOOLEAN', 'byte');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900670', 'BYTE', 'byte');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900670', 'CHAR', 'char');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900670', 'DATE', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900670', 'DATETIME DAY TO DAY', 'datetime day to day');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900670', 'DATETIME DAY TO FRACTION', 'datetime day to fraction');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900670', 'DATETIME DAY TO HOUR', 'datetime day to hour');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900670', 'DATETIME DAY TO MINUTE', 'datetime day to minute');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900670', 'DATETIME DAY TO SECOND', 'datetime day to second');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900670', 'DATETIME FRACTION TO FRACTION', 'datetime fraction to fraction');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900670', 'DATETIME HOUR TO FRACTION', 'datetime hour to fraction');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900670', 'DATETIME HOUR TO HOUR', 'datetime hour to hour');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900670', 'DATETIME HOUR TO MINUTE', 'datetime hour to minute');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900670', 'DATETIME HOUR TO SECOND', 'datetime hour to second');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900670', 'DATETIME MINUTE TO FRACTION', 'datetime minute to fraction');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900670', 'DATETIME MINUTE TO MINUTE', 'datetime minute to minute');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900670', 'DATETIME MINUTE TO SECOND', 'datetime minute to second');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900670', 'DATETIME MONTH TO DAY', 'datetime month to day');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900670', 'DATETIME MONTH TO FRACTION', 'datetime month to fraction');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900670', 'DATETIME MONTH TO HOUR', 'datetime month to hour');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900670', 'DATETIME MONTH TO MINUTE', 'datetime month to minute');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900670', 'DATETIME MONTH TO MONTH', 'datetime month to month');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900670', 'DATETIME MONTH TO SECOND', 'datetime month to second');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900670', 'DATETIME SECOND TO FRACTION', 'datetime second to fraction');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900670', 'DATETIME SECOND TO SECOND', 'datetime second to second');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900670', 'DECIMAL', 'decimal');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900670', 'FLOAT', 'float');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900670', 'HUGE', 'numeric');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900670', 'IMAGE', 'byte in table');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900670', 'INTEGER', 'integer');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900670', 'INTERVAL DAY TO FRACTION', 'interval day() to fraction()');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900670', 'INTERVAL DAY TO HOUR', 'interval day() to hour');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900670', 'INTERVAL DAY TO MINUTE', 'interval day() to minute');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900670', 'INTERVAL DAY TO SECOND', 'interval day() to second');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900670', 'INTERVAL DAY', 'interval day() to day');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900670', 'INTERVAL HOUR TO FRACTION', 'interval hour() to fraction()');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900670', 'INTERVAL HOUR TO MINUTE', 'interval hour() to minute');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900670', 'INTERVAL HOUR TO SECOND', 'interval hour() to second');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900670', 'INTERVAL HOUR', 'interval hour() to hour');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900670', 'INTERVAL MINUTE TO FRACTION', 'interval minute() to fraction()');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900670', 'INTERVAL MINUTE TO SECOND', 'interval minute() to second');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900670', 'INTERVAL MINUTE', 'interval minute() to minute');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900670', 'INTERVAL MONTH', 'interval month() to month');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900670', 'INTERVAL SECOND TO FRACTION', 'interval second() to fraction()');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900670', 'INTERVAL SECOND', 'interval second() to second');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900670', 'INTERVAL YEAR TO MONTH', 'interval year() to month');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900670', 'INTERVAL YEAR', 'interval year() to year');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900670', 'INTERVAL', 'interval');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900670', 'LARGE BINARY', 'byte');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900670', 'LONG FLOAT', 'double precision');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900670', 'LONG TEXT', 'text');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900670', 'LONG', 'int');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900670', 'MONEY', 'money');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900670', 'NCHAR', 'nchar');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900670', 'NUMBER', 'numeric');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900670', 'NUMERIC', 'numeric');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900670', 'NVARCHAR', 'nvarchar');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900670', 'SECURITY_ID', 'varchar');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900670', 'SHORT FLOAT', 'smallfloat');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900670', 'SMALLINT', 'smallint');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900670', 'TEXT', 'text');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900670', 'TIME', 'datetime year to year');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900670', 'TIMESTAMP', 'datetime year to month');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900670', 'UNIQUEID', 'integer');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900670', 'VARCHAR', 'varchar');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900670', 'VIDEO', 'byte in table');
+
+
+
+--Informix 9.2
+
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900692', 'DATETIME DAY TO DAY', 'datetime day to day');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900692', 'BOOLEAN', 'boolean');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900692', 'DATETIME SECOND TO SECOND', 'datetime second to second');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900692', 'NCHAR', 'nchar');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900692', 'LONG', 'int8');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900692', 'INTERVAL MINUTE TO SECOND', 'interval minute() to second');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900692', 'DATETIME HOUR TO FRACTION', 'datetime hour to fraction');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900692', 'TIMESTAMP', 'datetime year to month');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900692', 'UNIQUEID', 'integer');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900692', 'DATETIME HOUR TO HOUR', 'datetime hour to hour');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900692', 'TIME', 'datetime year to year');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900692', 'DATETIME MONTH TO FRACTION', 'datetime month to fraction');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900692', 'DATETIME HOUR TO SECOND', 'datetime hour to second');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900692', 'VIDEO', 'byte in table');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900692', 'INTERVAL HOUR TO FRACTION', 'interval hour() to fraction()');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900692', 'VARCHAR', 'varchar');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900692', 'DATETIME MONTH TO MONTH', 'datetime month to month');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900692', 'NUMBER', 'numeric');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900692', 'INTERVAL YEAR', 'interval year() to year');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900692', 'DATETIME HOUR TO MINUTE', 'datetime hour to minute');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900692', 'INTEGER', 'integer');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900692', 'INTERVAL DAY TO SECOND', 'interval day() to second');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900692', 'DATETIME MONTH TO HOUR', 'datetime month to hour');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900692', 'DATETIME DAY TO SECOND', 'datetime day to second');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900692', 'DATETIME SECOND TO FRACTION', 'datetime second to fraction');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900692', 'DATETIME MINUTE TO SECOND', 'datetime minute to second');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900692', 'DATETIME DAY TO FRACTION', 'datetime day to fraction');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900692', 'DATETIME DAY TO HOUR', 'datetime day to hour');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900692', 'DATETIME FRACTION TO FRACTION', 'datetime fraction to fraction');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900692', 'INTERVAL HOUR', 'interval hour() to hour');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900692', 'INTERVAL MINUTE TO FRACTION', 'interval minute() to fraction()');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900692', 'INTERVAL DAY TO MINUTE', 'interval day() to minute');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900692', 'NUMERIC', 'numeric');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900692', 'BINARY', 'byte in table');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900692', 'LONG FLOAT', 'double precision');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900692', 'INTERVAL SECOND', 'interval second() to second');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900692', 'INTERVAL DAY TO FRACTION', 'interval day() to fraction()');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900692', 'INTERVAL HOUR TO MINUTE', 'interval hour() to minute');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900692', 'DATETIME DAY TO MINUTE', 'datetime day to minute');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900692', 'INTERVAL DAY', 'interval day() to day');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900692', 'CHAR', 'char');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900692', 'LONG TEXT', 'lvarchar');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900692', 'DATETIME MINUTE TO MINUTE', 'datetime minute to minute');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900692', 'SECURITY_ID', 'blob');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900692', 'DECIMAL', 'decimal');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900692', 'AUDIO', 'blob');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900692', 'DATETIME MINUTE TO FRACTION', 'datetime minute to fraction');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900692', 'MONEY', 'money');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900692', 'INTERVAL MONTH', 'interval month() to month');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900692', 'FLOAT', 'float');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900692', 'INTERVAL SECOND TO FRACTION', 'interval second() to fraction()');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900692', 'SHORT FLOAT', 'smallfloat');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900692', 'INTERVAL YEAR TO MONTH', 'interval year() to month');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900692', 'INTERVAL MINUTE', 'interval minute() to minute');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900692', 'INTERVAL DAY TO HOUR', 'interval day() to hour');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900692', 'IMAGE', 'byte in table');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900692', 'DATETIME MONTH TO SECOND', 'datetime month to second');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900692', 'INTERVAL', 'interval fraction to fraction()');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900692', 'NVARCHAR', 'nvarchar');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900692', 'BYTE', 'byte');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900692', 'HUGE', 'serial8');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900692', 'DATETIME MONTH TO DAY', 'datetime month to day');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900692', 'LARGE BINARY', 'blob');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900692', 'DATETIME MONTH TO MINUTE', 'datetime month to minute');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900692', 'TEXT', 'lvarchar');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900692', 'SMALLINT', 'smallint');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900692', 'INTERVAL HOUR TO SECOND', 'interval hour() to second');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900692', 'DATE', 'date');
+
+
+--Ingres 2.5
+
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900725', 'TIME', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900725', 'LARGE BINARY', 'long byte');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900725', 'INTERVAL', 'float8');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900725', 'DATETIME DAY TO HOUR', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900725', 'AUDIO', 'long byte');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900725', 'BOOLEAN', 'integer1');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900725', 'HUGE', 'float8');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900725', 'BYTE', 'byte');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900725', 'INTERVAL MONTH', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900725', 'DATETIME DAY TO FRACTION', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900725', 'CHAR', 'c');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900725', 'INTERVAL MINUTE', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900725', 'SHORT FLOAT', 'float4');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900725', 'FLOAT', 'float');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900725', 'DATETIME MONTH TO HOUR', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900725', 'DECIMAL', 'decimal');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900725', 'INTERVAL HOUR TO SECOND', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900725', 'DATETIME FRACTION TO FRACTION', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900725', 'DATETIME SECOND TO SECOND', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900725', 'MONEY', 'money');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900725', 'INTERVAL HOUR', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900725', 'LONG', 'integer4');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900725', 'DATETIME HOUR TO MINUTE', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900725', 'DATETIME MONTH TO FRACTION', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900725', 'DATETIME SECOND TO FRACTION', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900725', 'INTERVAL MINUTE TO SECOND', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900725', 'DATETIME HOUR TO HOUR', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900725', 'INTERVAL DAY TO FRACTION', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900725', 'DATETIME HOUR TO SECOND', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900725', 'UNIQUEID', 'object_key');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900725', 'INTEGER', 'integer');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900725', 'BINARY', 'byte varying');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900725', 'VARCHAR', 'varchar');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900725', 'DATETIME MONTH TO MINUTE', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900725', 'VIDEO', 'long byte');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900725', 'NVARCHAR', 'varchar');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900725', 'DATETIME DAY TO DAY', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900725', 'INTERVAL YEAR TO MONTH', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900725', 'INTERVAL HOUR TO MINUTE', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900725', 'INTERVAL SECOND TO FRACTION', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900725', 'DATETIME MINUTE TO MINUTE', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900725', 'DATETIME MONTH TO DAY', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900725', 'DATE', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900725', 'INTERVAL HOUR TO FRACTION', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900725', 'TIMESTAMP', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900725', 'DATETIME HOUR TO FRACTION', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900725', 'INTERVAL DAY TO MINUTE', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900725', 'DATETIME MONTH TO MONTH', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900725', 'DATETIME DAY TO MINUTE', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900725', 'INTERVAL SECOND', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900725', 'INTERVAL DAY', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900725', 'NUMBER', 'float');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900725', 'IMAGE', 'text');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900725', 'INTERVAL DAY TO SECOND', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900725', 'LONG TEXT', 'long varchar');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900725', 'NUMERIC', 'float');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900725', 'SMALLINT', 'smallint');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900725', 'INTERVAL MINUTE TO FRACTION', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900725', 'INTERVAL DAY TO HOUR', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900725', 'DATETIME DAY TO SECOND', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900725', 'TEXT', 'long varchar');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900725', 'SECURITY_ID', 'varchar');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900725', 'LONG FLOAT', 'float8');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900725', 'INTERVAL YEAR', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900725', 'DATETIME MONTH TO SECOND', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900725', 'DATETIME MINUTE TO FRACTION', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900725', 'NCHAR', 'char');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900725', 'DATETIME MINUTE TO SECOND', 'date');
+
+
+
+
+--Ingres 2.6
+
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900726', 'BINARY', 'byte varying');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900726', 'DATETIME MINUTE TO SECOND', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900726', 'DATETIME HOUR TO SECOND', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900726', 'NUMBER', 'float');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900726', 'INTERVAL MONTH', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900726', 'FLOAT', 'float');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900726', 'SHORT FLOAT', 'float4');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900726', 'NVARCHAR', 'nvarchar');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900726', 'DATETIME MONTH TO MONTH', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900726', 'CHAR', 'c');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900726', 'INTERVAL SECOND', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900726', 'INTERVAL HOUR TO MINUTE', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900726', 'LONG TEXT', 'long varchar');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900726', 'INTEGER', 'integer');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900726', 'INTERVAL DAY TO HOUR', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900726', 'SMALLINT', 'smallint');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900726', 'DATETIME HOUR TO HOUR', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900726', 'DATETIME DAY TO SECOND', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900726', 'LARGE BINARY', 'long byte');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900726', 'DATETIME MONTH TO FRACTION', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900726', 'DATETIME DAY TO HOUR', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900726', 'INTERVAL YEAR TO MONTH', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900726', 'INTERVAL HOUR TO SECOND', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900726', 'INTERVAL SECOND TO FRACTION', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900726', 'LONG', 'integer4');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900726', 'NUMERIC', 'float');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900726', 'INTERVAL MINUTE TO FRACTION', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900726', 'TIMESTAMP', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900726', 'DATETIME MINUTE TO FRACTION', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900726', 'INTERVAL MINUTE TO SECOND', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900726', 'DATETIME SECOND TO FRACTION', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900726', 'IMAGE', 'text');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900726', 'INTERVAL DAY', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900726', 'DATETIME DAY TO DAY', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900726', 'VIDEO', 'long byte');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900726', 'LONG FLOAT', 'float8');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900726', 'NCHAR', 'nchar');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900726', 'DATETIME MINUTE TO MINUTE', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900726', 'DATE', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900726', 'INTERVAL DAY TO FRACTION', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900726', 'INTERVAL HOUR', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900726', 'HUGE', 'float8');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900726', 'DATETIME MONTH TO SECOND', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900726', 'DATETIME DAY TO MINUTE', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900726', 'INTERVAL DAY TO SECOND', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900726', 'DATETIME SECOND TO SECOND', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900726', 'AUDIO', 'long byte');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900726', 'DATETIME MONTH TO MINUTE', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900726', 'INTERVAL', 'float8');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900726', 'BOOLEAN', 'integer1');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900726', 'DATETIME HOUR TO FRACTION', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900726', 'DATETIME MONTH TO HOUR', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900726', 'INTERVAL DAY TO MINUTE', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900726', 'TIME', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900726', 'DATETIME HOUR TO MINUTE', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900726', 'MONEY', 'money');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900726', 'DATETIME MONTH TO DAY', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900726', 'TEXT', 'long varchar');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900726', 'DATETIME DAY TO FRACTION', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900726', 'DECIMAL', 'decimal');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900726', 'VARCHAR', 'varchar');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900726', 'UNIQUEID', 'object_key');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900726', 'BYTE', 'byte');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900726', 'SECURITY_ID', 'security_label');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900726', 'INTERVAL MINUTE', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900726', 'INTERVAL HOUR TO FRACTION', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900726', 'INTERVAL YEAR', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900726', 'DATETIME FRACTION TO FRACTION', 'date');
+
+
+
+--Ingres 2006
+
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900730', 'DATETIME HOUR TO HOUR', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900730', 'INTERVAL MINUTE TO FRACTION', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900730', 'INTERVAL HOUR TO SECOND', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900730', 'CHAR', 'c');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900730', 'INTERVAL DAY', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900730', 'SECURITY_ID', 'security_label');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900730', 'DATETIME HOUR TO SECOND', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900730', 'BOOLEAN', 'integer1');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900730', 'LONG FLOAT', 'float8');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900730', 'DATETIME MONTH TO DAY', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900730', 'SHORT FLOAT', 'float4');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900730', 'BYTE', 'byte');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900730', 'NUMERIC', 'float');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900730', 'FLOAT', 'float');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900730', 'DATETIME MINUTE TO MINUTE', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900730', 'INTERVAL HOUR TO FRACTION', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900730', 'DATETIME HOUR TO FRACTION', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900730', 'HUGE', 'float8');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900730', 'INTERVAL DAY TO HOUR', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900730', 'MONEY', 'money');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900730', 'DATETIME MONTH TO MONTH', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900730', 'DATETIME DAY TO DAY', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900730', 'UNIQUEID', 'object_key');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900730', 'DATETIME SECOND TO SECOND', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900730', 'IMAGE', 'text');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900730', 'INTERVAL MONTH', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900730', 'INTEGER', 'integer');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900730', 'INTERVAL', 'float8');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900730', 'DECIMAL', 'decimal');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900730', 'DATETIME DAY TO MINUTE', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900730', 'INTERVAL YEAR', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900730', 'INTERVAL SECOND TO FRACTION', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900730', 'DATETIME DAY TO FRACTION', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900730', 'NVARCHAR', 'nvarchar');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900730', 'NCHAR', 'nchar');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900730', 'DATETIME DAY TO SECOND', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900730', 'LONG', 'integer4');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900730', 'DATETIME MONTH TO FRACTION', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900730', 'LARGE BINARY', 'long byte');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900730', 'BINARY', 'byte varying');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900730', 'DATETIME HOUR TO MINUTE', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900730', 'TIME', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900730', 'DATETIME MINUTE TO FRACTION', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900730', 'NUMBER', 'float');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900730', 'INTERVAL MINUTE', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900730', 'INTERVAL MINUTE TO SECOND', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900730', 'INTERVAL HOUR', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900730', 'LONG TEXT', 'long varchar');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900730', 'TIMESTAMP', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900730', 'DATETIME MONTH TO SECOND', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900730', 'VARCHAR', 'varchar');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900730', 'INTERVAL DAY TO MINUTE', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900730', 'INTERVAL SECOND', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900730', 'INTERVAL DAY TO FRACTION', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900730', 'SMALLINT', 'smallint');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900730', 'DATE', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900730', 'DATETIME MINUTE TO SECOND', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900730', 'DATETIME FRACTION TO FRACTION', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900730', 'INTERVAL YEAR TO MONTH', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900730', 'DATETIME SECOND TO FRACTION', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900730', 'INTERVAL DAY TO SECOND', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900730', 'TEXT', 'long varchar');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900730', 'DATETIME DAY TO HOUR', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900730', 'VIDEO', 'long byte');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900730', 'INTERVAL HOUR TO MINUTE', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900730', 'DATETIME MONTH TO HOUR', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900730', 'AUDIO', 'long byte');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900730', 'DATETIME MONTH TO MINUTE', 'date');
+
+
+
+--iSerise 5.x
+
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901940', 'BINARY', 'GRAPHIC');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901940', 'DATETIME HOUR TO MINUTE', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901940', 'INTERVAL MINUTE', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901940', 'INTERVAL', 'FLOAT');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901940', 'VIDEO', 'VARGRAPHIC');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901940', 'NVARCHAR', 'VARCHAR');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901940', 'INTERVAL MINUTE TO SECOND', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901940', 'DATETIME MONTH TO FRACTION', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901940', 'SHORT FLOAT', 'REAL');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901940', 'DATETIME MONTH TO MONTH', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901940', 'DATETIME SECOND TO FRACTION', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901940', 'DATETIME HOUR TO SECOND', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901940', 'INTERVAL MONTH', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901940', 'MONEY', 'DECIMAL(19,2)');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901940', 'INTERVAL DAY', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901940', 'DATETIME HOUR TO HOUR', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901940', 'AUDIO', 'BLOB');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901940', 'INTERVAL YEAR', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901940', 'NUMERIC', 'NUMERIC');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901940', 'DATETIME MINUTE TO FRACTION', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901940', 'IMAGE', 'VARGRAPHIC');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901940', 'VARCHAR', 'VARCHAR');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901940', 'DATETIME SECOND TO SECOND', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901940', 'DATETIME DAY TO MINUTE', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901940', 'NUMBER', 'NUMERIC');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901940', 'INTERVAL DAY TO FRACTION', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901940', 'DATE', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901940', 'INTERVAL DAY TO SECOND', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901940', 'INTERVAL MINUTE TO FRACTION', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901940', 'DATETIME DAY TO HOUR', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901940', 'DECIMAL', 'DECIMAL');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901940', 'INTEGER', 'INTEGER');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901940', 'DATETIME FRACTION TO FRACTION', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901940', 'INTERVAL DAY TO MINUTE', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901940', 'SECURITY_ID', 'BLOB');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901940', 'DATETIME DAY TO FRACTION', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901940', 'TIMESTAMP', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901940', 'BOOLEAN', 'SMALLINT');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901940', 'DATETIME MONTH TO DAY', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901940', 'INTERVAL SECOND TO FRACTION', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901940', 'LONG', 'INTEGER');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901940', 'CHAR', 'CHAR');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901940', 'UNIQUEID', 'INTEGER');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901940', 'TIME', 'TIME');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901940', 'INTERVAL YEAR TO MONTH', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901940', 'BYTE', 'SMALLINT');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901940', 'INTERVAL HOUR TO FRACTION', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901940', 'DATETIME MONTH TO SECOND', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901940', 'INTERVAL HOUR TO MINUTE', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901940', 'DATETIME DAY TO DAY', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901940', 'DATETIME MONTH TO HOUR', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901940', 'TEXT', 'VARCHAR');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901940', 'DATETIME MINUTE TO MINUTE', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901940', 'DATETIME MINUTE TO SECOND', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901940', 'INTERVAL HOUR TO SECOND', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901940', 'HUGE', 'BIGINT');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901940', 'SMALLINT', 'SMALLINT');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901940', 'LONG FLOAT', 'DOUBLE PRECISION');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901940', 'DATETIME DAY TO SECOND', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901940', 'DATETIME MONTH TO MINUTE', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901940', 'LONG TEXT', 'CLOB');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901940', 'INTERVAL SECOND', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901940', 'FLOAT', 'FLOAT');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901940', 'INTERVAL DAY TO HOUR', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901940', 'INTERVAL HOUR', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901940', 'NCHAR', 'CHAR');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901940', 'DATETIME HOUR TO FRACTION', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901940', 'LARGE BINARY', 'BLOB');
+
+
+
+--MySQL 5.0
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585912950', 'DATETIME MONTH TO FRACTION', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585912950', 'DATETIME MONTH TO HOUR', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585912950', 'DATETIME HOUR TO MINUTE', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585912950', 'FLOAT', 'FLOAT');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585912950', 'IMAGE', 'LONG VARBINARY');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585912950', 'DATETIME MINUTE TO MINUTE', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585912950', 'INTERVAL MINUTE TO FRACTION', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585912950', 'MONEY', 'DECIMAL(19,4)');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585912950', 'DATETIME MONTH TO MINUTE', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585912950', 'CHAR', 'CHAR');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585912950', 'INTERVAL MONTH', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585912950', 'DATETIME DAY TO FRACTION', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585912950', 'BYTE', 'TINYINT');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585912950', 'INTERVAL HOUR TO SECOND', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585912950', 'INTERVAL DAY TO SECOND', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585912950', 'DECIMAL', 'DECIMAL');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585912950', 'DATETIME DAY TO SECOND', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585912950', 'LONG', 'MEDIUMINT');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585912950', 'DATETIME DAY TO MINUTE', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585912950', 'SHORT FLOAT', 'FLOAT');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585912950', 'NVARCHAR', 'VARCHAR');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585912950', 'HUGE', 'BIGINT');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585912950', 'DATETIME SECOND TO FRACTION', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585912950', 'INTEGER', 'INTEGER');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585912950', 'DATETIME DAY TO HOUR', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585912950', 'SMALLINT', 'SMALLINT');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585912950', 'LONG TEXT', 'MEDIUMTEXT');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585912950', 'INTERVAL HOUR TO MINUTE', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585912950', 'DATETIME HOUR TO HOUR', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585912950', 'SECURITY_ID', 'VARCHAR');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585912950', 'INTERVAL HOUR', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585912950', 'AUDIO', 'LONG VARBINARY');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585912950', 'INTERVAL MINUTE TO SECOND', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585912950', 'DATETIME SECOND TO SECOND', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585912950', 'INTERVAL MINUTE', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585912950', 'DATETIME MONTH TO SECOND', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585912950', 'BINARY', 'BINARY');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585912950', 'INTERVAL YEAR', 'YEAR');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585912950', 'INTERVAL YEAR TO MONTH', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585912950', 'INTERVAL', 'FLOAT');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585912950', 'INTERVAL DAY TO HOUR', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585912950', 'NCHAR', 'CHAR');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585912950', 'UNIQUEID', 'INTEGER');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585912950', 'DATETIME HOUR TO FRACTION', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585912950', 'BOOLEAN', 'boolean');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585912950', 'DATETIME MINUTE TO FRACTION', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585912950', 'DATETIME MONTH TO MONTH', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585912950', 'INTERVAL DAY', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585912950', 'INTERVAL DAY TO FRACTION', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585912950', 'INTERVAL SECOND TO FRACTION', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585912950', 'TIME', 'TIME');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585912950', 'TEXT', 'TEXT');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585912950', 'DATETIME MONTH TO DAY', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585912950', 'NUMBER', 'NUMERIC');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585912950', 'NUMERIC', 'NUMERIC');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585912950', 'LARGE BINARY', 'BLOB');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585912950', 'DATETIME HOUR TO SECOND', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585912950', 'LONG FLOAT', 'DOUBLE PRECISION');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585912950', 'INTERVAL HOUR TO FRACTION', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585912950', 'INTERVAL DAY TO MINUTE', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585912950', 'VIDEO', 'VARBINARY');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585912950', 'DATETIME DAY TO DAY', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585912950', 'INTERVAL SECOND', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585912950', 'DATE', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585912950', 'TIMESTAMP', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585912950', 'VARCHAR', 'VARCHAR');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585912950', 'DATETIME FRACTION TO FRACTION', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585912950', 'DATETIME MINUTE TO SECOND', 'DATE');
+
+
+
+--ODBC 2.0
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900920', 'AUDIO', 'LONG VARBINARY');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900920', 'BINARY', 'BINARY');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900920', 'BOOLEAN', 'BIT');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900920', 'BYTE', 'TINYINT');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900920', 'CHAR', 'CHAR');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900920', 'DATE', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900920', 'DATETIME DAY TO DAY', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900920', 'DATETIME DAY TO FRACTION', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900920', 'DATETIME DAY TO HOUR', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900920', 'DATETIME DAY TO MINUTE', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900920', 'DATETIME DAY TO SECOND', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900920', 'DATETIME FRACTION TO FRACTION', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900920', 'DATETIME HOUR TO FRACTION', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900920', 'DATETIME HOUR TO HOUR', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900920', 'DATETIME HOUR TO MINUTE', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900920', 'DATETIME HOUR TO SECOND', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900920', 'DATETIME MINUTE TO FRACTION', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900920', 'DATETIME MINUTE TO MINUTE', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900920', 'DATETIME MINUTE TO SECOND', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900920', 'DATETIME MONTH TO DAY', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900920', 'DATETIME MONTH TO FRACTION', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900920', 'DATETIME MONTH TO HOUR', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900920', 'DATETIME MONTH TO MINUTE', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900920', 'DATETIME MONTH TO MONTH', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900920', 'DATETIME MONTH TO SECOND', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900920', 'DATETIME SECOND TO FRACTION', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900920', 'DATETIME SECOND TO SECOND', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900920', 'DECIMAL', 'DECIMAL');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900920', 'FLOAT', 'FLOAT');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900920', 'HUGE', 'BIGINT');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900920', 'IMAGE', 'LONGVARWCHAR');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900920', 'INTEGER', 'INTEGER');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900920', 'INTERVAL DAY TO FRACTION', 'INTERVAL DAY');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900920', 'INTERVAL DAY TO HOUR', 'INTERVAL DAY TO HOUR');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900920', 'INTERVAL DAY TO MINUTE', 'INTERVAL DAY TO MINUTE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900920', 'INTERVAL DAY TO SECOND', 'INTERVAL DAY TO SECOND');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900920', 'INTERVAL DAY', 'INTERVAL DAY');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900920', 'INTERVAL HOUR TO FRACTION', 'INTERVAL HOUR');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900920', 'INTERVAL HOUR TO MINUTE', 'INTERVAL HOUR TO MINUTE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900920', 'INTERVAL HOUR TO SECOND', 'INTERVAL HOUR TO SECOND');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900920', 'INTERVAL HOUR', 'INTERVAL HOUR');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900920', 'INTERVAL MINUTE TO FRACTION', 'INTERVAL MINUTE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900920', 'INTERVAL MINUTE TO SECOND', 'INTERVAL MINUTE TO SECOND');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900920', 'INTERVAL MINUTE', 'INTERVAL MINUTE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900920', 'INTERVAL MONTH', 'INTERVAL MONTH');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900920', 'INTERVAL SECOND TO FRACTION', 'INTERVAL SECOND');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900920', 'INTERVAL SECOND', 'INTERVAL SECOND');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900920', 'INTERVAL YEAR TO MONTH', 'INTERVAL YEAR TO MONTH');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900920', 'INTERVAL YEAR', 'INTERVAL YEAR');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900920', 'INTERVAL', 'FLOAT');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900920', 'LARGE BINARY', 'LONG VARBINARY');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900920', 'LONG FLOAT', 'FLOAT');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900920', 'LONG TEXT', 'LONG VARCHAR');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900920', 'LONG', 'INTEGER');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900920', 'MONEY', 'DECIMAL(19,4)');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900920', 'NCHAR', 'WCHAR');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900920', 'NUMBER', 'NUMERIC');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900920', 'NUMERIC', 'NUMERIC');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900920', 'NVARCHAR', 'VARWCHAR');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900920', 'SECURITY_ID', 'VARCHAR');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900920', 'SHORT FLOAT', 'REAL');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900920', 'SMALLINT', 'INTEGER');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900920', 'TEXT', 'LONG VARCHAR');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900920', 'TIME', 'TIME');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900920', 'TIMESTAMP', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900920', 'UNIQUEID', 'GUID');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900920', 'VARCHAR', 'VARCHAR');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900920', 'VIDEO', 'VARBINARY');
+
+
+
+
+-- ODBC 3.0
+
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900930', 'AUDIO', 'LONG VARBINARY');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900930', 'BINARY', 'BINARY');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900930', 'BOOLEAN', 'BIT');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900930', 'BYTE', 'TINYINT');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900930', 'CHAR', 'CHAR');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900930', 'DATE', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900930', 'DATETIME DAY TO DAY', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900930', 'DATETIME DAY TO FRACTION', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900930', 'DATETIME DAY TO HOUR', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900930', 'DATETIME DAY TO MINUTE', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900930', 'DATETIME DAY TO SECOND', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900930', 'DATETIME FRACTION TO FRACTION', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900930', 'DATETIME HOUR TO FRACTION', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900930', 'DATETIME HOUR TO HOUR', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900930', 'DATETIME HOUR TO MINUTE', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900930', 'DATETIME HOUR TO SECOND', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900930', 'DATETIME MINUTE TO FRACTION', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900930', 'DATETIME MINUTE TO MINUTE', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900930', 'DATETIME MINUTE TO SECOND', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900930', 'DATETIME MONTH TO DAY', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900930', 'DATETIME MONTH TO FRACTION', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900930', 'DATETIME MONTH TO HOUR', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900930', 'DATETIME MONTH TO MINUTE', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900930', 'DATETIME MONTH TO MONTH', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900930', 'DATETIME MONTH TO SECOND', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900930', 'DATETIME SECOND TO FRACTION', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900930', 'DATETIME SECOND TO SECOND', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900930', 'DECIMAL', 'DECIMAL');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900930', 'FLOAT', 'FLOAT');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900930', 'HUGE', 'BIGINT');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900930', 'IMAGE', 'LONGVARWCHAR');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900930', 'INTEGER', 'INTEGER');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900930', 'INTERVAL DAY TO FRACTION', 'INTERVAL DAY');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900930', 'INTERVAL DAY TO HOUR', 'INTERVAL DAY TO HOUR');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900930', 'INTERVAL DAY TO MINUTE', 'INTERVAL DAY TO MINUTE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900930', 'INTERVAL DAY TO SECOND', 'INTERVAL DAY TO SECOND');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900930', 'INTERVAL DAY', 'INTERVAL DAY');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900930', 'INTERVAL HOUR TO FRACTION', 'INTERVAL HOUR');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900930', 'INTERVAL HOUR TO MINUTE', 'INTERVAL HOUR TO MINUTE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900930', 'INTERVAL HOUR TO SECOND', 'INTERVAL HOUR TO SECOND');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900930', 'INTERVAL HOUR', 'INTERVAL HOUR');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900930', 'INTERVAL MINUTE TO FRACTION', 'INTERVAL MINUTE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900930', 'INTERVAL MINUTE TO SECOND', 'INTERVAL MINUTE TO SECOND');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900930', 'INTERVAL MINUTE', 'INTERVAL MINUTE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900930', 'INTERVAL MONTH', 'INTERVAL MONTH');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900930', 'INTERVAL SECOND TO FRACTION', 'INTERVAL SECOND');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900930', 'INTERVAL SECOND', 'INTERVAL SECOND');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900930', 'INTERVAL YEAR TO MONTH', 'INTERVAL YEAR TO MONTH');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900930', 'INTERVAL YEAR', 'INTERVAL YEAR');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900930', 'INTERVAL', 'FLOAT');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900930', 'LARGE BINARY', 'LONG VARBINARY');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900930', 'LONG FLOAT', 'FLOAT');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900930', 'LONG TEXT', 'LONG VARCHAR');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900930', 'LONG', 'INTEGER');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900930', 'MONEY', 'DECIMAL(19,4)');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900930', 'NCHAR', 'WCHAR');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900930', 'NUMBER', 'NUMERIC');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900930', 'NUMERIC', 'NUMERIC');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900930', 'NVARCHAR', 'VARWCHAR');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900930', 'SECURITY_ID', 'VARCHAR');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900930', 'SHORT FLOAT', 'REAL');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900930', 'SMALLINT', 'INTEGER');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900930', 'TEXT', 'LONG VARCHAR');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900930', 'TIME', 'TIME');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900930', 'TIMESTAMP', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900930', 'UNIQUEID', 'GUID');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900930', 'VARCHAR', 'VARCHAR');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585900930', 'VIDEO', 'VARBINARY');
+
+
+
+
+-- Sybase 12.5
+
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859017125', 'AUDIO', 'varbinary');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859017125', 'BINARY', 'binary');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859017125', 'BOOLEAN', 'bit');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859017125', 'BYTE', 'tinyint');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859017125', 'CHAR', 'char');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859017125', 'DATE', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859017125', 'DATETIME DAY TO DAY', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859017125', 'DATETIME DAY TO FRACTION', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859017125', 'DATETIME DAY TO HOUR', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859017125', 'DATETIME DAY TO MINUTE', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859017125', 'DATETIME DAY TO SECOND', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859017125', 'DATETIME FRACTION TO FRACTION', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859017125', 'DATETIME HOUR TO FRACTION', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859017125', 'DATETIME HOUR TO HOUR', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859017125', 'DATETIME HOUR TO MINUTE', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859017125', 'DATETIME HOUR TO SECOND', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859017125', 'DATETIME MINUTE TO FRACTION', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859017125', 'DATETIME MINUTE TO MINUTE', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859017125', 'DATETIME MINUTE TO SECOND', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859017125', 'DATETIME MONTH TO DAY', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859017125', 'DATETIME MONTH TO FRACTION', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859017125', 'DATETIME MONTH TO HOUR', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859017125', 'DATETIME MONTH TO MINUTE', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859017125', 'DATETIME MONTH TO MONTH', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859017125', 'DATETIME MONTH TO SECOND', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859017125', 'DATETIME SECOND TO FRACTION', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859017125', 'DATETIME SECOND TO SECOND', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859017125', 'DECIMAL', 'decimal');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859017125', 'FLOAT', 'float');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859017125', 'HUGE', 'float');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859017125', 'IMAGE', 'image');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859017125', 'INTEGER', 'integer');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859017125', 'INTERVAL DAY TO FRACTION', 'timestamp');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859017125', 'INTERVAL DAY TO HOUR', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859017125', 'INTERVAL DAY TO MINUTE', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859017125', 'INTERVAL DAY TO SECOND', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859017125', 'INTERVAL DAY', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859017125', 'INTERVAL HOUR TO FRACTION', 'timestamp');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859017125', 'INTERVAL HOUR TO MINUTE', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859017125', 'INTERVAL HOUR TO SECOND', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859017125', 'INTERVAL HOUR', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859017125', 'INTERVAL MINUTE TO FRACTION', 'timestamp');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859017125', 'INTERVAL MINUTE TO SECOND', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859017125', 'INTERVAL MINUTE', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859017125', 'INTERVAL MONTH', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859017125', 'INTERVAL SECOND TO FRACTION', 'timestamp');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859017125', 'INTERVAL SECOND', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859017125', 'INTERVAL YEAR TO MONTH', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859017125', 'INTERVAL YEAR', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859017125', 'INTERVAL', 'float');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859017125', 'LARGE BINARY', 'varbinary');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859017125', 'LONG FLOAT', 'double precision');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859017125', 'LONG TEXT', 'text');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859017125', 'LONG', 'int');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859017125', 'MONEY', 'money');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859017125', 'NCHAR', 'unichar');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859017125', 'NUMBER', 'numeric');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859017125', 'NUMERIC', 'numeric');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859017125', 'NVARCHAR', 'univarchar');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859017125', 'SECURITY_ID', 'varchar');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859017125', 'SHORT FLOAT', 'real');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859017125', 'SMALLINT', 'smallint');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859017125', 'TEXT', 'text');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859017125', 'TIME', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859017125', 'TIMESTAMP', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859017125', 'UNIQUEID', 'int');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859017125', 'VARCHAR', 'varchar');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859017125', 'VIDEO', 'varbinary');
+
+
+
+
+
+--Sybase IQ 12.5
+
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859130125', 'AUDIO', 'varbinary');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859130125', 'BINARY', 'binary');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859130125', 'BOOLEAN', 'bit');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859130125', 'BYTE', 'tinyint');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859130125', 'CHAR', 'char');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859130125', 'DATE', 'date');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859130125', 'DATETIME DAY TO DAY', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859130125', 'DATETIME DAY TO FRACTION', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859130125', 'DATETIME DAY TO HOUR', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859130125', 'DATETIME DAY TO MINUTE', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859130125', 'DATETIME DAY TO SECOND', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859130125', 'DATETIME FRACTION TO FRACTION', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859130125', 'DATETIME HOUR TO FRACTION', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859130125', 'DATETIME HOUR TO HOUR', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859130125', 'DATETIME HOUR TO MINUTE', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859130125', 'DATETIME HOUR TO SECOND', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859130125', 'DATETIME MINUTE TO FRACTION', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859130125', 'DATETIME MINUTE TO MINUTE', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859130125', 'DATETIME MINUTE TO SECOND', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859130125', 'DATETIME MONTH TO DAY', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859130125', 'DATETIME MONTH TO FRACTION', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859130125', 'DATETIME MONTH TO HOUR', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859130125', 'DATETIME MONTH TO MINUTE', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859130125', 'DATETIME MONTH TO MONTH', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859130125', 'DATETIME MONTH TO SECOND', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859130125', 'DATETIME SECOND TO FRACTION', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859130125', 'DATETIME SECOND TO SECOND', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859130125', 'DECIMAL', 'decimal');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859130125', 'FLOAT', 'float');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859130125', 'HUGE', 'bigint');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859130125', 'IMAGE', 'varbinary');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859130125', 'INTEGER', 'integer');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859130125', 'INTERVAL DAY TO FRACTION', 'timestamp');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859130125', 'INTERVAL DAY TO HOUR', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859130125', 'INTERVAL DAY TO MINUTE', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859130125', 'INTERVAL DAY TO SECOND', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859130125', 'INTERVAL DAY', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859130125', 'INTERVAL HOUR TO FRACTION', 'timestamp');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859130125', 'INTERVAL HOUR TO MINUTE', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859130125', 'INTERVAL HOUR TO SECOND', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859130125', 'INTERVAL HOUR', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859130125', 'INTERVAL MINUTE TO FRACTION', 'timestamp');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859130125', 'INTERVAL MINUTE TO SECOND', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859130125', 'INTERVAL MINUTE', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859130125', 'INTERVAL MONTH', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859130125', 'INTERVAL SECOND TO FRACTION', 'timestamp');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859130125', 'INTERVAL SECOND', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859130125', 'INTERVAL YEAR TO MONTH', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859130125', 'INTERVAL YEAR', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859130125', 'INTERVAL', 'float');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859130125', 'LARGE BINARY', 'varbinary');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859130125', 'LONG FLOAT', 'double');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859130125', 'LONG TEXT', 'long varchar');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859130125', 'LONG', 'unsigned integer');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859130125', 'MONEY', 'money');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859130125', 'NCHAR', 'char');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859130125', 'NUMBER', 'numeric');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859130125', 'NUMERIC', 'numeric');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859130125', 'NVARCHAR', 'varchar');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859130125', 'SECURITY_ID', 'varchar');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859130125', 'SHORT FLOAT', 'real');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859130125', 'SMALLINT', 'smallint');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859130125', 'TEXT', 'long varchar');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859130125', 'TIME', 'time');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859130125', 'TIMESTAMP', 'datetime');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859130125', 'UNIQUEID', 'int');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859130125', 'VARCHAR', 'varchar');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('1075859130125', 'VIDEO', 'varbinary');
+
+
+
+--Teradata 2.0
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901820', 'AUDIO', 'VARBYTE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901820', 'BINARY', 'GRAPHIC');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901820', 'BOOLEAN', 'BYTEINT');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901820', 'BYTE', 'BYTEINT');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901820', 'CHAR', 'CHAR');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901820', 'DATE', 'DATE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901820', 'DATETIME DAY TO DAY', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901820', 'DATETIME DAY TO FRACTION', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901820', 'DATETIME DAY TO HOUR', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901820', 'DATETIME DAY TO MINUTE', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901820', 'DATETIME DAY TO SECOND', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901820', 'DATETIME FRACTION TO FRACTION', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901820', 'DATETIME HOUR TO FRACTION', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901820', 'DATETIME HOUR TO HOUR', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901820', 'DATETIME HOUR TO MINUTE', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901820', 'DATETIME HOUR TO SECOND', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901820', 'DATETIME MINUTE TO FRACTION', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901820', 'DATETIME MINUTE TO MINUTE', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901820', 'DATETIME MINUTE TO SECOND', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901820', 'DATETIME MONTH TO DAY', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901820', 'DATETIME MONTH TO FRACTION', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901820', 'DATETIME MONTH TO HOUR', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901820', 'DATETIME MONTH TO MINUTE', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901820', 'DATETIME MONTH TO MONTH', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901820', 'DATETIME MONTH TO SECOND', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901820', 'DATETIME SECOND TO FRACTION', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901820', 'DATETIME SECOND TO SECOND', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901820', 'DECIMAL', 'DECIMAL');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901820', 'FLOAT', 'FLOAT');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901820', 'HUGE', 'DOUBLE PRECISION');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901820', 'IMAGE', 'LONG VARGRAPHIC');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901820', 'INTEGER', 'INTEGER');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901820', 'INTERVAL DAY TO FRACTION', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901820', 'INTERVAL DAY TO HOUR', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901820', 'INTERVAL DAY TO MINUTE', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901820', 'INTERVAL DAY TO SECOND', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901820', 'INTERVAL DAY', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901820', 'INTERVAL HOUR TO FRACTION', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901820', 'INTERVAL HOUR TO MINUTE', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901820', 'INTERVAL HOUR TO SECOND', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901820', 'INTERVAL HOUR', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901820', 'INTERVAL MINUTE TO FRACTION', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901820', 'INTERVAL MINUTE TO SECOND', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901820', 'INTERVAL MINUTE', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901820', 'INTERVAL MONTH', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901820', 'INTERVAL SECOND TO FRACTION', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901820', 'INTERVAL SECOND', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901820', 'INTERVAL YEAR TO MONTH', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901820', 'INTERVAL YEAR', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901820', 'INTERVAL', 'FLOAT');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901820', 'LARGE BINARY', 'VARBYTE');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901820', 'LONG FLOAT', 'DOUBLE PRECISION');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901820', 'LONG TEXT', 'LONG VARCHAR');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901820', 'LONG', 'INTEGER');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901820', 'MONEY', 'DECIMAL(19,4)');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901820', 'NCHAR', 'CHAR');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901820', 'NUMBER', 'NUMERIC');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901820', 'NUMERIC', 'NUMERIC');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901820', 'NVARCHAR', 'VARCHAR');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901820', 'SECURITY_ID', 'VARCHAR');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901820', 'SHORT FLOAT', 'FLOAT');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901820', 'SMALLINT', 'SMALLINT');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901820', 'TEXT', 'LONG VARCHAR');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901820', 'TIME', 'TIME');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901820', 'TIMESTAMP', 'TIMESTAMP');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901820', 'UNIQUEID', 'INTEGER');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901820', 'VARCHAR', 'VARCHAR');
+Insert into Tranform_DataType (DBMS, FromDataType, ToDataType) Values('107585901820', 'VIDEO', 'BYTE');

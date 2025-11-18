@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.dq.profile.anares.service.WamPrfResultMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.dq.profile.anares.service.WamPrfResultVO"  extends="kr.wise.dq.profile.mstr.service.WamPrfMstrMapper.BaseResultMap" >
+    <id column="ANA_STR_DTM" property="anaStrDtm" jdbcType="TIMESTAMP" />
+    <result column="ANA_END_DTM" property="anaEndDtm" jdbcType="TIMESTAMP" />
+    <result column="ANA_DGR" property="anaDgr" jdbcType="DECIMAL" />
+    <result column="ANA_CNT" property="anaCnt" jdbcType="DECIMAL" />
+    <result column="ESN_ER_CNT" property="esnErCnt" jdbcType="DECIMAL" />
+    <result column="ANA_LOG_ID" property="anaLogId" jdbcType="VARCHAR" />
+    <result column="ANA_USER_ID" property="anaUserId" jdbcType="VARCHAR" />
+    <result column="ANA_USER_NM" property="anaUserNm" jdbcType="VARCHAR" />
+    <result column="ESN_ER_RATE" property="esnErRate" jdbcType="VARCHAR" />
+    
+    <result column="SCH_ANA_STR_DTM" property="schAnaStrDtm" jdbcType="VARCHAR" />
+    <result column="NULL_CNT" property="nullCnt" jdbcType="DECIMAL" />
+    <result column="SPACE_CNT" property="spaceCnt" jdbcType="DECIMAL" />
+    <result column="MIN_VAL1" property="minVal1" jdbcType="VARCHAR" />
+    <result column="MIN_VAL2" property="minVal2" jdbcType="VARCHAR" />
+    <result column="MIN_VAL3" property="minVal3" jdbcType="VARCHAR" />
+    <result column="MAX_VAL1" property="maxVal1" jdbcType="VARCHAR" />
+    <result column="MAX_VAL2" property="maxVal2" jdbcType="VARCHAR" />
+    <result column="MAX_VAL3" property="maxVal3" jdbcType="VARCHAR" />
+    <result column="MIN_LEN" property="minLen" jdbcType="DECIMAL" />
+    <result column="MAX_LEN" property="maxLen" jdbcType="DECIMAL" />
+    
+    <!-- 품질추이 -->
+    <result column="DB_CONN_TRG_LNM" property="dbConnTrgLnm" jdbcType="VARCHAR" />
+    <result column="ANA_DGR_DISP" property="anaDgrDisp" jdbcType="VARCHAR" />
+    <result column="DPMO" property="dpmo" jdbcType="VARCHAR" />
+    <result column="SIGMA" property="sigma" jdbcType="VARCHAR" />
+    <result column="ER_RATE" property="erRate" jdbcType="VARCHAR" />
+    
+    
+    
+  </resultMap>
+  <sql id="Base_Column_List" >
+    PRF_ID, ANA_STR_DTM, ANA_END_DTM, ANA_DGR, ANA_CNT, ESN_ER_CNT, ANA_LOG_ID, ANA_USER_ID
+  </sql>
+  
+  <!-- 최근실행일자 -->
+  <sql id="getPrfResultMaxAnaStrDtm" >
+      SELECT R.*
+<!--                , CASE WHEN R.ANA_CNT = 0 THEN 0 ELSE ROUND(R.ER_CNT*100/R.ANA_CNT,2) END AS ERR_RATE -->
+       FROM WAM_PRF_RESULT R
+                INNER JOIN (SELECT PRF_ID, MAX(ANA_STR_DTM) AS ANA_STR_DTM
+                                  FROM WAM_PRF_RESULT
+                                <if test="anaDgr != null and anaDgr != ''  " >
+                                 WHERE ANA_DGR =#{anaDgr,jdbcType=DECIMAL}
+                                </if>
+                                GROUP BY PRF_ID ) R2
+                    ON R.PRF_ID = R2.PRF_ID
+                   AND R.ANA_STR_DTM = R2.ANA_STR_DTM
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="map" >
+    select 
+    <include refid="Base_Column_List" />
+    from WAM_PRF_RESULT
+    where PRF_ID = #{prfId,jdbcType=VARCHAR}
+      and ANA_STR_DTM = #{anaStrDtm,jdbcType=TIMESTAMP}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="map" >
+    delete from WAM_PRF_RESULT
+    where PRF_ID = #{prfId,jdbcType=VARCHAR}
+      and ANA_STR_DTM = #{anaStrDtm,jdbcType=TIMESTAMP}
+  </delete>
+  <insert id="insert" parameterType="kr.wise.dq.profile.anares.service.WamPrfResultVO" >
+    insert into WAM_PRF_RESULT (PRF_ID, ANA_STR_DTM, ANA_END_DTM, 
+      ANA_DGR, ANA_CNT, ESN_ER_CNT, 
+      ANA_LOG_ID, ANA_USER_ID)
+    values (#{prfId,jdbcType=VARCHAR}, #{anaStrDtm,jdbcType=TIMESTAMP}, #{anaEndDtm,jdbcType=TIMESTAMP}, 
+      #{anaDgr,jdbcType=DECIMAL}, #{anaCnt,jdbcType=DECIMAL}, #{esnErCnt,jdbcType=DECIMAL}, 
+      #{anaLogId,jdbcType=VARCHAR}, #{anaUserId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="kr.wise.dq.profile.anares.service.WamPrfResultVO" >
+    insert into WAM_PRF_RESULT
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="prfId != null" >
+        PRF_ID,
+      </if>
+      <if test="anaStrDtm != null" >
+        ANA_STR_DTM,
+      </if>
+      <if test="anaEndDtm != null" >
+        ANA_END_DTM,
+      </if>
+      <if test="anaDgr != null" >
+        ANA_DGR,
+      </if>
+      <if test="anaCnt != null" >
+        ANA_CNT,
+      </if>
+      <if test="esnErCnt != null" >
+        ESN_ER_CNT,
+      </if>
+      <if test="anaLogId != null" >
+        ANA_LOG_ID,
+      </if>
+      <if test="anaUserId != null" >
+        ANA_USER_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="prfId != null" >
+        #{prfId,jdbcType=VARCHAR},
+      </if>
+      <if test="anaStrDtm != null" >
+        #{anaStrDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="anaEndDtm != null" >
+        #{anaEndDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="anaDgr != null" >
+        #{anaDgr,jdbcType=DECIMAL},
+      </if>
+      <if test="anaCnt != null" >
+        #{anaCnt,jdbcType=DECIMAL},
+      </if>
+      <if test="esnErCnt != null" >
+        #{esnErCnt,jdbcType=DECIMAL},
+      </if>
+      <if test="anaLogId != null" >
+        #{anaLogId,jdbcType=VARCHAR},
+      </if>
+      <if test="anaUserId != null" >
+        #{anaUserId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.dq.profile.anares.service.WamPrfResultVO" >
+    update WAM_PRF_RESULT
+    <set >
+      <if test="anaEndDtm != null" >
+        ANA_END_DTM = #{anaEndDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="anaDgr != null" >
+        ANA_DGR = #{anaDgr,jdbcType=DECIMAL},
+      </if>
+      <if test="anaCnt != null" >
+        ANA_CNT = #{anaCnt,jdbcType=DECIMAL},
+      </if>
+      <if test="esnErCnt != null" >
+        ESN_ER_CNT = #{esnErCnt,jdbcType=DECIMAL},
+      </if>
+      <if test="anaLogId != null" >
+        ANA_LOG_ID = #{anaLogId,jdbcType=VARCHAR},
+      </if>
+      <if test="anaUserId != null" >
+        ANA_USER_ID = #{anaUserId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where PRF_ID = #{prfId,jdbcType=VARCHAR}
+      and ANA_STR_DTM = #{anaStrDtm,jdbcType=TIMESTAMP}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="kr.wise.dq.profile.anares.service.WamPrfResultVO" >
+    update WAM_PRF_RESULT
+    set ANA_END_DTM = #{anaEndDtm,jdbcType=TIMESTAMP},
+      ANA_DGR = #{anaDgr,jdbcType=DECIMAL},
+      ANA_CNT = #{anaCnt,jdbcType=DECIMAL},
+      ESN_ER_CNT = #{esnErCnt,jdbcType=DECIMAL},
+      ANA_LOG_ID = #{anaLogId,jdbcType=VARCHAR},
+      ANA_USER_ID = #{anaUserId,jdbcType=VARCHAR}
+    where PRF_ID = #{prfId,jdbcType=VARCHAR}
+      and ANA_STR_DTM = #{anaStrDtm,jdbcType=TIMESTAMP}
+  </update>
+  
+  <select id="selectPrfLst" resultMap="BaseResultMap" parameterType="kr.wise.dq.profile.anares.service.WamPrfResultVO" >
+    SELECT   M.DB_CONN_TRG_ID
+		       ,M.DB_SCH_ID
+		       ,M.PRF_ID
+		       ,M.PRF_KND_CD AS PRF_KND_CD_NM
+		       ,M.PRF_KND_CD 
+		       ,M.PRF_NM
+		       ,DQI.DQI_LNM
+		       ,DQI.DQI_ID
+		       ,M.DBC_TBL_NM
+		       ,M.OBJ_NM
+		       ,R.ANA_STR_DTM
+		       ,R.ANA_END_DTM
+		       ,R.ANA_DGR
+		       ,R.ANA_CNT
+		       ,R.ESN_ER_CNT
+		       ,R.ANA_LOG_ID
+		       ,GET_USER_NM(R.ANA_USER_ID) AS ANA_USER_NM
+		       ,(CASE WHEN R.ANA_CNT IS NULL THEN NULL 
+                         ELSE (CASE WHEN R.ANA_CNT = '0' THEN '0'
+                                        ELSE TO_CHAR(ROUND(R.ESN_ER_CNT*100/CAST(R.ANA_CNT AS FLOAT),2))
+                                        END )
+                         END ) AS ESN_ER_RATE
+               ,(CASE WHEN R.ESN_ER_CNT IS NULL THEN NULL
+                      ELSE (CASE WHEN R.ESN_ER_CNT = '0' THEN  NULL
+                                     ELSE '#FF0000'
+                                     END  )
+                       END  ) AS FontColor
+		  FROM WAA_DB_CONN_TRG DB
+		       INNER JOIN WAA_DB_SCH S
+		          ON DB.DB_CONN_TRG_ID = S.DB_CONN_TRG_ID
+		         AND S.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+		         AND S.REG_TYP_CD IN ('C','U')
+		       INNER JOIN WAM_PRF_MSTR M
+		          ON DB.DB_CONN_TRG_ID = M.DB_CONN_TRG_ID
+		         AND S.DB_SCH_ID = M.DB_SCH_ID
+		         AND M.REG_TYP_CD IN ('C','U')
+		        <!-- 최근실행일자 -->
+		        LEFT OUTER JOIN (<include refid="getPrfResultMaxAnaStrDtm"/> ) R
+		         ON M.PRF_ID = R.PRF_ID 
+		        LEFT OUTER JOIN WAM_PRF_DQI_MAP DQI_MAP
+				  ON DQI_MAP.PRF_ID = M.PRF_ID
+				 AND DQI_MAP.REG_TYP_CD IN ('C', 'U')
+				LEFT OUTER JOIN WAM_DQI DQI
+				  ON DQI.DQI_ID = DQI_MAP.DQI_ID
+				 AND DQI.REG_TYP_CD IN ('C', 'U') 
+		 WHERE DB.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+		   AND DB.REG_TYP_CD IN ('C','U')
+           <if test="dbConnTrgId != null  and dbConnTrgId != ''  " >
+           AND M.DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR}
+           </if>
+           <if test="dbSchId != null  and dbSchId != ''  " >
+           AND M.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+           </if>
+           <if test="dbcTblNm != null  and dbcTblNm != ''  " >
+           AND M.DBC_TBL_NM = #{dbcTblNm,jdbcType=VARCHAR}
+           </if>
+           <if test="objNm != null  and objNm != ''  " >
+           AND M.OBJ_NM = #{objNm,jdbcType=VARCHAR}
+           </if>
+           <if test="dbcColNm != null  and dbcColNm != ''  " >
+           AND M.OBJ_NM = #{dbcColNm,jdbcType=VARCHAR}
+           </if>
+           <if test="tblColGb != null  and tblColGb != ''  " >
+           AND M.PRF_KND_CD LIKE #{tblColGb}||'%'
+           </if>
+           <if test="prfId != null  and prfId != ''  " >
+           AND M.PRF_ID = #{prfId,jdbcType=VARCHAR}
+           </if>
+           <if test="schAnaStrDtm!= null and schAnaStrDtm != ''  " >
+           AND R.ANA_STR_DTM = TO_DATE(#{schAnaStrDtm,jdbcType=VARCHAR},'YYYYMMDD HH24:MI:SS')
+           </if>
+           <if test="anaDgr != null and anaDgr != ''  " > 
+           AND R.ANA_DGR = #{anaDgr,jdbcType=DECIMAL}
+           </if>
+         ORDER BY M.PRF_KND_CD
+  </select>
+  
+  <!-- 컬럼프로파일 분석결과 조회 -->
+  <select id="selectColAnaResDtl" resultMap="BaseResultMap" parameterType="kr.wise.dq.profile.anares.service.WamPrfResultVO" >
+ SELECT R.PRF_ID
+       ,TO_CHAR(R.ANA_STR_DTM, 'YYYY-MM-DD HH24:MI:SS') AS SCH_ANA_STR_DTM
+       ,GET_USER_NM(R.ANA_USER_ID) AS ANA_USER_NM
+       ,R.ANA_DGR
+       ,R.ANA_CNT
+       ,R.ESN_ER_CNT
+       ,R.NULL_CNT
+       ,R.SPACE_CNT
+       ,R.MIN_VAL1
+       ,R.MIN_VAL2
+       ,R.MIN_VAL3
+       ,R.MAX_VAL1
+       ,R.MAX_VAL2
+       ,R.MAX_VAL3
+       ,R.MIN_LEN
+       ,R.MAX_LEN
+  FROM (SELECT M.* 
+          FROM WAM_PRF_MSTR M
+         WHERE PRF_KND_CD = 'PC01'
+           AND (M.DB_CONN_TRG_ID ,M.DB_SCH_ID, M.DBC_TBL_NM, M.OBJ_NM) IN 
+               (SELECT  { DB_CONN_TRG_ID
+                       ,DB_SCH_ID
+                       ,DBC_TBL_NM
+                       ,OBJ_NM }
+                  FROM WAM_PRF_MSTR M
+                 WHERE PRF_ID = #{objId,jdbcType=VARCHAR}
+                   AND REG_TYP_CD IN ('C','U') ) ) M
+        INNER JOIN (  SELECT R.*
+						       FROM WAM_PRF_RESULT R
+						                INNER JOIN (SELECT PRF_ID, MAX(ANA_STR_DTM) AS ANA_STR_DTM
+						                                  FROM WAM_PRF_RESULT
+						                                GROUP BY PRF_ID ) R2
+						                    ON R.PRF_ID = R2.PRF_ID
+						                   AND R.ANA_STR_DTM = R2.ANA_STR_DTM) R
+           ON M.PRF_ID = R.PRF_ID
+  </select>
+  
+  <select id="selectProfileProgQuality" resultMap="BaseResultMap" parameterType="kr.wise.dq.profile.mstr.service.WamPrfMstrCommonVO">
+SELECT A.*
+<!--       ,TO_CHAR(ROUND(WDQ_FC_DPMO(A.ESN_ER_CNT, A.ANA_CNT ), 2)) AS DPMO  -->
+      ,TO_CHAR(ROUND(WDQ_FC_SIGMA(WDQ_FC_DPMO(A.ESN_ER_CNT, A.ANA_CNT )),2)) AS SIGMA  
+      ,ROUND(DECODE(A.ANA_CNT,0,0,DECODE(A.ESN_ER_CNT,0,100,ROUND(((CAST(A.ANA_CNT AS FLOAT)-A.ESN_ER_CNT)/A.ANA_CNT*100),2))),2) ER_RATE
+  FROM (
+        SELECT PM.DB_CONN_TRG_ID
+        	  ,DB.DB_CONN_TRG_LNM
+              ,PR.ANA_DGR
+              ,PR.ANA_DGR || ' 차' AS ANA_DGR_DISP
+              ,PM.PRF_KND_CD
+              ,MAX(PR.ANA_STR_DTM) AS ANA_STR_DTM
+              ,SUM(NVL(PR.ANA_CNT,0)) AS ANA_CNT
+              ,SUM(NVL(PR.ESN_ER_CNT,0)) AS ESN_ER_CNT
+              
+          FROM WAM_PRF_RESULT PR
+         INNER JOIN WAM_PRF_MSTR PM
+            ON PR.PRF_ID = PM.PRF_ID
+           AND PM.REG_TYP_CD IN ('C', 'U')
+         INNER JOIN WAT_DBC_TBL TDB
+            ON PM.DB_CONN_TRG_ID = TDB.DB_CONN_TRG_ID
+           AND PM.DB_SCH_ID = TDB.DB_SCH_ID
+           AND PM.DBC_TBL_NM = TDB.DBC_TBL_NM
+         INNER JOIN WAA_DB_CONN_TRG DB
+            ON PM.DB_CONN_TRG_ID = DB.DB_CONN_TRG_ID
+           AND DB.REG_TYP_CD IN ('C', 'U')
+           AND DB.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+         INNER JOIN WAA_DB_SCH SCH
+            ON DB.DB_CONN_TRG_ID = SCH.DB_CONN_TRG_ID
+           AND SCH.REG_TYP_CD IN ('C', 'U')
+           AND SCH.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+         LEFT JOIN WAA_EXP_TBL EX          
+		   ON EX.DB_SCH_ID  = PM.DB_SCH_ID  
+		  AND EX.DBC_TBL_NM =PM.DBC_TBL_NM
+         WHERE PR.ANA_DGR IS NOT NULL
+         AND NVL(EX.EXP_YN,'N')='N'
+         AND PM.PRF_KND_CD != 'PC01'
+         <if test="dbConnTrgId != null">
+         AND PM.DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR}
+         </if>
+         <if test="dbSchId != null">
+         AND PM.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+         </if>
+         <if test="prfKndCd != null">
+         AND PM.PRF_KND_CD = #{prfKndCd,jdbcType=VARCHAR}
+         </if>
+         <if test="dbcTblNm != null">
+         AND (PM.DBC_TBL_NM LIKE '%' || #{dbcTblNm,jdbcType=VARCHAR} || '%'
+         	OR PM.DBC_TBL_NM LIKE '%' || UPPER(#{dbcTblNm,jdbcType=VARCHAR}) || '%')
+         </if>
+         <if test="dbcColNm != null">
+         AND (PM.OBJ_NM LIKE '%' || #{dbcColNm,jdbcType=VARCHAR} || '%'
+         	OR PM.OBJ_NM LIKE '%' || UPPER(#{dbcColNm,jdbcType=VARCHAR}) || '%')
+         </if>
+        
+         <if test="anaDgr != null">
+         AND PR.ANA_DGR = #{anaDgr,jdbcType=VARCHAR}
+         </if>
+         GROUP BY PR.ANA_DGR, PM.PRF_KND_CD, PM.DB_CONN_TRG_ID, DB.DB_CONN_TRG_LNM ) A
+         
+         ORDER BY DB_CONN_TRG_LNM, PRF_KND_CD, ANA_DGR 
+  </select>
+  
+  
+</mapper>

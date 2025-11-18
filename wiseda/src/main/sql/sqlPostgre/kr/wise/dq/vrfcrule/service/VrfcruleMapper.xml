@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.dq.vrfcrule.service.VrfcruleMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.dq.vrfcrule.service.VrfcruleVO" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap" >
+    <id 	column="VRFC_ID" 		property="vrfcId" 		jdbcType="VARCHAR" />
+    <result column="VRFC_NM" 		property="vrfcNm" 		jdbcType="VARCHAR" />
+    <result column="VRFC_TYP" 		property="vrfcTyp"		jdbcType="VARCHAR" />
+    <result column="VRFC_DESCN" 	property="vrfcDescn"	jdbcType="VARCHAR" />
+    <result column="VRFC_RULE" 		property="vrfcRule" 	jdbcType="VARCHAR" />
+    <result column="DQI_ID" 		property="dqiId"		jdbcType="VARCHAR" />
+    <result column="DQI_LNM" 		property="dqiLnm" 		jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    VRFC_ID, EXP_DTM, STR_DTM, VRFC_NM, VRFC_TYP, VRFC_RULE, VRFC_DESCN, OBJ_DESCN, OBJ_VERS, REG_TYP_CD, WRIT_DTM, WRIT_USER_ID, DQI_ID
+  </sql>
+  
+  <select id="selectVrfcList" parameterType="kr.wise.dq.vrfcrule.service.VrfcruleVO" resultMap="BaseResultMap" >
+	SELECT  A.VRFC_ID     
+		  , A.EXP_DTM     
+		  , A.STR_DTM     
+		  , A.VRFC_NM
+		  , A.VRFC_TYP
+		  , A.VRFC_RULE 
+		  , A.VRFC_DESCN
+		  , A.OBJ_DESCN   
+		  , A.OBJ_VERS    
+		  , A.REG_TYP_CD  
+		  , A.WRIT_DTM    
+		  , A.WRIT_USER_ID
+	      , GET_USER_NM(A.WRIT_USER_ID) AS WRIT_USER_NM
+	      , A.DQI_ID
+		  , B.FULL_PATH AS DQI_LNM
+	  FROM WAA_VRFC_RULE A
+	       LEFT JOIN WAM_DQI B
+             ON B.DQI_ID = A.DQI_ID
+            AND B.REG_TYP_CD IN ('C', 'U')
+  	<where>
+		AND A.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')
+  		AND A.REG_TYP_CD IN ('C', 'U')
+		<if test="vrfcNm != null" >
+			AND UPPER(A.VRFC_NM) LIKE UPPER( '%' || #{vrfcNm,jdbcType=VARCHAR} || '%' )
+		</if>
+		<if test="vrfcTyp != null" >
+			AND A.VRFC_TYP = #{vrfcTyp,jdbcType=VARCHAR}
+		</if>
+		<if test="vrfcTyp == null" >
+			AND A.VRFC_TYP != 'CD'
+		</if>
+	</where>
+	ORDER BY A.VRFC_TYP
+	       , A.VRFC_NM
+	       , A.VRFC_ID
+           
+  </select>
+
+  <select id="selectVrfcDetail" resultMap="BaseResultMap"  parameterType="kr.wise.dq.vrfcrule.service.VrfcruleVO" >
+    SELECT A.VRFC_ID
+		  ,A.VRFC_TYP
+		  ,A.VRFC_NM
+		  ,A.VRFC_RULE
+		  ,A.VRFC_DESCN
+		  ,A.EXP_DTM
+		  ,A.STR_DTM
+		  ,A.OBJ_DESCN
+		  ,A.OBJ_VERS
+		  ,A.REG_TYP_CD
+		  ,A.WRIT_DTM
+		  ,A.WRIT_USER_ID
+		  ,A.DQI_ID
+		  ,B.DQI_LNM
+      FROM WAA_VRFC_RULE A
+      LEFT JOIN WAM_DQI B
+        ON B.DQI_ID = A.DQI_ID
+       AND B.REG_TYP_CD IN ('C', 'U')
+     WHERE 1=1
+       AND A.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')
+	   AND A.REG_TYP_CD IN ('C', 'U')  
+       AND A.VRFC_ID = #{vrfcId,jdbcType=VARCHAR}
+  </select>
+
+  
+    <update id="updateExpDtm" parameterType="kr.wise.dq.vrfcrule.service.VrfcruleVO">
+  	UPDATE WAA_VRFC_RULE SET
+  		EXP_DTM = NOW()
+  	WHERE VRFC_ID = #{vrfcId}
+  	  AND EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')
+  	  AND REG_TYP_CD IN ('C', 'U')
+  </update>
+  
+  <delete id="deleteByPrimaryKey" parameterType="kr.wise.dq.vrfcrule.service.VrfcruleVO" >
+    DELETE FROM WAA_VRFC_RULE
+     WHERE VRFC_ID = #{vrfcId,jdbcType=VARCHAR}
+  </delete>
+  
+  <insert id="insertVrfc" parameterType="kr.wise.dq.vrfcrule.service.VrfcruleVO" >
+    INSERT INTO 
+    WAA_VRFC_RULE
+    (
+	     VRFC_ID	
+		,EXP_DTM	
+		,STR_DTM	
+		,VRFC_NM
+		,VRFC_TYP
+		,VRFC_RULE
+		,VRFC_DESCN
+		,DQI_ID
+		,OBJ_DESCN
+		,OBJ_VERS
+		,REG_TYP_CD
+		,WRIT_DTM
+		,WRIT_USER_ID
+    )
+    VALUES (
+	    #{vrfcId,jdbcType=VARCHAR}
+	    , TO_DATE( '9999-12-31', 'YYYY-MM-DD')
+	    , NOW()
+	    ,#{vrfcNm,jdbcType=VARCHAR}
+	    ,#{vrfcTyp,jdbcType=VARCHAR}
+	    ,#{vrfcRule,jdbcType=DECIMAL}
+	    ,#{vrfcDescn,jdbcType=VARCHAR}
+	    ,#{dqiId,jdbcType=VARCHAR}
+	    ,#{objDescn,jdbcType=VARCHAR}
+	    ,#{objVers,jdbcType=DECIMAL}
+	    ,#{regTypCd,jdbcType=VARCHAR}
+	    ,NOW()
+	    ,#{writUserId,jdbcType=VARCHAR}
+    )
+  </insert>
+  
+  
+  <insert id="insertSelective" parameterType="kr.wise.dq.vrfcrule.service.VrfcruleVO" >
+    INSERT INTO WAA_VRFC_RULE
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="vrfcId != null" >
+        VRFC_ID,
+      </if>
+      <if test="vrfcNm != null" >
+        VRFC_NM,
+      </if>
+      <if test="vrfcTyp != null" >
+        VRFC_TYP,
+      </if>
+      <if test="vrfcRule != null" >
+        VRFC_RULE,
+      </if>
+      <if test="vrfcDescn != null" >
+        VRFC_DESCN,
+      </if>
+      <if test="dqiId != null" >
+        DQI_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="vrfcId != null" >
+        #{vrfcId,jdbcType=VARCHAR},
+      </if>
+      <if test="vrfcNm != null" >
+        #{vrfcNm,jdbcType=VARCHAR},
+      </if>
+      <if test="vrfcTyp != null" >
+        #{vrfcTyp,jdbcType=VARCHAR},
+      </if>
+      <if test="vrfcRule != null" >
+        #{vrfcRule,jdbcType=VARCHAR},
+      </if>
+      <if test="vrfcDescn != null" >
+        #{vrfcDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="dqiId != null" >
+        #{dqiId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.dq.vrfcrule.service.VrfcruleVO" >
+    UPDATE WAA_VRFC_RULE
+	       <set >
+	       VRFC_NM = #{vrfcNm,jdbcType=VARCHAR},
+	       VRFC_TYP = #{vrfcTyp,jdbcType=VARCHAR},
+	       VRFC_RULE = #{vrfcRule,jdbcType=VARCHAR},
+	       VRFC_DESCN = #{vrfcDescn,jdbcType=VARCHAR},
+	       OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+	       DQI_ID = #{dqiId,jdbcType=VARCHAR},
+	       OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+	       REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR}
+	       </set>
+     WHERE VRFC_ID = #{vrfcId,jdbcType=VARCHAR}
+       AND REG_TYP_CD IN ('C', 'U')
+	   AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+  </update>
+  
+  <update id="updateVfrc" parameterType="kr.wise.dq.vrfcrule.service.VrfcruleVO" >
+    UPDATE WAA_VRFC_RULE
+       SET VRFC_NM = #{vrfcNm,jdbcType=VARCHAR},
+	       VRFC_TYP = #{vrfcTyp,jdbcType=VARCHAR},
+	       VRFC_RULE = #{vrfcRule,jdbcType=VARCHAR},
+	       VRFC_DESCN = #{vrfcDescn,jdbcType=VARCHAR},
+	       DQI_ID = #{dqiId,jdbcType=VARCHAR}
+     WHERE VRFC_ID = #{vrfcId,jdbcType=VARCHAR}
+       AND REG_TYP_CD IN ('C', 'U')
+	   AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+  </update>
+  
+  	<update id="deleteVrfc" parameterType="java.lang.String">
+		UPDATE WAA_VRFC_RULE R
+		   SET R.REG_TYP_CD = 'D', R.EXP_DTM = NOW()
+		 WHERE R.VRFC_ID = #{vrfcId,jdbcType=VARCHAR}
+		   AND R.REG_TYP_CD IN ('C', 'U')
+		   AND R.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+		   AND 0 = (SELECT COUNT(REL.VRFC_ID) 
+		              FROM WAA_COL_RULE_REL REL
+		             WHERE REL.VRFC_ID = #{vrfcId,jdbcType=VARCHAR} 
+		           )
+	</update>
+  
+
+    
+  
+</mapper>

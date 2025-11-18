@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.meta.effect.service.WatPgmAstaSubsysMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.meta.effect.service.WatPgmAstaSubsys" >
+    <result column="REQUEST_ID" property="requestId" jdbcType="VARCHAR" />
+    <result column="OBJ_ID" property="objId" jdbcType="DECIMAL" />
+    <result column="OBJ_KNM" property="objKnm" jdbcType="VARCHAR" />
+    <result column="OBJ_PATH" property="objPath" jdbcType="VARCHAR" />
+    <result column="PARENT_ID" property="parentId" jdbcType="DECIMAL" />
+    <result column="LEAF_ORDER" property="leafOrder" jdbcType="DECIMAL" />
+    <result column="UK_OBJ_ID" property="ukObjId" jdbcType="DECIMAL" />
+    <result column="UK_PRNT_OBJ_ID" property="ukPrntObjId" jdbcType="DECIMAL" />
+  </resultMap>
+  <insert id="insert" parameterType="kr.wise.meta.effect.service.WatPgmAstaSubsys" >
+    insert into WAT_PGM_ASTA_SUBSYS (REQUEST_ID, OBJ_ID, OBJ_KNM, 
+      OBJ_PATH, PARENT_ID, LEAF_ORDER, 
+      UK_OBJ_ID, UK_PRNT_OBJ_ID)
+    values (#{requestId,jdbcType=VARCHAR}, #{objId,jdbcType=DECIMAL}, #{objKnm,jdbcType=VARCHAR}, 
+      #{objPath,jdbcType=VARCHAR}, #{parentId,jdbcType=DECIMAL}, #{leafOrder,jdbcType=DECIMAL}, 
+      #{ukObjId,jdbcType=DECIMAL}, #{ukPrntObjId,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="kr.wise.meta.effect.service.WatPgmAstaSubsys" >
+    insert into WAT_PGM_ASTA_SUBSYS
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="requestId != null" >
+        REQUEST_ID,
+      </if>
+      <if test="objId != null" >
+        OBJ_ID,
+      </if>
+      <if test="objKnm != null" >
+        OBJ_KNM,
+      </if>
+      <if test="objPath != null" >
+        OBJ_PATH,
+      </if>
+      <if test="parentId != null" >
+        PARENT_ID,
+      </if>
+      <if test="leafOrder != null" >
+        LEAF_ORDER,
+      </if>
+      <if test="ukObjId != null" >
+        UK_OBJ_ID,
+      </if>
+      <if test="ukPrntObjId != null" >
+        UK_PRNT_OBJ_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="requestId != null" >
+        #{requestId,jdbcType=VARCHAR},
+      </if>
+      <if test="objId != null" >
+        #{objId,jdbcType=DECIMAL},
+      </if>
+      <if test="objKnm != null" >
+        #{objKnm,jdbcType=VARCHAR},
+      </if>
+      <if test="objPath != null" >
+        #{objPath,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null" >
+        #{parentId,jdbcType=DECIMAL},
+      </if>
+      <if test="leafOrder != null" >
+        #{leafOrder,jdbcType=DECIMAL},
+      </if>
+      <if test="ukObjId != null" >
+        #{ukObjId,jdbcType=DECIMAL},
+      </if>
+      <if test="ukPrntObjId != null" >
+        #{ukPrntObjId,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+</mapper>

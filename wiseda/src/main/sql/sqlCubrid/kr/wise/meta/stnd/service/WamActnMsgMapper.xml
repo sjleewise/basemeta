@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.meta.stnd.service.WamActnMsgMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.meta.stnd.service.WamActnMsg" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+    <result column="ACTN_MSG_ID" property="actnMsgId" jdbcType="VARCHAR" />
+    <result column="ACTN_MSG_LNM" property="actnMsgLnm" jdbcType="VARCHAR" />
+    <result column="ACTN_MSG_PNM" property="actnMsgPnm" jdbcType="VARCHAR" />
+    <result column="ACTN_CD" property="actnCd" jdbcType="VARCHAR" />
+    <result column="ERR_TLG_LAN_DSCD" property="errTlgLanDscd" jdbcType="VARCHAR" />
+    <result column="ACTN_MSG_CTNT" property="actnMsgCtnt" jdbcType="VARCHAR" />
+    <result column="ACTN_USE_YN" property="actnUseYn" jdbcType="VARCHAR" />
+    <result column="ACTN_DEL_YN" property="actnDelYn" jdbcType="VARCHAR" />
+    <result column="ACTN_CD_APL_DT" property="actnCdAplDt" jdbcType="VARCHAR" />
+    <result column="CHNL_MSG_CD" property="chnlMsgCd" jdbcType="VARCHAR" />
+    <result column="CHNL_TYP_CD" property="chnlTypCd" jdbcType="VARCHAR" />
+    <result column="MCI_LNK_YN" property="mciLnkYn" jdbcType="VARCHAR" />
+    <result column="MCI_LNK_DT" property="mciLnkDt" jdbcType="VARCHAR" />
+  </resultMap>
+  <select id="selectList" parameterType="kr.wise.meta.stnd.service.WamChnlErrMsg" resultMap="BaseResultMap">
+    SELECT A.*
+	  FROM WAM_ACTN_MSG A
+	  <where>
+		  <if test="errTlgLanDscd != null" >
+	        AND ERR_TLG_LAN_DSCD LIKE '%'||#{errTlgLanDscd,jdbcType=VARCHAR}||'%'
+	      </if>
+	      <if test="actnMsgId != null" >
+	        AND ACTN_MSG_ID LIKE '%'||#{actnMsgId,jdbcType=VARCHAR}||'%'
+	      </if>
+	      <if test="actnCd != null" >
+	        AND ACTN_CD LIKE '%'||#{actnCd,jdbcType=VARCHAR}||'%'
+	      </if>
+	      <if test="actnUseYn != null" >
+	        AND ACTN_USE_YN LIKE '%'||#{actnUseYn,jdbcType=VARCHAR}||'%'
+	      </if>
+	      <if test="actnDelYn != null" >
+	        AND ACTN_DEL_YN LIKE '%'||#{actnDelYn,jdbcType=VARCHAR}||'%'
+	      </if>
+	      <if test="actnMsgCtnt != null" >
+	        AND ACTN_MSG_CTNT LIKE '%'||#{actnMsgCtnt,jdbcType=VARCHAR}||'%'
+	      </if>
+	      <if test="actnCdAplDt != null" >
+	        AND ACTN_CD_APL_DT LIKE '%'||#{actnCdAplDt,jdbcType=VARCHAR}||'%'
+	      </if>
+	      <if test="frsRqstUserId != null" >
+	        AND FRS_RQST_USER_ID = (SELECT USER_ID FROM WAA_USER WHERE USER_NM = #{frsRqstUserId,jdbcType=VARCHAR} OR USER_ID = #{frsRqstUserId,jdbcType=VARCHAR})
+	      </if>
+	   </where> 
+  </select>
+  
+   <select id="selectMessageDtl" parameterType="java.lang.String" resultMap="BaseResultMap">
+    SELECT A.*
+    	   ,(SELECT USER_NM FROM WAA_USER WHERE USER_ID = A.FRS_RQST_USER_ID AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD') AND REG_TYP_CD IN ('C','U')) AS FRS_RQST_USER_NM
+    	   ,(SELECT USER_NM FROM WAA_USER WHERE USER_ID = A.RQST_USER_ID AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD') AND REG_TYP_CD IN ('C','U')) AS RQST_USER_NM
+    	   ,(SELECT USER_NM FROM WAA_USER WHERE USER_ID = A.APRV_USER_ID AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD') AND REG_TYP_CD IN ('C','U')) AS APRV_USER_NM
+	  FROM WAM_ACTN_MSG A
+	  <where>
+	   ACTN_MSG_ID = #{actnMsgId,jdbcType=VARCHAR}  
+	   </where> 
+  </select>
+   <select id="selectChangeList" parameterType="java.lang.String" resultMap="BaseResultMap">
+    SELECT A.*
+	  FROM WAH_ACTN_MSG A
+	  <where>
+	   ACTN_MSG_ID = #{actnMsgId,jdbcType=VARCHAR}  
+	   </where> 
+	ORDER BY OBJ_VERS DESC
+  </select>
+</mapper>

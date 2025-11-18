@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- 템플릿 관련 JSP 파일이 있는 폴더 -->
+<decorators defaultdir="/WEB-INF/decorators">
+    <!-- 템플릿을 적용하지 말아야 할 패턴들 목록 -->
+    <excludes>
+        
+        <!-- 
+        작동하지 않는 패턴- 사용 금지
+        -->
+        
+        <!-- 다음에디터 iframe 제외 -->
+<!--         <pattern>*/*_rqst</pattern> -->
+<!--         <pattern>*/*_lst</pattern> -->
+<!--         <pattern>*/*_pop</pattern> -->
+		 
+<!--         <pattern>*/commons/fms/*</pattern> -->
+        <pattern>*/index*</pattern>
+<!--         <pattern>*/login*</pattern> -->
+		<pattern>*/*Chart*</pattern>
+        <pattern>*/logout*</pattern>
+        <pattern>/SmartEdit/*</pattern>
+        <pattern>/js/*</pattern>
+        <pattern>/portal/*/ajax/*</pattern>
+        <pattern>*/*ajaxgrid/*</pattern>
+        <pattern>*/*detail/*</pattern>
+        <pattern>/commons/sso/*</pattern>
+        <pattern>*/commons/error/*</pattern>
+        <pattern>/WEB-INF/views/commons/error/errorPage.jsp</pattern>
+        <pattern>/ssologin*.do</pattern>
+        <pattern>*/iframe_*</pattern>
+<!--         <pattern>*/pop*</pattern>공통 -->
+        <pattern>*/leftMenu*</pattern><!-- 메인 -->
+    </excludes>
+
+
+    <!-- ************* 전체 레이아웃 페이지 ************* -->
+    <!-- 로그인 화면 레이아웃 -->
+    <decorator name="login" page="loginTemplate.jsp">        
+        <pattern>*/</pattern>
+        <pattern>/login.do</pattern>
+        <pattern>/loginform.do</pattern>
+        <pattern>/WEB-INF/views/login.jsp</pattern>
+        <pattern>/changePassword.do</pattern>
+        <pattern>/WEB-INF/views/changePassword.jsp</pattern>
+    </decorator>
+    
+    <!-- 메인화면 레이아웃 -->
+    <decorator name="main" page="mainTemplate.jsp">
+    	<pattern>/main.do</pattern>
+    	<pattern>/WEB-INF/views/main.jsp</pattern>
+    	<pattern>*/totalSearch*</pattern>
+    	<pattern>/WEB-INF/views/portal/totalsearch/*</pattern>
+    </decorator>
+
+    <!-- 팝업 레이아웃 -->
+    <decorator name="pop" page="popTemplate.jsp">
+<!--     	<pattern>/commons/pop/*</pattern> -->
+    	<pattern>*/portal/pop/*</pattern>
+        <pattern>*/commons/*/pop/*</pattern>
+        <pattern>*/commons/*/popup/*</pattern>
+        <pattern>*/*pop*</pattern>
+<!--         <pattern>*/commons/sys/program/programPop.jsp*</pattern> -->
+    </decorator>
+    
+    <!-- 일반화면 레이아웃 -->
+    <decorator name="full" page="fullTemplate.jsp">
+    	<pattern>*/portal/*</pattern>
+    	<pattern>*/commons/bbs*/*</pattern>
+<!--     	<pattern>*/commons/bbs_dq/*</pattern> -->
+    	<pattern>*/commons/fms/*</pattern>
+<!--     	<pattern>*/*_rqst*</pattern> -->
+<!--     	<pattern>*/*_lst*</pattern> -->
+    </decorator>
+    
+    <!-- 빈화면 레이아웃 -->
+    <decorator name="empty" page="emptyTemplate.jsp">        
+		<pattern>*/portal/myjob/recentWork.do*</pattern>
+		<pattern>*/portal/myjob/RecentWork*</pattern>
+		<pattern>/portal/*/ajax/*</pattern>
+	<!-- 표준사전 등록요청용 iframe -->
+		<pattern>*/*_ifm*</pattern>
+		<pattern>*/*error*</pattern>
+<!-- 		<pattern>*/dq/criinfo/profile/getColDetail.do</pattern> -->
+<!-- 		<pattern>*/*Chart*</pattern> -->
+		
+    </decorator>
+    <decorator name="empty2" page="emptyTemplate2.jsp">
+    	<pattern>*/dq/criinfo/profile/getColDetail.do</pattern>
+		<pattern>*/*_rqst_ifm*</pattern>
+    </decorator>
+    <!-- META 레이아웃 -->
+    <decorator name="meta" page="metaTemplate.jsp">
+    	<pattern>*/meta/stnd/*</pattern>
+    	<pattern>*/meta/model/*</pattern>
+    	<pattern>*/meta/ddl/*</pattern>
+    	<pattern>*/meta/dbc/*</pattern>
+    	<pattern>*/meta/stts/*</pattern>
+<!--     	<pattern>*/commons/code/*</pattern> -->
+<!--     	<pattern>*/commons/user/*</pattern> -->
+<!--     	<pattern>*/commons/damgmt/*</pattern> -->
+<!--     	<pattern>*/meta/subjarea/*</pattern> -->
+    </decorator>
+
+    <!-- DQ 레이아웃 -->
+    <decorator name="dq" page="dqTemplate.jsp">
+    	<pattern>*/dq/*/*</pattern>
+<!--     	<pattern>*/commons/*/schedule/*</pattern> -->
+    </decorator>
+    
+    <!-- 관리자 레이아웃 -->
+    <decorator name="admin" page="adminTemplate.jsp">
+    	<pattern>*/commons/sys/*</pattern>
+    	<pattern>*/commons/sysmgmt/*</pattern>
+    	<pattern>*/commons/code/*</pattern>
+    	<pattern>*/commons/user/*</pattern>
+    	<pattern>*/commons/damgmt/*</pattern>
+    	<pattern>*/meta/subjarea/*</pattern>
+    	
+    </decorator>
+
+    <!-- 관리자 팝업 레이아웃 -->
+    <decorator name="adminpop" page="adminPopTemplate.jsp">
+    	<pattern>*/commons/sys/program/popup/*</pattern>
+    	<pattern>*/commons/sys/bbs/popup/*</pattern>
+    	<pattern>*/commons/sys/program/pop/programPop.do*</pattern>
+        <pattern>*/commons/sys/menu/*Pop*.do*</pattern>
+        <pattern>*/commons/code/popup/*</pattern>
+        <pattern>*/commons/*/*/popup/*</pattern>
+        <pattern>*/commons/user/*Pop*.do*</pattern>
+        <pattern>*/commons/damgmt/*/*Pop*.do</pattern>
+        <pattern>*/dq/*/*/popup/*xls*</pattern>
+        <pattern>*/dq/*/popup/*xls*</pattern>
+        <pattern>*/dq/*/*/popup/*pop*.do</pattern>
+        <pattern>*/dq/*/popup/*pop*.do</pattern>
+        <pattern>*/meta/subjarea/*/*pop*.do</pattern>
+        <pattern>*/meta/*/popup/*</pattern>
+    </decorator>
+<!--     <decorator name="xml" page="xmlTemplate.jsp">        
+	표준사전 등록요청용 iframe
+		<pattern>*/*Chart*</pattern>
+		
+    </decorator> -->
+        
+    
+
+
+    <!-- ************* 부속 콤포넌트 페이지 ************** -->
+    
+    <!-- 기본 상단, 하단, 좌측 부속  -->
+    <decorator name="headinclude" page="headinclude.jsp" />
+    <decorator name="header" page="headerContent.jsp" />
+<!--     <decorator name="leftPage" page="leftContent.jsp" /> -->
+    <decorator name="sideMenu" page="sideMenuContent.jsp" />
+    <decorator name="footer" page="footerContent.jsp"/>
+  
+    <decorator name="adminMenu" page="adminMenuContent.jsp" />
+    <decorator name="adminheader" page="adminheaderContent.jsp" />
+    <decorator name="adminfooter" page="adminfooterContent.jsp" />
+    <decorator name="validreview" page="validreview.jsp" />
+<!-- META TEMPLATE -->
+    <decorator name="metaheader" page="metaheaderContent.jsp" />
+    <decorator name="metagnb" page="metagnbContent.jsp" />
+    <decorator name="metaMenu" page="metaMenuContent.jsp" />
+    <decorator name="metaSideMenu" page="metaSideMenu.jsp" />
+    
+    <!-- 등록요청 마스터 폼.... -->
+    <decorator name="rqstMstForm" page="requestMstForm.jsp" />
+    <decorator name="approveStatus" page="approveStatus.jsp" />
+ 
+    <decorator name="buttonsearch" page="buttonSearch.jsp" />
+    <decorator name="buttonmain" page="buttonMain.jsp" />
+    <decorator name="buttonsub" page="buttonSub.jsp" />
+    <decorator name="buttonpop" page="buttonPop.jsp" />
+    <decorator name="buttonTree" page="buttonTree.jsp" />
+    <decorator name="buttonRqst" page="buttonRqst.jsp" />
+    <decorator name="buttonRqstInput" page="buttonRqstInput.jsp" />
+    <decorator name="buttonStndDiv" page="buttonStndDiv.jsp" />
+    <!-- ************************************************ -->
+            
+    <!-- DQ TEMPLATE -->
+<!--     <decorator name="dqheader" page="dqheaderContent.jsp" /> -->
+<!--     <decorator name="dqMenu" page="dqMenuContent.jsp" /> -->
+    
+    <decorator name="dqheader" page="dqheaderContent.jsp" />
+    <decorator name="dqgnb" page="dqgnbContent.jsp" />
+    <decorator name="dqMenu" page="dqMenuContent.jsp" />
+    <decorator name="dqSideMenu" page="dqSideMenu.jsp" />
+    
+    <decorator name="buttonProfile" page="buttonProfile.jsp" />
+            
+</decorators>
+

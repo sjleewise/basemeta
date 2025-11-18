@@ -1,0 +1,997 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.meta.model.service.WamAsisPdmColMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.meta.model.service.WamPdmCol" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap" >
+    <id column="PDM_COL_ID" property="pdmColId" jdbcType="VARCHAR" />
+    <result column="PDM_COL_PNM" property="pdmColPnm" jdbcType="VARCHAR" />
+    <result column="PDM_COL_LNM" property="pdmColLnm" jdbcType="VARCHAR" />
+    <result column="PDM_TBL_ID" property="pdmTblId" jdbcType="VARCHAR" />
+    <result column="PDM_TBL_LNM" property="pdmTblLnm" jdbcType="VARCHAR" />
+    <result column="PDM_TBL_PNM" property="pdmTblPnm" jdbcType="VARCHAR" />
+    <result column="SDITM_ID" property="sditmId" jdbcType="VARCHAR" />
+    <result column="SDITM_LNM" property="sditmLnm" jdbcType="VARCHAR" />
+    <result column="SDITM_PNM" property="sditmPnm" jdbcType="VARCHAR" />
+    <result column="DMN_ID" property="dmnId" jdbcType="VARCHAR" />
+    <result column="DMN_LNM" property="dmnLnm" jdbcType="VARCHAR" />
+    <result column="DMN_PNM" property="dmnPnm" jdbcType="VARCHAR" />
+    <result column="INFOTP_ID" property="infotpId" jdbcType="VARCHAR" />
+    <result column="INFOTP_LNM" property="infotpLnm" jdbcType="VARCHAR" />
+    <result column="COL_ORD" property="colOrd" jdbcType="DECIMAL" />
+    <result column="DATA_TYPE" property="dataType" jdbcType="VARCHAR" />
+    <result column="DATA_LEN" property="dataLen" jdbcType="DECIMAL" />
+    <result column="DATA_SCAL" property="dataScal" jdbcType="DECIMAL" />
+    <result column="PK_YN" property="pkYn" jdbcType="VARCHAR" />
+    <result column="PK_ORD" property="pkOrd" jdbcType="DECIMAL" />
+    <result column="NONUL_YN" property="nonulYn" jdbcType="VARCHAR" />
+    <result column="DEFLT_VAL" property="defltVal" jdbcType="VARCHAR" />
+    <result column="ENC_YN" property="encYn" jdbcType="VARCHAR" />
+    <result column="SUBJ_ID" property="subjId" jdbcType="VARCHAR" />
+    <result column="SUBJ_LNM" property="subjLnm" jdbcType="VARCHAR" />
+    <result column="SUBJ_PNM" property="subjPnm" jdbcType="VARCHAR" />
+    <result column="FULL_PATH" property="fullPath" jdbcType="VARCHAR" />
+    <result column="STD_APL_YN" property="stdAplYn" jdbcType="VARCHAR" />
+    <result column="SDITM_DATA_TYPE" property="sditmDataType" jdbcType="VARCHAR" />
+    <result column="SDITM_DATA_LEN" property="sditmDataLen" jdbcType="DECIMAL" />
+    <result column="SDITM_DATA_SCAL" property="sditmDataScal" jdbcType="DECIMAL" />
+    
+    <result column="ERR_DATA_SCALE_YN" property="errDataScaleYn" jdbcType="VARCHAR" />
+    <result column="ERR_DATA_LENGTH_YN" property="errDataLengthYn" jdbcType="VARCHAR" />
+    <result column="ERR_DATA_TYPE_YN" property="errDataTypeYn" jdbcType="VARCHAR" />
+    <result column="ERR_COL_PNM_YN" property="errColPnmYn" jdbcType="VARCHAR" />
+    <result column="ERR_ITEM_ID_YN" property="errItemIdYn" jdbcType="VARCHAR" />
+    <result column="ITEM_STATUS" property="itemStatus" jdbcType="VARCHAR" />
+    
+    <result column="SYSTEM_NM" property="systemNm" jdbcType="VARCHAR" />
+    <result column="DBMS_TYP_CD" property="dbmsTypCd" jdbcType="VARCHAR" />
+    <result column="DBMS_NM" property="dbmsNm" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    PDM_COL_ID, PDM_COL_PNM, PDM_COL_LNM, PDM_TBL_ID, SDITM_ID, COL_ORD, DATA_TYPE, DATA_LEN, 
+    DATA_SCAL, PK_YN, PK_ORD, NONUL_YN, DEFLT_VAL, RQST_NO, RQST_SNO, RQST_DTL_SNO, OBJ_DESCN, 
+    OBJ_VERS, REG_TYP_CD, FRS_RQST_DTM, FRS_RQST_USER_ID, RQST_DTM, RQST_USER_ID, APRV_DTM, 
+    APRV_USER_ID
+  </sql>
+  <sql id="Base_Column_List2" >
+    PDM_COL_PNM, PDM_COL_LNM, PDM_TBL_ID, SDITM_ID, COL_ORD, DATA_TYPE, DATA_LEN, 
+    DATA_SCAL, PK_YN, PK_ORD, NONUL_YN, DEFLT_VAL, RQST_NO, RQST_SNO, RQST_DTL_SNO, OBJ_DESCN, 
+    OBJ_VERS, REG_TYP_CD, FRS_RQST_DTM, FRS_RQST_USER_ID, RQST_DTM, RQST_USER_ID, APRV_DTM, 
+    APRV_USER_ID
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from WAM_ASIS_PDM_COL
+    where PDM_COL_ID = #{pdmColId,jdbcType=VARCHAR}
+  </select>
+
+
+  <select id="selectList" resultMap="BaseResultMap" parameterType="kr.wise.meta.model.service.WamPdmCol" >
+    SELECT
+<!--     <include refid="Base_Column_List" /> -->
+  			  A.PDM_COL_ID
+			, A.PDM_COL_PNM
+			, A.PDM_COL_LNM
+			, A.PDM_TBL_ID
+			, A.SDITM_ID
+			, C.SDITM_LNM
+			, C.SDITM_PNM
+			, D.DMN_ID
+			, D.DMN_LNM
+			, D.DMN_PNM
+			, E.INFOTP_ID
+			, E.INFOTP_LNM
+			, A.COL_ORD
+			, CASE WHEN A.DATA_LEN IS NULL 
+                     THEN A.DATA_TYPE
+                     ELSE (CASE WHEN A.DATA_SCAL IS NOT NULL
+                                THEN A.DATA_TYPE || '(' || A.DATA_LEN ||','|| A.DATA_SCAL ||')' 
+                                ELSE A.DATA_TYPE || '(' || A.DATA_LEN ||')'
+                                 END )
+                     END AS DATA_TYPE
+			, COALESCE(A.PK_YN, 'N') AS PK_YN
+			, A.PK_ORD
+			, COALESCE(A.NONUL_YN, 'N') AS NONUL_YN
+			, A.DEFLT_VAL
+			, A.ENC_YN
+			, A.OBJ_DESCN
+			, A.OBJ_VERS
+			, A.REG_TYP_CD
+			, A.FRS_RQST_DTM
+			, A.FRS_RQST_USER_ID
+			, A.RQST_DTM
+			, A.RQST_USER_ID
+			, A.APRV_DTM
+			, A.APRV_USER_ID
+			, B.PDM_TBL_LNM
+			, B.PDM_TBL_PNM
+			, B.SUBJ_ID
+            , SUBJ.SUBJ_LNM
+            , SUBJ.SUBJ_PNM
+            , SUBJ.FULL_PATH
+            , B.STD_APL_YN
+	    	, GET_USER_NM(A.FRS_RQST_USER_ID) AS FRS_RQST_USER_NM
+    		, GET_USER_NM(A.RQST_USER_ID) AS RQST_USER_NM
+    		, GET_USER_NM(A.APRV_USER_ID) AS APRV_USER_NM
+     FROM WAM_ASIS_PDM_TBL B
+    	    INNER JOIN WAM_ASIS_PDM_COL A
+               ON B.PDM_TBL_ID = A.PDM_TBL_ID
+			 AND A.REG_TYP_CD IN ('C', 'U')
+			  LEFT OUTER JOIN WAM_SDITM C
+				ON A.SDITM_ID = C.SDITM_ID
+			   AND C.REG_TYP_CD IN ('C', 'U')
+			  LEFT OUTER JOIN WAM_DMN D
+			    ON C.DMN_ID = D.DMN_ID
+			   AND D.REG_TYP_CD IN ('C', 'U')
+			  LEFT OUTER JOIN WAA_INFO_TYPE E
+			    ON D.INFOTP_ID = E.INFOTP_ID
+			   AND E.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+			   LEFT OUTER JOIN WAA_SUBJ SUBJ
+               ON B.SUBJ_ID = SUBJ.SUBJ_ID
+               AND SUBJ.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+               AND SUBJ.REG_TYP_CD IN ('C', 'U') 
+    <where>
+    	AND B.REG_TYP_CD IN ('C', 'U')
+<!--     	gap 분석 물리테이블ID 는 필수 입력항목 입니다. -->
+      	<if test="pdmTblId != null">
+    	AND B.PDM_TBL_ID = #{pdmTblId,jdbcType=VARCHAR}
+    	</if>
+    	<if test="tgtColId != null and tgtColId != '' "> 
+    	AND A.PDM_COL_ID = #{tgtColId,jdbcType=VARCHAR}
+    	</if>
+    	<if test="pdmTblLnm != null and pdmTblLnm != '' "> 
+    	AND (B.PDM_TBL_LNM LIKE '%'||#{pdmTblLnm,jdbcType=VARCHAR}||'%' OR B.PDM_TBL_PNM LIKE '%'||#{pdmTblLnm,jdbcType=VARCHAR}||'%')
+    	</if>
+    	<if test="pdmColLnm != null and pdmColLnm != '' ">
+    	AND (A.PDM_COL_LNM LIKE '%'||#{pdmColLnm,jdbcType=VARCHAR}||'%' OR A.PDM_COL_PNM LIKE '%'||#{pdmColLnm,jdbcType=VARCHAR}||'%')
+    	</if>
+    	<if test="subjId != null and subjId != '' ">
+    	AND B.SUBJ_ID = #{subjId,jdbcType=VARCHAR}
+    	</if>
+    	<if test="subjLnm != null and subjLnm != '' "> 
+    	AND SUBJ.FULL_PATH LIKE #{subjLnm,jdbcType=VARCHAR} ||'%'
+    	</if>
+    	<if test="stdAplYn != null and stdAplYn != '' "> 
+    	AND B.STD_APL_YN = #{stdAplYn,jdbcType=VARCHAR}
+    	</if>
+        	
+    </where>
+    ORDER BY B.PDM_TBL_LNM, A.COL_ORD
+  </select>
+  
+   <select id="selectListGap" resultMap="BaseResultMap" parameterType="kr.wise.meta.model.service.WamPdmCol" >
+    SELECT
+<!--     <include refid="Base_Column_List" /> -->
+  			  A.PDM_COL_ID
+			, A.PDM_COL_PNM
+			, A.PDM_COL_LNM
+			, A.PDM_TBL_ID
+			, A.SDITM_ID
+			, C.SDITM_LNM
+			, C.SDITM_PNM
+			, D.DMN_ID
+			, D.DMN_LNM
+			, D.DMN_PNM
+			, E.INFOTP_ID
+			, E.INFOTP_LNM
+			, A.COL_ORD
+			, CASE WHEN A.DATA_LEN IS NULL 
+                     THEN A.DATA_TYPE
+                     ELSE (CASE WHEN A.DATA_SCAL IS NOT NULL
+                                THEN A.DATA_TYPE || '(' || A.DATA_LEN ||','|| A.DATA_SCAL ||')' 
+                                ELSE A.DATA_TYPE || '(' || A.DATA_LEN ||')'
+                                 END )
+                     END AS DATA_TYPE
+			, COALESCE(A.PK_YN, 'N') AS PK_YN
+			, A.PK_ORD
+			, COALESCE(A.NONUL_YN, 'N') AS NONUL_YN
+			, A.DEFLT_VAL
+			, A.ENC_YN
+			, A.OBJ_DESCN
+			, A.OBJ_VERS
+			, A.REG_TYP_CD
+			, A.FRS_RQST_DTM
+			, A.FRS_RQST_USER_ID
+			, A.RQST_DTM
+			, A.RQST_USER_ID
+			, A.APRV_DTM
+			, A.APRV_USER_ID
+			, B.PDM_TBL_LNM
+			, B.PDM_TBL_PNM
+			, B.SUBJ_ID
+            , SUBJ.SUBJ_LNM
+            , SUBJ.SUBJ_PNM
+            , SUBJ.FULL_PATH
+            , B.STD_APL_YN
+	    	, GET_USER_NM(A.FRS_RQST_USER_ID) AS FRS_RQST_USER_NM
+    		, GET_USER_NM(A.RQST_USER_ID) AS RQST_USER_NM
+    		, GET_USER_NM(A.APRV_USER_ID) AS APRV_USER_NM
+     FROM WAM_ASIS_PDM_TBL B
+    	    INNER JOIN WAM_ASIS_PDM_COL A
+               ON B.PDM_TBL_ID = A.PDM_TBL_ID
+			 AND A.REG_TYP_CD IN ('C', 'U')
+			  LEFT OUTER JOIN WAM_SDITM C
+				ON A.SDITM_ID = C.SDITM_ID
+			   AND C.REG_TYP_CD IN ('C', 'U')
+			  LEFT OUTER JOIN WAM_DMN D
+			    ON C.DMN_ID = D.DMN_ID
+			   AND D.REG_TYP_CD IN ('C', 'U')
+			  LEFT OUTER JOIN WAA_INFO_TYPE E
+			    ON D.INFOTP_ID = E.INFOTP_ID
+			   AND E.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+			   LEFT OUTER JOIN WAA_SUBJ SUBJ
+               ON B.SUBJ_ID = SUBJ.SUBJ_ID
+               AND SUBJ.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+               AND SUBJ.REG_TYP_CD IN ('C', 'U') 
+    <where>
+    	AND B.REG_TYP_CD IN ('C', 'U')
+<!--     	gap 분석 물리테이블ID 는 필수 입력항목 입니다. -->
+    	AND B.PDM_TBL_ID = #{pdmTblId,jdbcType=VARCHAR}
+    	<if test="tgtColId != null and tgtColId != '' "> 
+    	AND A.PDM_COL_ID = #{tgtColId,jdbcType=VARCHAR}
+    	</if>
+    	<if test="pdmTblLnm != null and pdmTblLnm != '' "> 
+    	AND (B.PDM_TBL_LNM LIKE '%'||#{pdmTblLnm,jdbcType=VARCHAR}||'%' OR B.PDM_TBL_PNM LIKE '%'||#{pdmTblLnm,jdbcType=VARCHAR}||'%')
+    	</if>
+    	<if test="pdmColLnm != null and pdmColLnm != '' "> 
+    	AND (A.PDM_COL_LNM LIKE '%'||#{pdmColLnm,jdbcType=VARCHAR}||'%' OR A.PDM_COL_PNM LIKE '%'||#{pdmColLnm,jdbcType=VARCHAR}||'%')
+    	</if>
+    	<if test="subjId != null and subjId != '' ">
+    	AND B.SUBJ_ID = #{subjId,jdbcType=VARCHAR}
+    	</if>
+    	<if test="subjLnm != null and subjLnm != '' ">
+    	AND SUBJ.FULL_PATH LIKE '%'||#{subjLnm,jdbcType=VARCHAR}||'%'
+    	</if>
+    	<if test="stdAplYn != null and stdAplYn != '' ">
+    	AND B.STD_APL_YN = #{stdAplYn,jdbcType=VARCHAR}
+    	</if>
+    	
+<!--           <if test="pdmColPnm != null" > -->
+<!--         AND A.PDM_COL_PNM LIKE  '%'||#{pdmColPnm,jdbcType=VARCHAR}||'%' -->
+<!--       </if> -->
+<!--       <if test="pdmColLnm != null" > -->
+<!--         AND A.PDM_COL_LNM = #{pdmColLnm,jdbcType=VARCHAR} -->
+<!--       </if> -->
+    </where>
+    ORDER BY B.PDM_TBL_LNM, A.COL_ORD
+  </select>
+
+  <select id="seleccoldtltList" resultMap="BaseResultMap" parameterType="kr.wise.meta.model.service.WamPdmCol" >
+  SELECT
+			  A.PDM_COL_ID
+			, A.PDM_COL_PNM
+			, A.PDM_COL_LNM
+			, A.DATA_TYPE||'('||A.DATA_LEN||')'||A.DATA_SCAL
+			, A.OBJ_DESCN
+FROM
+			  WAH_ASIS_PDM_COL A
+			, WAH_ASIS_PDM_TBL B
+WHERE
+			  A.PDM_TBL_ID = B.PDM_TBL_ID
+			AND A.PDM_TBL_ID = #{pdmTblId,jdbcType=VARCHAR}
+			AND B.OBJ_VERS =  #{objVers,jdbcType=VARCHAR}
+			AND A.OBJ_VERS <![CDATA[<=]]> B.OBJ_VERS
+			AND A.STR_DTM <![CDATA[<=]]> (B.STR_DTM + INTERVAL '1' SECOND)
+			AND A.EXP_DTM <![CDATA[>]]> B.EXP_DTM
+			AND A.REG_TYP_CD IN ('C', 'U')
+ORDER BY
+			 A.STR_DTM
+  </select>
+
+  <select id="seleccolhisttList" resultMap="BaseResultMap" parameterType="kr.wise.meta.model.service.WamPdmTbl" >
+	   SELECT A.PDM_COL_ID
+			, A.PDM_COL_PNM
+			, A.PDM_COL_LNM
+			, A.PDM_TBL_ID
+			, A.SDITM_ID
+			, C.SDITM_LNM
+			, C.SDITM_PNM
+			, D.DMN_ID
+			, D.DMN_LNM
+			, D.DMN_PNM
+			, E.INFOTP_ID
+			, E.INFOTP_LNM
+			, A.COL_ORD
+			, A.DATA_TYPE
+			, A.DATA_LEN
+			, A.DATA_SCAL
+			, A.PK_YN
+			, A.PK_ORD
+			, A.NONUL_YN
+			, A.DEFLT_VAL
+			, A.OBJ_DESCN
+			, A.OBJ_VERS
+			, A.REG_TYP_CD
+			, A.FRS_RQST_DTM
+			, A.FRS_RQST_USER_ID
+			, A.RQST_DTM
+			, A.RQST_USER_ID
+			, A.APRV_DTM
+			, A.APRV_USER_ID
+			, A.EXP_DTM
+			, A.STR_DTM
+			, B.PDM_TBL_LNM
+			, GET_USER_NM(A.FRS_RQST_USER_ID) AS FRS_RQST_USER_NM
+    		, GET_USER_NM(A.RQST_USER_ID) AS RQST_USER_NM
+    		, GET_USER_NM(A.APRV_USER_ID) AS APRV_USER_NM
+    		, CASE WHEN A.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD') AND A.REG_TYP_CD IN ('C', 'U') THEN '#0000FF'
+    		  ELSE NULL END AS FontColor
+		 FROM WAH_ASIS_PDM_COL A
+		 LEFT OUTER JOIN WAM_ASIS_PDM_TBL B
+	 	   ON A.PDM_TBL_ID = B.PDM_TBL_ID
+	 	  AND B.REG_TYP_CD IN ('C', 'U')
+		 LEFT OUTER JOIN WAM_SDITM C
+		   ON A.SDITM_ID = C.SDITM_ID
+		  AND C.REG_TYP_CD IN ('C', 'U')
+		 LEFT OUTER JOIN WAM_DMN D
+		   ON C.DMN_ID = D.DMN_ID
+		  AND D.REG_TYP_CD IN ('C', 'U')
+		 LEFT OUTER JOIN WAA_INFO_TYPE E
+		   ON D.INFOTP_ID = E.INFOTP_ID
+		  AND E.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	    WHERE A.PDM_TBL_ID = #{pdmTblId,jdbcType=VARCHAR}
+	    ORDER BY A.COL_ORD, A.OBJ_VERS DESC, A.EXP_DTM DESC, A.STR_DTM DESC
+  </select>
+
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from WAM_ASIS_PDM_COL
+    where PDM_COL_ID = #{pdmColId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="kr.wise.meta.model.service.WamPdmCol" >
+    insert into WAM_ASIS_PDM_COL (PDM_COL_ID, PDM_COL_PNM, PDM_COL_LNM, 
+      PDM_TBL_ID, SDITM_ID, COL_ORD, 
+      DATA_TYPE, DATA_LEN, DATA_SCAL, 
+      PK_YN, PK_ORD, NONUL_YN, 
+      DEFLT_VAL, RQST_NO, RQST_SNO, 
+      RQST_DTL_SNO, OBJ_DESCN, OBJ_VERS, 
+      REG_TYP_CD, FRS_RQST_DTM, FRS_RQST_USER_ID, 
+      RQST_DTM, RQST_USER_ID, APRV_DTM, 
+      APRV_USER_ID)
+    values (#{pdmColId,jdbcType=VARCHAR}, #{pdmColPnm,jdbcType=VARCHAR}, #{pdmColLnm,jdbcType=VARCHAR}, 
+      #{pdmTblId,jdbcType=VARCHAR}, #{sditmId,jdbcType=VARCHAR}, #{colOrd,jdbcType=DECIMAL}, 
+      #{dataType,jdbcType=VARCHAR}, #{dataLen,jdbcType=DECIMAL}, #{dataScal,jdbcType=DECIMAL}, 
+      #{pkYn,jdbcType=VARCHAR}, #{pkOrd,jdbcType=DECIMAL}, #{nonulYn,jdbcType=VARCHAR}, 
+      #{defltVal,jdbcType=VARCHAR}, #{rqstNo,jdbcType=VARCHAR}, #{rqstSno,jdbcType=DECIMAL}, 
+      #{rqstDtlSno,jdbcType=DECIMAL}, #{objDescn,jdbcType=VARCHAR}, #{objVers,jdbcType=DECIMAL}, 
+      #{regTypCd,jdbcType=VARCHAR}, #{frsRqstDtm,jdbcType=DATE}, #{frsRqstUserId,jdbcType=VARCHAR}, 
+      #{rqstDtm,jdbcType=DATE}, #{rqstUserId,jdbcType=VARCHAR}, #{aprvDtm,jdbcType=DATE}, 
+      #{aprvUserId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="kr.wise.meta.model.service.WamPdmCol" >
+    insert into WAM_ASIS_PDM_COL
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="pdmColId != null" >
+        PDM_COL_ID,
+      </if>
+      <if test="pdmColPnm != null" >
+        PDM_COL_PNM,
+      </if>
+      <if test="pdmColLnm != null" >
+        PDM_COL_LNM,
+      </if>
+      <if test="pdmTblId != null" >
+        PDM_TBL_ID,
+      </if>
+      <if test="sditmId != null" >
+        SDITM_ID,
+      </if>
+      <if test="colOrd != null" >
+        COL_ORD,
+      </if>
+      <if test="dataType != null" >
+        DATA_TYPE,
+      </if>
+      <if test="dataLen != null" >
+        DATA_LEN,
+      </if>
+      <if test="dataScal != null" >
+        DATA_SCAL,
+      </if>
+      <if test="pkYn != null" >
+        PK_YN,
+      </if>
+      <if test="pkOrd != null" >
+        PK_ORD,
+      </if>
+      <if test="nonulYn != null" >
+        NONUL_YN,
+      </if>
+      <if test="defltVal != null" >
+        DEFLT_VAL,
+      </if>
+      <if test="rqstNo != null" >
+        RQST_NO,
+      </if>
+      <if test="rqstSno != null" >
+        RQST_SNO,
+      </if>
+      <if test="rqstDtlSno != null" >
+        RQST_DTL_SNO,
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN,
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS,
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD,
+      </if>
+      <if test="frsRqstDtm != null" >
+        FRS_RQST_DTM,
+      </if>
+      <if test="frsRqstUserId != null" >
+        FRS_RQST_USER_ID,
+      </if>
+      <if test="rqstDtm != null" >
+        RQST_DTM,
+      </if>
+      <if test="rqstUserId != null" >
+        RQST_USER_ID,
+      </if>
+      <if test="aprvDtm != null" >
+        APRV_DTM,
+      </if>
+      <if test="aprvUserId != null" >
+        APRV_USER_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="pdmColId != null" >
+        #{pdmColId,jdbcType=VARCHAR},
+      </if>
+      <if test="pdmColPnm != null" >
+        #{pdmColPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="pdmColLnm != null" >
+        #{pdmColLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="pdmTblId != null" >
+        #{pdmTblId,jdbcType=VARCHAR},
+      </if>
+      <if test="sditmId != null" >
+        #{sditmId,jdbcType=VARCHAR},
+      </if>
+      <if test="colOrd != null" >
+        #{colOrd,jdbcType=DECIMAL},
+      </if>
+      <if test="dataType != null" >
+        #{dataType,jdbcType=VARCHAR},
+      </if>
+      <if test="dataLen != null" >
+        #{dataLen,jdbcType=DECIMAL},
+      </if>
+      <if test="dataScal != null" >
+        #{dataScal,jdbcType=DECIMAL},
+      </if>
+      <if test="pkYn != null" >
+        #{pkYn,jdbcType=VARCHAR},
+      </if>
+      <if test="pkOrd != null" >
+        #{pkOrd,jdbcType=DECIMAL},
+      </if>
+      <if test="nonulYn != null" >
+        #{nonulYn,jdbcType=VARCHAR},
+      </if>
+      <if test="defltVal != null" >
+        #{defltVal,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstNo != null" >
+        #{rqstNo,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstSno != null" >
+        #{rqstSno,jdbcType=DECIMAL},
+      </if>
+      <if test="rqstDtlSno != null" >
+        #{rqstDtlSno,jdbcType=DECIMAL},
+      </if>
+      <if test="objDescn != null" >
+        #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null" >
+        #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="frsRqstDtm != null" >
+        #{frsRqstDtm,jdbcType=DATE},
+      </if>
+      <if test="frsRqstUserId != null" >
+        #{frsRqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDtm != null" >
+        #{rqstDtm,jdbcType=DATE},
+      </if>
+      <if test="rqstUserId != null" >
+        #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDtm != null" >
+        #{aprvDtm,jdbcType=DATE},
+      </if>
+      <if test="aprvUserId != null" >
+        #{aprvUserId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.meta.model.service.WamPdmCol" >
+    update WAM_ASIS_PDM_COL
+    <set >
+      <if test="pdmColPnm != null" >
+        PDM_COL_PNM = #{pdmColPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="pdmColLnm != null" >
+        PDM_COL_LNM = #{pdmColLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="pdmTblId != null" >
+        PDM_TBL_ID = #{pdmTblId,jdbcType=VARCHAR},
+      </if>
+      <if test="sditmId != null" >
+        SDITM_ID = #{sditmId,jdbcType=VARCHAR},
+      </if>
+      <if test="colOrd != null" >
+        COL_ORD = #{colOrd,jdbcType=DECIMAL},
+      </if>
+      <if test="dataType != null" >
+        DATA_TYPE = #{dataType,jdbcType=VARCHAR},
+      </if>
+      <if test="dataLen != null" >
+        DATA_LEN = #{dataLen,jdbcType=DECIMAL},
+      </if>
+      <if test="dataScal != null" >
+        DATA_SCAL = #{dataScal,jdbcType=DECIMAL},
+      </if>
+      <if test="pkYn != null" >
+        PK_YN = #{pkYn,jdbcType=VARCHAR},
+      </if>
+      <if test="pkOrd != null" >
+        PK_ORD = #{pkOrd,jdbcType=DECIMAL},
+      </if>
+      <if test="nonulYn != null" >
+        NONUL_YN = #{nonulYn,jdbcType=VARCHAR},
+      </if>
+      <if test="defltVal != null" >
+        DEFLT_VAL = #{defltVal,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstNo != null" >
+        RQST_NO = #{rqstNo,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstSno != null" >
+        RQST_SNO = #{rqstSno,jdbcType=DECIMAL},
+      </if>
+      <if test="rqstDtlSno != null" >
+        RQST_DTL_SNO = #{rqstDtlSno,jdbcType=DECIMAL},
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="frsRqstDtm != null" >
+        FRS_RQST_DTM = #{frsRqstDtm,jdbcType=DATE},
+      </if>
+      <if test="frsRqstUserId != null" >
+        FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDtm != null" >
+        RQST_DTM = #{rqstDtm,jdbcType=DATE},
+      </if>
+      <if test="rqstUserId != null" >
+        RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDtm != null" >
+        APRV_DTM = #{aprvDtm,jdbcType=DATE},
+      </if>
+      <if test="aprvUserId != null" >
+        APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where PDM_COL_ID = #{pdmColId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="kr.wise.meta.model.service.WamPdmCol" >
+    update WAM_ASIS_PDM_COL
+    set PDM_COL_PNM = #{pdmColPnm,jdbcType=VARCHAR},
+      PDM_COL_LNM = #{pdmColLnm,jdbcType=VARCHAR},
+      PDM_TBL_ID = #{pdmTblId,jdbcType=VARCHAR},
+      SDITM_ID = #{sditmId,jdbcType=VARCHAR},
+      COL_ORD = #{colOrd,jdbcType=DECIMAL},
+      DATA_TYPE = #{dataType,jdbcType=VARCHAR},
+      DATA_LEN = #{dataLen,jdbcType=DECIMAL},
+      DATA_SCAL = #{dataScal,jdbcType=DECIMAL},
+      PK_YN = #{pkYn,jdbcType=VARCHAR},
+      PK_ORD = #{pkOrd,jdbcType=DECIMAL},
+      NONUL_YN = #{nonulYn,jdbcType=VARCHAR},
+      DEFLT_VAL = #{defltVal,jdbcType=VARCHAR},
+      RQST_NO = #{rqstNo,jdbcType=VARCHAR},
+      RQST_SNO = #{rqstSno,jdbcType=DECIMAL},
+      RQST_DTL_SNO = #{rqstDtlSno,jdbcType=DECIMAL},
+      OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      FRS_RQST_DTM = #{frsRqstDtm,jdbcType=DATE},
+      FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR},
+      RQST_DTM = #{rqstDtm,jdbcType=DATE},
+      RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      APRV_DTM = #{aprvDtm,jdbcType=DATE},
+      APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR}
+    where PDM_COL_ID = #{pdmColId,jdbcType=VARCHAR}
+  </update>
+  
+   <select id="selectPdmColList" resultMap="BaseResultMap" parameterType="kr.wise.meta.model.service.WamPdmCol" >
+    SELECT A.PDM_COL_ID
+	     , A.PDM_COL_LNM
+	     , A.PDM_COL_PNM
+	     , A.OBJ_DESCN
+	     , A.OBJ_VERS
+	     , A.REG_TYP_CD
+	     , A.FRS_RQST_DTM
+	     , A.FRS_RQST_USER_ID
+	     , A.RQST_DTM
+	     , A.RQST_USER_ID
+	     , B.PDM_TBL_ID
+	     , B.PDM_TBL_LNM
+	     , B.PDM_TBL_PNM
+	     , B.SYSTEM_NM
+	     , B.DBMS_TYP_CD
+	     , B.DBMS_NM
+	     , C.SUBJ_ID
+	     , C.FULL_PATH AS SUBJ_LNM
+	     , C.SUBJ_PNM
+	  FROM WAM_ASIS_PDM_COL A
+	 INNER JOIN WAM_ASIS_PDM_TBL B
+	    ON A.PDM_TBL_ID = B.PDM_TBL_ID
+	   AND B.REG_TYP_CD IN ('C', 'U')
+	 INNER JOIN WAA_SUBJ C
+	    ON B.SUBJ_ID = C.SUBJ_ID
+	   AND C.REG_TYP_CD IN ('C', 'U')
+	   AND C.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	
+	<where>   
+	    AND A.REG_TYP_CD IN ('C', 'U') 
+    	<if test="pdmTblLnm != null">
+    	AND (B.PDM_TBL_LNM LIKE  '%'||#{pdmTblLnm,jdbcType=VARCHAR}||'%'
+             OR B.PDM_TBL_LNM LIKE  '%'||UPPER(#{pdmTblLnm,jdbcType=VARCHAR})||'%'
+             OR B.PDM_TBL_PNM LIKE  '%'||#{pdmTblLnm,jdbcType=VARCHAR}||'%'
+             OR B.PDM_TBL_PNM LIKE  '%'||UPPER(#{pdmTblLnm,jdbcType=VARCHAR})||'%')
+    	</if>
+        <if test="pdmColLnm != null" >
+        AND (A.PDM_COL_LNM LIKE  '%'||#{pdmColLnm,jdbcType=VARCHAR}||'%'
+             OR A.PDM_COL_LNM LIKE  '%'||UPPER(#{pdmColLnm,jdbcType=VARCHAR})||'%'
+             OR A.PDM_COL_PNM LIKE  '%'||#{pdmColLnm,jdbcType=VARCHAR}||'%'
+             OR A.PDM_COL_PNM LIKE  '%'||UPPER(#{pdmColLnm,jdbcType=VARCHAR})||'%')
+      	</if>
+        <if test="subjId != null" >
+        AND C.SUBJ_ID = #{subjId,jdbcType=VARCHAR}
+      	</if>
+    </where>
+    ORDER BY
+    		 C.FULL_PATH, B.PDM_TBL_LNM, A.COL_ORD
+  </select>
+  
+  <select id="seleccolhisttListDtl" resultMap="BaseResultMap" parameterType="kr.wise.meta.model.service.WamPdmCol" >
+  --컬럼이력조회
+	   SELECT A.PDM_COL_ID  
+			, A.PDM_COL_PNM
+			, A.PDM_COL_LNM
+			, A.PDM_TBL_ID
+			, A.SDITM_ID
+			, C.SDITM_LNM
+			, C.SDITM_PNM
+			, D.DMN_ID
+			, D.DMN_LNM
+			, D.DMN_PNM
+			, E.INFOTP_ID
+			, E.INFOTP_LNM
+			, A.COL_ORD
+			, A.DATA_TYPE
+			, A.DATA_LEN
+			, A.DATA_SCAL
+			, A.PK_YN
+			, A.PK_ORD
+			, A.NONUL_YN
+			, A.DEFLT_VAL
+			, A.OBJ_DESCN
+			, A.OBJ_VERS
+			, A.REG_TYP_CD
+			, A.FRS_RQST_DTM
+			, A.FRS_RQST_USER_ID
+			, A.RQST_DTM
+			, A.RQST_USER_ID
+			, A.APRV_DTM
+			, A.APRV_USER_ID
+			, A.EXP_DTM
+			, A.STR_DTM
+			, B.PDM_TBL_LNM
+			, GET_USER_NM(A.FRS_RQST_USER_ID) AS FRS_RQST_USER_NM
+    		, GET_USER_NM(A.RQST_USER_ID) AS RQST_USER_NM
+    		, GET_USER_NM(A.APRV_USER_ID) AS APRV_USER_NM
+    		, CASE WHEN A.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD') AND A.REG_TYP_CD IN ('C', 'U') THEN '#0000FF'
+    		  ELSE NULL END AS FontColor
+		 FROM WAH_ASIS_PDM_COL A
+		 LEFT OUTER JOIN WAM_ASIS_PDM_TBL B
+	 	   ON A.PDM_TBL_ID = B.PDM_TBL_ID
+	 	  AND B.REG_TYP_CD IN ('C', 'U')
+		 LEFT OUTER JOIN WAM_SDITM C
+		   ON A.SDITM_ID = C.SDITM_ID
+		  AND C.REG_TYP_CD IN ('C', 'U')
+		 LEFT OUTER JOIN WAM_DMN D
+		   ON C.DMN_ID = D.DMN_ID
+		  AND D.REG_TYP_CD IN ('C', 'U')
+		 LEFT OUTER JOIN WAA_INFO_TYPE E
+		   ON D.INFOTP_ID = E.INFOTP_ID
+		  AND E.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	    WHERE 1=1
+          AND A.PDM_COL_ID = #{pdmColId,jdbcType=VARCHAR}
+ 	    ORDER BY A.PDM_COL_PNM, A.OBJ_VERS DESC, A.EXP_DTM DESC, A.STR_DTM DESC
+  </select>
+  
+     <select id="selectPdmColChgList" resultMap="BaseResultMap" parameterType="kr.wise.meta.model.service.WamPdmCol" >
+     --버전별 컬럼리스트 조회
+ SELECT * FROM 
+    (SELECT A.PDM_COL_ID
+	     , A.PDM_COL_LNM
+	     , A.PDM_COL_PNM
+	     , A.OBJ_DESCN
+	     , A.OBJ_VERS
+	     , DECODE(A.RQST_NO,B.RQST_NO, A.REG_TYP_CD,DECODE(#{objVers,jdbcType=VARCHAR},'1',A.REG_TYP_CD,NULL)) AS REG_TYP_CD
+	     , A.FRS_RQST_DTM
+	     , A.FRS_RQST_USER_ID
+	     , A.RQST_DTM
+	     , A.RQST_USER_ID
+	     , A.APRV_DTM
+	     , A.APRV_USER_ID
+	     , GET_USER_NM(A.FRS_RQST_USER_ID) AS FRS_RQST_USER_NM
+    	 , GET_USER_NM(A.RQST_USER_ID) AS RQST_USER_NM
+    	 , GET_USER_NM(A.APRV_USER_ID) AS APRV_USER_NM
+	     , B.PDM_TBL_ID
+	     , B.PDM_TBL_LNM
+	     , B.PDM_TBL_PNM
+	     , C.SUBJ_ID
+	     , C.FULL_PATH AS SUBJ_LNM
+	     , C.SUBJ_PNM
+	     , A.COL_ORD
+	     , B.FULL_PATH
+	     , CASE WHEN A.DATA_LEN IS NULL 
+                     THEN A.DATA_TYPE
+                     ELSE (CASE WHEN A.DATA_SCAL IS NOT NULL
+                                THEN A.DATA_TYPE || '(' || A.DATA_LEN ||','|| A.DATA_SCAL ||')' 
+                                ELSE A.DATA_TYPE || '(' || A.DATA_LEN ||')'
+                                 END )
+                     END AS DATA_TYPE
+		 , A.DATA_LEN
+		 , A.DATA_SCAL
+		 , A.PK_YN
+		 , A.PK_ORD
+		 , A.NONUL_YN
+		 , A.DEFLT_VAL
+		 , COALESCE(A.ENC_YN,'N') ENC_YN
+	  FROM WAH_ASIS_PDM_COL A
+	 INNER JOIN WAH_ASIS_PDM_TBL B
+	    ON A.PDM_TBL_ID = B.PDM_TBL_ID
+	 INNER JOIN WAA_SUBJ C
+	    ON B.SUBJ_ID = C.SUBJ_ID
+	   AND C.REG_TYP_CD IN ('C', 'U')
+	   AND C.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	<where>   
+	   AND B.OBJ_VERS = #{objVers,jdbcType=VARCHAR}
+       AND B.PDM_TBL_ID =#{pdmTblId,jdbcType=VARCHAR}
+<![CDATA[ AND A.OBJ_VERS <= #{objVers,jdbcType=VARCHAR}]]>
+<![CDATA[ AND A.OBJ_VERS = (SELECT MAX(OBJ_VERS) 
+                                  FROM WAH_ASIS_PDM_COL C 
+                                  WHERE A.PDM_COL_ID = C.PDM_COL_ID  
+                                  AND OBJ_VERS <= #{objVers,jdbcType=VARCHAR}
+                                  AND TO_NUMBER(SUBSTR(B.RQST_NO,5)) >= TO_NUMBER(SUBSTR(C.RQST_NO,5))
+                                  )]]>
+<![CDATA[ AND TO_NUMBER(SUBSTR(A.RQST_NO,5)) <= TO_NUMBER(SUBSTR(B.RQST_NO,5))]]>
+	    AND A.REG_TYP_CD IN ('C', 'U') 
+    </where>
+    UNION ALL
+        SELECT A.PDM_COL_ID
+	     , A.PDM_COL_LNM
+	     , A.PDM_COL_PNM
+	     , A.OBJ_DESCN
+	     , A.OBJ_VERS
+	     , DECODE(A.RQST_NO,B.RQST_NO, A.REG_TYP_CD,DECODE(#{objVers,jdbcType=VARCHAR},'1',A.REG_TYP_CD,NULL)) AS REG_TYP_CD
+	     , A.FRS_RQST_DTM
+	     , A.FRS_RQST_USER_ID
+	     , A.RQST_DTM
+	     , A.RQST_USER_ID
+	     , A.APRV_DTM
+	     , A.APRV_USER_ID
+	     , GET_USER_NM(A.FRS_RQST_USER_ID) AS FRS_RQST_USER_NM
+    	 , GET_USER_NM(A.RQST_USER_ID) AS RQST_USER_NM
+    	 , GET_USER_NM(A.APRV_USER_ID) AS APRV_USER_NM
+	     , B.PDM_TBL_ID
+	     , B.PDM_TBL_LNM
+	     , B.PDM_TBL_PNM
+	     , C.SUBJ_ID
+	     , C.FULL_PATH AS SUBJ_LNM
+	     , C.SUBJ_PNM
+	     , A.COL_ORD
+	     , B.FULL_PATH
+	     ,CASE WHEN A.DATA_LEN IS NULL 
+                     THEN A.DATA_TYPE
+                     ELSE (CASE WHEN A.DATA_SCAL IS NOT NULL
+                                THEN A.DATA_TYPE || '(' || A.DATA_LEN ||','|| A.DATA_SCAL ||')' 
+                                ELSE A.DATA_TYPE || '(' || A.DATA_LEN ||')'
+                                 END )
+                     END AS DATA_TYPE
+		 , A.DATA_LEN
+		 , A.DATA_SCAL
+		 , A.PK_YN
+		 , A.PK_ORD
+		 , A.NONUL_YN
+		 , A.DEFLT_VAL
+		 , COALESCE(A.ENC_YN,'N') ENC_YN
+	  FROM WAH_ASIS_PDM_COL A
+	 INNER JOIN WAH_ASIS_PDM_TBL B
+	    ON A.PDM_TBL_ID = B.PDM_TBL_ID
+	 INNER JOIN WAA_SUBJ C
+	    ON B.SUBJ_ID = C.SUBJ_ID
+	   AND C.REG_TYP_CD IN ('C', 'U')
+	   AND C.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	<where>   
+	  AND B.OBJ_VERS = #{objVers,jdbcType=VARCHAR}
+      AND B.PDM_TBL_ID = #{pdmTblId,jdbcType=VARCHAR}
+      AND A.RQST_NO = B.RQST_NO
+      AND A.REG_TYP_CD IN ('D')
+    </where>
+    )
+    ORDER BY FULL_PATH, PDM_TBL_LNM, COL_ORD
+    		 
+  </select>
+  
+  <select id="selectColNonStndList" resultMap="BaseResultMap" parameterType="kr.wise.meta.model.service.WamPdmCol" >
+    SELECT
+<!--     <include refid="Base_Column_List" /> -->
+  			  A.PDM_COL_ID
+			, A.PDM_COL_PNM
+			, A.PDM_COL_LNM
+			, A.PDM_TBL_ID
+			, A.SDITM_ID
+			, C.SDITM_LNM
+			, C.SDITM_PNM
+			, D.DMN_ID
+			, D.DMN_LNM
+			, D.DMN_PNM
+			, E.INFOTP_ID
+			, E.INFOTP_LNM
+			, E.DATA_TYPE AS SDITM_DATA_TYPE
+			, E.DATA_LEN  AS SDITM_DATA_LEN 
+			, E.DATA_SCAL AS SDITM_DATA_SCAL
+			, A.COL_ORD
+<!-- 			, CASE WHEN A.DATA_LEN IS NULL  -->
+<!--                      THEN A.DATA_TYPE -->
+<!--                      ELSE (CASE WHEN A.DATA_SCAL IS NOT NULL -->
+<!--                                 THEN A.DATA_TYPE || '(' || A.DATA_LEN ||','|| A.DATA_SCAL ||')'  -->
+<!--                                 ELSE A.DATA_TYPE || '(' || A.DATA_LEN ||')' -->
+<!--                                  END ) -->
+<!--                      END AS DATA_TYPE -->
+            , A.DATA_TYPE
+            , A.DATA_LEN
+            , A.DATA_SCAL
+			, COALESCE(A.PK_YN, 'N') AS PK_YN
+			, A.PK_ORD
+			, COALESCE(A.NONUL_YN, 'N') AS NONUL_YN
+			, A.DEFLT_VAL
+			, A.ENC_YN
+			, A.OBJ_DESCN
+			, A.OBJ_VERS
+			, A.REG_TYP_CD
+			, A.FRS_RQST_DTM
+			, A.FRS_RQST_USER_ID
+			, A.RQST_DTM
+			, A.RQST_USER_ID
+			, A.APRV_DTM
+			, A.APRV_USER_ID
+			, B.PDM_TBL_LNM
+			, B.PDM_TBL_PNM
+			, B.SUBJ_ID
+            , SUBJ.SUBJ_LNM
+            , SUBJ.SUBJ_PNM
+            , SUBJ.FULL_PATH
+            , B.STD_APL_YN
+	    	, GET_USER_NM(A.FRS_RQST_USER_ID) AS FRS_RQST_USER_NM
+    		, GET_USER_NM(A.RQST_USER_ID) AS RQST_USER_NM
+    		, GET_USER_NM(A.APRV_USER_ID) AS APRV_USER_NM
+    		,CASE WHEN  COALESCE(A.PDM_COL_LNM,'X') != RTRIM(C.SDITM_LNM,'_0123456789') THEN 'N' 
+                  ELSE 		
+            			CASE WHEN  COALESCE(C.SDITM_ID,'X') = 'X' AND       		 
+                   			COALESCE(A.PDM_COL_PNM,'X') = RTRIM(C.SDITM_PNM,'_0123456789') AND 
+                   			COALESCE(A.DATA_TYPE,'X') = COALESCE(E.DATA_TYPE,'X') AND 
+                   			COALESCE(A.DATA_LEN,'0') = COALESCE(E.DATA_LEN,'0') AND 
+                   			COALESCE(A.DATA_SCAL,'0') = COALESCE(E.DATA_SCAL,'0')  
+                   		THEN 'Y' 
+                   		ELSE 'E' 
+                   		END 
+             END AS ITEM_STATUS,
+             CASE WHEN COALESCE(C.SDITM_ID,'X') != 'X' THEN 
+                   CASE WHEN COALESCE(A.SDITM_ID,'X') != COALESCE(C.SDITM_ID,'X') THEN '항목정보 또는 ID 다름' 
+                        ELSE '정상' 
+                   END  
+              ELSE '미존재'      
+             END AS ERR_ITEM_ID_YN     
+            ,CASE WHEN COALESCE(C.SDITM_PNM,'X') != 'X' THEN 
+                   CASE WHEN  COALESCE(RTRIM(A.PDM_COL_PNM,'_0123456789'),'X') != C.SDITM_PNM THEN '항목영문명과다름'  
+                        ELSE '정상' 
+                   END  
+              ELSE '미존재'       
+             END AS ERR_COL_PNM_YN 
+            ,CASE WHEN COALESCE(RTRIM(A.PDM_COL_LNM,'_0123456789'),'X') = C.SDITM_LNM THEN 
+                CASE WHEN COALESCE(A.DATA_TYPE,'X') != COALESCE(E.DATA_TYPE,'X') THEN '데이터타입다름(COL:'|| A.DATA_TYPE ||',ITEM:' || E.DATA_TYPE ||')'  
+                   ELSE '정상' 
+                END 
+              ELSE ''    
+             END  AS ERR_DATA_TYPE_YN 
+            ,CASE WHEN COALESCE(RTRIM(A.PDM_COL_LNM,'_0123456789'),'X') = C.SDITM_LNM THEN 
+                 CASE WHEN COALESCE(A.DATA_LEN,'0') != COALESCE(E.DATA_LEN,'0') THEN '데이터길이다름(COL:'|| A.DATA_LEN ||',ITEM:' || E.DATA_LEN ||')'  
+                       ELSE '정상' 
+                 END  
+                 ELSE '' 
+             END AS ERR_DATA_LENGTH_YN 
+            ,CASE WHEN COALESCE(RTRIM(A.PDM_COL_LNM,'_0123456789'),'X') = C.SDITM_LNM THEN 
+                 CASE WHEN COALESCE(A.DATA_SCAL,'0') != COALESCE(E.DATA_SCAL,'0') THEN '소수점다름(COL:'|| A.DATA_SCAL ||',ITEM:' || E.DATA_SCAL ||')'   
+                       ELSE '정상' 
+                 END  
+              ELSE ''    
+             END AS ERR_DATA_SCALE_YN 
+     FROM WAM_ASIS_PDM_TBL B
+    	    INNER JOIN WAM_ASIS_PDM_COL A
+               ON B.PDM_TBL_ID = A.PDM_TBL_ID
+			 AND A.REG_TYP_CD IN ('C', 'U')
+			  LEFT OUTER JOIN WAM_SDITM C
+				ON RTRIM(A.PDM_COL_LNM,'_0123456789') = C.SDITM_LNM
+			   AND C.REG_TYP_CD IN ('C', 'U')
+			  LEFT OUTER JOIN WAM_DMN D
+			    ON C.DMN_ID = D.DMN_ID
+			   AND D.REG_TYP_CD IN ('C', 'U')
+			  LEFT OUTER JOIN WAA_INFO_TYPE E
+			    ON D.INFOTP_ID = E.INFOTP_ID
+			   AND E.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+			   LEFT OUTER JOIN WAA_SUBJ SUBJ
+               ON B.SUBJ_ID = SUBJ.SUBJ_ID
+               AND SUBJ.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD')
+               AND SUBJ.REG_TYP_CD IN ('C', 'U') 
+    <where>
+    
+    	AND B.REG_TYP_CD IN ('C', 'U')
+<!--     	    AND SUBJ.STD_APL_YN ='N'   -->
+<!--     	gap 분석 물리테이블ID 는 필수 입력항목 입니다. -->
+      	<if test="pdmTblId != null">
+    	AND B.PDM_TBL_ID = #{pdmTblId,jdbcType=VARCHAR}
+    	</if>
+    	<if test="tgtColId != null and tgtColId != '' ">
+    	AND A.PDM_COL_ID = #{tgtColId,jdbcType=VARCHAR}
+    	</if>
+    	<if test="pdmTblLnm != null and pdmTblLnm != '' ">
+    	AND (B.PDM_TBL_LNM LIKE '%'||#{pdmTblLnm,jdbcType=VARCHAR}||'%' OR B.PDM_TBL_PNM LIKE '%'||#{pdmTblLnm,jdbcType=VARCHAR}||'%')
+    	</if>
+    	<if test="pdmColLnm != null and pdmColLnm != '' "> 
+    	AND (A.PDM_COL_LNM LIKE '%'||#{pdmColLnm,jdbcType=VARCHAR}||'%' OR A.PDM_COL_PNM LIKE '%'||#{pdmColLnm,jdbcType=VARCHAR}||'%')
+    	</if>
+    	<if test="subjId != null and subjId != '' ">
+    	AND B.SUBJ_ID = #{subjId,jdbcType=VARCHAR}
+    	</if>
+    	<if test="subjLnm != null and subjLnm != '' ">
+    	AND SUBJ.FULL_PATH LIKE '%'||#{subjLnm,jdbcType=VARCHAR}||'%'
+    	</if>
+    	<if test="stdAplYn != null and stdAplYn != '' ">
+    	AND B.STD_APL_YN = #{stdAplYn,jdbcType=VARCHAR}
+    	</if>
+    	
+<!--           <if test="pdmColPnm != null" > -->
+<!--         AND A.PDM_COL_PNM LIKE  '%'||#{pdmColPnm,jdbcType=VARCHAR}||'%' -->
+<!--       </if> -->
+<!--       <if test="pdmColLnm != null" > -->
+<!--         AND A.PDM_COL_LNM = #{pdmColLnm,jdbcType=VARCHAR} -->
+<!--       </if> -->
+    </where>
+    ORDER BY B.PDM_TBL_LNM, A.COL_ORD
+  </select>
+  
+  
+</mapper>

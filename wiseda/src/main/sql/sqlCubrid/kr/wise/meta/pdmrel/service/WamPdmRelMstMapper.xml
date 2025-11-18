@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.meta.pdmrel.service.WamPdmRelMstMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.meta.pdmrel.service.WamPdmRelMst" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+
+    <result column="PDM_REL_PNM"    property="pdmRelPnm"   jdbcType="VARCHAR" />
+    <result column="PDM_REL_LNM"    property="pdmRelLnm"   jdbcType="VARCHAR" />
+    <result column="PDM_REL_ID"     property="pdmRelId"    jdbcType="VARCHAR" />                                     
+    <result column="REL_TYP_CD"     property="relTypCd"    jdbcType="VARCHAR" />
+    <result column="CRD_TYP_CD"     property="crdTypCd"    jdbcType="VARCHAR" />
+    <result column="PA_OPT_TYP_CD"  property="paOptTypCd"  jdbcType="VARCHAR" />
+    <result column="PA_SUBJ_ID"     property="paSubjId"    jdbcType="VARCHAR" />
+    <result column="PA_FULL_PATH"   property="paFullPath"  jdbcType="VARCHAR" />
+    <result column="PA_TBL_ID"      property="paTblId"     jdbcType="VARCHAR" />
+    <result column="PA_TBL_PNM"     property="paTblPnm"    jdbcType="VARCHAR" />
+    <result column="PA_COL_ID"      property="paColId"     jdbcType="VARCHAR" />
+    <result column="PA_COL_PNM"     property="paColPnm"    jdbcType="VARCHAR" />   
+    <result column="CH_SUBJ_ID"     property="chSubjId"    jdbcType="VARCHAR" />
+    <result column="CH_FULL_PATH"   property="chFullPath"  jdbcType="VARCHAR" />
+    <result column="CH_TBL_ID"      property="chTblId"     jdbcType="VARCHAR" />
+    <result column="CH_TBL_PNM"     property="chTblPnm"    jdbcType="VARCHAR" />     
+    <result column="CH_COL_ID"      property="chColId"     jdbcType="VARCHAR" />
+    <result column="CH_COL_PNM"     property="chColPnm"    jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >      
+      
+      PDM_REL_ID
+    , PDM_REL_LNM
+    , PDM_REL_PNM    
+    , REL_TYP_CD
+    , CRD_TYP_CD 
+    , PA_OPT_TYP_CD
+    , PA_SUBJ_ID
+    , PA_FULL_PATH
+    , PA_TBL_ID
+    , PA_TBL_PNM
+    , CH_SUBJ_ID
+    , CH_FULL_PATH
+    , CH_TBL_ID
+    , CH_TBL_PNM
+    , RQST_NO, RQST_SNO, RQST_DTL_SNO    
+    , OBJ_DESCN, OBJ_VERS
+    , REG_TYP_CD, FRS_RQST_DTM, FRS_RQST_USER_ID 
+    , RQST_DTM, RQST_USER_ID, APRV_DTM, APRV_USER_ID
+  </sql>
+  
+  <sql id="Base_Column_List2" >
+      A.RQST_NO
+    , A.RQST_SNO
+    , A.RQST_DTL_SNO    
+    , A.PDM_REL_ID
+    , A.PDM_REL_PNM
+    , A.PDM_REL_LNM    
+    , A.REL_TYP_CD
+    , A.CRD_TYP_CD 
+    , A.PA_OPT_TYP_CD
+    , A.PA_SUBJ_ID, A.PA_FULL_PATH
+    , A.PA_TBL_ID, A.PA_TBL_PNM
+    , B.PA_COL_ID
+    , B.PA_COL_PNM 
+    , A.CH_SUBJ_ID, A.CH_FULL_PATH
+    , A.CH_TBL_ID, A.CH_TBL_PNM
+    , B.CH_COL_ID
+    , B.CH_COL_PNM
+    , A.OBJ_DESCN, A.OBJ_VERS, A.REG_TYP_CD
+    , A.FRS_RQST_DTM
+    , A.FRS_RQST_USER_ID 
+    , A.RQST_DTM
+    , A.RQST_USER_ID
+    , (SELECT USER_NM FROM WAA_USER WHERE USER_ID = A.RQST_USER_ID AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD') AND REG_TYP_CD IN ('C','U')) AS RQST_USER_NM
+    , A.APRV_DTM
+    , A.APRV_USER_ID
+  </sql>
+  
+  <select id="selectWamPdmRelList" resultMap="BaseResultMap" parameterType="map" >
+   SELECT <include refid="Base_Column_List" />
+     FROM WAM_PDM_REL_MST         
+    WHERE 1 = 1
+      <if test="paFullPath != null" >
+      	AND PA_FULL_PATH LIKE #{paFullPath,jdbcType=VARCHAR}
+      </if>
+      <if test="paTblPnm != null" >
+      	AND PA_TBL_PNM LIKE #{paTblPnm,jdbcType=VARCHAR}
+      </if>
+  </select>
+  
+  <select id="selectWamPdmRelColList" resultMap="BaseResultMap" parameterType="map" >
+   SELECT <include refid="Base_Column_List2" />
+     FROM WAM_PDM_REL_MST A       
+          INNER JOIN WAM_PDM_REL_COL B
+             ON B.PDM_REL_ID = A.PDM_REL_ID
+    WHERE 1 = 1
+      <if test="chFullPath != null" >
+      	AND A.CH_FULL_PATH LIKE #{chFullPath,jdbcType=VARCHAR}
+      </if>
+      <if test="paTblPnm != null" >
+      	AND A.PA_TBL_PNM LIKE #{paTblPnm,jdbcType=VARCHAR}
+      </if>
+      <if test="chTblPnm != null" >
+      	AND A.CH_TBL_PNM LIKE #{chTblPnm,jdbcType=VARCHAR}
+      </if>
+  </select>
+  
+</mapper>

@@ -1,0 +1,941 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.meta.dbc.service.WatDbcColMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.meta.dbc.service.WatDbcCol" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+    <id column="DB_SCH_ID" property="dbSchId" jdbcType="VARCHAR" />
+    <id column="DBC_TBL_NM" property="dbcTblNm" jdbcType="VARCHAR" />
+    <id column="DBC_COL_NM" property="dbcColNm" jdbcType="VARCHAR" />
+    <result column="DBC_COL_KOR_NM" property="dbcColKorNm" jdbcType="VARCHAR" />
+    <result column="VERS" property="vers" jdbcType="DECIMAL" />
+    <result column="REG_TYP" property="regTyp" jdbcType="VARCHAR" />
+    <result column="REG_DTM" property="regDtm" jdbcType="TIMESTAMP" />
+    <result column="UPD_DTM" property="updDtm" jdbcType="TIMESTAMP" />
+    <result column="DESCN" property="descn" jdbcType="VARCHAR" />
+    <result column="DDL_COL_ID" property="ddlColId" jdbcType="VARCHAR" />
+    <result column="PDM_COL_ID" property="pdmColId" jdbcType="VARCHAR" />
+    <result column="ITM_ID" property="itmId" jdbcType="VARCHAR" />
+    <result column="ITM_PNM" property="itmPnm" jdbcType="VARCHAR" />
+    <result column="ITM_LNM" property="itmLnm" jdbcType="VARCHAR" />
+    <result column="DATA_TYPE" property="dataType" jdbcType="VARCHAR" />
+    <result column="DATA_LEN" property="dataLen" jdbcType="DECIMAL" />
+    <result column="DATA_PNUM" property="dataPnum" jdbcType="DECIMAL" />
+    <result column="DATA_PNT" property="dataPnt" jdbcType="DECIMAL" />
+    <result column="NULL_YN" property="nullYn" jdbcType="VARCHAR" />
+    <result column="DEFLT_LEN" property="defltLen" jdbcType="DECIMAL" />
+    <result column="DEFLT_VAL" property="defltVal" jdbcType="VARCHAR" />
+    <result column="PK_YN" property="pkYn" jdbcType="VARCHAR" />
+    <result column="ORD" property="ord" jdbcType="DECIMAL" />
+    <result column="PK_ORD" property="pkOrd" jdbcType="DECIMAL" />
+    <result column="COL_DESCN" property="colDescn" jdbcType="VARCHAR" />
+    <result column="COL_DQ_EXP_YN" property="colDqExpYn" jdbcType="VARCHAR" />
+    <result column="DDL_COL_EXTNC_YN" property="ddlColExtncYn" jdbcType="VARCHAR" />
+    <result column="DDL_ORD_ERR_EXS" property="ddlOrdErrExs" jdbcType="VARCHAR" />
+    <result column="DDL_PK_YN_ERR_EXS" property="ddlPkYnErrExs" jdbcType="VARCHAR" />
+    <result column="DDL_PK_ORD_ERR_EXS" property="ddlPkOrdErrExs" jdbcType="VARCHAR" />
+    <result column="DDL_NULL_YN_ERR_EXS" property="ddlNullYnErrExs" jdbcType="VARCHAR" />
+    <result column="DDL_DEFLT_ERR_EXS" property="ddlDefltErrExs" jdbcType="VARCHAR" />
+    <result column="DDL_CMMT_ERR_EXS" property="ddlCmmtErrExs" jdbcType="VARCHAR" />
+    <result column="DDL_DATA_TYPE_ERR_EXS" property="ddlDataTypeErrExs" jdbcType="VARCHAR" />
+    <result column="DDL_DATA_LEN_ERR_EXS" property="ddlDataLenErrExs" jdbcType="VARCHAR" />
+    <result column="DDL_DATA_PNT_ERR_EXS" property="ddlDataPntErrExs" jdbcType="VARCHAR" />
+    <result column="DDL_COL_ERR_EXS" property="ddlColErrExs" jdbcType="VARCHAR" />
+    <result column="PDM_COL_EXTNC_EXS" property="pdmColExtncExs" jdbcType="VARCHAR" />
+    <result column="PDM_ORD_ERR_EXS" property="pdmOrdErrExs" jdbcType="VARCHAR" />
+    <result column="PDM_PK_YN_ERR_EXS" property="pdmPkYnErrExs" jdbcType="VARCHAR" />
+    <result column="PDM_PK_ORD_ERR_EXS" property="pdmPkOrdErrExs" jdbcType="VARCHAR" />
+    <result column="PDM_NULL_YN_ERR_EXS" property="pdmNullYnErrExs" jdbcType="VARCHAR" />
+    <result column="PDM_DEFLT_ERR_EXS" property="pdmDefltErrExs" jdbcType="VARCHAR" />
+    <result column="PDM_CMMT_ERR_EXS" property="pdmCmmtErrExs" jdbcType="VARCHAR" />
+    <result column="PDM_DATA_TYPE_ERR_EXS" property="pdmDataTypeErrExs" jdbcType="VARCHAR" />
+    <result column="PDM_DATA_LEN_ERR_EXS" property="pdmDataLenErrExs" jdbcType="VARCHAR" />
+    <result column="PDM_DATA_PNT_ERR_EXS" property="pdmDataPntErrExs" jdbcType="VARCHAR" />
+    <result column="PDM_COL_ERR_EXS" property="pdmColErrExs" jdbcType="VARCHAR" />
+    <result column="COL_ERR_CONTS" property="colErrConts" jdbcType="VARCHAR" />
+    
+    <result column="DB_CONN_TRG_LNM" property="dbConnTrgLnm" jdbcType="VARCHAR" />
+    <result column="DB_SCH_LNM" property="dbSchLnm" jdbcType="VARCHAR" />
+    <result column="DB_CONN_TRG_PNM" property="dbConnTrgPnm" jdbcType="VARCHAR" />
+    <result column="DB_SCH_PNM" property="dbSchPnm" jdbcType="VARCHAR" />
+    <result column="SUBJ_LNM" property="subjLnm" jdbcType="VARCHAR" />
+    <result column="DDL_TBL_LNM" property="ddlTblLnm" jdbcType="VARCHAR" />
+    <result column="PDM_TBL_LNM" property="pdmTblLnm" jdbcType="VARCHAR" />
+    <result column="DDL_COL_LNM" property="ddlColLnm" jdbcType="VARCHAR" />
+    <result column="PDM_COL_LNM" property="pdmColLnm" jdbcType="VARCHAR" />
+    <result column="FULL_PATH" property="fullPath" jdbcType="VARCHAR" />
+    <result column="DDL_TBL_PNM" property="ddlTblPnm" jdbcType="VARCHAR" />
+    <result column="PDM_TBL_PNM" property="pdmTblPnm" jdbcType="VARCHAR" />
+    <result column="DDL_COL_PNM" property="ddlColPnm" jdbcType="VARCHAR" />
+    <result column="PDM_COL_PNM" property="pdmColPnm" jdbcType="VARCHAR" />
+    <result column="DB_CONN_TRG_ID" property="dbConnTrgId" jdbcType="VARCHAR" />
+    <result column="PRF_KND_CD" property="prfKndCd" jdbcType="VARCHAR" />
+<!--     <result column="OBJ_NM" property="objNm" jdbcType="VARCHAR" /> -->
+<!--     <result column="CRD_ANA_YN" property="crdAnaYn" jdbcType="VARCHAR" /> -->
+<!--     <result column="MIN_MAX_VAL_ANA_YN" property="minMaxValAnaYn" jdbcType="VARCHAR" /> -->
+<!--     <result column="AONL_YN" property="aonlYn" jdbcType="VARCHAR" /> -->
+<!--     <result column="LEN_ANA_YN" property="lenAnaYn" jdbcType="VARCHAR" /> -->
+<!--     <result column="RQST_DCD" property="rqstDcd" jdbcType="VARCHAR" /> -->
+    
+    
+  </resultMap>
+  <resultMap id="BaseResultRetMap" type="HashMap" extends="BaseResultMap">
+  </resultMap>
+  <sql id="Base_Column_List" >
+    DB_SCH_ID, DBC_TBL_NM, DBC_COL_NM, DBC_COL_KOR_NM, VERS, REG_TYP, REG_DTM, UPD_DTM, 
+    DESCN, DDL_COL_ID, PDM_COL_ID, ITM_ID, DATA_TYPE, DATA_LEN, DATA_PNUM, DATA_PNT, 
+    NULL_YN, DEFLT_LEN, DEFLT_VAL, PK_YN, ORD, PK_ORD, COL_DESCN, COL_DQ_EXP_YN, DDL_COL_EXTNC_YN, 
+    DDL_ORD_ERR_EXS, DDL_PK_YN_ERR_EXS, DDL_PK_ORD_ERR_EXS, DDL_NULL_YN_ERR_EXS, DDL_DEFLT_ERR_EXS, 
+    DDL_CMMT_ERR_EXS, DDL_DATA_TYPE_ERR_EXS, DDL_DATA_LEN_ERR_EXS, DDL_DATA_PNT_ERR_EXS, 
+    DDL_COL_ERR_EXS, PDM_COL_EXTNC_EXS, PDM_ORD_ERR_EXS, PDM_PK_YN_ERR_EXS, PDM_PK_ORD_ERR_EXS, 
+    PDM_NULL_YN_ERR_EXS, PDM_DEFLT_ERR_EXS, PDM_CMMT_ERR_EXS, PDM_DATA_TYPE_ERR_EXS, 
+    PDM_DATA_LEN_ERR_EXS, PDM_DATA_PNT_ERR_EXS, PDM_COL_ERR_EXS, COL_ERR_CONTS
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="map" >
+    SELECT /* WatDbcColMapper.selectByPrimaryKey */
+    	A.*
+      ,C.DB_SCH_LNM
+	  ,D.DB_CONN_TRG_LNM
+	  ,E.SUBJ_LNM
+	  ,F.DDL_TBL_LNM
+	  ,G.PDM_TBL_LNM
+      ,H.PDM_COL_LNM
+      ,I.DDL_COL_LNM
+
+    FROM WAT_DBC_COL A
+        INNER JOIN WAT_DBC_TBL B
+            ON A.DB_SCH_ID = B.DB_SCH_ID
+            AND A.DBC_TBL_NM = B.DBC_TBL_NM
+	    LEFT OUTER JOIN WAA_DB_SCH C
+	        ON B.DB_SCH_ID = C.DB_SCH_ID
+	        AND C.REG_TYP_CD IN ('C', 'U')
+	        AND C.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+<!-- 	        AND IFNULL(B.REG_TYP, 'C') IN ('C', 'U') -->
+	    LEFT OUTER JOIN WAA_DB_CONN_TRG D
+	        ON B.DB_CONN_TRG_ID = D.DB_CONN_TRG_ID
+	        AND D.REG_TYP_CD IN ('C', 'U')
+	        AND D.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	    LEFT OUTER JOIN WAA_SUBJ E
+	        ON B.SUBJ_ID = E.SUBJ_ID
+	        AND E.REG_TYP_CD IN ('C', 'U')
+	        AND E.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	    LEFT OUTER JOIN WAM_DDL_TBL F
+	        ON B.DDL_TBL_ID = F.DDL_TBL_ID
+	        AND F.REG_TYP_CD IN ('C', 'U')
+	    LEFT OUTER JOIN WAM_PDM_TBL G
+	        ON B.PDM_TBL_ID = G.PDM_TBL_ID
+	        AND G.REG_TYP_CD IN ('C', 'U')
+        LEFT OUTER JOIN WAM_PDM_COL H
+            ON G.PDM_TBL_ID = H.PDM_TBL_ID
+            AND A.PDM_COL_ID = H.PDM_COL_ID
+            AND H.REG_TYP_CD IN ('C', 'U')
+        LEFT OUTER JOIN WAM_DDL_COL I
+            ON F.DDL_TBL_ID = I.DDL_TBL_ID
+            AND A.DDL_COL_ID = I.DDL_COL_ID
+            AND I.REG_TYP_CD IN ('C', 'U')
+	        
+    where A.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+      and A.DBC_TBL_NM = #{dbcTblNm,jdbcType=VARCHAR}
+      and A.DBC_COL_NM = #{dbcColNm,jdbcType=VARCHAR}
+<!--       AND IFNULL(A.REG_TYP, 'C') IN ('C', 'U') -->
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="map" >
+    delete /* WatDbcColMapper.deleteByPrimaryKey */
+    from WAT_DBC_COL
+    where DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+      and DBC_TBL_NM = #{dbcTblNm,jdbcType=VARCHAR}
+      and DBC_COL_NM = #{dbcColNm,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="kr.wise.meta.dbc.service.WatDbcCol" >
+    insert 	/* WatDbcColMapper.insert */
+    		into WAT_DBC_COL (DB_SCH_ID, DBC_TBL_NM, DBC_COL_NM, 
+      DBC_COL_KOR_NM, VERS, REG_TYP, 
+      REG_DTM, UPD_DTM, DESCN, 
+      DDL_COL_ID, PDM_COL_ID, ITM_ID, 
+      DATA_TYPE, DATA_LEN, DATA_PNUM, 
+      DATA_PNT, NULL_YN, DEFLT_LEN, 
+      DEFLT_VAL, PK_YN, ORD, 
+      PK_ORD, COL_DESCN, COL_DQ_EXP_YN, 
+      DDL_COL_EXTNC_YN, DDL_ORD_ERR_EXS, DDL_PK_YN_ERR_EXS, 
+      DDL_PK_ORD_ERR_EXS, DDL_NULL_YN_ERR_EXS, DDL_DEFLT_ERR_EXS, 
+      DDL_CMMT_ERR_EXS, DDL_DATA_TYPE_ERR_EXS, DDL_DATA_LEN_ERR_EXS, 
+      DDL_DATA_PNT_ERR_EXS, DDL_COL_ERR_EXS, PDM_COL_EXTNC_EXS, 
+      PDM_ORD_ERR_EXS, PDM_PK_YN_ERR_EXS, PDM_PK_ORD_ERR_EXS, 
+      PDM_NULL_YN_ERR_EXS, PDM_DEFLT_ERR_EXS, PDM_CMMT_ERR_EXS, 
+      PDM_DATA_TYPE_ERR_EXS, PDM_DATA_LEN_ERR_EXS, PDM_DATA_PNT_ERR_EXS, 
+      PDM_COL_ERR_EXS, COL_ERR_CONTS)
+    values (#{dbSchId,jdbcType=VARCHAR}, #{dbcTblNm,jdbcType=VARCHAR}, #{dbcColNm,jdbcType=VARCHAR}, 
+      #{dbcColKorNm,jdbcType=VARCHAR}, #{vers,jdbcType=DECIMAL}, #{regTyp,jdbcType=VARCHAR}, 
+      #{regDtm,jdbcType=TIMESTAMP}, #{updDtm,jdbcType=TIMESTAMP}, #{descn,jdbcType=VARCHAR}, 
+      #{ddlColId,jdbcType=VARCHAR}, #{pdmColId,jdbcType=VARCHAR}, #{itmId,jdbcType=VARCHAR}, 
+      #{dataType,jdbcType=VARCHAR}, #{dataLen,jdbcType=DECIMAL}, #{dataPnum,jdbcType=DECIMAL}, 
+      #{dataPnt,jdbcType=DECIMAL}, #{nullYn,jdbcType=VARCHAR}, #{defltLen,jdbcType=DECIMAL}, 
+      #{defltVal,jdbcType=VARCHAR}, #{pkYn,jdbcType=VARCHAR}, #{ord,jdbcType=DECIMAL}, 
+      #{pkOrd,jdbcType=DECIMAL}, #{colDescn,jdbcType=VARCHAR}, #{colDqExpYn,jdbcType=VARCHAR}, 
+      #{ddlColExtncYn,jdbcType=VARCHAR}, #{ddlOrdErrExs,jdbcType=VARCHAR}, #{ddlPkYnErrExs,jdbcType=VARCHAR}, 
+      #{ddlPkOrdErrExs,jdbcType=VARCHAR}, #{ddlNullYnErrExs,jdbcType=VARCHAR}, #{ddlDefltErrExs,jdbcType=VARCHAR}, 
+      #{ddlCmmtErrExs,jdbcType=VARCHAR}, #{ddlDataTypeErrExs,jdbcType=VARCHAR}, #{ddlDataLenErrExs,jdbcType=VARCHAR}, 
+      #{ddlDataPntErrExs,jdbcType=VARCHAR}, #{ddlColErrExs,jdbcType=VARCHAR}, #{pdmColExtncExs,jdbcType=VARCHAR}, 
+      #{pdmOrdErrExs,jdbcType=VARCHAR}, #{pdmPkYnErrExs,jdbcType=VARCHAR}, #{pdmPkOrdErrExs,jdbcType=VARCHAR}, 
+      #{pdmNullYnErrExs,jdbcType=VARCHAR}, #{pdmDefltErrExs,jdbcType=VARCHAR}, #{pdmCmmtErrExs,jdbcType=VARCHAR}, 
+      #{pdmDataTypeErrExs,jdbcType=VARCHAR}, #{pdmDataLenErrExs,jdbcType=VARCHAR}, #{pdmDataPntErrExs,jdbcType=VARCHAR}, 
+      #{pdmColErrExs,jdbcType=VARCHAR}, #{colErrConts,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="kr.wise.meta.dbc.service.WatDbcCol" >
+    insert 	/* WatDbcColMapper.insertSelective */
+    		into WAT_DBC_COL
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="dbSchId != null" >
+        DB_SCH_ID,
+      </if>
+      <if test="dbcTblNm != null" >
+        DBC_TBL_NM,
+      </if>
+      <if test="dbcColNm != null" >
+        DBC_COL_NM,
+      </if>
+      <if test="dbcColKorNm != null" >
+        DBC_COL_KOR_NM,
+      </if>
+      <if test="vers != null" >
+        VERS,
+      </if>
+      <if test="regTyp != null" >
+        REG_TYP,
+      </if>
+      <if test="regDtm != null" >
+        REG_DTM,
+      </if>
+      <if test="updDtm != null" >
+        UPD_DTM,
+      </if>
+      <if test="descn != null" >
+        DESCN,
+      </if>
+      <if test="ddlColId != null" >
+        DDL_COL_ID,
+      </if>
+      <if test="pdmColId != null" >
+        PDM_COL_ID,
+      </if>
+      <if test="itmId != null" >
+        ITM_ID,
+      </if>
+      <if test="dataType != null" >
+        DATA_TYPE,
+      </if>
+      <if test="dataLen != null" >
+        DATA_LEN,
+      </if>
+      <if test="dataPnum != null" >
+        DATA_PNUM,
+      </if>
+      <if test="dataPnt != null" >
+        DATA_PNT,
+      </if>
+      <if test="nullYn != null" >
+        NULL_YN,
+      </if>
+      <if test="defltLen != null" >
+        DEFLT_LEN,
+      </if>
+      <if test="defltVal != null" >
+        DEFLT_VAL,
+      </if>
+      <if test="pkYn != null" >
+        PK_YN,
+      </if>
+      <if test="ord != null" >
+        ORD,
+      </if>
+      <if test="pkOrd != null" >
+        PK_ORD,
+      </if>
+      <if test="colDescn != null" >
+        COL_DESCN,
+      </if>
+      <if test="colDqExpYn != null" >
+        COL_DQ_EXP_YN,
+      </if>
+      <if test="ddlColExtncYn != null" >
+        DDL_COL_EXTNC_YN,
+      </if>
+      <if test="ddlOrdErrExs != null" >
+        DDL_ORD_ERR_EXS,
+      </if>
+      <if test="ddlPkYnErrExs != null" >
+        DDL_PK_YN_ERR_EXS,
+      </if>
+      <if test="ddlPkOrdErrExs != null" >
+        DDL_PK_ORD_ERR_EXS,
+      </if>
+      <if test="ddlNullYnErrExs != null" >
+        DDL_NULL_YN_ERR_EXS,
+      </if>
+      <if test="ddlDefltErrExs != null" >
+        DDL_DEFLT_ERR_EXS,
+      </if>
+      <if test="ddlCmmtErrExs != null" >
+        DDL_CMMT_ERR_EXS,
+      </if>
+      <if test="ddlDataTypeErrExs != null" >
+        DDL_DATA_TYPE_ERR_EXS,
+      </if>
+      <if test="ddlDataLenErrExs != null" >
+        DDL_DATA_LEN_ERR_EXS,
+      </if>
+      <if test="ddlDataPntErrExs != null" >
+        DDL_DATA_PNT_ERR_EXS,
+      </if>
+      <if test="ddlColErrExs != null" >
+        DDL_COL_ERR_EXS,
+      </if>
+      <if test="pdmColExtncExs != null" >
+        PDM_COL_EXTNC_EXS,
+      </if>
+      <if test="pdmOrdErrExs != null" >
+        PDM_ORD_ERR_EXS,
+      </if>
+      <if test="pdmPkYnErrExs != null" >
+        PDM_PK_YN_ERR_EXS,
+      </if>
+      <if test="pdmPkOrdErrExs != null" >
+        PDM_PK_ORD_ERR_EXS,
+      </if>
+      <if test="pdmNullYnErrExs != null" >
+        PDM_NULL_YN_ERR_EXS,
+      </if>
+      <if test="pdmDefltErrExs != null" >
+        PDM_DEFLT_ERR_EXS,
+      </if>
+      <if test="pdmCmmtErrExs != null" >
+        PDM_CMMT_ERR_EXS,
+      </if>
+      <if test="pdmDataTypeErrExs != null" >
+        PDM_DATA_TYPE_ERR_EXS,
+      </if>
+      <if test="pdmDataLenErrExs != null" >
+        PDM_DATA_LEN_ERR_EXS,
+      </if>
+      <if test="pdmDataPntErrExs != null" >
+        PDM_DATA_PNT_ERR_EXS,
+      </if>
+      <if test="pdmColErrExs != null" >
+        PDM_COL_ERR_EXS,
+      </if>
+      <if test="colErrConts != null" >
+        COL_ERR_CONTS,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="dbSchId != null" >
+        #{dbSchId,jdbcType=VARCHAR},
+      </if>
+      <if test="dbcTblNm != null" >
+        #{dbcTblNm,jdbcType=VARCHAR},
+      </if>
+      <if test="dbcColNm != null" >
+        #{dbcColNm,jdbcType=VARCHAR},
+      </if>
+      <if test="dbcColKorNm != null" >
+        #{dbcColKorNm,jdbcType=VARCHAR},
+      </if>
+      <if test="vers != null" >
+        #{vers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTyp != null" >
+        #{regTyp,jdbcType=VARCHAR},
+      </if>
+      <if test="regDtm != null" >
+        #{regDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updDtm != null" >
+        #{updDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="descn != null" >
+        #{descn,jdbcType=VARCHAR},
+      </if>
+      <if test="ddlColId != null" >
+        #{ddlColId,jdbcType=VARCHAR},
+      </if>
+      <if test="pdmColId != null" >
+        #{pdmColId,jdbcType=VARCHAR},
+      </if>
+      <if test="itmId != null" >
+        #{itmId,jdbcType=VARCHAR},
+      </if>
+      <if test="dataType != null" >
+        #{dataType,jdbcType=VARCHAR},
+      </if>
+      <if test="dataLen != null" >
+        #{dataLen,jdbcType=DECIMAL},
+      </if>
+      <if test="dataPnum != null" >
+        #{dataPnum,jdbcType=DECIMAL},
+      </if>
+      <if test="dataPnt != null" >
+        #{dataPnt,jdbcType=DECIMAL},
+      </if>
+      <if test="nullYn != null" >
+        #{nullYn,jdbcType=VARCHAR},
+      </if>
+      <if test="defltLen != null" >
+        #{defltLen,jdbcType=DECIMAL},
+      </if>
+      <if test="defltVal != null" >
+        #{defltVal,jdbcType=VARCHAR},
+      </if>
+      <if test="pkYn != null" >
+        #{pkYn,jdbcType=VARCHAR},
+      </if>
+      <if test="ord != null" >
+        #{ord,jdbcType=DECIMAL},
+      </if>
+      <if test="pkOrd != null" >
+        #{pkOrd,jdbcType=DECIMAL},
+      </if>
+      <if test="colDescn != null" >
+        #{colDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="colDqExpYn != null" >
+        #{colDqExpYn,jdbcType=VARCHAR},
+      </if>
+      <if test="ddlColExtncYn != null" >
+        #{ddlColExtncYn,jdbcType=VARCHAR},
+      </if>
+      <if test="ddlOrdErrExs != null" >
+        #{ddlOrdErrExs,jdbcType=VARCHAR},
+      </if>
+      <if test="ddlPkYnErrExs != null" >
+        #{ddlPkYnErrExs,jdbcType=VARCHAR},
+      </if>
+      <if test="ddlPkOrdErrExs != null" >
+        #{ddlPkOrdErrExs,jdbcType=VARCHAR},
+      </if>
+      <if test="ddlNullYnErrExs != null" >
+        #{ddlNullYnErrExs,jdbcType=VARCHAR},
+      </if>
+      <if test="ddlDefltErrExs != null" >
+        #{ddlDefltErrExs,jdbcType=VARCHAR},
+      </if>
+      <if test="ddlCmmtErrExs != null" >
+        #{ddlCmmtErrExs,jdbcType=VARCHAR},
+      </if>
+      <if test="ddlDataTypeErrExs != null" >
+        #{ddlDataTypeErrExs,jdbcType=VARCHAR},
+      </if>
+      <if test="ddlDataLenErrExs != null" >
+        #{ddlDataLenErrExs,jdbcType=VARCHAR},
+      </if>
+      <if test="ddlDataPntErrExs != null" >
+        #{ddlDataPntErrExs,jdbcType=VARCHAR},
+      </if>
+      <if test="ddlColErrExs != null" >
+        #{ddlColErrExs,jdbcType=VARCHAR},
+      </if>
+      <if test="pdmColExtncExs != null" >
+        #{pdmColExtncExs,jdbcType=VARCHAR},
+      </if>
+      <if test="pdmOrdErrExs != null" >
+        #{pdmOrdErrExs,jdbcType=VARCHAR},
+      </if>
+      <if test="pdmPkYnErrExs != null" >
+        #{pdmPkYnErrExs,jdbcType=VARCHAR},
+      </if>
+      <if test="pdmPkOrdErrExs != null" >
+        #{pdmPkOrdErrExs,jdbcType=VARCHAR},
+      </if>
+      <if test="pdmNullYnErrExs != null" >
+        #{pdmNullYnErrExs,jdbcType=VARCHAR},
+      </if>
+      <if test="pdmDefltErrExs != null" >
+        #{pdmDefltErrExs,jdbcType=VARCHAR},
+      </if>
+      <if test="pdmCmmtErrExs != null" >
+        #{pdmCmmtErrExs,jdbcType=VARCHAR},
+      </if>
+      <if test="pdmDataTypeErrExs != null" >
+        #{pdmDataTypeErrExs,jdbcType=VARCHAR},
+      </if>
+      <if test="pdmDataLenErrExs != null" >
+        #{pdmDataLenErrExs,jdbcType=VARCHAR},
+      </if>
+      <if test="pdmDataPntErrExs != null" >
+        #{pdmDataPntErrExs,jdbcType=VARCHAR},
+      </if>
+      <if test="pdmColErrExs != null" >
+        #{pdmColErrExs,jdbcType=VARCHAR},
+      </if>
+      <if test="colErrConts != null" >
+        #{colErrConts,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.meta.dbc.service.WatDbcCol" >
+    update 	/* WatDbcColMapper.updateByPrimaryKeySelective */
+    		WAT_DBC_COL
+    <set >
+      <if test="dbcColKorNm != null" >
+        DBC_COL_KOR_NM = #{dbcColKorNm,jdbcType=VARCHAR},
+      </if>
+      <if test="vers != null" >
+        VERS = #{vers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTyp != null" >
+        REG_TYP = #{regTyp,jdbcType=VARCHAR},
+      </if>
+      <if test="regDtm != null" >
+        REG_DTM = #{regDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updDtm != null" >
+        UPD_DTM = #{updDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="descn != null" >
+        DESCN = #{descn,jdbcType=VARCHAR},
+      </if>
+      <if test="ddlColId != null" >
+        DDL_COL_ID = #{ddlColId,jdbcType=VARCHAR},
+      </if>
+      <if test="pdmColId != null" >
+        PDM_COL_ID = #{pdmColId,jdbcType=VARCHAR},
+      </if>
+      <if test="itmId != null" >
+        ITM_ID = #{itmId,jdbcType=VARCHAR},
+      </if>
+      <if test="dataType != null" >
+        DATA_TYPE = #{dataType,jdbcType=VARCHAR},
+      </if>
+      <if test="dataLen != null" >
+        DATA_LEN = #{dataLen,jdbcType=DECIMAL},
+      </if>
+      <if test="dataPnum != null" >
+        DATA_PNUM = #{dataPnum,jdbcType=DECIMAL},
+      </if>
+      <if test="dataPnt != null" >
+        DATA_PNT = #{dataPnt,jdbcType=DECIMAL},
+      </if>
+      <if test="nullYn != null" >
+        NULL_YN = #{nullYn,jdbcType=VARCHAR},
+      </if>
+      <if test="defltLen != null" >
+        DEFLT_LEN = #{defltLen,jdbcType=DECIMAL},
+      </if>
+      <if test="defltVal != null" >
+        DEFLT_VAL = #{defltVal,jdbcType=VARCHAR},
+      </if>
+      <if test="pkYn != null" >
+        PK_YN = #{pkYn,jdbcType=VARCHAR},
+      </if>
+      <if test="ord != null" >
+        ORD = #{ord,jdbcType=DECIMAL},
+      </if>
+      <if test="pkOrd != null" >
+        PK_ORD = #{pkOrd,jdbcType=DECIMAL},
+      </if>
+      <if test="colDescn != null" >
+        COL_DESCN = #{colDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="colDqExpYn != null" >
+        COL_DQ_EXP_YN = #{colDqExpYn,jdbcType=VARCHAR},
+      </if>
+      <if test="ddlColExtncYn != null" >
+        DDL_COL_EXTNC_YN = #{ddlColExtncYn,jdbcType=VARCHAR},
+      </if>
+      <if test="ddlOrdErrExs != null" >
+        DDL_ORD_ERR_EXS = #{ddlOrdErrExs,jdbcType=VARCHAR},
+      </if>
+      <if test="ddlPkYnErrExs != null" >
+        DDL_PK_YN_ERR_EXS = #{ddlPkYnErrExs,jdbcType=VARCHAR},
+      </if>
+      <if test="ddlPkOrdErrExs != null" >
+        DDL_PK_ORD_ERR_EXS = #{ddlPkOrdErrExs,jdbcType=VARCHAR},
+      </if>
+      <if test="ddlNullYnErrExs != null" >
+        DDL_NULL_YN_ERR_EXS = #{ddlNullYnErrExs,jdbcType=VARCHAR},
+      </if>
+      <if test="ddlDefltErrExs != null" >
+        DDL_DEFLT_ERR_EXS = #{ddlDefltErrExs,jdbcType=VARCHAR},
+      </if>
+      <if test="ddlCmmtErrExs != null" >
+        DDL_CMMT_ERR_EXS = #{ddlCmmtErrExs,jdbcType=VARCHAR},
+      </if>
+      <if test="ddlDataTypeErrExs != null" >
+        DDL_DATA_TYPE_ERR_EXS = #{ddlDataTypeErrExs,jdbcType=VARCHAR},
+      </if>
+      <if test="ddlDataLenErrExs != null" >
+        DDL_DATA_LEN_ERR_EXS = #{ddlDataLenErrExs,jdbcType=VARCHAR},
+      </if>
+      <if test="ddlDataPntErrExs != null" >
+        DDL_DATA_PNT_ERR_EXS = #{ddlDataPntErrExs,jdbcType=VARCHAR},
+      </if>
+      <if test="ddlColErrExs != null" >
+        DDL_COL_ERR_EXS = #{ddlColErrExs,jdbcType=VARCHAR},
+      </if>
+      <if test="pdmColExtncExs != null" >
+        PDM_COL_EXTNC_EXS = #{pdmColExtncExs,jdbcType=VARCHAR},
+      </if>
+      <if test="pdmOrdErrExs != null" >
+        PDM_ORD_ERR_EXS = #{pdmOrdErrExs,jdbcType=VARCHAR},
+      </if>
+      <if test="pdmPkYnErrExs != null" >
+        PDM_PK_YN_ERR_EXS = #{pdmPkYnErrExs,jdbcType=VARCHAR},
+      </if>
+      <if test="pdmPkOrdErrExs != null" >
+        PDM_PK_ORD_ERR_EXS = #{pdmPkOrdErrExs,jdbcType=VARCHAR},
+      </if>
+      <if test="pdmNullYnErrExs != null" >
+        PDM_NULL_YN_ERR_EXS = #{pdmNullYnErrExs,jdbcType=VARCHAR},
+      </if>
+      <if test="pdmDefltErrExs != null" >
+        PDM_DEFLT_ERR_EXS = #{pdmDefltErrExs,jdbcType=VARCHAR},
+      </if>
+      <if test="pdmCmmtErrExs != null" >
+        PDM_CMMT_ERR_EXS = #{pdmCmmtErrExs,jdbcType=VARCHAR},
+      </if>
+      <if test="pdmDataTypeErrExs != null" >
+        PDM_DATA_TYPE_ERR_EXS = #{pdmDataTypeErrExs,jdbcType=VARCHAR},
+      </if>
+      <if test="pdmDataLenErrExs != null" >
+        PDM_DATA_LEN_ERR_EXS = #{pdmDataLenErrExs,jdbcType=VARCHAR},
+      </if>
+      <if test="pdmDataPntErrExs != null" >
+        PDM_DATA_PNT_ERR_EXS = #{pdmDataPntErrExs,jdbcType=VARCHAR},
+      </if>
+      <if test="pdmColErrExs != null" >
+        PDM_COL_ERR_EXS = #{pdmColErrExs,jdbcType=VARCHAR},
+      </if>
+      <if test="colErrConts != null" >
+        COL_ERR_CONTS = #{colErrConts,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+      and DBC_TBL_NM = #{dbcTblNm,jdbcType=VARCHAR}
+      and DBC_COL_NM = #{dbcColNm,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="kr.wise.meta.dbc.service.WatDbcCol" >
+    update 	/* WatDbcColMapper.updateByPrimaryKey */
+    		WAT_DBC_COL
+    set DBC_COL_KOR_NM = #{dbcColKorNm,jdbcType=VARCHAR},
+      VERS = #{vers,jdbcType=DECIMAL},
+      REG_TYP = #{regTyp,jdbcType=VARCHAR},
+      REG_DTM = #{regDtm,jdbcType=TIMESTAMP},
+      UPD_DTM = #{updDtm,jdbcType=TIMESTAMP},
+      DESCN = #{descn,jdbcType=VARCHAR},
+      DDL_COL_ID = #{ddlColId,jdbcType=VARCHAR},
+      PDM_COL_ID = #{pdmColId,jdbcType=VARCHAR},
+      ITM_ID = #{itmId,jdbcType=VARCHAR},
+      DATA_TYPE = #{dataType,jdbcType=VARCHAR},
+      DATA_LEN = #{dataLen,jdbcType=DECIMAL},
+      DATA_PNUM = #{dataPnum,jdbcType=DECIMAL},
+      DATA_PNT = #{dataPnt,jdbcType=DECIMAL},
+      NULL_YN = #{nullYn,jdbcType=VARCHAR},
+      DEFLT_LEN = #{defltLen,jdbcType=DECIMAL},
+      DEFLT_VAL = #{defltVal,jdbcType=VARCHAR},
+      PK_YN = #{pkYn,jdbcType=VARCHAR},
+      ORD = #{ord,jdbcType=DECIMAL},
+      PK_ORD = #{pkOrd,jdbcType=DECIMAL},
+      COL_DESCN = #{colDescn,jdbcType=VARCHAR},
+      COL_DQ_EXP_YN = #{colDqExpYn,jdbcType=VARCHAR},
+      DDL_COL_EXTNC_YN = #{ddlColExtncYn,jdbcType=VARCHAR},
+      DDL_ORD_ERR_EXS = #{ddlOrdErrExs,jdbcType=VARCHAR},
+      DDL_PK_YN_ERR_EXS = #{ddlPkYnErrExs,jdbcType=VARCHAR},
+      DDL_PK_ORD_ERR_EXS = #{ddlPkOrdErrExs,jdbcType=VARCHAR},
+      DDL_NULL_YN_ERR_EXS = #{ddlNullYnErrExs,jdbcType=VARCHAR},
+      DDL_DEFLT_ERR_EXS = #{ddlDefltErrExs,jdbcType=VARCHAR},
+      DDL_CMMT_ERR_EXS = #{ddlCmmtErrExs,jdbcType=VARCHAR},
+      DDL_DATA_TYPE_ERR_EXS = #{ddlDataTypeErrExs,jdbcType=VARCHAR},
+      DDL_DATA_LEN_ERR_EXS = #{ddlDataLenErrExs,jdbcType=VARCHAR},
+      DDL_DATA_PNT_ERR_EXS = #{ddlDataPntErrExs,jdbcType=VARCHAR},
+      DDL_COL_ERR_EXS = #{ddlColErrExs,jdbcType=VARCHAR},
+      PDM_COL_EXTNC_EXS = #{pdmColExtncExs,jdbcType=VARCHAR},
+      PDM_ORD_ERR_EXS = #{pdmOrdErrExs,jdbcType=VARCHAR},
+      PDM_PK_YN_ERR_EXS = #{pdmPkYnErrExs,jdbcType=VARCHAR},
+      PDM_PK_ORD_ERR_EXS = #{pdmPkOrdErrExs,jdbcType=VARCHAR},
+      PDM_NULL_YN_ERR_EXS = #{pdmNullYnErrExs,jdbcType=VARCHAR},
+      PDM_DEFLT_ERR_EXS = #{pdmDefltErrExs,jdbcType=VARCHAR},
+      PDM_CMMT_ERR_EXS = #{pdmCmmtErrExs,jdbcType=VARCHAR},
+      PDM_DATA_TYPE_ERR_EXS = #{pdmDataTypeErrExs,jdbcType=VARCHAR},
+      PDM_DATA_LEN_ERR_EXS = #{pdmDataLenErrExs,jdbcType=VARCHAR},
+      PDM_DATA_PNT_ERR_EXS = #{pdmDataPntErrExs,jdbcType=VARCHAR},
+      PDM_COL_ERR_EXS = #{pdmColErrExs,jdbcType=VARCHAR},
+      COL_ERR_CONTS = #{colErrConts,jdbcType=VARCHAR}
+    where DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+      and DBC_TBL_NM = #{dbcTblNm,jdbcType=VARCHAR}
+      and DBC_COL_NM = #{dbcColNm,jdbcType=VARCHAR}
+  </update>
+  
+  <select id="selectList" parameterType="java.lang.String" resultMap="BaseResultMap">
+  SELECT /* WatDbcColMapper.selectList */
+  		A.DB_SCH_ID
+      ,C.DB_SCH_LNM
+      ,A.DBC_TBL_NM
+      ,A.DBC_COL_NM
+      ,A.DBC_COL_KOR_NM
+      ,A.ORD
+<!--       ,A.DATA_TYPE -->
+      , CASE WHEN A.DATA_LEN IS NULL 
+         THEN A.DATA_TYPE
+         ELSE (CASE WHEN A.DATA_PNT IS NOT NULL
+                    THEN CONCAT(A.DATA_TYPE, '(', A.DATA_LEN, ', ', A.DATA_PNT, ')') 
+                    ELSE CONCAT(A.DATA_TYPE, '(', A.DATA_LEN, ')')
+                     END )
+         END AS DATA_TYPE
+      ,A.DATA_LEN
+      ,A.DATA_PNUM
+      ,A.DATA_PNT
+      ,A.PK_YN
+      ,A.PK_ORD
+<!--       NULL 여부가 아니라 NOT NULL 여부 이기 때문에 반대로 표현 한다. -->
+      ,CASE WHEN A.NULL_YN = 'Y' THEN 'N' 
+            ELSE 'Y' END AS NULL_YN
+      ,A.DEFLT_LEN
+      ,A.DEFLT_VAL
+      ,A.DESCN
+      ,A.DDL_COL_ERR_EXS
+      ,A.PDM_COL_ERR_EXS
+      ,A.COL_ERR_CONTS
+      ,CASE WHEN A.DDL_COL_ERR_EXS = 'Y' THEN '#FF0000'
+       ELSE CASE WHEN A.PDM_COL_ERR_EXS = 'Y' THEN '#FF0000' ELSE NULL
+       END END AS FontColor
+    FROM WAT_DBC_COL A
+        INNER JOIN WAT_DBC_TBL B
+            ON A.DB_SCH_ID = B.DB_SCH_ID
+            AND A.DBC_TBL_NM = B.DBC_TBL_NM
+<!--             AND IFNULL(A.REG_TYP, 'C') IN ('C', 'U') -->
+<!--             AND IFNULL(B.REG_TYP, 'C') IN ('C', 'U') -->
+        INNER JOIN WAA_DB_SCH C
+            ON B.DB_SCH_ID = C.DB_SCH_ID
+            AND C.REG_TYP_CD IN ('C', 'U')
+            AND C.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+  
+  <where>
+  	A.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+  	AND A.DBC_TBL_NM = #{dbcTblNm,jdbcType=VARCHAR}
+  </where>
+  
+  ORDER BY A.ORD, A.PK_ORD
+  
+  </select>
+  <select id="selectListNonColor" parameterType="java.lang.String" resultMap="BaseResultMap">
+  SELECT 	/* WatDbcColMapper.selectListNonColor */
+  			A.DB_SCH_ID
+      ,A.STND_ASRT
+      ,C.DB_SCH_LNM
+      ,A.DBC_TBL_NM
+      ,A.DBC_COL_NM
+      ,A.DBC_COL_KOR_NM
+      ,A.ORD
+      ,A.DATA_TYPE
+<!--       ,A.DATA_LEN -->
+      ,CASE WHEN IFNULL(A.DATA_PNUM,0) != 0 THEN A.DATA_PNUM ELSE A.DATA_LEN END AS DATA_LEN
+      ,A.DATA_PNUM
+      ,A.DATA_PNT
+      ,A.PK_YN
+      ,A.PK_ORD
+<!--       NULL 여부가 아니라 NOT NULL 여부 이기 때문에 반대로 표현 한다. -->
+      ,CASE WHEN A.NULL_YN = 'Y' THEN 'N' 
+            ELSE 'Y' END AS NULL_YN
+      ,A.DEFLT_LEN
+      ,A.DEFLT_VAL
+      ,A.DESCN
+      ,A.DDL_COL_ERR_EXS
+      ,A.PDM_COL_ERR_EXS
+      ,A.COL_ERR_CONTS
+    FROM WAT_DBC_COL A
+        INNER JOIN WAT_DBC_TBL B
+            ON A.DB_SCH_ID = B.DB_SCH_ID
+            AND A.DBC_TBL_NM = B.DBC_TBL_NM
+<!--             AND IFNULL(A.REG_TYP, 'C') IN ('C', 'U') -->
+<!--             AND IFNULL(B.REG_TYP, 'C') IN ('C', 'U') -->
+        INNER JOIN WAA_DB_SCH C
+            ON B.DB_SCH_ID = C.DB_SCH_ID
+            AND C.REG_TYP_CD IN ('C', 'U')
+            AND C.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+  
+  <where>
+  	A.DB_SCH_ID = #{dbSchId}
+  	AND A.DBC_TBL_NM = #{dbcTblNm}
+  </where>
+  
+  ORDER BY A.ORD, A.PK_ORD
+  
+  </select>
+  <select id="selectDbcColChangeList" parameterType="map" resultMap="BaseResultMap">
+ 	SELECT 	/* WatDbcColMapper.selectDbcColChangeList */
+ 			A.*
+	     , B.DBC_TBL_NM
+	     , C.DB_SCH_LNM
+	     , C.DB_SCH_PNM
+	     , D.DB_CONN_TRG_LNM
+	     , D.DB_CONN_TRG_PNM
+	     , E.FULL_PATH
+	     , F.DDL_TBL_LNM
+	     , F.DDL_TBL_PNM
+	     , G.PDM_TBL_LNM
+	     , G.PDM_TBL_PNM
+	     , H.PDM_COL_PNM
+	     , I.DDL_COL_PNM
+	     , CASE WHEN A.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d') AND A.REG_TYP IN ('C', 'U') THEN '#0000FF'
+	   	   ELSE NULL END AS FontColor
+	   	 , J.SDITM_PNM AS ITM_PNM
+	   	 , J.SDITM_LNM AS ITM_LNM
+	  FROM WAH_DBC_COL A
+	 INNER JOIN WAH_DBC_TBL B
+	    ON A.DB_SCH_ID = B.DB_SCH_ID
+	   AND A.DBC_TBL_NM = B.DBC_TBL_NM
+	  LEFT OUTER JOIN WAA_DB_SCH C
+	    ON B.DB_SCH_ID = C.DB_SCH_ID
+	   AND C.REG_TYP_CD IN ('C', 'U')
+	   AND C.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	  LEFT OUTER JOIN WAA_DB_CONN_TRG D
+	    ON B.DB_CONN_TRG_ID = D.DB_CONN_TRG_ID
+	   AND D.REG_TYP_CD IN ('C', 'U')
+	   AND D.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	  LEFT OUTER JOIN WAA_SUBJ E
+	    ON B.SUBJ_ID = E.SUBJ_ID
+	   AND E.REG_TYP_CD IN ('C', 'U')
+	   AND E.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+	  LEFT OUTER JOIN WAM_DDL_TBL F
+	    ON B.DDL_TBL_ID = F.DDL_TBL_ID
+	   AND F.REG_TYP_CD IN ('C', 'U')
+	  LEFT OUTER JOIN WAM_PDM_TBL G
+	    ON B.PDM_TBL_ID = G.PDM_TBL_ID
+	   AND G.REG_TYP_CD IN ('C', 'U')
+	  LEFT OUTER JOIN WAM_PDM_COL H
+	    ON G.PDM_TBL_ID = H.PDM_TBL_ID
+	   AND A.PDM_COL_ID = H.PDM_COL_ID
+	   AND H.REG_TYP_CD IN ('C', 'U')
+	  LEFT OUTER JOIN WAM_DDL_COL I
+	    ON F.DDL_TBL_ID = I.DDL_TBL_ID
+	   AND A.DDL_COL_ID = I.DDL_COL_ID
+	   AND I.REG_TYP_CD IN ('C', 'U')
+	  LEFT OUTER JOIN WAM_SDITM J
+	    ON A.ITM_ID = J.SDITM_ID
+	   AND J.REG_TYP_CD IN ('C', 'U')
+	   
+	 <where>
+
+  <if test="dbSchId != null" >
+        AND A.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+      </if>
+  <if test="dbcTblNm != null" >
+        AND A.DBC_TBL_NM = #{dbcTblNm,jdbcType=VARCHAR}
+      </if>
+	</where>
+	 ORDER BY A.EXP_DTM DESC, A.STR_DTM DESC, A.ORD, A.PK_ORD
+  </select>
+  
+  
+<!--   list map 형태로 리턴 -->
+  <select id="selectListMap" parameterType="kr.wise.meta.dbc.service.WatDbcCol" resultMap="BaseResultRetMap">
+  SELECT /* WatDbcColMapper.selectListMap */
+  		A.DB_SCH_ID
+      ,A.STND_ASRT
+      ,D.DB_SCH_LNM
+      ,A.DBC_TBL_NM
+      ,B.DBC_TBL_KOR_NM
+      ,A.DBC_COL_NM
+      ,A.DBC_COL_KOR_NM
+      ,A.ORD
+<!--       ,A.DATA_TYPE -->
+      , CASE WHEN A.DATA_LEN IS NULL 
+         THEN A.DATA_TYPE
+         ELSE (CASE WHEN A.DATA_PNT IS NOT NULL
+                    THEN A.DATA_TYPE || '(' || A.DATA_LEN ||', '|| A.DATA_PNT ||')' 
+                    ELSE A.DATA_TYPE || '(' || A.DATA_LEN ||')'
+                     END )
+         END AS DATA_TYPE
+      ,A.DATA_LEN
+      ,A.DATA_PNUM
+      ,A.DATA_PNT
+      ,A.PK_YN
+      ,A.PK_ORD
+<!--       NULL 여부가 아니라 NOT NULL 여부 이기 때문에 반대로 표현 한다. -->
+      ,CASE WHEN A.NULL_YN = 'Y' THEN 'N' 
+            ELSE 'Y' END AS NULL_YN
+      ,A.DEFLT_LEN
+      ,A.DEFLT_VAL
+      ,A.DESCN
+      ,A.DDL_COL_ERR_EXS
+      ,A.PDM_COL_ERR_EXS
+      ,A.COL_ERR_CONTS
+      ,CASE WHEN A.DDL_COL_ERR_EXS = 'Y' THEN '#FF0000'
+       ELSE CASE WHEN A.PDM_COL_ERR_EXS = 'Y' THEN '#FF0000' ELSE NULL
+       END END AS FontColor
+      ,C.DB_CONN_TRG_PNM
+      ,D.DB_SCH_PNM
+      ,'CU' AS RQST_DCD
+      , S.FULL_PATH AS SUBJ_LNM
+    FROM WAT_DBC_COL A
+        INNER JOIN WAT_DBC_TBL B
+            ON A.DB_SCH_ID = B.DB_SCH_ID
+            AND A.DBC_TBL_NM = B.DBC_TBL_NM
+            AND A.STND_ASRT = B.STND_ASRT
+        LEFT OUTER JOIN WAA_DB_CONN_TRG C
+        ON B.DB_CONN_TRG_ID = C.DB_CONN_TRG_ID
+        AND B.STND_ASRT = C.STND_ASRT
+        AND C.REG_TYP_CD IN ('C', 'U')
+        AND C.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')    
+        LEFT OUTER JOIN WAA_DB_SCH D
+          ON B.DB_SCH_ID = D.DB_SCH_ID
+         AND B.STND_ASRT = D.STND_ASRT
+         AND D.REG_TYP_CD IN ('C', 'U')
+         AND D.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+          LEFT OUTER JOIN WAM_DDL_TBL E
+        ON  E.DB_SCH_ID = B.DB_SCH_ID
+        AND E.DDL_TBL_PNM = B.DBC_TBL_NM
+        AND E.STND_ASRT = B.STND_ASRT
+        AND E.REG_TYP_CD IN ('C', 'U')
+        LEFT OUTER JOIN WAM_PDM_TBL F
+        ON F.STND_ASRT = B.STND_ASRT
+        AND F.PDM_TBL_ID = E.PDM_TBL_ID
+        AND E.REG_TYP_CD IN ('C', 'U')
+        LEFT OUTER JOIN WAA_SUBJ S
+         ON S.STND_ASRT = B.STND_ASRT
+        AND S.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+        AND S.REG_TYP_CD IN ('C', 'U')
+        AND S.SUBJ_LVL ='2'
+        AND S.SUBJ_ABR_NM IS NOT NULL
+        AND S.SUBJ_ABR_NM !=''
+        AND B.DBC_TBL_NM LIKE CONCAT(S.SUBJ_ABR_NM,'%')     
+  <where>
+  <if test="dbConnTrgId != null" >
+        AND B.DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR}
+      </if>
+  <if test="dbSchId != null" >
+        AND B.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+      </if>
+  <if test="subjId != null" >
+        AND B.SUBJ_ID = #{subjId,jdbcType=VARCHAR}
+      </if>
+  <if test="dbcTblNm != null" >
+        AND (  B.DBC_TBL_NM LIKE CONCAT('%' , #{dbcTblNm,jdbcType=VARCHAR} , '%')
+        	OR B.DBC_TBL_NM LIKE CONCAT('%' , UPPER(#{dbcTblNm,jdbcType=VARCHAR}) , '%')
+        	OR B.DBC_TBL_KOR_NM LIKE CONCAT('%' , #{dbcTblNm,jdbcType=VARCHAR} , '%')
+        	OR B.DBC_TBL_KOR_NM LIKE CONCAT('%' , UPPER(#{dbcTblNm,jdbcType=VARCHAR}) , '%' ) 
+        	)
+      </if>
+  <if test="dbcColNm != null">
+  		AND EXISTS ( SELECT 1
+                     FROM WAT_DBC_COL Z
+                    WHERE Z.DB_SCH_ID = B.DB_SCH_ID
+                      AND Z.DBC_TBL_NM = B.DBC_TBL_NM
+                      AND (Z.DBC_COL_NM LIKE CONCAT('%' , #{dbcColNm,jdbcType=VARCHAR} , '%')
+                      		OR Z.DBC_COL_NM LIKE CONCAT('%' , UPPER(#{dbcColNm,jdbcType=VARCHAR}) , '%' )
+                      		)
+                   )
+  </if>
+  <if test='metaRegYn == "Y" '>
+	AND E.DDL_TBL_ID IS NOT NULL
+	AND F.PDM_TBL_ID IS NOT NULL
+	</if>
+	<if test='metaRegYn == "N" '>
+	AND (E.DDL_TBL_ID IS NULL OR F.PDM_TBL_ID IS NULL)
+	</if>
+        AND C.META_MNG_YN = 'Y' 
+  </where>
+  
+  ORDER BY B.DBC_TBL_NM,A.ORD, A.PK_ORD
+<!--   느릴경우 인덱스 생성 -->
+<!--    create index IX_WAA_SUBJ_03 on WAA_SUBJ(STND_ASRT,EXP_DTM,REG_TYP_CD,SUBJ_LVL,SUBJ_ABR_NM); -->
+  </select>
+  
+</mapper>

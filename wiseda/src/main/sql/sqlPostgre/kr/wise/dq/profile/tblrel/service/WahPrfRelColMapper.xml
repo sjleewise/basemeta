@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.dq.profile.tblrel.service.WahPrfRelColMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.dq.profile.tblrel.service.WahPrfRelColVO" >
+    <id column="PRF_ID" property="prfId" jdbcType="VARCHAR" />
+    <id column="REL_COL_SNO" property="relColSno" jdbcType="DECIMAL" />
+    <id column="EXP_DTM" property="expDtm" jdbcType="TIMESTAMP" />
+    <result column="STR_DTM" property="strDtm" jdbcType="TIMESTAMP" />
+    <result column="CH_TBL_DB_CONN_TRG_ID" property="chTblDbConnTrgId" jdbcType="VARCHAR" />
+    <result column="CH_TBL_DBC_SCH_ID" property="chTblDbcSchId" jdbcType="VARCHAR" />
+    <result column="CH_TBL_DBC_TBL_NM" property="chTblDbcTblNm" jdbcType="VARCHAR" />
+    <result column="CH_TBL_DBC_COL_NM" property="chTblDbcColNm" jdbcType="VARCHAR" />
+    <result column="PA_TBL_DB_CONN_TRG_ID" property="paTblDbConnTrgId" jdbcType="VARCHAR" />
+    <result column="PA_TBL_DBC_SCH_ID" property="paTblDbcSchId" jdbcType="VARCHAR" />
+    <result column="PA_TBL_DBC_TBL_NM" property="paTblDbcTblNm" jdbcType="VARCHAR" />
+    <result column="PA_TBL_DBC_COL_NM" property="paTblDbcColNm" jdbcType="VARCHAR" />
+    <result column="RQST_NO" property="rqstNo" jdbcType="VARCHAR" />
+    <result column="RQST_SNO" property="rqstSno" jdbcType="DECIMAL" />
+    <result column="OBJ_DESCN" property="objDescn" jdbcType="VARCHAR" />
+    <result column="OBJ_VERS" property="objVers" jdbcType="DECIMAL" />
+    <result column="REG_TYP_CD" property="regTypCd" jdbcType="VARCHAR" />
+    <result column="FRS_RQST_DTM" property="frsRqstDtm" jdbcType="TIMESTAMP" />
+    <result column="FRS_RQST_USER_ID" property="frsRqstUserId" jdbcType="VARCHAR" />
+    <result column="RQST_DTM" property="rqstDtm" jdbcType="TIMESTAMP" />
+    <result column="RQST_USER_ID" property="rqstUserId" jdbcType="VARCHAR" />
+    <result column="APRV_DTM" property="aprvDtm" jdbcType="TIMESTAMP" />
+    <result column="APRV_USER_ID" property="aprvUserId" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    PRF_ID, REL_COL_SNO, EXP_DTM, STR_DTM, CH_TBL_DB_CONN_TRG_ID, CH_TBL_DBC_SCH_ID, 
+    CH_TBL_DBC_TBL_NM, CH_TBL_DBC_COL_NM, PA_TBL_DB_CONN_TRG_ID, PA_TBL_DBC_SCH_ID, PA_TBL_DBC_TBL_NM, 
+    PA_TBL_DBC_COL_NM, RQST_NO, RQST_SNO, OBJ_DESCN, OBJ_VERS, REG_TYP_CD, FRS_RQST_DTM, 
+    FRS_RQST_USER_ID, RQST_DTM, RQST_USER_ID, APRV_DTM, APRV_USER_ID
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="map" >
+    select 
+    <include refid="Base_Column_List" />
+    from WAH_PRF_REL_COL
+    where PRF_ID = #{prfId,jdbcType=VARCHAR}
+      and REL_COL_SNO = #{relColSno,jdbcType=DECIMAL}
+      and EXP_DTM = #{expDtm,jdbcType=TIMESTAMP}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="map" >
+    delete from WAH_PRF_REL_COL
+    where PRF_ID = #{prfId,jdbcType=VARCHAR}
+      and REL_COL_SNO = #{relColSno,jdbcType=DECIMAL}
+      and EXP_DTM = #{expDtm,jdbcType=TIMESTAMP}
+  </delete>
+  <insert id="insert" parameterType="kr.wise.dq.profile.tblrel.service.WahPrfRelColVO" >
+    insert into WAH_PRF_REL_COL (PRF_ID, REL_COL_SNO, EXP_DTM, 
+      STR_DTM, CH_TBL_DB_CONN_TRG_ID, CH_TBL_DBC_SCH_ID, 
+      CH_TBL_DBC_TBL_NM, CH_TBL_DBC_COL_NM, PA_TBL_DB_CONN_TRG_ID, 
+      PA_TBL_DBC_SCH_ID, PA_TBL_DBC_TBL_NM, PA_TBL_DBC_COL_NM, 
+      RQST_NO, RQST_SNO, OBJ_DESCN, 
+      OBJ_VERS, REG_TYP_CD, FRS_RQST_DTM, 
+      FRS_RQST_USER_ID, RQST_DTM, RQST_USER_ID, 
+      APRV_DTM, APRV_USER_ID)
+    values (#{prfId,jdbcType=VARCHAR}, #{relColSno,jdbcType=DECIMAL}, #{expDtm,jdbcType=TIMESTAMP}, 
+      #{strDtm,jdbcType=TIMESTAMP}, #{chTblDbConnTrgId,jdbcType=VARCHAR}, #{chTblDbcSchId,jdbcType=VARCHAR}, 
+      #{chTblDbcTblNm,jdbcType=VARCHAR}, #{chTblDbcColNm,jdbcType=VARCHAR}, #{paTblDbConnTrgId,jdbcType=VARCHAR}, 
+      #{paTblDbcSchId,jdbcType=VARCHAR}, #{paTblDbcTblNm,jdbcType=VARCHAR}, #{paTblDbcColNm,jdbcType=VARCHAR}, 
+      #{rqstNo,jdbcType=VARCHAR}, #{rqstSno,jdbcType=DECIMAL}, #{objDescn,jdbcType=VARCHAR}, 
+      #{objVers,jdbcType=DECIMAL}, #{regTypCd,jdbcType=VARCHAR}, #{frsRqstDtm,jdbcType=TIMESTAMP}, 
+      #{frsRqstUserId,jdbcType=VARCHAR}, #{rqstDtm,jdbcType=TIMESTAMP}, #{rqstUserId,jdbcType=VARCHAR}, 
+      #{aprvDtm,jdbcType=TIMESTAMP}, #{aprvUserId,jdbcType=VARCHAR})
+  </insert>
+  
+  <insert id="insertSelective" parameterType="kr.wise.dq.profile.tblrel.service.WamPrfRelColVO">
+    insert into WAH_PRF_REL_COL
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+        PRF_ID,
+        REL_COL_SNO,
+        EXP_DTM,
+        STR_DTM,
+      <if test="chTblDbConnTrgId != null" >
+        CH_TBL_DB_CONN_TRG_ID,
+      </if>
+      <if test="chTblDbcSchId != null" >
+        CH_TBL_DBC_SCH_ID,
+      </if>
+      <if test="chTblDbcTblNm != null" >
+        CH_TBL_DBC_TBL_NM,
+      </if>
+        CH_TBL_DBC_COL_NM,
+      <if test="paTblDbConnTrgId != null" >
+        PA_TBL_DB_CONN_TRG_ID,
+      </if>
+      <if test="paTblDbcSchId != null" >
+        PA_TBL_DBC_SCH_ID,
+      </if>
+      <if test="paTblDbcTblNm != null" >
+        PA_TBL_DBC_TBL_NM,
+      </if>
+        PA_TBL_DBC_COL_NM,
+      <if test="rqstNo != null" >
+        RQST_NO,
+      </if>
+      <if test="rqstSno != null" >
+        RQST_SNO,
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN,
+      </if>
+        OBJ_VERS,
+        REG_TYP_CD,
+      <if test="frsRqstDtm != null" >
+        FRS_RQST_DTM,
+      </if>
+      <if test="frsRqstUserId != null" >
+        FRS_RQST_USER_ID,
+      </if>
+      <if test="rqstDtm != null" >
+        RQST_DTM,
+      </if>
+      <if test="rqstUserId != null" >
+        RQST_USER_ID,
+      </if>
+      <if test="aprvDtm != null" >
+        APRV_DTM,
+      </if>
+      <if test="aprvUserId != null" >
+        APRV_USER_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+        #{prfId,jdbcType=VARCHAR},
+        (SELECT COALESCE(MAX(REL_COL_SNO), 0 ) + 1 
+           FROM WAH_PRF_REL_COL 
+          WHERE PRF_ID =  #{prfId,jdbcType=VARCHAR}  ) ,
+<!--              AND CH_TBL_DBC_COL_NM =  #{chTblDbcColNm,jdbcType=VARCHAR} -->
+<!--              AND PA_TBL_DBC_COL_NM =  #{paTblDbcColNm,jdbcType=VARCHAR} ) , -->
+        TO_DATE('99991231','YYYYMMDD'),
+        NOW(),
+      <if test="chTblDbConnTrgId != null" >
+        #{chTblDbConnTrgId,jdbcType=VARCHAR},
+      </if>
+      <if test="chTblDbcSchId != null" >
+        #{chTblDbcSchId,jdbcType=VARCHAR},
+      </if>
+      <if test="chTblDbcTblNm != null" >
+        #{chTblDbcTblNm,jdbcType=VARCHAR},
+      </if>
+        #{chTblDbcColNm,jdbcType=VARCHAR},
+      <if test="paTblDbConnTrgId != null" >
+        #{paTblDbConnTrgId,jdbcType=VARCHAR},
+      </if>
+      <if test="paTblDbcSchId != null" >
+        #{paTblDbcSchId,jdbcType=VARCHAR},
+      </if>
+      <if test="paTblDbcTblNm != null" >
+        #{paTblDbcTblNm,jdbcType=VARCHAR},
+      </if>
+        #{paTblDbcColNm,jdbcType=VARCHAR},
+      <if test="rqstNo != null" >
+        #{rqstNo,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstSno != null" >
+        #{rqstSno,jdbcType=DECIMAL},
+      </if>
+      <if test="objDescn != null" >
+        #{objDescn,jdbcType=VARCHAR},
+      </if>
+       (SELECT MAX(OBJ_VERS)  FROM  WAH_PRF_EFVA_ANA WHERE PRF_ID = #{prfId,jdbcType=VARCHAR} ),
+        #{regTypCd,jdbcType=VARCHAR},
+      <if test="frsRqstDtm != null" >
+        #{frsRqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="frsRqstUserId != null" >
+        #{frsRqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDtm != null" >
+        #{rqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rqstUserId != null" >
+        #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDtm != null" >
+        #{aprvDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aprvUserId != null" >
+        #{aprvUserId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.dq.profile.tblrel.service.WahPrfRelColVO" >
+    update WAH_PRF_REL_COL
+    <set >
+      <if test="strDtm != null" >
+        STR_DTM = #{strDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="chTblDbConnTrgId != null" >
+        CH_TBL_DB_CONN_TRG_ID = #{chTblDbConnTrgId,jdbcType=VARCHAR},
+      </if>
+      <if test="chTblDbcSchId != null" >
+        CH_TBL_DBC_SCH_ID = #{chTblDbcSchId,jdbcType=VARCHAR},
+      </if>
+      <if test="chTblDbcTblNm != null" >
+        CH_TBL_DBC_TBL_NM = #{chTblDbcTblNm,jdbcType=VARCHAR},
+      </if>
+      <if test="chTblDbcColNm != null" >
+        CH_TBL_DBC_COL_NM = #{chTblDbcColNm,jdbcType=VARCHAR},
+      </if>
+      <if test="paTblDbConnTrgId != null" >
+        PA_TBL_DB_CONN_TRG_ID = #{paTblDbConnTrgId,jdbcType=VARCHAR},
+      </if>
+      <if test="paTblDbcSchId != null" >
+        PA_TBL_DBC_SCH_ID = #{paTblDbcSchId,jdbcType=VARCHAR},
+      </if>
+      <if test="paTblDbcTblNm != null" >
+        PA_TBL_DBC_TBL_NM = #{paTblDbcTblNm,jdbcType=VARCHAR},
+      </if>
+      <if test="paTblDbcColNm != null" >
+        PA_TBL_DBC_COL_NM = #{paTblDbcColNm,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstNo != null" >
+        RQST_NO = #{rqstNo,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstSno != null" >
+        RQST_SNO = #{rqstSno,jdbcType=DECIMAL},
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="frsRqstDtm != null" >
+        FRS_RQST_DTM = #{frsRqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="frsRqstUserId != null" >
+        FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDtm != null" >
+        RQST_DTM = #{rqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rqstUserId != null" >
+        RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDtm != null" >
+        APRV_DTM = #{aprvDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aprvUserId != null" >
+        APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where PRF_ID = #{prfId,jdbcType=VARCHAR}
+      and REL_COL_SNO = #{relColSno,jdbcType=DECIMAL}
+      and EXP_DTM = #{expDtm,jdbcType=TIMESTAMP}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="kr.wise.dq.profile.tblrel.service.WahPrfRelColVO" >
+    update WAH_PRF_REL_COL
+    set STR_DTM = #{strDtm,jdbcType=TIMESTAMP},
+      CH_TBL_DB_CONN_TRG_ID = #{chTblDbConnTrgId,jdbcType=VARCHAR},
+      CH_TBL_DBC_SCH_ID = #{chTblDbcSchId,jdbcType=VARCHAR},
+      CH_TBL_DBC_TBL_NM = #{chTblDbcTblNm,jdbcType=VARCHAR},
+      CH_TBL_DBC_COL_NM = #{chTblDbcColNm,jdbcType=VARCHAR},
+      PA_TBL_DB_CONN_TRG_ID = #{paTblDbConnTrgId,jdbcType=VARCHAR},
+      PA_TBL_DBC_SCH_ID = #{paTblDbcSchId,jdbcType=VARCHAR},
+      PA_TBL_DBC_TBL_NM = #{paTblDbcTblNm,jdbcType=VARCHAR},
+      PA_TBL_DBC_COL_NM = #{paTblDbcColNm,jdbcType=VARCHAR},
+      RQST_NO = #{rqstNo,jdbcType=VARCHAR},
+      RQST_SNO = #{rqstSno,jdbcType=DECIMAL},
+      OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      FRS_RQST_DTM = #{frsRqstDtm,jdbcType=TIMESTAMP},
+      FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR},
+      RQST_DTM = #{rqstDtm,jdbcType=TIMESTAMP},
+      RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      APRV_DTM = #{aprvDtm,jdbcType=TIMESTAMP},
+      APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR}
+    where PRF_ID = #{prfId,jdbcType=VARCHAR}
+      and REL_COL_SNO = #{relColSno,jdbcType=DECIMAL}
+      and EXP_DTM = #{expDtm,jdbcType=TIMESTAMP}
+  </update>
+  
+  <update id="updateWahPrf" parameterType="kr.wise.dq.profile.tblrel.service.WamPrfRelColVO" >
+    UPDATE WAH_PRF_REL_COL
+         SET EXP_DTM = NOW()
+     WHERE EXP_DTM = to_date('99991231','YYYYMMDD')
+        AND PRF_ID = #{prfId,jdbcType=VARCHAR}           
+        AND CH_TBL_DBC_COL_NM = #{chTblDbcColNm,jdbcType=VARCHAR}
+        AND PA_TBL_DBC_COL_NM = #{paTblDbcColNm,jdbcType=VARCHAR}
+     </update>
+     
+</mapper>

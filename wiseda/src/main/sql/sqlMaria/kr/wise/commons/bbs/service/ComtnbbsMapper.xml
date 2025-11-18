@@ -1,0 +1,682 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.commons.bbs.service.ComtnbbsMapper" >
+
+	<resultMap id="boardList" type="kr.wise.commons.bbs.service.BoardVO" >
+		<id column="NTT_ID" property="nttId" jdbcType="DECIMAL" />
+    	<id column="BBS_ID" property="bbsId" jdbcType="CHAR" />
+		<result property="nttSj" column="NTT_SJ" 	/>
+		<result property="frstRegisterId" column="FRST_REGISTER_ID" />
+		<result property="frstRegisterNm" column="FRST_REGISTER_NM" />
+		<result property="frstRegisterPnttm" column="FRST_REGIST_PNTTM" />
+		<result property="inqireCo" column="RDCNT" />
+		<result property="parnts" column="PARNTSCTT_NO" />
+		<result property="replyAt" column="ANSWER_AT" />		
+		<result property="replyLc" column="ANSWER_LC" />
+		<result property="useAt" column="USE_AT" />
+		<result property="atchFileId" column="ATCH_FILE_ID" />
+		<result property="ntceBgnde" column="NTCE_BGNDE" />
+		<result property="ntceEndde" column="NTCE_ENDDE" />
+		<result property="cateCode" column="CATE_CODE" />
+		<result property="cateNm" column="CATE_NM" />
+		<result property="prjId" column="PRJ_ID" />
+		<result property="reportType" column="REPORT_TYPE" />
+	</resultMap>
+	
+	<resultMap id="boardDetail" type="kr.wise.commons.bbs.service.BoardVO">
+	    <id column="NTT_ID" property="nttId" jdbcType="DECIMAL" />
+	    <id column="BBS_ID" property="bbsId" jdbcType="CHAR" />
+		<result property="nttSj" column="NTT_SJ" />	
+		<result property="ntcrId" column="NTCR_ID" />
+		<result property="ntcrNm" column="NTCR_NM" />
+		<result property="nttNo" column="NTT_NO" />
+		<result property="nttCn" column="NTT_CN"  jdbcType="CLOB"/>
+		<result property="password" column="PASSWORD" />
+		<result property="frstRegisterId" column="FRST_REGISTER_ID" />
+		<result property="frstRegisterNm" column="FRST_REGISTER_NM" />
+		<result property="frstRegisterPnttm" column="FRST_REGIST_PNTTM" />
+		<result property="ntceBgnde" column="NTCE_BGNDE" />
+		<result property="ntceEndde" column="NTCE_ENDDE" />
+		<result property="inqireCo" column="RDCNT" />
+		<result property="useAt" column="USE_AT" />
+		<result property="atchFileId" column="ATCH_FILE_ID" />
+		<result property="parnts" column="PARNTSCTT_NO" />
+		<result property="replyAt" column="ANSWER_AT" />		
+		<result property="replyLc" column="ANSWER_LC" />
+		<result property="sortOrdr" column="SORT_ORDR" />
+		<result property="bbsTyCode" column="BBS_TY_CODE" />
+		<result property="bbsAttrbCode" column="BBS_ATTRB_CODE" />
+		<result property="replyPosblAt" column="REPLY_POSBL_AT" />
+		<result property="fileAtchPosblAt" column="FILE_ATCH_POSBL_AT" />
+		<result property="posblAtchFileNumber" column="ATCH_POSBL_FILE_NUMBER" />
+		<result property="bbsNm" column="BBS_NM" />
+		<result property="cateCode" column="CATE_CODE" />
+		<result property="cateNm" column="CATE_NM" />
+		<result property="prjId" column="PRJ_ID" />
+		<result property="reportType" column="REPORT_TYPE" />
+	</resultMap>
+
+<!--   <resultMap id="BaseResultMap" type="kr.wise.commons.bbs.service.Comtnbbs" >
+    <id column="NTT_ID" property="nttId" jdbcType="DECIMAL" />
+    <id column="BBS_ID" property="bbsId" jdbcType="CHAR" />
+    <result column="NTT_NO" property="nttNo" jdbcType="DECIMAL" />
+    <result column="NTT_SJ" property="nttSj" jdbcType="VARCHAR" />
+    <result column="ANSWER_AT" property="answerAt" jdbcType="CHAR" />
+    <result column="PARNTSCTT_NO" property="parntscttNo" jdbcType="DECIMAL" />
+    <result column="ANSWER_LC" property="answerLc" jdbcType="DECIMAL" />
+    <result column="SORT_ORDR" property="sortOrdr" jdbcType="DECIMAL" />
+    <result column="RDCNT" property="rdcnt" jdbcType="DECIMAL" />
+    <result column="USE_AT" property="useAt" jdbcType="CHAR" />
+    <result column="NTCE_BGNDE" property="ntceBgnde" jdbcType="CHAR" />
+    <result column="NTCE_ENDDE" property="ntceEndde" jdbcType="CHAR" />
+    <result column="NTCR_ID" property="ntcrId" jdbcType="VARCHAR" />
+    <result column="NTCR_NM" property="ntcrNm" jdbcType="VARCHAR" />
+    <result column="PASSWORD" property="password" jdbcType="VARCHAR" />
+    <result column="ATCH_FILE_ID" property="atchFileId" jdbcType="CHAR" />
+    <result column="FRST_REGIST_PNTTM" property="frstRegistPnttm" jdbcType="TIMESTAMP" />
+    <result column="FRST_REGISTER_ID" property="frstRegisterId" jdbcType="VARCHAR" />
+    <result column="LAST_UPDT_PNTTM" property="lastUpdtPnttm" jdbcType="TIMESTAMP" />
+    <result column="LAST_UPDUSR_ID" property="lastUpdusrId" jdbcType="VARCHAR" />
+  </resultMap> -->
+  <!-- <resultMap id="ResultMapWithBLOBs" type="kr.wise.commons.bbs.service.Comtnbbs" extends="BaseResultMap" >
+    <result column="NTT_CN" property="nttCn" jdbcType="CLOB" />
+  </resultMap> -->
+  <sql id="Base_Column_List" >
+    NTT_ID, BBS_ID, NTT_NO, NTT_SJ, ANSWER_AT, PARNTSCTT_NO, ANSWER_LC, SORT_ORDR, RDCNT, 
+    USE_AT, NTCE_BGNDE, NTCE_ENDDE, NTCR_ID, NTCR_NM, PASSWORD, ATCH_FILE_ID, FRST_REGIST_PNTTM, 
+    FRST_REGISTER_ID, LAST_UPDT_PNTTM, LAST_UPDUSR_ID
+  </sql>
+  <sql id="Blob_Column_List" >
+    NTT_CN
+  </sql>
+    
+  	<select id="selectBoardArticleList" parameterType="kr.wise.commons.bbs.service.BoardVO" resultMap="boardList" >
+		<![CDATA[
+		SELECT * FROM ( SELECT @ROWNUM := @ROWNUM + 1 AS rn, TB.*  
+		FROM (
+			SELECT
+					a.NTT_ID
+					, a.NTT_SJ
+					, a.FRST_REGISTER_ID
+					, IFNULL(B.USER_NM, a.NTCR_NM) as FRST_REGISTER_NM,
+					DATE_FORMAT(a.FRST_REGIST_PNTTM, '%Y-%m-%d %H:%i:%S') as FRST_REGIST_PNTTM
+					, a.RDCNT
+					, a.PARNTSCTT_NO
+					, a.ANSWER_AT
+					, a.ANSWER_LC
+					, a.USE_AT
+					, a.ATCH_FILE_ID
+					, a.BBS_ID
+					, rtrim(a.NTCE_BGNDE) NTCE_BGNDE
+					, rtrim(a.NTCE_ENDDE) NTCE_ENDDE
+					, a.CATE_CODE
+					, Y.CODE_NM AS CATE_NM
+					, a.PRJ_ID
+					, a.REPORT_TYPE
+			FROM
+				COMTNBBS a
+			INNER JOIN COMTNBBSMASTER X
+            ON a.BBS_ID = X.BBS_ID
+            LEFT OUTER JOIN COMTCCMMNDETAILCODE Y
+            ON X.CATE_CODE = Y.CODE_ID
+            AND a.CATE_CODE = Y.CODE
+			LEFT OUTER JOIN WAA_USER B 
+			ON a.FRST_REGISTER_ID = B.LOGIN_AC_ID
+			AND B.REG_TYP_CD IN ('C', 'U')
+			AND B.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+			-- LEFT OUTER JOIN PMSPORJECT Z
+			-- ON a.PRJ_ID = Z.PRJ_ID 
+			--  LEFT OUTER JOIN 
+			-- 	COMVNUSERMASTER b
+			--  ON a.FRST_REGISTER_ID = B.ESNTL_ID 
+			WHERE
+				a.USE_AT = 'Y'
+			AND	a.BBS_ID = #{bbsId}
+		]]>
+			<if test="cateCode !=null and cateCode != ''">
+				<![CDATA[ AND	a.CATE_CODE  = #{cateCode} 		]]>
+			</if>
+			<if test="searchBgnDe !=null and searchBgnDe !=''">
+				<![CDATA[ AND STR_TO_DATE(a.FRST_REGIST_PNTTM, '%Y-%m-%d') >= #{searchBgnDe} ]]>
+			</if>
+			<if test="searchEndDe !=null and searchEndDe !=''">
+				<![CDATA[ AND STR_TO_DATE(a.FRST_REGIST_PNTTM, '%Y-%m-%d') <= #{searchEndDe} ]]>
+			</if>
+			<if test="prjId !=null and prjId != ''">
+				<![CDATA[ AND	a.PRJ_ID  = #{prjId} 		]]>
+			</if>
+			<if test="reportType !=null and reportType != ''">
+				<![CDATA[ AND	a.REPORT_TYPE  = #{reportType} 		]]>
+			</if>
+				<if test="searchWrd != null and searchWrd != ''" >
+					<if test="searchCnd == 0">
+						<![CDATA[ AND	a.NTT_SJ LIKE CONCAT('%',#{searchWrd},'%') 		]]>
+					</if>
+					<if test="searchCnd == 1">
+						<![CDATA[ AND	a.NTT_CN LIKE CONCAT('%', #{searchWrd},'%') 		]]>
+					</if>
+					<if test="searchCnd == 2">
+						<![CDATA[ AND	B.USER_NM LIKE CONCAT('%', #{searchWrd},'%') 		]]>
+					</if>
+				</if>
+<!-- 			<isEqual prepend="AND" property="searchCnd" compareValue="0"> -->
+<!-- 				<![CDATA[	a.NTT_SJ LIKE '%' || #searchWrd# || '%' 		]]> -->
+<!-- 			</isEqual> -->
+<!-- 			<isEqual prepend="AND" property="searchCnd" compareValue="1"> -->
+<!-- 				<![CDATA[	a.NTT_CN LIKE '%' || #searchWrd# || '%' 		]]> -->
+<!-- 			</isEqual>	 -->
+<!-- 			<isEqual prepend="AND" property="searchCnd" compareValue="2"> -->
+<!-- 				<![CDATA[	b.USER_NM LIKE '%' || #searchWrd# || '%' 		]]> -->
+<!-- 			</isEqual>				 -->
+		<![CDATA[			
+			ORDER BY a.SORT_ORDR DESC, NTT_NO ASC
+			) TB ,(SELECT @rownum:=0) TMP
+	)TBL  
+	WHERE rn BETWEEN #{firstIndex} + 1 AND #{firstIndex} + #{recordCountPerPage}
+		]]>				
+	</select>	
+	
+	<select id="selectBoardArticleListCnt" parameterType="kr.wise.commons.bbs.service.BoardVO" resultType="java.lang.Integer" >
+		<![CDATA[
+			SELECT
+				COUNT(a.NTT_ID)
+			FROM
+				COMTNBBS a
+			LEFT OUTER JOIN WAA_USER B 
+			ON a.FRST_REGISTER_ID = B.LOGIN_AC_ID 
+			AND B.REG_TYP_CD IN ('C', 'U')
+			AND B.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+			--  LEFT OUTER JOIN 
+			-- 	COMVNUSERMASTER b
+			--  ON a.FRST_REGISTER_ID = B.ESNTL_ID 
+			WHERE
+				a.BBS_ID = #{bbsId}
+		]]>
+			<if test="cateCode !=null and cateCode != ''">
+				<![CDATA[ AND	a.CATE_CODE  = #{cateCode} 		]]>
+			</if>
+			<if test="searchBgnDe !=null and searchBgnDe !=''">
+				<![CDATA[ AND STR_TO_DATE(a.FRST_REGIST_PNTTM, '%Y-%m-%d') >= #{searchBgnDe} ]]>
+			</if>
+			<if test="searchEndDe !=null and searchEndDe !=''">
+				<![CDATA[ AND STR_TO_DATE(a.FRST_REGIST_PNTTM, '%Y-%m-%d') <= #{searchEndDe} ]]>
+			</if>
+			<if test="prjId !=null and prjId != ''">
+				<![CDATA[ AND	a.PRJ_ID  = #{prjId} 		]]>
+			</if>
+			<if test="reportType !=null and reportType != ''">
+				<![CDATA[ AND	a.REPORT_TYPE  = #{reportType} 		]]>
+			</if>
+			<if test="searchWrd != null and searchWrd != ''" >
+				<if test="searchCnd == 0">
+					<![CDATA[ AND	a.NTT_SJ LIKE CONCAT('%' , #{searchWrd} , '%') 		]]>
+				</if>
+				<if test="searchCnd == 1">
+					<![CDATA[ AND	a.NTT_CN LIKE CONCAT('%' , #{searchWrd} , '%') 		]]>
+				</if>
+				<if test="searchCnd == 2">
+					<![CDATA[ AND	B.USER_NM LIKE CONCAT('%' , #{searchWrd} , '%') 		]]>
+				</if>
+			</if>
+<!-- 			<isEqual prepend="AND" property="searchCnd" compareValue="0"> -->
+<!-- 				<![CDATA[	a.NTT_SJ LIKE '%' || #searchWrd# || '%' 		]]> -->
+<!-- 			</isEqual> -->
+<!-- 			<isEqual prepend="AND" property="searchCnd" compareValue="1"> -->
+<!-- 				<![CDATA[	a.NTT_CN LIKE '%' || #searchWrd# || '%' 		]]> -->
+<!-- 			</isEqual>	 -->
+<!-- 			<isEqual prepend="AND" property="searchCnd" compareValue="2"> -->
+<!-- 				<![CDATA[	b.USER_NM LIKE '%' || #searchWrd# || '%' 		]]> -->
+<!-- 			</isEqual>		 -->
+	</select>
+	
+	 <select id="selectMaxInqireCo" resultType="java.lang.Integer" parameterType="kr.wise.commons.bbs.service.BoardVO">
+ 		<![CDATA[
+			SELECT IFNULL(MAX(RDCNT),0)+1 AS RDCNT FROM COMTNBBS
+			WHERE BBS_ID = #{bbsId}
+			AND NTT_ID = #{nttId}
+ 		]]>
+ 	</select>	
+ 	
+ 	
+ 	 <update id="deleteBoardArticle" parameterType="kr.wise.commons.bbs.service.Board">
+ 		<![CDATA[
+			UPDATE COMTNBBS SET 
+				NTT_SJ = #{nttSj},
+				USE_AT = 'N',  
+				LAST_UPDUSR_ID = #{lastUpdusrId},
+				LAST_UPDT_PNTTM = NOW()
+			WHERE BBS_ID = #{bbsId}
+			AND NTT_ID = #{nttId}
+			AND FRST_REGISTER_ID = #{frstRegisterId}
+ 		]]>
+ 	</update>
+ 	
+ 	 <update id="updateBoardArticle" parameterType="kr.wise.commons.bbs.service.Board">
+ 		<![CDATA[
+			UPDATE COMTNBBS SET 
+				NTT_SJ = #{nttSj},
+				NTT_CN = #{nttCn}, 
+				NTCR_ID = #{ntcrId},
+				NTCR_NM = #{ntcrNm},
+				PASSWORD = #{password},
+				NTCE_BGNDE = #{ntceBgnde},		
+				NTCE_ENDDE = #{ntceEndde},
+				LAST_UPDUSR_ID = #{lastUpdusrId},
+				ATCH_FILE_ID = #{atchFileId,jdbcType=CHAR},
+				LAST_UPDT_PNTTM = NOW(), 
+				CATE_CODE = #{cateCode,jdbcType=VARCHAR},
+				PRJ_ID = #{prjId, jdbcType=VARCHAR},
+				REPORT_TYPE = #{reportType, jdbcType=VARCHAR}
+			WHERE BBS_ID = #{bbsId}
+			AND NTT_ID = #{nttId}
+			AND FRST_REGISTER_ID = #{frstRegisterId}
+ 		]]>
+ 	</update>
+ 	
+ 	 <update id="updateInqireCo" parameterType="kr.wise.commons.bbs.service.BoardVO">
+ 		<![CDATA[
+			UPDATE COMTNBBS SET 
+				RDCNT = #{inqireCo},
+				LAST_UPDUSR_ID = #{lastUpdusrId},
+				LAST_UPDT_PNTTM = NOW()
+			WHERE BBS_ID = #{bbsId}
+			AND NTT_ID = #{nttId}
+ 		]]>
+ 	</update>
+ 	
+ 	<select id="selectBoardArticle" parameterType="kr.wise.commons.bbs.service.BoardVO" resultMap="boardDetail" >
+		<![CDATA[
+			SELECT
+				a.NTT_SJ, a.NTCR_ID, a.NTCR_NM, a.NTT_NO, a.NTT_CN,
+				a.PASSWORD, a.FRST_REGISTER_ID, b.USER_NM as FRST_REGISTER_NM,
+				STR_TO_DATE(a.FRST_REGIST_PNTTM, '%Y-%m-%d') as FRST_REGIST_PNTTM,
+				a.NTCE_BGNDE, a.NTCE_ENDDE, a.RDCNT, 
+				a.USE_AT, a.ATCH_FILE_ID, a.BBS_ID, a.NTT_ID,
+				a.PARNTSCTT_NO, a.ANSWER_AT, a.ANSWER_LC, a.SORT_ORDR,
+				c.BBS_TY_CODE, c.BBS_ATTRB_CODE, c.REPLY_POSBL_AT, 
+				c.FILE_ATCH_POSBL_AT, c.ATCH_POSBL_FILE_NUMBER, c.BBS_NM
+				, a.CATE_CODE, Y.CODE_NM AS CATE_NM, a.PRJ_ID, a.REPORT_TYPE
+			FROM
+				COMTNBBS a
+            LEFT OUTER JOIN WAA_USER b 
+			ON a.FRST_REGISTER_ID = b.LOGIN_AC_ID 
+			AND b.REG_TYP_CD IN ('C', 'U')
+			AND b.EXP_DTM = STR_TO_DATE('9999-12-31', '%Y-%m-%d')
+			--  LEFT OUTER JOIN 
+			-- 	COMVNUSERMASTER b
+			--  ON a.FRST_REGISTER_ID = b.ESNTL_ID 
+			LEFT OUTER JOIN 
+				COMTNBBSMASTER c
+			ON a.BBS_ID = c.BBS_ID			
+            LEFT OUTER JOIN COMTCCMMNDETAILCODE Y
+            ON  c.CATE_CODE = Y.CODE_ID
+            AND a.CATE_CODE = Y.CODE
+			WHERE
+				a.BBS_ID = #{bbsId}	
+			AND
+				a.NTT_ID = #{nttId}	
+		]]>				
+	</select>
+	
+	<select id="selectBoardRegID" parameterType="kr.wise.commons.bbs.service.BoardVO" resultType="String" >
+		<![CDATA[
+			SELECT FRST_REGISTER_ID FROM COMTNBBS
+			WHERE BBS_ID = #{bbsId}
+			AND NTT_ID = #{nttId}
+		]]>				
+	</select>
+	
+	<insert id="insertBoardArticle" parameterType="kr.wise.commons.bbs.service.Board" >
+		<selectKey resultType="java.lang.Long" keyProperty="nttNo" order="BEFORE">
+			SELECT IFNULL(MAX(SORT_ORDR),0)+1 AS NTT_NO  FROM COMTNBBS
+			WHERE BBS_ID = #{bbsId}
+		</selectKey>
+		<![CDATA[
+			INSERT INTO COMTNBBS
+			(NTT_ID, BBS_ID, NTT_SJ, NTT_CN, SORT_ORDR, 
+			 NTCR_ID, NTCR_NM, PASSWORD, RDCNT, 
+			 NTCE_BGNDE, NTCE_ENDDE, ANSWER_AT,  			   
+			 PARNTSCTT_NO, NTT_NO, ANSWER_LC, ATCH_FILE_ID,
+			 FRST_REGISTER_ID, FRST_REGIST_PNTTM, USE_AT, CATE_CODE, 
+			 PRJ_ID, REPORT_TYPE
+			 
+			 )
+			VALUES
+			( #{nttId}, #{bbsId}, #{nttSj}, #{nttCn}, #{nttNo}, 
+			  #{ntcrId}, #{ntcrNm}, #{password}, #{inqireCo}, 
+			  #{ntceBgnde}, #{ntceEndde}, #{replyAt}, 
+			  #{parnts}, 1, #{replyLc}, #{atchFileId,jdbcType=CHAR},
+			  #{frstRegisterId}, NOW(), 'Y', #{cateCode,jdbcType=VARCHAR},
+			  #{prjId,jdbcType=VARCHAR}, #{reportType, jdbcType=VARCHAR}
+			 )			
+		]]>
+	</insert>
+  
+  
+  	<insert id="replyBoardArticle" parameterType="kr.wise.commons.bbs.service.Board" >
+		<selectKey resultType="java.lang.Long" keyProperty="nttNo" order="BEFORE">
+			SELECT IFNULL(MAX(NTT_NO),0)+1 AS NTT_NO  FROM COMTNBBS
+			WHERE BBS_ID = #{bbsId} AND SORT_ORDR = #{sortOrdr}
+		</selectKey>			
+		<![CDATA[
+			INSERT INTO COMTNBBS
+			(NTT_ID, BBS_ID, NTT_SJ, NTT_CN, SORT_ORDR, 
+			 NTCR_ID, NTCR_NM, PASSWORD, RDCNT, 
+			 NTCE_BGNDE, NTCE_ENDDE, ANSWER_AT,  			   
+			 PARNTSCTT_NO, NTT_NO, ANSWER_LC, ATCH_FILE_ID,
+			 FRST_REGISTER_ID, FRST_REGIST_PNTTM, USE_AT, CATE_CODE, 
+			 PRJ_ID, REPORT_TYPE
+			 )
+			VALUES
+			( #{nttId}, #{bbsId}, #{nttSj}, #{nttCn}, #{sortOrdr}, 
+			  #{ntcrId}, #{ntcrNm}, #{password}, #{inqireCo}, 
+			  #{ntceBgnde}, #{ntceEndde}, #{replyAt}, 
+			  #{parnts}, 1, #{replyLc}, #{atchFileId,jdbcType=CHAR},
+			  #{frstRegisterId}, NOW(), 'Y', #{cateCode,jdbcType=VARCHAR}, 
+			  #{prjId,jdbcType=VARCHAR}, #{reportType, jdbcType=VARCHAR}
+			 )			
+		]]>
+	</insert>
+	
+	<select id="getParentNttNo" parameterType="kr.wise.commons.bbs.service.Board" resultType="java.lang.Long">
+		<![CDATA[
+			SELECT NTT_NO FROM COMTNBBS
+			WHERE BBS_ID = #{bbsId} AND NTT_ID = #{parnts}			
+		]]>
+	</select>
+	
+ 	<update id="updateOtherNttNo" parameterType="kr.wise.commons.bbs.service.Board">
+ 		<![CDATA[
+			UPDATE COMTNBBS SET 
+				NTT_NO = NTT_NO + 1
+			WHERE BBS_ID = #{bbsId} AND SORT_ORDR = #{sortOrdr}
+			AND NTT_NO > #{nttNo}
+ 		]]>
+ 	</update>
+ 	
+ 	 <update id="updateNttNo" parameterType="kr.wise.commons.bbs.service.Board">
+ 		<![CDATA[
+			UPDATE COMTNBBS SET 
+				NTT_NO = #{nttNo}
+			WHERE BBS_ID = #{bbsId} 
+			AND NTT_ID = #{nttId}
+ 		]]>
+ 	</update>	
+  
+<!--   <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="map" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from COMTNBBS
+    where NTT_ID = #{nttId,jdbcType=DECIMAL}
+      and BBS_ID = #{bbsId,jdbcType=CHAR}
+  </select> -->
+<!--   <delete id="deleteByPrimaryKey" parameterType="map" >
+    delete from COMTNBBS
+    where NTT_ID = #{nttId,jdbcType=DECIMAL}
+      and BBS_ID = #{bbsId,jdbcType=CHAR}
+  </delete> -->
+<!--   <insert id="insert" parameterType="kr.wise.commons.bbs.service.Comtnbbs" >
+    insert into COMTNBBS (NTT_ID, BBS_ID, NTT_NO, 
+      NTT_SJ, ANSWER_AT, PARNTSCTT_NO, 
+      ANSWER_LC, SORT_ORDR, RDCNT, 
+      USE_AT, NTCE_BGNDE, NTCE_ENDDE, 
+      NTCR_ID, NTCR_NM, PASSWORD, 
+      ATCH_FILE_ID, FRST_REGIST_PNTTM, FRST_REGISTER_ID, 
+      LAST_UPDT_PNTTM, LAST_UPDUSR_ID, NTT_CN
+      )
+    values (#{nttId,jdbcType=DECIMAL}, #{bbsId,jdbcType=CHAR}, #{nttNo,jdbcType=DECIMAL}, 
+      #{nttSj,jdbcType=VARCHAR}, #{answerAt,jdbcType=CHAR}, #{parntscttNo,jdbcType=DECIMAL}, 
+      #{answerLc,jdbcType=DECIMAL}, #{sortOrdr,jdbcType=DECIMAL}, #{rdcnt,jdbcType=DECIMAL}, 
+      #{useAt,jdbcType=CHAR}, #{ntceBgnde,jdbcType=CHAR}, #{ntceEndde,jdbcType=CHAR}, 
+      #{ntcrId,jdbcType=VARCHAR}, #{ntcrNm,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
+      #{atchFileId,jdbcType=CHAR}, #{frstRegistPnttm,jdbcType=TIMESTAMP}, #{frstRegisterId,jdbcType=VARCHAR}, 
+      #{lastUpdtPnttm,jdbcType=TIMESTAMP}, #{lastUpdusrId,jdbcType=VARCHAR}, #{nttCn,jdbcType=CLOB}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="kr.wise.commons.bbs.service.Comtnbbs" >
+    insert into COMTNBBS
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="nttId != null" >
+        NTT_ID,
+      </if>
+      <if test="bbsId != null" >
+        BBS_ID,
+      </if>
+      <if test="nttNo != null" >
+        NTT_NO,
+      </if>
+      <if test="nttSj != null" >
+        NTT_SJ,
+      </if>
+      <if test="answerAt != null" >
+        ANSWER_AT,
+      </if>
+      <if test="parntscttNo != null" >
+        PARNTSCTT_NO,
+      </if>
+      <if test="answerLc != null" >
+        ANSWER_LC,
+      </if>
+      <if test="sortOrdr != null" >
+        SORT_ORDR,
+      </if>
+      <if test="rdcnt != null" >
+        RDCNT,
+      </if>
+      <if test="useAt != null" >
+        USE_AT,
+      </if>
+      <if test="ntceBgnde != null" >
+        NTCE_BGNDE,
+      </if>
+      <if test="ntceEndde != null" >
+        NTCE_ENDDE,
+      </if>
+      <if test="ntcrId != null" >
+        NTCR_ID,
+      </if>
+      <if test="ntcrNm != null" >
+        NTCR_NM,
+      </if>
+      <if test="password != null" >
+        PASSWORD,
+      </if>
+      <if test="atchFileId != null" >
+        ATCH_FILE_ID,
+      </if>
+      <if test="frstRegistPnttm != null" >
+        FRST_REGIST_PNTTM,
+      </if>
+      <if test="frstRegisterId != null" >
+        FRST_REGISTER_ID,
+      </if>
+      <if test="lastUpdtPnttm != null" >
+        LAST_UPDT_PNTTM,
+      </if>
+      <if test="lastUpdusrId != null" >
+        LAST_UPDUSR_ID,
+      </if>
+      <if test="nttCn != null" >
+        NTT_CN,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="nttId != null" >
+        #{nttId,jdbcType=DECIMAL},
+      </if>
+      <if test="bbsId != null" >
+        #{bbsId,jdbcType=CHAR},
+      </if>
+      <if test="nttNo != null" >
+        #{nttNo,jdbcType=DECIMAL},
+      </if>
+      <if test="nttSj != null" >
+        #{nttSj,jdbcType=VARCHAR},
+      </if>
+      <if test="answerAt != null" >
+        #{answerAt,jdbcType=CHAR},
+      </if>
+      <if test="parntscttNo != null" >
+        #{parntscttNo,jdbcType=DECIMAL},
+      </if>
+      <if test="answerLc != null" >
+        #{answerLc,jdbcType=DECIMAL},
+      </if>
+      <if test="sortOrdr != null" >
+        #{sortOrdr,jdbcType=DECIMAL},
+      </if>
+      <if test="rdcnt != null" >
+        #{rdcnt,jdbcType=DECIMAL},
+      </if>
+      <if test="useAt != null" >
+        #{useAt,jdbcType=CHAR},
+      </if>
+      <if test="ntceBgnde != null" >
+        #{ntceBgnde,jdbcType=CHAR},
+      </if>
+      <if test="ntceEndde != null" >
+        #{ntceEndde,jdbcType=CHAR},
+      </if>
+      <if test="ntcrId != null" >
+        #{ntcrId,jdbcType=VARCHAR},
+      </if>
+      <if test="ntcrNm != null" >
+        #{ntcrNm,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="atchFileId != null" >
+        #{atchFileId,jdbcType=CHAR},
+      </if>
+      <if test="frstRegistPnttm != null" >
+        #{frstRegistPnttm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="frstRegisterId != null" >
+        #{frstRegisterId,jdbcType=VARCHAR},
+      </if>
+      <if test="lastUpdtPnttm != null" >
+        #{lastUpdtPnttm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastUpdusrId != null" >
+        #{lastUpdusrId,jdbcType=VARCHAR},
+      </if>
+      <if test="nttCn != null" >
+        #{nttCn,jdbcType=CLOB},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.commons.bbs.service.Comtnbbs" >
+    update COMTNBBS
+    <set >
+      <if test="nttNo != null" >
+        NTT_NO = #{nttNo,jdbcType=DECIMAL},
+      </if>
+      <if test="nttSj != null" >
+        NTT_SJ = #{nttSj,jdbcType=VARCHAR},
+      </if>
+      <if test="answerAt != null" >
+        ANSWER_AT = #{answerAt,jdbcType=CHAR},
+      </if>
+      <if test="parntscttNo != null" >
+        PARNTSCTT_NO = #{parntscttNo,jdbcType=DECIMAL},
+      </if>
+      <if test="answerLc != null" >
+        ANSWER_LC = #{answerLc,jdbcType=DECIMAL},
+      </if>
+      <if test="sortOrdr != null" >
+        SORT_ORDR = #{sortOrdr,jdbcType=DECIMAL},
+      </if>
+      <if test="rdcnt != null" >
+        RDCNT = #{rdcnt,jdbcType=DECIMAL},
+      </if>
+      <if test="useAt != null" >
+        USE_AT = #{useAt,jdbcType=CHAR},
+      </if>
+      <if test="ntceBgnde != null" >
+        NTCE_BGNDE = #{ntceBgnde,jdbcType=CHAR},
+      </if>
+      <if test="ntceEndde != null" >
+        NTCE_ENDDE = #{ntceEndde,jdbcType=CHAR},
+      </if>
+      <if test="ntcrId != null" >
+        NTCR_ID = #{ntcrId,jdbcType=VARCHAR},
+      </if>
+      <if test="ntcrNm != null" >
+        NTCR_NM = #{ntcrNm,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        PASSWORD = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="atchFileId != null" >
+        ATCH_FILE_ID = #{atchFileId,jdbcType=CHAR},
+      </if>
+      <if test="frstRegistPnttm != null" >
+        FRST_REGIST_PNTTM = #{frstRegistPnttm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="frstRegisterId != null" >
+        FRST_REGISTER_ID = #{frstRegisterId,jdbcType=VARCHAR},
+      </if>
+      <if test="lastUpdtPnttm != null" >
+        LAST_UPDT_PNTTM = #{lastUpdtPnttm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastUpdusrId != null" >
+        LAST_UPDUSR_ID = #{lastUpdusrId,jdbcType=VARCHAR},
+      </if>
+      <if test="nttCn != null" >
+        NTT_CN = #{nttCn,jdbcType=CLOB},
+      </if>
+    </set>
+    where NTT_ID = #{nttId,jdbcType=DECIMAL}
+      and BBS_ID = #{bbsId,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="kr.wise.commons.bbs.service.Comtnbbs" >
+    update COMTNBBS
+    set NTT_NO = #{nttNo,jdbcType=DECIMAL},
+      NTT_SJ = #{nttSj,jdbcType=VARCHAR},
+      ANSWER_AT = #{answerAt,jdbcType=CHAR},
+      PARNTSCTT_NO = #{parntscttNo,jdbcType=DECIMAL},
+      ANSWER_LC = #{answerLc,jdbcType=DECIMAL},
+      SORT_ORDR = #{sortOrdr,jdbcType=DECIMAL},
+      RDCNT = #{rdcnt,jdbcType=DECIMAL},
+      USE_AT = #{useAt,jdbcType=CHAR},
+      NTCE_BGNDE = #{ntceBgnde,jdbcType=CHAR},
+      NTCE_ENDDE = #{ntceEndde,jdbcType=CHAR},
+      NTCR_ID = #{ntcrId,jdbcType=VARCHAR},
+      NTCR_NM = #{ntcrNm,jdbcType=VARCHAR},
+      PASSWORD = #{password,jdbcType=VARCHAR},
+      ATCH_FILE_ID = #{atchFileId,jdbcType=CHAR},
+      FRST_REGIST_PNTTM = #{frstRegistPnttm,jdbcType=TIMESTAMP},
+      FRST_REGISTER_ID = #{frstRegisterId,jdbcType=VARCHAR},
+      LAST_UPDT_PNTTM = #{lastUpdtPnttm,jdbcType=TIMESTAMP},
+      LAST_UPDUSR_ID = #{lastUpdusrId,jdbcType=VARCHAR},
+      NTT_CN = #{nttCn,jdbcType=CLOB}
+    where NTT_ID = #{nttId,jdbcType=DECIMAL}
+      and BBS_ID = #{bbsId,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="kr.wise.commons.bbs.service.Comtnbbs" >
+    update COMTNBBS
+    set NTT_NO = #{nttNo,jdbcType=DECIMAL},
+      NTT_SJ = #{nttSj,jdbcType=VARCHAR},
+      ANSWER_AT = #{answerAt,jdbcType=CHAR},
+      PARNTSCTT_NO = #{parntscttNo,jdbcType=DECIMAL},
+      ANSWER_LC = #{answerLc,jdbcType=DECIMAL},
+      SORT_ORDR = #{sortOrdr,jdbcType=DECIMAL},
+      RDCNT = #{rdcnt,jdbcType=DECIMAL},
+      USE_AT = #{useAt,jdbcType=CHAR},
+      NTCE_BGNDE = #{ntceBgnde,jdbcType=CHAR},
+      NTCE_ENDDE = #{ntceEndde,jdbcType=CHAR},
+      NTCR_ID = #{ntcrId,jdbcType=VARCHAR},
+      NTCR_NM = #{ntcrNm,jdbcType=VARCHAR},
+      PASSWORD = #{password,jdbcType=VARCHAR},
+      ATCH_FILE_ID = #{atchFileId,jdbcType=CHAR},
+      FRST_REGIST_PNTTM = #{frstRegistPnttm,jdbcType=TIMESTAMP},
+      FRST_REGISTER_ID = #{frstRegisterId,jdbcType=VARCHAR},
+      LAST_UPDT_PNTTM = #{lastUpdtPnttm,jdbcType=TIMESTAMP},
+      LAST_UPDUSR_ID = #{lastUpdusrId,jdbcType=VARCHAR}
+    where NTT_ID = #{nttId,jdbcType=DECIMAL}
+      and BBS_ID = #{bbsId,jdbcType=CHAR}
+  </update> -->
+</mapper>

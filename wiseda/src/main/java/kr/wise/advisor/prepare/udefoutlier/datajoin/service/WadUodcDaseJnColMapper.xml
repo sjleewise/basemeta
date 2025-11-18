@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.wise.advisor.prepare.udefoutlier.datajoin.service.WadUodcDaseJnColMapper">
+	<resultMap id="BaseResultMap" type="kr.wise.advisor.prepare.udefoutlier.datajoin.service.WadUodcDaseJnCol" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+		<id column="UDF_OTL_DTC_ID"   		jdbcType="VARCHAR"   property="udfOtlDtcId" />
+		<id column="CRE_COMP_ID"      		jdbcType="VARCHAR"   property="creCompId" />
+		<id column="JN_COL_SNO"       		jdbcType="DECIMAL"   property="jnColSno" />
+		<result column="LEFT_ANA_VAR_ID"    jdbcType="VARCHAR"   property="leftAnaVarId"    />
+		<result column="RIGHT_ANA_VAR_ID"   jdbcType="VARCHAR"   property="rightAnaVarId"  />
+		<result column="LEFT_ANA_DASE_NM"   jdbcType="VARCHAR"   property="leftAnaDaseNm"    />
+		<result column="RIGHT_ANA_DASE_NM"  jdbcType="VARCHAR"   property="rightAnaDaseNm"  />
+		<result column="LEFT_COL_PNM"  		jdbcType="VARCHAR"   property="leftColPnm" />
+		<result column="RIGHT_COL_PNM"  	jdbcType="VARCHAR"   property="rightColPnm" />
+		
+		<result column="COL_LNM"  	        jdbcType="VARCHAR"   property="colLnm"    />
+		<result column="ANA_VAR_ID"         jdbcType="VARCHAR"   property="anaVarId"  />
+		<result column="ANA_DASE_NM"        jdbcType="VARCHAR"   property="anaDaseNm" />
+		<result column="ANA_DASE_ID"        jdbcType="VARCHAR"   property="anaDaseId" />
+		<result column="JN_TYP_CD"          jdbcType="VARCHAR"   property="jnTypCd"   />
+		<result column="JN_TYP_NM"          jdbcType="VARCHAR"   property="jnTypNm"   />
+	</resultMap>
+	
+	<select id="selectJnColList" parameterType="kr.wise.advisor.prepare.udefoutlier.datajoin.service.WadUodcDaseJn" resultMap="BaseResultMap">
+		SELECT C.ANA_DASE_NM AS LEFT_ANA_DASE_NM
+		     , E.ANA_DASE_NM AS RIGHT_ANA_DASE_NM
+		     , B.LEFT_ANA_VAR_ID
+		     , B.RIGHT_ANA_VAR_ID
+		     , B.LEFT_COL_PNM
+		     , B.RIGHT_COL_PNM
+		     , C.ANA_DASE_ID   AS LEFT_ANA_DASE_ID
+		     , E.ANA_DASE_ID   AS RIGHT_ANA_DASE_ID
+		     , B.JN_COL_SNO       
+		  FROM WAD_UODC_DASE_JN A
+		       INNER JOIN WAD_UODC_DASE_JN_COL B
+		          ON B.UDF_OTL_DTC_ID = A.UDF_OTL_DTC_ID     
+		         AND B.CRE_COMP_ID    = A.CRE_COMP_ID 
+		       INNER JOIN WAD_UODC_ANA_DASE C
+		          ON C.UDF_OTL_DTC_ID = A.UDF_OTL_DTC_ID
+		         AND C.ANA_DASE_ID    = A.LEFT_ANA_DASE_ID
+		       INNER JOIN WAD_UODC_ANA_DASE_COL D
+		          ON D.UDF_OTL_DTC_ID = A.UDF_OTL_DTC_ID
+		         AND D.ANA_DASE_ID    = A.LEFT_ANA_DASE_ID
+		         AND D.ANA_VAR_ID     = B.LEFT_ANA_VAR_ID
+		       INNER JOIN WAD_UODC_ANA_DASE E
+		          ON E.UDF_OTL_DTC_ID = A.UDF_OTL_DTC_ID
+		         AND E.ANA_DASE_ID    = A.RIGHT_ANA_DASE_ID
+		       INNER JOIN WAD_UODC_ANA_DASE_COL F
+		          ON F.UDF_OTL_DTC_ID = A.UDF_OTL_DTC_ID
+		         AND F.ANA_DASE_ID    = A.RIGHT_ANA_DASE_ID
+		         AND F.ANA_VAR_ID     = B.RIGHT_ANA_VAR_ID 
+		  WHERE 1 = 1
+		    AND A.UDF_OTL_DTC_ID = #{udfOtlDtcId, jdbcType=VARCHAR}
+		    AND A.CRE_COMP_ID = #{creCompId, jdbcType=VARCHAR}
+		  ORDER BY B.JN_COL_SNO
+	</select>
+	
+	<select id="getJnColSno" parameterType="kr.wise.advisor.prepare.udefoutlier.datajoin.service.WadUodcDaseJnCol" resultType="String">
+		SELECT	NVL(MAX(JN_COL_SNO), 0) + 1 
+			FROM	WAD_UODC_DASE_JN_COL
+			WHERE	UDF_OTL_DTC_ID = #{udfOtlDtcId,jdbcType=VARCHAR}
+				AND CRE_COMP_ID    = #{creCompId,jdbcType=VARCHAR}
+	</select>
+	
+	<insert id="insertWadUodcDaseJnCol" parameterType="kr.wise.advisor.prepare.udefoutlier.datajoin.service.WadUodcDaseJnCol">
+		INSERT INTO WAD_UODC_DASE_JN_COL 
+						(	UDF_OTL_DTC_ID,
+							CRE_COMP_ID,
+							JN_COL_SNO,
+							LEFT_ANA_VAR_ID,
+							RIGHT_ANA_VAR_ID,
+							LEFT_COL_PNM,
+							RIGHT_COL_PNM,
+							OBJ_VERS,      
+					        REG_TYP_CD,      
+					        WRIT_USER_ID,      
+					        WRIT_DTM 	)
+		VALUES			
+						(	#{udfOtlDtcId,jdbcType=VARCHAR},
+							#{creCompId,jdbcType=VARCHAR},
+							#{jnColSno, jdbcType=DECIMAL},
+							#{leftAnaVarId,jdbcType=VARCHAR},
+							#{rightAnaVarId,jdbcType=VARCHAR},
+							#{leftColPnm,jdbcType=VARCHAR},
+							#{rightColPnm,jdbcType=VARCHAR},
+							1,
+					        'C',      
+					        #{writUserId,jdbcType=VARCHAR},      
+					        SYSDATE	)
+	</insert>
+	
+	<delete id="deleteJnCol" parameterType="kr.wise.advisor.prepare.udefoutlier.datajoin.service.WadUodcDaseJnCol">
+		DELETE	FROM WAD_UODC_DASE_JN_COL
+		WHERE	UDF_OTL_DTC_ID = #{udfOtlDtcId,jdbcType=VARCHAR}
+			AND	CRE_COMP_ID = #{creCompId,jdbcType=VARCHAR}
+			AND	JN_COL_SNO = #{jnColSno,jdbcType=DECIMAL}
+	</delete>
+	
+	<delete id="deleteByPrimaryKey" parameterType="map">
+	    delete from WAD_UODC_DASE_JN_COL
+	    where UDF_OTL_DTC_ID = #{udfOtlDtcId,jdbcType=VARCHAR}
+	      and CRE_COMP_ID = #{creCompId,jdbcType=VARCHAR}
+	</delete>
+	
+	<delete id="deleteByUdfOtlDtcId" parameterType="map">
+	    delete from WAD_UODC_DASE_JN_COL
+	    where UDF_OTL_DTC_ID = #{udfOtlDtcId,jdbcType=VARCHAR}
+	</delete>
+	
+	<select id="getJnColPnm" parameterType="kr.wise.advisor.prepare.udefoutlier.datajoin.service.WadUodcDaseJnCol" resultMap="BaseResultMap">
+		SELECT DISTINCT COL_PNM AS LEFT_COL_PNM
+		     , COL_LNM 
+		     , ANA_VAR_ID 
+		  FROM WAD_UODC_ANA_DASE_COL
+		 WHERE (ANA_DASE_ID = #{leftAnaVarId,jdbcType=VARCHAR} 
+		        OR ANA_DASE_ID = #{rightAnaVarId,jdbcType=VARCHAR})
+	</select>
+	
+	<update id="updateDaseJnAnaDaseId" parameterType="kr.wise.advisor.prepare.udefoutlier.datajoin.service.WadUodcDaseJn" >
+    <![CDATA[
+  	 UPDATE WAD_UODC_DASE_JN A
+  	     SET ANA_DASE_ID = (SELECT ANA_DASE_ID
+		                      FROM WAD_UODC_ANA_DASE X 
+		                     WHERE X.UDF_OTL_DTC_ID = A.UDF_OTL_DTC_ID
+		                       AND X.CRE_COMP_ID    = A.CRE_COMP_ID 
+		                       AND ROWNUM <= 1
+		                   )   
+  	  WHERE UDF_OTL_DTC_ID = #{udfOtlDtcId,jdbcType=VARCHAR}
+        AND CRE_COMP_ID    = #{creCompId,jdbcType=VARCHAR}
+    ]]>
+  </update>
+  
+  <update id="updateDaseJnAnaDaseColId" parameterType="kr.wise.advisor.prepare.udefoutlier.datajoin.service.WadUodcDaseJn" >
+    <![CDATA[
+  	 UPDATE WAD_UODC_ANA_DASE_COL A
+  	     SET ANA_DASE_ID = (SELECT ANA_DASE_ID
+		                      FROM WAD_UODC_DASE_JN X 
+		                     WHERE X.UDF_OTL_DTC_ID = A.UDF_OTL_DTC_ID
+		                       AND X.CRE_COMP_ID    = A.CRE_COMP_ID 
+		                       AND ROWNUM <= 1
+		                   )   
+  	  WHERE UDF_OTL_DTC_ID = #{udfOtlDtcId,jdbcType=VARCHAR}
+        AND CRE_COMP_ID    = #{creCompId,jdbcType=VARCHAR}
+    ]]>
+  </update>
+  
+  <select id="selectUodcDaseJnColLstForScrt" parameterType="kr.wise.advisor.prepare.udefoutlier.datajoin.service.WadUodcDaseJn" resultMap="BaseResultMap">
+		SELECT G.ANA_DASE_NM   
+		     , GET_CMCD_DTL_NM('JN_TYP_CD',A.JN_TYP_CD) AS JN_TYP_NM
+		     , D.ANA_DASE_NM	AS LEFT_ANA_DASE_NM
+             , F.ANA_DASE_NM	AS RIGHT_ANA_DASE_NM
+             , B.LEFT_ANA_VAR_ID
+             , B.RIGHT_ANA_VAR_ID
+             , B.LEFT_COL_PNM
+             , B.RIGHT_COL_PNM
+             , B.JN_COL_SNO
+		  FROM WAD_UODC_DASE_JN A
+		       LEFT JOIN WAD_UODC_DASE_JN_COL B
+		         ON B.UDF_OTL_DTC_ID = A.UDF_OTL_DTC_ID
+		        AND B.CRE_COMP_ID    = A.CRE_COMP_ID 
+		       INNER JOIN WAD_UODC_ANA_DASE_COL C
+                 ON C.UDF_OTL_DTC_ID = A.UDF_OTL_DTC_ID
+                AND C.ANA_DASE_ID    = A.LEFT_ANA_DASE_ID
+                AND C.ANA_VAR_ID     = B.LEFT_ANA_VAR_ID
+               LEFT JOIN WAD_UODC_ANA_DASE D
+				 ON	D.UDF_OTL_DTC_ID = C.UDF_OTL_DTC_ID   
+				AND	D.ANA_DASE_ID    = C.ANA_DASE_ID  
+			   INNER JOIN WAD_UODC_ANA_DASE_COL E
+                 ON E.UDF_OTL_DTC_ID = A.UDF_OTL_DTC_ID
+                AND E.ANA_DASE_ID    = A.RIGHT_ANA_DASE_ID
+                AND E.ANA_VAR_ID     = B.RIGHT_ANA_VAR_ID
+			   LEFT JOIN WAD_UODC_ANA_DASE F
+				 ON	F.UDF_OTL_DTC_ID = B.UDF_OTL_DTC_ID    
+				AND	F.ANA_DASE_ID    = E.ANA_DASE_ID
+			   LEFT JOIN WAD_UODC_ANA_DASE G
+			     ON G.ANA_DASE_ID = A.ANA_DASE_ID	  
+		WHERE 1 = 1
+          AND A.UDF_OTL_DTC_ID = #{udfOtlDtcId, jdbcType=VARCHAR}
+          AND A.CRE_COMP_ID    = #{creCompId, jdbcType=VARCHAR}
+		ORDER BY B.JN_COL_SNO
+	</select>
+</mapper>

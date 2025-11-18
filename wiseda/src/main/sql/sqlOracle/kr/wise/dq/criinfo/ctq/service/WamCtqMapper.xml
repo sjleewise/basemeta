@@ -1,0 +1,396 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.dq.criinfo.ctq.service.WamCtqMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.dq.criinfo.ctq.service.WamCtqVO" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+    <id column="CTQ_ID" property="ctqId" jdbcType="VARCHAR" />
+    <result column="CTQ_LNM" property="ctqLnm" jdbcType="VARCHAR" />
+    <result column="CTQ_PNM" property="ctqPnm" jdbcType="VARCHAR" />
+    <result column="CTQ_LVL" property="ctqLvl" jdbcType="DECIMAL" />
+    <result column="CTQ_LVL" property="Level" jdbcType="DECIMAL" />
+    <result column="UPP_CTQ_ID" property="uppCtqId" jdbcType="VARCHAR" />
+    <result column="UPP_CTQ_LNM" property="uppCtqLnm" jdbcType="VARCHAR" />
+    <result column="GOAL" property="goal" jdbcType="DECIMAL" />
+	<result column="WEIGHT" property="weight" jdbcType="DECIMAL" />
+<!--     <result column="RQST_NO" property="rqstNo" jdbcType="VARCHAR" /> -->
+<!--     <result column="RQST_SNO" property="rqstSno" jdbcType="DECIMAL" /> -->
+<!--     <result column="OBJ_DESCN" property="objDescn" jdbcType="VARCHAR" /> -->
+<!--     <result column="OBJ_VERS" property="objVers" jdbcType="DECIMAL" /> -->
+<!--     <result column="REG_TYP_CD" property="regTypCd" jdbcType="VARCHAR" /> -->
+<!--     <result column="FRS_RQST_DTM" property="frsRqstDtm" jdbcType="DATE" /> -->
+<!--     <result column="FRS_RQST_USER_ID" property="frsRqstUserId" jdbcType="VARCHAR" /> -->
+<!--     <result column="RQST_DTM" property="rqstDtm" jdbcType="DATE" /> -->
+    <result column="RQST_DTM_DISP" property="rqstDtmDisp" jdbcType="VARCHAR" />
+<!--     <result column="RQST_USER_ID" property="rqstUserId" jdbcType="VARCHAR" /> -->
+<!--     <result column="RQST_USER_NM" property="rqstUserNm" jdbcType="VARCHAR" /> -->
+<!--     <result column="APRV_DTM" property="aprvDtm" jdbcType="DATE" /> -->
+<!--     <result column="APRV_USER_ID" property="aprvUserId" jdbcType="VARCHAR" /> -->
+	<result column="BIZRULE_CNT" property="bizruleCnt" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    CTQ_ID, CTQ_LNM, CTQ_PNM, CTQ_LVL, UPP_CTQ_ID, RQST_NO, 
+    RQST_SNO, GOAL, WEIGHT, OBJ_DESCN, OBJ_VERS, REG_TYP_CD, FRS_RQST_DTM, FRS_RQST_USER_ID, RQST_DTM, 
+    RQST_USER_ID, APRV_DTM, APRV_USER_ID
+  </sql>
+  
+  <!-- for 문 사용 SQL -->
+ <sql id="SelectSql" >
+    SELECT CTQ_ID
+         , CTQ_LNM
+         , CTQ_PNM
+         , CTQ_LVL
+         , UPP_CTQ_ID
+         , RQST_NO
+         , RQST_SNO
+         , OBJ_DESCN
+         , OBJ_VERS
+         , REG_TYP_CD
+         , FRS_RQST_DTM
+         , FRS_RQST_USER_ID
+         , RQST_DTM
+         , RQST_USER_ID
+         , APRV_DTM
+         , APRV_USER_ID
+         , FULL_PATH     
+         , UPP_CTQ_ID||CTQ_ID AS ORDER_COLUMN
+         , GOAL
+         , WEIGHT
+   FROM WAM_CTQ
+  WHERE CTQ_LVL = #{item}
+    AND REG_TYP_CD  IN ('C','U')
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select  A.CTQ_ID
+       ,A.CTQ_LNM
+       ,A.CTQ_LVL
+       ,A.GOAL
+	   ,A.WEIGHT
+       ,A.OBJ_DESCN
+       ,A.OBJ_VERS
+       ,A.REG_TYP_CD
+       ,A.RQST_USER_ID
+       ,A.RQST_DTM
+       ,GET_USER_NM(A.RQST_USER_ID) AS RQST_USER_NM
+       ,A.FRS_RQST_DTM
+       ,A.FRS_RQST_USER_ID
+       ,GET_USER_NM(A.FRS_RQST_USER_ID) AS FRS_RQST_USER_NM
+       ,A.APRV_DTM
+       ,A.APRV_USER_ID
+       ,GET_USER_NM(A.APRV_USER_ID) AS APRV_USER_NM
+       ,B.USER_NM AS RQST_USER_NM
+       ,CASE WHEN A.CTQ_LVL > 1 
+             THEN (SELECT CTQ_LNM                     
+                     FROM WAM_CTQ                
+                    WHERE CTQ_ID = A.UPP_CTQ_ID       
+                      AND REG_TYP_CD IN ('C','U')	
+                  ) END AS UPP_CTQ_LNM      
+   FROM WAM_CTQ A
+        left outer join WAA_USER B
+          on A.RQST_USER_ID = B.USER_ID
+         and B.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+         and B.REG_TYP_CD IN ('C','U')
+        left outer join WAA_USER C
+          on A.FRS_RQST_USER_ID = C.USER_ID
+         and C.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+         and C.REG_TYP_CD IN ('C','U')
+        left outer join WAA_USER D
+          on A.APRV_USER_ID = D.USER_ID
+         and D.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+         and D.REG_TYP_CD IN ('C','U')
+    where A.CTQ_ID = #{ctqId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from WAM_CTQ
+    where CTQ_ID = #{ctqId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="kr.wise.dq.criinfo.ctq.service.WamCtqVO" >
+    insert into WAM_CTQ (CTQ_ID, CTQ_LNM, CTQ_PNM, 
+      CTQ_LVL, UPP_CTQ_ID, GOAL, WEIGHT, RQST_NO, 
+      RQST_SNO, OBJ_DESCN, OBJ_VERS, 
+      REG_TYP_CD, FRS_RQST_DTM, FRS_RQST_USER_ID, 
+      RQST_DTM, RQST_USER_ID, APRV_DTM, 
+      APRV_USER_ID)
+    values (#{ctqId,jdbcType=VARCHAR}, #{ctqLnm,jdbcType=VARCHAR}, #{ctqPnm,jdbcType=VARCHAR}, 
+      #{ctqLvl,jdbcType=DECIMAL}, #{uppCtqId,jdbcType=VARCHAR}, #{goal,jdbcType=DECIMAL},
+	  #{weight,jdbcType=DECIMAL},  #{rqstNo,jdbcType=VARCHAR}, 
+      #{rqstSno,jdbcType=DECIMAL}, #{objDescn,jdbcType=VARCHAR}, #{objVers,jdbcType=DECIMAL}, 
+      #{regTypCd,jdbcType=VARCHAR}, #{frsRqstDtm,jdbcType=DATE}, #{frsRqstUserId,jdbcType=VARCHAR}, 
+      #{rqstDtm,jdbcType=DATE}, #{rqstUserId,jdbcType=VARCHAR}, #{aprvDtm,jdbcType=DATE}, 
+      #{aprvUserId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="kr.wise.dq.criinfo.ctq.service.WamCtqVO" >
+    insert into WAM_CTQ
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="ctqId != null" >
+        CTQ_ID,
+      </if>
+      <if test="ctqLnm != null" >
+        CTQ_LNM,
+      </if>
+      <if test="ctqPnm != null" >
+        CTQ_PNM,
+      </if>
+      <if test="ctqLvl != null" >
+        CTQ_LVL,
+      </if>
+      <if test="uppCtqId != null" >
+        UPP_CTQ_ID,
+      </if>
+      <if test="goal != null" >
+        GOAL,
+      </if>
+	  <if test="weight != null" >
+        WEIGHT,
+      </if>
+      <if test="rqstNo != null" >
+        RQST_NO,
+      </if>
+      <if test="rqstSno != null" >
+        RQST_SNO,
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN,
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS,
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD,
+      </if>
+      <if test="frsRqstDtm != null" >
+        FRS_RQST_DTM,
+      </if>
+      <if test="frsRqstUserId != null" >
+        FRS_RQST_USER_ID,
+      </if>
+      <if test="rqstDtm != null" >
+        RQST_DTM,
+      </if>
+      <if test="rqstUserId != null" >
+        RQST_USER_ID,
+      </if>
+      <if test="aprvDtm != null" >
+        APRV_DTM,
+      </if>
+      <if test="aprvUserId != null" >
+        APRV_USER_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="ctqId != null" >
+        #{ctqId,jdbcType=VARCHAR},
+      </if>
+      <if test="ctqLnm != null" >
+        #{ctqLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="ctqPnm != null" >
+        #{ctqPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="ctqLvl != null" >
+        #{ctqLvl,jdbcType=DECIMAL},
+      </if>
+      <if test="uppCtqId != null" >
+        #{uppCtqId,jdbcType=VARCHAR},
+      </if>
+      <if test="goal != null" >
+        #{goal,jdbcType=DECIMAL},
+      </if>
+	  <if test="weight != null" >
+        #{weight,jdbcType=DECIMAL},
+      </if>
+      <if test="rqstNo != null" >
+        #{rqstNo,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstSno != null" >
+        #{rqstSno,jdbcType=DECIMAL},
+      </if>
+      <if test="objDescn != null" >
+        #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null" >
+        #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="frsRqstDtm != null" >
+        #{frsRqstDtm,jdbcType=DATE},
+      </if>
+      <if test="frsRqstUserId != null" >
+        #{frsRqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDtm != null" >
+        #{rqstDtm,jdbcType=DATE},
+      </if>
+      <if test="rqstUserId != null" >
+        #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDtm != null" >
+        #{aprvDtm,jdbcType=DATE},
+      </if>
+      <if test="aprvUserId != null" >
+        #{aprvUserId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.dq.criinfo.ctq.service.WamCtqVO" >
+    update WAM_CTQ
+    <set >
+      <if test="ctqLnm != null" >
+        CTQ_LNM = #{ctqLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="ctqPnm != null" >
+        CTQ_PNM = #{ctqPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="ctqLvl != null" >
+        CTQ_LVL = #{ctqLvl,jdbcType=DECIMAL},
+      </if>
+      <if test="uppCtqId != null" >
+        UPP_CTQ_ID = #{uppCtqId,jdbcType=VARCHAR},
+      </if>
+      <if test="goal != null" >
+        GOAL = #{goal,jdbcType=DECIMAL},
+      </if>
+	  <if test="weight != null" >
+        WEIGHT = #{weight,jdbcType=DECIMAL},
+      </if>
+      <if test="rqstNo != null" >
+        RQST_NO = #{rqstNo,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstSno != null" >
+        RQST_SNO = #{rqstSno,jdbcType=DECIMAL},
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="frsRqstDtm != null" >
+        FRS_RQST_DTM = #{frsRqstDtm,jdbcType=DATE},
+      </if>
+      <if test="frsRqstUserId != null" >
+        FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDtm != null" >
+        RQST_DTM = #{rqstDtm,jdbcType=DATE},
+      </if>
+      <if test="rqstUserId != null" >
+        RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDtm != null" >
+        APRV_DTM = #{aprvDtm,jdbcType=DATE},
+      </if>
+      <if test="aprvUserId != null" >
+        APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where CTQ_ID = #{ctqId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="kr.wise.dq.criinfo.ctq.service.WamCtqVO" >
+    update WAM_CTQ
+    set CTQ_LNM = #{ctqLnm,jdbcType=VARCHAR},
+      CTQ_PNM = #{ctqPnm,jdbcType=VARCHAR},
+      CTQ_LVL = #{ctqLvl,jdbcType=DECIMAL},
+      UPP_CTQ_ID = #{uppCtqId,jdbcType=VARCHAR},
+      GOAL = #{goal,jdbcType=DECIMAL},
+	  WEIGHT = #{weight,jdbcType=DECIMAL},
+      RQST_NO = #{rqstNo,jdbcType=VARCHAR},
+      RQST_SNO = #{rqstSno,jdbcType=DECIMAL},
+      OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      FRS_RQST_DTM = #{frsRqstDtm,jdbcType=DATE},
+      FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR},
+      RQST_DTM = #{rqstDtm,jdbcType=DATE},
+      RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      APRV_DTM = #{aprvDtm,jdbcType=DATE},
+      APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR}
+    where CTQ_ID = #{ctqId,jdbcType=VARCHAR}
+  </update>
+  
+  
+  <select id="selectCtqList" resultMap="BaseResultMap" parameterType="kr.wise.dq.criinfo.ctq.service.WamCtqVO">
+  SELECT  A.CTQ_ID     
+		, A.CTQ_LNM     
+        , A.CTQ_PNM
+        , A.CTQ_LVL
+        , A.UPP_CTQ_ID
+        , A.RQST_NO
+        , A.RQST_SNO
+        , A.OBJ_DESCN
+        , A.OBJ_VERS
+        , A.REG_TYP_CD
+        , A.FRS_RQST_DTM
+        , A.FRS_RQST_USER_ID
+        , GET_USER_NM(A.FRS_RQST_USER_ID) AS FRS_RQST_USER_NM
+        , A.RQST_DTM
+        , A.RQST_USER_ID
+        , GET_USER_NM(A.RQST_USER_ID) AS RQST_USER_NM
+        , A.APRV_DTM
+        , A.APRV_USER_ID
+        , GET_USER_NM(A.APRV_USER_ID) AS APRV_USER_NM
+        , A.FULL_PATH     
+        , B.CTQ_LNM AS UPP_CTQ_LNM
+        , C.BIZRULE_CNT
+        , A.GOAL
+        , A.WEIGHT
+	  FROM (
+<!-- 	  		collection = 전달받은 인자값 -->
+<!-- 	  		item   = 전달받은 인자값을 다른이름으로 대체  -->
+<!-- 	  		open 해당 구문이 시작할떄  -->
+<!-- 	  		lose 해당구문이 끝날떄 -->
+<!-- 			separator  한번 이상 반복할때 반복되는 사이에  해당 문을 넣어줌 -->
+	  		<foreach collection="lvlList" item="item" index="index" open="" separator="UNION ALL" close="">
+				<include refid="SelectSql" />	      
+			</foreach>
+	       ) A
+	       LEFT OUTER JOIN WAM_CTQ B
+	         ON A.UPP_CTQ_ID = B.CTQ_ID
+	        AND B.REG_TYP_CD IN ('C','U')
+	       LEFT OUTER JOIN (SELECT COUNT(1) AS BIZRULE_CNT
+					             , B.CTQ_ID AS JOIN_CTQ_ID
+					          FROM WAM_BR_MSTR A INNER JOIN WAM_BR_CTQ_MAP B
+					            ON A.BR_ID = B.BR_ID
+					           AND A.REG_TYP_CD IN ('C', 'U')
+					           AND B.REG_TYP_CD IN ('C', 'U')
+					         GROUP BY CTQ_ID) C
+	        ON A.CTQ_ID = C.JOIN_CTQ_ID
+ <where>
+    <if test=" ctqId != null  and ctqId != '' " >
+      and A.CTQ_ID =   #{ctqId,jdbcType=VARCHAR} 
+   </if>
+   <if test=" ctqLnm != null and ctqLnm != '' " >
+      and UPPER(A.FULL_PATH) LIKE '%' || UPPER(#{ctqLnm,jdbcType=VARCHAR}) ||'%'
+<!--       and CTQ_LNM LIKE REPLACE( #{ctqLnm,jdbcType=VARCHAR} , '*', '%') -->
+   </if>
+   <if test=" uppCtqLnm != null and uppCtqLnm != '' " >
+      and UPPER(B.CTQ_LNM) LIKE '%' || UPPER(#{uppCtqLnm,jdbcType=VARCHAR}) || '%'
+   </if>
+</where>
+      ORDER BY A.FULL_PATH, A.CTQ_LVL
+  </select>
+  
+  <insert id="insertWamCtq" parameterType="kr.wise.commons.rqstmst.service.WaqMstr" >
+	insert into WAM_CTQ
+	(<include refid="Base_Column_List" />)
+	select 
+	<include refid="Base_Column_List" />
+	from WAH_CTQ
+	where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+	  and EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+	  and REG_TYP_CD in ('C','U')
+  </insert>
+  
+  <delete id="deleteWamCtq" parameterType="kr.wise.commons.rqstmst.service.WaqMstr" >
+	delete WAM_CTQ
+	where CTQ_ID in (select CTQ_ID from WAH_CTQ
+		                            where RQST_NO = #{rqstNo,jdbcType=VARCHAR}
+		                               and EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+		                 )
+  </delete>
+  
+</mapper>

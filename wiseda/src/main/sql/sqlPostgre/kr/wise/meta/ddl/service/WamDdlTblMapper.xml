@@ -1,0 +1,1252 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.meta.ddl.service.WamDdlTblMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.meta.ddl.service.WamDdlTbl" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+    <id column="DDL_TBL_ID" property="ddlTblId" jdbcType="VARCHAR" />
+    <result column="DDL_TBL_PNM" property="ddlTblPnm" jdbcType="VARCHAR" />
+    <result column="DDL_TBL_LNM" property="ddlTblLnm" jdbcType="VARCHAR" />
+    <result column="DB_SCH_ID" property="dbSchId" jdbcType="VARCHAR" />
+    <result column="TBL_SPAC_ID" property="tblSpacId" jdbcType="VARCHAR" />
+    <result column="PRC_TYP_CD" property="prcTypCd" jdbcType="VARCHAR" />
+    <result column="PRC_DT" property="prcDt" jdbcType="VARCHAR" />
+    <result column="PRC_DBA_ID" property="prcDbaId" jdbcType="VARCHAR" />
+    <result column="PRC_DBA_NM" property="prcDbaNm" jdbcType="VARCHAR" />
+    
+    <result column="PDM_TBL_ID" property="pdmTblId" jdbcType="VARCHAR" />
+    <result column="DB_CONN_TRG_ID" property="dbConnTrgId" jdbcType="VARCHAR" />
+    <result column="DB_CONN_TRG_PNM" property="dbConnTrgPnm" jdbcType="VARCHAR" />
+    <result column="DB_CONN_TRG_LNM" property="dbConnTrgLnm" jdbcType="VARCHAR" />
+    <result column="DB_SCH_LNM" property="dbSchLnm" jdbcType="VARCHAR" />
+    <result column="DB_SCH_PNM" property="dbSchPnm" jdbcType="VARCHAR" />
+    <result column="PDM_TBL_LNM" property="pdmTblLnm" jdbcType="VARCHAR" />
+    <result column="TBL_SPAC_PNM" property="tblSpacPnm" jdbcType="VARCHAR" />
+    <result column="SCRT_INFO" property="scrtInfo" jdbcType="VARCHAR" />
+    
+    <result column="OBJ_ID" property="objId" jdbcType="VARCHAR" />
+    <result column="OBJ_LNM" property="objLnm" jdbcType="VARCHAR" />
+    <result column="OBJ_PNM" property="objPnm" jdbcType="VARCHAR" />
+    <result column="OBJ_DCD" property="objDcd" jdbcType="VARCHAR" />
+    <result column="TBL_TYP_CD" property="tblTypCd" jdbcType="VARCHAR" />
+    <result column="DDL_COL_LNM" property="ddlColLnm" jdbcType="VARCHAR" />
+    <result column="SUBJ_ID" property="subjId" jdbcType="VARCHAR" />
+    
+    <result column="DDL_IDX_PNM" property="ddlIdxPnm" jdbcType="VARCHAR" />
+    <result column="DDL_IDX_LNM" property="ddlIdxLnm" jdbcType="VARCHAR" />
+    
+    <result column="PART_TBL_YN" property="partTblYn" jdbcType="VARCHAR" />
+    
+    <result column="IDX_SPAC_ID" property="idxSpacId" jdbcType="VARCHAR" />
+    <result column="IDX_SPAC_PNM" property="idxSpacPnm" jdbcType="VARCHAR" />
+    <result column="SYS_AREA_ID" property="sysAreaId" jdbcType="VARCHAR" />
+    
+    <result column="PDM_TBL_PNM" property="pdmTblPnm" jdbcType="VARCHAR" />
+    <result column="PDM_TBL_LNM" property="pdmTblLnm" jdbcType="VARCHAR" />
+    <result column="PRGM_ID" property="prgmId" jdbcType="VARCHAR" />
+    <result column="TGT_DDL_TRG_DCD" property="tgtDdlTrgDcd" jdbcType="VARCHAR" />
+    
+    <result column="EXP_DTM_STR" property="expDtmStr" jdbcType="VARCHAR" />
+    
+    <result column="ENC_YN" property="encYn" jdbcType="VARCHAR" />
+    
+  </resultMap>
+  
+  <resultMap id="ResultMapWithBLOBs" type="kr.wise.meta.ddl.service.WamDdlTbl" extends="BaseResultMap" >
+    <result column="SCRT_INFO" property="scrtInfo" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    DDL_TBL_ID, DDL_TBL_PNM, DDL_TBL_LNM, DB_SCH_ID, TBL_SPAC_ID, PDM_TBL_ID, RQST_NO, 
+    RQST_SNO, OBJ_DESCN, OBJ_VERS, REG_TYP_CD, FRS_RQST_DTM, FRS_RQST_USER_ID, RQST_DTM, 
+    RQST_USER_ID, APRV_DTM, APRV_USER_ID
+  </sql>
+  
+  <sql id="Blob_Column_List" >
+    SCRT_INFO
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    SELECT A.DDL_TBL_ID,A.DDL_TBL_PNM,A.DDL_TBL_LNM,A.DB_SCH_ID,A.TBL_SPAC_ID,A.PDM_TBL_ID,A.SCRT_INFO
+		,A.PRC_TYP_CD,A.PRC_DT,A.PRC_DBA_ID,A.RQST_NO,A.RQST_SNO,A.OBJ_VERS,A.OBJ_DESCN,A.REG_TYP_CD
+		,A.FRS_RQST_DTM,A.FRS_RQST_USER_ID,A.RQST_DTM,A.RQST_USER_ID,A.APRV_DTM,A.APRV_USER_ID
+		,A.ENC_YN,A.USER_RQST_CNTN,A.PART_TBL_YN,A.PCI_YN,A.DDL_TRG_DCD
+		,A.SRC_DDL_TRG_DCD,A.SRC_DB_SCH_ID,A.SRC_DB_SCH_PNM,A.SRC_DB_CONN_TRG_PNM,A.TGT_DDL_TRG_DCD
+		,A.TGT_DB_SCH_ID,A.TGT_DB_SCH_PNM,A.TGT_DB_CONN_TRG_PNM,A.PDM_RQST_NO
+  		,GET_USER_NM(A.FRS_RQST_USER_ID) AS FRS_RQST_USER_NM
+  		,GET_USER_NM(A.RQST_USER_ID) AS RQST_USER_NM
+  		,GET_USER_NM(A.APRV_USER_ID) AS APRV_USER_NM
+        ,B.*
+        ,C.*
+  FROM WAH_DDL_TBL A 
+       LEFT JOIN
+	    (SELECT A.DB_CONN_TRG_ID
+	           ,DB_CONN_TRG_LNM
+	           ,DB_CONN_TRG_PNM
+	           ,DB_SCH_ID
+	           ,DB_SCH_LNM
+	           ,DB_SCH_PNM
+	     FROM WAA_DB_CONN_TRG A INNER JOIN WAA_DB_SCH B
+	     ON A.DB_CONN_TRG_ID = B.DB_CONN_TRG_ID
+	     AND A.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	     AND B.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	     AND A.REG_TYP_CD IN ('C', 'U')
+	     AND B.REG_TYP_CD IN ('C', 'U')
+	     ) B
+	     ON A.DB_SCH_ID = B.DB_SCH_ID
+         LEFT OUTER JOIN 
+         (SELECT PDM_TBL_ID, PDM_TBL_PNM, PDM_TBL_LNM
+         FROM WAM_PDM_TBL
+         WHERE REG_TYP_CD IN ('C', 'U')
+         ) C
+         ON A.PDM_TBL_ID = C.PDM_TBL_ID
+
+    WHERE A.DDL_TBL_ID = #{ddlTblId,jdbcType=VARCHAR}
+      AND A.RQST_NO = #{rqstNo, jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from WAM_DDL_TBL
+    where DDL_TBL_ID = #{ddlTblId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="kr.wise.meta.ddl.service.WamDdlTbl" >
+    insert into WAM_DDL_TBL (DDL_TBL_ID, DDL_TBL_PNM, DDL_TBL_LNM, 
+      DB_SCH_ID, TBL_SPAC_ID, PDM_TBL_ID, 
+      RQST_NO, RQST_SNO, OBJ_DESCN, 
+      OBJ_VERS, REG_TYP_CD, FRS_RQST_DTM, 
+      FRS_RQST_USER_ID, RQST_DTM, RQST_USER_ID, 
+      APRV_DTM, APRV_USER_ID, SCRT_INFO
+      )
+    values (#{ddlTblId,jdbcType=VARCHAR}, #{ddlTblPnm,jdbcType=VARCHAR}, #{ddlTblLnm,jdbcType=VARCHAR}, 
+      #{dbSchId,jdbcType=VARCHAR}, #{tblSpacId,jdbcType=VARCHAR}, #{pdmTblId,jdbcType=VARCHAR}, 
+      #{rqstNo,jdbcType=VARCHAR}, #{rqstSno,jdbcType=DECIMAL}, #{objDescn,jdbcType=VARCHAR}, 
+      #{objVers,jdbcType=DECIMAL}, #{regTypCd,jdbcType=VARCHAR}, #{frsRqstDtm,jdbcType=TIMESTAMP}, 
+      #{frsRqstUserId,jdbcType=VARCHAR}, #{rqstDtm,jdbcType=TIMESTAMP}, #{rqstUserId,jdbcType=VARCHAR}, 
+      #{aprvDtm,jdbcType=TIMESTAMP}, #{aprvUserId,jdbcType=VARCHAR}, #{scrtInfo,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="kr.wise.meta.ddl.service.WamDdlTbl" >
+    insert into WAM_DDL_TBL
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="ddlTblId != null" >
+        DDL_TBL_ID,
+      </if>
+      <if test="ddlTblPnm != null" >
+        DDL_TBL_PNM,
+      </if>
+      <if test="ddlTblLnm != null" >
+        DDL_TBL_LNM,
+      </if>
+      <if test="dbSchId != null" >
+        DB_SCH_ID,
+      </if>
+      <if test="tblSpacId != null" >
+        TBL_SPAC_ID,
+      </if>
+      <if test="pdmTblId != null" >
+        PDM_TBL_ID,
+      </if>
+      <if test="rqstNo != null" >
+        RQST_NO,
+      </if>
+      <if test="rqstSno != null" >
+        RQST_SNO,
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN,
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS,
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD,
+      </if>
+      <if test="frsRqstDtm != null" >
+        FRS_RQST_DTM,
+      </if>
+      <if test="frsRqstUserId != null" >
+        FRS_RQST_USER_ID,
+      </if>
+      <if test="rqstDtm != null" >
+        RQST_DTM,
+      </if>
+      <if test="rqstUserId != null" >
+        RQST_USER_ID,
+      </if>
+      <if test="aprvDtm != null" >
+        APRV_DTM,
+      </if>
+      <if test="aprvUserId != null" >
+        APRV_USER_ID,
+      </if>
+      <if test="scrtInfo != null" >
+        SCRT_INFO,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="ddlTblId != null" >
+        #{ddlTblId,jdbcType=VARCHAR},
+      </if>
+      <if test="ddlTblPnm != null" >
+        #{ddlTblPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="ddlTblLnm != null" >
+        #{ddlTblLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="dbSchId != null" >
+        #{dbSchId,jdbcType=VARCHAR},
+      </if>
+      <if test="tblSpacId != null" >
+        #{tblSpacId,jdbcType=VARCHAR},
+      </if>
+      <if test="pdmTblId != null" >
+        #{pdmTblId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstNo != null" >
+        #{rqstNo,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstSno != null" >
+        #{rqstSno,jdbcType=DECIMAL},
+      </if>
+      <if test="objDescn != null" >
+        #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null" >
+        #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="frsRqstDtm != null" >
+        #{frsRqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="frsRqstUserId != null" >
+        #{frsRqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDtm != null" >
+        #{rqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rqstUserId != null" >
+        #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDtm != null" >
+        #{aprvDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aprvUserId != null" >
+        #{aprvUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="scrtInfo != null" >
+        #{scrtInfo,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.meta.ddl.service.WamDdlTbl" >
+    update WAM_DDL_TBL
+    <set >
+      <if test="ddlTblPnm != null" >
+        DDL_TBL_PNM = #{ddlTblPnm,jdbcType=VARCHAR},
+      </if>
+      <if test="ddlTblLnm != null" >
+        DDL_TBL_LNM = #{ddlTblLnm,jdbcType=VARCHAR},
+      </if>
+      <if test="dbSchId != null" >
+        DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR},
+      </if>
+      <if test="tblSpacId != null" >
+        TBL_SPAC_ID = #{tblSpacId,jdbcType=VARCHAR},
+      </if>
+      <if test="pdmTblId != null" >
+        PDM_TBL_ID = #{pdmTblId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstNo != null" >
+        RQST_NO = #{rqstNo,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstSno != null" >
+        RQST_SNO = #{rqstSno,jdbcType=DECIMAL},
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="frsRqstDtm != null" >
+        FRS_RQST_DTM = #{frsRqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="frsRqstUserId != null" >
+        FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDtm != null" >
+        RQST_DTM = #{rqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rqstUserId != null" >
+        RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDtm != null" >
+        APRV_DTM = #{aprvDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aprvUserId != null" >
+        APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="scrtInfo != null" >
+        SCRT_INFO = #{scrtInfo,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where DDL_TBL_ID = #{ddlTblId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="kr.wise.meta.ddl.service.WamDdlTbl" >
+    update WAM_DDL_TBL
+    set DDL_TBL_PNM = #{ddlTblPnm,jdbcType=VARCHAR},
+      DDL_TBL_LNM = #{ddlTblLnm,jdbcType=VARCHAR},
+      DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR},
+      TBL_SPAC_ID = #{tblSpacId,jdbcType=VARCHAR},
+      PDM_TBL_ID = #{pdmTblId,jdbcType=VARCHAR},
+      RQST_NO = #{rqstNo,jdbcType=VARCHAR},
+      RQST_SNO = #{rqstSno,jdbcType=DECIMAL},
+      OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      FRS_RQST_DTM = #{frsRqstDtm,jdbcType=TIMESTAMP},
+      FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR},
+      RQST_DTM = #{rqstDtm,jdbcType=TIMESTAMP},
+      RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      APRV_DTM = #{aprvDtm,jdbcType=TIMESTAMP},
+      APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR},
+      SCRT_INFO = #{scrtInfo,jdbcType=VARCHAR}
+    where DDL_TBL_ID = #{ddlTblId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="kr.wise.meta.ddl.service.WamDdlTbl" >
+    update WAM_DDL_TBL
+    set DDL_TBL_PNM = #{ddlTblPnm,jdbcType=VARCHAR},
+      DDL_TBL_LNM = #{ddlTblLnm,jdbcType=VARCHAR},
+      DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR},
+      TBL_SPAC_ID = #{tblSpacId,jdbcType=VARCHAR},
+      PDM_TBL_ID = #{pdmTblId,jdbcType=VARCHAR},
+      RQST_NO = #{rqstNo,jdbcType=VARCHAR},
+      RQST_SNO = #{rqstSno,jdbcType=DECIMAL},
+      OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      FRS_RQST_DTM = #{frsRqstDtm,jdbcType=TIMESTAMP},
+      FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR},
+      RQST_DTM = #{rqstDtm,jdbcType=TIMESTAMP},
+      RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      APRV_DTM = #{aprvDtm,jdbcType=TIMESTAMP},
+      APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR}
+    where DDL_TBL_ID = #{ddlTblId,jdbcType=VARCHAR}
+  </update>
+  
+  <select id="selectList" resultMap="BaseResultMap" parameterType="kr.wise.meta.ddl.service.WamDdlTbl" >
+  
+SELECT    A.DDL_TBL_ID, A.DDL_TBL_PNM, A.DDL_TBL_LNM, A.DB_SCH_ID, A.TBL_SPAC_ID, A.PDM_TBL_ID, A.SCRT_INFO
+		, A.PRC_TYP_CD, A.PRC_DT, A.PRC_DBA_ID, A.RQST_NO, A.RQST_SNO, B.OBJ_DESCN, A.OBJ_VERS, A.REG_TYP_CD
+		, A.FRS_RQST_DTM, A.FRS_RQST_USER_ID, A.RQST_DTM, A.RQST_USER_ID, A.APRV_DTM, A.APRV_USER_ID
+		, A.USER_RQST_CNTN, A.PART_TBL_YN, A.PCI_YN, A.DDL_TRG_DCD, A.SRC_DDL_TRG_DCD
+		, A.SRC_DB_SCH_ID, A.SRC_DB_SCH_PNM, A.SRC_DB_CONN_TRG_PNM, A.TGT_DDL_TRG_DCD
+		, A.TGT_DB_SCH_ID, A.TGT_DB_SCH_PNM, A.TGT_DB_CONN_TRG_PNM, A.PDM_RQST_NO
+	    , B.PDM_TBL_ID
+	    , B.PDM_TBL_LNM
+	    , B.PDM_TBL_PNM
+	    , SCH.DB_SCH_LNM
+	    , SCH.DB_SCH_PNM
+	    , SCH.DB_IDX_SPAC_ID AS IDX_SPAC_ID
+	    , GET_TBL_SPAC_PNM(SCH.DB_IDX_SPAC_ID) AS IDX_SPAC_PNM
+	    , DB.DB_CONN_TRG_ID
+	    , DB.DB_CONN_TRG_LNM
+	    , DB.DB_CONN_TRG_PNM
+	    , S.SUBJ_ID
+	    , S.SUBJ_LNM
+	    , S.SUBJ_PNM
+	    , S.FULL_PATH
+	    , U1.USER_NM AS FRS_RQST_USER_NM
+	    , U2.USER_NM AS RQST_USER_NM
+	    , U3.USER_NM AS APRV_USER_NM
+	    , COALESCE(NULLIF(A.ENC_YN, ''), 'N') AS ENC_YN
+	  FROM WAM_DDL_TBL A
+	  LEFT OUTER JOIN WAM_PDM_TBL B
+	    ON A.PDM_TBL_ID = B.PDM_TBL_ID
+	   AND B.REG_TYP_CD IN ('C', 'U')
+	 INNER JOIN WAA_DB_SCH SCH
+	    ON A.DB_SCH_ID = SCH.DB_SCH_ID
+	   AND SCH.REG_TYP_CD IN ('C', 'U')
+	   AND SCH.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	 LEFT JOIN WAA_TBL_SPAC SPAC
+	    ON SPAC.DB_TBL_SPAC_ID = SCH.DB_TBL_SPAC_ID
+	   AND SPAC.EXP_DTM = TO_DATE('99991231', 'YYYYMMDD') 
+	 INNER JOIN WAA_DB_CONN_TRG DB
+	    ON SCH.DB_CONN_TRG_ID = DB.DB_CONN_TRG_ID
+	   AND DB.REG_TYP_CD IN ('C', 'U')
+	   AND DB.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	 LEFT OUTER JOIN WAA_SUBJ S
+	    ON B.SUBJ_ID = S.SUBJ_ID
+	   AND S.REG_TYP_CD IN ('C', 'U')
+	   AND S.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	  LEFT OUTER JOIN WAA_USER U1
+	    ON A.FRS_RQST_USER_ID = U1.USER_ID
+	   AND U1.REG_TYP_CD IN ('C', 'U')
+	   AND U1.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	  LEFT OUTER JOIN WAA_USER U2
+	    ON A.RQST_USER_ID = U2.USER_ID
+	   AND U2.REG_TYP_CD IN ('C', 'U')
+	   AND U2.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	  LEFT OUTER JOIN WAA_USER U3
+	    ON A.APRV_USER_ID = U3.USER_ID
+	   AND U3.REG_TYP_CD IN ('C', 'U')
+	   AND U3.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+  <where>
+  	A.REG_TYP_CD IN ('C', 'U')
+  	  
+      <if test="ddlTblLnm != null" >
+        AND (A.DDL_TBL_LNM LIKE '%' || #{ddlTblLnm,jdbcType=VARCHAR} || '%'
+        	OR A.DDL_TBL_PNM LIKE '%' || #{ddlTblLnm,jdbcType=VARCHAR} || '%'
+        	OR A.DDL_TBL_LNM LIKE '%' || UPPER(#{ddlTblLnm,jdbcType=VARCHAR}) || '%'
+        	OR A.DDL_TBL_PNM LIKE '%' || UPPER(#{ddlTblLnm,jdbcType=VARCHAR}) || '%')
+      </if>
+      <if test="dbSchId != null" >
+        AND A.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+      </if>
+      <if test="dbConnTrgId != null" >
+        AND DB.DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR}
+      </if>
+      <if test="tgtDdlTrgDcd != null" >
+    	AND COALESCE(SCH.DDL_TRG_DCD,'D') = #{tgtDdlTrgDcd,jdbcType=VARCHAR}
+      </if>
+      <if test="subjId != null" >
+        AND S.SUBJ_ID = #{subjId,jdbcType=VARCHAR}
+      </if>
+      <if test="ddlColLnm != null" >
+        AND EXISTS ( SELECT 1
+                     FROM WAM_DDL_COL B
+                    WHERE B.DDL_TBL_ID = A.DDL_TBL_ID
+                      AND B.REG_TYP_CD IN ('C', 'U')
+                      AND (B.DDL_COL_LNM LIKE '%' || #{ddlColLnm,jdbcType=VARCHAR} || '%'
+                      		OR B.DDL_COL_LNM LIKE '%' || UPPER(#{ddlColLnm,jdbcType=VARCHAR}) || '%'
+                      		OR B.DDL_COL_PNM LIKE '%' || #{ddlColLnm,jdbcType=VARCHAR} || '%'
+                      		OR B.DDL_COL_PNM LIKE '%' || UPPER(#{ddlColLnm,jdbcType=VARCHAR}) || '%')
+                   )
+      </if>
+      <if test="partTblYn != null">
+      	AND A.PART_TBL_YN = #{partTblYn,jdbcType=VARCHAR}
+      </if>
+      <if test="encYn != null">
+      	AND A.ENC_YN = #{encYn,jdbcType=VARCHAR}
+      </if>
+      
+  
+  </where>
+  
+  </select>
+  
+  <select id="selectDdlTblChange" resultMap="BaseResultMap" parameterType="kr.wise.meta.ddl.service.WamDdlTbl" >
+  SELECT A.*
+  	   , GET_USER_NM(A.FRS_RQST_USER_ID) AS FRS_RQST_USER_NM
+  	   , GET_USER_NM(A.RQST_USER_ID) AS RQST_USER_NM
+  	   , GET_USER_NM(A.APRV_USER_ID) AS APRV_USER_NM
+  	   , CASE WHEN A.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD') AND A.REG_TYP_CD IN ('C', 'U') THEN '#0000FF'
+  	     ELSE NULL END AS FontColor
+    FROM WAH_DDL_TBL A
+  <where>
+     AND DDL_TBL_ID = #{ddlTblId,jdbcType=VARCHAR}
+  
+  </where>
+   ORDER BY EXP_DTM DESC, STR_DTM DESC
+  
+  
+  
+  </select>
+  
+  
+  <select id="selectDdlTblRqstList" resultMap="BaseResultMap" parameterType="kr.wise.meta.ddl.service.WamDdlTbl" >
+
+SELECT *
+  FROM (
+	    SELECT A.DDL_TBL_ID AS OBJ_ID
+		     , A.DDL_TBL_LNM AS OBJ_LNM
+		     , A.DDL_TBL_PNM AS OBJ_PNM
+		     , 'TBL' AS OBJ_DCD
+		     , DB.DB_CONN_TRG_ID
+		     , DB.DB_CONN_TRG_LNM
+		     , SCH.DB_SCH_ID
+		     , SCH.DB_SCH_LNM
+		     , CASE WHEN PDM.PART_TBL_YN = 'Y' THEN 'PAR'
+		       ELSE 'NML' END AS TBL_TYP_CD
+		     , A.REG_TYP_CD
+		     , CASE WHEN A.PRC_TYP_CD = 'APV' THEN '1'
+		       ELSE '0' END AS PRC_TYP_CD 
+		     , A.PRC_TYP_CD AS PRC_TYP_CD_NM
+		     , A.PRC_DT
+		     , A.PRC_DBA_ID
+		     , U.USER_NM AS PRC_DBA_NM
+		     , A.SCRT_INFO
+		     , A.RQST_NO
+		     , A.RQST_SNO
+		     , NULL AS RQST_DTL_SNO
+		     , CASE WHEN A.PRC_DT IS NULL AND A.REG_TYP_CD = 'C' THEN '#0FAA28'
+	           ELSE CASE WHEN A.PRC_DT IS NULL AND A.REG_TYP_CD = 'U' THEN '#1446F0'
+	           ELSE CASE WHEN A.PRC_DT IS NULL AND A.REG_TYP_CD = 'D' THEN '#FF9650'
+		       ELSE NULL END END END AS FontColor
+		     , TO_CHAR(A.EXP_DTM, 'YYYYMMDDHH24MISS') AS EXP_DTM_STR
+		  FROM WAH_DDL_TBL A
+		 INNER JOIN WAA_DB_SCH SCH
+		    ON A.DB_SCH_ID = SCH.DB_SCH_ID
+		   AND SCH.REG_TYP_CD IN ('C', 'U')
+		   AND SCH.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+		 INNER JOIN WAA_DB_CONN_TRG DB
+		    ON SCH.DB_CONN_TRG_ID = DB.DB_CONN_TRG_ID
+		   AND DB.REG_TYP_CD IN ('C', 'U')
+		   AND DB.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+		  LEFT OUTER JOIN WAM_PDM_TBL PDM
+		    ON A.PDM_TBL_ID = PDM.PDM_TBL_ID
+		   AND PDM.REG_TYP_CD IN ('C', 'U')
+		  LEFT OUTER JOIN WAA_USER U
+		    ON A.PRC_DBA_ID = U.USER_ID
+		   AND U.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+		   AND U.REG_TYP_CD IN ('C', 'U')
+		 WHERE 1=1
+<!-- 		   AND A.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD') -->
+	UNION ALL
+		SELECT I.DDL_IDX_ID AS OBJ_ID
+		     , I.DDL_IDX_LNM AS OBJ_LNM
+		     , I.DDL_IDX_PNM AS OBJ_PNM
+		     , 'IDX' AS OBJ_DCD
+		     , DB.DB_CONN_TRG_ID
+		     , DB.DB_CONN_TRG_LNM
+		     , SCH.DB_SCH_ID
+		     , SCH.DB_SCH_LNM
+		     , NULL
+		     , I.REG_TYP_CD
+		     , CASE WHEN I.PRC_TYP_CD = 'APV' THEN '1'
+		       ELSE '0' END AS PRC_TYP_CD 
+		     , I.PRC_TYP_CD AS PRC_TYP_CD_NM
+		     , I.PRC_DT
+		     , I.PRC_DBA_ID
+		     , U.USER_NM AS PRC_DBA_NM
+		     , I.SCRT_INFO
+		     , I.RQST_NO
+		     , I.RQST_SNO
+		     , I.RQST_DTL_SNO AS RQST_DTL_SNO
+		     , CASE WHEN I.PRC_DT IS NULL AND I.REG_TYP_CD = 'C' THEN '#0FAA28'
+	           ELSE CASE WHEN I.PRC_DT IS NULL AND I.REG_TYP_CD = 'U' THEN '#1446F0'
+	           ELSE CASE WHEN I.PRC_DT IS NULL AND I.REG_TYP_CD = 'D' THEN '#FF9650'
+		       ELSE NULL END END END AS FontColor
+		     , TO_CHAR(I.EXP_DTM, 'YYYYMMDDHH24MISS') AS EXP_DTM_STR
+		  FROM WAH_DDL_IDX I
+		 INNER JOIN WAH_DDL_TBL A
+		    ON I.DDL_TBL_ID = A.DDL_TBL_ID
+		   AND A.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+		 INNER JOIN WAA_DB_SCH SCH
+		    ON A.DB_SCH_ID = SCH.DB_SCH_ID
+		   AND SCH.REG_TYP_CD IN ('C', 'U')
+		   AND SCH.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+		 INNER JOIN WAA_DB_CONN_TRG DB
+		    ON SCH.DB_CONN_TRG_ID = DB.DB_CONN_TRG_ID
+		   AND DB.REG_TYP_CD IN ('C', 'U')
+		   AND DB.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+		  LEFT OUTER JOIN WAM_PDM_TBL PDM
+		    ON A.PDM_TBL_ID = PDM.PDM_TBL_ID
+		   AND PDM.REG_TYP_CD IN ('C', 'U')
+		  LEFT OUTER JOIN WAA_USER U
+		    ON I.PRC_DBA_ID = U.USER_ID
+		   AND U.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+		   AND U.REG_TYP_CD IN ('C', 'U')
+		 WHERE 1=1
+<!-- 		   AND I.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD') -->
+	UNION ALL
+		SELECT S.DDL_SEQ_ID AS OBJ_ID
+		     , S.DDL_SEQ_LNM AS OBJ_LNM
+		     , S.DDL_SEQ_PNM AS OBJ_PNM
+		     , 'SEQ' AS OBJ_DCD
+		     , DB.DB_CONN_TRG_ID
+		     , DB.DB_CONN_TRG_LNM
+		     , SCH.DB_SCH_ID
+		     , SCH.DB_SCH_LNM
+		     , NULL
+		     , S.REG_TYP_CD
+		     , CASE WHEN S.PRC_TYP_CD = 'APV' THEN '1'
+		       ELSE '0' END AS PRC_TYP_CD 
+		     , S.PRC_TYP_CD AS PRC_TYP_CD_NM
+		     , S.PRC_DT
+		     , S.PRC_DBA_ID
+		     , U.USER_NM AS PRC_DBA_NM
+		     , S.SCRT_INFO
+		     , S.RQST_NO
+		     , S.RQST_SNO
+		     , NULL AS RQST_DTL_SNO
+		     , CASE WHEN S.PRC_DT IS NULL AND S.REG_TYP_CD = 'C' THEN '#0FAA28'
+	           ELSE CASE WHEN S.PRC_DT IS NULL AND S.REG_TYP_CD = 'U' THEN '#1446F0'
+	           ELSE CASE WHEN S.PRC_DT IS NULL AND S.REG_TYP_CD = 'D' THEN '#FF9650'
+		       ELSE NULL END END END AS FontColor
+		     , TO_CHAR(S.EXP_DTM, 'YYYYMMDDHH24MISS') AS EXP_DTM_STR
+		  FROM WAH_DDL_SEQ S
+		 INNER JOIN WAA_DB_SCH SCH
+		    ON S.DB_SCH_ID = SCH.DB_SCH_ID
+		   AND SCH.REG_TYP_CD IN ('C', 'U')
+		   AND SCH.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+		 INNER JOIN WAA_DB_CONN_TRG DB
+		    ON SCH.DB_CONN_TRG_ID = DB.DB_CONN_TRG_ID
+		   AND DB.REG_TYP_CD IN ('C', 'U')
+		   AND DB.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+		  LEFT OUTER JOIN WAA_USER U
+		    ON S.PRC_DBA_ID = U.USER_ID
+		   AND U.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+		   AND U.REG_TYP_CD IN ('C', 'U')
+		 WHERE 1=1
+<!-- 		   AND S.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD') -->
+	UNION ALL
+		SELECT E.DDL_ETC_ID AS OBJ_ID
+		     , E.DDL_ETC_LNM AS OBJ_LNM
+		     , E.DDL_ETC_PNM AS OBJ_PNM
+		     , 'ETC' AS OBJ_DCD
+		     , DB.DB_CONN_TRG_ID
+		     , DB.DB_CONN_TRG_LNM
+		     , SCH.DB_SCH_ID
+		     , SCH.DB_SCH_LNM
+		     , NULL
+		     , E.REG_TYP_CD
+		     , CASE WHEN E.PRC_TYP_CD = 'APV' THEN '1'
+		       ELSE '0' END AS PRC_TYP_CD 
+		     , E.PRC_TYP_CD AS PRC_TYP_CD_NM
+		     , E.PRC_DT
+		     , E.PRC_DBA_ID
+		     , U.USER_NM AS PRC_DBA_NM
+		     , E.SCRT_INFO
+		     , E.RQST_NO
+		     , E.RQST_SNO
+		     , NULL AS RQST_DTL_SNO
+		     , CASE WHEN E.PRC_DT IS NULL AND E.REG_TYP_CD = 'C' THEN '#0FAA28'
+	           ELSE CASE WHEN E.PRC_DT IS NULL AND E.REG_TYP_CD = 'U' THEN '#1446F0'
+	           ELSE CASE WHEN E.PRC_DT IS NULL AND E.REG_TYP_CD = 'D' THEN '#FF9650'
+		       ELSE NULL END END END AS FontColor
+		     , TO_CHAR(E.EXP_DTM, 'YYYYMMDDHH24MISS') AS EXP_DTM_STR
+		  FROM WAH_DDL_ETC E
+		 INNER JOIN WAA_DB_SCH SCH
+		    ON E.DB_SCH_ID = SCH.DB_SCH_ID
+		   AND SCH.REG_TYP_CD IN ('C', 'U')
+		   AND SCH.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+		 INNER JOIN WAA_DB_CONN_TRG DB
+		    ON SCH.DB_CONN_TRG_ID = DB.DB_CONN_TRG_ID
+		   AND DB.REG_TYP_CD IN ('C', 'U')
+		   AND DB.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+		  LEFT OUTER JOIN WAA_USER U
+		    ON E.PRC_DBA_ID = U.USER_ID
+		   AND U.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+		   AND U.REG_TYP_CD IN ('C', 'U')
+		 WHERE 1=1
+<!-- 		   AND E.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD') -->
+		UNION ALL
+		SELECT P.DDL_PART_ID AS OBJ_ID
+		     , TBL.DDL_TBL_LNM AS OBJ_LNM
+		     , P.DDL_TBL_PNM AS OBJ_PNM
+		     , 'DDP' AS OBJ_DCD
+		     , DB.DB_CONN_TRG_ID
+		     , DB.DB_CONN_TRG_LNM
+		     , SCH.DB_SCH_ID
+		     , SCH.DB_SCH_LNM
+		     , NULL
+		     , P.REG_TYP_CD
+		     , CASE WHEN P.PRC_TYP_CD = 'APV' THEN '1'
+		       ELSE '0' END AS PRC_TYP_CD 
+		     , P.PRC_TYP_CD AS PRC_TYP_CD_NM
+		     , P.PRC_DT
+		     , P.PRC_DBA_ID
+		     , U.USER_NM AS PRC_DBA_NM
+		     , P.SCRT_INFO
+		     , P.RQST_NO
+		     , P.RQST_SNO
+		     , NULL AS RQST_DTL_SNO
+		     , CASE WHEN P.PRC_DT IS NULL AND P.REG_TYP_CD = 'C' THEN '#0FAA28'
+	           ELSE CASE WHEN P.PRC_DT IS NULL AND P.REG_TYP_CD = 'U' THEN '#1446F0'
+	           ELSE CASE WHEN P.PRC_DT IS NULL AND P.REG_TYP_CD = 'D' THEN '#FF9650'
+		       ELSE NULL END END END AS FontColor
+		     , TO_CHAR(P.EXP_DTM, 'YYYYMMDDHH24MISS') AS EXP_DTM_STR
+		  FROM WAH_DDL_PART P
+		 INNER JOIN WAA_DB_SCH SCH
+		    ON P.DB_SCH_ID = SCH.DB_SCH_ID
+		   AND SCH.REG_TYP_CD IN ('C', 'U')
+		   AND SCH.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+		 INNER JOIN WAA_DB_CONN_TRG DB
+		    ON SCH.DB_CONN_TRG_ID = DB.DB_CONN_TRG_ID
+		   AND DB.REG_TYP_CD IN ('C', 'U')
+		   AND DB.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+		 INNER JOIN WAH_DDL_TBL TBL
+		    ON TBL.DDL_TBL_ID = P.DDL_TBL_ID
+<!-- 		   AND TBL.REG_TYP_CD IN ('C', 'U') -->
+		   AND TBL.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+		  LEFT OUTER JOIN WAA_USER U
+		    ON P.PRC_DBA_ID = U.USER_ID
+		   AND U.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+		   AND U.REG_TYP_CD IN ('C', 'U')
+		 WHERE 1=1
+<!-- 		   AND P.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD') -->
+		UNION ALL 
+		 SELECT A.DDL_GRT_ID AS OBJ_ID
+		     , RO.ROLE_PNM AS OBJ_LNM
+		     , A.DDL_OBJ_PNM AS OBJ_PNM
+		     , 'GRT' AS OBJ_DCD
+		     , DB.DB_CONN_TRG_ID
+		     , DB.DB_CONN_TRG_LNM
+		     , SCH.DB_SCH_ID
+		     , SCH.DB_SCH_LNM
+		     , NULL
+		     , A.REG_TYP_CD
+		     , CASE WHEN A.PRC_TYP_CD = 'APV' THEN '1'
+		       ELSE '0' END AS PRC_TYP_CD 
+		     , A.PRC_TYP_CD AS PRC_TYP_CD_NM
+		     , A.PRC_DT
+		     , A.PRC_DBA_ID
+		     , U.USER_NM AS PRC_DBA_NM
+		     , A.SCRT_INFO
+			 , A.RQST_NO
+			 , A.RQST_SNO
+			 , NULL AS RQST_DTL_SNO 
+		     , CASE WHEN A.PRC_DT IS NULL AND A.REG_TYP_CD = 'C' THEN '#0FAA28'
+	           ELSE CASE WHEN A.PRC_DT IS NULL AND A.REG_TYP_CD = 'U' THEN '#1446F0'
+	           ELSE CASE WHEN A.PRC_DT IS NULL AND A.REG_TYP_CD = 'D' THEN '#FF9650'
+		       ELSE NULL END END END AS FontColor
+			 , TO_CHAR(A.EXP_DTM, 'YYYYMMDDHH24MISS') AS EXP_DTM_STR
+		  FROM WAH_DDL_GRT A
+		 INNER JOIN WAA_DB_SCH SCH
+		    ON A.GRTOR_SCH_ID = SCH.DB_SCH_ID
+		   AND SCH.REG_TYP_CD IN ('C', 'U')
+		   AND SCH.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+		 INNER JOIN WAA_DB_CONN_TRG DB
+		    ON SCH.DB_CONN_TRG_ID = DB.DB_CONN_TRG_ID
+		   AND DB.REG_TYP_CD IN ('C', 'U')
+		   AND DB.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+         INNER JOIN WAA_DB_ROLE RO
+		    ON A.GRTED_SCH_ID = RO.ROLE_ID
+		   AND RO.REG_TYP_CD IN ('C', 'U')
+		   AND RO.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+		  LEFT OUTER JOIN WAA_USER U
+		    ON A.PRC_DBA_ID = U.USER_ID
+		   AND U.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+		   AND U.REG_TYP_CD IN ('C', 'U')
+		 WHERE 1=1
+		
+	
+		) A
+ <where>
+  	  <if test="objId != null" >
+        AND A.OBJ_ID = #{objId,jdbcType=VARCHAR}
+      </if>
+      <if test="objLnm != null" >
+        AND (UPPER(A.OBJ_LNM) LIKE '%' || UPPER(#{objLnm,jdbcType=VARCHAR}) || '%'
+        	OR UPPER(A.OBJ_PNM) LIKE '%' || UPPER(#{objLnm,jdbcType=VARCHAR}) || '%')
+      </if>
+      <if test="objDcd != null" >
+        AND A.OBJ_DCD = #{objDcd,jdbcType=VARCHAR}
+      </if>
+      <if test="dbConnTrgId != null" >
+        AND A.DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR}
+      </if>
+      <if test="dbSchId != null" >
+        AND A.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+      </if>
+      <if test="tblTypCd != null" >
+        AND A.TBL_TYP_CD = #{tblTypCd,jdbcType=VARCHAR}
+      </if>
+      <if test='prcTypCd != null and prcTypCd == "APV"' >
+        AND A.PRC_TYP_CD_NM = #{prcTypCd,jdbcType=VARCHAR}
+      </if>
+      <if test='prcTypCd != null and prcTypCd != "APV"' >
+        AND (A.PRC_TYP_CD_NM IS NULL OR A.PRC_TYP_CD_NM = 'NPC')
+        
+      </if>
+      <if test="regTypCd != null" >
+        AND A.REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR}
+      </if>
+      <if test="searchBgnDe !=null and searchBgnDe !=''">
+		<![CDATA[ AND TO_DATE(SUBSTR(A.PRC_DT, 1, 8), 'YYYYMMDD')::VARCHAR >= #{searchBgnDe}::VARCHAR ]]>
+	  </if>
+	  <if test="searchEndDe !=null and searchEndDe !=''">
+		<![CDATA[ AND TO_DATE(SUBSTR(A.PRC_DT, 1, 8), 'YYYYMMDD')::VARCHAR <= #{searchEndDe}::VARCHAR ]]>
+	  </if>
+  </where>
+  	ORDER BY A.PRC_DBA_ID DESC, A.PRC_DT, A.OBJ_DCD, A.OBJ_LNM
+  </select>
+  
+  <update id="updateDdlTblRqstPrc" parameterType="kr.wise.meta.ddl.service.WamDdlTbl" >
+    UPDATE WAH_DDL_TBL
+       SET 
+       	   <if test="prcTypCd != null">
+       	   PRC_TYP_CD = #{prcTypCd,jdbcType=VARCHAR},
+       	   </if>
+       	   <if test="prcDt != null">
+--           PRC_DT = TO_CHAR(NOW(), 'YYYYMMDD'),
+           PRC_DT = TO_CHAR(NOW(), 'YYYYMMDDHH24MISS'),
+           </if>
+           <if test="prcDt == null">
+           PRC_DT = NULL,
+           </if>
+       	   <if test="prcDbaId != null">
+       	   PRC_DBA_ID = NULLIF(#{prcDbaId,jdbcType=VARCHAR}, '')
+           </if>
+           <if test="prcDbaId == null">
+       	   PRC_DBA_ID = NULL
+           </if>
+     WHERE DDL_TBL_ID = #{objId,jdbcType=VARCHAR}
+     	 AND RQST_NO = #{rqstNo, jdbcType=VARCHAR}
+     	 AND PRC_DT IS NULL
+  </update>
+  <select id="selectDdlTblHistList" resultMap="BaseResultMap" parameterType="kr.wise.meta.ddl.service.WamDdlTbl" >
+  
+    SELECT A.*
+	     , B.PDM_TBL_ID
+	     , B.PDM_TBL_LNM
+	     , B.PDM_TBL_PNM
+	     , SCH.DB_SCH_LNM
+	     , SCH.DB_SCH_PNM
+	     , DB.DB_CONN_TRG_ID
+	     , DB.DB_CONN_TRG_LNM
+	     , DB.DB_CONN_TRG_PNM
+	     , S.SUBJ_ID
+	     , S.SUBJ_LNM
+	     , S.SUBJ_PNM
+	     , S.FULL_PATH
+	     , U1.USER_NM AS FRS_RQST_USER_NM
+	     , U2.USER_NM AS RQST_USER_NM
+	     , U3.USER_NM AS APRV_USER_NM
+	  FROM WAH_DDL_TBL A
+	  LEFT OUTER JOIN WAM_PDM_TBL B
+	    ON A.PDM_TBL_ID = B.PDM_TBL_ID
+	   AND B.REG_TYP_CD IN ('C', 'U')
+	 INNER JOIN WAA_DB_SCH SCH
+	    ON A.DB_SCH_ID = SCH.DB_SCH_ID
+	   AND SCH.REG_TYP_CD IN ('C', 'U')
+	   AND SCH.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	 INNER JOIN WAA_DB_CONN_TRG DB
+	    ON SCH.DB_CONN_TRG_ID = DB.DB_CONN_TRG_ID
+	   AND DB.REG_TYP_CD IN ('C', 'U')
+	   AND DB.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	  LEFT OUTER JOIN WAA_SUBJ S
+	    ON B.SUBJ_ID = S.SUBJ_ID
+	   AND S.REG_TYP_CD IN ('C', 'U')
+	   AND S.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	  LEFT OUTER JOIN WAA_USER U1
+	    ON A.FRS_RQST_USER_ID = U1.USER_ID
+	   AND U1.REG_TYP_CD IN ('C', 'U')
+	   AND U1.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	  LEFT OUTER JOIN WAA_USER U2
+	    ON A.RQST_USER_ID = U2.USER_ID
+	   AND U2.REG_TYP_CD IN ('C', 'U')
+	   AND U2.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	  LEFT OUTER JOIN WAA_USER U3
+	    ON A.APRV_USER_ID = U3.USER_ID
+	   AND U3.REG_TYP_CD IN ('C', 'U')
+	   AND U3.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+  <where>
+  	A.REG_TYP_CD IN ('C', 'U')
+  	  
+      <if test="ddlTblLnm != null" >
+        AND (A.DDL_TBL_LNM LIKE '%' || #{ddlTblLnm,jdbcType=VARCHAR} || '%'
+        	OR A.DDL_TBL_PNM LIKE '%' || #{ddlTblLnm,jdbcType=VARCHAR} || '%'
+        	OR A.DDL_TBL_LNM LIKE '%' || UPPER(#{ddlTblLnm,jdbcType=VARCHAR}) || '%'
+        	OR A.DDL_TBL_PNM LIKE '%' || UPPER(#{ddlTblLnm,jdbcType=VARCHAR}) || '%')
+      </if>
+      <if test="dbSchId != null" >
+        AND A.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+      </if>
+      <if test="dbConnTrgId != null" >
+        AND DB.DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR}
+      </if>
+      <if test="subjId != null" >
+        AND S.SUBJ_ID = #{subjId,jdbcType=VARCHAR}
+      </if>
+      <if test="ddlColLnm != null" >
+        AND EXISTS ( SELECT 1
+                     FROM WAM_DDL_COL B
+                    WHERE B.DDL_TBL_ID = A.DDL_TBL_ID
+                      AND B.REG_TYP_CD IN ('C', 'U')
+                      AND (B.DDL_COL_LNM LIKE '%' || #{ddlColLnm,jdbcType=VARCHAR} || '%'
+                      		OR B.DDL_COL_LNM LIKE '%' || UPPER(#{ddlColLnm,jdbcType=VARCHAR}) || '%'
+                      		OR B.DDL_COL_PNM LIKE '%' || #{ddlColLnm,jdbcType=VARCHAR} || '%'
+                      		OR B.DDL_COL_PNM LIKE '%' || UPPER(#{ddlColLnm,jdbcType=VARCHAR}) || '%')
+                   )
+      </if>
+      <if test="searchBgnDe !=null and searchBgnDe !=''">
+		<![CDATA[ AND TO_CHAR(A.APRV_DTM, 'YYYY-MM-DD') >= #{searchBgnDe} ]]>
+	  </if>
+	  <if test="searchEndDe !=null and searchEndDe !=''">
+		<![CDATA[ AND TO_CHAR(A.APRV_DTM, 'YYYY-MM-DD') <= #{searchEndDe} ]]>
+	  </if>
+  
+  </where>
+  ORDER BY A.DDL_TBL_PNM, A.OBJ_VERS
+  </select>
+  
+  <select id="selectDdlTblHistDetail" resultMap="BaseResultMap" parameterType="kr.wise.meta.ddl.service.WamDdlTbl" >
+    SELECT A.*
+  		,GET_USER_NM(A.FRS_RQST_USER_ID) AS FRS_RQST_USER_NM
+  		,GET_USER_NM(A.RQST_USER_ID) AS RQST_USER_NM
+  		,GET_USER_NM(A.APRV_USER_ID) AS APRV_USER_NM
+        ,B.*
+        ,C.*
+  FROM WAH_DDL_TBL A 
+  LEFT OUTER JOIN
+	    (SELECT A.DB_CONN_TRG_ID
+	           ,DB_CONN_TRG_LNM
+	           ,DB_CONN_TRG_PNM
+	           ,DB_SCH_ID
+	           ,DB_SCH_LNM
+	           ,DB_SCH_PNM
+	     FROM WAA_DB_CONN_TRG A INNER JOIN WAA_DB_SCH B
+	     ON A.DB_CONN_TRG_ID = B.DB_CONN_TRG_ID
+	     AND A.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	     AND B.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	     AND A.REG_TYP_CD IN ('C', 'U')
+	     AND B.REG_TYP_CD IN ('C', 'U')
+	     ) B
+	     ON A.DB_SCH_ID = B.DB_SCH_ID
+         LEFT OUTER JOIN 
+         (SELECT PDM_TBL_ID, PDM_TBL_PNM, PDM_TBL_LNM
+         FROM WAM_PDM_TBL
+         WHERE REG_TYP_CD IN ('C', 'U')
+         ) C
+         ON A.PDM_TBL_ID = C.PDM_TBL_ID
+
+    WHERE A.DDL_TBL_ID = #{ddlTblId,jdbcType=VARCHAR}
+      AND A.OBJ_VERS = #{objVers}
+      AND A.REG_TYP_CD IN ('C', 'U')
+  </select> 
+  
+  <select id="selectDdlTsfTblListForRqst" resultMap="BaseResultMap" parameterType="kr.wise.meta.ddl.service.WamDdlTbl" >
+       SELECT 'TBL' AS OBJ_DCD
+            , C.DB_CONN_TRG_ID
+            , C.DB_CONN_TRG_PNM
+            , A.DB_SCH_ID
+            , B.DB_SCH_PNM
+            , A.DDL_TBL_ID
+            , A.DDL_TBL_PNM
+            , A.DDL_TBL_LNM
+            , '' AS DDL_IDX_PNM
+            , '' AS DDL_IDX_LNM
+            , A.OBJ_DESCN
+            , A.PDM_TBL_ID   
+         FROM WAM_DDL_TBL A
+              INNER JOIN WAA_DB_SCH B
+                 ON B.EXP_DTM = TO_DATE('9999-12-31','YYYY-MM-DD')
+                AND B.DB_SCH_ID = A.DB_SCH_ID
+              INNER JOIN WAA_DB_CONN_TRG C
+                 ON C.EXP_DTM = TO_DATE('9999-12-31','YYYY-MM-DD')
+                AND C.DB_CONN_TRG_ID = B.DB_CONN_TRG_ID         
+        WHERE 1 = 1          
+          AND A.DB_SCH_ID   = #{srcDbSchId,jdbcType=VARCHAR}    
+         <if test="ddlTblPnm !=null ">
+			AND (    A.DDL_TBL_PNM LIKE '%'|| UPPER(#{ddlTblPnm, jdbcType=VARCHAR}) || '%'
+			     OR  A.DDL_TBL_LNM LIKE '%'|| UPPER(#{ddlTblPnm, jdbcType=VARCHAR}) || '%'
+			    )     
+		 </if>
+		
+  </select> 
+  
+  <select id="selectDelDdlTsfTblListForRqst" resultMap="BaseResultMap" parameterType="kr.wise.meta.ddl.service.WamDdlTbl" >
+       SELECT 'DD'  AS RQST_DCD 
+            , 'TBL' AS OBJ_DCD
+            , C.DB_CONN_TRG_ID
+            , C.DB_CONN_TRG_PNM
+            , A.DB_SCH_ID
+            , B.DB_SCH_PNM
+            , A.DDL_TBL_ID
+            , A.DDL_TBL_PNM
+            , A.DDL_TBL_LNM
+            , '' AS DDL_IDX_PNM
+            , '' AS DDL_IDX_LNM
+            , A.OBJ_DESCN
+            , A.PDM_TBL_ID   
+         FROM WAM_DDL_TBL A
+              INNER JOIN WAA_DB_SCH B
+                 ON B.EXP_DTM = TO_DATE('9999-12-31','YYYY-MM-DD')
+                AND B.DB_SCH_ID = A.DB_SCH_ID
+              INNER JOIN WAA_DB_CONN_TRG C
+                 ON C.EXP_DTM = TO_DATE('9999-12-31','YYYY-MM-DD')
+                AND C.DB_CONN_TRG_ID = B.DB_CONN_TRG_ID         
+        WHERE 1 = 1          
+          AND NOT EXISTS (SELECT 1
+                            FROM WAM_DDL_TBL X
+                           WHERE X.DDL_TRG_DCD = #{srcDdlTrgDcd,jdbcType=VARCHAR}
+                             AND X.DB_SCH_ID   = #{srcDbSchId,jdbcType=VARCHAR}
+                             AND X.DDL_TBL_PNM = A.DDL_TBL_PNM 
+                          )
+          AND A.DDL_TRG_DCD = #{tgtDdlTrgDcd,jdbcType=VARCHAR}
+          AND A.DB_SCH_ID   = #{tgtDbSchId,jdbcType=VARCHAR}    
+          <if test="ddlTblPnm !=null ">
+			 AND (A.DDL_TBL_PNM LIKE UPPER(#{ddlTblPnm, jdbcType=VARCHAR}) || '%'
+			 	OR A.DDL_TBL_LNM LIKE UPPER(#{ddlTblPnm, jdbcType=VARCHAR}) || '%')    
+		  </if>
+		   
+		
+  </select> 
+  
+  <select id="selectPartitionTblList" resultMap="BaseResultMap" parameterType="kr.wise.meta.ddl.service.WamDdlTbl" >
+	SELECT *
+	  FROM (
+		    SELECT A.DDL_TBL_ID AS OBJ_ID
+			     , A.DDL_TBL_LNM AS OBJ_LNM
+			     , A.DDL_TBL_PNM AS OBJ_PNM
+			     , 'TBL' AS OBJ_DCD
+			     , DB.DB_CONN_TRG_ID
+			     , DB.DB_CONN_TRG_LNM
+			     , SCH.DB_SCH_ID
+			     , SCH.DB_SCH_LNM
+			     , CASE WHEN A.PART_TBL_YN = 'Y' THEN 'PAR'
+			       ELSE 'NML' END AS TBL_TYP_CD
+			     , A.REG_TYP_CD
+			     , CASE WHEN A.PRC_TYP_CD = 'APV' THEN '1'
+			       ELSE '0' END AS PRC_TYP_CD 
+			     , A.PRC_TYP_CD AS PRC_TYP_CD_NM
+			     , A.PRC_DT
+			     , A.PRC_DBA_ID
+			     , U.USER_NM AS PRC_DBA_NM
+			     , A.SCRT_INFO
+			     /*, CASE WHEN A.PRC_DT IS NULL AND A.REG_TYP_CD = 'C' THEN '#0FAA28'
+		           ELSE CASE WHEN A.PRC_DT IS NULL AND A.REG_TYP_CD = 'U' THEN '#1446F0'
+		           ELSE CASE WHEN A.PRC_DT IS NULL AND A.REG_TYP_CD = 'D' THEN '#FF9650'
+			       ELSE NULL END END END AS FontColor*/
+			     , A.USER_RQST_CNTN   
+			     , CASE WHEN A.PART_TBL_YN = 'Y' THEN 1 ELSE 0 END AS PART_TBL_YN
+			     , A.RQST_NO
+			  FROM WAH_DDL_TBL A
+			 INNER JOIN WAA_DB_SCH SCH
+			    ON A.DB_SCH_ID = SCH.DB_SCH_ID
+			   AND SCH.REG_TYP_CD IN ('C', 'U')
+			   AND SCH.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+			 INNER JOIN WAA_DB_CONN_TRG DB
+			    ON SCH.DB_CONN_TRG_ID = DB.DB_CONN_TRG_ID
+			   AND DB.REG_TYP_CD IN ('C', 'U')
+			   AND DB.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+			  LEFT OUTER JOIN WAM_PDM_TBL PDM
+			    ON A.PDM_TBL_ID = PDM.PDM_TBL_ID
+			   AND PDM.REG_TYP_CD IN ('C', 'U')
+			  LEFT OUTER JOIN WAA_USER U
+			    ON A.PRC_DBA_ID = U.USER_ID
+			   AND U.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+			   AND U.REG_TYP_CD IN ('C', 'U')
+			 WHERE A.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+			  AND A.REG_TYP_CD IN ('C', 'U')
+			) A 
+	 <where>
+	  	  <if test="objId != null" >
+	        AND A.OBJ_ID = #{objId,jdbcType=VARCHAR}
+	      </if>
+	      <if test="objLnm != null" >
+	        AND (A.OBJ_LNM LIKE '%' || #{objLnm,jdbcType=VARCHAR} || '%'
+	        	OR A.OBJ_PNM LIKE '%' || #{objLnm,jdbcType=VARCHAR} || '%')
+	      </if>
+	      <if test="objDcd != null" >
+	        AND A.OBJ_DCD = #{objDcd,jdbcType=VARCHAR}
+	      </if>
+	      <if test="dbConnTrgId != null" >
+	        AND A.DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR}
+	      </if>
+	      <if test="dbSchId != null" >
+	        AND A.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+	      </if>
+	      <if test="tblTypCd != null" >
+	        AND A.TBL_TYP_CD = #{tblTypCd,jdbcType=VARCHAR}
+	      </if>
+	      <if test='prcTypCd != null and prcTypCd == "APV"' >
+	        AND A.PRC_TYP_CD_NM = #{prcTypCd,jdbcType=VARCHAR}
+	      </if>
+	      <if test='prcTypCd != null and prcTypCd != "APV"' >
+	        AND (A.PRC_TYP_CD_NM IS NULL OR A.PRC_TYP_CD_NM = 'NPC')
+	        
+	      </if>
+	      <if test="regTypCd != null" >
+	        AND A.REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR}
+	      </if>
+	      <if test="searchBgnDe !=null and searchBgnDe !=''">
+			<![CDATA[ AND TO_CHAR(TO_DATE(A.PRC_DT, 'YYYY-MM-DD'), 'YYYY-MM-DD') >= #{searchBgnDe} ]]>
+		  </if>
+		  <if test="searchEndDe !=null and searchEndDe !=''">
+			<![CDATA[ AND TO_CHAR(TO_DATE(A.PRC_DT, 'YYYY-MM-DD'), 'YYYY-MM-DD') <= #{searchEndDe} ]]>
+		  </if>
+	  </where>
+	  ORDER BY  A.PART_TBL_YN DESC, A.OBJ_DCD, A.OBJ_LNM
+  </select>
+  
+  <update id="updatePartTblRqstPrc" parameterType="kr.wise.meta.ddl.service.WamDdlTbl" >
+    UPDATE WAH_DDL_TBL
+       SET 
+       	   PART_TBL_YN  = #{partTblYn,jdbcType=VARCHAR}
+     WHERE DDL_TBL_ID = #{objId,jdbcType=VARCHAR}
+       AND EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+  </update>
+  
+   <update id="updatePartTblRqstPrcWam" parameterType="kr.wise.meta.ddl.service.WamDdlTbl" >
+    UPDATE WAM_DDL_TBL
+       SET 
+       	   PART_TBL_YN  = #{partTblYn,jdbcType=VARCHAR}
+     WHERE DDL_TBL_ID = #{objId,jdbcType=VARCHAR}
+  </update>
+  
+  
+  <select id="selectDdlTblListForPart" resultMap="BaseResultMap" parameterType="kr.wise.meta.ddl.service.WamDdlTbl" >
+  
+    SELECT A.DDL_TBL_ID
+         , A.DDL_TBL_PNM
+         , A.DDL_TBL_LNM
+         , A.DB_SCH_ID
+         , A.TBL_SPAC_ID
+         , GET_TBL_SPAC_PNM(A.TBL_SPAC_ID) AS TBL_SPAC_PNM
+         , A.PDM_TBL_ID
+         , A.RQST_NO 
+         , A.RQST_SNO
+         , A.OBJ_DESCN
+         , A.OBJ_VERS
+         , A.REG_TYP_CD
+         , A.FRS_RQST_DTM
+         , A.FRS_RQST_USER_ID
+         , A.RQST_DTM
+         , A.RQST_USER_ID
+         , A.APRV_DTM
+         , A.APRV_USER_ID	   
+	     , B.PDM_TBL_LNM
+	     , B.PDM_TBL_PNM
+	     , SCH.DB_SCH_ID 	   
+	     , SCH.DB_SCH_PNM	     
+	     , DB.DB_CONN_TRG_ID	     
+	     , DB.DB_CONN_TRG_PNM
+	     , S.FULL_PATH
+	     , S.SYS_AREA_ID
+	  FROM WAM_DDL_TBL A
+	       LEFT OUTER JOIN WAM_PDM_TBL B
+	         ON A.PDM_TBL_ID = B.PDM_TBL_ID	 
+	       INNER JOIN WAA_DB_SCH SCH
+	          ON A.DB_SCH_ID = SCH.DB_SCH_ID
+	         AND SCH.REG_TYP_CD IN ('C', 'U')
+	         AND SCH.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	       INNER JOIN WAA_DB_CONN_TRG DB
+	          ON SCH.DB_CONN_TRG_ID = DB.DB_CONN_TRG_ID
+	         AND DB.REG_TYP_CD IN ('C', 'U')
+	         AND DB.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	       LEFT OUTER JOIN WAA_SUBJ S
+	          ON B.SUBJ_ID = S.SUBJ_ID
+	         AND S.REG_TYP_CD IN ('C', 'U')
+	         AND S.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	       LEFT OUTER JOIN WAM_PDM_TBL PT
+	          ON B.PDM_TBL_ID = PT.PDM_TBL_ID
+	       LEFT OUTER JOIN WAA_SUBJ SB
+	          ON PT.SUBJ_ID = SB.SUBJ_ID
+	         AND SB.REG_TYP_CD IN ('C', 'U')
+	         AND SB.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')			   
+	       LEFT OUTER JOIN WAA_SYS_AREA SA
+	          ON SB.SYS_AREA_ID = SA.SYS_AREA_ID
+	         AND SA.REG_TYP_CD IN ('C', 'U')
+	         AND SA.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+    WHERE 1 = 1
+  	  AND A.DDL_TRG_DCD = 'D'
+  	  
+      <if test="ddlTblLnm != null" >
+        AND (UPPER(A.DDL_TBL_LNM) LIKE  UPPER('%'||#{ddlTblLnm,jdbcType=VARCHAR}||'%') 
+        	OR UPPER(A.DDL_TBL_PNM) LIKE UPPER('%'||#{ddlTblLnm,jdbcType=VARCHAR}||'%') )
+      </if>
+      <if test="dbSchId != null" >
+        AND A.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+      </if>
+      <if test="dbConnTrgId != null" >
+        AND DB.DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR}
+      </if>
+      <if test="partTblYn != null" >
+        AND COALESCE(A.PART_TBL_YN,'N') = #{partTblYn,jdbcType=VARCHAR}
+      </if>
+      <if test="encYn != null" >
+        AND COALESCE(A.ENC_YN,'N')  = #{encYn,jdbcType=VARCHAR}
+      </if>
+      <if test="fullPath != null" >
+        AND UPPER(B.FULL_PATH)  LIKE UPPER('%'||#{fullPath,jdbcType=VARCHAR}||'%')
+      </if>
+      <if test="sysAreaId != null" >
+        AND SA.SYS_AREA_ID = #{sysAreaId,jdbcType=VARCHAR}
+      </if> 
+  
+  </select>
+  
+  <select id="selectDdlAllObjForGrtList" resultMap="BaseResultMap" parameterType="kr.wise.meta.ddl.service.WamDdlTbl" >
+  SELECT * FROM (
+    SELECT A.DDL_TBL_PNM AS OBJ_PNM
+	     , A.DDL_TBL_LNM AS OBJ_LNM
+	     , A.DDL_TBL_ID AS OBJ_ID
+	     , SCH.DB_SCH_ID
+	     , SCH.DB_SCH_LNM
+	     , SCH.DB_SCH_PNM
+	     , DB.DB_CONN_TRG_ID
+	     , DB.DB_CONN_TRG_LNM
+	     , DB.DB_CONN_TRG_PNM
+	     , 'TBL' AS OBJ_DCD
+	  FROM WAM_DDL_TBL A
+	 INNER JOIN WAA_DB_SCH SCH
+	    ON A.DB_SCH_ID = SCH.DB_SCH_ID
+	   AND SCH.REG_TYP_CD IN ('C', 'U')
+	   AND SCH.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	 INNER JOIN WAA_DB_CONN_TRG DB
+	    ON SCH.DB_CONN_TRG_ID = DB.DB_CONN_TRG_ID
+	   AND DB.REG_TYP_CD IN ('C', 'U')
+	   AND DB.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	   
+		UNION ALL
+	  
+	  SELECT A.DDL_SEQ_PNM AS OBJ_PNM
+		     , A.DDL_SEQ_LNM AS OBJ_LNM
+		     , A.DDL_SEQ_ID AS OBJ_ID
+		     , SCH.DB_SCH_ID
+		     , SCH.DB_SCH_LNM
+		     , SCH.DB_SCH_PNM
+		     , DB.DB_CONN_TRG_ID
+		     , DB.DB_CONN_TRG_LNM
+		     , DB.DB_CONN_TRG_PNM
+		     , 'SEQ' AS OBJ_DCD
+		  FROM WAM_DDL_SEQ A
+		 INNER JOIN WAA_DB_SCH SCH
+		    ON A.DB_SCH_ID = SCH.DB_SCH_ID
+		   AND SCH.REG_TYP_CD IN ('C', 'U')
+		   AND SCH.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+		 INNER JOIN WAA_DB_CONN_TRG DB
+		    ON SCH.DB_CONN_TRG_ID = DB.DB_CONN_TRG_ID
+		   AND DB.REG_TYP_CD IN ('C', 'U')
+		   AND DB.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	   
+	   UNION ALL
+  
+	  SELECT A.DDL_ETC_PNM AS OBJ_PNM
+		     , A.DDL_ETC_LNM AS OBJ_LNM
+		     , A.DDL_ETC_ID AS OBJ_ID
+		     , SCH.DB_SCH_ID
+		     , SCH.DB_SCH_LNM
+		     , SCH.DB_SCH_PNM
+		     , DB.DB_CONN_TRG_ID
+		     , DB.DB_CONN_TRG_LNM
+		     , DB.DB_CONN_TRG_PNM
+		     , ETC_OBJ_DCD AS OBJ_DCD
+<!-- 		     , 'ETC' AS OBJ_DCD -->
+		  FROM WAM_DDL_ETC A
+		 INNER JOIN WAA_DB_SCH SCH
+		    ON A.DB_SCH_ID = SCH.DB_SCH_ID
+		   AND SCH.REG_TYP_CD IN ('C', 'U')
+		   AND SCH.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+		 INNER JOIN WAA_DB_CONN_TRG DB
+		    ON SCH.DB_CONN_TRG_ID = DB.DB_CONN_TRG_ID
+		   AND DB.REG_TYP_CD IN ('C', 'U')
+		   AND DB.EXP_DTM = TO_DATE('9999-12-31', 'YYYY-MM-DD')
+	) A
+  <where>
+      <if test="objLnm != null" >
+        AND (A.OBJ_LNM LIKE '%' || #{objLnm,jdbcType=VARCHAR} || '%'
+        	OR A.OBJ_PNM LIKE '%' || #{objLnm,jdbcType=VARCHAR} || '%'
+        	OR A.OBJ_LNM LIKE '%' || UPPER(#{objLnm,jdbcType=VARCHAR}) || '%'
+        	OR A.OBJ_PNM LIKE '%' || UPPER(#{objLnm,jdbcType=VARCHAR}) || '%')
+      </if>
+      <if test="dbSchId != null" >
+        AND A.DB_SCH_ID = #{dbSchId,jdbcType=VARCHAR}
+      </if>
+      <if test="dbConnTrgId != null" >
+        AND A.DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR}
+      </if>
+      <if test="objDcd != null" >
+        AND A.OBJ_DCD = #{objDcd,jdbcType=VARCHAR}
+      </if>
+      
+  </where>
+  
+</select>
+
+</mapper>

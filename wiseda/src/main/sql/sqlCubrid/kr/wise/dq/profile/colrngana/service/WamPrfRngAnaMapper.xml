@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.dq.profile.colrngana.service.WamPrfRngAnaMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.dq.profile.colrngana.service.WamPrfRngAnaVO" extends="kr.wise.dq.profile.mstr.service.WamPrfMstrMapper.BaseResultMap">
+<!--     <id column="PRF_ID" property="prfId" jdbcType="VARCHAR" /> -->
+    <result column="RNG_OPR1" property="rngOpr1" jdbcType="VARCHAR" />
+    <result column="RNG_EFVA1" property="rngEfva1" jdbcType="VARCHAR" />
+    <result column="RNG_CNC" property="rngCnc" jdbcType="VARCHAR" />
+    <result column="RNG_OPR2" property="rngOpr2" jdbcType="VARCHAR" />
+    <result column="RNG_EFVA2" property="rngEfva2" jdbcType="VARCHAR" />
+    
+    <result column="DQI_ID" property="dqiId" jdbcType="VARCHAR" />
+	<result column="DQI_LNM" property="dqiLnm" jdbcType="VARCHAR" />
+  </resultMap>
+    <resultMap id="PC04_ResultMap" type="kr.wise.dq.profile.mstr.service.WamPrfMstrCommonVO">
+    <id column="DB_SCH_ID" property="dbSchId" jdbcType="VARCHAR" />
+     <result column="DB_CONN_TRG_ID" property="dbConnTrgId" jdbcType="VARCHAR" />
+    <result column="DB_CONN_TRG_LNM" property="dbConnTrgLnm" jdbcType="VARCHAR" />
+    <result column="ANA_DGR" property="anaDgr" jdbcType="VARCHAR" />
+    <result column="ANA_STR_DTM" property="anaStrDtm" jdbcType="DATE" />
+    <result column="DB_SCH_LNM" property="dbSchLnm" jdbcType="VARCHAR" />
+    <result column="DBC_TBL_NM" property="dbcTblNm" jdbcType="VARCHAR" />
+    <result column="DBC_TBL_KOR_NM" property="dbcTblKorNm" jdbcType="VARCHAR" />
+    <result column="ORD" property="ord" jdbcType="VARCHAR" />
+    <result column="DBC_COL_NM" property="dbcColNm" jdbcType="VARCHAR" />
+    <result column="DBC_COL_KOR_NM" property="dbcColKorNm" jdbcType="VARCHAR" />
+    <result column="ANA_CNT" property="anaCnt" jdbcType="VARCHAR" />
+    <result column="ESN_ER_CNT" property="esnErCnt" jdbcType="VARCHAR" />
+    <result column="COL_ERR_RATE" property="colErrRate" jdbcType="VARCHAR" />
+    <result column="DPMO" property="dpmo" jdbcType="VARCHAR" />
+    <result column="SIGMA" property="sigma" jdbcType="VARCHAR" />
+    <result column="PRF_ID" property="prfId" jdbcType="VARCHAR" />
+     <result column="SHD_JOB_ID" property="shdJobId" jdbcType="VARCHAR" />
+     <result column="ETC_JOB_NM" property="etcJobNm" jdbcType="VARCHAR" />
+    <result column="PRF_RNG" property="prfRng" jdbcType="VARCHAR" />
+    
+    <result column="DQI_ID" property="dqiId" jdbcType="VARCHAR" />
+	<result column="DQI_LNM" property="dqiLnm" jdbcType="VARCHAR" />
+	
+	<result column="STND_RATE" property="stndRate" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    PRF_ID, RNG_OPR1, RNG_EFVA1, RNG_CNC, RNG_OPR2, RNG_EFVA2, RQST_NO, RQST_SNO, OBJ_DESCN, 
+    OBJ_VERS, REG_TYP_CD, FRS_RQST_DTM, FRS_RQST_USER_ID, RQST_DTM, RQST_USER_ID, APRV_DTM, 
+    APRV_USER_ID
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select <include refid="kr.wise.dq.profile.mstr.service.WamPrfMstrMapper.wam_prf_mstr_Column_List"/>
+           ,A.RNG_OPR1 
+           ,A.RNG_EFVA1
+           ,A.RNG_CNC
+           ,A.RNG_OPR2 
+           ,A.RNG_EFVA2 
+    from WAM_PRF_MSTR M
+           INNER JOIN  WAM_PRF_RNG_ANA A
+               ON M.PRF_ID = A.PRF_ID
+    <include refid="kr.wise.dq.profile.mstr.service.WamPrfMstrMapper.wam_prf_mstr_dqi_join" />
+   where M.PRF_ID = #{prfId,jdbcType=VARCHAR}
+      and M.REG_TYP_CD IN ('C','U')   
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from WAM_PRF_RNG_ANA
+    where PRF_ID = #{prfId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="kr.wise.dq.profile.colrngana.service.WamPrfRngAnaVO" >
+    insert into WAM_PRF_RNG_ANA (PRF_ID, RNG_OPR1, RNG_EFVA1, 
+      RNG_CNC, RNG_OPR2, RNG_EFVA2, 
+      RQST_NO, RQST_SNO, OBJ_DESCN, 
+      OBJ_VERS, REG_TYP_CD, FRS_RQST_DTM, 
+      FRS_RQST_USER_ID, RQST_DTM, RQST_USER_ID, 
+      APRV_DTM, APRV_USER_ID)
+    values (#{prfId,jdbcType=VARCHAR}, #{rngOpr1,jdbcType=VARCHAR}, #{rngEfva1,jdbcType=VARCHAR}, 
+      #{rngCnc,jdbcType=VARCHAR}, #{rngOpr2,jdbcType=VARCHAR}, #{rngEfva2,jdbcType=VARCHAR}, 
+      #{rqstNo,jdbcType=VARCHAR}, #{rqstSno,jdbcType=DECIMAL}, #{objDescn,jdbcType=VARCHAR}, 
+      #{objVers,jdbcType=DECIMAL}, #{regTypCd,jdbcType=VARCHAR}, #{frsRqstDtm,jdbcType=TIMESTAMP}, 
+      #{frsRqstUserId,jdbcType=VARCHAR}, #{rqstDtm,jdbcType=TIMESTAMP}, #{rqstUserId,jdbcType=VARCHAR}, 
+      #{aprvDtm,jdbcType=TIMESTAMP}, #{aprvUserId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="kr.wise.dq.profile.colrngana.service.WamPrfRngAnaVO" >
+    insert into WAM_PRF_RNG_ANA
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="prfId != null" >
+        PRF_ID,
+      </if>
+      <if test="rngOpr1 != null" >
+        RNG_OPR1,
+      </if>
+      <if test="rngEfva1 != null" >
+        RNG_EFVA1,
+      </if>
+      <if test="rngCnc != null" >
+        RNG_CNC,
+      </if>
+      <if test="rngOpr2 != null" >
+        RNG_OPR2,
+      </if>
+      <if test="rngEfva2 != null" >
+        RNG_EFVA2,
+      </if>
+      <if test="rqstNo != null" >
+        RQST_NO,
+      </if>
+      <if test="rqstSno != null" >
+        RQST_SNO,
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN,
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS,
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD,
+      </if>
+      <if test="frsRqstDtm != null" >
+        FRS_RQST_DTM,
+      </if>
+      <if test="frsRqstUserId != null" >
+        FRS_RQST_USER_ID,
+      </if>
+      <if test="rqstDtm != null" >
+        RQST_DTM,
+      </if>
+      <if test="rqstUserId != null" >
+        RQST_USER_ID,
+      </if>
+      <if test="aprvDtm != null" >
+        APRV_DTM,
+      </if>
+      <if test="aprvUserId != null" >
+        APRV_USER_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="prfId != null" >
+        #{prfId,jdbcType=VARCHAR},
+      </if>
+      <if test="rngOpr1 != null" >
+        #{rngOpr1,jdbcType=VARCHAR},
+      </if>
+      <if test="rngEfva1 != null" >
+        #{rngEfva1,jdbcType=VARCHAR},
+      </if>
+      <if test="rngCnc != null" >
+        #{rngCnc,jdbcType=VARCHAR},
+      </if>
+      <if test="rngOpr2 != null" >
+        #{rngOpr2,jdbcType=VARCHAR},
+      </if>
+      <if test="rngEfva2 != null" >
+        #{rngEfva2,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstNo != null" >
+        #{rqstNo,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstSno != null" >
+        #{rqstSno,jdbcType=DECIMAL},
+      </if>
+      <if test="objDescn != null" >
+        #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null" >
+        #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="frsRqstDtm != null" >
+        #{frsRqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="frsRqstUserId != null" >
+        #{frsRqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDtm != null" >
+        #{rqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rqstUserId != null" >
+        #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDtm != null" >
+        #{aprvDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aprvUserId != null" >
+        #{aprvUserId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.dq.profile.colrngana.service.WamPrfRngAnaVO" >
+    update WAM_PRF_RNG_ANA
+    <set >
+      <if test="rngOpr1 != null" >
+        RNG_OPR1 = #{rngOpr1,jdbcType=VARCHAR},
+      </if>
+      <if test="rngEfva1 != null" >
+        RNG_EFVA1 = #{rngEfva1,jdbcType=VARCHAR},
+      </if>
+      <if test="rngCnc != null" >
+        RNG_CNC = #{rngCnc,jdbcType=VARCHAR},
+      </if>
+      <if test="rngOpr2 != null" >
+        RNG_OPR2 = #{rngOpr2,jdbcType=VARCHAR},
+      </if>
+      <if test="rngEfva2 != null" >
+        RNG_EFVA2 = #{rngEfva2,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstNo != null" >
+        RQST_NO = #{rqstNo,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstSno != null" >
+        RQST_SNO = #{rqstSno,jdbcType=DECIMAL},
+      </if>
+      <if test="objDescn != null" >
+        OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null" >
+        OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null" >
+        REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="frsRqstDtm != null" >
+        FRS_RQST_DTM = #{frsRqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="frsRqstUserId != null" >
+        FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="rqstDtm != null" >
+        RQST_DTM = #{rqstDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rqstUserId != null" >
+        RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="aprvDtm != null" >
+        APRV_DTM = #{aprvDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aprvUserId != null" >
+        APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where PRF_ID = #{prfId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="kr.wise.dq.profile.colrngana.service.WamPrfRngAnaVO" >
+    update WAM_PRF_RNG_ANA
+    set RNG_OPR1 = #{rngOpr1,jdbcType=VARCHAR},
+      RNG_EFVA1 = #{rngEfva1,jdbcType=VARCHAR},
+      RNG_CNC = #{rngCnc,jdbcType=VARCHAR},
+      RNG_OPR2 = #{rngOpr2,jdbcType=VARCHAR},
+      RNG_EFVA2 = #{rngEfva2,jdbcType=VARCHAR},
+      RQST_NO = #{rqstNo,jdbcType=VARCHAR},
+      RQST_SNO = #{rqstSno,jdbcType=DECIMAL},
+      OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      FRS_RQST_DTM = #{frsRqstDtm,jdbcType=TIMESTAMP},
+      FRS_RQST_USER_ID = #{frsRqstUserId,jdbcType=VARCHAR},
+      RQST_DTM = #{rqstDtm,jdbcType=TIMESTAMP},
+      RQST_USER_ID = #{rqstUserId,jdbcType=VARCHAR},
+      APRV_DTM = #{aprvDtm,jdbcType=TIMESTAMP},
+      APRV_USER_ID = #{aprvUserId,jdbcType=VARCHAR}
+    where PRF_ID = #{prfId,jdbcType=VARCHAR}
+  </update>
+  
+  <insert id="insertWamPrfPC04ByPrfId" parameterType="java.lang.String" >
+	insert into WAM_PRF_RNG_ANA
+	(<include refid="Base_Column_List" />)
+	select 
+	<include refid="Base_Column_List" />
+	from WAH_PRF_RNG_ANA
+   where PRF_ID = #{prfId,jdbcType=VARCHAR}
+	 and EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+	 and REG_TYP_CD in ('C','U')
+  </insert>
+  
+<select id="profileListRangeAna" resultMap="PC04_ResultMap" parameterType="kr.wise.dq.profile.mstr.service.WamPrfMstrCommonVO" >
+	SELECT 
+	<include refid="kr.wise.dq.profile.mstr.service.WamPrfMstrMapper.wam_prf_mstr_common_List"/>
+	    , M.PRF_ID AS SHD_JOB_ID
+	    , '['|| GET_CMCD_DTL_NM('PRF_KND_CD', M.PRF_KND_CD) ||'] ' ||M.DBC_TBL_NM ||'.'|| M.OBJ_NM AS ETC_JOB_NM
+		, CASE WHEN R.ANA_CNT IS NULL THEN NULL         
+		 		  ELSE TO_CHAR(ROUND(R.ESN_ER_CNT*100/DECODE(R.ANA_CNT,0,1,R.ANA_CNT),2))
+		 		  END AS COL_ERR_RATE
+		, CASE WHEN R.ANA_CNT IS NULL THEN TO_CHAR(100)         
+	    	         ELSE TO_CHAR(ROUND(100-(R.ESN_ER_CNT*100/DECODE(R.ANA_CNT,0,1,R.ANA_CNT)),2))
+	    	       END AS STND_RATE
+	      <!-- 	,TO_CHAR(ROUND(WDQ_FC_DPMO(R.ESN_ER_CNT,R.ANA_CNT), 2)) AS DPMO                  -->
+	    <!-- R.ANA_CNT = null일 경우 오류 발생하여 수정 -->
+	    , IF(R.ANA_CNT = null, null, (TO_CHAR(ROUND(WDQ_FC_SIGMA(WDQ_FC_DPMO(R.ESN_ER_CNT,R.ANA_CNT))), 2))) AS SIGMA
+		<!-- , TO_CHAR(ROUND(WDQ_FC_SIGMA(WDQ_FC_DPMO(R.ESN_ER_CNT,R.ANA_CNT)), 2)) AS SIGMA -->             
+		, GET_RANGE(PR.PRF_ID) AS PRF_RNG		--범위
+		, (CASE WHEN R.ESN_ER_CNT IS NULL THEN NULL
+	                      ELSE (CASE WHEN R.ESN_ER_CNT = '0' THEN  NULL
+	                                     ELSE '#FF0000'
+	                                     END  )
+	                       END  ) AS FontColor
+	FROM WAA_DB_CONN_TRG TRG
+	     INNER JOIN	WAA_DB_SCH S
+	        ON S.EXP_DTM = TO_DATE('99991231','YYYYMMDD')
+	       AND S.REG_TYP_CD IN ('C','U')
+	       AND S.DB_CONN_TRG_ID = TRG.DB_CONN_TRG_ID 	       
+	     INNER JOIN WAM_PRF_MSTR M
+	        ON M.DB_SCH_ID = S.DB_SCH_ID	         	          
+	     LEFT JOIN WAT_DBC_TBL T
+	        ON T.DB_SCH_ID  = S.DB_SCH_ID  
+	       AND T.DBC_TBL_NM= M.DBC_TBL_NM
+	     LEFT JOIN WAT_DBC_COL C
+	       ON C.DB_SCH_ID  = S.DB_SCH_ID   
+	      AND C.DBC_TBL_NM = M.DBC_TBL_NM  
+	      AND C.DBC_COL_NM = M.OBJ_NM 
+	     LEFT JOIN (	<include refid="kr.wise.dq.profile.anares.service.WamPrfResultMapper.getPrfResultMaxAnaStrDtm"/>  ) R
+	       ON R.PRF_ID = M.PRF_ID 	 
+	     LEFT JOIN WAM_PRF_RNG_ANA PR
+	       ON PR.REG_TYP_CD IN ('C','U')
+	      AND PR.PRF_ID = M.PRF_ID        
+	WHERE 1 = 1   
+	  AND TRG.EXP_DTM = TO_DATE( '9999-12-31', 'YYYY-MM-DD')
+	  AND TRG.REG_TYP_CD IN ('C', 'U')
+	  AND M.PRF_KND_CD = 'PC04'
+	  
+	  <if test='dbConnTrgId != "" and dbConnTrgId != null ' >
+        AND TRG.DB_CONN_TRG_ID = #{dbConnTrgId,jdbcType=VARCHAR}
+      </if>	      
+      <if test='dbSchId != null ' >
+        AND S.DB_SCH_ID =#{dbSchId,jdbcType=VARCHAR}
+      </if>	
+      <choose>
+      	<when test='schRegYn == "Y" '>
+      		AND R.PRF_ID IS NOT  NULL
+      	</when>
+      	<when test='schRegYn == "N" '>
+      		 AND R.PRF_ID IS NULL
+      	</when>
+      </choose>      		  
+      <if test='schRegYn == "N" ' >
+        AND R.PRF_ID IS NULL
+      </if>
+      <if test='dbcTblNm != "" and dbcTblNm != null ' >
+        AND (    T.DBC_TBL_NM LIKE '%'|| #{dbcTblNm,jdbcType=VARCHAR} || '%' 
+              OR T.DBC_TBL_KOR_NM LIKE  '%'|| #{dbcTblNm,jdbcType=VARCHAR} || '%'
+            )
+      </if>
+      <if test='dbcColNm != "" and dbcColNm != null ' >
+        AND (    C.DBC_COL_NM LIKE '%'|| #{dbcColNm,jdbcType=VARCHAR} || '%'
+              OR C.DBC_COL_KOR_NM LIKE '%'|| #{dbcColNm,jdbcType=VARCHAR} || '%'
+            )
+      </if>
+      <if test='anaDgr != "" and anaDgr != null ' >
+        AND R.ANA_DGR =#{anaDgr,jdbcType=DECIMAL}
+       </if>
+       <if test='prfId != "" and prfId != null '>
+        AND M.PRF_ID = #{prfId, jdbcType=VARCHAR}
+      </if>
+	ORDER BY R.ANA_DGR, S.DB_SCH_ID , M.DBC_TBL_NM ,C.DBC_COL_NM
+</select>
+</mapper>

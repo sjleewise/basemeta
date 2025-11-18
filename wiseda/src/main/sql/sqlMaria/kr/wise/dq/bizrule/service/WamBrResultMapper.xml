@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.dq.bizrule.service.WamBrResultMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.dq.bizrule.service.WamBrResult" extends = "kr.wise.dq.criinfo.bizarea.service.WamBizAreaMapper.BaseResultMap">
+    <id column="BR_ID" property="brId" jdbcType="VARCHAR" />
+    <id column="ANA_STR_DTM" property="anaStrDtm" jdbcType="TIMESTAMP" />
+    <result column="ANA_END_DTM" property="anaEndDtm" jdbcType="TIMESTAMP" />
+    <result column="ANA_DGR" property="anaDgr" jdbcType="DECIMAL" />
+    <result column="ANA_CNT" property="anaCnt" jdbcType="DECIMAL" />
+    <result column="ER_CNT" property="erCnt" jdbcType="DECIMAL" />
+    <result column="ANA_LOG_ID" property="anaLogId" jdbcType="VARCHAR" />
+    <result column="ANA_RUN_USER_ID" property="anaRunUserId" jdbcType="VARCHAR" />
+    <result column="ANA_TIME" property="anaTime" jdbcType="VARCHAR" />
+    <result column="OBJ_NM" property="objNm" jdbcType="VARCHAR" />
+    <result column="BR_CNT" property="brCnt" jdbcType="DECIMAL" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    BR_ID, ANA_STR_DTM, ANA_END_DTM, ANA_DGR, ANA_CNT, ER_CNT, ANA_LOG_ID, ANA_RUN_USER_ID, 
+    ANA_TIME, OBJ_NM
+  </sql>
+  
+    <!-- 최근실행일자 -->
+  <sql id="getBrResultMaxAnaStrDtm" >
+      SELECT R.*
+                , CASE WHEN R.ANA_CNT = 0 THEN 0 ELSE ROUND(R.ER_CNT*100/R.ANA_CNT,2) END AS ERR_RATE
+       FROM WAM_BR_RESULT R
+                INNER JOIN (SELECT BR_ID, MAX(ANA_STR_DTM) AS ANA_STR_DTM
+                                  FROM WAM_BR_RESULT
+                                <if test="anaDgr != null and anaDgr != ''  " >
+                                 WHERE ANA_DGR =#{anaDgr,jdbcType=DECIMAL}
+                                </if>
+                                GROUP BY BR_ID ) R2
+                    ON R.BR_ID = R2.BR_ID
+                   AND R.ANA_STR_DTM = R2.ANA_STR_DTM
+  </sql>
+  
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="map" >
+    select 
+    <include refid="Base_Column_List" />
+    from WAM_BR_RESULT
+    where BR_ID = #{brId,jdbcType=VARCHAR}
+      and ANA_STR_DTM = #{anaStrDtm,jdbcType=TIMESTAMP}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="map" >
+    delete from WAM_BR_RESULT
+    where BR_ID = #{brId,jdbcType=VARCHAR}
+      and ANA_STR_DTM = #{anaStrDtm,jdbcType=TIMESTAMP}
+  </delete>
+  <insert id="insert" parameterType="kr.wise.dq.bizrule.service.WamBrResult" >
+    insert into WAM_BR_RESULT (BR_ID, ANA_STR_DTM, ANA_END_DTM, 
+      ANA_DGR, ANA_CNT, ER_CNT, 
+      ANA_LOG_ID, ANA_RUN_USER_ID, ANA_TIME, 
+      OBJ_NM)
+    values (#{brId,jdbcType=VARCHAR}, #{anaStrDtm,jdbcType=TIMESTAMP}, #{anaEndDtm,jdbcType=TIMESTAMP}, 
+      #{anaDgr,jdbcType=DECIMAL}, #{anaCnt,jdbcType=DECIMAL}, #{erCnt,jdbcType=DECIMAL}, 
+      #{anaLogId,jdbcType=VARCHAR}, #{anaRunUserId,jdbcType=VARCHAR}, #{anaTime,jdbcType=VARCHAR}, 
+      #{objNm,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="kr.wise.dq.bizrule.service.WamBrResult" >
+    insert into WAM_BR_RESULT
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="brId != null" >
+        BR_ID,
+      </if>
+      <if test="anaStrDtm != null" >
+        ANA_STR_DTM,
+      </if>
+      <if test="anaEndDtm != null" >
+        ANA_END_DTM,
+      </if>
+      <if test="anaDgr != null" >
+        ANA_DGR,
+      </if>
+      <if test="anaCnt != null" >
+        ANA_CNT,
+      </if>
+      <if test="erCnt != null" >
+        ER_CNT,
+      </if>
+      <if test="anaLogId != null" >
+        ANA_LOG_ID,
+      </if>
+      <if test="anaRunUserId != null" >
+        ANA_RUN_USER_ID,
+      </if>
+      <if test="anaTime != null" >
+        ANA_TIME,
+      </if>
+      <if test="objNm != null" >
+        OBJ_NM,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="brId != null" >
+        #{brId,jdbcType=VARCHAR},
+      </if>
+      <if test="anaStrDtm != null" >
+        #{anaStrDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="anaEndDtm != null" >
+        #{anaEndDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="anaDgr != null" >
+        #{anaDgr,jdbcType=DECIMAL},
+      </if>
+      <if test="anaCnt != null" >
+        #{anaCnt,jdbcType=DECIMAL},
+      </if>
+      <if test="erCnt != null" >
+        #{erCnt,jdbcType=DECIMAL},
+      </if>
+      <if test="anaLogId != null" >
+        #{anaLogId,jdbcType=VARCHAR},
+      </if>
+      <if test="anaRunUserId != null" >
+        #{anaRunUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="anaTime != null" >
+        #{anaTime,jdbcType=VARCHAR},
+      </if>
+      <if test="objNm != null" >
+        #{objNm,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.dq.bizrule.service.WamBrResult" >
+    update WAM_BR_RESULT
+    <set >
+      <if test="anaEndDtm != null" >
+        ANA_END_DTM = #{anaEndDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="anaDgr != null" >
+        ANA_DGR = #{anaDgr,jdbcType=DECIMAL},
+      </if>
+      <if test="anaCnt != null" >
+        ANA_CNT = #{anaCnt,jdbcType=DECIMAL},
+      </if>
+      <if test="erCnt != null" >
+        ER_CNT = #{erCnt,jdbcType=DECIMAL},
+      </if>
+      <if test="anaLogId != null" >
+        ANA_LOG_ID = #{anaLogId,jdbcType=VARCHAR},
+      </if>
+      <if test="anaRunUserId != null" >
+        ANA_RUN_USER_ID = #{anaRunUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="anaTime != null" >
+        ANA_TIME = #{anaTime,jdbcType=VARCHAR},
+      </if>
+      <if test="objNm != null" >
+        OBJ_NM = #{objNm,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where BR_ID = #{brId,jdbcType=VARCHAR}
+      and ANA_STR_DTM = #{anaStrDtm,jdbcType=TIMESTAMP}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="kr.wise.dq.bizrule.service.WamBrResult" >
+    update WAM_BR_RESULT
+    set ANA_END_DTM = #{anaEndDtm,jdbcType=TIMESTAMP},
+      ANA_DGR = #{anaDgr,jdbcType=DECIMAL},
+      ANA_CNT = #{anaCnt,jdbcType=DECIMAL},
+      ER_CNT = #{erCnt,jdbcType=DECIMAL},
+      ANA_LOG_ID = #{anaLogId,jdbcType=VARCHAR},
+      ANA_RUN_USER_ID = #{anaRunUserId,jdbcType=VARCHAR},
+      ANA_TIME = #{anaTime,jdbcType=VARCHAR},
+      OBJ_NM = #{objNm,jdbcType=VARCHAR}
+    where BR_ID = #{brId,jdbcType=VARCHAR}
+      and ANA_STR_DTM = #{anaStrDtm,jdbcType=TIMESTAMP}
+  </update>
+</mapper>

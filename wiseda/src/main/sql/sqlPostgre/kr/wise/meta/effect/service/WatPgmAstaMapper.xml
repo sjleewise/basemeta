@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.wise.meta.effect.service.WatPgmAstaMapper" >
+  <resultMap id="BaseResultMap" type="kr.wise.meta.effect.service.WatPgmAsta" >
+    <result column="REQUEST_ID" 	property="requestId" 	jdbcType="VARCHAR" />
+    <result column="OBJ_NM" 		property="objNm" 		jdbcType="VARCHAR" />
+    <result column="STA_DTTM" 		property="staDttm" 		jdbcType="TIMESTAMP" />
+    <result column="SYSTEM_KNM" 	property="systemNm" 	jdbcType="VARCHAR" />
+    <result column="BIZSYSTEM_KNM" 	property="bizsystemNm" 	jdbcType="VARCHAR" />
+    <result column="SUBSYSTEM_KNM" 	property="subsystemNm" 	jdbcType="VARCHAR" />
+    <result column="SUBSYSTEM_ID" 	property="subsystemId" 	jdbcType="DECIMAL" />
+    <result column="PGM_ID" 		property="pgmId" 		jdbcType="DECIMAL" />
+    <result column="PGM_FILE_PATH" 	property="pgmFilePath" 	jdbcType="VARCHAR" />
+    <result column="PGM_FILE_NM" 	property="pgmFileNm" 	jdbcType="VARCHAR" />
+    <result column="HOST_IP" 		property="hostIp" 		jdbcType="VARCHAR" />
+    <result column="PGM_NM" 		property="pgmNm" 		jdbcType="VARCHAR" />
+    <result column="PGM_TYPE" 		property="pgmType" 		jdbcType="VARCHAR" />
+    <result column="CATEGORY_TYPE" 	property="categoryType" jdbcType="VARCHAR" />
+    <result column="PGM_URL" 		property="pgmUrl" 		jdbcType="VARCHAR" />
+    <result column="ORGL_USER" 		property="orglUser" 	jdbcType="VARCHAR" />
+    <result column="UPDT_USER" 		property="updtUser" 	jdbcType="VARCHAR" />
+    <result column="ORGL_DTTM" 		property="orglDttm" 	jdbcType="TIMESTAMP" />
+    <result column="UPDT_DTTM" 		property="updtDttm" 	jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <resultMap id="AstaFuncResultMap" type="kr.wise.meta.effect.service.WatPgmAstaFuc" extends="BaseResultMap">
+  	<id column="SUBSYSTEM_ID" 	property="subsystemId" 	jdbcType="DECIMAL" />
+    <id column="PGM_ID" 		property="pgmId" 		jdbcType="DECIMAL" />
+  	<id column="FUC_ID" 		property="fucId" 		jdbcType="DECIMAL" />
+    <result column="FUC_ENM" 		property="fucEnm" 		jdbcType="VARCHAR" />
+    <collection property="tblEnms" javaType="java.util.ArrayList"  ofType="string">
+    	<result column="TBL_ENM" />
+    </collection>
+  </resultMap>
+  
+  <select id="selectProgramEffectList" parameterType="kr.wise.meta.effect.service.WatPgmAsta" resultMap="BaseResultMap">
+	SELECT
+	       B.SYS_KNM1       AS SYSTEM_KNM
+	     , B.SYS_KNM2       AS BIZSYSTEM_KNM
+	     , B.SYS_ID2       AS BIZSYSTEM_ID
+	     , B.SYS_KNM3       AS SUBSYSTEM_KNM
+	     , B.OBJ_ID         AS SUBSYSTEM_ID
+	     , A.PGM_FILE_NM    
+	     , A.PGM_NM         
+	     , A.PGM_ID         
+	     , A.ORGL_USER      
+	     , A.CATEGORY_TYPE  
+	     , A.PGM_TYPE          
+	     , A.PGM_FILE_PATH  
+	  FROM WAT_PGM_ASTA A
+	 INNER JOIN V_PGM_AST_SYS B
+	    ON A.SUBSYSTEM_ID = B.OBJ_ID
+	 --INNER JOIN WAT_PGM_ASTA_LNG E
+	 --   ON A.PGM_TYPE = E.LNG_CD
+     WHERE 1 = 1
+     <if test="subsystemNm != null">
+       AND B.SYS_KNM3 LIKE '%'||#{subsystemNm}||'%'
+     </if>
+     <if test="pgmType != null">
+       AND A.PGM_TYPE = #{pgmType}
+     </if>
+     <if test="pgmNm != null">
+       AND A.PGM_NM LIKE '%'||#{pgmNm}||'%'
+     </if>
+     <if test="tblEnm != null">
+       AND EXISTS (
+       				SELECT 1 FROM WAT_PGM_ASTA_TBL X 
+       				 WHERE A.SUBSYSTEM_ID  = X.SUBSYSTEM_ID 
+       				   AND A.PGM_ID = X.PGM_ID 
+       				   AND X.TBL_ENM LIKE '%'||#{tblEnm}||'%'
+       )
+     </if>
+	 ORDER BY B.SYS_KNM1, B.SYS_KNM2, B.SYS_KNM3, A.PGM_NM  	
+  </select>
+  
+  <select id="selectProgramEffectDetail" parameterType="kr.wise.meta.effect.service.WatPgmAsta" resultMap="BaseResultMap">
+		SELECT
+		          B.SYS_KNM1||'>'||B.SYS_KNM2||'>'||B.SYS_KNM3       AS SYSTEM_KNM
+		         ,B.OBJ_ID         AS SUBSYSTEM_ID
+		         ,A.PGM_FILE_NM    
+		         ,A.PGM_NM         
+		         ,A.PGM_ID         
+		         ,A.ORGL_USER      
+		         ,A.ORGL_DTTM
+		         ,A.UPDT_USER
+		         ,A.UPDT_DTTM
+		         ,A.HOST_IP
+		         ,A.PGM_FILE_PATH
+		         ,A.CATEGORY_TYPE
+		         ,A.PGM_TYPE        
+		FROM WAT_PGM_ASTA A
+		       INNER JOIN V_PGM_AST_SYS B
+		          ON A.SUBSYSTEM_ID = B.OBJ_ID
+		INNER JOIN WAT_PGM_ASTA_LNG E
+		  ON A.PGM_TYPE = E.LNG_CD
+		WHERE 1 = 1
+		AND A.PGM_ID = #{pgmId}
+		AND B.OBJ_ID  = #{subsystemId}  	
+  </select>
+  
+  <select id="selectRelProgramList" parameterType="kr.wise.meta.effect.service.WatPgmAsta" resultMap="BaseResultMap">
+		SELECT DISTINCT C.SYS_KNM1  AS SYSTEM_KNM
+		     , C.SYS_KNM2    		AS BIZSYSTEM_KNM
+		     , C.SYS_KNM3    		AS SUBSYSTEM_KNM
+		     , B.PGM_FILE_NM 		
+		     , B.PGM_TYPE
+		     , B.CATEGORY_TYPE
+		     , B.PGM_NM      
+		     , A.PGM_ID     
+		     , C.SYS_ID2    AS BIZSYSTEM_ID
+		     , C.OBJ_ID     AS SUBSYSTEM_ID
+		  FROM WAT_PGM_ASTA_REL A
+		 INNER JOIN WAT_PGM_ASTA B
+		    ON A.SUBSYSTEM_ID = B.SUBSYSTEM_ID
+		   AND A.PGM_ID = B.PGM_ID
+		 INNER JOIN V_PGM_AST_SYS C
+		    ON B.SUBSYSTEM_ID = C.OBJ_ID
+		 WHERE A.CALL_SUBSYSTEM_ID = #{subsystemId}
+		   AND A.CALL_PGM_ID = #{pgmId}  	
+  </select>
+  
+  <select id="selectRelFuncList" parameterType="kr.wise.meta.effect.service.WatPgmAsta" resultMap="AstaFuncResultMap">
+    SELECT C.SYS_KNM1    AS SYSTEM_KNM
+      	 , C.SYS_KNM2    AS BIZSYSTEM_KNM
+      	 , C.SYS_KNM3    AS SUBSYSTEM_KNM
+      	 , B.PGM_FILE_NM 
+      	 , A.FUC_ENM     
+      	 , A.PGM_ID
+      	 , A.FUC_ID   
+      	 , A.SUBSYSTEM_ID
+      	 , D.TBL_ENM
+      FROM WAT_PGM_ASTA_FUC A
+     INNER JOIN WAT_PGM_ASTA B
+        ON A.SUBSYSTEM_ID = B.SUBSYSTEM_ID
+       AND A.PGM_ID = B.PGM_ID
+     INNER JOIN V_PGM_AST_SYS C
+        ON A.SUBSYSTEM_ID = C.OBJ_ID
+      LEFT OUTER JOIN WAT_PGM_ASTA_TBL D
+        ON A.SUBSYSTEM_ID = D.SUBSYSTEM_ID
+       AND A.PGM_ID = D.PGM_ID
+       AND A.FUC_ID = D.OF_FUC_ID 
+     WHERE A.SUBSYSTEM_ID = #{subsystemId}
+       AND A.PGM_ID = #{pgmId} 
+     ORDER BY A.FUC_ENM  	
+  </select>
+  
+  <insert id="insert" parameterType="kr.wise.meta.effect.service.WatPgmAsta" >
+    insert into WAT_PGM_ASTA (REQUEST_ID, OBJ_NM, STA_DTTM, 
+      SUBSYSTEM_ID, PGM_ID, PGM_FILE_PATH, 
+      PGM_FILE_NM, HOST_IP, PGM_NM, 
+      PGM_TYPE, CATEGORY_TYPE, PGM_URL, 
+      ORGL_USER, UPDT_USER, ORGL_DTTM, 
+      UPDT_DTTM)
+    values (#{requestId,jdbcType=VARCHAR}, #{objNm,jdbcType=VARCHAR}, #{staDttm,jdbcType=TIMESTAMP}, 
+      #{subsystemId,jdbcType=DECIMAL}, #{pgmId,jdbcType=DECIMAL}, #{pgmFilePath,jdbcType=VARCHAR}, 
+      #{pgmFileNm,jdbcType=VARCHAR}, #{hostIp,jdbcType=VARCHAR}, #{pgmNm,jdbcType=VARCHAR}, 
+      #{pgmType,jdbcType=VARCHAR}, #{categoryType,jdbcType=VARCHAR}, #{pgmUrl,jdbcType=VARCHAR}, 
+      #{orglUser,jdbcType=VARCHAR}, #{updtUser,jdbcType=VARCHAR}, #{orglDttm,jdbcType=TIMESTAMP}, 
+      #{updtDttm,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="kr.wise.meta.effect.service.WatPgmAsta" >
+    insert into WAT_PGM_ASTA
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="requestId != null" >
+        REQUEST_ID,
+      </if>
+      <if test="objNm != null" >
+        OBJ_NM,
+      </if>
+      <if test="staDttm != null" >
+        STA_DTTM,
+      </if>
+      <if test="subsystemId != null" >
+        SUBSYSTEM_ID,
+      </if>
+      <if test="pgmId != null" >
+        PGM_ID,
+      </if>
+      <if test="pgmFilePath != null" >
+        PGM_FILE_PATH,
+      </if>
+      <if test="pgmFileNm != null" >
+        PGM_FILE_NM,
+      </if>
+      <if test="hostIp != null" >
+        HOST_IP,
+      </if>
+      <if test="pgmNm != null" >
+        PGM_NM,
+      </if>
+      <if test="pgmType != null" >
+        PGM_TYPE,
+      </if>
+      <if test="categoryType != null" >
+        CATEGORY_TYPE,
+      </if>
+      <if test="pgmUrl != null" >
+        PGM_URL,
+      </if>
+      <if test="orglUser != null" >
+        ORGL_USER,
+      </if>
+      <if test="updtUser != null" >
+        UPDT_USER,
+      </if>
+      <if test="orglDttm != null" >
+        ORGL_DTTM,
+      </if>
+      <if test="updtDttm != null" >
+        UPDT_DTTM,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="requestId != null" >
+        #{requestId,jdbcType=VARCHAR},
+      </if>
+      <if test="objNm != null" >
+        #{objNm,jdbcType=VARCHAR},
+      </if>
+      <if test="staDttm != null" >
+        #{staDttm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="subsystemId != null" >
+        #{subsystemId,jdbcType=DECIMAL},
+      </if>
+      <if test="pgmId != null" >
+        #{pgmId,jdbcType=DECIMAL},
+      </if>
+      <if test="pgmFilePath != null" >
+        #{pgmFilePath,jdbcType=VARCHAR},
+      </if>
+      <if test="pgmFileNm != null" >
+        #{pgmFileNm,jdbcType=VARCHAR},
+      </if>
+      <if test="hostIp != null" >
+        #{hostIp,jdbcType=VARCHAR},
+      </if>
+      <if test="pgmNm != null" >
+        #{pgmNm,jdbcType=VARCHAR},
+      </if>
+      <if test="pgmType != null" >
+        #{pgmType,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryType != null" >
+        #{categoryType,jdbcType=VARCHAR},
+      </if>
+      <if test="pgmUrl != null" >
+        #{pgmUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="orglUser != null" >
+        #{orglUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updtUser != null" >
+        #{updtUser,jdbcType=VARCHAR},
+      </if>
+      <if test="orglDttm != null" >
+        #{orglDttm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updtDttm != null" >
+        #{updtDttm,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+</mapper>

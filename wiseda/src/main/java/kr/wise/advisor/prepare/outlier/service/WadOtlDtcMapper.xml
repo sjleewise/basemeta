@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.wise.advisor.prepare.outlier.service.WadOtlDtcMapper">
+  <resultMap id="BaseResultMap" type="kr.wise.advisor.prepare.outlier.service.WadOtlDtc" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+    <id column="OTL_DTC_ID" jdbcType="VARCHAR" property="otlDtcId" />
+    <result column="DASE_ID" jdbcType="VARCHAR" property="daseId" />
+    <result column="OTL_ALG_ID" jdbcType="VARCHAR" property="otlAlgId" />
+  </resultMap>
+
+  <resultMap id="WadOtlDtcVoMap" type="kr.wise.advisor.prepare.outlier.service.WadOtlDtcVo" extends="kr.wise.commons.cmm.service.CommonMapper.BaseResultMap">
+    <id column="OTL_DTC_ID" jdbcType="VARCHAR" property="otlDtcId" />
+    <result column="DASE_ID" jdbcType="VARCHAR" property="daseId" />
+    <result column="OTL_ALG_ID" jdbcType="VARCHAR" property="otlAlgId" />
+    <association property="alg" resultMap="kr.wise.admin.ai.algorithm.service.WaaAlgMapper.BaseResultMap" javaType="kr.wise.admin.ai.algorithm.service.WaaAlg"></association>
+    <collection property="varlist" resultMap="kr.wise.advisor.prepare.dataset.service.WadAnaVarMapper.BaseResultMap" javaType="java.util.ArrayList" ofType="kr.wise.advisor.prepare.dataset.service.WadAnaVar"></collection>
+    <collection property="arglist" resultMap="kr.wise.admin.ai.algorithm.service.WaaAlgArgMapper.BaseResultMap" javaType="java.util.ArrayList" ofType="kr.wise.admin.ai.algorithm.service.WaaAlgArg"></collection>
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    OTL_DTC_ID, DASE_ID, OTL_ALG_ID, OBJ_DESCN, OBJ_VERS, REG_TYP_CD, WRIT_DTM, WRIT_USER_ID
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from WAD_OTL_DTC
+    where OTL_DTC_ID = #{otlDtcId,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="selectOtlDct" parameterType="kr.wise.advisor.prepare.outlier.service.WadOtlDtc" resultMap="WadOtlDtcVoMap">
+  --이상값탐지 알고리즘, 파라미터, 변수목록
+    SELECT A.OTL_DTC_ID, A.DASE_ID, A.OTL_ALG_ID 
+	     , C.ANL_VAR_ID, C.DB_TBL_NM, C.DB_COL_NM 
+	     , B.ALG_ID, B.ALG_LNM, B.ALG_PNM, B.ALG_TYP_CD 
+	     , P.ALG_ARG_ID, P.ARG_LNM, P.ARG_PNM, P.ARG_DATA_TYPE, P.ARG_DEFLT_VAL 
+	     , R.ARG_VAL 
+	  FROM WAD_OTL_DTC A
+	  JOIN WAD_OTL_VAL V
+	    ON A.OTL_DTC_ID = V.OTL_DTC_ID  
+	  JOIN WAD_ANA_VAR C
+	    ON V.ANL_VAR_ID = C.ANL_VAR_ID 
+	  JOIN WAA_ALG B
+	    ON A.OTL_ALG_ID = B.ALG_ID
+	  LEFT OUTER JOIN WAD_OTL_ARG R
+	    ON A.OTL_DTC_ID = R.OTL_DTC_ID
+	  LEFT OUTER JOIN WAA_ALG_ARG P
+	    ON R.ALG_ARG_ID = P.ALG_ARG_ID
+	   AND A.OTL_ALG_ID = P.ALG_ID
+	    
+	 WHERE A.OTL_DTC_ID = #{otlDtcId,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="selectbydsnalg" parameterType="kr.wise.advisor.prepare.outlier.service.WadOtlDtc" resultMap="BaseResultMap">
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM WAD_OTL_DTC
+    WHERE DASE_ID = #{daseId,jdbcType=VARCHAR}
+      AND OTL_ALG_ID = #{otlAlgId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    --이상값 탐지 삭제 by OtlDtcId
+    delete from WAD_OTL_DTC
+    where OTL_DTC_ID = #{otlDtcId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="kr.wise.advisor.prepare.outlier.service.WadOtlDtc">
+    INSERT INTO WAD_OTL_DTC (OTL_DTC_ID, DASE_ID, OTL_ALG_ID, 
+      OBJ_DESCN, OBJ_VERS, REG_TYP_CD, 
+      WRIT_DTM, WRIT_USER_ID)
+    VALUES (#{otlDtcId,jdbcType=VARCHAR}, #{daseId,jdbcType=VARCHAR}, #{otlAlgId,jdbcType=VARCHAR}, 
+      #{objDescn,jdbcType=VARCHAR}, 1, 'C',SYSDATE, #{writUserId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="kr.wise.advisor.prepare.outlier.service.WadOtlDtc">
+    insert into WAD_OTL_DTC
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="otlDtcId != null">
+        OTL_DTC_ID,
+      </if>
+      <if test="daseId != null">
+        DASE_ID,
+      </if>
+      <if test="otlAlgId != null">
+        OTL_ALG_ID,
+      </if>
+      <if test="objDescn != null">
+        OBJ_DESCN,
+      </if>
+      <if test="objVers != null">
+        OBJ_VERS,
+      </if>
+      <if test="regTypCd != null">
+        REG_TYP_CD,
+      </if>
+      <if test="writDtm != null">
+        WRIT_DTM,
+      </if>
+      <if test="writUserId != null">
+        WRIT_USER_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="otlDtcId != null">
+        #{otlDtcId,jdbcType=VARCHAR},
+      </if>
+      <if test="daseId != null">
+        #{daseId,jdbcType=VARCHAR},
+      </if>
+      <if test="otlAlgId != null">
+        #{otlAlgId,jdbcType=VARCHAR},
+      </if>
+      <if test="objDescn != null">
+        #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null">
+        #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null">
+        #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="writDtm != null">
+        #{writDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="writUserId != null">
+        #{writUserId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="kr.wise.advisor.prepare.outlier.service.WadOtlDtc">
+    update WAD_OTL_DTC
+    <set>
+      <if test="daseId != null">
+        DASE_ID = #{daseId,jdbcType=VARCHAR},
+      </if>
+      <if test="otlAlgId != null">
+        OTL_ALG_ID = #{otlAlgId,jdbcType=VARCHAR},
+      </if>
+      <if test="objDescn != null">
+        OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      </if>
+      <if test="objVers != null">
+        OBJ_VERS = #{objVers,jdbcType=DECIMAL},
+      </if>
+      <if test="regTypCd != null">
+        REG_TYP_CD = #{regTypCd,jdbcType=VARCHAR},
+      </if>
+      <if test="writDtm != null">
+        WRIT_DTM = #{writDtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="writUserId != null">
+        WRIT_USER_ID = #{writUserId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where OTL_DTC_ID = #{otlDtcId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="kr.wise.advisor.prepare.outlier.service.WadOtlDtc">
+    UPDATE WAD_OTL_DTC
+    SET DASE_ID = #{daseId,jdbcType=VARCHAR},
+      OTL_ALG_ID = #{otlAlgId,jdbcType=VARCHAR},
+      OBJ_DESCN = #{objDescn,jdbcType=VARCHAR},
+      OBJ_VERS = NVL(OBJ_VERS, 0) + 1,
+      REG_TYP_CD = 'U',
+      WRIT_DTM = SYSDATE,
+      WRIT_USER_ID = #{writUserId,jdbcType=VARCHAR}
+    WHERE OTL_DTC_ID = #{otlDtcId,jdbcType=VARCHAR}
+  </update>
+  
+  <update id="updateOtlNm" parameterType="kr.wise.advisor.prepare.outlier.service.WadOtlDtc">
+		  
+		UPDATE WAD_OTL_DTC T
+		   SET OTL_NM = (
+		                SELECT MAX(E.ALG_LNM) || '(' ||LISTAGG(D.DBC_COL_NM, ',') WITHIN GROUP (ORDER BY A.OTL_DTC_ID) ||')' AS COL_NM
+		                  FROM WAD_OTL_DTC A
+		                       INNER JOIN WAD_OTL_VAL B
+		                          ON B.OTL_DTC_ID = A.OTL_DTC_ID
+		                         AND B.ANA_VAR_CHK = '1'   
+		                       INNER JOIN WAD_ANA_VAR C
+		                          ON C.ANL_VAR_ID = B.ANL_VAR_ID
+		                       INNER JOIN WAT_DBC_COL D
+		                          ON D.DB_SCH_ID  = C.DB_SCH_ID
+		                         AND D.DBC_TBL_NM = C.DB_TBL_NM
+		                         AND D.DBC_COL_NM = C.DB_COL_NM   
+		                       INNER JOIN WAA_ALG E
+		                          ON E.ALG_ID = A.OTL_ALG_ID     
+		                 WHERE 1 = 1          
+		                   AND A.OTL_DTC_ID = T.OTL_DTC_ID
+		                 GROUP BY A.OTL_DTC_ID                                 
+		                 )
+		 WHERE 1 = 1
+		   AND T.OTL_DTC_ID = #{otlDtcId,jdbcType=VARCHAR}
+		   AND EXISTS ( SELECT 1
+		                  FROM WAD_OTL_DTC A
+		                       INNER JOIN WAD_OTL_VAL B
+		                          ON B.OTL_DTC_ID = A.OTL_DTC_ID
+		                         AND B.ANA_VAR_CHK = '1'    
+		                       INNER JOIN WAD_ANA_VAR C
+		                          ON C.ANL_VAR_ID = B.ANL_VAR_ID
+		                       INNER JOIN WAT_DBC_COL D
+		                          ON D.DB_SCH_ID  = C.DB_SCH_ID
+		                         AND D.DBC_TBL_NM = C.DB_TBL_NM
+		                         AND D.DBC_COL_NM = C.DB_COL_NM   
+		                       INNER JOIN WAA_ALG E
+		                          ON E.ALG_ID = A.OTL_ALG_ID     
+		                 WHERE 1 = 1          
+		                   AND A.OTL_DTC_ID = T.OTL_DTC_ID
+		                 GROUP BY A.OTL_DTC_ID
+		                )		                     
+  </update>
+  
+  <delete id="deleteWamOtlDqiMap" parameterType="java.lang.String">
+    --이상값 탐지 품질지표 삭제 by OtlDtcId
+    delete from WAM_OTL_DQI_MAP
+    where OTL_DTC_ID = #{otlDtcId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insertWamOtlDqiMap" parameterType="kr.wise.advisor.prepare.outlier.service.WadOtlDtc">
+    INSERT INTO WAM_OTL_DQI_MAP (OTL_DTC_ID, ANL_VAR_ID, DQI_ID, OBJ_DESCN, OBJ_VERS        
+								, RQST_NO, RQST_SNO, REG_TYP_CD, FRS_RQST_USER_ID
+								, RQST_USER_ID, APRV_DTM, APRV_USER_ID)
+    VALUES (#{otlDtcId,jdbcType=VARCHAR}, #{anlVarId,jdbcType=VARCHAR}, #{dqiId,jdbcType=VARCHAR}, 
+      #{objDescn,jdbcType=VARCHAR}, 1, '', '', 'C', #{writUserId,jdbcType=VARCHAR}, #{writUserId,jdbcType=VARCHAR}, '', '')
+  </insert>
+</mapper>
