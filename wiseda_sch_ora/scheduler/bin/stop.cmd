@@ -1,0 +1,1 @@
+C:/ide/basemeta_postgresql/wiseda_sch_ora/scheduler/bin/DAscheduler.cmd STOP

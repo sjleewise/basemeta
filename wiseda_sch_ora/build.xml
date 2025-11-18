@@ -1,0 +1,386 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ====================================================================== 
+     2013. 06. 26.                                                         
+
+     WISE DA build    
+                   
+     Insomnia(장명수)                                                                
+     ====================================================================== -->
+<project name="da_scheduler" default="build">
+    <description>
+	    <![CDATA[
+    	WISE DA SCHEDULER build      
+	    ]]>     
+    </description>
+	
+	<!--퍼로퍼티 파일 지정 -->
+	<property file="build.properties" />
+	
+	<!--퍼로퍼티 설정 : 각종 폴더 & 생성파일 -->
+	<property name="project.name" value="daschedule"/>
+	
+	<condition property="build.env" value="${build.env}" else="prod">
+	    <isset property="build.env" />
+	</condition>
+
+	<property name="base.dir" value="."/>
+	<property name="scheduler.dir" value="scheduler" />
+	<property name="quartz.dir" value="Quartz" />
+	<property name="src.dir" value="src" />
+	<property name="lib.dir" value="${scheduler.dir}/lib"/>
+	<property name="build.dir" value="${scheduler.dir}/classes"/>
+	<property name="resources.dir" value="conf" />
+	<property name="dist.dir" value="target"/>
+	<property name="war.file" value="${dist.dir}/${project.name}.war"/>
+	<property name="ear.file" value="${dist.dir}/${project.name}.ear"/>
+
+	
+	<!-- 환경변수 사용하도록 선언 -->
+	<property environment="env"/>
+	<!--
+	<echo message="maven-home.path : ${env.Path}" />
+	<property name="maven-home.path" value="${env.M2_HOME}" />
+	-->
+	
+	<!-- ================================= 
+          target: telnet              
+         ================================= -->
+    <target name="telnet-test" depends="" description="description">
+    	<telnet server="${remote.server}"
+    	    		 	userid="${remote.id}"
+    					password="${remote.pass}"
+    	    			timeout="20"
+    	    		>
+    	    <read>${remote.prompt}</read>
+    	    <write>ls -al</write>
+    		<read>${remote.prompt}</read>
+    	</telnet>
+    </target>
+	
+	<!-- ================================= 
+          target: stop-schedule              
+         ================================= -->
+    <target name="stopschedule" depends="" description="stop wiseda scheduler">
+    	<telnet server="${remote.server}"
+    		 	userid="${remote.id}"
+				password="${remote.pass}"
+    			timeout="20"
+    		>
+    		<read>${remote.prompt}</read>
+    		<write>cd ${remote.dir}/${scheduler.dir}/bin</write>
+    		<read>${remote.prompt}</read>
+    		<write>stop.sh</write>
+    		<read>${remote.prompt}</read>
+    		
+    	</telnet>
+    </target>
+	
+	<!-- ================================= 
+          target: start-scheduler              
+         ================================= -->
+    <target name="startschedule" depends="" description="start wiseda wcheduler">
+    	<!--
+    	<sshexec host="${remote.server}"
+    	         username="${remote.id}"
+    	         password="${remote.pass}"
+    	         trust="true"
+    	         command="${jeus.admin} startcon ${jeus.container}"/>
+    	 -->
+    	<telnet server="${remote.server}"
+    	    		 	userid="${remote.id}"
+    					password="${remote.pass}"
+    	    			timeout="20"
+    	    		>
+    	    		<read>${remote.prompt}</read>
+    	    		<write>cd ${remote.dir}/${scheduler.dir}/bin</write>
+    	    		<read>${remote.prompt}</read>
+    	    		<write>start.sh</write>
+    	    		<read>${remote.prompt}</read>
+    	</telnet>
+    </target>
+
+	
+	<!-- ================================= 
+          target: clean              
+         ================================= -->
+    <target name="clean" description="delete build, dist">
+    	<!--
+        <delete dir="${dist.dir}" />
+        -->
+        <delete dir="${build.dir}" />
+        <!--
+    	<delete dir="${web.dir}/WEB-INF/classes" />
+    	-->
+    </target>
+	
+	<!-- ================================= 
+          target: datentime              
+         ================================= -->
+    <target name="datentime" description="create current date">
+        <tstamp>
+        	<format property="DSTAMP" pattern="yyyy-MM-dd"/>
+        	<format property="TSTAMP" pattern="HH:mm:ss"/>
+        </tstamp>
+    	<echo message="Build started at : ${DSTAMP} - ${TSTAMP}" />
+    </target>
+	
+	<!-- ================================= 
+          target: prepare              
+         ================================= -->
+	<target name="preparecopy">
+		<antcall target="preparecopy.${build.env}" />
+	</target>
+	<target name="preparecopy.">
+		<echo message="no build.env param" />
+	</target>
+	<target name="preparecopy.prod">
+		<echo message="build.env=prod copy file" />
+		<copy 	file="${resources.dir}/dqexecutor.prod.properties" 
+						tofile="${resources.dir}/daexecutor.properties" 
+						overwrite="true"/>
+		<copy 	file="${scheduler.dir}/bin/scheduler.prod.properties" 
+						tofile="${scheduler.dir}/bin/scheduler.properties" 
+						overwrite="true"/>
+    	<copy 	file="${resources.dir}/log4j_${build.env}.xml" 
+				tofile="${resources.dir}/log4j.xml" 
+				overwrite="true"/>
+	</target>
+	<target name="preparecopy.dev">
+    	<!-- 개발서버의 경우 개발서버용 스크립트로 교체... -->
+		<echo message="build.env=dev copy file" />
+    	<copy 	file="${scheduler.dir}/bin/dev/setenv.cmd" 
+				tofile="${scheduler.dir}/bin/setenv.cmd" 
+				overwrite="true"/>
+    	<copy 	file="${scheduler.dir}/bin/dev/ScheduleRegistry.cmd" 
+				tofile="${scheduler.dir}/bin/ScheduleRegistry.cmd" 
+				overwrite="true"/>
+    	<copy 	file="${scheduler.dir}/bin/dev/DAscheduler.cmd" 
+				tofile="${scheduler.dir}/bin/DAscheduler.cmd" 
+				overwrite="true"/>
+    	<copy 	file="${base.dir}/conf/log4j_dev.xml" 
+				tofile="${base.dir}/conf/log4j.xml" 
+				overwrite="true"/>
+	</target>
+	
+	
+	
+    <target name="prepare" depends="datentime, clean, preparecopy" description="copy web contents">
+        <mkdir dir="${build.dir}"/>
+
+    	
+    	<copy todir="${build.dir}">
+    		<fileset dir="${resources.dir}">
+    			<exclude name="**/*.class"/>
+    			<exclude name="**/*.java"/>
+    		</fileset>
+    	</copy>
+    	
+    	
+        <!--
+    	<mkdir dir="${dist.dir}"/>
+		<mkdir dir="${web.dir}/WEB-INF/classes" />
+    	<copy todir="${web.dir}/WEB-INF/classes">
+			<fileset dir="${src.dir}" >
+				<exclude name="**/*.java"/>
+			</fileset>
+		</copy>
+        -->
+    		
+		<!--
+    	<copy 	file="${src.dir}/wisecomp_config_meta.xml" 
+				tofile="${web.dir}/WEB-INF/classes/wisecomp_config.xml" 
+				overwrite="true"/>
+    	
+    	<copy 	file="${src.dir}/collector_config.xml" 
+				tofile="${build.dir}/collector_config.xml" 
+				overwrite="true"/>
+		-->
+    </target>
+
+	<!-- ================================= 
+          target: build              
+         ================================= -->
+    <target name="build" depends="datentime" description="compile java">
+    	<propertyfile file="${scheduler.dir}/bin/scheduler.properties" >
+    		<entry key="org.quartz.dataSource.wisedaDS.driver" value="${jdbc.driver}"/>
+    		<entry key="org.quartz.dataSource.wisedaDS.URL" value="${jdbc.url}"/>
+    		<entry key="org.quartz.dataSource.wisedaDS.user" value="${jdbc.user}"/>
+    		<entry key="org.quartz.dataSource.wisedaDS.password" value="${jdbc.pass}"/>
+    		<entry key="org.quartz.dataSource.wisedaDS.maxConnections" value="${jdbc.maxcon}"/>
+    	</propertyfile>
+    	<propertyfile file="${build.dir}/daexecutor.properties" >
+    		<entry key="DA_JDBC_DRIVER" value="${jdbc.driver}"/>
+    		<entry key="DA_DB_URL" value="${jdbc.url}"/>
+    		<entry key="DA_DB_USER" value="${jdbc.user}"/>
+    		<entry key="DA_DB_PASS" value="${jdbc.pass}"/>
+    		<entry key="META_JDBC_DRIVER" value="${jdbc.driver}"/>
+    		<entry key="META_DB_URL" value="${jdbc.url}"/>
+    		<entry key="META_DB_USER" value="${jdbc.user}"/>
+    		<entry key="META_DB_PASS" value="${jdbc.pass}"/>
+    		
+    	</propertyfile>
+    	<replaceregexp byline="true">
+    	  <regexp pattern="JAVA_HOME=(.*)"/>
+    	  <substitution expression="JAVA_HOME=${remote.java.home}"/>
+    	  <fileset dir="${scheduler.dir}/bin">
+    	    <include name="setenv.sh"/>
+    	  </fileset>
+    	</replaceregexp>
+    	<replaceregexp byline="true">
+    	  <regexp pattern="SCHEDULER_HOME=(.*)"/>
+    	  <substitution expression="SCHEDULER_HOME=${remote.build}/${scheduler.dir}"/>
+    	  <fileset dir="${scheduler.dir}/bin">
+    	    <include name="setenv.sh"/>
+    	  </fileset>
+    	</replaceregexp>
+    	<replaceregexp byline="true">
+    	  <regexp pattern="(.*)setenv.sh"/>
+    	  <substitution expression=". ${remote.build}/${scheduler.dir}/bin/setenv.sh"/>
+    	  <fileset dir="${scheduler.dir}/bin">
+    	    <include name="ScheduleRegistry.sh"/>
+    	    <include name="DAscheduler.sh"/>
+    	  </fileset>
+    	</replaceregexp>
+    	
+    	<tar destfile="${dist.dir}/wiseda_sche.tar" basedir="." >
+    		<include name="${scheduler.dir}/**"/>
+    	</tar>
+
+    	<!--
+    	<javac srcdir="${src.dir}"
+	       destdir="${build.dir}"
+	       debug="${compile.debug}"
+	       target="${compile.target}"
+           encoding="${compile.encoding}"
+    	   classpathref="project.classpath">
+		</javac>
+    	   failonerror="off"
+    	<copy todir="${web.dir}/WEB-INF/classes" overwrite="true">
+    		<fileset dir="${build.dir}/WEB-INF/classes" />
+    	</copy>
+	       optimize="${compile.optimize}"
+    	   includeantruntime="false"
+    		<compilerarg value="-Xlint:unchecked"/>
+    		<compilerarg value="-Xlint:deprecation"/>
+    	   target="1.5"
+    	   source="1.5"
+	       deprecation="${compile.deprecation}"
+    	<copy todir="${build.dir}/WEB-INF/classes">
+    		<fileset dir="${src.dir}" excludes="**/*.java, **/*.properties" />
+    		<fileset dir="${resources.dir}" excludes="**/*.java" />
+    	</copy>
+    	<copy 	file="${resources.dir}/kca-log4j.properties" 
+				tofile="${build.dir}/WEB-INF/classes/log4j.properties" 
+				overwrite="true"/>
+    			<native2ascii src="${src.home}"
+    			              dest="${build.home}/WEB-INF/classes"
+    			              includes="**/*.properties" />
+    			<native2ascii src="${conf.home}"
+    			              dest="${build.home}/WEB-INF/classes"
+    			              includes="**/*.properties" />
+    	-->
+    </target>
+	
+	<!-- ================================= 
+          target: deploy              
+         ================================= -->
+    <target name="deploy" depends="build,stopschedule,ftpsend,untarda,startschedule" description="jeus deploy">
+    	
+    </target>
+	
+	
+	<!-- ================================= 
+          target: untar wiseda              
+         ================================= -->
+    <target name="untarda" depends="" description="untar wiseda">
+    	<!--
+    	<sshexec host="${remote.server}"
+    	         username="${remote.id}"
+    	         password="${remote.pass}"
+    	         trust="true"
+    	         command="tar -xvf ${remote.dir}/wiseda_sche.tar -C ${remote.dir}/"/>
+    	-->
+    	<telnet server="${remote.server}"
+    		 	userid="${remote.id}"
+				password="${remote.pass}"
+    			timeout="600"
+    		>
+    	    <read>${remote.prompt}</read>
+    	    <write>tar -xvf ${remote.dir}/wiseda_sche.tar -C ${remote.dir}/</write>
+    		<read>${remote.prompt}</read>
+    	</telnet>
+    </target>
+	<!-- ================================= 
+          target: sync              
+         ================================= -->
+    <target name="sync">
+    	<antcall target="sync.${build.env}"/>
+    </target>
+    <target name="sync.dev" depends="" description="sync build">
+    	<sync todir="${collector.paht.dev}/${scheduler.dir}">
+    	  <fileset dir="${scheduler.dir}"/>
+    	</sync>
+    </target>
+    <target name="sync.prod" depends="" description="sync build">
+    	<sync todir="${collector.paht.prod}/${scheduler.dir}">
+    	  <fileset dir="${scheduler.dir}"/>
+    	</sync>
+    </target>
+	
+	
+	<!-- ================================= 
+          target: stopdqschedule              
+         ================================= -->
+    <target name="stopdqschedule" depends="" description="description">
+    	<!-- 
+    	<exec executable="cmd.exe">
+    		<arg line="/C ${collector.paht.local}/${scheduler.dir}/bin/DAscheduler.cmd STOP" />
+        </exec>
+    	<exec executable="${collector.paht.local}/${scheduler.dir}/bin/DAscheduler.cmd">
+    		<arg value="STOP"/>
+    	</exec>
+    	-->
+    	<exec executable="${collector.paht.dev}/${scheduler.dir}/bin/DAscheduler.cmd">
+    		<arg value="STOP"/>
+    	</exec>
+    </target>
+
+
+	<!-- ================================= 
+          target: dbc test              
+         ================================= -->
+    <target name="dbc test" depends="" description="dbc test">
+        <java classname="wiseitech.wisedq.executor.SchemaManualCollector"
+        	classpathref="project.classpath"
+        	fork="true"
+        	>
+        	<arg value="T1372134635224"/>
+        </java>
+    </target>
+
+	<!-- ================================= 
+          target: antftp              
+         ================================= -->
+    <target name="ftpsend" depends="" description="">
+        <ftp password="${remote.pass}" 
+        	server="${remote.server}" 
+        	userid="${remote.id}"
+        	remotedir="${remote.dir}"
+        	binary="yes"
+        	separator="/"
+    		verbose="yes" 
+        	>
+        	
+        	<!-- 
+	        	skipFailedTransfers="true" 
+	        	passive="yes"
+        	<fileset dir="${dist.dir}/wiseda" >
+        		
+        	</fileset>
+        	-->
+        	<fileset file="${dist.dir}/wiseda_sche.tar" />
+        </ftp>
+    </target>
+	
+
+</project>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO">
+	<Properties>
+	  <Property name="logNm">WISE_scheduler_log</Property>
+	  <Property name="layoutPattern">%d [%t] %-5level %c(%location) - %m%n</Property>
+	</Properties>
+	<Appenders> 
+	  <Console name="console" target="SYSTEM_OUT">
+	   <PatternLayout pattern="${layoutPattern}" />
+	  </Console>
+	
+	  <RollingFile name="file" fileName="C:/ide/basemeta/logfile/${logNm}.log" filePattern="C:/ide/basemeta/logfile/${logNm}_%d{yyyy-MM-dd}_%i.log">
+	   <PatternLayout pattern="${layoutPattern}" />
+	   <Policies>
+	    <SizeBasedTriggeringPolicy size="3MB" /> <!-- 3MB 용량이 초과시 DefaultRolloverStrategy 정책만큼 넘버링 -->      
+	    <TimeBasedTriggeringPolicy modulate="true" interval="1" /><!-- 일별 로그 파일 생성-->
+	   </Policies>
+	   <DefaultRolloverStrategy max="50" fileIndex="min" /><!-- 롤링 파일 50개 까지 생성 -->
+	  </RollingFile>
+	 </Appenders>
+	<Loggers>
+		<Root level="debug" additivity="false">
+			<AppenderRef ref="console" />
+		</Root>
+	</Loggers>
+</Configuration>
